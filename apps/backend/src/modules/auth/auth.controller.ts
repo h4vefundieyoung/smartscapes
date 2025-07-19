@@ -14,6 +14,27 @@ import {
 import { type AuthService } from "./auth.service.js";
 import { AuthApiPath } from "./libs/enums/enums.js";
 
+/**
+ * @swagger
+ * components:
+ *    schemas:
+ *      UserSignUpRequestDto:
+ *        type: object
+ *        required:
+ *          - email
+ *          - password
+ *        properties:
+ *          email:
+ *            type: string
+ *            example: user@example.com
+ *          password:
+ *            type: string
+ *            example: strongP@ssw0rd
+ *
+ *      UserAuthResponseDto:
+ *        $ref: '#/components/schemas/User'
+ */
+
 class AuthController extends BaseController {
 	private authService: AuthService;
 
@@ -23,12 +44,7 @@ class AuthController extends BaseController {
 		this.authService = authService;
 
 		this.addRoute({
-			handler: (options) =>
-				this.signUp(
-					options as APIHandlerOptions<{
-						body: UserSignUpRequestDto;
-					}>,
-				),
+			handler: this.signUp.bind(this),
 			method: "POST",
 			path: AuthApiPath.SIGN_UP,
 			validation: {
@@ -41,39 +57,32 @@ class AuthController extends BaseController {
 	 * @swagger
 	 * /auth/sign-up:
 	 *    post:
-	 *      description: Sign up user into the system
+	 *      tags:
+	 *       - Auth
+	 *      summary: Register a new user
 	 *      requestBody:
-	 *        description: User auth data
 	 *        required: true
 	 *        content:
 	 *          application/json:
 	 *            schema:
-	 *              type: object
-	 *              properties:
-	 *                email:
-	 *                  type: string
-	 *                  format: email
-	 *                password:
-	 *                  type: string
+	 *              $ref: '#/components/schemas/UserSignUpRequestDto'
 	 *      responses:
 	 *        201:
-	 *          description: Successful operation
+	 *          description: User registered
 	 *          content:
 	 *            application/json:
 	 *              schema:
-	 *                type: object
-	 *                properties:
-	 *                  message:
-	 *                    type: object
-	 *                    $ref: "#/components/schemas/User"
+	 *                $ref: "#/components/schemas/UserAuthResponseDto"
 	 */
 	private async signUp(
 		options: APIHandlerOptions<{
 			body: UserSignUpRequestDto;
 		}>,
 	): Promise<APIHandlerResponse> {
+		const { body } = options;
+
 		return {
-			payload: await this.authService.signUp(options.body),
+			payload: await this.authService.signUp(body),
 			status: HTTPCode.CREATED,
 		};
 	}

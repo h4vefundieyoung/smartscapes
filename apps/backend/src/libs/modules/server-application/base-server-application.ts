@@ -1,5 +1,7 @@
+import fastifyCors from "@fastify/cors";
+import fastifyHelmet from "@fastify/helmet";
 import fastifyStatic from "@fastify/static";
-import swagger, { type StaticDocumentSpec } from "@fastify/swagger";
+import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import Fastify, {
 	type FastifyError,
@@ -9,7 +11,7 @@ import Fastify, {
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { ServerErrorType } from "~/libs/enums/enums.js";
+import { AppEnvironment, ServerErrorType } from "~/libs/enums/enums.js";
 import { ValidationError } from "~/libs/exceptions/exceptions.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Database } from "~/libs/modules/database/database.js";
@@ -54,11 +56,31 @@ class BaseServerApplication implements ServerApplication {
 		this.database = database;
 		this.logger = logger;
 		this.title = title;
-
-		this.initApp();
 	}
 
-	public addRoute(parameters: ServerApplicationRouteParameters): void {
+	public async init(): Promise<void> {
+		this.logger.info("Application initialization...");
+
+		this.app = Fastify({
+			ignoreTrailingSlash: true,
+		});
+
+		this.initValidationCompiler();
+
+		await this.initMiddlewares();
+
+		await this.initServe();
+
+		this.initRoutes();
+
+		this.initErrorHandler();
+
+		this.database.connect();
+
+		await this.listenApp();
+	}
+
+	private addRoute(parameters: ServerApplicationRouteParameters): void {
 		const { handler, method, path, preHandlers, validation } = parameters;
 
 		const routeOptions: RouteOptions = {
@@ -76,91 +98,46 @@ class BaseServerApplication implements ServerApplication {
 
 		this.app.route(routeOptions);
 
-		this.logger.info(`Route: ${method} ${path} is registered.`);
+		this.logger.info(`Route registered: ${method} ${path}`);
 	}
 
-	public addRoutes(parameters: ServerApplicationRouteParameters[]): void {
+	private addRoutes(parameters: ServerApplicationRouteParameters[]): void {
 		for (let parameter of parameters) {
 			this.addRoute(parameter);
 		}
 	}
 
-	public async init(): Promise<void> {
-		this.logger.info("Application initialization...");
-
-		await this.initServe();
-
-		await this.initMiddlewares();
-
-		this.initValidationCompiler();
-
-		this.initErrorHandler();
-
-		this.initRoutes();
-
-		this.database.connect();
-
-		try {
-			await this.app.listen({
-				host: this.config.ENV.APP.HOST,
-				port: this.config.ENV.APP.PORT,
-			});
-
-			this.logger.info(
-				`Application is listening on PORT – ${this.config.ENV.APP.PORT.toString()}, ENVIRONMENT – ${
-					this.config.ENV.APP.ENVIRONMENT
-				}.`,
-			);
-		} catch (error) {
-			if (error instanceof Error) {
-				this.logger.error(error.message, {
-					cause: error.cause,
-					stack: error.stack,
-				});
-			}
-
-			throw error;
-		}
-	}
-
-	public async initMiddlewares(): Promise<void> {
+	private async initApiDocs(): Promise<void> {
 		await Promise.all(
 			this.apis.map(async (api) => {
-				this.logger.info(
-					`Generating swagger documentation for API ${api.version}...`,
-				);
+				if (this.config.ENV.APP.ENVIRONMENT !== AppEnvironment.PRODUCTION) {
+					this.logger.info(
+						`Generating swagger documentation for API ${api.version}...`,
+					);
 
-				await this.app.register(swagger, {
-					mode: "static",
-					specification: {
-						document: api.generateDoc(
-							this.title,
-						) as StaticDocumentSpec["document"],
-					},
-				});
+					await this.app.register(swagger, {
+						mode: "static",
+						specification: {
+							document: api.generateDoc(this.title),
+						},
+					});
 
-				await this.app.register(swaggerUi, {
-					routePrefix: `${api.version}/documentation`,
-				});
+					await this.app.register(swaggerUi, {
+						routePrefix: `${api.basePath}/documentation`,
+					});
+				}
 			}),
 		);
-	}
-
-	public initRoutes(): void {
-		const routers = this.apis.flatMap((api) => api.routes);
-
-		this.addRoutes(routers);
-	}
-
-	private initApp(): void {
-		this.app = Fastify({ ignoreTrailingSlash: true });
 	}
 
 	private initErrorHandler(): void {
 		this.app.setErrorHandler(
 			(error: FastifyError | ValidationError, _request, reply) => {
 				if (error instanceof ValidationError) {
-					this.logger.error(`[Validation Error]: ${error.message}`);
+					const [issue] = error.issues;
+					const message = issue?.message ?? error.message;
+
+					this.logger.error(`[Validation Error]: ${message}`);
 
 					const response: ServerValidationErrorResponse = {
 						details: error.issues.map((issue) => ({
@@ -168,7 +145,7 @@ class BaseServerApplication implements ServerApplication {
 							path: issue.path as (number | string)[],
 						})),
 						errorType: ServerErrorType.VALIDATION,
-						message: error.message,
+						message,
 					};
 
 					return reply.status(HTTPCode.UNPROCESSED_ENTITY).send(response);
@@ -199,6 +176,22 @@ class BaseServerApplication implements ServerApplication {
 		);
 	}
 
+	private async initMiddlewares(): Promise<void> {
+		if (this.config.ENV.APP.ENVIRONMENT !== AppEnvironment.PRODUCTION) {
+			await this.initApiDocs();
+		}
+
+		await this.app.register(fastifyCors);
+
+		await this.app.register(fastifyHelmet);
+	}
+
+	private initRoutes(): void {
+		const routers = this.apis.flatMap((api) => api.routes);
+
+		this.addRoutes(routers);
+	}
+
 	private async initServe(): Promise<void> {
 		const staticPath = path.join(
 			path.dirname(fileURLToPath(import.meta.url)),
@@ -223,6 +216,30 @@ class BaseServerApplication implements ServerApplication {
 				return Boolean(result);
 			};
 		});
+	}
+
+	private async listenApp(): Promise<void> {
+		try {
+			await this.app.listen({
+				host: this.config.ENV.APP.HOST,
+				port: this.config.ENV.APP.PORT,
+			});
+
+			this.logger.info(
+				`Application is listening on PORT – ${this.config.ENV.APP.PORT.toString()}, ENVIRONMENT – ${
+					this.config.ENV.APP.ENVIRONMENT
+				}.`,
+			);
+		} catch (error) {
+			if (error instanceof Error) {
+				this.logger.error(error.message, {
+					cause: error.cause,
+					stack: error.stack,
+				});
+			}
+
+			throw error;
+		}
 	}
 }
 

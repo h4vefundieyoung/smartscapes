@@ -2,8 +2,10 @@ import { type ServerErrorType } from "../../libs/enums/enums.js";
 import { type ServerErrorDetail } from "./server-error-detail.type.js";
 
 type ServerCommonErrorResponse = {
-	errorType: typeof ServerErrorType.COMMON;
-	message: string;
+	error: {
+		message: string;
+		type: typeof ServerErrorType.COMMON;
+	};
 };
 
 type ServerErrorResponse =
@@ -11,9 +13,11 @@ type ServerErrorResponse =
 	| ServerValidationErrorResponse;
 
 type ServerValidationErrorResponse = {
-	details: ServerErrorDetail[];
-	errorType: typeof ServerErrorType.VALIDATION;
-	message: string;
+	error: {
+		details: ServerErrorDetail[];
+		message: string;
+		type: typeof ServerErrorType.VALIDATION;
+	};
 };
 
 export {

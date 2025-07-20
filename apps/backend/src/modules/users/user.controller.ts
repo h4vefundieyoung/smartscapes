@@ -50,15 +50,18 @@ class UserController extends BaseController {
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               type: array
-	 *               items:
-	 *                 $ref: '#/components/schemas/User'
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: array
+	 *                   items:
+	 *                     $ref: '#/components/schemas/User'
 	 */
 	private async findAll(): Promise<APIHandlerResponse> {
 		const users = await this.userService.findAll();
 
 		return {
-			payload: users,
+			payload: { data: users },
 			status: HTTPCode.OK,
 		};
 	}

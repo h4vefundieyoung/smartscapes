@@ -3,9 +3,8 @@ import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
 
 import {
-	type UserGetAllResponseDto,
+	type UserGetAllItemResponseDto,
 	type UserSignUpRequestDto,
-	type UserSignUpResponseDto,
 } from "./libs/types/types.js";
 
 class UserService implements Service {
@@ -17,36 +16,22 @@ class UserService implements Service {
 
 	public async create(
 		payload: UserSignUpRequestDto,
-	): Promise<UserSignUpResponseDto> {
+	): Promise<UserGetAllItemResponseDto> {
 		const item = await this.userRepository.create(
 			UserEntity.initializeNew({
 				email: payload.email,
-				passwordHash: "HASH", // TODO
-				passwordSalt: "SALT", // TODO
+				passwordHash: "HASH", // TODO: store password hash
+				passwordSalt: "SALT", // TODO: store salt
 			}),
 		);
 
 		return item.toObject();
 	}
 
-	public delete(): ReturnType<Service["delete"]> {
-		return Promise.resolve(true);
-	}
-
-	public find(): ReturnType<Service["find"]> {
-		return Promise.resolve(null);
-	}
-
-	public async findAll(): Promise<UserGetAllResponseDto> {
+	public async findAll(): Promise<UserGetAllItemResponseDto[]> {
 		const items = await this.userRepository.findAll();
 
-		return {
-			items: items.map((item) => item.toObject()),
-		};
-	}
-
-	public update(): ReturnType<Service["update"]> {
-		return Promise.resolve(null);
+		return items.map((item) => item.toObject());
 	}
 }
 

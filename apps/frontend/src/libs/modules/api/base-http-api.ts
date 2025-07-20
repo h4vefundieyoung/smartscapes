@@ -39,10 +39,10 @@ class BaseHTTPApi implements HTTPApi {
 		this.storage = storage;
 	}
 
-	public async load(
+	public async load<T>(
 		path: string,
 		options: HTTPApiOptions,
-	): Promise<HTTPApiResponse> {
+	): Promise<HTTPApiResponse<T>> {
 		const {
 			contentType = null,
 			hasAuth = false,
@@ -61,7 +61,7 @@ class BaseHTTPApi implements HTTPApi {
 			payload,
 		});
 
-		return (await this.checkResponse(response)) as HTTPApiResponse;
+		return await this.checkResponse<T>(response);
 	}
 
 	protected getFullEndpoint<T extends Record<string, string>>(
@@ -79,7 +79,9 @@ class BaseHTTPApi implements HTTPApi {
 		);
 	}
 
-	private async checkResponse(response: Response): Promise<Response> {
+	private async checkResponse<T>(
+		response: HTTPApiResponse<T>,
+	): Promise<HTTPApiResponse<T>> {
 		if (!response.ok) {
 			await this.handleError(response);
 		}
@@ -107,24 +109,28 @@ class BaseHTTPApi implements HTTPApi {
 	}
 
 	private async handleError(response: Response): Promise<never> {
-		let parsedException: ServerErrorResponse;
+		let parsedException: ServerErrorResponse["error"];
 
 		try {
-			parsedException = (await response.json()) as ServerErrorResponse;
+			const { error } = (await response.json()) as ServerErrorResponse;
+
+			parsedException = error;
 		} catch {
 			parsedException = {
-				errorType: ServerErrorType.COMMON,
 				message: response.statusText,
+				type: ServerErrorType.COMMON,
 			};
 		}
 
-		const isCustomException = Boolean(parsedException.errorType);
+		const isCustomException = Boolean(parsedException.type);
+		const errorType = isCustomException
+			? parsedException.type
+			: ServerErrorType.COMMON;
+		const details = "details" in parsedException ? parsedException.details : [];
 
 		throw new HTTPError({
-			details: "details" in parsedException ? parsedException.details : [],
-			errorType: isCustomException
-				? parsedException.errorType
-				: ServerErrorType.COMMON,
+			details,
+			errorType,
 			message: parsedException.message,
 			status: response.status as ValueOf<typeof HTTPCode>,
 		});

@@ -20,6 +20,7 @@ export {
 	type ServerCommonErrorResponse,
 	type ServerErrorDetail,
 	type ServerErrorResponse,
+	type ServerResponse,
 	type ServerValidationErrorResponse,
 	type ValidationSchema,
 	type ValueOf,
@@ -27,7 +28,6 @@ export {
 export { AuthApiPath } from "./modules/auth/auth.js";
 export {
 	type UserGetAllItemResponseDto,
-	type UserGetAllResponseDto,
 	UsersApiPath,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,

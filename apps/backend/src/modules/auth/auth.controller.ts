@@ -72,7 +72,10 @@ class AuthController extends BaseController {
 	 *          content:
 	 *            application/json:
 	 *              schema:
-	 *                $ref: "#/components/schemas/UserAuthResponseDto"
+	 *                type: object
+	 *                properties:
+	 *                  data:
+	 *                    $ref: '#/components/schemas/UserAuthResponseDto'
 	 */
 	private async signUp(
 		options: APIHandlerOptions<{
@@ -81,8 +84,10 @@ class AuthController extends BaseController {
 	): Promise<APIHandlerResponse> {
 		const { body } = options;
 
+		const user = await this.authService.signUp(body);
+
 		return {
-			payload: await this.authService.signUp(body),
+			payload: { data: user },
 			status: HTTPCode.CREATED,
 		};
 	}

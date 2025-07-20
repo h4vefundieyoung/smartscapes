@@ -140,12 +140,14 @@ class BaseServerApplication implements ServerApplication {
 					this.logger.error(`[Validation Error]: ${message}`);
 
 					const response: ServerValidationErrorResponse = {
-						details: error.issues.map((issue) => ({
-							message: issue.message,
-							path: issue.path as (number | string)[],
-						})),
-						errorType: ServerErrorType.VALIDATION,
-						message,
+						error: {
+							details: error.issues.map((issue) => ({
+								message: issue.message,
+								path: issue.path as (number | string)[],
+							})),
+							message,
+							type: ServerErrorType.VALIDATION,
+						},
 					};
 
 					return reply.status(HTTPCode.UNPROCESSED_ENTITY).send(response);
@@ -157,8 +159,10 @@ class BaseServerApplication implements ServerApplication {
 					);
 
 					const response: ServerCommonErrorResponse = {
-						errorType: ServerErrorType.COMMON,
-						message: error.message,
+						error: {
+							message: error.message,
+							type: ServerErrorType.COMMON,
+						},
 					};
 
 					return reply.status(error.status).send(response);
@@ -167,8 +171,10 @@ class BaseServerApplication implements ServerApplication {
 				this.logger.error(error.message);
 
 				const response: ServerCommonErrorResponse = {
-					errorType: ServerErrorType.COMMON,
-					message: error.message,
+					error: {
+						message: error.message,
+						type: ServerErrorType.COMMON,
+					},
 				};
 
 				return reply.status(HTTPCode.INTERNAL_SERVER_ERROR).send(response);

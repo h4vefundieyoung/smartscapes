@@ -1,5 +1,5 @@
-type HTTPApiResponse = Response & {
-	json<T = unknown>(): never | Promise<T>;
+type HTTPApiResponse<T = unknown> = Omit<Response, "json"> & {
+	json(): never | Promise<T>;
 };
 
 export { type HTTPApiResponse };

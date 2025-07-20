@@ -1,8 +1,5 @@
-import { type ServerApplicationRouteParameters } from "./types.js";
-
 type ServerApplication = {
-	addRoute(parameters: ServerApplicationRouteParameters): void;
-	addRoutes(parameters: ServerApplicationRouteParameters[]): void;
+	init(): Promise<void>;
 };
 
 export { type ServerApplication };

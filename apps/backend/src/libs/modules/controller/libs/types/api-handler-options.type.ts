@@ -1,9 +1,9 @@
 type APIHandlerOptions<
-	T extends DefaultApiHandlerOptions = DefaultApiHandlerOptions,
+	HandlerOptions extends DefaultApiHandlerOptions = DefaultApiHandlerOptions,
 > = {
-	body: T["body"];
-	params: T["params"];
-	query: T["query"];
+	body: HandlerOptions["body"];
+	params: HandlerOptions["params"];
+	query: HandlerOptions["query"];
 };
 
 type DefaultApiHandlerOptions = {

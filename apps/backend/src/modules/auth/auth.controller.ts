@@ -79,7 +79,7 @@ class AuthController extends BaseController {
 	 *                  data:
 	 *                    $ref: '#/components/schemas/UserAuthResponseDto'
 	 */
-	private async signUp(
+	public async signUp(
 		options: APIHandlerOptions<{
 			body: UserSignUpRequestDto;
 		}>,

@@ -54,3 +54,23 @@ jobs:
 
       - name: Build Code
         run: npm run build
+
+  test:
+    name: Test Code
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Install NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Test Code
+        run: npm run test

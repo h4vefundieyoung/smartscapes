@@ -24,7 +24,7 @@
 		"react-dom": "19.1.0",
 		"react-hook-form": "7.60.0",
 		"react-redux": "9.2.0",
-		"react-router-dom": "7.6.3"
+		"react-router": "7.7.0"
 	},
 	"devDependencies": {
 		"@types/eslint-plugin-jsx-a11y": "6.10.0",

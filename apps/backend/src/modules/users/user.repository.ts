@@ -24,22 +24,10 @@ class UserRepository implements Repository {
 		return UserEntity.initialize(user);
 	}
 
-	public delete(): ReturnType<Repository["delete"]> {
-		return Promise.resolve(true);
-	}
-
-	public find(): ReturnType<Repository["find"]> {
-		return Promise.resolve(null);
-	}
-
 	public async findAll(): Promise<UserEntity[]> {
 		const users = await this.userModel.query().execute();
 
 		return users.map((user) => UserEntity.initialize(user));
-	}
-
-	public update(): ReturnType<Repository["update"]> {
-		return Promise.resolve(null);
 	}
 }
 

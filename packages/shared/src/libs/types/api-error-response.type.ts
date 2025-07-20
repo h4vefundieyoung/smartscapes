@@ -3,12 +3,12 @@ import { type APIValidationErrorDetail } from "./api-validation-error-detail.typ
 import { type ValueOf } from "./value-of.type.js";
 
 type APIBaseErrorResponse<
-	T extends ValueOf<typeof APIErrorType> = ValueOf<typeof APIErrorType>,
-	D = undefined,
+	ErrorType extends ValueOf<typeof APIErrorType> = ValueOf<typeof APIErrorType>,
+	Details extends undefined | unknown[] = undefined,
 > = {
-	error: (D extends undefined ? object : { details: D }) & {
+	error: (Details extends undefined ? object : { details: Details }) & {
 		message: string;
-		type: T;
+		type: ErrorType;
 	};
 };
 

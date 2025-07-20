@@ -8,6 +8,7 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import {
 	type UserSignUpRequestDto,
+	type UserSignUpResponseDto,
 	userSignUpValidationSchema,
 } from "~/modules/users/users.js";
 
@@ -82,7 +83,7 @@ class AuthController extends BaseController {
 		options: APIHandlerOptions<{
 			body: UserSignUpRequestDto;
 		}>,
-	): Promise<APIHandlerResponse> {
+	): Promise<APIHandlerResponse<UserSignUpResponseDto>> {
 		const { body } = options;
 
 		const user = await this.authService.signUp(body);

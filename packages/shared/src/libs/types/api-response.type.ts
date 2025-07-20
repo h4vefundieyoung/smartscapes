@@ -1,5 +1,5 @@
-type APIResponse<T> = {
-	data: T;
+type APIResponse<Data> = {
+	data: Data;
 };
 
 export { type APIResponse };

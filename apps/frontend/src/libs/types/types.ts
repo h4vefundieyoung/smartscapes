@@ -1,8 +1,8 @@
 export { type AsyncThunkConfig } from "./async-thunk-config.type.js";
 export {
-	type ServerErrorDetail,
-	type ServerErrorResponse,
-	type ServerResponse,
+	type APIErrorResponse,
+	type APIResponse,
+	type APIValidationErrorDetail,
 	type ValidationSchema,
 	type ValueOf,
 } from "@smartscapes/shared";

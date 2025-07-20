@@ -1,4 +1,4 @@
-import { type Service } from "~/libs/types/types.js";
+import { type CollectionResult, type Service } from "~/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
 
@@ -28,10 +28,12 @@ class UserService implements Service {
 		return item.toObject();
 	}
 
-	public async findAll(): Promise<UserGetAllItemResponseDto[]> {
+	public async findAll(): Promise<CollectionResult<UserGetAllItemResponseDto>> {
 		const items = await this.userRepository.findAll();
 
-		return items.map((item) => item.toObject());
+		return {
+			items: items.map((item) => item.toObject()),
+		};
 	}
 }
 

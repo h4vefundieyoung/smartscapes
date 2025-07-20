@@ -32,6 +32,7 @@ import { AuthApiPath } from "./libs/enums/enums.js";
  *            example: strongP@ssw0rd
  *
  *      UserAuthResponseDto:
+ *        type: object
  *        $ref: '#/components/schemas/User'
  */
 

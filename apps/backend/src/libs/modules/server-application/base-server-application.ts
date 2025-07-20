@@ -11,15 +11,14 @@ import Fastify, {
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { AppEnvironment, ServerErrorType } from "~/libs/enums/enums.js";
+import { APIErrorType, AppEnvironment } from "~/libs/enums/enums.js";
 import { ValidationError } from "~/libs/exceptions/exceptions.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Database } from "~/libs/modules/database/database.js";
 import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import {
-	type ServerCommonErrorResponse,
-	type ServerValidationErrorResponse,
+	type APIErrorResponse,
 	type ValidationSchema,
 } from "~/libs/types/types.js";
 
@@ -110,22 +109,20 @@ class BaseServerApplication implements ServerApplication {
 	private async initApiDocs(): Promise<void> {
 		await Promise.all(
 			this.apis.map(async (api) => {
-				if (this.config.ENV.APP.ENVIRONMENT !== AppEnvironment.PRODUCTION) {
-					this.logger.info(
-						`Generating swagger documentation for API ${api.version}...`,
-					);
+				this.logger.info(
+					`Generating swagger documentation for API ${api.version}...`,
+				);
 
-					await this.app.register(swagger, {
-						mode: "static",
-						specification: {
-							document: api.generateDoc(this.title),
-						},
-					});
+				await this.app.register(swagger, {
+					mode: "static",
+					specification: {
+						document: api.generateDoc(this.title),
+					},
+				});
 
-					await this.app.register(swaggerUi, {
-						routePrefix: `${api.basePath}/documentation`,
-					});
-				}
+				await this.app.register(swaggerUi, {
+					routePrefix: `${api.basePath}/documentation`,
+				});
 			}),
 		);
 	}
@@ -139,14 +136,14 @@ class BaseServerApplication implements ServerApplication {
 
 					this.logger.error(`[Validation Error]: ${message}`);
 
-					const response: ServerValidationErrorResponse = {
+					const response: APIErrorResponse = {
 						error: {
 							details: error.issues.map((issue) => ({
 								message: issue.message,
 								path: issue.path as (number | string)[],
 							})),
 							message,
-							type: ServerErrorType.VALIDATION,
+							type: APIErrorType.VALIDATION,
 						},
 					};
 
@@ -158,10 +155,10 @@ class BaseServerApplication implements ServerApplication {
 						`[HTTP Error]: ${String(error.status)} – ${error.message}`,
 					);
 
-					const response: ServerCommonErrorResponse = {
+					const response: APIErrorResponse = {
 						error: {
 							message: error.message,
-							type: ServerErrorType.COMMON,
+							type: APIErrorType.COMMON,
 						},
 					};
 
@@ -170,10 +167,10 @@ class BaseServerApplication implements ServerApplication {
 
 				this.logger.error(error.message);
 
-				const response: ServerCommonErrorResponse = {
+				const response: APIErrorResponse = {
 					error: {
 						message: error.message,
-						type: ServerErrorType.COMMON,
+						type: APIErrorType.COMMON,
 					},
 				};
 

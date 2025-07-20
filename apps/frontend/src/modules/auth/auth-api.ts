@@ -2,7 +2,7 @@ import { APIPath, ContentType } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
-import { type ServerResponse } from "~/libs/types/types.js";
+import { type APIResponse } from "~/libs/types/types.js";
 
 import { AuthApiPath } from "./libs/enums/enums.js";
 import {
@@ -23,8 +23,8 @@ class AuthApi extends BaseHTTPApi {
 
 	public async signUp(
 		payload: UserSignUpRequestDto,
-	): Promise<ServerResponse<UserSignUpResponseDto>> {
-		const response = await this.load<ServerResponse<UserSignUpResponseDto>>(
+	): Promise<APIResponse<UserSignUpResponseDto>> {
+		const response = await this.load<APIResponse<UserSignUpResponseDto>>(
 			this.getFullEndpoint(AuthApiPath.SIGN_UP, {}),
 			{
 				contentType: ContentType.JSON,

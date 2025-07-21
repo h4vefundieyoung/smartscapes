@@ -1,5 +1,5 @@
 import reactLogo from "~/assets/images/react.svg";
-import { Link, RouterOutlet } from "~/libs/components/components.js";
+import { Link, RouterOutlet, Sidebar } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -27,6 +27,7 @@ const App = (): React.JSX.Element => {
 
 	return (
 		<div className={styles["container"]}>
+			<Sidebar />
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
 
 			<ul className="App-navigation-list">

@@ -1,10 +1,8 @@
-import { type APIResponse } from "@smartscapes/shared";
-
 import { type HTTPCode } from "~/libs/modules/http/http.js";
-import { type ValueOf } from "~/libs/types/types.js";
+import { type APIResponse, type ValueOf } from "~/libs/types/types.js";
 
-type APIHandlerResponse<Data> = {
-	payload: APIResponse<Data> | null;
+type APIHandlerResponse<Data = null> = {
+	payload: Data extends null ? null : APIResponse<Data>;
 	status: ValueOf<typeof HTTPCode>;
 };
 

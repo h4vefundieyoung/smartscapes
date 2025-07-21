@@ -132,6 +132,8 @@ You should use .env.example files as a reference.
 - `npm install` - Install all workspaces’ dependencies
 - `npm run lint` - Run all linting checks
 - `npm run format` - Auto‑format the entire codebase with Prettier
+- `npm run test` - Run unit tests
+- `npm run test:coverage` - Run unit tests and generate a coverage report
 - `npm run start:dev -w apps/backend` - Start the backend in development mode
 - `npm run start:dev -w apps/frontend` - Start the frontend in development mode
 - `npm run migrate:dev -w apps/backend` - Apply the latest database migrations in development
@@ -192,6 +194,16 @@ Pull Request title should follow the same format as your commit messages.
 Examples:
 
 - `feat(frontend): add dashboard component ss-45`
+
+## 7.4 Testing
+
+We require **unit tests** for the backend code including:
+
+- Controllers
+- Services
+- Repositories
+- Entities
+- Helpers
 
 ## 8. Deployment
 

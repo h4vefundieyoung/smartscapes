@@ -1,4 +1,5 @@
-import { Button, Input } from "~/libs/components/components.js";
+import { Button, Input, Link } from "~/libs/components/components.js";
+import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
 	type UserSignUpRequestDto,
@@ -98,6 +99,13 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 
 				<Button label="Sign up" type="submit" />
 			</form>
+
+			<div className={styles["login-link-container"]}>
+				<p className={styles["login-text"]}>
+					Already have an account?
+					<Link to={AppRoute.SIGN_IN}>Log in</Link>
+				</p>
+			</div>
 		</div>
 	);
 };

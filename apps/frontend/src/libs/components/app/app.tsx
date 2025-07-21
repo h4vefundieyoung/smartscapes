@@ -50,7 +50,7 @@ const App = (): React.JSX.Element => {
 			{isRoot && (
 				<>
 					<p>State: {dataStatus}</p>
-					<Loader size={50} />
+					<Loader />
 					<h3>Users:</h3>
 					<ul>
 						{users.map((user) => (

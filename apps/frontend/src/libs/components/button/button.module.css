@@ -1,0 +1,15 @@
+.common-button {
+	width: 100%;
+	padding: 12px 24px;
+	font-family: Barlow, sans-serif;
+	font-size: 18px;
+	color: white;
+	text-align: center;
+	background-color: var(--brand-green);
+	border: none;
+	border-radius: 12px;
+}
+
+.common-button:hover {
+	opacity: 0.8;
+}

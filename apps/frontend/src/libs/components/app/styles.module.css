@@ -1,3 +1,14 @@
+:root {
+	--brand-green: #34a853;
+}
+
+@font-face {
+	font-family: Barlow;
+	font-style: normal;
+	font-weight: 700;
+	src: url("../../../assets/fonts/barlow/barlow-regular.ttf") format("truetype");
+}
+
 .container {
 	display: flex;
 	flex-direction: column;

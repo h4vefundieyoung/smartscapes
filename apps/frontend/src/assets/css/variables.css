@@ -1,23 +1,6 @@
 :root {
-	/* Background */
-	--color-bg-main: #EAEAE8;
-	--color-bg-alt: #F8F8FA;
+	--font-family: inter;
 
-	/* Typography */
-	--color-text-main: #29221C;
-	--color-text-secondary: #6C5948;
-	--color-text-tertiary: #8A8683;
-	--color-text-disabled: #ECEBEB;
-
-	/* Brand */
-	--color-brand-primary: #773800;
-	--color-brand-accent: #34A853;
-
-	/* Support */
-	--color-support-error: #EE4E2F;
-	--color-support-border: #BBB8B5;
-
-	--font-family: "Inter";
 	/* Font sizes */
 	--font-size-display: 56px;
 	--font-size-h1: 40px;
@@ -39,4 +22,22 @@
 	--font-weight-bold: 700;
 	--font-weight-semibold: 600;
 	--font-weight-regular: 400;
+
+	/* Background */
+	--color-bg-main: #eaeae8;
+	--color-bg-alt: #f8f8fa;
+
+	/* Typography */
+	--color-text-main: #29221c;
+	--color-text-secondary: #6c5948;
+	--color-text-tertiary: #8a8683;
+	--color-text-disabled: #ecebeb;
+
+	/* Brand */
+	--color-brand-primary: #773800;
+	--color-brand-accent: #34a853;
+
+	/* Support */
+	--color-support-error: #ee4e2f;
+	--color-support-border: #bbb8b5;
 }

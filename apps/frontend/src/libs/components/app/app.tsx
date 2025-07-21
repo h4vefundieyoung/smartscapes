@@ -1,5 +1,5 @@
 import reactLogo from "~/assets/images/react.svg";
-import { Link, RouterOutlet, Header } from "~/libs/components/components.js";
+import { Header, Link, RouterOutlet } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,

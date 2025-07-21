@@ -14,18 +14,21 @@
 
 :global(.Toastify__toast--error) {
 	color: var(--text-error);
-	background-color: var(--fill-error-weak);
+	background-image: linear-gradient(
+		var(--fill-error-weak),
+		var(--fill-error-weak)
+	);
 	border-color: var(--stroke-error);
 }
 
 :global(.Toastify__toast--success) {
 	color: var(--text-strong);
-	background-color: var(--fill-weak);
+	background-image: linear-gradient(var(--fill-weak), var(--fill-weak));
 	border-color: var(--stroke-selected);
 }
 
 :global(.Toastify__toast--info) {
 	color: var(--text-strong);
-	background-color: var(--fill-weaker);
+	background-image: linear-gradient(var(--fill-weaker), var(--fill-weaker));
 	border-color: var(--fill-brand);
 }

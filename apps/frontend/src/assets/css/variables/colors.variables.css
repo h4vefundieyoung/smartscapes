@@ -6,8 +6,7 @@
 	--brand-primary-50: #067a570d; /* 5% */
 
 	/* === Text === */
-	--text-strong: #00291d;
-	--text-strong-90: #00291de6;
+	--text-strong: #00291de6;
 	--text-weak: #003324;
 	--text-weak-65: #003324a6;
 	--text-inverse: #ffffff;
@@ -15,12 +14,10 @@
 	--text-error: #c73338;
 
 	/* === Stroke === */
-	--stroke-strong: #004d36;
-	--stroke-strong-45: #004d3673;
+	--stroke-strong: #004d3673;
 	--stroke-selected: var(--brand-primary);
 	--stroke-focus: var(--brand-primary);
-	--stroke-weak: #008647;
-	--stroke-weak-10: #0086471a;
+	--stroke-weak: #0086471a;
 	--stroke-error: #c73338cc;
 
 	/* === Fill === */

@@ -1,29 +1,23 @@
-import {
-	isRejected,
-	type Middleware,
-	type UnknownAction,
-} from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
+import { type Middleware } from "@reduxjs/toolkit";
 
-type NextFunction = (action: unknown) => unknown;
+import { showError } from "~/libs/modules/notification/notification.js";
 
-const handleError = (
-	action: UnknownAction & { error: { message?: string } },
-): void => {
-	const errorMessage = action.error.message || "An unexpected error occurred";
-	toast.error(errorMessage);
-};
+const errorHandlingMiddleware: Middleware =
+	() =>
+	(next) =>
+	(action): unknown => {
+		if (
+			action &&
+			typeof action === "object" &&
+			"error" in action &&
+			action.error
+		) {
+			const { message } : { message?: string } = action.error as { message?: string };
 
-const handleAction =
-	(next: NextFunction) =>
-	(action: unknown): unknown => {
-		if (isRejected(action)) {
-			handleError(action as UnknownAction & { error: { message?: string } });
+			showError(message);
 		}
 
 		return next(action);
 	};
-
-const errorHandlingMiddleware: Middleware = () => handleAction;
 
 export { errorHandlingMiddleware };

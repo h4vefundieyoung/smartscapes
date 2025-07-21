@@ -1,0 +1,41 @@
+:root {
+	/* === Brand === */
+	--brand-primary: #067a57;
+	--brand-primary-800: #067a57cc; /* 80% */
+	--brand-primary-200: #067a5733; /* 20% */
+	--brand-primary-50: #067a570d; /* 5% */
+
+	/* === Text === */
+	--text-strong: #00291d;
+	--text-strong-90: #00291de6;
+	--text-weak: #003324;
+	--text-weak-65: #003324a6;
+	--text-inverse: #ffffff;
+	--text-brand: var(--brand-primary);
+	--text-error: #c73338;
+
+	/* === Stroke === */
+	--stroke-strong: #004d36;
+	--stroke-strong-45: #004d3673;
+	--stroke-selected: var(--brand-primary);
+	--stroke-focus: var(--brand-primary);
+	--stroke-weak: #008647;
+	--stroke-weak-10: #0086471a;
+	--stroke-error: #c73338cc;
+
+	/* === Fill === */
+	--fill-brand: var(--brand-primary);
+	--fill-hover: #0066470a;
+	--fill-press: #006647;
+	--fill-disabled: #0066474d;
+	--fill-weak: #0080590a; /* 4% */
+	--fill-weaker: #00805905; /* 2% */
+	--fill-error-weak: #ff4d4d0d; /* 5% */
+
+	/* === Icon === */
+	--icon-neutral: var(--stroke-strong-45);
+	--icon-error: var(--stroke-error);
+
+	/* === Background === */
+	--bg-base: #ffffff;
+}

@@ -1,4 +1,4 @@
-import styles from "./button.module.css";
+import styles from "./styles.module.css";
 
 type Properties = {
 	label: string;
@@ -12,7 +12,7 @@ const Button = ({
 	type = "submit",
 }: Properties): React.JSX.Element => {
 	return (
-		<button className={styles["common-button"]} onClick={onClick} type={type}>
+		<button className={styles["button"]} onClick={onClick} type={type}>
 			{label}
 		</button>
 	);

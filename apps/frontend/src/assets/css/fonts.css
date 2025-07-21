@@ -1,0 +1,20 @@
+@font-face {
+	font-family: Inter;
+	src: url("../fonts/inter-regular.ttf");
+}
+
+:root {
+	--font-family: "Inter";
+	--font-size-display: 64px;
+	--font-size-h1: 64px;
+	--font-size-h2: 48px;
+	--font-size-h3: 11px;
+	--font-size-h4: 24px;
+	--font-size-small: 16px;
+	--font-size-tiny: 14px;
+	--font-weight-bold: 700;
+	--font-weight-semibold: 600;
+	--font-weight-regular: 400;
+	--font-style: normal;
+	--font-style-quatation: italic;
+}

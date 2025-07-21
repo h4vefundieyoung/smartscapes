@@ -1,0 +1,29 @@
+/* Toast container styles using CSS modules */
+:global(.Toastify__toast) {
+	font-family: inherit;
+	color: var(--color-text-main);
+	background-color: var(--color-bg-alt);
+	border: 1px solid var(--color-support-border);
+	border-radius: 8px;
+	box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+}
+
+:global(.Toastify__close-button) {
+	color: var(--color-text-main);
+}
+
+:global(.Toastify__toast-icon) {
+	color: var(--color-text-main);
+}
+
+:global(.Toastify__toast--error) {
+	border-color: var(--color-support-error);
+}
+
+:global(.Toastify__toast--success) {
+	border-color: var(--color-brand-accent);
+}
+
+:global(.Toastify__toast--info) {
+	border-color: var(--color-brand-primary);
+}

@@ -1,0 +1,19 @@
+:root {
+	/* Background */
+	--color-bg-main: #eaeae8;
+	--color-bg-alt: #f8f8fa;
+
+	/* Typography */
+	--color-text-main: #29221c;
+	--color-text-secondary: #6c5948;
+	--color-text-tertiary: #8a8683;
+	--color-text-disabled: #ecebeb;
+
+	/* Brand */
+	--color-brand-primary: #773800;
+	--color-brand-accent: #34a853;
+
+	/* Support */
+	--color-support-error: #ee4e2f;
+	--color-support-border: #bbb8b5;
+}

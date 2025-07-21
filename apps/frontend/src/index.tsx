@@ -5,6 +5,7 @@ import {
 	App,
 	RouterProvider,
 	StoreProvider,
+	ToastContainer,
 } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { store } from "~/libs/modules/store/store.js";
@@ -31,6 +32,7 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 					},
 				]}
 			/>
+			<ToastContainer />
 		</StoreProvider>
 	</StrictMode>,
 );

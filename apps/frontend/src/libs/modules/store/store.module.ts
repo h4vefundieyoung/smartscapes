@@ -11,6 +11,7 @@ import { authApi, reducer as authReducer } from "~/modules/auth/auth.js";
 import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
 
 import { type ExtraArguments, type RootReducer } from "./libs/types/types.js";
+import { errorHandlingMiddleware } from "./middlewares/middlewares.js";
 
 class Store {
 	public instance: ReturnType<
@@ -36,7 +37,7 @@ class Store {
 					thunk: {
 						extraArgument: this.extraArguments,
 					},
-				});
+				}).prepend(errorHandlingMiddleware);
 			},
 			reducer: {
 				auth: authReducer,

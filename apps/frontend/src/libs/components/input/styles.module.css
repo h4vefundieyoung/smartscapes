@@ -1,14 +1,67 @@
 .label {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: 4px;
 	width: 100%;
-	color: var(--color-text-primary);
+	max-width: 364px;
+	color: #00291de5;
 }
 
 .error {
+	display: inline-flex;
+	gap: 7px;
+	align-items: center;
 	font-size: 14px;
 	font-weight: 500;
 	line-height: 1.3;
-	color: var(--color-danger);
+	color: #c73838;
+}
+
+.label-caption::first-letter,
+.error::first-letter {
+	text-transform: capitalize;
+}
+
+.error-icon {
+	width: 18px;
+}
+
+.input {
+	height: 48px;
+	padding: 12px 16px;
+	border-radius: 8px;
+}
+
+.input.input-error {
+	outline: none;
+	border: 2px solid #c73838cc;
+}
+
+.input-error,
+.input-error:hover,
+.input-error:focus {
+	background-color: #ff4d4d0d;
+}
+
+.input,
+.input:focus {
+	border: 1px solid #004d3673;
+}
+
+.input:hover {
+	background-color: #0066470a;
+}
+
+.input:focus {
+	outline: 2px solid #067a57;
+	outline-offset: 2px;
+	background-color: initial;
+}
+
+.input:focus::placeholder {
+	color: transparent;
+}
+
+.input:focus + .error {
+	display: none;
 }

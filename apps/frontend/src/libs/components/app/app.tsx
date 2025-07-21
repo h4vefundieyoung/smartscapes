@@ -1,5 +1,5 @@
 import reactLogo from "~/assets/images/react.svg";
-import { Link, RouterOutlet } from "~/libs/components/components.js";
+import { Link, RouterOutlet, Header } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -16,6 +16,7 @@ const App = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const dataStatus = useAppSelector(({ users }) => users.dataStatus);
 	const users = useAppSelector(({ users }) => users.data);
+	const mockUser = { firstName: "John", lastName: "Smith" };
 
 	const isRoot = pathname === AppRoute.ROOT;
 
@@ -27,6 +28,7 @@ const App = (): React.JSX.Element => {
 
 	return (
 		<div className={styles["container"]}>
+			<Header user={mockUser} />
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
 
 			<ul className="App-navigation-list">

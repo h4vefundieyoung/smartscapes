@@ -1,7 +1,7 @@
 {
 	"name": "@smartscapes/backend",
 	"type": "module",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"engines": {
 		"node": ">=22.10.0 <23.0.0",
 		"npm": "10.x.x"
@@ -10,6 +10,8 @@
 		"lint:types": "npx tsc --noEmit",
 		"lint:js": "npx eslint . --max-warnings=0",
 		"lint": "concurrently \"npm:lint:*\"",
+		"test": "tsx --test \"**/*.test.ts\"",
+		"test:coverage": "tsx --test --experimental-test-coverage \"**/*.test.ts\"",
 		"start:dev": "tsx watch src/index.ts",
 		"migrate:dev": "tsx ../../node_modules/knex/bin/cli.js migrate:latest",
 		"migrate:dev:make": "tsx ../../node_modules/knex/bin/cli.js migrate:make -x ts",
@@ -41,6 +43,7 @@
 	"devDependencies": {
 		"@types/convict": "6.1.6",
 		"@types/swagger-jsdoc": "6.0.4",
+		"knex-mock-client": "3.0.2",
 		"tsx": "4.20.3"
 	}
 }

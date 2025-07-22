@@ -4,6 +4,7 @@ import { type UserModel } from "~/modules/users/user.model.js";
 
 class UserRepository implements Repository {
 	private userModel: typeof UserModel;
+
 	public constructor(userModel: typeof UserModel) {
 		this.userModel = userModel;
 	}

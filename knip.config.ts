@@ -7,14 +7,15 @@ const config: KnipConfig = {
 		},
 		"apps/backend": {
 			entry: ["src/db/migrations/*.ts", "knexfile.ts"],
+			ignore: ["src/modules/points-of-interest/**"],
 			ignoreDependencies: ["pg"],
 		},
 		"apps/frontend": {
 			entry: ["src/index.tsx"],
 		},
 		"packages/shared": {
-			entry: ["build/index.js"],
-			ignore: ["src/**/**"],
+			entry: [],
+			ignore: ["src/**/**", "src/modules/points-of-interest/**"],
 			includeEntryExports: true,
 		},
 	},

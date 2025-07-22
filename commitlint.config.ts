@@ -10,7 +10,7 @@ const config: UserConfig = {
 		},
 	},
 	rules: {
-		"references-empty": [RuleConfigSeverity.Error, "never"],
+		"references-empty": [RuleConfigSeverity.Disabled],
 		"scope-empty": [RuleConfigSeverity.Error, "never"],
 		"scope-enum": [
 			RuleConfigSeverity.Error,

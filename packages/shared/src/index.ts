@@ -26,6 +26,12 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath } from "./modules/auth/auth.js";
 export {
+	pointOfInterestValidationSchema,
+	PointsOfInterestApiPath,
+	type PointsOfInterestRequestDto,
+	type PointsOfInterestResponseDto,
+} from "./modules/points-of-interest/points-of-interest.js";
+export {
 	type UserGetAllItemResponseDto,
 	UsersApiPath,
 	type UserSignUpRequestDto,

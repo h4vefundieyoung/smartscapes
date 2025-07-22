@@ -1,0 +1,36 @@
+.container {
+	width: 100%;
+	max-width: 364px;
+}
+
+.form__title {
+	margin: 0 0 48px;
+	font-size: var(--font-size-h1);
+	font-weight: var(--font-weight-semibold);
+	line-height: var(--font-line-height-h1);
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	margin: 0 0 24px;
+}
+
+.form__group label {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	font-size: var(--font-size-small);
+	font-weight: var(--font-weight-regular);
+	line-height: var(--font-line-height-small);
+	color: var(--text-strong);
+}
+
+.login-link__text {
+	margin: 0;
+	font-size: var(--font-size-tiny);
+	font-weight: var(--font-weight-regular);
+	line-height: var(--font-line-height-tiny);
+	color: var(--text-weak);
+}

@@ -1,16 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { type UserSignUpResponseDto } from "@smartscapes/shared";
 
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
-import { signUp } from "./actions.js";
+import { signIn, signUp } from "./actions.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
+	error: null | string;
+	isAuthenticated: boolean;
+	user: null | UserSignUpResponseDto;
 };
 
 const initialState: State = {
 	dataStatus: DataStatus.IDLE,
+	error: null,
+	isAuthenticated: false,
+	user: null,
 };
 
 const { actions, name, reducer } = createSlice({
@@ -23,6 +30,23 @@ const { actions, name, reducer } = createSlice({
 		});
 		builder.addCase(signUp.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
+		});
+
+		builder.addCase(signIn.pending, (state) => {
+			state.dataStatus = DataStatus.PENDING;
+			state.error = null;
+		});
+		builder.addCase(signIn.fulfilled, (state, action) => {
+			state.dataStatus = DataStatus.FULFILLED;
+			state.error = null;
+			state.isAuthenticated = true;
+			state.user = action.payload.data;
+		});
+		builder.addCase(signIn.rejected, (state, action) => {
+			state.dataStatus = DataStatus.REJECTED;
+			state.error = (action.payload as string) || "An unknown error occurred";
+			state.isAuthenticated = false;
+			state.user = null;
 		});
 	},
 	initialState,

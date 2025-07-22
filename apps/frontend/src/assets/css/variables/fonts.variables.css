@@ -1,0 +1,32 @@
+@font-face {
+	font-family: Inter;
+	src: url("../../fonts/inter.ttf");
+}
+
+:root {
+	--font-family: "Inter";
+
+	/* Font sizes */
+	--font-size-display: 56px;
+	--font-size-h1: 40px;
+	--font-size-h2: 32px;
+	--font-size-h3: 24px;
+	--font-size-h4: 20px;
+	--font-size-small: 16px;
+	--font-size-tiny: 14px;
+
+	/* Font line height */
+	--font-line-height-display: 64px;
+	--font-line-height-h1: 48px;
+	--font-line-height-h2: 40px;
+	--font-line-height-h3: 32px;
+	--font-line-height-small: 24px;
+	--font-line-height-tiny: 20px;
+
+	/* Font weightes */
+	--font-weight-bold: 700;
+	--font-weight-semibold: 600;
+	--font-weight-regular: 400;
+	--font-style: normal;
+	--font-style-quatation: italic;
+}

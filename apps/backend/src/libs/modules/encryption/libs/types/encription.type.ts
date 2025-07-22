@@ -1,7 +1,6 @@
 type Encryption = {
-	generateSalt(): Promise<string>;
-	hashPassword(password: string, salt: string): Promise<string>;
-	verifyPassword(password: string, hashedPassword: string): Promise<boolean>;
+	compare(data: string, hash: string): Promise<boolean>;
+	encrypt(data: string): Promise<{ encryptedData: string; salt: string }>;
 };
 
 export { type Encryption };

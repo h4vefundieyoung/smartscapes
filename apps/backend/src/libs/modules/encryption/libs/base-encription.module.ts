@@ -5,27 +5,23 @@ import { type Config } from "~/libs/modules/config/config.js";
 import { type Encryption } from "./types/types.js";
 
 class BaseEncryption implements Encryption {
-	private config: Config;
+	private saltRounds: number;
 
 	public constructor(config: Config) {
-		this.config = config;
+		this.saltRounds = config.ENV.ENCRYPTION.SALT_ROUNDS;
 	}
 
-	public async generateSalt(): Promise<string> {
-		const saltRounds = this.config.ENV.ENCRYPTION.SALT_ROUNDS;
-
-		return await bcrypt.genSalt(saltRounds);
+	public async compare(data: string, hash: string): Promise<boolean> {
+		return await bcrypt.compare(data, hash);
 	}
 
-	public async hashPassword(password: string, salt: string): Promise<string> {
-		return await bcrypt.hash(password, salt);
-	}
+	public async encrypt(
+		data: string,
+	): Promise<{ encryptedData: string; salt: string }> {
+		const salt = await bcrypt.genSalt(this.saltRounds);
+		const encryptedData = await bcrypt.hash(data, salt);
 
-	public async verifyPassword(
-		password: string,
-		hashedPassword: string,
-	): Promise<boolean> {
-		return await bcrypt.compare(password, hashedPassword);
+		return { encryptedData, salt };
 	}
 }
 

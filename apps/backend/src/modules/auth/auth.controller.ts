@@ -83,13 +83,16 @@ class AuthController extends BaseController {
 		options: APIHandlerOptions<{
 			body: UserSignUpRequestDto;
 		}>,
-	): Promise<APIHandlerResponse<UserSignUpResponseDto>> {
+	): Promise<
+		APIHandlerResponse<{ token: string; user: UserSignUpResponseDto }>
+	> {
 		const { body } = options;
 
 		const user = await this.authService.signUp(body);
+		const token = await this.authService.generateToken(user.id);
 
 		return {
-			payload: { data: user },
+			payload: { data: { token, user } },
 			status: HTTPCode.CREATED,
 		};
 	}

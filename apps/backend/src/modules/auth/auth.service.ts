@@ -1,14 +1,27 @@
+import { type TokenPayload, type TokenService } from "~/modules/token/token.js";
 import {
 	type UserService,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
 
+type Constructor = {
+	tokenService: TokenService;
+	userService: UserService;
+};
+
 class AuthService {
+	private tokenService: TokenService;
+
 	private userService: UserService;
 
-	public constructor(userService: UserService) {
+	public constructor({ tokenService, userService }: Constructor) {
+		this.tokenService = tokenService;
 		this.userService = userService;
+	}
+
+	public generateToken(id: TokenPayload["id"]): Promise<string> {
+		return this.tokenService.create(id);
 	}
 
 	public signUp(

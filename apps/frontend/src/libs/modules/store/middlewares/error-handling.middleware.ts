@@ -12,7 +12,9 @@ const errorHandlingMiddleware: Middleware =
 			"error" in action &&
 			action.error
 		) {
-			const { message } : { message?: string } = action.error as { message?: string };
+			const { message }: { message?: string } = action.error as {
+				message?: string;
+			};
 
 			showError(message);
 		}

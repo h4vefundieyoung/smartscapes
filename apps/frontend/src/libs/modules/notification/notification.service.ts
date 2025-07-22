@@ -38,12 +38,11 @@ class NotificationService {
 
 const notificationService = new NotificationService();
 
-export { notificationService };
-
 export const showError =
 	notificationService.showError.bind(notificationService);
-export const showWarning =
-	notificationService.showWarning.bind(notificationService);
-export const showSuccess =
-	notificationService.showSuccess.bind(notificationService);
-export const showInfo = notificationService.showInfo.bind(notificationService);
+
+// Uncomment when needed (commented out to avoid unused exports (linter errors)):
+// export { notificationService };
+// export const showWarning = notificationService.showWarning.bind(notificationService);
+// export const showSuccess = notificationService.showSuccess.bind(notificationService);
+// export const showInfo = notificationService.showInfo.bind(notificationService);

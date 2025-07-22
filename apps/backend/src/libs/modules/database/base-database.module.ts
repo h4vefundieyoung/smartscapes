@@ -14,6 +14,7 @@ class BaseDatabase implements Database {
 			[AppEnvironment.DEVELOPMENT]: this.initialConfig,
 			[AppEnvironment.LOCAL]: this.initialConfig,
 			[AppEnvironment.PRODUCTION]: this.initialConfig,
+			[AppEnvironment.TEST]: this.initialConfig,
 		};
 	}
 

@@ -58,7 +58,7 @@ class UserController extends BaseController {
 	 *                   items:
 	 *                     $ref: '#/components/schemas/User'
 	 */
-	private async findAll(): Promise<
+	public async findAll(): Promise<
 		APIHandlerResponse<UserGetAllItemResponseDto[]>
 	> {
 		const { items } = await this.userService.findAll();

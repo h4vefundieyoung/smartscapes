@@ -76,14 +76,18 @@ class BaseConfig implements Config {
 		config();
 
 		this.envSchema.load({});
-		this.envSchema.validate({
-			allowed: "strict",
-			output: (message) => {
-				this.logger.info(message);
-			},
-		});
 
 		this.ENV = this.envSchema.getProperties();
+
+		if (this.ENV.APP.ENVIRONMENT !== AppEnvironment.TEST) {
+			this.envSchema.validate({
+				allowed: "strict",
+				output: (message) => {
+					this.logger.info(message);
+				},
+			});
+		}
+
 		this.logger.info(".env file is found and successfully parsed.");
 	}
 }

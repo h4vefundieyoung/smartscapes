@@ -20,6 +20,8 @@ describe("UserService", () => {
 
 		const userRepository = {
 			create: (() => Promise.resolve(userEntity)) as UserRepository["create"],
+			findByEmail: (() =>
+				Promise.resolve(null)) as UserRepository["findByEmail"],
 		} as UserRepository;
 
 		const userService = new UserService(userRepository);

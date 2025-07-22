@@ -18,6 +18,12 @@ class UserService implements Service {
 	public async create(
 		payload: UserSignUpRequestDto,
 	): Promise<UserGetAllItemResponseDto> {
+		const user = await this.findByEmail(payload.email);
+
+		if (user) {
+			throw new Error(`User with email ${payload.email} already exists`);
+		}
+
 		const { encryptedData, salt } = await encryption.encrypt(payload.password);
 
 		const item = await this.userRepository.create(

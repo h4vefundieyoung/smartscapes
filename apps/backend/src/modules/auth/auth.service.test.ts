@@ -5,11 +5,14 @@ import {
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 
+import { type TokenService } from "~/modules/token/token.js";
 import { type UserService } from "~/modules/users/users.js";
 
 import { AuthService } from "./auth.service.js";
 
 describe("AuthService", () => {
+	const mockToken = "mock token";
+
 	const signUpRequestDto: UserSignUpRequestDto = {
 		email: "test@example.com",
 		password: "Password123!",
@@ -21,15 +24,24 @@ describe("AuthService", () => {
 			id: 1,
 		};
 
+		const mockTokenCreate = mock.fn<TokenService["create"]>(() =>
+			Promise.resolve(mockToken),
+		);
 		const mockUserCreate = mock.fn<UserService["create"]>(() =>
 			Promise.resolve(mockResponse),
 		);
 
+		const mockTokenService = {
+			create: mockTokenCreate as TokenService["create"],
+		} as TokenService;
 		const mockUserService = {
 			create: mockUserCreate as UserService["create"],
 		} as UserService;
 
-		const authService = new AuthService(mockUserService);
+		const authService = new AuthService({
+			tokenService: mockTokenService,
+			userService: mockUserService,
+		});
 
 		const result = await authService.signUp(signUpRequestDto);
 

@@ -13,6 +13,8 @@ import { AuthController } from "./auth.controller.js";
 import { type AuthService } from "./auth.service.js";
 
 describe("AuthController", () => {
+	const mockToken = "mock token";
+
 	const mockUser: UserSignUpResponseDto = {
 		email: "test@example.com",
 		id: 1,
@@ -26,11 +28,16 @@ describe("AuthController", () => {
 	};
 
 	it("signUp should create and return new user", async () => {
+		const mockGenerateToken: AuthService["generateToken"] = () => {
+			return Promise.resolve(mockToken);
+		};
+
 		const mockSignUp: AuthService["signUp"] = () => {
 			return Promise.resolve(mockUser);
 		};
 
 		const authService = {
+			generateToken: mockGenerateToken,
 			signUp: mockSignUp,
 		} as AuthService;
 
@@ -47,7 +54,7 @@ describe("AuthController", () => {
 
 		assert.deepStrictEqual(result, {
 			payload: {
-				data: mockUser,
+				data: { token: mockToken, user: mockUser },
 			},
 			status: HTTPCode.CREATED,
 		});

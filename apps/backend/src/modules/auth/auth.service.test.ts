@@ -29,8 +29,13 @@ describe("AuthService", () => {
 			Promise.resolve(mockResponse),
 		);
 
+		const mockFindByEmail = mock.fn<UserService["findByEmail"]>(() =>
+			Promise.resolve(null),
+		);
+
 		const mockUserService = {
 			create: mockUserCreate as UserService["create"],
+			findByEmail: mockFindByEmail as UserService["findByEmail"],
 		} as UserService;
 
 		const authService = new AuthService(mockUserService);

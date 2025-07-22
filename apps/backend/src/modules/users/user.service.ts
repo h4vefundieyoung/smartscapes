@@ -44,6 +44,14 @@ class UserService implements Service {
 			items: items.map((item) => item.toObject()),
 		};
 	}
+
+	public async findByEmail(
+		email: string,
+	): Promise<null | UserGetAllItemResponseDto> {
+		const user = await this.userRepository.findByEmail(email);
+
+		return user ? user.toObject() : null;
+	}
 }
 
 export { UserService };

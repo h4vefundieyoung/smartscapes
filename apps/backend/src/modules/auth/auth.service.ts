@@ -11,10 +11,16 @@ class AuthService {
 		this.userService = userService;
 	}
 
-	public signUp(
+	public async signUp(
 		userRequestDto: UserSignUpRequestDto,
 	): Promise<UserSignUpResponseDto> {
-		return this.userService.create(userRequestDto);
+		const user = await this.userService.findByEmail(userRequestDto.email);
+
+		if (user) {
+			throw new Error(`User with email ${userRequestDto.email} already exists`);
+		}
+
+		return await this.userService.create(userRequestDto);
 	}
 }
 

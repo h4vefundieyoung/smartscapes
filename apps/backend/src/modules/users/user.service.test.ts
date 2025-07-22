@@ -24,6 +24,8 @@ describe("UserService", () => {
 
 		const result = await userService.create({
 			email: mockUser.email,
+			firstName: "Test",
+			lastName: "User",
 			password: "Password",
 		});
 

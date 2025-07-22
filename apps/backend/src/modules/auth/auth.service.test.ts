@@ -12,6 +12,8 @@ import { AuthService } from "./auth.service.js";
 describe("AuthService", () => {
 	const signUpRequestDto: UserSignUpRequestDto = {
 		email: "test@example.com",
+		firstName: "Test",
+		lastName: "User",
 		password: "Password123!",
 	};
 

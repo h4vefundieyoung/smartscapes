@@ -39,6 +39,8 @@ describe("AuthController", () => {
 		const signUpOptions = {
 			body: {
 				email: mockUser.email,
+				firstName: "Test",
+				lastName: "User",
 				password: "Password123!",
 			},
 		} as APIHandlerOptions<{ body: UserSignUpRequestDto }>;

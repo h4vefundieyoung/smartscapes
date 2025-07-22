@@ -1,7 +1,7 @@
 type UserSignUpRequestDto = {
 	email: string;
 	firstName: string;
-	lastName?: string | undefined;
+	lastName: string;
 	password: string;
 };
 

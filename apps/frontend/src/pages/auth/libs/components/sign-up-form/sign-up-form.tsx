@@ -29,7 +29,7 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 				const payload: UserSignUpRequestDto = {
 					email: formData.email,
 					firstName: formData.firstName,
-					lastName: formData.lastName === "" ? undefined : formData.lastName,
+					lastName: formData.lastName,
 					password: formData.password,
 				};
 				onSubmit(payload);

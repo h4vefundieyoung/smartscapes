@@ -39,10 +39,10 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 	);
 
 	return (
-		<div className={styles["container form-wrapper"]}>
-			<h1 className={styles["form-title"]}>Sign Up</h1>
-			<form onSubmit={handleFormSubmit}>
-				<div className={styles["form-group"]}>
+		<div className={styles["container"]}>
+			<h1 className={styles["form__title"]}>Sign Up</h1>
+			<form className={styles["form"]} onSubmit={handleFormSubmit}>
+				<div className={styles["form__group"]}>
 					<Input
 						control={control}
 						errors={errors}
@@ -53,7 +53,7 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 					/>
 				</div>
 
-				<div className={styles["form-group"]}>
+				<div className={styles["form__group"]}>
 					<Input
 						control={control}
 						errors={errors}
@@ -64,7 +64,7 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 					/>
 				</div>
 
-				<div className={styles["form-group"]}>
+				<div className={styles["form__group"]}>
 					<Input
 						control={control}
 						errors={errors}
@@ -75,7 +75,7 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 					/>
 				</div>
 
-				<div className={styles["form-group"]}>
+				<div className={styles["form__group"]}>
 					<Input
 						control={control}
 						errors={errors}
@@ -86,7 +86,7 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 					/>
 				</div>
 
-				<div className={styles["form-group"]}>
+				<div className={styles["form__group"]}>
 					<Input
 						control={control}
 						errors={errors}
@@ -100,8 +100,8 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 				<Button label="Sign up" type="submit" />
 			</form>
 
-			<div className={styles["login-link-container"]}>
-				<p className={styles["login-text"]}>
+			<div className={styles["login-link__container"]}>
+				<p className={styles["login-link__text"]}>
 					Already have an account?
 					<Link to={AppRoute.SIGN_IN}>Log in</Link>
 				</p>

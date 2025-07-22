@@ -33,6 +33,14 @@ class BaseConfig implements Config {
 					format: Number,
 				},
 			},
+			AUTH: {
+				JWT_SECRET: {
+					default: null,
+					doc: "Secret string for token generation",
+					env: "JWT_SECRET",
+					format: String,
+				},
+			},
 			DB: {
 				CONNECTION_STRING: {
 					default: null,

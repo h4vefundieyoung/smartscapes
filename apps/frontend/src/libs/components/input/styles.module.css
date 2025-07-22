@@ -4,17 +4,25 @@
 	gap: 4px;
 	width: 100%;
 	max-width: 364px;
-	color: #00291de5;
 }
 
 .error {
 	display: inline-flex;
 	gap: 7px;
 	align-items: center;
-	font-size: 14px;
-	font-weight: 500;
-	line-height: 1.3;
-	color: #c73838;
+	font:
+		var(--font-weight-semibold) var(--font-size-tiny) /
+			var(--font-line-height-tiny) Inter,
+		sans-serif;
+	color: var(--text-error);
+}
+
+.label-caption {
+	font:
+		var(--font-weight-regular) var(--font-size-small) /
+			var(--font-line-height-small) Inter,
+		sans-serif;
+	color: var(--text-strong);
 }
 
 .label-caption::first-letter,
@@ -34,26 +42,26 @@
 
 .input.input-error {
 	outline: none;
-	border: 2px solid #c73838cc;
+	border: 2px solid var(--stroke-error-strong);
 }
 
 .input-error,
 .input-error:hover,
 .input-error:focus {
-	background-color: #ff4d4d0d;
+	background-color: var(--fill-error-weak);
 }
 
 .input,
 .input:focus {
-	border: 1px solid #004d3673;
+	border: 1px solid var(--stroke-strong);
 }
 
 .input:hover {
-	background-color: #0066470a;
+	background-color: var(--fill-hover);
 }
 
 .input:focus {
-	outline: 2px solid #067a57;
+	outline: 2px solid var(--stroke-focus);
 	outline-offset: 2px;
 	background-color: initial;
 }

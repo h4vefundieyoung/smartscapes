@@ -1,3 +1,4 @@
+import logo from "~/assets/images/logo.svg";
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -60,7 +61,23 @@ const Auth = (): React.JSX.Element => {
 	}, [dataStatus, navigate]);
 
 	return (
-		<main className={styles["container"]}>{handleFormRender(pathname)}</main>
+		<main className={styles["container"]}>
+			<div className={styles["left-panel"]}>
+				<div className={styles["left-panel__logo logo"]}>
+					<img
+						alt="SmartScapes"
+						className={styles["logo__image"]}
+						src={logo}
+						style={{ height: "24px", width: "24px" }}
+					/>
+					<p className="logo__text">SmartScapes</p>
+				</div>
+
+				{handleFormRender(pathname)}
+			</div>
+
+			<div className={styles["right-panel"]} />
+		</main>
 	);
 };
 

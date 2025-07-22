@@ -1,12 +1,20 @@
 import bcrypt from "bcrypt";
 
+import { type Config } from "~/libs/modules/config/config.js";
+
 import { type Encryption } from "./types/types.js";
 
-const SALT_ROUNDS = 10;
-
 class BaseEncryption implements Encryption {
+	private config: Config;
+
+	public constructor(config: Config) {
+		this.config = config;
+	}
+
 	public async generateSalt(): Promise<string> {
-		return await bcrypt.genSalt(SALT_ROUNDS);
+		const saltRounds = this.config.ENV.ENCRYPTION.SALT_ROUNDS;
+
+		return await bcrypt.genSalt(saltRounds);
 	}
 
 	public async hashPassword(password: string, salt: string): Promise<string> {

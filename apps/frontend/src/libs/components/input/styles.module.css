@@ -4,24 +4,23 @@
 	gap: 4px;
 	width: 100%;
 	max-width: 364px;
+	font-family: Inter, sans-serif;
 }
 
 .error {
 	display: inline-flex;
 	gap: 7px;
 	align-items: center;
-	font:
-		var(--font-weight-semibold) var(--font-size-tiny) /
-			var(--font-line-height-tiny) Inter,
-		sans-serif;
+	font-size: var(--font-size-tiny);
+	font-weight: var(--font-weight-semibold);
+	line-height: var(--font-line-height-tiny);
 	color: var(--text-error);
 }
 
 .label-caption {
-	font:
-		var(--font-weight-regular) var(--font-size-small) /
-			var(--font-line-height-small) Inter,
-		sans-serif;
+	font-size: var(--font-size-small);
+	font-weight: var(--font-weight-regular);
+	line-height: var(--font-line-height-small);
 	color: var(--text-strong);
 }
 

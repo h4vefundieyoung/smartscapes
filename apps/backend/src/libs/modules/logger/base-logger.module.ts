@@ -4,40 +4,38 @@ import pretty from "pino-pretty";
 import { type Logger } from "./libs/types/types.js";
 
 class BaseLogger implements Logger {
-	private logger: LibraryLogger;
+	private instance: LibraryLogger;
 
 	public constructor() {
-		this.logger = pino(pretty());
-
-		this.logger.info("Logger is created.");
+		this.instance = pino(pretty());
 	}
 
 	public debug(
 		message: string,
 		parameters: Record<string, unknown> = {},
 	): ReturnType<Logger["debug"]> {
-		this.logger.debug(parameters, message);
+		this.instance.debug(parameters, message);
 	}
 
 	public error(
 		message: string,
 		parameters: Record<string, unknown> = {},
 	): ReturnType<Logger["error"]> {
-		this.logger.error(parameters, message);
+		this.instance.error(parameters, message);
 	}
 
 	public info(
 		message: string,
 		parameters: Record<string, unknown> = {},
 	): ReturnType<Logger["info"]> {
-		this.logger.info(parameters, message);
+		this.instance.info(parameters, message);
 	}
 
 	public warn(
 		message: string,
 		parameters: Record<string, unknown> = {},
 	): ReturnType<Logger["warn"]> {
-		this.logger.warn(parameters, message);
+		this.instance.warn(parameters, message);
 	}
 }
 

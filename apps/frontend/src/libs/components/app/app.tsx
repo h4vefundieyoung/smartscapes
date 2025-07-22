@@ -8,6 +8,9 @@ import styles from "./styles.module.css";
 const App = (): React.JSX.Element => {
 	const { pathname } = useLocation();
 	const dispatch = useAppDispatch();
+  
+	const dataStatus = useAppSelector(({ users }) => users.dataStatus);
+	const users = useAppSelector(({ users }) => users.data);
 
 	const isRoot = pathname === AppRoute.ROOT;
 

@@ -1,19 +1,19 @@
-import { ServerErrorType } from "~/libs/enums/enums.js";
+import { APIErrorType } from "~/libs/enums/enums.js";
 import { configureString } from "~/libs/helpers/helpers.js";
 import {
 	type HTTP,
 	type HTTPCode,
 	HTTPError,
 	HTTPHeader,
+	type HTTPResponse,
 } from "~/libs/modules/http/http.js";
 import { type Storage, StorageKey } from "~/libs/modules/storage/storage.js";
-import { type ServerErrorResponse, type ValueOf } from "~/libs/types/types.js";
+import { type APIErrorResponse, type ValueOf } from "~/libs/types/types.js";
 
 import {
 	type GetHeadersOptions,
 	type HTTPApi,
 	type HTTPApiOptions,
-	type HTTPApiResponse,
 } from "./libs/types/types.js";
 
 type Constructor = {
@@ -39,10 +39,10 @@ class BaseHTTPApi implements HTTPApi {
 		this.storage = storage;
 	}
 
-	public async load(
+	public async load<T = unknown>(
 		path: string,
 		options: HTTPApiOptions,
-	): Promise<HTTPApiResponse> {
+	): Promise<HTTPResponse<T>> {
 		const {
 			contentType = null,
 			hasAuth = false,
@@ -55,13 +55,13 @@ class BaseHTTPApi implements HTTPApi {
 			hasAuth,
 		});
 
-		const response = await this.http.load(path, {
+		const response = await this.http.load<T>(path, {
 			headers,
 			method,
 			payload,
 		});
 
-		return (await this.checkResponse(response)) as HTTPApiResponse;
+		return await this.checkResponse<T>(response);
 	}
 
 	protected getFullEndpoint<T extends Record<string, string>>(
@@ -79,7 +79,9 @@ class BaseHTTPApi implements HTTPApi {
 		);
 	}
 
-	private async checkResponse(response: Response): Promise<Response> {
+	private async checkResponse<T>(
+		response: HTTPResponse<T>,
+	): Promise<HTTPResponse<T>> {
 		if (!response.ok) {
 			await this.handleError(response);
 		}
@@ -106,27 +108,32 @@ class BaseHTTPApi implements HTTPApi {
 		return headers;
 	}
 
-	private async handleError(response: Response): Promise<never> {
-		let parsedException: ServerErrorResponse;
+	private async handleError(response: HTTPResponse): Promise<never> {
+		let errorPayload: APIErrorResponse["error"];
 
 		try {
-			parsedException = (await response.json()) as ServerErrorResponse;
-		} catch {
-			parsedException = {
-				errorType: ServerErrorType.COMMON,
+			const body = (await response.json()) as APIErrorResponse;
+
+			const commonErrorPayload = {
 				message: response.statusText,
+				type: APIErrorType.COMMON,
+			};
+
+			errorPayload = "error" in body ? body.error : commonErrorPayload;
+		} catch {
+			errorPayload = {
+				message: response.statusText,
+				type: APIErrorType.COMMON,
 			};
 		}
 
-		const isCustomException = Boolean(parsedException.errorType);
+		const details = "details" in errorPayload ? errorPayload.details : [];
 
 		throw new HTTPError({
-			details: "details" in parsedException ? parsedException.details : [],
-			errorType: isCustomException
-				? parsedException.errorType
-				: ServerErrorType.COMMON,
-			message: parsedException.message,
+			details,
+			message: errorPayload.message,
 			status: response.status as ValueOf<typeof HTTPCode>,
+			type: errorPayload.type,
 		});
 	}
 }

@@ -1,7 +1,11 @@
-import { type ServerApplicationRouteParameters } from "./types.js";
+import {
+	type APIDoc as APIDocument,
+	type ServerApplicationRouteParameters,
+} from "./types.js";
 
 type ServerApplicationApi = {
-	generateDoc(title: string): object;
+	basePath: string;
+	generateDoc(title: string): APIDocument;
 	routes: ServerApplicationRouteParameters[];
 	version: string;
 };

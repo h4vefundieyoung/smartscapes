@@ -21,7 +21,9 @@ class BaseController implements Controller {
 		this.routes = [];
 	}
 
-	public addRoute(options: ControllerRouteParameters): void {
+	public addRoute<HandlerOptions extends APIHandlerOptions = APIHandlerOptions>(
+		options: ControllerRouteParameters<HandlerOptions>,
+	): void {
 		const { handler, path } = options;
 		const fullPath = this.apiUrl + path;
 
@@ -32,29 +34,31 @@ class BaseController implements Controller {
 		});
 	}
 
-	private async mapHandler(
-		handler: APIHandler,
+	private async mapHandler<HandlerOptions extends APIHandlerOptions>(
+		handler: APIHandler<HandlerOptions>,
 		request: Parameters<ServerApplicationRouteParameters["handler"]>[0],
 		reply: Parameters<ServerApplicationRouteParameters["handler"]>[1],
 	): Promise<void> {
-		this.logger.info(`${request.method.toUpperCase()} on ${request.url}`);
+		this.logger.info(
+			`Incoming Request: ${request.method.toUpperCase()} ${request.url} [${request.id}]`,
+		);
 
-		const handlerOptions = this.mapRequest(request);
+		const handlerOptions = this.mapRequest<HandlerOptions>(request);
 		const { payload, status } = await handler(handlerOptions);
 
 		return await reply.status(status).send(payload);
 	}
 
-	private mapRequest(
+	private mapRequest<HandlerOptions extends APIHandlerOptions>(
 		request: Parameters<ServerApplicationRouteParameters["handler"]>[0],
-	): APIHandlerOptions {
+	): HandlerOptions {
 		const { body, params, query } = request;
 
 		return {
 			body,
 			params,
 			query,
-		};
+		} as HandlerOptions;
 	}
 }
 

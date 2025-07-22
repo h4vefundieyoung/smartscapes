@@ -1,6 +1,6 @@
-const ServerErrorType = {
+const APIErrorType = {
 	COMMON: "COMMON",
 	VALIDATION: "VALIDATION",
 } as const;
 
-export { ServerErrorType };
+export { APIErrorType };

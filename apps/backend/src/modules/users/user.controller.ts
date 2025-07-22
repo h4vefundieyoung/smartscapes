@@ -8,31 +8,31 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
 import { UsersApiPath } from "./libs/enums/enums.js";
+import { type UserGetAllItemResponseDto } from "./libs/types/types.js";
 
-/*** @swagger
+/**
+ * @swagger
  * components:
- *    schemas:
- *      User:
- *        type: object
- *        properties:
- *          id:
- *            type: number
- *            format: number
- *            minimum: 1
- *          email:
- *            type: string
- *            format: email
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         email:
+ *           type: string
+ *           example: user@example.com
  */
+
 class UserController extends BaseController {
 	private userService: UserService;
 
 	public constructor(logger: Logger, userService: UserService) {
 		super(logger, APIPath.USERS);
-
 		this.userService = userService;
 
 		this.addRoute({
-			handler: () => this.findAll(),
+			handler: this.findAll.bind(this),
 			method: "GET",
 			path: UsersApiPath.ROOT,
 		});
@@ -41,21 +41,30 @@ class UserController extends BaseController {
 	/**
 	 * @swagger
 	 * /users:
-	 *    get:
-	 *      description: Returns an array of users
-	 *      responses:
-	 *        200:
-	 *          description: Successful operation
-	 *          content:
-	 *            application/json:
-	 *              schema:
-	 *                type: array
-	 *                items:
-	 *                  $ref: "#/components/schemas/User"
+	 *   get:
+	 *     tags:
+	 *       - Users
+	 *     summary: Retrieve all users
+	 *     responses:
+	 *       200:
+	 *         description: A list of users
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: array
+	 *                   items:
+	 *                     $ref: '#/components/schemas/User'
 	 */
-	private async findAll(): Promise<APIHandlerResponse> {
+	public async findAll(): Promise<
+		APIHandlerResponse<UserGetAllItemResponseDto[]>
+	> {
+		const { items } = await this.userService.findAll();
+
 		return {
-			payload: await this.userService.findAll(),
+			payload: { data: items },
 			status: HTTPCode.OK,
 		};
 	}

@@ -16,9 +16,7 @@ import styles from "./styles.module.css";
 
 const Auth = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
-	const { dataStatus } = useAppSelector(({ auth }) => ({
-		dataStatus: auth.dataStatus,
-	}));
+	const dataStatus = useAppSelector(({ auth }) => auth.dataStatus);
 	const { pathname } = useLocation();
 	const navigate = useNavigate();
 

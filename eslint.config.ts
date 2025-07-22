@@ -240,6 +240,12 @@ const overridesConfigs: Linter.Config[] = [
 			"@typescript-eslint/explicit-function-return-type": ["off"],
 		},
 	},
+	{
+		files: ["**/*.test.ts"],
+		rules: {
+			"@typescript-eslint/no-floating-promises": ["off"],
+		},
+	},
 ];
 
 const config: Linter.Config[] = [

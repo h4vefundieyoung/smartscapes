@@ -8,7 +8,9 @@ import { UserService } from "./user.service.js";
 describe("UserService", () => {
 	const mockUser: Parameters<typeof UserEntity.initialize>[0] = {
 		email: "test@example.com",
+		firstName: "John",
 		id: 1,
+		lastName: "Doe",
 		passwordHash: "hash",
 		passwordSalt: "salt",
 	};
@@ -24,12 +26,16 @@ describe("UserService", () => {
 
 		const result = await userService.create({
 			email: mockUser.email,
+			firstName: mockUser.firstName,
+			lastName: mockUser.lastName,
 			password: "Password",
 		});
 
 		assert.deepStrictEqual(result, {
 			email: mockUser.email,
+			firstName: mockUser.firstName,
 			id: mockUser.id,
+			lastName: mockUser.lastName,
 		});
 	});
 

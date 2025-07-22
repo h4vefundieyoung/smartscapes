@@ -12,13 +12,17 @@ import { AuthService } from "./auth.service.js";
 describe("AuthService", () => {
 	const signUpRequestDto: UserSignUpRequestDto = {
 		email: "test@example.com",
+		firstName: "John",
+		lastName: "Doe",
 		password: "Password123!",
 	};
 
 	it("signUp should create new user", async () => {
 		const mockResponse: UserSignUpResponseDto = {
 			email: signUpRequestDto.email,
+			firstName: signUpRequestDto.firstName,
 			id: 1,
+			lastName: signUpRequestDto.lastName,
 		};
 
 		const mockUserCreate = mock.fn<UserService["create"]>(() =>

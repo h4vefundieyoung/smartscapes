@@ -1,25 +1,24 @@
 import { type Middleware } from "@reduxjs/toolkit";
 
-import { showError } from "~/libs/modules/notification/notification.js";
+import { notificationService } from "~/libs/modules/notification/notification.js";
 
-const errorHandlingMiddleware: Middleware =
-	() =>
-	(next) =>
-	(action): unknown => {
+function withNext(next: (a: unknown) => unknown): (action: unknown) => unknown {
+	return function (action: unknown) {
 		if (
 			action &&
 			typeof action === "object" &&
 			"error" in action &&
-			action.error
+			action.error &&
+			typeof action.error === "object" &&
+			"message" in action.error
 		) {
-			const { message }: { message?: string } = action.error as {
-				message?: string;
-			};
-
-			showError(message);
+			notificationService.showError(action.error.message as string);
 		}
 
 		return next(action);
 	};
+}
+
+const errorHandlingMiddleware: Middleware = () => withNext;
 
 export { errorHandlingMiddleware };

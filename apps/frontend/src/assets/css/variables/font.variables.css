@@ -1,0 +1,17 @@
+:root {
+	--font-family: inter;
+
+	/* Font sizes */
+	--font-size-display: 56px;
+	--font-size-h1: 40px;
+	--font-size-h2: 32px;
+	--font-size-h3: 24px;
+	--font-size-h4: 20px;
+	--font-size-small: 16px;
+	--font-size-tiny: 14px;
+
+	/* Font weights */
+	--font-weight-bold: 700;
+	--font-weight-semibold: 600;
+	--font-weight-regular: 400;
+}

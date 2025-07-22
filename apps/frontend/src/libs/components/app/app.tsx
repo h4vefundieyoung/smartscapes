@@ -16,8 +16,7 @@ const App = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const dataStatus = useAppSelector(({ users }) => users.dataStatus);
 	const users = useAppSelector(({ users }) => users.data);
-	const mockUser = { firstName: "John", lastName: "Smith" };
-
+	const mockUserWithoutAvatar = { firstName: "John", lastName: "Smith" };
 	const isRoot = pathname === AppRoute.ROOT;
 
 	useEffect(() => {
@@ -28,7 +27,7 @@ const App = (): React.JSX.Element => {
 
 	return (
 		<div className={styles["container"]}>
-			<Header user={mockUser} />
+			<Header user={mockUserWithoutAvatar} />
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
 
 			<ul className="App-navigation-list">

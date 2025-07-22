@@ -1,1 +1,4 @@
-export { pointOfInterestValidationSchema } from "@smartscapes/shared";
+export {
+	pointOfInterestCreateValidationSchema,
+	pointOfInterestUpdateValidationSchema,
+} from "@smartscapes/shared";

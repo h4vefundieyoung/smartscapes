@@ -8,11 +8,11 @@ export { ValidationError } from "./libs/exceptions/exceptions.js";
 export { configureString } from "./libs/helpers/helpers.js";
 export { type Config } from "./libs/modules/config/config.js";
 export {
-	type HTTP,
 	HTTPCode,
 	HTTPError,
 	HTTPHeader,
 	type HTTPMethod,
+	HTTPMethodEnum,
 	type HTTPOptions,
 	type HTTPResponse,
 } from "./libs/modules/http/http.js";
@@ -26,8 +26,8 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath } from "./modules/auth/auth.js";
 export {
-	pointOfInterestValidationSchema,
-	PointsOfInterestApiPath,
+	pointOfInterestCreateValidationSchema,
+	pointOfInterestUpdateValidationSchema,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 } from "./modules/points-of-interest/points-of-interest.js";

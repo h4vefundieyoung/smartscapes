@@ -1,10 +1,8 @@
 type PointsOfInterestResponseDto = {
-	createdAt: string;
-	id: string;
+	id: number;
 	latitude: number;
 	longitude: number;
 	name: string;
-	updatedAt: string;
 };
 
 export { type PointsOfInterestResponseDto };

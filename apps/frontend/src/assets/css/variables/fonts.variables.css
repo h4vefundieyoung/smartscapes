@@ -1,0 +1,69 @@
+@font-face {
+	font-family: Inter;
+	font-style: normal;
+	font-weight: 100 900;
+	src: url("../fonts/Inter/inter.ttf") format("truetype-variations");
+	font-display: swap;
+}
+
+@font-face {
+	font-family: Inter;
+	font-style: italic;
+	font-weight: 100 900;
+	src: url("../fonts/Inter/inter.ttf") format("truetype-variations");
+	font-display: swap;
+}
+
+:root {
+	--font-family: "Inter", sans-serif;
+
+	/* === Font Sizes === */
+	--font-size: 16px;
+	--font-size-sm: 14px;
+	--font-size-lg: 20px;
+	--font-size-xl: 24px;
+	--font-size-2xl: 32px;
+	--font-size-3xl: 40px;
+	--font-size-4xl: 56px;
+
+	/* === Font Weights === */
+	--font-weight: 400;
+	--font-weight-medium: 500;
+	--font-weight-semibold: 600;
+	--font-weight-bold: 700;
+
+	/* === Line Heights and Letter Spacing === */
+	--line-height: 1.5;
+	--line-height-xs: 1;
+
+	/* while there is no final values, just defined in px */
+	--line-height-sm: 20px;
+	--line-height-md: 24px;
+	--line-height-lg: 28px;
+	--line-height-xl: 36px;
+	--line-height-2xl: 42px;
+	--line-height-3xl: 48px;
+	--line-height-4xl: 64px;
+
+	/* === Other === */
+	--letter-spacing: 0;
+	--font-style-quotation: italic;
+	--font-style: normal;
+
+	/* === Fallback for #ss-25 and others issues === */
+	--font-size-display: var(--font-size-4xl);
+	--font-size-h1: var(--font-size-3xl);
+	--font-size-h2: var(--font-size-2xl);
+	--font-size-h3: var(--font-size-xl);
+	--font-size-h4: var(--font-size-lg);
+	--font-size-small: var(--font-size);
+	--font-size-tiny: var(--font-size-sm);
+	--font-line-height-display: var(--line-height-4xl);
+	--font-line-height-h1: var(--line-height-3xl);
+	--font-line-height-h2: var(--line-height-2xl);
+	--font-line-height-h3: var(--line-height-xl);
+	--font-line-height-h4: var(--line-height-lg);
+	--font-line-height-small: var(--line-height);
+	--font-line-height-tiny: var(--line-height-xs);
+	--font-weight-regular: var(--font-weight);
+}

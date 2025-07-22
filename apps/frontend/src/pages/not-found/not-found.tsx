@@ -1,5 +1,4 @@
-import { useCallback } from "react";
-import { useNavigate } from "react-router";
+import { Link } from "react-router";
 
 import { Button } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
@@ -7,16 +6,6 @@ import { AppRoute } from "~/libs/enums/enums.js";
 import styles from "./styles.module.css";
 
 const NotFound = (): React.JSX.Element => {
-	const navigate = useNavigate();
-
-	const onBackHomeClick = useCallback((): void => {
-		const promise = navigate(AppRoute.ROOT);
-
-		if (promise instanceof Promise) {
-			promise.catch(() => {});
-		}
-	}, [navigate]);
-
 	return (
 		<main className={styles["container"]}>
 			<div className={styles["error-container"]}>
@@ -31,7 +20,9 @@ const NotFound = (): React.JSX.Element => {
 					</span>
 				</div>
 
-				<Button label="Back to home" onClick={onBackHomeClick} type="button" />
+				<Link to={AppRoute.ROOT}>
+					<Button label="Back to home" type="button" />
+				</Link>
 			</div>
 		</main>
 	);

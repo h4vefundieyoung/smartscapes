@@ -2,7 +2,6 @@ import { jwtVerify, SignJWT } from "jose";
 
 import { type Config } from "~/libs/modules/config/config.js";
 
-import { JWS_ALGORITHM, TOKEN_EXPIRATION } from "./libs/constants/constants.js";
 import { type TokenPayload } from "./libs/types/types.js";
 
 type Constructor = {
@@ -20,9 +19,9 @@ class TokenService {
 		const secret = this.generateSecret();
 
 		const jwt = await new SignJWT({ id })
-			.setProtectedHeader({ alg: JWS_ALGORITHM })
+			.setProtectedHeader({ alg: this.config.ENV.AUTH.JWS_ALGORITHM })
 			.setIssuedAt()
-			.setExpirationTime(TOKEN_EXPIRATION)
+			.setExpirationTime(this.config.ENV.AUTH.TOKEN_EXPIRATION)
 			.sign(secret);
 
 		return jwt;

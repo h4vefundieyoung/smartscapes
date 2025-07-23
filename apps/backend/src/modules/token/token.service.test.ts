@@ -9,7 +9,9 @@ import { TokenService } from "./token.service.js";
 describe("Token service", () => {
 	const mockENV: Pick<EnvironmentSchema, "AUTH"> = {
 		AUTH: {
+			JWS_ALGORITHM: "HS384",
 			JWT_SECRET: "mock secret",
+			TOKEN_EXPIRATION: "1h",
 		},
 	};
 

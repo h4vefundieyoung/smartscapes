@@ -1,5 +1,10 @@
 import reactLogo from "~/assets/images/react.svg";
-import { Link, Loader, RouterOutlet } from "~/libs/components/components.js";
+import {
+	Button,
+	Link,
+	Loader,
+	RouterOutlet,
+} from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -28,7 +33,6 @@ const App = (): React.JSX.Element => {
 	return (
 		<div className={styles["container"]}>
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
-
 			<ul className="App-navigation-list">
 				<li>
 					<Link to={AppRoute.ROOT}>Root</Link>
@@ -55,6 +59,7 @@ const App = (): React.JSX.Element => {
 							<li key={user.id}>{user.email}</li>
 						))}
 					</ul>
+					<Button label="Button for test" type="button" />
 				</>
 			)}
 		</div>

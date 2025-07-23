@@ -1,17 +1,27 @@
-import { Header, Loader, RouterOutlet } from "~/libs/components/components.js";
+import reactLogo from "~/assets/images/react.svg";
+import {
+	Button,
+	Header,
+	Link,
+	Loader,
+	RouterOutlet,
+} from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import { useAppDispatch, useEffect, useLocation } from "~/libs/hooks/hooks.js";
+import {
+	useAppDispatch,
+	useAppSelector,
+	useEffect,
+	useLocation,
+} from "~/libs/hooks/hooks.js";
 import { actions as userActions } from "~/modules/users/users.js";
+
+import styles from "./styles.module.css";
 
 const App = (): React.JSX.Element => {
 	const { pathname } = useLocation();
 	const dispatch = useAppDispatch();
-	const mockUserWithAvatar = {
-		avatarUrl:
-			"https://www.imani.sg/wp/wp-content/uploads/2022/09/imani_icon.png",
-		firstName: "John",
-		lastName: "Smith",
-	};
+	const dataStatus = useAppSelector(({ users }) => users.dataStatus);
+	const users = useAppSelector(({ users }) => users.data);
 	const mockUserWithoutAvatar = {
 		avatarUrl: null,
 		firstName: "John",
@@ -26,12 +36,38 @@ const App = (): React.JSX.Element => {
 	}, [isRoot, dispatch]);
 
 	return (
-		<div>
-			<Loader />
-			<Header user={mockUserWithAvatar} />
+		<div className={styles["container"]}>
 			<Header user={mockUserWithoutAvatar} />
-			<Header user={null} />
-			<RouterOutlet />
+			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
+			<ul className="App-navigation-list">
+				<li>
+					<Link to={AppRoute.ROOT}>Root</Link>
+				</li>
+				<li>
+					<Link to={AppRoute.SIGN_IN}>Sign in</Link>
+				</li>
+				<li>
+					<Link to={AppRoute.SIGN_UP}>Sign up</Link>
+				</li>
+			</ul>
+			<p>Current path: {pathname}</p>
+
+			<div>
+				<RouterOutlet />
+			</div>
+			{isRoot && (
+				<>
+					<p>State: {dataStatus}</p>
+					<Loader />
+					<h3>Users:</h3>
+					<ul>
+						{users.map((user) => (
+							<li key={user.id}>{user.email}</li>
+						))}
+					</ul>
+					<Button label="Button for test" type="button" />
+				</>
+			)}
 		</div>
 	);
 };

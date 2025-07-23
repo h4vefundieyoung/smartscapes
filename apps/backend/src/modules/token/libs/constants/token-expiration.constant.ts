@@ -1,3 +1,0 @@
-const TOKEN_EXPIRATION = "24h";
-
-export { TOKEN_EXPIRATION };

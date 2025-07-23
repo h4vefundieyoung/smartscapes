@@ -24,11 +24,19 @@ import { AuthApiPath } from "./libs/enums/enums.js";
  *        type: object
  *        required:
  *          - email
+ *          - firstName
+ *          - lastName
  *          - password
  *        properties:
  *          email:
  *            type: string
  *            example: user@example.com
+ *          firstName:
+ *            type: string
+ *            example: John
+ *          lastName:
+ *            type: string
+ *            example: Doe
  *          password:
  *            type: string
  *            example: strongP@ssw0rd

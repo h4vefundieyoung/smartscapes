@@ -27,6 +27,7 @@ export {
 export { AuthApiPath } from "./modules/auth/auth.js";
 export { type UserAuthResponseDto } from "./modules/token/token.js";
 export {
+	UserExceptionMessage,
 	type UserGetAllItemResponseDto,
 	UsersApiPath,
 	type UserSignUpRequestDto,

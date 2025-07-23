@@ -16,6 +16,9 @@ type EnvironmentSchema = {
 		POOL_MAX: number;
 		POOL_MIN: number;
 	};
+	ENCRYPTION: {
+		SALT_ROUNDS: number;
+	};
 };
 
 export { type EnvironmentSchema };

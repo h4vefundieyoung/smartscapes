@@ -20,14 +20,14 @@ class AuthService {
 		this.userService = userService;
 	}
 
-	public generateToken(id: TokenPayload["id"]): Promise<string> {
-		return this.tokenService.create(id);
+	public async generateToken(id: TokenPayload["id"]): Promise<string> {
+		return await this.tokenService.create(id);
 	}
 
-	public signUp(
+	public async signUp(
 		userRequestDto: UserSignUpRequestDto,
 	): Promise<UserSignUpResponseDto> {
-		return this.userService.create(userRequestDto);
+		return await this.userService.create(userRequestDto);
 	}
 }
 

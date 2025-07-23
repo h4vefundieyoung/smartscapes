@@ -15,13 +15,17 @@ describe("AuthService", () => {
 
 	const signUpRequestDto: UserSignUpRequestDto = {
 		email: "test@example.com",
+		firstName: "John",
+		lastName: "Doe",
 		password: "Password123!",
 	};
 
 	it("signUp should create new user", async () => {
 		const mockResponse: UserSignUpResponseDto = {
 			email: signUpRequestDto.email,
+			firstName: signUpRequestDto.firstName,
 			id: 1,
+			lastName: signUpRequestDto.lastName,
 		};
 
 		const mockTokenCreate = mock.fn<TokenService["create"]>(() =>
@@ -31,11 +35,16 @@ describe("AuthService", () => {
 			Promise.resolve(mockResponse),
 		);
 
+		const mockFindByEmail = mock.fn<UserService["findByEmail"]>(() =>
+			Promise.resolve(null),
+		);
+
 		const mockTokenService = {
 			create: mockTokenCreate as TokenService["create"],
 		} as TokenService;
 		const mockUserService = {
 			create: mockUserCreate as UserService["create"],
+			findByEmail: mockFindByEmail as UserService["findByEmail"],
 		} as UserService;
 
 		const authService = new AuthService({

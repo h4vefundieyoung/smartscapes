@@ -20,13 +20,7 @@ const Header = ({ user }: Properties): JSX.Element => {
 	if (!user) {
 		return (
 			<header className={styles["header"]}>
-				<div className={styles["logo"]}>
-					<img
-						alt="SmartScapes Logo"
-						className={styles["logoIcon"]}
-						src={appLogo}
-					/>
-				</div>
+				<img alt="SmartScapes Logo" className={styles["logo"]} src={appLogo} />
 				<div className={styles["buttons"]}>
 					<Link to={AppRoute.SIGN_UP}>
 						<Button label="Sign up" type="button" />
@@ -41,13 +35,7 @@ const Header = ({ user }: Properties): JSX.Element => {
 
 	return (
 		<header className={styles["header"]}>
-			<div className={styles["logo"]}>
-				<img
-					alt="SmartScapes Logo"
-					className={styles["logoIcon"]}
-					src={appLogo}
-				/>
-			</div>
+			<img alt="SmartScapes Logo" className={styles["logo"]} src={appLogo} />
 			<div className={styles["userInfo"]}>
 				<Avatar user={user} />
 				<div className={styles["name"]}>

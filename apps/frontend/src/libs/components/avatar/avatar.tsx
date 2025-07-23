@@ -1,9 +1,13 @@
 import { type JSX } from "react";
 
 import { Image } from "../components.js";
+import { getUserInitials } from "./libs/helpers/helpers.js";
 import styles from "./styles.module.css";
 
+const DEFAULT_AVATAR_SIZE = 32;
+
 type Properties = {
+	size?: number;
 	user: User;
 };
 
@@ -13,26 +17,19 @@ type User = {
 	lastName: string;
 };
 
-const getInitials = (user: User): string => {
-	const [firstChar] = user.firstName;
-	const [lastChar] = user.lastName;
-
-	const firstNameInitial = firstChar ? firstChar.toUpperCase() : "";
-	const lastNameInitial = lastChar ? lastChar.toUpperCase() : "";
-
-	return `${firstNameInitial}${lastNameInitial}`;
-};
-
-const Avatar = ({ user }: Properties): JSX.Element => {
+const Avatar = ({
+	size = DEFAULT_AVATAR_SIZE,
+	user,
+}: Properties): JSX.Element => {
 	return (
-		<div className={styles["avatar"]}>
+		<div className={styles["avatar"]} style={{ height: size, width: size }}>
 			<Image
 				alt="User Avatar"
-				className={styles["avatarImage"] ?? ""}
+				className={styles["avatarImage"] as string}
 				fallback={
-					<span className={styles["fallback"]}>{getInitials(user)}</span>
+					<span className={styles["fallback"]}>{getUserInitials(user)}</span>
 				}
-				src={user.avatarUrl ?? ""}
+				src={user.avatarUrl as string}
 			/>
 		</div>
 	);

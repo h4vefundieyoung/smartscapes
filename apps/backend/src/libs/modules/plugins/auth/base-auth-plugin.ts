@@ -7,9 +7,9 @@ import {
 
 import { type UserService } from "~/modules/users/users.js";
 
-import { type Plugin } from "../libs/types/types.js";
+import { type AuthPluginApi } from "./libs/types/types.js";
 
-class AuthPlugin implements Plugin {
+class BaseAuthPlugin implements AuthPluginApi {
 	private jwtService: unknown;
 	private readonly userService: UserService;
 	private readonly whiteListRoutes: string[] = [];
@@ -27,17 +27,29 @@ class AuthPlugin implements Plugin {
 		app.addHook("onRequest", this.authHandler.bind(this));
 	}
 
-	private authHandler(request: FastifyRequest, reply: FastifyReply): void {
+	private async authHandler(
+		request: FastifyRequest,
+		reply: FastifyReply,
+	): Promise<void> {
 		const { headers, url } = request;
+		const mockId = 1;
 
 		if (this.whiteListRoutes.includes(url)) {
 			return;
 		}
 
 		if (!headers.authorization) {
-			reply.status(HTTPCode.UNAUTHORIZED).send();
+			return await reply.status(HTTPCode.UNAUTHORIZED).send();
 		}
+
+		const user = await this.userService.find(mockId);
+
+		if (!user) {
+			return await reply.status(HTTPCode.UNAUTHORIZED).send();
+		}
+
+		request.user = user;
 	}
 }
 
-export { AuthPlugin };
+export { BaseAuthPlugin };

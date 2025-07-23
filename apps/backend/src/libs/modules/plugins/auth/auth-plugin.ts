@@ -1,7 +1,7 @@
 import { userService } from "~/modules/users/users.js";
 
-import { AuthPlugin } from "./base-auth-plugin.js";
+import { BaseAuthPlugin } from "./base-auth-plugin.js";
 
-const authPlugin = new AuthPlugin({}, userService);
+const authPlugin = new BaseAuthPlugin({}, userService);
 
 export { authPlugin };

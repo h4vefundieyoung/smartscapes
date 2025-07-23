@@ -1,62 +1,32 @@
 import { type JSX } from "react";
 
-import leafLogo from "~/assets/images/leaf.svg";
+import appLogo from "~/assets/images/logo.svg";
 import { AppRoute } from "~/libs/enums/enums.js";
 
-import { Button, Image, Link } from "../components.js";
+import { Avatar, Button, Link } from "../components.js";
 import styles from "./styles.module.css";
 
-type HeaderProperties = {
+type Properties = {
 	user: null | User;
 };
 
 type User = {
-	avatarUrl?: string;
+	avatarUrl: null | string;
 	firstName: string;
 	lastName: string;
 };
 
-const getInitials = (user: null | User): string => {
-	const DEFAULT_INITIALS = "NN";
-	const FIRST_INDEX = 0;
-
+const Header = ({ user }: Properties): JSX.Element => {
 	if (!user) {
-		return DEFAULT_INITIALS;
-	}
-
-	const firstInitial = user.firstName.charAt(FIRST_INDEX).toUpperCase();
-	const lastInitial = user.lastName.charAt(FIRST_INDEX).toUpperCase();
-
-	return firstInitial + lastInitial || DEFAULT_INITIALS;
-};
-
-const Header = ({ user }: HeaderProperties): JSX.Element => {
-	return (
-		<header className={styles["header"]}>
-			<div className={styles["logo"]}>
-				<img
-					alt="SmartScapes Logo"
-					className={styles["logoIcon"]}
-					src={leafLogo}
-				/>
-				<span className={styles["logoText"]}>SmartScapes</span>
-			</div>
-
-			{user ? (
-				<div className={styles["userInfo"]}>
-					<div className={styles["avatar"]}>
-						<Image
-							alt="User Avatar"
-							className={styles["avatarImage"] ?? ""}
-							fallback={<span>{getInitials(user)}</span>}
-							src={user.avatarUrl ?? ""}
-						/>
-					</div>
-					<div className={styles["name"]}>
-						{user.firstName} {user.lastName}
-					</div>
+		return (
+			<header className={styles["header"]}>
+				<div className={styles["logo"]}>
+					<img
+						alt="SmartScapes Logo"
+						className={styles["logoIcon"]}
+						src={appLogo}
+					/>
 				</div>
-			) : (
 				<div className={styles["buttons"]}>
 					<Link to={AppRoute.SIGN_UP}>
 						<Button label="Sign up" type="button" />
@@ -65,7 +35,25 @@ const Header = ({ user }: HeaderProperties): JSX.Element => {
 						<Button label="Sign in" type="button" />
 					</Link>
 				</div>
-			)}
+			</header>
+		);
+	}
+
+	return (
+		<header className={styles["header"]}>
+			<div className={styles["logo"]}>
+				<img
+					alt="SmartScapes Logo"
+					className={styles["logoIcon"]}
+					src={appLogo}
+				/>
+			</div>
+			<div className={styles["userInfo"]}>
+				<Avatar user={user} />
+				<div className={styles["name"]}>
+					{user.firstName} {user.lastName}
+				</div>
+			</div>
 		</header>
 	);
 };

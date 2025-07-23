@@ -1,7 +1,7 @@
 import { type JSX, useCallback } from "react";
 import { useState } from "react";
 
-type ImageProperties = {
+type Properties = {
 	alt: string;
 	className?: string;
 	fallback: JSX.Element;
@@ -13,7 +13,7 @@ const Image = ({
 	className = "",
 	fallback,
 	src,
-}: ImageProperties): JSX.Element => {
+}: Properties): JSX.Element => {
 	const [hasError, setHasError] = useState<boolean>(false);
 
 	const handleError = useCallback(() => {

@@ -14,8 +14,8 @@ type User = {
 };
 
 const getInitials = (user: User): string => {
-	const firstChar = user.firstName[0];
-	const lastChar = user.lastName[0];
+	const [firstChar] = user.firstName;
+	const [lastChar] = user.lastName;
 
 	const firstNameInitial = firstChar ? firstChar.toUpperCase() : "";
 	const lastNameInitial = lastChar ? lastChar.toUpperCase() : "";

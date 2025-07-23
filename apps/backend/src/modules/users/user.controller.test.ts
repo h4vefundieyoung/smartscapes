@@ -16,7 +16,14 @@ describe("UserController", () => {
 	};
 
 	it("findAll should return all users", async () => {
-		const users = [{ email: "test@example.com", id: 1 }];
+		const users = [
+			{
+				email: "test@example.com",
+				firstName: "John",
+				id: 1,
+				lastName: "Doe",
+			},
+		];
 
 		const mockFindAll: UserService["findAll"] = () => {
 			return Promise.resolve({ items: users });

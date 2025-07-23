@@ -24,12 +24,6 @@ const overridesConfigs = [
 			],
 		},
 	},
-	{
-		files: ["src/libs/modules/controller/base-controller.module.ts"],
-		rules: {
-			"@typescript-eslint/no-magic-numbers": ["off"],
-		},
-	},
 ] satisfies Linter.Config[];
 
 const config = [

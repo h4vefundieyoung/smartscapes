@@ -13,7 +13,9 @@ describe("UserRepository", () => {
 
 	const mockUser: Parameters<typeof UserEntity.initialize>[0] = {
 		email: "test@example.com",
+		firstName: "John",
 		id: 1,
+		lastName: "Doe",
 		passwordHash: "hash",
 		passwordSalt: "salt",
 	};

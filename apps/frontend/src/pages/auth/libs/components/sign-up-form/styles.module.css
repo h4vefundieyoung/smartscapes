@@ -25,42 +25,13 @@
 	color: var(--color-text-strong);
 }
 
-/* input {
-	height: 48px;
-	border-radius: 12px;
-	border: 1px solid var(--color-stroke-strong);
-	padding: 12px 16px;
-}
-
-input:hover {
-	background-color: var(--color-fill-hover);
-}
-
-input:focus {
-	outline: none;
-	border: 2px solid var(--color-stroke-focus)
-}
-
-label span:last-child {
-	display: flex;
-	align-items: center;
-	font-family: var(--font-family);
-	font-size: var(--font-size-tiny);
-	font-weight: var(--font-weight-semibold);
-	color: var(--color-text-error);
-}
-
-label span:last-child::before {
-	content: url("../../../../../assets/images/error.svg");
-	display: inline-block;
-	height: 18px;
-	width: 18px;
-	margin-right: 7px;
-} */
-
 .login-link__text {
 	margin: 0;
 	font-size: var(--font-size-tiny);
 	font-weight: var(--font-weight-regular);
 	color: var(--color-text-weak);
+}
+
+.login-link__text a {
+	color: var(--color-text-brand);
 }

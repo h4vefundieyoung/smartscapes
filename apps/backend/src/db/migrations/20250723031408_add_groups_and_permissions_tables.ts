@@ -1,6 +1,11 @@
 import { type Knex } from "knex";
 
-import { DatabaseTableName } from "~/libs/modules/database/libs/enums/enums.js";
+const TableNames = {
+	GROUPS: "groups",
+	GROUPS_TO_PERMISSIONS: "groups_to_permissions",
+	PERMISSIONS: "permissions",
+	USERS: "users",
+} as const;
 
 const ColumnName = {
 	CREATED_AT: "created_at",
@@ -13,17 +18,17 @@ const ColumnName = {
 } as const;
 
 async function down(knex: Knex): Promise<void> {
-	await knex.schema.alterTable(DatabaseTableName.USERS, (table) => {
+	await knex.schema.alterTable(TableNames.USERS, (table) => {
 		table.dropColumn(ColumnName.GROUP_ID);
 	});
 
-	await knex.schema.dropTableIfExists(DatabaseTableName.GROUPS_TO_PERMISSIONS);
-	await knex.schema.dropTableIfExists(DatabaseTableName.PERMISSIONS);
-	await knex.schema.dropTableIfExists(DatabaseTableName.GROUPS);
+	await knex.schema.dropTableIfExists(TableNames.GROUPS_TO_PERMISSIONS);
+	await knex.schema.dropTableIfExists(TableNames.PERMISSIONS);
+	await knex.schema.dropTableIfExists(TableNames.GROUPS);
 }
 
 async function up(knex: Knex): Promise<void> {
-	await knex.schema.createTable(DatabaseTableName.GROUPS, (table) => {
+	await knex.schema.createTable(TableNames.GROUPS, (table) => {
 		table.increments(ColumnName.ID).primary();
 		table
 			.timestamp(ColumnName.CREATED_AT)
@@ -37,7 +42,7 @@ async function up(knex: Knex): Promise<void> {
 		table.string(ColumnName.NAME).notNullable();
 	});
 
-	await knex.schema.createTable(DatabaseTableName.PERMISSIONS, (table) => {
+	await knex.schema.createTable(TableNames.PERMISSIONS, (table) => {
 		table.increments(ColumnName.ID).primary();
 		table
 			.timestamp(ColumnName.CREATED_AT)
@@ -51,39 +56,36 @@ async function up(knex: Knex): Promise<void> {
 		table.string(ColumnName.NAME).notNullable();
 	});
 
-	await knex.schema.createTable(
-		DatabaseTableName.GROUPS_TO_PERMISSIONS,
-		(table) => {
-			table.increments(ColumnName.ID).primary();
-			table
-				.timestamp(ColumnName.CREATED_AT)
-				.notNullable()
-				.defaultTo(knex.fn.now());
-			table
-				.timestamp(ColumnName.UPDATED_AT)
-				.notNullable()
-				.defaultTo(knex.fn.now());
-			table
-				.integer(ColumnName.GROUP_ID)
-				.notNullable()
-				.references(ColumnName.ID)
-				.inTable(DatabaseTableName.GROUPS)
-				.onDelete("CASCADE");
-			table
-				.integer(ColumnName.PERMISSION_ID)
-				.notNullable()
-				.references(ColumnName.ID)
-				.inTable(DatabaseTableName.PERMISSIONS)
-				.onDelete("CASCADE");
-		},
-	);
+	await knex.schema.createTable(TableNames.GROUPS_TO_PERMISSIONS, (table) => {
+		table.increments(ColumnName.ID).primary();
+		table
+			.timestamp(ColumnName.CREATED_AT)
+			.notNullable()
+			.defaultTo(knex.fn.now());
+		table
+			.timestamp(ColumnName.UPDATED_AT)
+			.notNullable()
+			.defaultTo(knex.fn.now());
+		table
+			.integer(ColumnName.GROUP_ID)
+			.notNullable()
+			.references(ColumnName.ID)
+			.inTable(TableNames.GROUPS)
+			.onDelete("CASCADE");
+		table
+			.integer(ColumnName.PERMISSION_ID)
+			.notNullable()
+			.references(ColumnName.ID)
+			.inTable(TableNames.PERMISSIONS)
+			.onDelete("CASCADE");
+	});
 
-	await knex.schema.alterTable(DatabaseTableName.USERS, (table) => {
+	await knex.schema.alterTable(TableNames.USERS, (table) => {
 		table
 			.integer(ColumnName.GROUP_ID)
 			.nullable()
 			.references(ColumnName.ID)
-			.inTable(DatabaseTableName.GROUPS)
+			.inTable(TableNames.GROUPS)
 			.onDelete("SET NULL");
 	});
 }

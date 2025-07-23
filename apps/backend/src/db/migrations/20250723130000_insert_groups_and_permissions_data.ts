@@ -1,10 +1,14 @@
 import { type Knex } from "knex";
 
-import { DatabaseTableName } from "~/libs/modules/database/libs/enums/enums.js";
-
 type IdObject = { id: number };
 
 type IdObjectList = IdObject[];
+
+const TableNames = {
+	GROUPS: "groups",
+	GROUPS_TO_PERMISSIONS: "groups_to_permissions",
+	PERMISSIONS: "permissions",
+} as const;
 
 const ColumnName = {
 	CREATED_AT: "created_at",
@@ -17,18 +21,18 @@ const ColumnName = {
 } as const;
 
 async function down(knex: Knex): Promise<void> {
-	const group = await knex<IdObject>(DatabaseTableName.GROUPS)
+	const group = await knex<IdObject>(TableNames.GROUPS)
 		.select(ColumnName.ID)
 		.where(ColumnName.KEY, "admins")
 		.first();
 
-	const permission = await knex<IdObject>(DatabaseTableName.PERMISSIONS)
+	const permission = await knex<IdObject>(TableNames.PERMISSIONS)
 		.select(ColumnName.ID)
 		.where(ColumnName.KEY, "create_route")
 		.first();
 
 	if (group?.id && permission?.id) {
-		await knex(DatabaseTableName.GROUPS_TO_PERMISSIONS)
+		await knex(TableNames.GROUPS_TO_PERMISSIONS)
 			.where({
 				[ColumnName.GROUP_ID]: group.id,
 				[ColumnName.PERMISSION_ID]: permission.id,
@@ -36,11 +40,11 @@ async function down(knex: Knex): Promise<void> {
 			.delete();
 	}
 
-	await knex(DatabaseTableName.PERMISSIONS)
+	await knex(TableNames.PERMISSIONS)
 		.where(ColumnName.KEY, "create_route")
 		.delete();
 
-	await knex(DatabaseTableName.GROUPS)
+	await knex(TableNames.GROUPS)
 		.whereIn(ColumnName.KEY, ["admins", "users"])
 		.delete();
 }
@@ -48,7 +52,7 @@ async function down(knex: Knex): Promise<void> {
 async function up(knex: Knex): Promise<void> {
 	const now = new Date();
 
-	await knex(DatabaseTableName.GROUPS).insert([
+	await knex(TableNames.GROUPS).insert([
 		{
 			[ColumnName.CREATED_AT]: now,
 			[ColumnName.KEY]: "admins",
@@ -63,23 +67,23 @@ async function up(knex: Knex): Promise<void> {
 		},
 	]);
 
-	await knex(DatabaseTableName.PERMISSIONS).insert({
+	await knex(TableNames.PERMISSIONS).insert({
 		[ColumnName.CREATED_AT]: now,
 		[ColumnName.KEY]: "create_route",
 		[ColumnName.NAME]: "Create Route",
 		[ColumnName.UPDATED_AT]: now,
 	});
 
-	const [group] = (await knex(DatabaseTableName.GROUPS)
+	const [group] = (await knex(TableNames.GROUPS)
 		.select(ColumnName.ID)
 		.where(ColumnName.KEY, "admins")) as IdObjectList;
 
-	const [permission] = (await knex(DatabaseTableName.PERMISSIONS)
+	const [permission] = (await knex(TableNames.PERMISSIONS)
 		.select(ColumnName.ID)
 		.where(ColumnName.KEY, "create_route")) as IdObjectList;
 
 	if (group && permission) {
-		await knex(DatabaseTableName.GROUPS_TO_PERMISSIONS).insert({
+		await knex(TableNames.GROUPS_TO_PERMISSIONS).insert({
 			[ColumnName.CREATED_AT]: now,
 			[ColumnName.GROUP_ID]: group.id,
 			[ColumnName.PERMISSION_ID]: permission.id,

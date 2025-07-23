@@ -26,6 +26,7 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath } from "./modules/auth/auth.js";
 export {
+	UserExceptionMessage,
 	type UserGetAllItemResponseDto,
 	UsersApiPath,
 	type UserSignInRequestDto,

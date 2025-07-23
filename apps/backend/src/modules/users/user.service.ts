@@ -1,10 +1,10 @@
 import { encryption } from "~/libs/modules/encryption/libs/encription.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
+import { UserExceptionMessage } from "~/modules/users/libs/enums/enums.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
 
-import { ExceptionMessage } from "./libs/enums/exception-message.enum.js";
 import { UserError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserGetAllItemResponseDto,
@@ -25,7 +25,7 @@ class UserService implements Service {
 
 		if (existingUser) {
 			throw new UserError({
-				message: ExceptionMessage.INVALID_CREDENTIALS,
+				message: UserExceptionMessage.INVALID_CREDENTIALS,
 				status: HTTPCode.CONFLICT,
 			});
 		}

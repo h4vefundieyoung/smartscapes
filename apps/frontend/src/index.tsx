@@ -9,7 +9,6 @@ import {
 import { AppRoute } from "~/libs/enums/enums.js";
 import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
-
 import { NotFound } from "~/pages/not-found/not-found.jsx";
 
 createRoot(document.querySelector("#root") as HTMLElement).render(

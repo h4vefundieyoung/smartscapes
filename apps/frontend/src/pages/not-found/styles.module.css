@@ -15,8 +15,6 @@
 	align-items: center;
 	justify-content: space-between;
 	width: 360px;
-	height: 312px;
-	letter-spacing: 0;
 }
 
 .error-message {
@@ -47,8 +45,6 @@
 .error-description {
 	height: 24px;
 	margin: 0;
-	font-size: var(--font-size-small);
-	font-weight: var(--font-weight-regular);
 	color: var(--color-text-weak);
 	text-align: center;
 }

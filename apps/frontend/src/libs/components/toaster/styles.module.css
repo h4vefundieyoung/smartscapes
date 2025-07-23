@@ -1,34 +1,39 @@
-/* Toast container styles using CSS modules */
 :global(.Toastify__toast) {
 	font-family: inherit;
-	color: var(--text-strong);
-	background-color: var(--bg-base);
-	border: 1px solid var(--stroke-weak-10);
+	color: var(--color-text-strong);
+	background-color: var(--color-background-base);
+	border: 1px solid var(--color-stroke-weak);
 	border-radius: 8px;
 	box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
 }
 
 :global(.Toastify__close-button) {
-	color: var(--text-strong);
+	color: var(--color-text-strong);
 }
 
 :global(.Toastify__toast--error) {
-	color: var(--text-error);
+	color: var(--color-text-error);
 	background-image: linear-gradient(
-		var(--fill-error-weak),
-		var(--fill-error-weak)
+		var(--color-fill-error-weak),
+		var(--color-fill-error-weak)
 	);
-	border-color: var(--stroke-error);
+	border-color: var(--color-stroke-error);
 }
 
 :global(.Toastify__toast--success) {
-	color: var(--text-strong);
-	background-image: linear-gradient(var(--fill-weak), var(--fill-weak));
-	border-color: var(--stroke-selected);
+	color: var(--color-text-strong);
+	background-image: linear-gradient(
+		var(--color-fill-weak),
+		var(--color-fill-weak)
+	);
+	border-color: var(--color-stroke-selected);
 }
 
 :global(.Toastify__toast--info) {
-	color: var(--text-strong);
-	background-image: linear-gradient(var(--fill-weaker), var(--fill-weaker));
-	border-color: var(--fill-brand);
+	color: var(--color-text-strong);
+	background-image: linear-gradient(
+		var(--color-fill-weaker),
+		var(--color-fill-weaker)
+	);
+	border-color: var(--color-fill-brand);
 }

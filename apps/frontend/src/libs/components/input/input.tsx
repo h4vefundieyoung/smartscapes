@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import {
 	type Control,
 	type FieldErrors,
@@ -7,11 +6,13 @@ import {
 } from "react-hook-form";
 
 import errorIcon from "~/assets/images/error.svg";
+import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
+	autocomplete?: HTMLInputElement["autocomplete"];
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
 	label: string;
@@ -21,6 +22,7 @@ type Properties<T extends FieldValues> = {
 };
 
 const Input = <T extends FieldValues>({
+	autocomplete = "off",
 	control,
 	errors,
 	label,
@@ -37,8 +39,11 @@ const Input = <T extends FieldValues>({
 		<label className={styles["label"]}>
 			<span className={styles["label-caption"]}>{label}</span>
 			<input
-				autoComplete="off"
-				className={clsx(styles["input"], hasError && styles["input-error"])}
+				autoComplete={autocomplete}
+				className={combineClassNames(
+					styles["input"],
+					hasError && styles["input-error"],
+				)}
 				name={field.name}
 				onChange={field.onChange}
 				placeholder={placeholder}
@@ -47,11 +52,7 @@ const Input = <T extends FieldValues>({
 			/>
 			{hasError && (
 				<span className={styles["error"]}>
-					<img
-						alt="error-icon"
-						className={styles["error-icon"]}
-						src={errorIcon}
-					/>
+					<img alt="error-icon" src={errorIcon} />
 					{error as string}
 				</span>
 			)}

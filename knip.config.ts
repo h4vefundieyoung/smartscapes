@@ -6,7 +6,7 @@ const config: KnipConfig = {
 			entry: ["./dangerfile.ts"],
 		},
 		"apps/backend": {
-			entry: ["src/db/migrations/*.ts", "src/db/seeds/*.ts", "knexfile.ts"],
+			entry: ["src/db/migrations/*.ts", "knexfile.ts"],
 			ignoreDependencies: ["pg"],
 		},
 		"apps/frontend": {

@@ -21,8 +21,7 @@
 		"build:copy": "cp -r package.json build",
 		"prestart": "npm run migrate",
 		"migrate": "knex migrate:latest",
-		"start": "node ./src/index.js",
-		"seed:dev": "tsx ../../node_modules/knex/bin/cli.js seed:run"
+		"start": "node ./src/index.js"
 	},
 	"dependencies": {
 		"@fastify/cors": "11.0.1",

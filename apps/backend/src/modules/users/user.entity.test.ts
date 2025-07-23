@@ -7,7 +7,9 @@ describe("UserEntity", () => {
 	it("should create new user entity", () => {
 		const userData = {
 			email: "test@example.com",
+			firstName: "John",
 			id: 1,
+			lastName: "Doe",
 			passwordHash: "hash",
 			passwordSalt: "salt",
 		};
@@ -22,6 +24,8 @@ describe("UserEntity", () => {
 	it("should initialize new user without id", () => {
 		const userData = {
 			email: "test@example.com",
+			firstName: "John",
+			lastName: "Doe",
 			passwordHash: "hash",
 			passwordSalt: "salt",
 		};

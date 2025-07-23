@@ -1,3 +1,5 @@
+import styles from "./styles.module.css";
+
 type Properties = {
 	label: string;
 	onClick?: () => void;
@@ -10,7 +12,7 @@ const Button = ({
 	type = "submit",
 }: Properties): React.JSX.Element => {
 	return (
-		<button onClick={onClick} type={type}>
+		<button className={styles["button"]} onClick={onClick} type={type}>
 			{label}
 		</button>
 	);

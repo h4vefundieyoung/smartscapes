@@ -5,7 +5,7 @@ import {
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 
-import { type TokenService } from "~/modules/token/token.js";
+import { type BaseToken } from "~/modules/token/token.js";
 import { type UserService } from "~/modules/users/users.js";
 
 import { AuthService } from "./auth.service.js";
@@ -28,7 +28,7 @@ describe("AuthService", () => {
 			lastName: signUpRequestDto.lastName,
 		};
 
-		const mockTokenCreate = mock.fn<TokenService["create"]>(() =>
+		const mockTokenCreate = mock.fn<BaseToken["create"]>(() =>
 			Promise.resolve(mockToken),
 		);
 		const mockUserCreate = mock.fn<UserService["create"]>(() =>
@@ -40,8 +40,8 @@ describe("AuthService", () => {
 		);
 
 		const mockTokenService = {
-			create: mockTokenCreate as TokenService["create"],
-		} as TokenService;
+			create: mockTokenCreate as BaseToken["create"],
+		} as BaseToken;
 		const mockUserService = {
 			create: mockUserCreate as UserService["create"],
 			findByEmail: mockFindByEmail as UserService["findByEmail"],

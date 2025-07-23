@@ -4,7 +4,7 @@ import { describe, it } from "node:test";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type EnvironmentSchema } from "~/libs/modules/config/libs/types/types.js";
 
-import { TokenService } from "./token.service.js";
+import { BaseToken } from "./token.service.js";
 
 describe("Token service", () => {
 	const mockENV: Pick<EnvironmentSchema, "AUTH"> = {
@@ -22,7 +22,7 @@ describe("Token service", () => {
 	} as Config;
 
 	it("create should return token", async () => {
-		const tokenService = new TokenService({ config: mockConfig });
+		const tokenService = new BaseToken({ config: mockConfig });
 
 		const token = await tokenService.create(userId);
 
@@ -31,7 +31,7 @@ describe("Token service", () => {
 	});
 
 	it("verify should throw error if token is invalid", async () => {
-		const tokenService = new TokenService({ config: mockConfig });
+		const tokenService = new BaseToken({ config: mockConfig });
 
 		const invalidToken = "invalid token";
 

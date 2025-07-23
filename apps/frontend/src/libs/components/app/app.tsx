@@ -1,4 +1,4 @@
-import { Header, RouterOutlet } from "~/libs/components/components.js";
+import { Header, Loader, RouterOutlet } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppDispatch, useEffect, useLocation } from "~/libs/hooks/hooks.js";
 import { actions as userActions } from "~/modules/users/users.js";
@@ -27,6 +27,7 @@ const App = (): React.JSX.Element => {
 
 	return (
 		<div>
+			<Loader />
 			<Header user={mockUserWithAvatar} />
 			<Header user={mockUserWithoutAvatar} />
 			<Header user={null} />

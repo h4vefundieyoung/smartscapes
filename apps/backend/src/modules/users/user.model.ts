@@ -9,6 +9,10 @@ class UserModel extends AbstractModel {
 	}
 	public email!: string;
 
+	public firstName!: string;
+
+	public lastName!: string;
+
 	public passwordHash!: string;
 
 	public passwordSalt!: string;

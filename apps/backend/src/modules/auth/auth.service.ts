@@ -1,4 +1,7 @@
-import { type BaseToken, type TokenPayload } from "~/modules/token/token.js";
+import {
+	type BaseToken,
+	type TokenPayload,
+} from "~/libs/modules/token/token.js";
 import {
 	type UserService,
 	type UserSignUpRequestDto,

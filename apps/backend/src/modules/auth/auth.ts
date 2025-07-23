@@ -1,5 +1,5 @@
 import { logger } from "~/libs/modules/logger/logger.js";
-import { tokenService } from "~/modules/token/token.js";
+import { tokenService } from "~/libs/modules/token/token.js";
 import { userService } from "~/modules/users/users.js";
 
 import { AuthController } from "./auth.controller.js";

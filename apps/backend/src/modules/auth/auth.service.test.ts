@@ -5,7 +5,7 @@ import {
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 
-import { type BaseToken } from "~/modules/token/token.js";
+import { type BaseToken } from "~/libs/modules/token/token.js";
 import { type UserService } from "~/modules/users/users.js";
 
 import { AuthService } from "./auth.service.js";

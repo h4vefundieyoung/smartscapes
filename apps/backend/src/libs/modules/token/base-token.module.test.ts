@@ -4,7 +4,7 @@ import { describe, it } from "node:test";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type EnvironmentSchema } from "~/libs/modules/config/libs/types/types.js";
 
-import { BaseToken } from "./token.service.js";
+import { BaseToken } from "./base-token.module.js";
 
 describe("Token service", () => {
 	const mockENV: Pick<EnvironmentSchema, "AUTH"> = {

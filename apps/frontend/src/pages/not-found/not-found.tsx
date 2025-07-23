@@ -11,7 +11,7 @@ const NotFound = (): React.JSX.Element => {
 			<div className={styles["error-container"]}>
 				<div className={styles["error-message"]}>
 					<h1 className={styles["error-number-label"]}>404</h1>
-					<h2 className={styles["error-message__tittle"]}>
+					<h2 className={styles["error-message-title"]}>
 						Something went wrong
 					</h2>
 

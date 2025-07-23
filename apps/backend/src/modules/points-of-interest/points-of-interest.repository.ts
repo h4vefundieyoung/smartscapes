@@ -55,6 +55,21 @@ class PointsOfInterestRepository implements Repository {
 		);
 	}
 
+	public async findByName(
+		name: string,
+	): Promise<null | PointsOfInterestEntity> {
+		const [point] = await this.pointsOfInterestModel
+			.query()
+			.where("name", "=", name)
+			.execute();
+
+		if (!point) {
+			return null;
+		}
+
+		return PointsOfInterestEntity.initialize(point);
+	}
+
 	public async update(
 		id: number,
 		entity: PointsOfInterestEntity,

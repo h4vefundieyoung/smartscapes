@@ -1,7 +1,10 @@
+import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
 import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
 import { type PointsOfInterestRepository } from "~/modules/points-of-interest/points-of-interest.repository.js";
 
+import { PointOfInterestExceptionMessage } from "./libs/enums/enums.js";
+import { PointOfInterestError } from "./libs/exceptions/exceptions.js";
 import {
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
@@ -17,6 +20,8 @@ class PointsOfInterestService implements Service {
 	public async create(
 		payload: PointsOfInterestRequestDto,
 	): Promise<PointsOfInterestResponseDto> {
+		await this.ensureNameIsUnique(payload.name);
+
 		const { latitude, longitude, name } = payload;
 
 		const item = await this.pointsOfInterestRepository.create(
@@ -36,13 +41,13 @@ class PointsOfInterestService implements Service {
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		await this.assertIdExists(id);
+		await this.ensureIdExists(id);
 
 		return await this.pointsOfInterestRepository.delete(id);
 	}
 
 	public async find(id: number): Promise<PointsOfInterestResponseDto> {
-		await this.assertIdExists(id);
+		await this.ensureIdExists(id);
 
 		const item = (await this.pointsOfInterestRepository.find(
 			id,
@@ -77,7 +82,9 @@ class PointsOfInterestService implements Service {
 		id: number,
 		payload: PointsOfInterestRequestDto,
 	): Promise<PointsOfInterestResponseDto> {
-		await this.assertIdExists(id);
+		await this.ensureIdExists(id);
+
+		await this.ensureNameIsUnique(payload.name);
 
 		const { latitude, longitude, name } = payload;
 
@@ -91,7 +98,10 @@ class PointsOfInterestService implements Service {
 		);
 
 		if (!item) {
-			throw new Error(`Point of interest with id=${id.toString()} not updated`);
+			throw new PointOfInterestError({
+				message: PointOfInterestExceptionMessage.UPDATE_FAILED,
+				status: HTTPCode.INTERNAL_SERVER_ERROR,
+			});
 		}
 
 		const object = item.toObject();
@@ -102,18 +112,27 @@ class PointsOfInterestService implements Service {
 		};
 	}
 
-	private async assertIdExists(id: number): Promise<void> {
-		const exists = await this.isIdExists(id);
+	private async ensureIdExists(id: number): Promise<void> {
+		const exists = await this.pointsOfInterestRepository.find(id);
 
 		if (!exists) {
-			throw new Error(`Point of interest with id=${id.toString()} not found`);
+			throw new PointOfInterestError({
+				message: PointOfInterestExceptionMessage.ID_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
 		}
 	}
 
-	private async isIdExists(id: number): Promise<boolean> {
-		const item = await this.pointsOfInterestRepository.find(id);
+	private async ensureNameIsUnique(name: string): Promise<void> {
+		const existingPointOfInterest =
+			await this.pointsOfInterestRepository.findByName(name);
 
-		return item !== null;
+		if (existingPointOfInterest) {
+			throw new PointOfInterestError({
+				message: PointOfInterestExceptionMessage.NAME_ALREADY_EXISTS,
+				status: HTTPCode.CONFLICT,
+			});
+		}
 	}
 }
 

@@ -77,7 +77,7 @@ class PointsOfInterestController extends BaseController {
 
 		this.addRoute({
 			handler: this.update.bind(this),
-			method: HTTPMethodEnum.PUT,
+			method: HTTPMethodEnum.PATCH,
 			path: "/:id",
 			validation: {
 				body: pointOfInterestUpdateValidationSchema,
@@ -155,9 +155,8 @@ class PointsOfInterestController extends BaseController {
 			params: { id: string };
 		}>,
 	): Promise<APIHandlerResponse<boolean>> {
-		const { params } = options;
-		const { id } = params;
-		const isDeleted = await this.pointsOfInterestService.delete(Number(id));
+		const id = Number(options.params.id);
+		const isDeleted = await this.pointsOfInterestService.delete(id);
 
 		return {
 			payload: { data: isDeleted },
@@ -192,17 +191,9 @@ class PointsOfInterestController extends BaseController {
 		options: APIHandlerOptions<{
 			params: { id: string };
 		}>,
-	): Promise<APIHandlerResponse<null | PointsOfInterestResponseDto>> {
-		const { params } = options;
-		const { id } = params;
-		const pointOfInterest = await this.pointsOfInterestService.find(Number(id));
-
-		if (!pointOfInterest) {
-			return {
-				payload: null,
-				status: HTTPCode.INTERNAL_SERVER_ERROR,
-			};
-		}
+	): Promise<APIHandlerResponse<PointsOfInterestResponseDto>> {
+		const id = Number(options.params.id);
+		const pointOfInterest = await this.pointsOfInterestService.find(id);
 
 		return {
 			payload: { data: pointOfInterest },
@@ -283,23 +274,13 @@ class PointsOfInterestController extends BaseController {
 	 */
 	public async update(
 		options: APIHandlerOptions<{
-			body: Partial<PointsOfInterestRequestDto>;
+			body: PointsOfInterestRequestDto;
 			params: { id: string };
 		}>,
-	): Promise<APIHandlerResponse<null | PointsOfInterestResponseDto>> {
+	): Promise<APIHandlerResponse<PointsOfInterestResponseDto>> {
 		const { body, params } = options;
-		const { id } = params;
-		const pointOfInterest = await this.pointsOfInterestService.update(
-			Number(id),
-			body as PointsOfInterestRequestDto,
-		);
-
-		if (!pointOfInterest) {
-			return {
-				payload: null,
-				status: HTTPCode.INTERNAL_SERVER_ERROR,
-			};
-		}
+		const id = Number(params.id);
+		const pointOfInterest = await this.pointsOfInterestService.update(id, body);
 
 		return {
 			payload: { data: pointOfInterest },

@@ -36,15 +36,17 @@ class PointsOfInterestService implements Service {
 	}
 
 	public async delete(id: number): Promise<boolean> {
+		await this.assertIdExists(id);
+
 		return await this.pointsOfInterestRepository.delete(id);
 	}
 
-	public async find(id: number): Promise<null | PointsOfInterestResponseDto> {
-		const item = await this.pointsOfInterestRepository.find(id);
+	public async find(id: number): Promise<PointsOfInterestResponseDto> {
+		await this.assertIdExists(id);
 
-		if (!item) {
-			return null;
-		}
+		const item = (await this.pointsOfInterestRepository.find(
+			id,
+		)) as PointsOfInterestEntity;
 
 		const object = item.toObject();
 
@@ -74,7 +76,9 @@ class PointsOfInterestService implements Service {
 	public async update(
 		id: number,
 		payload: PointsOfInterestRequestDto,
-	): Promise<null | PointsOfInterestResponseDto> {
+	): Promise<PointsOfInterestResponseDto> {
+		await this.assertIdExists(id);
+
 		const { latitude, longitude, name } = payload;
 
 		const item = await this.pointsOfInterestRepository.update(
@@ -87,7 +91,7 @@ class PointsOfInterestService implements Service {
 		);
 
 		if (!item) {
-			return null;
+			throw new Error(`Point of interest with id=${id.toString()} not updated`);
 		}
 
 		const object = item.toObject();
@@ -96,6 +100,20 @@ class PointsOfInterestService implements Service {
 			...object,
 			id: object.id,
 		};
+	}
+
+	private async assertIdExists(id: number): Promise<void> {
+		const exists = await this.isIdExists(id);
+
+		if (!exists) {
+			throw new Error(`Point of interest with id=${id.toString()} not found`);
+		}
+	}
+
+	private async isIdExists(id: number): Promise<boolean> {
+		const item = await this.pointsOfInterestRepository.find(id);
+
+		return item !== null;
 	}
 }
 

@@ -7,13 +7,13 @@ import { type UserGetAllItemResponseDto } from "~/modules/users/users.js";
 import { loadAll } from "./actions.js";
 
 type State = {
+	data: UserGetAllItemResponseDto[];
 	dataStatus: ValueOf<typeof DataStatus>;
-	users: UserGetAllItemResponseDto[];
 };
 
 const initialState: State = {
+	data: [],
 	dataStatus: DataStatus.IDLE,
-	users: [],
 };
 
 const { actions, name, reducer } = createSlice({
@@ -22,7 +22,7 @@ const { actions, name, reducer } = createSlice({
 			state.dataStatus = DataStatus.PENDING;
 		});
 		builder.addCase(loadAll.fulfilled, (state, action) => {
-			state.users = action.payload.items;
+			state.data = action.payload.data;
 			state.dataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(loadAll.rejected, (state) => {

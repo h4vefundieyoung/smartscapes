@@ -19,3 +19,4 @@ ignore:
   - "**/node_modules"
   - "**/build"
   - "**/CHANGELOG.md"
+  - ".vscode"

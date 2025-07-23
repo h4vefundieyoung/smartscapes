@@ -1,7 +1,11 @@
+import { encryption } from "~/libs/modules/encryption/libs/encription.js";
+import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
+import { UserExceptionMessage } from "~/modules/users/libs/enums/enums.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
 
+import { UserError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserGetAllItemResponseDto,
 	type UserSignUpRequestDto,
@@ -17,11 +21,24 @@ class UserService implements Service {
 	public async create(
 		payload: UserSignUpRequestDto,
 	): Promise<UserGetAllItemResponseDto> {
+		const existingUser = await this.findByEmail(payload.email);
+
+		if (existingUser) {
+			throw new UserError({
+				message: UserExceptionMessage.INVALID_CREDENTIALS,
+				status: HTTPCode.CONFLICT,
+			});
+		}
+
+		const { encryptedData, salt } = await encryption.encrypt(payload.password);
+
 		const item = await this.userRepository.create(
 			UserEntity.initializeNew({
 				email: payload.email,
-				passwordHash: "HASH", // TODO: store password hash
-				passwordSalt: "SALT", // TODO: store salt
+				firstName: payload.firstName,
+				lastName: payload.lastName,
+				passwordHash: encryptedData,
+				passwordSalt: salt,
 			}),
 		);
 
@@ -34,6 +51,14 @@ class UserService implements Service {
 		return {
 			items: items.map((item) => item.toObject()),
 		};
+	}
+
+	public async findByEmail(
+		email: string,
+	): Promise<null | UserGetAllItemResponseDto> {
+		const user = await this.userRepository.findByEmail(email);
+
+		return user ? user.toObject() : null;
 	}
 }
 

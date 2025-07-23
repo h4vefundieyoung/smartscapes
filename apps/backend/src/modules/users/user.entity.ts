@@ -3,7 +3,11 @@ import { type Entity } from "~/libs/types/types.js";
 class UserEntity implements Entity {
 	private email: string;
 
+	private firstName: string;
+
 	private id: null | number;
+
+	private lastName: string;
 
 	private passwordHash: string;
 
@@ -11,35 +15,47 @@ class UserEntity implements Entity {
 
 	private constructor({
 		email,
+		firstName,
 		id,
+		lastName,
 		passwordHash,
 		passwordSalt,
 	}: {
 		email: string;
+		firstName: string;
 		id: null | number;
+		lastName: string;
 		passwordHash: string;
 		passwordSalt: string;
 	}) {
 		this.id = id;
 		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.passwordHash = passwordHash;
 		this.passwordSalt = passwordSalt;
 	}
 
 	public static initialize({
 		email,
+		firstName,
 		id,
+		lastName,
 		passwordHash,
 		passwordSalt,
 	}: {
 		email: string;
+		firstName: string;
 		id: number;
+		lastName: string;
 		passwordHash: string;
 		passwordSalt: string;
 	}): UserEntity {
 		return new UserEntity({
 			email,
+			firstName,
 			id,
+			lastName,
 			passwordHash,
 			passwordSalt,
 		});
@@ -47,16 +63,22 @@ class UserEntity implements Entity {
 
 	public static initializeNew({
 		email,
+		firstName,
+		lastName,
 		passwordHash,
 		passwordSalt,
 	}: {
 		email: string;
+		firstName: string;
+		lastName: string;
 		passwordHash: string;
 		passwordSalt: string;
 	}): UserEntity {
 		return new UserEntity({
 			email,
+			firstName,
 			id: null,
+			lastName,
 			passwordHash,
 			passwordSalt,
 		});
@@ -64,11 +86,15 @@ class UserEntity implements Entity {
 
 	public toNewObject(): {
 		email: string;
+		firstName: string;
+		lastName: string;
 		passwordHash: string;
 		passwordSalt: string;
 	} {
 		return {
 			email: this.email,
+			firstName: this.firstName,
+			lastName: this.lastName,
 			passwordHash: this.passwordHash,
 			passwordSalt: this.passwordSalt,
 		};
@@ -76,11 +102,15 @@ class UserEntity implements Entity {
 
 	public toObject(): {
 		email: string;
+		firstName: string;
 		id: number;
+		lastName: string;
 	} {
 		return {
 			email: this.email,
+			firstName: this.firstName,
 			id: this.id as number,
+			lastName: this.lastName,
 		};
 	}
 }

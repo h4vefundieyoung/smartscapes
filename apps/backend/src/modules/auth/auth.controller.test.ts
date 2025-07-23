@@ -15,7 +15,9 @@ import { type AuthService } from "./auth.service.js";
 describe("AuthController", () => {
 	const mockUser: UserSignUpResponseDto = {
 		email: "test@example.com",
+		firstName: "John",
 		id: 1,
+		lastName: "Doe",
 	};
 
 	const mockLogger: Logger = {
@@ -39,8 +41,8 @@ describe("AuthController", () => {
 		const signUpOptions = {
 			body: {
 				email: mockUser.email,
-				firstName: "Test",
-				lastName: "User",
+				firstName: mockUser.firstName,
+				lastName: mockUser.lastName,
 				password: "Password123!",
 			},
 		} as APIHandlerOptions<{ body: UserSignUpRequestDto }>;

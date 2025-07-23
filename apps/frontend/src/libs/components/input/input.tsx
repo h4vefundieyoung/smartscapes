@@ -35,6 +35,7 @@ const Input = <T extends FieldValues>({
 		<label className={styles["label"]}>
 			<span>{label}</span>
 			<input
+				className={`${styles["input"] ?? ""} ${hasError ? (styles["input--error"] ?? "") : ""}`}
 				name={field.name}
 				onChange={field.onChange}
 				placeholder={placeholder}

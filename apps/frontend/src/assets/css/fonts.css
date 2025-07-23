@@ -2,8 +2,7 @@
 	font-family: Inter;
 	font-style: normal;
 	font-weight: 400;
-	src: url("../../../public/assets/fonts/inter/inter-regular.woff")
-		format("woff");
+	src: url("/assets/fonts/inter/inter-regular.woff") format("woff");
 	font-display: swap;
 }
 
@@ -11,7 +10,6 @@
 	font-family: Inter;
 	font-style: normal;
 	font-weight: 600;
-	src: url("../../../public/assets/fonts/inter/inter-semibold.woff")
-		format("woff");
+	src: url("/assets/fonts/inter/inter-semibold.woff") format("woff");
 	font-display: swap;
 }

@@ -1,35 +1,32 @@
-import { Link } from "react-router";
-
-import dashboardIcon from "~/assets/images/icons/dashboard.svg";
-import smartScapesLogo from "~/assets/images/icons/logo.svg";
+import Logo from "~/assets/images/icons/logo.svg?react";
+import { NavItem, NavLink } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
+import { type NavigationItem } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
-const Sidebar = (): React.JSX.Element => {
+type Properties = {
+	navigationItems: NavigationItem[];
+};
+
+const Sidebar = ({ navigationItems }: Properties): React.JSX.Element => {
 	return (
 		<div className={styles["sidebar"]}>
-			<Link className={styles["sidebar-logo-link"]} to={AppRoute.ROOT}>
-				<img
-					alt="smart-scapes-logo"
-					className={styles["sidebar-logo-icon"]}
-					src={smartScapesLogo}
-				/>
-			</Link>
+			<NavLink
+				className={styles["sidebar-logo-link"] as string}
+				to={AppRoute.ROOT}
+			>
+				<Logo className={styles["sidebar-logo-icon"]} />
+			</NavLink>
 			<ul className={styles["sidebar-navigation-list"]}>
-				<li>
-					<Link
-						className={styles["sidebar-navigation-link"]}
-						to={AppRoute.ROOT}
-					>
-						<img
-							alt="Dashboard"
-							className={styles["sidebar-navigation-icon"]}
-							src={dashboardIcon}
-						/>
-						<span className={styles["sidebar-navigation-text"]}>Dashboard</span>
-					</Link>
-				</li>
+				{navigationItems.map((item) => (
+					<NavItem
+						href={item.href}
+						icon={item.icon}
+						key={item.icon}
+						label={item.label}
+					/>
+				))}
 			</ul>
 		</div>
 	);

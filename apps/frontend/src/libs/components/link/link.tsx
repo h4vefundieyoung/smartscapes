@@ -17,3 +17,4 @@ const Link = ({ children, to }: Properties): React.JSX.Element => (
 );
 
 export { Link };
+export { NavLink } from "react-router";

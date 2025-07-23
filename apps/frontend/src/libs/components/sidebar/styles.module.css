@@ -25,30 +25,3 @@
 	padding: 0;
 	margin: 0;
 }
-
-.sidebar-navigation-link {
-	display: flex;
-	gap: 12px;
-	align-items: center;
-	padding: 12px 20px;
-	color: #00291d;
-	text-decoration: none;
-	border-left: 4px solid transparent;
-}
-
-.sidebar-navigation-link:hover {
-	cursor: pointer;
-	background-color: rgb(0 102 71 / 4%);
-	border-left: 4px solid #067a57;
-}
-
-.sidebar-navigation-icon {
-	width: 24px;
-	height: 24px;
-}
-
-.sidebar-navigation-text {
-	font-size: 1rem;
-	font-weight: 400;
-	line-height: 24px;
-}

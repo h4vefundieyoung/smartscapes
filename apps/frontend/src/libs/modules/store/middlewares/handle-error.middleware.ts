@@ -10,15 +10,6 @@ const handleError = ({ toastNotifier }: ExtraArguments): Middleware => {
 				toastNotifier.showError(
 					action.error.message ?? ExceptionMessage.UNEXPECTED_ERROR,
 				);
-				toastNotifier.showSuccess(
-					action.error.message ?? ExceptionMessage.UNEXPECTED_ERROR,
-				);
-				toastNotifier.showInfo(
-					action.error.message ?? ExceptionMessage.UNEXPECTED_ERROR,
-				);
-				toastNotifier.showWarning(
-					action.error.message ?? ExceptionMessage.UNEXPECTED_ERROR,
-				);
 			}
 
 			return next(action);

@@ -7,7 +7,7 @@
 	margin: 0 0 48px;
 	font-size: var(--font-size-h1);
 	font-weight: var(--font-weight-semibold);
-	line-height: var(--font-line-height-h1);
+	line-height: 48px;
 }
 
 .form {
@@ -23,14 +23,14 @@
 	gap: 4px;
 	font-size: var(--font-size-small);
 	font-weight: var(--font-weight-regular);
-	line-height: var(--font-line-height-small);
-	color: var(--text-strong);
+	line-height: 150%;
+	color: var(--color-text-strong);
 }
 
-.login-link__text {
+.sign-up-link__text {
 	margin: 0;
 	font-size: var(--font-size-tiny);
 	font-weight: var(--font-weight-regular);
-	line-height: var(--font-line-height-tiny);
-	color: var(--text-weak);
+	line-height: 20px;
+	color: var(--color-text-weak);
 }

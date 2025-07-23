@@ -1,6 +1,7 @@
 import { config } from "~/libs/modules/config/config.js";
 import { database } from "~/libs/modules/database/database.js";
 import { logger } from "~/libs/modules/logger/logger.js";
+import { authPlugin } from "~/libs/modules/plugins/auth/auth-plugin.js";
 import { authController } from "~/modules/auth/auth.js";
 import { userController } from "~/modules/users/users.js";
 
@@ -13,6 +14,11 @@ const apiV1 = new BaseServerApplicationApi(
 	...authController.routes,
 	...userController.routes,
 );
+
+authPlugin.addWhiteListRoutes(
+	...authController.routes.map(({ path }) => apiV1.basePath + path),
+);
+
 const serverApplication = new BaseServerApplication({
 	apis: [apiV1],
 	config,

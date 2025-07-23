@@ -8,6 +8,7 @@ import Fastify, {
 	type FastifyInstance,
 	type RouteOptions,
 } from "fastify";
+import fastifyPlugin from "fastify-plugin";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -22,6 +23,7 @@ import {
 	type ValidationSchema,
 } from "~/libs/types/types.js";
 
+import { authPlugin } from "../plugins/auth/auth-plugin.js";
 import {
 	type ServerApplication,
 	type ServerApplicationApi,
@@ -69,6 +71,8 @@ class BaseServerApplication implements ServerApplication {
 		await this.initMiddlewares();
 
 		await this.initServe();
+
+		await this.initRoutesProtection();
 
 		this.initRoutes();
 
@@ -193,6 +197,10 @@ class BaseServerApplication implements ServerApplication {
 		const routers = this.apis.flatMap((api) => api.routes);
 
 		this.addRoutes(routers);
+	}
+
+	private async initRoutesProtection(): Promise<void> {
+		await this.app.register(fastifyPlugin(authPlugin.plugin.bind(authPlugin)));
 	}
 
 	private async initServe(): Promise<void> {

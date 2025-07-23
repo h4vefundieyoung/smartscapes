@@ -187,6 +187,7 @@ const typescriptConfig: Linter.Config = {
 		"@typescript-eslint/no-magic-numbers": [
 			"error",
 			{
+				ignore: [0],
 				ignoreEnums: true,
 				ignoreReadonlyClassProperties: true,
 				ignoreTypeIndexes: true,

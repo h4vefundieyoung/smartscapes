@@ -1,12 +1,12 @@
 import { config } from "~/libs/modules/config/config.js";
 
-import { TokenService } from "./token.service.js";
+import { BaseToken } from "./token.service.js";
 
-const tokenService = new TokenService({ config });
+const tokenService = new BaseToken({ config });
 
 export { tokenService };
 export {
 	type TokenPayload,
 	type UserAuthResponseDto,
 } from "./libs/types/types.js";
-export { type TokenService } from "./token.service.js";
+export { type BaseToken } from "./token.service.js";

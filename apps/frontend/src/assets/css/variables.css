@@ -25,6 +25,8 @@
 	--color-stroke-error-strong: hsl(0deg 56% 50% / 80%);
 	--color-icon-neutral: hsl(162deg 100% 15% / 45%);
 	--color-icon-error: hsl(0deg 56% 50% / 80%);
+	--color-shadow-weak: hsl(0deg 0% 0% / 3.9%);
+	--color-shadow-strong: hsl(0deg 0% 0% / 7.8%);
 	--font-family: "Inter", sans-serif;
 	--font-size-display: 56px;
 	--font-size-h1: 40px;

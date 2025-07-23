@@ -12,24 +12,13 @@
 	border-right: 1px solid rgb(0 102 71 / 4%);
 }
 
-.sidebar-logo {
-	display: flex;
-	gap: 8px;
-	align-items: center;
+.sidebar-logo-link {
 	padding: 24px;
-	text-decoration: none;
 }
 
 .sidebar-logo-icon {
-	width: 24px;
+	width: 136px;
 	height: 24px;
-}
-
-.sidebar-logo-text {
-	font-size: 1rem;
-	font-weight: 600;
-	line-height: 24px;
-	color: #00291d;
 }
 
 .sidebar-navigation-list {

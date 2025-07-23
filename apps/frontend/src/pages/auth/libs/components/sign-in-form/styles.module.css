@@ -34,3 +34,7 @@
 	line-height: 1.4;
 	color: var(--color-text-weak);
 }
+
+.sign-up-link__text a {
+	color: var(--color-text-brand);
+}

@@ -1,5 +1,3 @@
-import { Link } from "react-router";
-
 import { Button } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 
@@ -20,9 +18,9 @@ const NotFound = (): React.JSX.Element => {
 					</span>
 				</div>
 
-				<Link to={AppRoute.ROOT}>
-					<Button label="Back to home" type="button" />
-				</Link>
+				<div>
+					<Button label="Back to home" to={AppRoute.ROOT} />
+				</div>
 			</div>
 		</main>
 	);

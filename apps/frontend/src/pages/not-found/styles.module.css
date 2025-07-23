@@ -29,14 +29,14 @@
 .error-number-label {
 	height: 116px;
 	margin: 0;
-	font-size: 96px;
+	font-size: 6rem;
 	font-weight: var(--font-weight-semibold);
 	line-height: 100%;
 	color: var(--color-text-strong);
 	text-align: center;
 }
 
-.error-message__tittle {
+.error-message-title {
 	margin: 0;
 	font-size: var(--font-size-h2);
 	font-weight: var(--font-weight-semibold);

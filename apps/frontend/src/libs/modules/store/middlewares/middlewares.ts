@@ -1,1 +1,1 @@
-export { errorHandlingMiddleware } from "./error-handling.middleware.js";
+export { handleErrorMiddleware } from "./handle-error.middleware.js";

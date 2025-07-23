@@ -1,8 +1,11 @@
 import { encryption } from "~/libs/modules/encryption/libs/encription.js";
+import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
 
+import { ExceptionMessage } from "./libs/enums/exception-message.enum.js";
+import { UserError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserGetAllItemResponseDto,
 	type UserSignUpRequestDto,
@@ -18,10 +21,13 @@ class UserService implements Service {
 	public async create(
 		payload: UserSignUpRequestDto,
 	): Promise<UserGetAllItemResponseDto> {
-		const user = await this.findByEmail(payload.email);
+		const existingUser = await this.findByEmail(payload.email);
 
-		if (user) {
-			throw new Error(`User with email ${payload.email} already exists`);
+		if (existingUser) {
+			throw new UserError({
+				message: ExceptionMessage.INVALID_CREDENTIALS,
+				status: HTTPCode.CONFLICT,
+			});
 		}
 
 		const { encryptedData, salt } = await encryption.encrypt(payload.password);

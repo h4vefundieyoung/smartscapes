@@ -27,7 +27,49 @@ SmartScapes is an interactive mapping platform for parks and attractions that pr
 
 ## 4. Database Schema
 
-TBD
+```mermaid
+erDiagram
+
+  users {
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    varchar email
+    varchar first_name
+    varchar last_name
+    text password_hash
+    text password_salt
+    int group_id FK
+  }
+
+  groups {
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    varchar name
+    varchar key
+  }
+
+ groups_to_permissions {
+      int id PK
+      dateTime created_at
+      dateTime updated_at
+      int group_id FK
+      int permission_id FK
+  }
+
+  permissions {
+      int id PK
+      dateTime created_at
+      dateTime updated_at
+      varchar name
+      varchar key
+  }
+
+  users }|--|| groups : group_id
+  groups ||--|{ groups_to_permissions : group_id
+  permissions ||--|{ groups_to_permissions : permission_id
+```
 
 ## 5. Architecture
 

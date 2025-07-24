@@ -69,7 +69,9 @@ const Auth = (): React.JSX.Element => {
 				<img
 					alt="SmartScapes"
 					className={styles["left-panel__logo"]}
+					height={24}
 					src={logo}
+					width={136}
 				/>
 				{handleFormRender(pathname)}
 			</div>

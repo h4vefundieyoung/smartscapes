@@ -27,7 +27,49 @@ SmartScapes is an interactive mapping platform for parks and attractions that pr
 
 ## 4. Database Schema
 
-TBD
+```mermaid
+erDiagram
+
+  users {
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    varchar email
+    varchar first_name
+    varchar last_name
+    text password_hash
+    text password_salt
+    int group_id FK
+  }
+
+  groups {
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    varchar name
+    varchar key
+  }
+
+ groups_to_permissions {
+      int id PK
+      dateTime created_at
+      dateTime updated_at
+      int group_id FK
+      int permission_id FK
+  }
+
+  permissions {
+      int id PK
+      dateTime created_at
+      dateTime updated_at
+      varchar name
+      varchar key
+  }
+
+  users }|--|| groups : group_id
+  groups ||--|{ groups_to_permissions : group_id
+  permissions ||--|{ groups_to_permissions : permission_id
+```
 
 ## 5. Architecture
 
@@ -107,39 +149,58 @@ As we are already using js on both frontend and backend it would be useful to sh
 ### 6.1 Getting Started
 
 1. Copy and fill env files:
+   - `apps/frontend/.env`
+   - `apps/backend/.env`
 
-- apps/frontend/.env
-- apps/backend/.env
+   You should use `.env.example` files as a reference.
 
-You should use .env.example files as a reference.
+2. Install dependencies: `npm install`.
 
-1. Install dependencies: `npm install`.
+3. Install pre-commit hooks: `npm run git:hooks:prepare`. Those hooks are used to verify code style on commit.
 
-2. Install pre-commit hooks: `npm run git:hooks:prepare`. Those hooks are used to verify code style on commit.
+4. Build shared: `npm run build:shared`
 
-3. Build shared: `npm run build:shared`
+5. Run database. You can run it by installing postgres on your computer.
 
-4. Run database. You can run it by installing postgres on your computer.
+6. Apply migrations: `npm run migrate:dev -w apps/backend`
 
-5. Apply migrations: `npm run migrate:dev -w apps/backend`
+7. Run backend: `npm run start:dev -w apps/backend`
 
-6. Run backend: `npm run start:dev -w apps/backend`
-
-7. Run frontend: `npm run start:dev -w apps/frontend`
+8. Run frontend: `npm run start:dev -w apps/frontend`
 
 ### 6.2 Available Scripts
 
+#### Installation and hooks
+
 - `npm install` - Install all workspaces’ dependencies
+- `npm run git:hooks:prepare` - Set up pre-commit hooks
+
+#### Linting and formating
+
 - `npm run lint` - Run all linting checks
 - `npm run format` - Auto‑format the entire codebase with Prettier
+
+#### Testing
+
 - `npm run test` - Run unit tests
 - `npm run test:coverage` - Run unit tests and generate a coverage report
-- `npm run start:dev -w apps/backend` - Start the backend in development mode
+
+#### Database
+
+- `npm run migrate:dev -w apps/backend` - Apply all pending migrations
+- `npm run migrate:dev:make -w apps/backend -- <name>` - Create a new migration file (specify `<name>`)
+- `npm run migrate:dev:down -w apps/backend` - Roll back the most recent migration
+- `npm run migrate:dev:rollback -w apps/backend` - Roll back _all_ migrations
+
+#### Development
+
+- `npm run start:dev -w apps/backend` - Start the backend in development mode (with auto‑reload)
 - `npm run start:dev -w apps/frontend` - Start the frontend in development mode
-- `npm run migrate:dev -w apps/backend` - Apply the latest database migrations in development
-- `npm run git:hooks:prepare` - Set up pre-commit hooks
-- `npm run build` - Build shared, backend, frontend
-- `npm run start` - Run the production backend
+
+#### Build and production
+
+- `npm run build` - Build shared, backend, and frontend packages
+- `npm run start` - Run the production backend (from the build output)
 
 For a full list of more specialized scripts (lint:js, lint:types, build:shared, lint:unused, etc.), see the scripts section of the corresponding `package.json`.
 

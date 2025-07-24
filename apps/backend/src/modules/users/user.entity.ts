@@ -84,12 +84,12 @@ class UserEntity implements Entity {
 		});
 	}
 
-	public getPasswordSalt(): string {
-		return this.passwordSalt;
+	public getPasswordHash(): string {
+		return this.passwordHash;
 	}
 
-	public getPasswrodHash(): string {
-		return this.passwordHash;
+	public getPasswordSalt(): string {
+		return this.passwordSalt;
 	}
 
 	public toNewObject(): {

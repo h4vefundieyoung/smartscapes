@@ -32,15 +32,17 @@ class AuthService {
 		const user = await this.userRepository.findByEmail(email);
 
 		if (!user) {
-			throw new ApplicationError({ message: "Invalid credentials." });
+			throw new ApplicationError({
+				message: "An account with this email does not exist.",
+			});
 		}
 
-		const passwordsMatch = await this.encryptionService.compare(
+		const arePasswordsMatch = await this.encryptionService.compare(
 			password,
-			user.getPasswrodHash(),
+			user.getPasswordHash(),
 		);
 
-		if (!passwordsMatch) {
+		if (!arePasswordsMatch) {
 			throw new ApplicationError({ message: "Invalid credentials." });
 		}
 

@@ -1,5 +1,6 @@
 import { NavLink } from "~/libs/components/components.js";
 import { IconMap } from "~/libs/enums/enums.js";
+import { combineClassNames } from "~/libs/helpers/combine-class-names.helper.js";
 import { useCallback } from "~/libs/hooks/hooks.js";
 import { type NavigationItem } from "~/libs/types/types.js";
 
@@ -9,11 +10,11 @@ const NavItem = ({ href, icon, label }: NavigationItem): React.JSX.Element => {
 	const Icon = IconMap[icon];
 
 	const getNavLinkClassName = useCallback(
-		({ isActive }: { isActive: boolean }) =>
-			[
+		({ isActive }: { isActive: boolean }): string =>
+			combineClassNames(
 				styles["sidebar-navigation-link"],
-				isActive ? styles["sidebar-navigation-link-active"] : "",
-			].join(" "),
+				isActive && styles["sidebar-navigation-link-active"],
+			),
 		[],
 	);
 

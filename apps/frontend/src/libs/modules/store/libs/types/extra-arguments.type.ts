@@ -1,4 +1,4 @@
-import { type toastNotifier } from "~/libs/modules/notification/notification.js";
+import { type toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { type authApi } from "~/modules/auth/auth.js";
 import { type userApi } from "~/modules/users/users.js";
 

@@ -74,7 +74,7 @@ erDiagram
     float longitude
     float latitude
   }
-
+  
   users }|--|| groups : group_id
   groups ||--|{ groups_to_permissions : group_id
   permissions ||--|{ groups_to_permissions : permission_id

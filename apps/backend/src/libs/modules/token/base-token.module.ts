@@ -1,4 +1,4 @@
-import { jwtVerify, SignJWT } from "jose";
+import { type JWTPayload, jwtVerify, SignJWT } from "jose";
 
 import { type Token, type TokenPayload } from "./libs/types/types.js";
 
@@ -25,8 +25,8 @@ class BaseToken implements Token {
 		this.tokenExpirationTime = tokenExpirationTime;
 	}
 
-	public async create(id: TokenPayload["id"]): Promise<string> {
-		const jwt = await new SignJWT({ id })
+	public async create(payload: TokenPayload["payload"]): Promise<string> {
+		const jwt = await new SignJWT({ payload })
 			.setProtectedHeader({ alg: this.jwtAlgorithm })
 			.setIssuedAt()
 			.setExpirationTime(this.tokenExpirationTime)
@@ -35,11 +35,12 @@ class BaseToken implements Token {
 		return jwt;
 	}
 
-	public async verify(jwt: string): Promise<TokenPayload["id"]> {
+	public async verify<Payload extends JWTPayload = JWTPayload>(
+		jwt: string,
+	): Promise<Payload> {
 		const { payload } = await jwtVerify(jwt, this.secret);
-		const { id } = payload as TokenPayload;
 
-		return id;
+		return payload as Payload;
 	}
 }
 

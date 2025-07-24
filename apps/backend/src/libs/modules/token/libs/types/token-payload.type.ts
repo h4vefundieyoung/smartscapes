@@ -1,7 +1,5 @@
 import { type JWTPayload } from "jose";
 
-import { type UserAuthResponseDto } from "~/modules/users/users.js";
-
-type TokenPayload = JWTPayload & Pick<UserAuthResponseDto, "id">;
+type TokenPayload = JWTPayload & { payload: unknown };
 
 export { type TokenPayload };

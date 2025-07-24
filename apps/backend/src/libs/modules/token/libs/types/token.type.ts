@@ -1,8 +1,12 @@
+import { type JWTPayload } from "jose";
+
 import { type TokenPayload } from "./token-payload.type.js";
 
 type Token = {
-	create(id: TokenPayload["id"]): Promise<string>;
-	verify(jwt: string): Promise<TokenPayload["id"]>;
+	create(payload: TokenPayload["payload"]): Promise<string>;
+	verify<Payload extends JWTPayload = JWTPayload>(
+		jwt: string,
+	): Promise<Payload>;
 };
 
 export { type Token };

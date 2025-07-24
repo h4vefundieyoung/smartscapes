@@ -5,9 +5,11 @@ import {
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 
+import { type BaseEncryption } from "~/libs/modules/encryption/libs/base-encription.module.js";
+import { AuthService } from "~/modules/auth/auth.service.js";
+import { MockUserRepository } from "~/modules/users/mock.user.repository.js";
+import { type UserModel } from "~/modules/users/user.model.js";
 import { type UserService } from "~/modules/users/users.js";
-
-import { AuthService } from "./auth.service.js";
 
 describe("AuthService", () => {
 	const signUpRequestDto: UserSignUpRequestDto = {
@@ -38,7 +40,20 @@ describe("AuthService", () => {
 			findByEmail: mockFindByEmail as UserService["findByEmail"],
 		} as UserService;
 
-		const authService = new AuthService(mockUserService);
+		const mockEncryptionService = {
+			compare: mock.fn(() => Promise.resolve(true)),
+			encrypt: mock.fn(() => Promise.resolve("encryptedValue")),
+			hash: mock.fn(() => Promise.resolve("hashedPassword")),
+		} as unknown as BaseEncryption;
+
+		const mockUserModel = {} as typeof UserModel;
+		const mockUserRepository = new MockUserRepository(mockUserModel);
+
+		const authService = new AuthService(
+			mockUserService,
+			mockEncryptionService,
+			mockUserRepository,
+		);
 
 		const result = await authService.signUp(signUpRequestDto);
 

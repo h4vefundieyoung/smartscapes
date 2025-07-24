@@ -1,4 +1,4 @@
-import Logo from "~/assets/images/icons/logo.svg?react";
+import smartScapesLogo from "~/assets/images/logo.svg";
 import { NavItem, NavLink } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { type NavigationItem } from "~/libs/types/types.js";
@@ -16,7 +16,7 @@ const Sidebar = ({ navigationItems }: Properties): React.JSX.Element => {
 				className={styles["sidebar-logo-link"] as string}
 				to={AppRoute.ROOT}
 			>
-				<Logo className={styles["sidebar-logo-icon"]} />
+				<img alt="SmartScapes" height="24" src={smartScapesLogo} width="136" />
 			</NavLink>
 			<ul className={styles["sidebar-navigation-list"]}>
 				{navigationItems.map((item) => (

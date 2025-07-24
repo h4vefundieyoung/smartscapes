@@ -23,8 +23,7 @@
 }
 
 .sidebar-navigation-icon {
-	width: 24px;
-	height: 24px;
+	color: var(--color-stroke-strong);
 }
 
 .sidebar-navigation-text {

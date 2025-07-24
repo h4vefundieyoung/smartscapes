@@ -34,8 +34,8 @@ const App = (): React.JSX.Element => {
 		},
 		{
 			href: AppRoute.SIGN_UP,
-			icon: "list",
-			label: "Sign Up",
+			icon: "listOfPlaces",
+			label: "List of places",
 		},
 	];
 

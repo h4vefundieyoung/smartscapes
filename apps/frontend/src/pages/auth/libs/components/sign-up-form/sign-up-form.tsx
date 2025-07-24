@@ -46,7 +46,7 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 						errors={errors}
 						label="First Name"
 						name="firstName"
-						placeholder=""
+						placeholder="Enter your first name"
 						type="text"
 					/>
 				</div>
@@ -57,7 +57,7 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 						errors={errors}
 						label="Last Name"
 						name="lastName"
-						placeholder=""
+						placeholder="Enter your last name"
 						type="text"
 					/>
 				</div>

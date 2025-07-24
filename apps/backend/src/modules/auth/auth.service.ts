@@ -1,7 +1,4 @@
-import {
-	type BaseToken,
-	type TokenPayload,
-} from "~/libs/modules/token/token.js";
+import { type BaseToken } from "~/libs/modules/token/token.js";
 import {
 	type UserService,
 	type UserSignUpRequestDto,
@@ -27,13 +24,9 @@ class AuthService {
 		userRequestDto: UserSignUpRequestDto,
 	): Promise<UserSignUpResponseDto> {
 		const { email, id } = await this.userService.create(userRequestDto);
-		const token = await this.generateToken(id);
+		const token = await this.tokenService.create({ userId: id });
 
 		return { token, user: { email, id } };
-	}
-
-	private async generateToken(id: TokenPayload["id"]): Promise<string> {
-		return await this.tokenService.create(id);
 	}
 }
 

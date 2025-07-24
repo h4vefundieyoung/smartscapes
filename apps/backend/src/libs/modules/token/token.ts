@@ -6,7 +6,4 @@ const tokenService = new BaseToken({ config });
 
 export { tokenService };
 export { type BaseToken } from "./base-token.module.js";
-export {
-	type TokenPayload,
-	type UserAuthResponseDto,
-} from "./libs/types/types.js";
+export { type TokenPayload } from "./libs/types/types.js";

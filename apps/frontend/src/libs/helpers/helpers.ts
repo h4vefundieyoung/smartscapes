@@ -1,2 +1,2 @@
-export { combineClassNames } from "./combine-class-names.js";
+export { combineClassNames } from "./combine-class-names.helper.js";
 export { configureString } from "@smartscapes/shared";

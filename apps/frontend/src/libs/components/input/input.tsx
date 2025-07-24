@@ -22,7 +22,7 @@ type Properties<T extends FieldValues> = {
 };
 
 const Input = <T extends FieldValues>({
-	autocomplete = "off",
+	autocomplete = "on",
 	control,
 	errors,
 	label,

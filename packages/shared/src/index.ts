@@ -2,6 +2,7 @@ export {
 	APIErrorType,
 	APIPath,
 	AppEnvironment,
+	CommonExceptionMessage,
 	ContentType,
 } from "./libs/enums/enums.js";
 export { ValidationError } from "./libs/exceptions/exceptions.js";
@@ -26,6 +27,7 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath } from "./modules/auth/auth.js";
 export {
+	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetAllItemResponseDto,
 	UsersApiPath,

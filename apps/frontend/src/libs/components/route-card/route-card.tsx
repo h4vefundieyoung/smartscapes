@@ -2,7 +2,7 @@ import StarIcon from "./star.svg?react";
 import styles from "./styles.module.css";
 
 type Properties = {
-	alt?: string;
+	alt: string;
 	image?: string;
 	label: string;
 };

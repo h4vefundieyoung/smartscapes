@@ -64,9 +64,9 @@ const App = (): React.JSX.Element => {
 					<section className={styles["popular-section"]}>
 						<p className={styles["title"]}>Popular Routes</p>
 						<div className={styles["cards"]}>
-							<RouteCard label="Kralovska obora" />
-							<RouteCard label="Kralovska obora" />
-							<RouteCard label="Kralovska obora" />
+							<RouteCard alt="Kralovska obora" label="Kralovska obora" />
+							<RouteCard alt="Kralovska obora" label="Kralovska obora" />
+							<RouteCard alt="Kralovska obora" label="Kralovska obora" />
 						</div>
 					</section>
 				</>

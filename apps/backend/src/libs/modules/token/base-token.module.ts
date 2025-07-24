@@ -1,28 +1,35 @@
 import { jwtVerify, SignJWT } from "jose";
 
-import { type Config } from "~/libs/modules/config/config.js";
-
 import { type Token, type TokenPayload } from "./libs/types/types.js";
 
 type Constructor = {
-	config: Config;
+	jwtAlgorithm: string;
+	jwtSecret: string;
+	tokenExpirationTime: string;
 };
 
 class BaseToken implements Token {
-	private config: Config;
+	private jwtAlgorithm: string;
 
 	private secret: Uint8Array;
 
-	public constructor({ config }: Constructor) {
-		this.config = config;
-		this.secret = new TextEncoder().encode(this.config.ENV.AUTH.JWT_SECRET);
+	private tokenExpirationTime: string;
+
+	public constructor({
+		jwtAlgorithm,
+		jwtSecret,
+		tokenExpirationTime,
+	}: Constructor) {
+		this.jwtAlgorithm = jwtAlgorithm;
+		this.secret = new TextEncoder().encode(jwtSecret);
+		this.tokenExpirationTime = tokenExpirationTime;
 	}
 
 	public async create(id: TokenPayload["id"]): Promise<string> {
 		const jwt = await new SignJWT({ id })
-			.setProtectedHeader({ alg: this.config.ENV.AUTH.JWS_ALGORITHM })
+			.setProtectedHeader({ alg: this.jwtAlgorithm })
 			.setIssuedAt()
-			.setExpirationTime(this.config.ENV.AUTH.TOKEN_EXPIRATION)
+			.setExpirationTime(this.tokenExpirationTime)
 			.sign(this.secret);
 
 		return jwt;

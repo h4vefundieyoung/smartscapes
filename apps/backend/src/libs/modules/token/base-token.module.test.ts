@@ -21,8 +21,14 @@ describe("Token service", () => {
 		ENV: mockENV as Config["ENV"],
 	} as Config;
 
+	const { JWS_ALGORITHM, JWT_SECRET, TOKEN_EXPIRATION } = mockConfig.ENV.AUTH;
+
 	it("create should return token", async () => {
-		const tokenService = new BaseToken({ config: mockConfig });
+		const tokenService = new BaseToken({
+			jwtAlgorithm: JWS_ALGORITHM,
+			jwtSecret: JWT_SECRET,
+			tokenExpirationTime: TOKEN_EXPIRATION,
+		});
 
 		const token = await tokenService.create(userId);
 
@@ -31,7 +37,11 @@ describe("Token service", () => {
 	});
 
 	it("verify should throw error if token is invalid", async () => {
-		const tokenService = new BaseToken({ config: mockConfig });
+		const tokenService = new BaseToken({
+			jwtAlgorithm: JWS_ALGORITHM,
+			jwtSecret: JWT_SECRET,
+			tokenExpirationTime: TOKEN_EXPIRATION,
+		});
 
 		const invalidToken = "invalid token";
 

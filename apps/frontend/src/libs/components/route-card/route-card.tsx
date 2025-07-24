@@ -1,4 +1,3 @@
-import StarIcon from "./star.svg?react";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -17,18 +16,6 @@ const RouteCard = ({ alt, image, label }: Properties): React.JSX.Element => {
 			)}
 			<div className={styles["data"]}>
 				<p className={styles["label"]}>{label}</p>
-				<ul className={styles["description"]}>
-					<li>
-						<StarIcon className={styles["star"]} />
-					</li>
-					<li>4.5</li>
-					<li>•</li>
-					<li>Moderate</li>
-					<li>•</li>
-					<li>3.9 km</li>
-					<li>•</li>
-					<li>Est. 52 min</li>
-				</ul>
 			</div>
 		</div>
 	);

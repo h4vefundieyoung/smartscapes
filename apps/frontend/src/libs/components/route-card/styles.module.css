@@ -29,18 +29,3 @@
 	color: var(--color-text-strong);
 	white-space: nowrap;
 }
-
-.route-card .description {
-	display: flex;
-	gap: 8px;
-	align-items: center;
-	padding: 0;
-	margin: 0;
-	line-height: 1.4;
-	color: var(--color-text-weak);
-	list-style: none;
-}
-
-.route-card .star {
-	vertical-align: middle;
-}

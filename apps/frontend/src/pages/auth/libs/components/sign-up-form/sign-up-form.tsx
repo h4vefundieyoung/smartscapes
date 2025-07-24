@@ -101,7 +101,9 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 			<div className={styles["login-link__container"]}>
 				<p className={styles["login-link__text"]}>
 					Already have an account?
-					<Link to={AppRoute.SIGN_IN}>Log in</Link>
+					<Link to={AppRoute.SIGN_IN}>
+						<span className={styles["link-auth"]}>Log in</span>
+					</Link>
 				</p>
 			</div>
 		</div>

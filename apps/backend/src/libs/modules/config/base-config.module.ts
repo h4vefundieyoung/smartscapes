@@ -33,6 +33,26 @@ class BaseConfig implements Config {
 					format: Number,
 				},
 			},
+			AUTH: {
+				JWS_ALGORITHM: {
+					default: null,
+					doc: "JWS algorithm key",
+					env: "JWS_ALGORITHM",
+					format: String,
+				},
+				JWT_SECRET: {
+					default: null,
+					doc: "Secret string for token generation",
+					env: "JWT_SECRET",
+					format: String,
+				},
+				TOKEN_EXPIRATION: {
+					default: null,
+					doc: "Token expiration time",
+					env: "TOKEN_EXPIRATION",
+					format: String,
+				},
+			},
 			DB: {
 				CONNECTION_STRING: {
 					default: null,

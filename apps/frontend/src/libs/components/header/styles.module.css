@@ -19,6 +19,8 @@
 	display: flex;
 	gap: 8px;
 	align-items: center;
+	max-width: 136px;
+	max-height: 24px;
 }
 
 .buttons {

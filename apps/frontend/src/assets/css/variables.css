@@ -28,14 +28,14 @@
 	--color-shadow-weak: hsl(0deg 0% 0% / 3.9%);
 	--color-shadow-strong: hsl(0deg 0% 0% / 7.8%);
 	--font-family: "Inter", sans-serif;
-	--font-size-display: 56px;
-	--font-size-h1: 40px;
-	--font-size-h2: 32px;
-	--font-size-h3: 24px;
-	--font-size-h4: 20px;
-	--font-size-small: 16px;
-	--font-size-tiny: 14px;
-	--font-size-large: 36px;
+	--font-size-display: 3.5rem;
+	--font-size-h1: 2.5rem;
+	--font-size-h2: 2rem;
+	--font-size-h3: 1.5rem;
+	--font-size-h4: 1.25rem;
+	--font-size-small: 1rem;
+	--font-size-tiny: 0.875rem;
+	--font-size-large: 2.25rem;
 	--font-weight-regular: 400;
 	--font-weight-semibold: 600;
 }

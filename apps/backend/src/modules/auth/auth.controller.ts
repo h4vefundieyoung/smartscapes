@@ -7,6 +7,8 @@ import {
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import {
+	type UserSignInRequestDto,
+	userSignInValidationSchema,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 	userSignUpValidationSchema,
@@ -61,6 +63,30 @@ class AuthController extends BaseController {
 				body: userSignUpValidationSchema,
 			},
 		});
+
+		this.addRoute({
+			handler: this.signIn.bind(this),
+			method: "POST",
+			path: AuthApiPath.SIGN_IN,
+			validation: {
+				body: userSignInValidationSchema,
+			},
+		});
+	}
+
+	public async signIn(
+		options: APIHandlerOptions<{
+			body: UserSignInRequestDto;
+		}>,
+	): Promise<APIHandlerResponse<UserSignUpResponseDto>> {
+		const { body } = options;
+
+		const user = await this.authService.signIn(body);
+
+		return {
+			payload: { data: user },
+			status: HTTPCode.OK,
+		};
 	}
 
 	/**

@@ -15,8 +15,8 @@ const Avatar = ({
 	size = DEFAULT_AVATAR_SIZE,
 	user,
 }: Properties): JSX.Element => {
-	const avatarSource = user.avatarUrl?.trim() || undefined;
-	const hasAvatar = Boolean(avatarSource);
+	const { avatarUrl, firstName, lastName } = user;
+	const hasAvatar = Boolean(avatarUrl);
 
 	return (
 		<div
@@ -27,10 +27,12 @@ const Avatar = ({
 				<img
 					alt="User Avatar"
 					className={styles["avatar-image"]}
-					src={avatarSource}
+					src={avatarUrl as string}
 				/>
 			) : (
-				<span className={styles["fallback"]}>{getUserInitials(user)}</span>
+				<span className={styles["fallback"]}>
+					{getUserInitials(firstName, lastName)}
+				</span>
 			)}
 		</div>
 	);

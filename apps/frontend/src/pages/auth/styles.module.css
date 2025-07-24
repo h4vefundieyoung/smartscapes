@@ -28,12 +28,5 @@
 	position: absolute;
 	top: 32px;
 	left: 48px;
-	display: flex;
-	flex-direction: row;
-	gap: 8px;
-	align-items: center;
-	height: 24px;
-	font-size: var(--font-size-small);
-	font-weight: var(--font-weight-semibold);
-	line-height: 1.5;
+	max-width: 136px;
 }

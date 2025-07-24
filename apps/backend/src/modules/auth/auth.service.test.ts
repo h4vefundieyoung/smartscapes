@@ -5,7 +5,7 @@ import {
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 
-import { type BaseEncryption } from "~/libs/modules/encryption/libs/base-encription.module.js";
+import { type BaseEncryption } from "~/libs/modules/encryption/libs/base-encryption.module.js";
 import { AuthService } from "~/modules/auth/auth.service.js";
 import { MockUserRepository } from "~/modules/users/mock.user.repository.js";
 import { type UserModel } from "~/modules/users/user.model.js";

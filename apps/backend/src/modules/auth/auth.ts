@@ -1,4 +1,4 @@
-import { encryption } from "~/libs/modules/encryption/libs/encription.js";
+import { encryption } from "~/libs/modules/encryption/libs/encryption.js";
 import { logger } from "~/libs/modules/logger/logger.js";
 import { userRepository, userService } from "~/modules/users/users.js";
 

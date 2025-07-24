@@ -1,6 +1,6 @@
 import { ApplicationError } from "@smartscapes/shared/src/libs/exceptions/exceptions.js";
 
-import { type encryption } from "~/libs/modules/encryption/libs/encription.js";
+import { type encryption } from "~/libs/modules/encryption/libs/encryption.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
 import {
 	type UserService,

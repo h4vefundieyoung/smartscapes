@@ -17,6 +17,7 @@ type Properties = {
 const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 	const { control, errors, handleSubmit } = useAppForm<UserSignUpFormValues>({
 		defaultValues: DEFAULT_SIGN_UP_PAYLOAD,
+		mode: "onChange",
 		validationSchema: userSignUpValidationSchema,
 	});
 
@@ -67,7 +68,7 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 						errors={errors}
 						label="Email"
 						name="email"
-						placeholder=""
+						placeholder="Enter your email"
 						type="email"
 					/>
 				</div>
@@ -78,8 +79,8 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 						errors={errors}
 						label="Password"
 						name="password"
-						placeholder=""
-						type="text"
+						placeholder="Enter your password"
+						type="password"
 					/>
 				</div>
 

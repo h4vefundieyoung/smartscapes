@@ -6,7 +6,6 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import { type UserAuthResponseDto } from "~/libs/modules/token/token.js";
 import {
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
@@ -92,14 +91,13 @@ class AuthController extends BaseController {
 		options: APIHandlerOptions<{
 			body: UserSignUpRequestDto;
 		}>,
-	): Promise<APIHandlerResponse<UserAuthResponseDto<UserSignUpResponseDto>>> {
+	): Promise<APIHandlerResponse<UserSignUpResponseDto>> {
 		const { body } = options;
 
-		const user = await this.authService.signUp(body);
-		const token = await this.authService.generateToken(user.id);
+		const data = await this.authService.signUp(body);
 
 		return {
-			payload: { data: { token, user } },
+			payload: { data },
 			status: HTTPCode.CREATED,
 		};
 	}

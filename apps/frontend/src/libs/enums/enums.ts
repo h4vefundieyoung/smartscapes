@@ -5,5 +5,6 @@ export {
 	APIErrorType,
 	APIPath,
 	AppEnvironment,
+	CommonExceptionMessage,
 	ContentType,
 } from "@smartscapes/shared";

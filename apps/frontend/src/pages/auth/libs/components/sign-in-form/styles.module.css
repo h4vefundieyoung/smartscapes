@@ -17,14 +17,10 @@
 	margin: 0 0 24px;
 }
 
-.form__group label {
+.form__group {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
-	font-size: var(--font-size-small);
-	font-weight: var(--font-weight-regular);
-	line-height: 1.5;
-	color: var(--color-text-strong);
 }
 
 .sign-up-link__text {

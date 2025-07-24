@@ -1,6 +1,7 @@
 export { UserExceptionMessage, UsersApiPath } from "./libs/enums/enums.js";
 export {
 	type UserGetAllItemResponseDto,
+	type UserSignUpFormValues,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "./libs/types/types.js";

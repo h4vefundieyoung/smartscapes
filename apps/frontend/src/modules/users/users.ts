@@ -13,6 +13,7 @@ const userApi = new UserApi({
 export { userApi };
 export {
 	type UserGetAllItemResponseDto,
+	type UserSignUpFormValues,
 	type UserSignUpRequestDto,
 } from "./libs/types/types.js";
 export { userSignUpValidationSchema } from "./libs/validation-schemas/validation-schemas.js";

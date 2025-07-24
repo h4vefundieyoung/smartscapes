@@ -16,7 +16,7 @@
 	margin: 0 0 24px;
 }
 
-.form__group label {
+.form__group .label {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;

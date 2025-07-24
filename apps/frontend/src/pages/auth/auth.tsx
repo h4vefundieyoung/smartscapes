@@ -66,7 +66,6 @@ const Auth = (): React.JSX.Element => {
 				>
 					<img
 						alt="SmartScapes"
-						className={styles["logo__image"]}
 						src={logo}
 						style={{ height: "24px", width: "24px" }}
 					/>

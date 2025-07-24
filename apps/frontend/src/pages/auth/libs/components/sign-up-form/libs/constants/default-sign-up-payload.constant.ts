@@ -1,10 +1,6 @@
-import { type UserSignUpRequestDto } from "~/modules/users/users.js";
+import { type UserSignUpFormValues } from "~/modules/users/users.js";
 
-type SignUpFormValues = UserSignUpRequestDto & {
-	repeatPassword: string;
-};
-
-const DEFAULT_SIGN_UP_PAYLOAD: SignUpFormValues = {
+const DEFAULT_SIGN_UP_PAYLOAD: UserSignUpFormValues = {
 	email: "",
 	firstName: "",
 	lastName: "",

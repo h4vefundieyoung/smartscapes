@@ -2,6 +2,7 @@ import { Button, Input, Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
+	type UserSignUpFormValues,
 	type UserSignUpRequestDto,
 	userSignUpValidationSchema,
 } from "~/modules/users/users.js";
@@ -13,19 +14,15 @@ type Properties = {
 	onSubmit: (payload: UserSignUpRequestDto) => void;
 };
 
-type SignUpFormValues = UserSignUpRequestDto & {
-	repeatPassword: string;
-};
-
 const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
-	const { control, errors, handleSubmit } = useAppForm<SignUpFormValues>({
-		defaultValues: DEFAULT_SIGN_UP_PAYLOAD as SignUpFormValues,
+	const { control, errors, handleSubmit } = useAppForm<UserSignUpFormValues>({
+		defaultValues: DEFAULT_SIGN_UP_PAYLOAD,
 		validationSchema: userSignUpValidationSchema,
 	});
 
 	const handleFormSubmit = useCallback(
 		(event_: React.BaseSyntheticEvent): void => {
-			void handleSubmit((formData: SignUpFormValues) => {
+			void handleSubmit((formData: UserSignUpFormValues) => {
 				const payload: UserSignUpRequestDto = {
 					email: formData.email,
 					firstName: formData.firstName,

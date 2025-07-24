@@ -5,7 +5,6 @@ import { type Config } from "~/libs/modules/config/config.js";
 import { type EnvironmentSchema } from "~/libs/modules/config/libs/types/types.js";
 
 import { BaseToken } from "./base-token.module.js";
-import { type TokenPayload } from "./token.js";
 
 describe("Token service", () => {
 	const mockENV: Pick<EnvironmentSchema, "AUTH"> = {
@@ -33,7 +32,7 @@ describe("Token service", () => {
 
 		const token = await tokenService.create(userId);
 
-		const { payload } = await tokenService.verify<TokenPayload>(token);
+		const { payload } = await tokenService.verify(token);
 		assert.equal(payload, userId);
 	});
 

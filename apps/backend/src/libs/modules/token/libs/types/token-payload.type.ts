@@ -1,5 +1,1 @@
-import { type JWTPayload } from "jose";
-
-type TokenPayload = JWTPayload & { payload: unknown };
-
-export { type TokenPayload };
+export { type JWTPayload as TokenPayload } from "jose";

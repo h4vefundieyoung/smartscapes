@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 
 import {
 	App,
+	PrivateRoute,
 	RouterProvider,
 	StoreProvider,
 } from "~/libs/components/components.js";
@@ -29,6 +30,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 						],
 						element: <App />,
 						path: AppRoute.ROOT,
+					},
+					{
+						element: <PrivateRoute />,
+						path: AppRoute.APP,
 					},
 					{
 						element: <NotFound />,

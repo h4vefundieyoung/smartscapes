@@ -1,4 +1,3 @@
-import landingCover from "../../../../public/assets/images/landing-cover.png";
 import styles from "./styles.module.css";
 
 const Landing = (): React.JSX.Element => {
@@ -18,7 +17,7 @@ const Landing = (): React.JSX.Element => {
 			<img
 				alt="Landing - forest view"
 				className={styles["landing-cover"]}
-				src={landingCover}
+				src="/assets/images/landing-cover.png"
 			/>
 		</main>
 	);

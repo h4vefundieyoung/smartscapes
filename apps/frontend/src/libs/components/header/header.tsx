@@ -16,7 +16,7 @@ const Header = ({ user }: Properties): JSX.Element => {
 
 	return (
 		<header className={styles["header"]}>
-			<img alt="SmartScapes Logo" className={styles["logo"]} src={appLogo} />
+			<img alt="SmartScapes Logo" height={24} src={appLogo} width={136} />
 			{hasUser ? (
 				<div className={styles["user-info"]}>
 					{user && <Avatar user={user} />}

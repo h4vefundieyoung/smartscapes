@@ -7,14 +7,22 @@ import {
 
 import { type UserService } from "~/modules/users/users.js";
 
+import { type BaseToken } from "../../token/token.js";
 import { type AuthPluginApi } from "./libs/types/types.js";
 
+type TokenPayload = {
+	payload: {
+		userId: number;
+	};
+};
+
 class BaseAuthPlugin implements AuthPluginApi {
-	private jwtService: unknown;
+	private readonly jwtService: BaseToken;
 	private readonly userService: UserService;
 	private readonly whiteListRoutes: string[] = [];
 
-	public constructor(jwtService: unknown, userService: UserService) {
+	public constructor(jwtService: BaseToken, userService: UserService) {
+		this.jwtService = jwtService;
 		this.userService = userService;
 		this.plugin = this.plugin.bind(this);
 	}
@@ -32,23 +40,37 @@ class BaseAuthPlugin implements AuthPluginApi {
 		reply: FastifyReply,
 	): Promise<void> {
 		const { headers, url } = request;
-		const mockId = 1;
 
 		if (this.whiteListRoutes.includes(url)) {
 			return;
 		}
 
 		if (!headers.authorization) {
-			return await reply.status(HTTPCode.UNAUTHORIZED).send();
+			this.sendUnathorized(reply);
+
+			return;
 		}
 
-		const user = await this.userService.find(mockId);
+		try {
+			const tokenIndex = 1;
+			const token = headers.authorization.split(" ")[tokenIndex] as string;
+			const {
+				payload: { userId },
+			} = await this.jwtService.verify<TokenPayload>(token);
+			const user = await this.userService.find(userId);
 
-		if (!user) {
-			return await reply.status(HTTPCode.UNAUTHORIZED).send();
+			if (user) {
+				request.user = user;
+			} else {
+				this.sendUnathorized(reply);
+			}
+		} catch {
+			this.sendUnathorized(reply);
 		}
+	}
 
-		request.user = user;
+	private sendUnathorized(reply: FastifyReply): void {
+		reply.status(HTTPCode.UNAUTHORIZED).send();
 	}
 }
 

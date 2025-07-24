@@ -7,6 +7,11 @@ type EnvironmentSchema = {
 		HOST: string;
 		PORT: number;
 	};
+	AUTH: {
+		JWS_ALGORITHM: string;
+		JWT_SECRET: string;
+		TOKEN_EXPIRATION: string;
+	};
 	DB: {
 		CONNECTION_STRING: string;
 		DIALECT: string;

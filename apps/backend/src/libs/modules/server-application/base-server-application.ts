@@ -23,7 +23,7 @@ import {
 	type ValidationSchema,
 } from "~/libs/types/types.js";
 
-import { authPlugin } from "../plugins/auth/auth-plugin.js";
+import { authPlugin } from "../plugins/auth/auth.plugin.js";
 import {
 	type ServerApplication,
 	type ServerApplicationApi,

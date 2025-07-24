@@ -1,7 +1,7 @@
 import { config } from "~/libs/modules/config/config.js";
 import { database } from "~/libs/modules/database/database.js";
 import { logger } from "~/libs/modules/logger/logger.js";
-import { authPlugin } from "~/libs/modules/plugins/auth/auth-plugin.js";
+import { authPlugin } from "~/libs/modules/plugins/auth/auth.plugin.js";
 import { authController } from "~/modules/auth/auth.js";
 import { userController } from "~/modules/users/users.js";
 

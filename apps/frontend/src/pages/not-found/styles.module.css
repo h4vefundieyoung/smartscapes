@@ -11,7 +11,7 @@
 .error-container {
 	display: flex;
 	flex-direction: column;
-	gap: 64px;
+	gap: 60px;
 	align-items: center;
 	justify-content: space-between;
 	width: 360px;
@@ -21,11 +21,11 @@
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
-	height: 200px;
+	min-height: 200px;
 }
 
 .error-number-label {
-	height: 116px;
+	padding: 20px;
 	margin: 0;
 	font-size: 6rem;
 	font-weight: var(--font-weight-semibold);
@@ -43,7 +43,6 @@
 }
 
 .error-description {
-	height: 24px;
 	margin: 0;
 	color: var(--color-text-weak);
 	text-align: center;

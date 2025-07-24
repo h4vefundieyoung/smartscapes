@@ -22,12 +22,10 @@ class PointsOfInterestService implements Service {
 	): Promise<PointsOfInterestResponseDto> {
 		await this.ensureNameIsUnique(payload.name);
 
-		const { latitude, longitude, name } = payload;
+		const { name } = payload;
 
 		const item = await this.pointsOfInterestRepository.create(
 			PointsOfInterestEntity.initializeNew({
-				latitude,
-				longitude,
 				name,
 			}),
 		);
@@ -86,13 +84,11 @@ class PointsOfInterestService implements Service {
 
 		await this.ensureNameIsUnique(payload.name);
 
-		const { latitude, longitude, name } = payload;
+		const { name } = payload;
 
 		const item = await this.pointsOfInterestRepository.update(
 			id,
 			PointsOfInterestEntity.initializeNew({
-				latitude,
-				longitude,
 				name,
 			}),
 		);

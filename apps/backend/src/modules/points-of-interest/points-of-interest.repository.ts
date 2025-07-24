@@ -12,13 +12,11 @@ class PointsOfInterestRepository implements Repository {
 	public async create(
 		entity: PointsOfInterestEntity,
 	): Promise<PointsOfInterestEntity> {
-		const { latitude, longitude, name } = entity.toNewObject();
+		const { name } = entity.toNewObject();
 
 		const pointOfInterest = await this.pointsOfInterestModel
 			.query()
 			.insert({
-				latitude,
-				longitude,
 				name,
 			})
 			.returning("*")
@@ -74,13 +72,11 @@ class PointsOfInterestRepository implements Repository {
 		id: number,
 		entity: PointsOfInterestEntity,
 	): Promise<null | PointsOfInterestEntity> {
-		const { latitude, longitude, name } = entity.toNewObject();
+		const { name } = entity.toNewObject();
 
 		const updatedPointOfInterest = await this.pointsOfInterestModel
 			.query()
 			.patchAndFetchById(id, {
-				latitude,
-				longitude,
 				name,
 			})
 			.execute();

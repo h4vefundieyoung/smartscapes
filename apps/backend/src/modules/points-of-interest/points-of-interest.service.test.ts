@@ -13,8 +13,6 @@ describe("PointsOfInterestService", () => {
 	>[0] = {
 		createdAt: "2024-01-01T00:00:00Z",
 		id: 1,
-		latitude: 40.7829,
-		longitude: -73.9654,
 		name: "Point Of Interest Test Name",
 		updatedAt: "2024-01-01T00:00:00Z",
 	};
@@ -40,15 +38,11 @@ describe("PointsOfInterestService", () => {
 		);
 
 		const result = await pointsOfInterestService.create({
-			latitude: mockPointOfInterest.latitude,
-			longitude: mockPointOfInterest.longitude,
 			name: mockPointOfInterest.name,
 		});
 
 		assert.deepStrictEqual(result, {
 			id: mockPointOfInterest.id,
-			latitude: mockPointOfInterest.latitude,
-			longitude: mockPointOfInterest.longitude,
 			name: mockPointOfInterest.name,
 		});
 	});
@@ -117,8 +111,6 @@ describe("PointsOfInterestService", () => {
 		);
 
 		const result = await pointsOfInterestService.update(EXISTING_ID, {
-			latitude: updatedPointOfInterest.latitude,
-			longitude: updatedPointOfInterest.longitude,
 			name: updatedPointOfInterest.name,
 		});
 

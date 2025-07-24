@@ -71,8 +71,6 @@ erDiagram
     dateTime created_at
     dateTime updated_at
     varchar name
-    float longitude
-    float latitude
   }
 
   users }|--|| groups : group_id

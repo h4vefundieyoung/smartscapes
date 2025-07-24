@@ -21,8 +21,6 @@ describe("PointsOfInterestController", () => {
 
 	const mockPointOfInterest = {
 		id: 1,
-		latitude: 40.7829,
-		longitude: -73.9654,
 		name: "Point Of Interest Test Name",
 	};
 
@@ -68,8 +66,6 @@ describe("PointsOfInterestController", () => {
 
 		const result = await pointsOfInterestController.create({
 			body: {
-				latitude: mockPointOfInterest.latitude,
-				longitude: mockPointOfInterest.longitude,
 				name: mockPointOfInterest.name,
 			},
 			params: {},
@@ -133,8 +129,6 @@ describe("PointsOfInterestController", () => {
 
 		const result = await pointsOfInterestController.update({
 			body: {
-				latitude: updatedPointOfInterest.latitude,
-				longitude: updatedPointOfInterest.longitude,
 				name: updatedPointOfInterest.name,
 			},
 			params: { id: "1" },

@@ -23,8 +23,6 @@ describe("PointsOfInterestRepository", () => {
 	>[0] = {
 		createdAt: "2024-01-01T00:00:00Z",
 		id: 1,
-		latitude: 40.7829,
-		longitude: -73.9654,
 		name: "Point Of Interest Test Name",
 		updatedAt: "2024-01-01T00:00:00Z",
 	};

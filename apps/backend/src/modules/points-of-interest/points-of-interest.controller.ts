@@ -29,12 +29,6 @@ import {
  *         name:
  *           type: string
  *           example: "Central Park"
- *         latitude:
- *           type: number
- *           example: 40.7829
- *         longitude:
- *           type: number
- *           example: -73.9654
  *
  */
 
@@ -100,15 +94,9 @@ class PointsOfInterestController extends BaseController {
 	 *             type: object
 	 *             required:
 	 *               - name
-	 *               - latitude
-	 *               - longitude
 	 *             properties:
 	 *               name:
 	 *                 type: string
-	 *               latitude:
-	 *                 type: number
-	 *               longitude:
-	 *                 type: number
 	 *     responses:
 	 *       201:
 	 *         description: Point of interest created successfully
@@ -253,15 +241,9 @@ class PointsOfInterestController extends BaseController {
 	 *             type: object
 	 *             required:
 	 *               - name
-	 *               - latitude
-	 *               - longitude
 	 *             properties:
 	 *               name:
 	 *                 type: string
-	 *               latitude:
-	 *                 type: number
-	 *               longitude:
-	 *                 type: number
 	 *     responses:
 	 *       200:
 	 *         description: Point of interest updated successfully

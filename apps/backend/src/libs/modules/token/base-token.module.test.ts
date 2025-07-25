@@ -30,11 +30,11 @@ describe("Token service", () => {
 			tokenExpirationTime: TOKEN_EXPIRATION,
 		});
 
-		const token = await tokenService.create({ userId });
+		const token = await tokenService.create({ id: userId });
 
 		const payload = await tokenService.verify(token);
 
-		assert.equal(payload["userId"], userId);
+		assert.equal(payload["id"], userId);
 	});
 
 	it("verify should throw error if token is invalid", async () => {

@@ -24,7 +24,7 @@ class AuthService {
 		userRequestDto: UserSignUpRequestDto,
 	): Promise<UserSignUpResponseDto> {
 		const { email, id } = await this.userService.create(userRequestDto);
-		const token = await this.tokenService.create({ userId: id });
+		const token = await this.tokenService.create({ id });
 
 		return { token, user: { email, id } };
 	}

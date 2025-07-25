@@ -14,11 +14,12 @@ const HeroSection = (): React.JSX.Element => {
 				</p>
 			</div>
 
-			<img
-				alt="Landing - forest view"
-				className={styles["hero-section-cover"]}
-				src="/assets/images/landing-cover.jpg"
-			/>
+			<div className={styles["hero-section-cover"]}>
+				<img
+					alt="Landing - forest view"
+					src="/assets/images/landing-cover.jpg"
+				/>
+			</div>
 		</section>
 	);
 };

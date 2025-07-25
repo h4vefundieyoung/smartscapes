@@ -3,15 +3,15 @@ import styles from "./styles.module.css";
 const Landing = (): React.JSX.Element => {
 	return (
 		<main className={styles["landing"]}>
-			<div className={styles["landing-header"]}>
+			<div className={styles["landing-hero"]}>
 				<h1 className={styles["landing-title"]}>
 					Discover Your Next Adventure
 				</h1>
 
-				<h4 className={styles["landing-description"]}>
+				<p className={styles["landing-description"]}>
 					Find the best trails for hiking, biking, and exploring the outdoors
 					wherever you are.
-				</h4>
+				</p>
 			</div>
 
 			<img

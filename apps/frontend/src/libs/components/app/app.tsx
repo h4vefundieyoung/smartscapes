@@ -14,7 +14,6 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { actions as userActions } from "~/modules/users/users.js";
 
-import { Landing } from "../landing/landing.js";
 import styles from "./styles.module.css";
 
 const App = (): React.JSX.Element => {
@@ -61,7 +60,6 @@ const App = (): React.JSX.Element => {
 						))}
 					</ul>
 					<Button label="Button for test" type="button" />
-					<Landing />
 				</>
 			)}
 		</div>

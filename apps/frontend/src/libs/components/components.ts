@@ -3,7 +3,6 @@ export { Button } from "./button/button.js";
 export { Input } from "./input/input.js";
 export { Link } from "./link/link.js";
 export { Loader } from "./loader/loader.js";
-export { PrivateRoute } from "./private-route/private-route.js";
 export { RouterProvider } from "./router-provider/router-provider.js";
 export { ToastContainer } from "./toast-container/toast-container.js";
 export { Provider as StoreProvider } from "react-redux";

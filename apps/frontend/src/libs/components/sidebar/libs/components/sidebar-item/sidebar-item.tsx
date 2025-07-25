@@ -12,20 +12,17 @@ const SidebarItem = ({
 }: NavigationItem): React.JSX.Element => {
 	const getSidebarClassName = useCallback(
 		({ isActive }: { isActive: boolean }): string =>
-			combineClassNames(
-				styles["sidebar-navigation-link"],
-				isActive && styles["sidebar-navigation-link-active"],
-			),
+			combineClassNames(styles["link"], isActive && styles["active"]),
 		[],
 	);
 
 	return (
 		<li>
 			<NavLink className={getSidebarClassName} to={href}>
-				<span className={styles["sidebar-navigation-icon"]}>
+				<span className={styles["icon"]}>
 					<Icon height={24} name={icon} width={24} />
 				</span>
-				<span className={styles["sidebar-navigation-text"]}>{label}</span>
+				<label className={styles["label"]}>{label}</label>
 			</NavLink>
 		</li>
 	);

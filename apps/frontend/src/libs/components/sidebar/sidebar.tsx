@@ -13,13 +13,10 @@ type Properties = {
 const Sidebar = ({ navigationItems }: Properties): React.JSX.Element => {
 	return (
 		<div className={styles["sidebar"]}>
-			<NavLink
-				className={styles["sidebar-logo-link"] as string}
-				to={AppRoute.ROOT}
-			>
+			<NavLink className={styles["logo-link"] as string} to={AppRoute.ROOT}>
 				<img alt="SmartScapes" height="24" src={smartScapesLogo} width="136" />
 			</NavLink>
-			<ul className={styles["sidebar-navigation-list"]}>
+			<ul className={styles["navigation-list"]}>
 				{navigationItems.map((item) => (
 					<SidebarItem
 						href={item.href}

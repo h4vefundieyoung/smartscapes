@@ -3,7 +3,7 @@
 	max-width: 364px;
 }
 
-.form__title {
+.form-title {
 	margin: 0 0 48px;
 	font-size: var(--font-size-h1);
 	font-weight: var(--font-weight-semibold);

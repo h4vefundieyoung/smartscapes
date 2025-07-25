@@ -5,7 +5,7 @@ import {
 	type UserSignUpRequestDto,
 	userSignUpValidationSchema,
 } from "~/modules/users/users.js";
-import { type UserSignUpFormValues } from "~/pages/auth/libs/types/user-sign-up-form-values.js";
+import { type UserSignUpFormValues } from "~/pages/auth/libs/types/user-sign-up-form-values.types.js";
 
 import { DEFAULT_SIGN_UP_PAYLOAD } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
@@ -88,7 +88,7 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 				<Button label="Sign up" type="submit" />
 			</form>
 
-			<div className={styles["login-link-container"]}>
+			<div>
 				<p className={styles["login-link-text"]}>
 					Already have an account?
 					<Link to={AppRoute.SIGN_IN}>Log in</Link>

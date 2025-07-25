@@ -1,4 +1,4 @@
-import { type UserSignUpFormValues } from "~/pages/auth/libs/types/user-sign-up-form-values.js";
+import { type UserSignUpFormValues } from "~/pages/auth/libs/types/user-sign-up-form-values.types.js";
 
 const DEFAULT_SIGN_UP_PAYLOAD: UserSignUpFormValues = {
 	confirmPassword: "",

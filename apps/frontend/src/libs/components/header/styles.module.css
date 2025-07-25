@@ -1,0 +1,20 @@
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	padding: 12px 32px;
+	border-bottom: 1px solid var(--color-stroke-weak);
+}
+
+.user-info {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	padding: 8px 16px;
+}
+
+.buttons {
+	display: flex;
+	gap: 8px;
+}

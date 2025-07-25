@@ -18,7 +18,7 @@
 		"migrate:dev:down": "tsx ../../node_modules/knex/bin/cli.js migrate:down",
 		"migrate:dev:rollback": "tsx ../../node_modules/knex/bin/cli.js migrate:rollback --all",
 		"build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json && npm run build:copy",
-		"build:copy": "shx cp -r package.json build",
+		"build:copy": "cp -r package.json build",
 		"prestart": "npm run migrate",
 		"migrate": "knex migrate:latest",
 		"start": "node ./src/index.js"
@@ -47,7 +47,6 @@
 		"@types/convict": "6.1.6",
 		"@types/swagger-jsdoc": "6.0.4",
 		"knex-mock-client": "3.0.2",
-		"shx": "0.4.0",
 		"tsx": "4.20.3"
 	}
 }

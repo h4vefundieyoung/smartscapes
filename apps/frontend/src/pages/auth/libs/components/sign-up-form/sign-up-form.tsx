@@ -2,8 +2,8 @@ import { Button, Input, Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
+	userSignUpFormValidationSchema,
 	type UserSignUpRequestDto,
-	userSignUpValidationSchema,
 } from "~/modules/users/users.js";
 import { type UserSignUpFormValues } from "~/pages/auth/libs/types/user-sign-up-form-values.types.js";
 
@@ -18,7 +18,7 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 	const { control, errors, handleSubmit } = useAppForm<UserSignUpFormValues>({
 		defaultValues: DEFAULT_SIGN_UP_PAYLOAD,
 		mode: "onChange",
-		validationSchema: userSignUpValidationSchema,
+		validationSchema: userSignUpFormValidationSchema,
 	});
 
 	const handleFormSubmit = useCallback(

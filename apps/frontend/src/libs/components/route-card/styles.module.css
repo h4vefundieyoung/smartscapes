@@ -2,14 +2,22 @@
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-	width: 390px;
+	width: 100%;
+	max-width: 390px;
 }
 
 .route-card .image {
 	align-items: center;
-	height: 240px;
 	object-fit: cover;
+}
+
+.route-card .image-placeholder {
 	background-color: var(--color-fill-grey);
+}
+
+.route-card .image,
+.route-card .image-placeholder {
+	height: 240px;
 	border-radius: 8px;
 }
 
@@ -26,6 +34,5 @@
 	font-size: var(--font-size-h4);
 	font-weight: var(--font-weight-semibold);
 	line-height: 1.2;
-	color: var(--color-text-strong);
 	white-space: nowrap;
 }

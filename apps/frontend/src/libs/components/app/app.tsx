@@ -63,11 +63,11 @@ const App = (): React.JSX.Element => {
 					<Button label="Button for test" type="button" />
 					<section className={styles["popular-section"]}>
 						<p className={styles["title"]}>Popular Routes</p>
-						<div className={styles["cards"]}>
-							<RouteCard alt="Kralovska obora" label="Kralovska obora" />
-							<RouteCard alt="Kralovska obora" label="Kralovska obora" />
-							<RouteCard alt="Kralovska obora" label="Kralovska obora" />
-						</div>
+						<ul className={styles["cards"]}>
+							<RouteCard imageUrl={null} name="Kralovska obora" />
+							<RouteCard imageUrl={null} name="Kralovska obora" />
+							<RouteCard imageUrl={null} name="Kralovska obora" />
+						</ul>
 					</section>
 				</>
 			)}

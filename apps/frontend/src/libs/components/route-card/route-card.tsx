@@ -1,23 +1,22 @@
 import styles from "./styles.module.css";
 
 type Properties = {
-	alt: string;
-	image?: string;
-	label: string;
+	imageUrl: null | string;
+	name: string;
 };
 
-const RouteCard = ({ alt, image, label }: Properties): React.JSX.Element => {
+const RouteCard = ({ imageUrl, name }: Properties): React.JSX.Element => {
 	return (
-		<div className={styles["route-card"]}>
-			{image ? (
-				<img alt={alt} className={styles["image"]} src={image} />
+		<li className={styles["route-card"]}>
+			{imageUrl ? (
+				<img alt={name} className={styles["image"]} src={imageUrl} />
 			) : (
-				<div className={styles["image"]} />
+				<div className={styles["image-placeholder"]} />
 			)}
 			<div className={styles["data"]}>
-				<p className={styles["label"]}>{label}</p>
+				<p className={styles["label"]}>{name}</p>
 			</div>
-		</div>
+		</li>
 	);
 };
 

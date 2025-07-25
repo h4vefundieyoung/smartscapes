@@ -4,7 +4,6 @@ export { Icon } from "./icon/icon.js";
 export { Input } from "./input/input.js";
 export { Link } from "./link/link.js";
 export { Loader } from "./loader/loader.js";
-export { NavItem } from "./nav-item/nav-item.js";
 export { RouterProvider } from "./router-provider/router-provider.js";
 export { Sidebar } from "./sidebar/sidebar.js";
 export { ToastContainer } from "./toast-container/toast-container.js";

@@ -5,8 +5,12 @@ import { type NavigationItem } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
-const NavItem = ({ href, icon, label }: NavigationItem): React.JSX.Element => {
-	const getNavLinkClassName = useCallback(
+const SidebarItem = ({
+	href,
+	icon,
+	label,
+}: NavigationItem): React.JSX.Element => {
+	const getSidebarClassName = useCallback(
 		({ isActive }: { isActive: boolean }): string =>
 			combineClassNames(
 				styles["sidebar-navigation-link"],
@@ -17,7 +21,7 @@ const NavItem = ({ href, icon, label }: NavigationItem): React.JSX.Element => {
 
 	return (
 		<li>
-			<NavLink className={getNavLinkClassName} to={href}>
+			<NavLink className={getSidebarClassName} to={href}>
 				<span className={styles["sidebar-navigation-icon"]}>
 					<Icon height={24} name={icon} width={24} />
 				</span>
@@ -27,4 +31,4 @@ const NavItem = ({ href, icon, label }: NavigationItem): React.JSX.Element => {
 	);
 };
 
-export { NavItem };
+export { SidebarItem };

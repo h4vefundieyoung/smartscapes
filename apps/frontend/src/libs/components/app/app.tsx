@@ -6,6 +6,7 @@ import {
 	RouterOutlet,
 	Sidebar,
 } from "~/libs/components/components.js";
+import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -13,7 +14,6 @@ import {
 	useEffect,
 	useLocation,
 } from "~/libs/hooks/hooks.js";
-import { type NavigationItem } from "~/libs/types/types.js";
 import { actions as userActions } from "~/modules/users/users.js";
 
 import styles from "./styles.module.css";
@@ -26,19 +26,6 @@ const App = (): React.JSX.Element => {
 
 	const isRoot = pathname === AppRoute.ROOT;
 
-	const navigationItems: NavigationItem[] = [
-		{
-			href: AppRoute.ROOT,
-			icon: "dashboard",
-			label: "Dashboard",
-		},
-		{
-			href: AppRoute.SIGN_UP,
-			icon: "listOfPlaces",
-			label: "List of places",
-		},
-	];
-
 	useEffect(() => {
 		if (isRoot) {
 			void dispatch(userActions.loadAll());
@@ -47,7 +34,7 @@ const App = (): React.JSX.Element => {
 
 	return (
 		<div className={styles["container"]}>
-			<Sidebar navigationItems={navigationItems} />
+			<Sidebar navigationItems={NAVIGATION_ITEMS} />
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
 			<ul className="App-navigation-list">
 				<li>

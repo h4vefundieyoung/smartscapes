@@ -25,8 +25,10 @@ class BaseToken implements Token {
 		this.tokenExpirationTime = tokenExpirationTime;
 	}
 
-	public async create<Payload>(payload: Payload): Promise<string> {
-		const jwt = await new SignJWT({ payload })
+	public async create<Payload extends Record<string, unknown>>(
+		payload: Payload,
+	): Promise<string> {
+		const jwt = await new SignJWT({ ...payload })
 			.setProtectedHeader({ alg: this.jwtAlgorithm })
 			.setIssuedAt()
 			.setExpirationTime(this.tokenExpirationTime)

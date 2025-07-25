@@ -1,6 +1,7 @@
 import reactLogo from "~/assets/images/react.svg";
 import {
 	Button,
+	Header,
 	Link,
 	Loader,
 	RouteCard,
@@ -22,7 +23,11 @@ const App = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const dataStatus = useAppSelector(({ users }) => users.dataStatus);
 	const users = useAppSelector(({ users }) => users.data);
-
+	const mockUserWithoutAvatar = {
+		avatarUrl: null,
+		firstName: "John",
+		lastName: "Smith",
+	};
 	const isRoot = pathname === AppRoute.ROOT;
 
 	useEffect(() => {
@@ -33,6 +38,7 @@ const App = (): React.JSX.Element => {
 
 	return (
 		<div className={styles["container"]}>
+			<Header user={mockUserWithoutAvatar} />
 			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
 			<ul className="App-navigation-list">
 				<li>

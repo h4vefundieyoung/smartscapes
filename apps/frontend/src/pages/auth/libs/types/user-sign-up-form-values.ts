@@ -1,4 +1,4 @@
-import { type UserSignUpRequestDto } from "@smartscapes/shared/src/modules/users/libs/types/user-sign-up-request-dto.type.js";
+import { type UserSignUpRequestDto } from "@smartscapes/shared";
 
 type UserSignUpFormValues = UserSignUpRequestDto & {
 	confirmPassword: string;

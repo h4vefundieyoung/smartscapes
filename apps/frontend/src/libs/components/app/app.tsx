@@ -26,7 +26,7 @@ const App = (): React.JSX.Element => {
 
 	return (
 		<div className={styles["container"]}>
-			<div>
+			<div className={styles["outlet-container"]}>
 				<RouterOutlet />
 			</div>
 			{isRoot && (

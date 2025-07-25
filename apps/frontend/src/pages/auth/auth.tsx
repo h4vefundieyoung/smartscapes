@@ -61,15 +61,8 @@ const Auth = (): React.JSX.Element => {
 	return (
 		<main className={styles["container"]}>
 			<div className={styles["left-panel"]}>
-				<div
-					className={`${styles["left-panel__logo"] ?? ""} ${styles["logo"] ?? ""}`}
-				>
-					<img
-						alt="SmartScapes"
-						src={logo}
-						style={{ height: "24px", width: "24px" }}
-					/>
-					<p className="logo__text">SmartScapes</p>
+				<div className={styles["logo"]}>
+					<img alt="SmartScapes" height="24" src={logo} width="136" />
 				</div>
 
 				{handleFormRender(pathname)}

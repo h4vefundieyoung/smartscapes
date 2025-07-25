@@ -1,7 +1,6 @@
 .container {
 	display: flex;
-	width: 100vw;
-	height: 100vh;
+	flex-grow: 1;
 	overflow: hidden;
 	font-family: var(--font-family);
 }
@@ -18,21 +17,14 @@
 
 .right-panel {
 	flex: 0 0 50%;
-	background-image: url("../../assets/images/background.jpg");
+	background-image: url("../../assets/images/auth-page-background.jpg");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
 }
 
-.left-panel__logo {
+.logo {
 	position: absolute;
 	top: 32px;
 	left: 48px;
-	display: flex;
-	flex-direction: row;
-	gap: 8px;
-	align-items: center;
-	height: 24px;
-	font-size: var(--font-size-small);
-	font-weight: var(--font-weight-semibold);
 }

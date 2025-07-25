@@ -67,8 +67,5 @@
 	"simple-git-hooks": {
 		"pre-commit": "npm run lint:types && npm run git:hooks:precommit",
 		"commit-msg": "npm run git:hooks:commit"
-	},
-	"dependencies": {
-		"react-router-dom": "7.7.0"
 	}
 }

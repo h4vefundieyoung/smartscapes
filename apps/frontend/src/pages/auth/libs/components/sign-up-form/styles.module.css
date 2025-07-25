@@ -16,19 +16,15 @@
 	margin: 0 0 24px;
 }
 
-.form__group .label {
+.label {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
 }
 
-.login-link__text {
+.login-link-text {
 	margin: 0;
 	font-size: var(--font-size-tiny);
 	font-weight: var(--font-weight-regular);
 	color: var(--color-text-weak);
-}
-
-.login-link__text a {
-	color: var(--color-text-brand);
 }

@@ -1,6 +1,10 @@
 {
 	"extends": "../../tsconfig.json",
-	"include": ["**/*.ts", "**/*.js"],
+	"include": [
+		"**/*.ts",
+		"**/*.js",
+		"../../apps/frontend/src/pages/auth/libs/types/user-sign-up-form-values.ts"
+	],
 	"exclude": ["node_modules", "build"],
 	"compilerOptions": {
 		"baseUrl": "."

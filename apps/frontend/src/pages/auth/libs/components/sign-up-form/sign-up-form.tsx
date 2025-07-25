@@ -2,10 +2,10 @@ import { Button, Input, Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
-	type UserSignUpFormValues,
 	type UserSignUpRequestDto,
 	userSignUpValidationSchema,
 } from "~/modules/users/users.js";
+import { type UserSignUpFormValues } from "~/pages/auth/libs/types/user-sign-up-form-values.js";
 
 import { DEFAULT_SIGN_UP_PAYLOAD } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
@@ -38,72 +38,60 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 
 	return (
 		<div className={styles["container"]}>
-			<h1 className={styles["form__title"]}>Sign Up</h1>
+			<h1 className={styles["form-title"]}>Sign Up</h1>
 			<form className={styles["form"]} onSubmit={handleFormSubmit}>
-				<div className={styles["form__group"]}>
-					<Input
-						control={control}
-						errors={errors}
-						label="First Name"
-						name="firstName"
-						placeholder="Enter your first name"
-						type="text"
-					/>
-				</div>
+				<Input
+					autocomplete="given-name"
+					control={control}
+					errors={errors}
+					label="First Name"
+					name="firstName"
+					type="text"
+				/>
 
-				<div className={styles["form__group"]}>
-					<Input
-						control={control}
-						errors={errors}
-						label="Last Name"
-						name="lastName"
-						placeholder="Enter your last name"
-						type="text"
-					/>
-				</div>
+				<Input
+					autocomplete="family-name"
+					control={control}
+					errors={errors}
+					label="Last Name"
+					name="lastName"
+					type="text"
+				/>
 
-				<div className={styles["form__group"]}>
-					<Input
-						control={control}
-						errors={errors}
-						label="Email"
-						name="email"
-						placeholder="Enter your email"
-						type="email"
-					/>
-				</div>
+				<Input
+					autocomplete="email"
+					control={control}
+					errors={errors}
+					label="Email"
+					name="email"
+					type="email"
+				/>
 
-				<div className={styles["form__group"]}>
-					<Input
-						control={control}
-						errors={errors}
-						label="Password"
-						name="password"
-						placeholder="Enter your password"
-						type="password"
-					/>
-				</div>
+				<Input
+					autocomplete="new-password"
+					control={control}
+					errors={errors}
+					label="Password"
+					name="password"
+					type="password"
+				/>
 
-				<div className={styles["form__group"]}>
-					<Input
-						control={control}
-						errors={errors}
-						label="Confirm password"
-						name="repeatPassword"
-						placeholder=""
-						type="text"
-					/>
-				</div>
+				<Input
+					autocomplete="new-password"
+					control={control}
+					errors={errors}
+					label="Confirm password"
+					name="confirmPassword"
+					type="text"
+				/>
 
 				<Button label="Sign up" type="submit" />
 			</form>
 
-			<div className={styles["login-link__container"]}>
-				<p className={styles["login-link__text"]}>
+			<div className={styles["login-link-container"]}>
+				<p className={styles["login-link-text"]}>
 					Already have an account?
-					<Link to={AppRoute.SIGN_IN}>
-						<span className={styles["link-auth"]}>Log in</span>
-					</Link>
+					<Link to={AppRoute.SIGN_IN}>Log in</Link>
 				</p>
 			</div>
 		</div>

@@ -33,6 +33,7 @@ export {
 	type PointsOfInterestResponseDto,
 } from "./modules/points-of-interest/points-of-interest.js";
 export {
+	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetAllItemResponseDto,
 	UsersApiPath,

@@ -1,14 +1,14 @@
 import styles from "./styles.module.css";
 
-const Landing = (): React.JSX.Element => {
+const HeroSection = (): React.JSX.Element => {
 	return (
-		<main className={styles["landing"]}>
-			<div className={styles["landing-hero"]}>
-				<h1 className={styles["landing-title"]}>
+		<section className={styles["hero-section"]}>
+			<div>
+				<h1 className={styles["hero-section-title"]}>
 					Discover Your Next Adventure
 				</h1>
 
-				<p className={styles["landing-description"]}>
+				<p className={styles["hero-section-description"]}>
 					Find the best trails for hiking, biking, and exploring the outdoors
 					wherever you are.
 				</p>
@@ -16,11 +16,11 @@ const Landing = (): React.JSX.Element => {
 
 			<img
 				alt="Landing - forest view"
-				className={styles["landing-cover"]}
+				className={styles["hero-section-cover"]}
 				src="/assets/images/landing-cover.png"
 			/>
-		</main>
+		</section>
 	);
 };
 
-export { Landing };
+export { HeroSection };

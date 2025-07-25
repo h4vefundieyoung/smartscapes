@@ -1,20 +1,12 @@
-.landing {
+.hero-section {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
-	align-items: center;
-	justify-content: center;
-}
-
-.landing-hero {
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
+	gap: 100px;
 	width: 100%;
-	margin: 100px 0;
+	margin-top: 100px;
 }
 
-.landing-title {
+.hero-section-title {
 	margin-bottom: 0;
 	font-size: var(--font-size-display);
 	font-weight: var(--font-weight-bold);
@@ -22,7 +14,7 @@
 	text-align: center;
 }
 
-.landing-description {
+.hero-section-description {
 	margin: 0;
 	font-size: var(--font-size-h4);
 	font-weight: var(--font-weight-regular);
@@ -30,7 +22,7 @@
 	text-align: center;
 }
 
-.landing-cover {
+.hero-section-cover {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;

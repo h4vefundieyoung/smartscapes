@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import { registerSW } from "virtual:pwa-register";
 
 import { PWAConfig } from "./libs/enums/enums.js";
@@ -33,7 +34,7 @@ class PWAModule {
 			onRegistered: (registration): void => {
 				if (registration) {
 					setInterval(() => {
-						registration.update();
+						void registration.update();
 					}, updateIntervalMs);
 				}
 

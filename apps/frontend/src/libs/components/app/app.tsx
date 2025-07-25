@@ -1,9 +1,6 @@
-import { Button, Loader, RouterOutlet } from "~/libs/components/components.js";
-import reactLogo from "~/assets/images/react.svg";
 import {
 	Button,
 	Header,
-	Link,
 	Loader,
 	RouterOutlet,
 } from "~/libs/components/components.js";
@@ -39,11 +36,11 @@ const App = (): React.JSX.Element => {
 	return (
 		<div className={styles["container"]}>
 			<div className={styles["outlet-container"]}>
-			<Header user={mockUserWithoutAvatar} />
 				<RouterOutlet />
 			</div>
 			{isRoot && (
 				<>
+					<Header user={mockUserWithoutAvatar} />
 					<p>State: {dataStatus}</p>
 					<Loader />
 					<h3>Users:</h3>

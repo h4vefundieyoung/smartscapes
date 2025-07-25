@@ -135,7 +135,7 @@ describe("PointsOfInterestRepository", () => {
 			.update(DatabaseTableName.POINTS_OF_INTEREST)
 			.response([pointOfInterestEntity]);
 
-		const result = await pointsOfInterestRepository.update(
+		const result = await pointsOfInterestRepository.patch(
 			EXISTING_ID,
 			pointOfInterestEntity,
 		);

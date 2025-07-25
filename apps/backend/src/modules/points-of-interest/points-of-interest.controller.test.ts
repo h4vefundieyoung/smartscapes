@@ -114,12 +114,12 @@ describe("PointsOfInterestController", () => {
 			name: "Updated Point Of Interest Test Name",
 		};
 
-		const mockUpdate: PointsOfInterestService["update"] = () => {
+		const mockUpdate: PointsOfInterestService["patch"] = () => {
 			return Promise.resolve(updatedPointOfInterest);
 		};
 
 		const pointsOfInterestService = {
-			update: mockUpdate,
+			patch: mockUpdate,
 		} as PointsOfInterestService;
 
 		const pointsOfInterestController = new PointsOfInterestController(
@@ -127,7 +127,7 @@ describe("PointsOfInterestController", () => {
 			pointsOfInterestService,
 		);
 
-		const result = await pointsOfInterestController.update({
+		const result = await pointsOfInterestController.patch({
 			body: {
 				name: updatedPointOfInterest.name,
 			},

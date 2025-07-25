@@ -1,4 +1,4 @@
-import { APIPath, HTTPMethodEnum } from "~/libs/enums/enums.js";
+import { APIPath } from "~/libs/enums/enums.js";
 import {
 	type APIHandlerOptions,
 	type APIHandlerResponse,
@@ -44,7 +44,7 @@ class PointsOfInterestController extends BaseController {
 
 		this.addRoute({
 			handler: this.create.bind(this),
-			method: HTTPMethodEnum.POST,
+			method: "POST",
 			path: "/",
 			validation: {
 				body: pointOfInterestCreateValidationSchema,
@@ -53,25 +53,25 @@ class PointsOfInterestController extends BaseController {
 
 		this.addRoute({
 			handler: this.delete.bind(this),
-			method: HTTPMethodEnum.DELETE,
+			method: "DELETE",
 			path: "/:id",
 		});
 
 		this.addRoute({
 			handler: this.find.bind(this),
-			method: HTTPMethodEnum.GET,
+			method: "GET",
 			path: "/:id",
 		});
 
 		this.addRoute({
 			handler: this.findAll.bind(this),
-			method: HTTPMethodEnum.GET,
+			method: "GET",
 			path: "/",
 		});
 
 		this.addRoute({
-			handler: this.update.bind(this),
-			method: HTTPMethodEnum.PATCH,
+			handler: this.patch.bind(this),
+			method: "PATCH",
 			path: "/:id",
 			validation: {
 				body: pointOfInterestUpdateValidationSchema,
@@ -254,7 +254,7 @@ class PointsOfInterestController extends BaseController {
 	 *       404:
 	 *         description: Point of interest not found
 	 */
-	public async update(
+	public async patch(
 		options: APIHandlerOptions<{
 			body: PointsOfInterestRequestDto;
 			params: { id: string };
@@ -262,7 +262,7 @@ class PointsOfInterestController extends BaseController {
 	): Promise<APIHandlerResponse<PointsOfInterestResponseDto>> {
 		const { body, params } = options;
 		const id = Number(params.id);
-		const pointOfInterest = await this.pointsOfInterestService.update(id, body);
+		const pointOfInterest = await this.pointsOfInterestService.patch(id, body);
 
 		return {
 			payload: { data: pointOfInterest },

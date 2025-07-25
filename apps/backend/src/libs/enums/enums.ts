@@ -1,6 +1,1 @@
-export {
-	APIErrorType,
-	APIPath,
-	AppEnvironment,
-	HTTPMethodEnum,
-} from "@smartscapes/shared";
+export { APIErrorType, APIPath, AppEnvironment } from "@smartscapes/shared";

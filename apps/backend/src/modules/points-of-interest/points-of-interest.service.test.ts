@@ -100,17 +100,17 @@ describe("PointsOfInterestService", () => {
 				)) as PointsOfInterestRepository["find"],
 			findByName: (() =>
 				Promise.resolve(null)) as PointsOfInterestRepository["findByName"],
-			update: (() =>
+			patch: (() =>
 				Promise.resolve(
 					pointOfInterestEntity,
-				)) as PointsOfInterestRepository["update"],
+				)) as PointsOfInterestRepository["patch"],
 		} as PointsOfInterestRepository;
 
 		const pointsOfInterestService = new PointsOfInterestService(
 			pointsOfInterestRepository,
 		);
 
-		const result = await pointsOfInterestService.update(EXISTING_ID, {
+		const result = await pointsOfInterestService.patch(EXISTING_ID, {
 			name: updatedPointOfInterest.name,
 		});
 

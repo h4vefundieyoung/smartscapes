@@ -31,7 +31,7 @@ class PointsOfInterestRepository implements Repository {
 			.deleteById(id)
 			.execute();
 
-		return !!deletedCount;
+		return Boolean(deletedCount);
 	}
 
 	public async find(id: number): Promise<null | PointsOfInterestEntity> {
@@ -68,20 +68,26 @@ class PointsOfInterestRepository implements Repository {
 		return PointsOfInterestEntity.initialize(point);
 	}
 
-	public async update(
+	public async patch(
 		id: number,
 		entity: PointsOfInterestEntity,
 	): Promise<null | PointsOfInterestEntity> {
 		const { name } = entity.toNewObject();
 
-		const updatedPointOfInterest = await this.pointsOfInterestModel
+		const updatedPoints = await this.pointsOfInterestModel
 			.query()
-			.patchAndFetchById(id, {
+			.patch({
 				name,
 			})
+			.where("id", "=", id)
+			.returning("*")
 			.execute();
 
-		return PointsOfInterestEntity.initialize(updatedPointOfInterest);
+		if (updatedPoints.length === 0 || !updatedPoints[0]) {
+			return null;
+		}
+
+		return PointsOfInterestEntity.initialize(updatedPoints[0]);
 	}
 }
 

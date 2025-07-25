@@ -13,7 +13,6 @@ export {
 	HTTPError,
 	HTTPHeader,
 	type HTTPMethod,
-	HTTPMethodEnum,
 	type HTTPOptions,
 	type HTTPResponse,
 } from "./libs/modules/http/http.js";

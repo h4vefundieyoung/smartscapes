@@ -5,7 +5,7 @@ import {
 	PointsOfInterestValidationRule,
 } from "../enums/enums.js";
 
-const MINIMUM_FIELDS_REQUIRED = 1;
+const MINIMUM_FIELDS_TO_UPDATE = 1;
 
 const pointOfInterestUpdate = z
 	.strictObject({
@@ -21,7 +21,7 @@ const pointOfInterestUpdate = z
 	})
 	.refine(
 		(data) => {
-			return Object.keys(data).length >= MINIMUM_FIELDS_REQUIRED;
+			return Object.keys(data).length >= MINIMUM_FIELDS_TO_UPDATE;
 		},
 		{
 			message: "At least one field must be provided for update",

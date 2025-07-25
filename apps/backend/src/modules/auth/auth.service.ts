@@ -1,5 +1,3 @@
-import { ApplicationError } from "@smartscapes/shared/src/libs/exceptions/exceptions.js";
-
 import { type encryption } from "~/libs/modules/encryption/libs/encryption.js";
 import { type BaseToken } from "~/libs/modules/token/token.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
@@ -10,6 +8,9 @@ import {
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
+
+import { AuthorizationExceptionMessage } from "./libs/enums/auth-exception-message.enum.js";
+import { AuthorizationError } from "./libs/exceptions/auth.exception.js";
 
 type Constructor = {
 	encryptionService: typeof encryption;
@@ -44,8 +45,8 @@ class AuthService {
 		const user = await this.userRepository.findByEmail(email);
 
 		if (!user) {
-			throw new ApplicationError({
-				message: "An account with this email does not exist.",
+			throw new AuthorizationError({
+				message: AuthorizationExceptionMessage.INVALID_CREDENTIALS,
 			});
 		}
 
@@ -55,7 +56,9 @@ class AuthService {
 		);
 
 		if (!arePasswordsMatch) {
-			throw new ApplicationError({ message: "Invalid credentials." });
+			throw new AuthorizationError({
+				message: AuthorizationExceptionMessage.INVALID_CREDENTIALS,
+			});
 		}
 
 		const token = await this.tokenService.create({ userId: user.getId() });

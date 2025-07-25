@@ -1,4 +1,12 @@
 import { Button, Loader, RouterOutlet } from "~/libs/components/components.js";
+import reactLogo from "~/assets/images/react.svg";
+import {
+	Button,
+	Header,
+	Link,
+	Loader,
+	RouterOutlet,
+} from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -15,7 +23,11 @@ const App = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const dataStatus = useAppSelector(({ users }) => users.dataStatus);
 	const users = useAppSelector(({ users }) => users.data);
-
+	const mockUserWithoutAvatar = {
+		avatarUrl: null,
+		firstName: "John",
+		lastName: "Smith",
+	};
 	const isRoot = pathname === AppRoute.ROOT;
 
 	useEffect(() => {
@@ -27,6 +39,7 @@ const App = (): React.JSX.Element => {
 	return (
 		<div className={styles["container"]}>
 			<div className={styles["outlet-container"]}>
+			<Header user={mockUserWithoutAvatar} />
 				<RouterOutlet />
 			</div>
 			{isRoot && (

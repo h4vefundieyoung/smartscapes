@@ -3,7 +3,7 @@
 	max-width: 364px;
 }
 
-.form__title {
+.form-title {
 	margin: 0 0 48px;
 	font-size: var(--font-size-h1);
 	font-weight: var(--font-weight-semibold);
@@ -17,13 +17,13 @@
 	margin: 0 0 24px;
 }
 
-.form__group {
+.form-group {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
 }
 
-.sign-up-link__text {
+.sign-up-link-text {
 	margin: 0;
 	font-size: var(--font-size-tiny);
 	font-weight: var(--font-weight-regular);
@@ -31,6 +31,6 @@
 	color: var(--color-text-weak);
 }
 
-.sign-up-link__text a {
+.sign-up-link-text a {
 	color: var(--color-text-brand);
 }

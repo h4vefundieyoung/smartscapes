@@ -68,7 +68,7 @@ const Auth = (): React.JSX.Element => {
 			<div className={styles["left-panel"]}>
 				<img
 					alt="SmartScapes"
-					className={styles["left-panel__logo"]}
+					className={styles["left-panel-logo"]}
 					height={24}
 					src={logo}
 					width={136}

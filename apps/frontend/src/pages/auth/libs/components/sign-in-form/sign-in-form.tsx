@@ -30,9 +30,9 @@ const SignInForm = ({ onSubmit }: Properties): React.JSX.Element => {
 
 	return (
 		<div className={styles["container"]}>
-			<h1 className={styles["form__title"]}>Log In</h1>
+			<h1 className={styles["form-title"]}>Log In</h1>
 			<form className={styles["form"]} onSubmit={handleFormSubmit}>
-				<div className={styles["form__group"]}>
+				<div className={styles["form-group"]}>
 					<Input
 						control={control}
 						errors={errors}
@@ -43,7 +43,7 @@ const SignInForm = ({ onSubmit }: Properties): React.JSX.Element => {
 					/>
 				</div>
 
-				<div className={styles["form__group"]}>
+				<div className={styles["form-group"]}>
 					<Input
 						control={control}
 						errors={errors}
@@ -57,8 +57,8 @@ const SignInForm = ({ onSubmit }: Properties): React.JSX.Element => {
 				<Button label="Log In" type="submit" />
 			</form>
 
-			<div className={styles["sign-up-link__container"]}>
-				<p className={styles["sign-up-link__text"]}>
+			<div className={styles["sign-up-link-container"]}>
+				<p className={styles["sign-up-link-text"]}>
 					Do not have an account? <Link to={AppRoute.SIGN_UP}>Sign up</Link>
 				</p>
 			</div>

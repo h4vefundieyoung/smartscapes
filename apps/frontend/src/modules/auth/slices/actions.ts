@@ -4,6 +4,7 @@ import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 
 import {
 	type UserSignInRequestDto,
+	type UserSignInResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "../libs/types/types.js";
@@ -22,7 +23,7 @@ const signUp = createAsyncThunk<
 });
 
 const signIn = createAsyncThunk<
-	APIResponse<UserSignUpResponseDto>,
+	APIResponse<UserSignInResponseDto>,
 	UserSignInRequestDto,
 	AsyncThunkConfig
 >(`${sliceName}/sign-in`, async (payload, { extra }) => {

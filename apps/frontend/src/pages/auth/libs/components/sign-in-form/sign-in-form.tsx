@@ -32,28 +32,22 @@ const SignInForm = ({ onSubmit }: Properties): React.JSX.Element => {
 		<div className={styles["container"]}>
 			<h1 className={styles["form-title"]}>Log In</h1>
 			<form className={styles["form"]} onSubmit={handleFormSubmit}>
-				<div className={styles["form-group"]}>
-					<Input
-						control={control}
-						errors={errors}
-						label="Email"
-						name="email"
-						placeholder=""
-						type="email"
-					/>
-				</div>
-
-				<div className={styles["form-group"]}>
-					<Input
-						control={control}
-						errors={errors}
-						label="Password"
-						name="password"
-						placeholder=""
-						type="text"
-					/>
-				</div>
-
+				<Input
+					autocomplete="email"
+					control={control}
+					errors={errors}
+					label="Email"
+					name="email"
+					type="email"
+				/>
+				<Input
+					autocomplete="current-password"
+					control={control}
+					errors={errors}
+					label="Password"
+					name="password"
+					type="password"
+				/>
 				<Button label="Log In" type="submit" />
 			</form>
 

@@ -3,8 +3,8 @@ import browserslist from "browserslist";
 import { browserslistToTargets, Features } from "lightningcss";
 import { fileURLToPath } from "node:url";
 import { type ConfigEnv, defineConfig, loadEnv } from "vite";
-import svgr from "vite-plugin-svgr";
 import { VitePWA } from "vite-plugin-pwa";
+import svgr from "vite-plugin-svgr";
 
 const config = ({ mode }: ConfigEnv): ReturnType<typeof defineConfig> => {
 	const {
@@ -34,47 +34,49 @@ const config = ({ mode }: ConfigEnv): ReturnType<typeof defineConfig> => {
 			reactPlugin(),
 			svgr(),
 			VitePWA({
-				registerType: "autoUpdate",
+				devOptions: {
+					enabled: false,
+					type: "module",
+				},
 				includeAssets: ["favicon.svg", "apple-touch-icon.png"],
 				manifest: {
-					name: "SmartScapes",
-					short_name: "SmartScapes",
+					background_color: "#ffffff",
 					description:
 						"Interactive mapping platform for exploring large, complex areas",
-					theme_color: "#ffffff",
-					background_color: "#ffffff",
-					scope: "/",
-					start_url: "/",
 					icons: [
 						{
-							src: "/assets/images/pwa-192x192.png",
 							sizes: "192x192",
+							src: "/assets/images/pwa-192x192.png",
 							type: "image/png",
 						},
 						{
-							src: "/assets/images/pwa-512x512.png",
 							sizes: "512x512",
-							type: "images/png",
+							src: "/assets/images/pwa-512x512.png",
+							type: "image/png",
 						},
 						{
-							src: "/assets/images/pwa-512x512.png",
-							sizes: "512x512",
-							type: "image/png",
 							purpose: "any",
+							sizes: "512x512",
+							src: "/assets/images/pwa-512x512.png",
+							type: "image/png",
 						},
 						{
-							src: "/assets/images/pwa-512x512.png",
-							sizes: "512x512",
-							type: "image/png",
 							purpose: "maskable",
+							sizes: "512x512",
+							src: "/assets/images/pwa-512x512.png",
+							type: "image/png",
 						},
 					],
+					name: "SmartScapes",
+					scope: "/",
+					short_name: "SmartScapes",
+					start_url: "/",
+					theme_color: "#ffffff",
 				},
+				registerType: "autoUpdate",
 				workbox: {
+					globIgnores: ["**/node_modules/**/*", "sw.js", "workbox-*.js"],
 					globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
-				},
-				devOptions: {
-					enabled: true,
 				},
 			}),
 		],

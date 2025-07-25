@@ -1,4 +1,8 @@
-import { HTTPCode } from "@smartscapes/shared";
+import {
+	CommonExceptionMessage,
+	HTTPCode,
+	HTTPError,
+} from "@smartscapes/shared";
 import {
 	type FastifyInstance,
 	type FastifyReply,
@@ -70,7 +74,12 @@ class BaseAuthPlugin implements AuthPluginApi {
 	}
 
 	private sendUnathorized(reply: FastifyReply): void {
-		reply.status(HTTPCode.UNAUTHORIZED).send();
+		const { UNAUTHORIZED: status } = HTTPCode;
+		const error = new HTTPError({
+			message: CommonExceptionMessage.UNAUTHORIZED,
+			status,
+		});
+		reply.status(status).send(error);
 	}
 }
 

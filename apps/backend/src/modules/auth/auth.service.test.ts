@@ -2,11 +2,10 @@ import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 
 import { type BaseEncryption } from "~/libs/modules/encryption/libs/base-encryption.module.js";
+import { type BaseToken } from "~/libs/modules/token/token.js";
 import { AuthService } from "~/modules/auth/auth.service.js";
 import { MockUserRepository } from "~/modules/users/mock.user.repository.js";
 import { type UserModel } from "~/modules/users/user.model.js";
-import { type UserService } from "~/modules/users/users.js";
-import { type BaseToken } from "~/libs/modules/token/token.js";
 import {
 	type UserGetAllItemResponseDto,
 	type UserService,
@@ -68,12 +67,12 @@ describe("AuthService", () => {
 		const mockUserModel = {} as typeof UserModel;
 		const mockUserRepository = new MockUserRepository(mockUserModel);
 
-		const authService = new AuthService(
-			mockUserService,
-			mockEncryptionService,
-			mockUserRepository,
-      mockTokenService
-		);
+		const authService = new AuthService({
+			encryptionService: mockEncryptionService,
+			tokenService: mockTokenService,
+			userRepository: mockUserRepository,
+			userService: mockUserService,
+		});
 
 		const result = await authService.signUp(signUpRequestDto);
 

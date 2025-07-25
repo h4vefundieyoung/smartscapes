@@ -16,8 +16,8 @@ function down(knex: Knex): Promise<void> {
 
 function up(knex: Knex): Promise<void> {
 	return knex.schema.alterTable(TABLE_NAME, (table) => {
-		table.string(ColumnName.FIRST_NAME).notNullable().defaultTo("");
-		table.string(ColumnName.LAST_NAME).notNullable().defaultTo("");
+		table.string(ColumnName.FIRST_NAME).notNullable();
+		table.string(ColumnName.LAST_NAME).notNullable();
 	});
 }
 

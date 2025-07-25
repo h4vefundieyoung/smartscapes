@@ -1,11 +1,8 @@
-
 import { ApplicationError } from "@smartscapes/shared/src/libs/exceptions/exceptions.js";
 
 import { type encryption } from "~/libs/modules/encryption/libs/encryption.js";
-import { type UserRepository } from "~/modules/users/user.repository.js";
-
 import { type BaseToken } from "~/libs/modules/token/token.js";
-
+import { type UserRepository } from "~/modules/users/user.repository.js";
 import {
 	type UserService,
 	type UserSignInRequestDto,
@@ -14,30 +11,28 @@ import {
 } from "~/modules/users/users.js";
 
 type Constructor = {
+	encryptionService: typeof encryption;
 	tokenService: BaseToken;
+	userRepository: UserRepository;
 	userService: UserService;
 };
 
 class AuthService {
-// 	private encryptionService: typeof encryption;
-// 	private userRepository: UserRepository;
-// 	private userService: UserService;
-
-// 	public constructor(
-// 		userService: UserService,
-// 		encryptionService: typeof encryption,
-// 		userRepository: UserRepository,
-// 	) {
-
+	private encryptionService: typeof encryption;
 	private tokenService: BaseToken;
-
+	private userRepository: UserRepository;
 	private userService: UserService;
 
-	public constructor({ tokenService, userService }: Constructor) {
-		this.tokenService = tokenService;
-		this.userService = userService;
+	public constructor({
+		encryptionService,
+		tokenService,
+		userRepository,
+		userService,
+	}: Constructor) {
 		this.encryptionService = encryptionService;
+		this.tokenService = tokenService;
 		this.userRepository = userRepository;
+		this.userService = userService;
 	}
 
 	public async signIn(
@@ -62,7 +57,9 @@ class AuthService {
 			throw new ApplicationError({ message: "Invalid credentials." });
 		}
 
-		return user.toObject();
+		const token = await this.tokenService.create({ userId: user.getId() });
+
+		return { token, user: user.toObject() };
 	}
 
 	public async signUp(

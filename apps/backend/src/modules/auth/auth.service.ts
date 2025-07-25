@@ -6,6 +6,7 @@ import { type UserRepository } from "~/modules/users/user.repository.js";
 import {
 	type UserService,
 	type UserSignInRequestDto,
+	type UserSignInResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
@@ -37,7 +38,7 @@ class AuthService {
 
 	public async signIn(
 		userRequestDto: UserSignInRequestDto,
-	): Promise<UserSignUpResponseDto> {
+	): Promise<UserSignInResponseDto> {
 		const { email, password } = userRequestDto;
 
 		const user = await this.userRepository.findByEmail(email);

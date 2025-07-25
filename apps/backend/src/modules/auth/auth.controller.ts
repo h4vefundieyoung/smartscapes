@@ -120,10 +120,10 @@ class AuthController extends BaseController {
 	): Promise<APIHandlerResponse<UserSignUpResponseDto>> {
 		const { body } = options;
 
-		const user = await this.authService.signUp(body);
+		const data = await this.authService.signUp(body);
 
 		return {
-			payload: { data: user },
+			payload: { data },
 			status: HTTPCode.CREATED,
 		};
 	}

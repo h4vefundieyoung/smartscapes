@@ -5,6 +5,7 @@ import { type APIHandlerOptions } from "~/libs/modules/controller/controller.js"
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import {
+	type UserGetAllItemResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
@@ -13,7 +14,9 @@ import { AuthController } from "./auth.controller.js";
 import { type AuthService } from "./auth.service.js";
 
 describe("AuthController", () => {
-	const mockUser: UserSignUpResponseDto = {
+	const mockToken = "mock token";
+
+	const mockUser: UserGetAllItemResponseDto = {
 		email: "test@example.com",
 		firstName: "John",
 		id: 1,
@@ -27,9 +30,17 @@ describe("AuthController", () => {
 		warn: () => {},
 	};
 
-	it("signUp should create and return new user", async () => {
+	it("signUp should create and return token and new user", async () => {
+		const mockResponseData: UserSignUpResponseDto = {
+			token: mockToken,
+			user: {
+				email: mockUser.email,
+				id: mockUser.id,
+			},
+		};
+
 		const mockSignUp: AuthService["signUp"] = () => {
-			return Promise.resolve(mockUser);
+			return Promise.resolve(mockResponseData);
 		};
 
 		const authService = {
@@ -51,7 +62,13 @@ describe("AuthController", () => {
 
 		assert.deepStrictEqual(result, {
 			payload: {
-				data: mockUser,
+				data: {
+					token: mockToken,
+					user: {
+						email: mockUser.email,
+						id: mockUser.id,
+					},
+				},
 			},
 			status: HTTPCode.CREATED,
 		});

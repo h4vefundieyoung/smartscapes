@@ -1,7 +1,11 @@
+
 import { ApplicationError } from "@smartscapes/shared/src/libs/exceptions/exceptions.js";
 
 import { type encryption } from "~/libs/modules/encryption/libs/encryption.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
+
+import { type BaseToken } from "~/libs/modules/token/token.js";
+
 import {
 	type UserService,
 	type UserSignInRequestDto,
@@ -9,16 +13,28 @@ import {
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
 
+type Constructor = {
+	tokenService: BaseToken;
+	userService: UserService;
+};
+
 class AuthService {
-	private encryptionService: typeof encryption;
-	private userRepository: UserRepository;
+// 	private encryptionService: typeof encryption;
+// 	private userRepository: UserRepository;
+// 	private userService: UserService;
+
+// 	public constructor(
+// 		userService: UserService,
+// 		encryptionService: typeof encryption,
+// 		userRepository: UserRepository,
+// 	) {
+
+	private tokenService: BaseToken;
+
 	private userService: UserService;
 
-	public constructor(
-		userService: UserService,
-		encryptionService: typeof encryption,
-		userRepository: UserRepository,
-	) {
+	public constructor({ tokenService, userService }: Constructor) {
+		this.tokenService = tokenService;
 		this.userService = userService;
 		this.encryptionService = encryptionService;
 		this.userRepository = userRepository;
@@ -52,7 +68,10 @@ class AuthService {
 	public async signUp(
 		userRequestDto: UserSignUpRequestDto,
 	): Promise<UserSignUpResponseDto> {
-		return await this.userService.create(userRequestDto);
+		const { email, id } = await this.userService.create(userRequestDto);
+		const token = await this.tokenService.create({ userId: id });
+
+		return { token, user: { email, id } };
 	}
 }
 

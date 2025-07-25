@@ -2,6 +2,7 @@ export {
 	APIErrorType,
 	APIPath,
 	AppEnvironment,
+	CommonExceptionMessage,
 	ContentType,
 } from "./libs/enums/enums.js";
 export { ValidationError } from "./libs/exceptions/exceptions.js";

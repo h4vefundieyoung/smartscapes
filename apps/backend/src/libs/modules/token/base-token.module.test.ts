@@ -15,7 +15,7 @@ describe("Token service", () => {
 		},
 	};
 
-	const userId = 1;
+	const resourceId = 1;
 
 	const mockConfig = {
 		ENV: mockENV as Config["ENV"],
@@ -30,11 +30,11 @@ describe("Token service", () => {
 			tokenExpirationTime: TOKEN_EXPIRATION,
 		});
 
-		const token = await tokenService.create({ id: userId });
+		const token = await tokenService.create({ id: resourceId });
 
 		const payload = await tokenService.verify(token);
 
-		assert.equal(payload["id"], userId);
+		assert.equal(payload["id"], resourceId);
 	});
 
 	it("verify should throw error if token is invalid", async () => {

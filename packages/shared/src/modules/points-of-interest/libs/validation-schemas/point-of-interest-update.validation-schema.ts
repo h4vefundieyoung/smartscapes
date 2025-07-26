@@ -24,7 +24,7 @@ const pointOfInterestUpdate = z
 			return Object.keys(data).length >= MINIMUM_FIELDS_TO_UPDATE;
 		},
 		{
-			message: "At least one field must be provided for update",
+			message: PointsOfInterestValidationMessage.REQUIRED_FIELDS_FOR_UPDATE,
 		},
 	);
 

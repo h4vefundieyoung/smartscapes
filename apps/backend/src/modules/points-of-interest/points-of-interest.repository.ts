@@ -61,11 +61,7 @@ class PointsOfInterestRepository implements Repository {
 			.where("name", "=", name)
 			.execute();
 
-		if (!point) {
-			return null;
-		}
-
-		return PointsOfInterestEntity.initialize(point);
+		return point ? PointsOfInterestEntity.initialize(point) : null;
 	}
 
 	public async patch(
@@ -74,7 +70,7 @@ class PointsOfInterestRepository implements Repository {
 	): Promise<null | PointsOfInterestEntity> {
 		const { name } = entity.toNewObject();
 
-		const updatedPoints = await this.pointsOfInterestModel
+		const [updatedRow] = await this.pointsOfInterestModel
 			.query()
 			.patch({
 				name,
@@ -83,11 +79,7 @@ class PointsOfInterestRepository implements Repository {
 			.returning("*")
 			.execute();
 
-		if (updatedPoints.length === 0 || !updatedPoints[0]) {
-			return null;
-		}
-
-		return PointsOfInterestEntity.initialize(updatedPoints[0]);
+		return updatedRow ? PointsOfInterestEntity.initialize(updatedRow) : null;
 	}
 }
 

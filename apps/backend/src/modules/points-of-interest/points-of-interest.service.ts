@@ -34,9 +34,9 @@ class PointsOfInterestService implements Service {
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		const deleted = await this.pointsOfInterestRepository.delete(id);
+		const isDeleted = await this.pointsOfInterestRepository.delete(id);
 
-		if (!deleted) {
+		if (!isDeleted) {
 			throw new PointOfInterestError({
 				message: PointOfInterestExceptionMessage.ID_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,

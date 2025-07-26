@@ -12,6 +12,12 @@
 	gap: 1rem;
 	overflow-x: auto;
 	scroll-behavior: smooth;
+	cursor: grab;
+}
+
+.carousel.dragging {
+	cursor: grabbing;
+	scroll-behavior: auto;
 }
 
 .carousel::-webkit-scrollbar {
@@ -34,6 +40,7 @@
 	pointer-events: none;
 	user-select: none;
 	object-fit: cover;
+	-webkit-user-drag: none;
 	transition: transform 0.2s ease;
 }
 

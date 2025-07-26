@@ -16,9 +16,7 @@ type PluginOptions = {
 };
 
 type TokenPayload = {
-	payload: {
-		userId: number;
-	};
+	userId: number;
 };
 
 type WhiteRoute = {
@@ -53,9 +51,7 @@ const authPlugin = (
 		try {
 			const tokenIndex = 1;
 			const token = headers.authorization.split(" ")[tokenIndex] as string;
-			const {
-				payload: { userId },
-			} = await tokenService.verify<TokenPayload>(token);
+			const { userId } = await tokenService.verify<TokenPayload>(token);
 			const user = await userService.findById(userId);
 
 			if (user) {

@@ -70,7 +70,7 @@ erDiagram
     int id PK
     dateTime created_at
     dateTime updated_at
-    int user_id FK
+    int user_id
     text content
     int likes_count
     int route_id
@@ -80,7 +80,6 @@ erDiagram
   users }|--|| groups : group_id
   groups ||--|{ groups_to_permissions : group_id
   permissions ||--|{ groups_to_permissions : permission_id
-  users || -- |{ reviews : user_id
 ```
 
 ## 5. Architecture

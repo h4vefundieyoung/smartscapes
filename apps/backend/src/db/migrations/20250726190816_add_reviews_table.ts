@@ -28,12 +28,7 @@ async function up(knex: Knex): Promise<void> {
 			.dateTime(ColumnName.UPDATED_AT)
 			.notNullable()
 			.defaultTo(knex.fn.now());
-		table
-			.integer(ColumnName.USER_ID)
-			.notNullable()
-			.references("id")
-			.inTable("users")
-			.onDelete("CASCADE");
+		table.integer(ColumnName.USER_ID).notNullable();
 		table.text(ColumnName.CONTENT);
 		table.integer(ColumnName.LIKES_COUNT).defaultTo(0);
 		table.integer(ColumnName.ROUTE_ID).nullable();

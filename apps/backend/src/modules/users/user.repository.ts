@@ -28,12 +28,6 @@ class UserRepository implements Repository {
 		return UserEntity.initialize(user);
 	}
 
-	public async find(id: number): Promise<null | UserEntity> {
-		const user = await this.userModel.query().where("id", id).first();
-
-		return user ? UserEntity.initialize(user) : null;
-	}
-
 	public async findAll(): Promise<UserEntity[]> {
 		const users = await this.userModel.query().execute();
 
@@ -42,6 +36,12 @@ class UserRepository implements Repository {
 
 	public async findByEmail(email: string): Promise<null | UserEntity> {
 		const user = await this.userModel.query().where("email", email).first();
+
+		return user ? UserEntity.initialize(user) : null;
+	}
+
+	public async findById(id: number): Promise<null | UserEntity> {
+		const user = await this.userModel.query().findById(id);
 
 		return user ? UserEntity.initialize(user) : null;
 	}

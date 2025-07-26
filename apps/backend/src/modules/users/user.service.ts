@@ -45,12 +45,6 @@ class UserService implements Service {
 		return item.toObject();
 	}
 
-	public async find(id: number): Promise<null | UserGetAllItemResponseDto> {
-		const user = await this.userRepository.find(id);
-
-		return user ? user.toObject() : null;
-	}
-
 	public async findAll(): Promise<CollectionResult<UserGetAllItemResponseDto>> {
 		const items = await this.userRepository.findAll();
 
@@ -63,6 +57,12 @@ class UserService implements Service {
 		email: string,
 	): Promise<null | UserGetAllItemResponseDto> {
 		const user = await this.userRepository.findByEmail(email);
+
+		return user ? user.toObject() : null;
+	}
+
+	public async findById(id: number): Promise<null | UserGetAllItemResponseDto> {
+		const user = await this.userRepository.findById(id);
 
 		return user ? user.toObject() : null;
 	}

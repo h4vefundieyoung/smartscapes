@@ -9,13 +9,12 @@
 	display: flex;
 	gap: 2%;
 	overflow-x: auto;
-	scroll-behavior: smooth;
+	scroll-behavior: auto;
 	cursor: grab;
 }
 
 .carousel.dragging {
 	cursor: grabbing;
-	scroll-behavior: auto;
 }
 
 .carousel::-webkit-scrollbar {

@@ -46,19 +46,6 @@ class PointsOfInterestService implements Service {
 		return true;
 	}
 
-	public async find(id: number): Promise<PointsOfInterestResponseDto> {
-		const item = await this.pointsOfInterestRepository.find(id);
-
-		if (!item) {
-			throw new PointOfInterestError({
-				message: PointOfInterestExceptionMessage.ID_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		return item.toObject();
-	}
-
 	public async findAll(): Promise<
 		CollectionResult<PointsOfInterestResponseDto>
 	> {
@@ -69,6 +56,19 @@ class PointsOfInterestService implements Service {
 				return item.toObject();
 			}),
 		};
+	}
+
+	public async findById(id: number): Promise<PointsOfInterestResponseDto> {
+		const item = await this.pointsOfInterestRepository.findById(id);
+
+		if (!item) {
+			throw new PointOfInterestError({
+				message: PointOfInterestExceptionMessage.ID_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return item.toObject();
 	}
 
 	public async patch(

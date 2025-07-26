@@ -58,7 +58,7 @@ class PointsOfInterestController extends BaseController {
 		});
 
 		this.addRoute({
-			handler: this.find.bind(this),
+			handler: this.findById.bind(this),
 			method: "GET",
 			path: "/:id",
 		});
@@ -154,43 +154,6 @@ class PointsOfInterestController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /points-of-interest/{id}:
-	 *   get:
-	 *     tags:
-	 *       - Points of Interest
-	 *     summary: Get a point of interest by ID
-	 *     parameters:
-	 *       - in: path
-	 *         name: id
-	 *         required: true
-	 *         schema:
-	 *           type: string
-	 *     responses:
-	 *       200:
-	 *         description: Point of interest found
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               $ref: '#/components/schemas/PointsOfInterest'
-	 *       404:
-	 *         description: Point of interest not found
-	 */
-	public async find(
-		options: APIHandlerOptions<{
-			params: { id: string };
-		}>,
-	): Promise<APIHandlerResponse<PointsOfInterestResponseDto>> {
-		const id = Number(options.params.id);
-		const pointOfInterest = await this.pointsOfInterestService.find(id);
-
-		return {
-			payload: { data: pointOfInterest },
-			status: HTTPCode.OK,
-		};
-	}
-
-	/**
-	 * @swagger
 	 * /points-of-interest:
 	 *   get:
 	 *     tags:
@@ -216,6 +179,43 @@ class PointsOfInterestController extends BaseController {
 
 		return {
 			payload: { data: items },
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /points-of-interest/{id}:
+	 *   get:
+	 *     tags:
+	 *       - Points of Interest
+	 *     summary: Get a point of interest by ID
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     responses:
+	 *       200:
+	 *         description: Point of interest found
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: '#/components/schemas/PointsOfInterest'
+	 *       404:
+	 *         description: Point of interest not found
+	 */
+	public async findById(
+		options: APIHandlerOptions<{
+			params: { id: string };
+		}>,
+	): Promise<APIHandlerResponse<PointsOfInterestResponseDto>> {
+		const id = Number(options.params.id);
+		const pointOfInterest = await this.pointsOfInterestService.findById(id);
+
+		return {
+			payload: { data: pointOfInterest },
 			status: HTTPCode.OK,
 		};
 	}

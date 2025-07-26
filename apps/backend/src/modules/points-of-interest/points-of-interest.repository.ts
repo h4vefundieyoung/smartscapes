@@ -34,7 +34,15 @@ class PointsOfInterestRepository implements Repository {
 		return Boolean(deletedCount);
 	}
 
-	public async find(id: number): Promise<null | PointsOfInterestEntity> {
+	public async findAll(): Promise<PointsOfInterestEntity[]> {
+		const pointsOfInterest = await this.pointsOfInterestModel.query().execute();
+
+		return pointsOfInterest.map((pointOfInterest) =>
+			PointsOfInterestEntity.initialize(pointOfInterest),
+		);
+	}
+
+	public async findById(id: number): Promise<null | PointsOfInterestEntity> {
 		const pointOfInterest = await this.pointsOfInterestModel
 			.query()
 			.findById(id)
@@ -43,14 +51,6 @@ class PointsOfInterestRepository implements Repository {
 		return pointOfInterest
 			? PointsOfInterestEntity.initialize(pointOfInterest)
 			: null;
-	}
-
-	public async findAll(): Promise<PointsOfInterestEntity[]> {
-		const pointsOfInterest = await this.pointsOfInterestModel.query().execute();
-
-		return pointsOfInterest.map((pointOfInterest) =>
-			PointsOfInterestEntity.initialize(pointOfInterest),
-		);
 	}
 
 	public async findByName(

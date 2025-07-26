@@ -81,12 +81,12 @@ describe("PointsOfInterestController", () => {
 	});
 
 	it("find should return point of interest by id", async () => {
-		const mockFind: PointsOfInterestService["find"] = () => {
+		const mockFind: PointsOfInterestService["findById"] = () => {
 			return Promise.resolve(mockPointOfInterest);
 		};
 
 		const pointsOfInterestService = {
-			find: mockFind,
+			findById: mockFind,
 		} as PointsOfInterestService;
 
 		const pointsOfInterestController = new PointsOfInterestController(
@@ -94,7 +94,7 @@ describe("PointsOfInterestController", () => {
 			pointsOfInterestService,
 		);
 
-		const result = await pointsOfInterestController.find({
+		const result = await pointsOfInterestController.findById({
 			body: {},
 			params: { id: "1" },
 			query: {},

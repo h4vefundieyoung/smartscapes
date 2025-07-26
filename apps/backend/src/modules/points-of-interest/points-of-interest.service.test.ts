@@ -65,26 +65,26 @@ describe("PointsOfInterestService", () => {
 		});
 	});
 
-	it("find should return point of interest by id", async () => {
+	it("findById should return point of interest by id", async () => {
 		const pointOfInterestEntity = createMockEntity();
 
 		const pointsOfInterestRepository = {
-			find: (() =>
+			findById: (() =>
 				Promise.resolve(
 					pointOfInterestEntity,
-				)) as PointsOfInterestRepository["find"],
+				)) as PointsOfInterestRepository["findById"],
 		} as PointsOfInterestRepository;
 
 		const pointsOfInterestService = new PointsOfInterestService(
 			pointsOfInterestRepository,
 		);
 
-		const result = await pointsOfInterestService.find(EXISTING_ID);
+		const result = await pointsOfInterestService.findById(EXISTING_ID);
 
 		assert.deepStrictEqual(result, pointOfInterestEntity.toObject());
 	});
 
-	it("update should return updated point of interest", async () => {
+	it("patch should return updated point of interest", async () => {
 		const updatedPointOfInterest = {
 			...mockPointOfInterest,
 			name: "Updated Point Of Interest Test Name",
@@ -94,10 +94,10 @@ describe("PointsOfInterestService", () => {
 		);
 
 		const pointsOfInterestRepository = {
-			find: (() =>
+			findById: (() =>
 				Promise.resolve(
 					pointOfInterestEntity,
-				)) as PointsOfInterestRepository["find"],
+				)) as PointsOfInterestRepository["findById"],
 			findByName: (() =>
 				Promise.resolve(null)) as PointsOfInterestRepository["findByName"],
 			patch: (() =>
@@ -123,10 +123,10 @@ describe("PointsOfInterestService", () => {
 		const pointsOfInterestRepository = {
 			delete: (() =>
 				Promise.resolve(true)) as PointsOfInterestRepository["delete"],
-			find: (() =>
+			findById: (() =>
 				Promise.resolve(
 					pointOfInterestEntity,
-				)) as PointsOfInterestRepository["find"],
+				)) as PointsOfInterestRepository["findById"],
 		} as PointsOfInterestRepository;
 
 		const pointsOfInterestService = new PointsOfInterestService(

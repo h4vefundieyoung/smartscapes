@@ -80,7 +80,7 @@ describe("PointsOfInterestRepository", () => {
 			.select(DatabaseTableName.POINTS_OF_INTEREST)
 			.response([pointOfInterestEntity]);
 
-		const result = await pointsOfInterestRepository.find(EXISTING_ID);
+		const result = await pointsOfInterestRepository.findById(EXISTING_ID);
 
 		assert.deepStrictEqual(result, pointOfInterestEntity);
 	});
@@ -88,7 +88,7 @@ describe("PointsOfInterestRepository", () => {
 	it("find should return null when point of interest not found", async () => {
 		databaseTracker.on.select("points_of_interest").response([]);
 
-		const result = await pointsOfInterestRepository.find(NON_EXISTENT_ID);
+		const result = await pointsOfInterestRepository.findById(NON_EXISTENT_ID);
 
 		assert.strictEqual(result, null);
 	});

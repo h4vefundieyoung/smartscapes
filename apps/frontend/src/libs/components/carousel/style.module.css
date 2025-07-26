@@ -1,15 +1,13 @@
 .carousel-container {
 	position: relative;
-	max-width: 1000px;
-	padding: 1rem;
-	margin: 0 auto;
+	padding: 2%;
 	border: 1px solid #b8b8b8;
 	border-radius: 8px;
 }
 
 .carousel {
 	display: flex;
-	gap: 1rem;
+	gap: 2%;
 	overflow-x: auto;
 	scroll-behavior: smooth;
 	cursor: grab;
@@ -25,7 +23,7 @@
 }
 
 .carousel-item {
-	flex: 0 0 calc((100% - 4rem) / 5);
+	flex: 0 0 calc((100% - 8%) / 5);
 	aspect-ratio: 1 / 1;
 	overflow: hidden;
 	pointer-events: none;

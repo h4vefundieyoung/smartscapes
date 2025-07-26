@@ -73,7 +73,7 @@ const App = (): React.JSX.Element => {
 			</div>
 			<div
 				className="any-parent-container"
-				style={{ margin: "0 auto", width: "1000px" }}
+				style={{ margin: "0 auto", maxWidth: "1000px", padding: "1rem" }}
 			>
 				<Carousel images={mockImages} />
 			</div>

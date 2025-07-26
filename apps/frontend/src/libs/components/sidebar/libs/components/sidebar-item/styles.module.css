@@ -23,6 +23,7 @@
 }
 
 .icon {
+	display: flex;
 	color: var(--color-stroke-strong);
 }
 

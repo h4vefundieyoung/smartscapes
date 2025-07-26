@@ -1,3 +1,3 @@
-type IconName = "dashboard" | "listOfPlaces";
+type IconName = "analytic" | "dashboard";
 
 export { type IconName };

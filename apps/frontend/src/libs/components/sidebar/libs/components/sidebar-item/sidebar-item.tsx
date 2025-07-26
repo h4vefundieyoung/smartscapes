@@ -1,4 +1,7 @@
-import { Icon, NavLink } from "~/libs/components/components.js";
+import {
+	Icon,
+	NavLink,
+} from "~/libs/components/sidebar/libs/components/sidebar-item/index.js";
 import { combineClassNames } from "~/libs/helpers/combine-class-names.helper.js";
 import { useCallback } from "~/libs/hooks/hooks.js";
 import { type NavigationItem } from "~/libs/types/types.js";
@@ -22,7 +25,7 @@ const SidebarItem = ({
 				<span className={styles["icon"]}>
 					<Icon height={24} name={icon} width={24} />
 				</span>
-				<label className={styles["label"]}>{label}</label>
+				<span className={styles["label"]}>{label}</span>
 			</NavLink>
 		</li>
 	);

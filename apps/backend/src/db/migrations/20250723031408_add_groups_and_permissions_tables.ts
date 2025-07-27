@@ -1,6 +1,6 @@
 import { type Knex } from "knex";
 
-const TableNames = {
+const TableName = {
 	GROUPS: "groups",
 	GROUPS_TO_PERMISSIONS: "groups_to_permissions",
 	PERMISSIONS: "permissions",
@@ -18,75 +18,79 @@ const ColumnName = {
 } as const;
 
 async function down(knex: Knex): Promise<void> {
-	await knex.schema.alterTable(TableNames.USERS, (table) => {
-		table.dropColumn(ColumnName.GROUP_ID);
-	});
+	await knex.transaction(async (trx) => {
+		await trx.schema.alterTable(TableName.USERS, (table) => {
+			table.dropColumn(ColumnName.GROUP_ID);
+		});
 
-	await knex.schema.dropTableIfExists(TableNames.GROUPS_TO_PERMISSIONS);
-	await knex.schema.dropTableIfExists(TableNames.PERMISSIONS);
-	await knex.schema.dropTableIfExists(TableNames.GROUPS);
+		await trx.schema.dropTableIfExists(TableName.GROUPS_TO_PERMISSIONS);
+		await trx.schema.dropTableIfExists(TableName.PERMISSIONS);
+		await trx.schema.dropTableIfExists(TableName.GROUPS);
+	});
 }
 
 async function up(knex: Knex): Promise<void> {
-	await knex.schema.createTable(TableNames.GROUPS, (table) => {
-		table.increments(ColumnName.ID).primary();
-		table
-			.timestamp(ColumnName.CREATED_AT)
-			.notNullable()
-			.defaultTo(knex.fn.now());
-		table
-			.timestamp(ColumnName.UPDATED_AT)
-			.notNullable()
-			.defaultTo(knex.fn.now());
-		table.string(ColumnName.KEY).notNullable().unique();
-		table.string(ColumnName.NAME).notNullable();
-	});
+	await knex.transaction(async (trx) => {
+		await trx.schema.createTable(TableName.GROUPS, (table) => {
+			table.increments(ColumnName.ID).primary();
+			table
+				.timestamp(ColumnName.CREATED_AT)
+				.notNullable()
+				.defaultTo(trx.fn.now());
+			table
+				.timestamp(ColumnName.UPDATED_AT)
+				.notNullable()
+				.defaultTo(trx.fn.now());
+			table.string(ColumnName.KEY).notNullable().unique();
+			table.string(ColumnName.NAME).notNullable();
+		});
 
-	await knex.schema.createTable(TableNames.PERMISSIONS, (table) => {
-		table.increments(ColumnName.ID).primary();
-		table
-			.timestamp(ColumnName.CREATED_AT)
-			.notNullable()
-			.defaultTo(knex.fn.now());
-		table
-			.timestamp(ColumnName.UPDATED_AT)
-			.notNullable()
-			.defaultTo(knex.fn.now());
-		table.string(ColumnName.KEY).notNullable().unique();
-		table.string(ColumnName.NAME).notNullable();
-	});
+		await trx.schema.createTable(TableName.PERMISSIONS, (table) => {
+			table.increments(ColumnName.ID).primary();
+			table
+				.timestamp(ColumnName.CREATED_AT)
+				.notNullable()
+				.defaultTo(trx.fn.now());
+			table
+				.timestamp(ColumnName.UPDATED_AT)
+				.notNullable()
+				.defaultTo(trx.fn.now());
+			table.string(ColumnName.KEY).notNullable().unique();
+			table.string(ColumnName.NAME).notNullable();
+		});
 
-	await knex.schema.createTable(TableNames.GROUPS_TO_PERMISSIONS, (table) => {
-		table.increments(ColumnName.ID).primary();
-		table
-			.timestamp(ColumnName.CREATED_AT)
-			.notNullable()
-			.defaultTo(knex.fn.now());
-		table
-			.timestamp(ColumnName.UPDATED_AT)
-			.notNullable()
-			.defaultTo(knex.fn.now());
-		table
-			.integer(ColumnName.GROUP_ID)
-			.notNullable()
-			.references(ColumnName.ID)
-			.inTable(TableNames.GROUPS)
-			.onDelete("CASCADE");
-		table
-			.integer(ColumnName.PERMISSION_ID)
-			.notNullable()
-			.references(ColumnName.ID)
-			.inTable(TableNames.PERMISSIONS)
-			.onDelete("CASCADE");
-	});
+		await trx.schema.createTable(TableName.GROUPS_TO_PERMISSIONS, (table) => {
+			table.increments(ColumnName.ID).primary();
+			table
+				.timestamp(ColumnName.CREATED_AT)
+				.notNullable()
+				.defaultTo(trx.fn.now());
+			table
+				.timestamp(ColumnName.UPDATED_AT)
+				.notNullable()
+				.defaultTo(trx.fn.now());
+			table
+				.integer(ColumnName.GROUP_ID)
+				.notNullable()
+				.references(ColumnName.ID)
+				.inTable(TableName.GROUPS)
+				.onDelete("CASCADE");
+			table
+				.integer(ColumnName.PERMISSION_ID)
+				.notNullable()
+				.references(ColumnName.ID)
+				.inTable(TableName.PERMISSIONS)
+				.onDelete("CASCADE");
+		});
 
-	await knex.schema.alterTable(TableNames.USERS, (table) => {
-		table
-			.integer(ColumnName.GROUP_ID)
-			.nullable()
-			.references(ColumnName.ID)
-			.inTable(TableNames.GROUPS)
-			.onDelete("SET NULL");
+		await trx.schema.alterTable(TableName.USERS, (table) => {
+			table
+				.integer(ColumnName.GROUP_ID)
+				.nullable()
+				.references(ColumnName.ID)
+				.inTable(TableName.GROUPS)
+				.onDelete("SET NULL");
+		});
 	});
 }
 

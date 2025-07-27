@@ -1,5 +1,5 @@
 import smartScapesLogo from "~/assets/images/logo.svg";
-import { NavLink } from "~/libs/components/components.js";
+import { Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { type NavigationItem } from "~/libs/types/types.js";
 
@@ -13,9 +13,15 @@ type Properties = {
 const Sidebar = ({ navigationItems }: Properties): React.JSX.Element => {
 	return (
 		<div className={styles["sidebar"]}>
-			<NavLink className={styles["logo-link"] as string} to={AppRoute.ROOT}>
-				<img alt="SmartScapes" height="24" src={smartScapesLogo} width="136" />
-			</NavLink>
+			<Link to={AppRoute.ROOT}>
+				<img
+					alt="SmartScapes"
+					className={styles["logo"]}
+					height="24"
+					src={smartScapesLogo}
+					width="136"
+				/>
+			</Link>
 			<ul className={styles["navigation-list"]}>
 				{navigationItems.map((item) => (
 					<SidebarItem

@@ -9,7 +9,7 @@ const NAVIGATION_ITEMS: NavigationItem[] = [
 	},
 	{
 		href: AppRoute.SIGN_UP,
-		icon: "analytic",
+		icon: "analytics",
 		label: "List of places",
 	},
 ];

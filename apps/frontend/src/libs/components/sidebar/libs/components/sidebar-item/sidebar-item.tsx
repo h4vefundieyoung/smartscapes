@@ -1,9 +1,4 @@
-import {
-	Icon,
-	NavLink,
-} from "~/libs/components/sidebar/libs/components/sidebar-item/index.js";
-import { combineClassNames } from "~/libs/helpers/combine-class-names.helper.js";
-import { useCallback } from "~/libs/hooks/hooks.js";
+import { Icon, Link } from "~/libs/components/components.js";
 import { type NavigationItem } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
@@ -13,20 +8,14 @@ const SidebarItem = ({
 	icon,
 	label,
 }: NavigationItem): React.JSX.Element => {
-	const getSidebarClassName = useCallback(
-		({ isActive }: { isActive: boolean }): string =>
-			combineClassNames(styles["link"], isActive && styles["active"]),
-		[],
-	);
-
 	return (
-		<li>
-			<NavLink className={getSidebarClassName} to={href}>
+		<li className={styles["item"]}>
+			<Link to={href}>
 				<span className={styles["icon"]}>
 					<Icon height={24} name={icon} width={24} />
 				</span>
 				<span className={styles["label"]}>{label}</span>
-			</NavLink>
+			</Link>
 		</li>
 	);
 };

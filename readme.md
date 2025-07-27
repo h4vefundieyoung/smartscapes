@@ -80,6 +80,9 @@ erDiagram
   users }|--|| groups : group_id
   groups ||--|{ groups_to_permissions : group_id
   permissions ||--|{ groups_to_permissions : permission_id
+  users ||--|{ reviews : user_id
+  routes ||--|{ reviews : route_id
+  points_of_interest ||--|{ reviews : poi_id
 ```
 
 ## 5. Architecture

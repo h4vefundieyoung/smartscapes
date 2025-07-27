@@ -5,7 +5,7 @@ import { type APIHandlerOptions } from "~/libs/modules/controller/controller.js"
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import {
-	type UserGetAllItemResponseDto,
+	type UserItemResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
@@ -16,7 +16,7 @@ import { type AuthService } from "./auth.service.js";
 describe("AuthController", () => {
 	const mockToken = "mock token";
 
-	const mockUser: UserGetAllItemResponseDto = {
+	const mockUser: UserItemResponseDto = {
 		email: "test@example.com",
 		firstName: "John",
 		id: 1,

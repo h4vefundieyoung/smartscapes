@@ -29,7 +29,7 @@ export { AuthApiPath } from "./modules/auth/auth.js";
 export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,
-	type UserGetAllItemResponseDto,
+	type UserItemResponseDto,
 	UsersApiPath,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,

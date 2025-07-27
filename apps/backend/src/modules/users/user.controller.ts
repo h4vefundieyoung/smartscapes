@@ -8,7 +8,7 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
 import { UsersApiPath } from "./libs/enums/enums.js";
-import { type UserGetAllItemResponseDto } from "./libs/types/types.js";
+import { type UserItemResponseDto } from "./libs/types/types.js";
 
 /**
  * @swagger
@@ -58,9 +58,7 @@ class UserController extends BaseController {
 	 *                   items:
 	 *                     $ref: '#/components/schemas/User'
 	 */
-	public async findAll(): Promise<
-		APIHandlerResponse<UserGetAllItemResponseDto[]>
-	> {
+	public async findAll(): Promise<APIHandlerResponse<UserItemResponseDto[]>> {
 		const { items } = await this.userService.findAll();
 
 		return {

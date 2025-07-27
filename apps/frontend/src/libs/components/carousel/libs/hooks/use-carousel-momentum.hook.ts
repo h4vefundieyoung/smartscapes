@@ -6,12 +6,12 @@ import { type CarouselReference } from "../types/types.js";
 
 type CarouselMomentumProperties = {
 	carouselReference: CarouselReference;
-	checkBoundaries: () => void;
+	handleBoundaryCollision: () => void;
 };
 
 const useCarouselMomentum = ({
 	carouselReference,
-	checkBoundaries,
+	handleBoundaryCollision,
 }: CarouselMomentumProperties): {
 	startMomentum: () => void;
 } => {
@@ -32,7 +32,7 @@ const useCarouselMomentum = ({
 			carouselReference.velocity.current = 0;
 			carouselReference.momentumID.current = null;
 
-			checkBoundaries();
+			handleBoundaryCollision();
 
 			return;
 		}
@@ -41,7 +41,7 @@ const useCarouselMomentum = ({
 			carouselReference.velocity.current * CarauselConfig.SCROLL_SPEED;
 
 		if (isAtLeftEdge || isAtRightEdge) {
-			checkBoundaries();
+			handleBoundaryCollision();
 			carouselReference.velocity.current = 0;
 			carouselReference.momentumID.current = null;
 
@@ -50,7 +50,7 @@ const useCarouselMomentum = ({
 
 		carouselReference.momentumID.current =
 			requestAnimationFrame(animateMomentum);
-	}, [checkBoundaries, carouselReference]);
+	}, [handleBoundaryCollision, carouselReference]);
 
 	const startMomentum = useCallback((): void => {
 		if (carouselReference.momentumID.current) {

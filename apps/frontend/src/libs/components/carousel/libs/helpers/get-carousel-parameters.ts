@@ -6,8 +6,8 @@ type Properties = {
 };
 
 const initialCarouselParameters: CarouselParameters = {
-	bounceDirection: null,
 	clientWidth: 0,
+	direction: null,
 	element: null,
 	isAtLeftEdge: false,
 	isAtRightEdge: false,
@@ -40,8 +40,8 @@ const getCarouselParameters = ({
 		carouselReference.current;
 
 	return {
-		bounceDirection: direction,
 		clientWidth,
+		direction,
 		element: carouselReference.current,
 		isAtLeftEdge,
 		isAtRightEdge,

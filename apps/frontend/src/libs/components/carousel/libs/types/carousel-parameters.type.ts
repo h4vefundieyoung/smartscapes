@@ -1,8 +1,8 @@
 import { type CarouselDirection } from "./types.js";
 
 type CarouselParameters = {
-	bounceDirection: CarouselDirection;
 	clientWidth: number;
+	direction: CarouselDirection;
 	element: HTMLDivElement | null;
 	isAtLeftEdge: boolean;
 	isAtRightEdge: boolean;

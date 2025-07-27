@@ -1,27 +1,25 @@
 import { useCallback } from "react";
 
-import { CarauselConfig } from "../enums/enums.js";
+import { CarauselAnimation, CarauselConfig } from "../enums/enums.js";
 import { getCarouselParameters } from "../helpers/helpers.js";
-import {
-	type CarouselDirection,
-	type CarouselReference,
-} from "../types/types.js";
+import { type CarauselAnimationType } from "../types/carausel-animation-type.type.js";
+import { type CarouselReference } from "../types/types.js";
 
 type CarouselBoundariesProperties = {
 	carouselReference: CarouselReference;
-	setBounceDirection: (direction: CarouselDirection) => void;
+	setAnimationClassName: (className: CarauselAnimationType) => void;
 	setSpringBounce: (value: boolean) => void;
 };
 
 const useCarouselBoundaries = ({
 	carouselReference,
-	setBounceDirection,
+	setAnimationClassName,
 	setSpringBounce,
 }: CarouselBoundariesProperties): {
-	checkBoundaries: () => void;
+	handleBoundaryCollision: () => void;
 } => {
-	const checkBoundaries = useCallback((): void => {
-		const { bounceDirection, element, isAtLeftEdge, isAtRightEdge, maxScroll } =
+	const handleBoundaryCollision = useCallback((): void => {
+		const { direction, element, isAtLeftEdge, isAtRightEdge, maxScroll } =
 			getCarouselParameters({
 				carouselReference: carouselReference.carouselReference,
 			});
@@ -31,22 +29,27 @@ const useCarouselBoundaries = ({
 		}
 
 		if (isAtLeftEdge || isAtRightEdge) {
-			element.scrollLeft = isAtLeftEdge ? 0 : maxScroll;
-			setBounceDirection(bounceDirection);
+			const animationClass =
+				direction === "left"
+					? CarauselAnimation.BOUNCE_LEFT
+					: CarauselAnimation.BOUNCE_RIGHT;
 
+			element.scrollLeft = isAtLeftEdge ? 0 : maxScroll;
 			carouselReference.isAnimating.current = true;
+
+			setAnimationClassName(animationClass);
 			setSpringBounce(true);
 
 			setTimeout(() => {
 				setSpringBounce(false);
-				setBounceDirection(null);
+				setAnimationClassName(null);
 				carouselReference.isAnimating.current = false;
 			}, CarauselConfig.SPRING_ANIMATION_DURATION);
 		}
-	}, [carouselReference, setBounceDirection, setSpringBounce]);
+	}, [carouselReference, setAnimationClassName, setSpringBounce]);
 
 	return {
-		checkBoundaries,
+		handleBoundaryCollision,
 	};
 };
 

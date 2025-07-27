@@ -3,22 +3,18 @@ import { useMemo } from "react";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 
 import styles from "../../style.module.css";
-import { type CarouselDirection } from "../types/types.js";
+import { type CarauselAnimationType } from "../types/types.js";
 
 type CarouselStylesProperties = {
-	bounceDirection: CarouselDirection;
+	animationClassName: CarauselAnimationType;
 	dragging: boolean;
 	overdragOffset: number;
-	slingshotDirection: CarouselDirection;
-	springBounce: boolean;
 };
 
 const useCarouselStyles = ({
-	bounceDirection,
+	animationClassName,
 	dragging,
 	overdragOffset,
-	slingshotDirection,
-	springBounce,
 }: CarouselStylesProperties): {
 	carouselClassName: string;
 	carouselStyle: React.CSSProperties;
@@ -26,8 +22,7 @@ const useCarouselStyles = ({
 	const carouselClassName = combineClassNames(
 		styles["carousel"],
 		dragging && styles["dragging"],
-		springBounce && bounceDirection && styles[`bounce-${bounceDirection}`],
-		slingshotDirection && styles[`slingshot-${slingshotDirection}`],
+		animationClassName && styles[animationClassName],
 	);
 
 	const carouselStyle = useMemo(() => {

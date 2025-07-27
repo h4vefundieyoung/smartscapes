@@ -1,45 +1,39 @@
 import { useCallback } from "react";
 
+import { CarauselAnimation } from "../enums/carausel-animation.enum.js";
 import { CarauselConfig } from "../enums/enums.js";
 import { getCarouselParameters } from "../helpers/helpers.js";
 import {
-	type CarouselDirection,
+	type CarauselAnimationType,
 	type CarouselReference,
 } from "../types/types.js";
 
 type CarouselMouseEventsProperties = {
 	callbacks: {
-		checkBoundaries: () => void;
+		handleBoundaryCollision: () => void;
 		startMomentum: () => void;
 	};
 	carouselReference: CarouselReference;
-	state: {
-		overdragOffset: number;
-		setBounceDirection: (direction: CarouselDirection) => void;
-		setDragging: (value: boolean) => void;
-		setOverdragOffset: (value: number) => void;
-		setSlingshotDirection: (direction: CarouselDirection) => void;
-		setSpringBounce: (value: boolean) => void;
-	};
+	overdragOffset: number;
+	setAnimationClassName: (className: CarauselAnimationType) => void;
+	setDragging: (value: boolean) => void;
+	setOverdragOffset: (value: number) => void;
+	setSpringBounce: (value: boolean) => void;
 };
 
 const useCarouselMouseEvents = ({
 	callbacks,
 	carouselReference,
-	state,
+	overdragOffset,
+	setAnimationClassName,
+	setDragging,
+	setOverdragOffset,
+	setSpringBounce,
 }: CarouselMouseEventsProperties): {
 	handleMouseDown: (event: React.MouseEvent) => void;
 	handleMouseMove: (event: React.MouseEvent) => void;
 	handleMouseUpOrLeave: () => void;
 } => {
-	const {
-		overdragOffset,
-		setBounceDirection,
-		setDragging,
-		setOverdragOffset,
-		setSlingshotDirection,
-		setSpringBounce,
-	} = state;
 	const { startMomentum } = callbacks;
 
 	const handleMouseDown = useCallback(
@@ -50,7 +44,7 @@ const useCarouselMouseEvents = ({
 
 			carouselReference.isAnimating.current = false;
 			setSpringBounce(false);
-			setBounceDirection(null);
+			setAnimationClassName(null);
 			setOverdragOffset(0);
 
 			carouselReference.isDragging.current = true;
@@ -65,7 +59,7 @@ const useCarouselMouseEvents = ({
 		},
 		[
 			carouselReference,
-			setBounceDirection,
+			setAnimationClassName,
 			setDragging,
 			setOverdragOffset,
 			setSpringBounce,
@@ -73,7 +67,7 @@ const useCarouselMouseEvents = ({
 	);
 
 	const handleMouseUpOrLeave = useCallback((): void => {
-		const { bounceDirection } = getCarouselParameters({
+		const { direction } = getCarouselParameters({
 			carouselReference: carouselReference.carouselReference,
 		});
 
@@ -84,15 +78,19 @@ const useCarouselMouseEvents = ({
 			const { CSS_ANIMATION_DELAY, SLINGSHOT_ANIMATION_DURATION } =
 				CarauselConfig;
 			setSpringBounce(false);
-			setBounceDirection(null);
+			setAnimationClassName(null);
 			setOverdragOffset(0);
 
 			setTimeout(() => {
-				setSlingshotDirection(bounceDirection);
+				const slingshotClass =
+					direction === "left"
+						? CarauselAnimation.SLINGSHOT_LEFT
+						: CarauselAnimation.SLINGSHOT_RIGHT;
+				setAnimationClassName(slingshotClass);
 			}, CSS_ANIMATION_DELAY);
 
 			setTimeout(() => {
-				setSlingshotDirection(null);
+				setAnimationClassName(null);
 			}, SLINGSHOT_ANIMATION_DURATION + CSS_ANIMATION_DELAY);
 		} else if (Math.abs(carouselReference.velocity.current) > 0) {
 			startMomentum();
@@ -100,9 +98,8 @@ const useCarouselMouseEvents = ({
 	}, [
 		overdragOffset,
 		startMomentum,
-		setBounceDirection,
+		setAnimationClassName,
 		setOverdragOffset,
-		setSlingshotDirection,
 		setSpringBounce,
 		setDragging,
 		carouselReference,

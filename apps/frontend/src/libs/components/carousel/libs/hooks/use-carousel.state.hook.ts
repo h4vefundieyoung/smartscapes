@@ -1,40 +1,33 @@
 import { useState } from "react";
 
-import { type CarouselDirection } from "../types/types.js";
+import { type CarauselAnimationType } from "../types/types.js";
 
 type CarouselState = {
-	bounceDirection: CarouselDirection;
+	animationClassName: CarauselAnimationType;
 	dragging: boolean;
 	overdragOffset: number;
-	setBounceDirection: (direction: CarouselDirection) => void;
+	setAnimationClassName: (className: CarauselAnimationType) => void;
 	setDragging: (value: boolean) => void;
 	setOverdragOffset: (value: number) => void;
-	setSlingshotDirection: (direction: CarouselDirection) => void;
 	setSpringBounce: (value: boolean) => void;
-	slingshotDirection: CarouselDirection;
 	springBounce: boolean;
 };
 
 const useCarouselState = (): CarouselState => {
 	const [dragging, setDragging] = useState<boolean>(false);
 	const [springBounce, setSpringBounce] = useState<boolean>(false);
-	const [bounceDirection, setBounceDirection] =
-		useState<CarouselDirection>(null);
-	const [slingshotDirection, setSlingshotDirection] =
-		useState<CarouselDirection>(null);
-
 	const [overdragOffset, setOverdragOffset] = useState<number>(0);
+	const [animationClassName, setAnimationClassName] =
+		useState<CarauselAnimationType>(null);
 
 	return {
-		bounceDirection,
+		animationClassName,
 		dragging,
 		overdragOffset,
-		setBounceDirection,
+		setAnimationClassName,
 		setDragging,
 		setOverdragOffset,
-		setSlingshotDirection,
 		setSpringBounce,
-		slingshotDirection,
 		springBounce,
 	};
 };

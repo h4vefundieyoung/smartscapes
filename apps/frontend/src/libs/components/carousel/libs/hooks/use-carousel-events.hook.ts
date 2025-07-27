@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 import {
-	type CarouselDirection,
+	type CarauselAnimationType,
 	type CarouselReference,
 } from "../types/types.js";
 import {
@@ -12,44 +12,71 @@ import {
 } from "./hooks.js";
 
 type CarouselEventsProperties = {
-	carouselReference: CarouselReference;
-	state: {
-		overdragOffset: number;
-		setBounceDirection: (direction: CarouselDirection) => void;
-		setDragging: (value: boolean) => void;
-		setOverdragOffset: (value: number) => void;
-		setSlingshotDirection: (direction: CarouselDirection) => void;
-		setSpringBounce: (value: boolean) => void;
-	};
+	carouselElement: React.RefObject<HTMLDivElement | null>;
+	isAnimating: React.RefObject<boolean>;
+	isDragging: React.RefObject<boolean>;
+	momentumID: React.RefObject<null | number>;
+	overdragOffset: number;
+	scrollStart: React.RefObject<number>;
+	setAnimationClassName: (className: CarauselAnimationType) => void;
+	setDragging: (value: boolean) => void;
+	setOverdragOffset: (value: number) => void;
+	setSpringBounce: (value: boolean) => void;
+	startX: React.RefObject<number>;
+	velocity: React.RefObject<number>;
 };
 
 const useCarouselEvents = ({
-	carouselReference,
-	state,
+	carouselElement,
+	isAnimating,
+	isDragging,
+	momentumID,
+	overdragOffset,
+	scrollStart,
+	setAnimationClassName,
+	setDragging,
+	setOverdragOffset,
+	setSpringBounce,
+	startX,
+	velocity,
 }: CarouselEventsProperties): {
 	handleMouseDown: (event: React.MouseEvent) => void;
 	handleMouseMove: (event: React.MouseEvent) => void;
 	handleMouseUpOrLeave: () => void;
 	handleWheelEvent: (event: WheelEvent) => void;
 } => {
-	const { checkBoundaries } = useCarouselBoundaries({
+	const carouselReference: CarouselReference = {
+		carouselReference: carouselElement,
+		isAnimating,
+		isDragging,
+		momentumID,
+		scrollStart,
+		startX,
+		velocity,
+	};
+
+	const { handleBoundaryCollision } = useCarouselBoundaries({
 		carouselReference,
-		setBounceDirection: state.setBounceDirection,
-		setSpringBounce: state.setSpringBounce,
+		setAnimationClassName,
+		setSpringBounce,
 	});
 
 	const { startMomentum } = useCarouselMomentum({
 		carouselReference,
-		checkBoundaries,
+		handleBoundaryCollision,
 	});
 
 	const mouseHandlers = useCarouselMouseEvents({
 		callbacks: {
-			checkBoundaries,
+			handleBoundaryCollision,
 			startMomentum,
 		},
 		carouselReference,
-		state,
+		overdragOffset,
+		setAnimationClassName,
+		setDragging,
+		setOverdragOffset,
+		setSpringBounce,
 	});
 
 	const handleWheelEvent = useCarouselWheelEvent({
@@ -58,7 +85,7 @@ const useCarouselEvents = ({
 	});
 
 	useEffect(() => {
-		const element = carouselReference.carouselReference.current;
+		const element = carouselElement.current;
 
 		if (element) {
 			element.addEventListener("wheel", handleWheelEvent, { passive: false });
@@ -67,7 +94,7 @@ const useCarouselEvents = ({
 				element.removeEventListener("wheel", handleWheelEvent);
 			};
 		}
-	}, [handleWheelEvent, carouselReference]);
+	}, [handleWheelEvent, carouselElement]);
 
 	return {
 		...mouseHandlers,

@@ -34,6 +34,10 @@ const config = ({ mode }: ConfigEnv): ReturnType<typeof defineConfig> => {
 			reactPlugin(),
 			svgr(),
 			VitePWA({
+				devOptions: {
+					enabled: true,
+					type: "module",
+				},
 				includeAssets: ["favicon.svg", "apple-touch-icon.png"],
 				manifest: {
 					background_color: "#ffffff",

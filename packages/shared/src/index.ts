@@ -27,6 +27,11 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath } from "./modules/auth/auth.js";
 export {
+	RouteCategoriesApiPath,
+	type RouteCategoryGetAllItemResponseDto,
+	type RouteCategoryRequestDto,
+} from "./modules/route-categories/route-categories.js";
+export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetAllItemResponseDto,

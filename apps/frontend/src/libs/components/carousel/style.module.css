@@ -55,6 +55,14 @@
 	animation: spring-bounce-right 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+.slingshot-left {
+	animation: slingshot-return-left 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.slingshot-right {
+	animation: slingshot-return-right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
 @keyframes spring-bounce-left {
 	0% {
 		transform: translateX(0);
@@ -107,29 +115,21 @@
 	}
 }
 
-.slingshot-left {
-	animation: slingshot-return-left 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.slingshot-right {
-	animation: slingshot-return-right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
 @keyframes slingshot-return-left {
 	0% {
-		transform: translateX(var(--overdrag-offset, 0));
+		transform: translateX(0);
 	}
 
 	20% {
-		transform: translateX(calc(var(--overdrag-offset, 0px) - 0.5%));
+		transform: translateX(0.5%);
 	}
 
 	40% {
-		transform: translateX(calc(var(--overdrag-offset, 0px) + 0.2%));
+		transform: translateX(0.2%);
 	}
 
 	60% {
-		transform: translateX(calc(var(--overdrag-offset, 0px) - 0.1%));
+		transform: translateX(-0.1%);
 	}
 
 	100% {
@@ -139,19 +139,15 @@
 
 @keyframes slingshot-return-right {
 	0% {
-		transform: translateX(var(--overdrag-offset, 0));
-	}
-
-	20% {
-		transform: translateX(calc(var(--overdrag-offset, 0px) + 0.5%));
+		transform: translateX(0);
 	}
 
 	40% {
-		transform: translateX(calc(var(--overdrag-offset, 0px) - 0.2%));
+		transform: translateX(-0.2%);
 	}
 
 	60% {
-		transform: translateX(calc(var(--overdrag-offset, 0px) + 0.1%));
+		transform: translateX(+0.1%);
 	}
 
 	100% {

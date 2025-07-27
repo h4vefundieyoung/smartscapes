@@ -4,8 +4,6 @@ import { describe, it, mock } from "node:test";
 import { type BaseEncryption } from "~/libs/modules/encryption/libs/base-encryption.module.js";
 import { type BaseToken } from "~/libs/modules/token/token.js";
 import { AuthService } from "~/modules/auth/auth.service.js";
-import { MockUserRepository } from "~/modules/users/mock.user.repository.js";
-import { type UserModel } from "~/modules/users/user.model.js";
 import {
 	type UserGetAllItemResponseDto,
 	type UserService,
@@ -64,13 +62,9 @@ describe("AuthService", () => {
 			hash: mock.fn(() => Promise.resolve("hashedPassword")),
 		} as unknown as BaseEncryption;
 
-		const mockUserModel = {} as typeof UserModel;
-		const mockUserRepository = new MockUserRepository(mockUserModel);
-
 		const authService = new AuthService({
 			encryptionService: mockEncryptionService,
 			tokenService: mockTokenService,
-			userRepository: mockUserRepository,
 			userService: mockUserService,
 		});
 

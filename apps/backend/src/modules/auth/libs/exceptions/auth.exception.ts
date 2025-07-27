@@ -12,7 +12,7 @@ class AuthorizationError extends HTTPError {
 	public constructor({
 		cause,
 		message = AuthorizationExceptionMessage.INVALID_CREDENTIALS,
-		status = HTTPCode.UNATHORIZED,
+		status = HTTPCode.UNAUTHORIZED,
 	}: Constructor = {}) {
 		super({ cause, message, status });
 	}

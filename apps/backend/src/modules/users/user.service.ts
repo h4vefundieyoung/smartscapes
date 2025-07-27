@@ -60,6 +60,10 @@ class UserService implements Service {
 
 		return user ? user.toObject() : null;
 	}
+
+	public async findEntityByEmail(email: string): Promise<null | UserEntity> {
+		return await this.userRepository.findByEmail(email);
+	}
 }
 
 export { UserService };

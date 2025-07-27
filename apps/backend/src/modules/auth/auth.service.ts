@@ -1,6 +1,5 @@
 import { type encryption } from "~/libs/modules/encryption/libs/encryption.js";
 import { type BaseToken } from "~/libs/modules/token/token.js";
-import { type UserRepository } from "~/modules/users/user.repository.js";
 import {
 	type UserService,
 	type UserSignInRequestDto,
@@ -15,25 +14,21 @@ import { AuthorizationError } from "./libs/exceptions/auth.exception.js";
 type Constructor = {
 	encryptionService: typeof encryption;
 	tokenService: BaseToken;
-	userRepository: UserRepository;
 	userService: UserService;
 };
 
 class AuthService {
 	private encryptionService: typeof encryption;
 	private tokenService: BaseToken;
-	private userRepository: UserRepository;
 	private userService: UserService;
 
 	public constructor({
 		encryptionService,
 		tokenService,
-		userRepository,
 		userService,
 	}: Constructor) {
 		this.encryptionService = encryptionService;
 		this.tokenService = tokenService;
-		this.userRepository = userRepository;
 		this.userService = userService;
 	}
 
@@ -42,7 +37,7 @@ class AuthService {
 	): Promise<UserSignInResponseDto> {
 		const { email, password } = userRequestDto;
 
-		const user = await this.userRepository.findByEmail(email);
+		const user = await this.userService.findEntityByEmail(email);
 
 		if (!user) {
 			throw new AuthorizationError({

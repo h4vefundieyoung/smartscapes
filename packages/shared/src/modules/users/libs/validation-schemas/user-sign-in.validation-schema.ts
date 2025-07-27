@@ -1,9 +1,8 @@
-import { z, type ZodType } from "zod";
+import { z } from "zod";
 
 import { UserValidationMessage, UserValidationRule } from "../enums/enums.js";
-import { type UserSignInRequestDto } from "../types/types.js";
 
-const userSignIn: ZodType<UserSignInRequestDto> = z.strictObject({
+const userSignIn = z.strictObject({
 	email: z
 		.email({
 			error: UserValidationMessage.EMAIL_WRONG,

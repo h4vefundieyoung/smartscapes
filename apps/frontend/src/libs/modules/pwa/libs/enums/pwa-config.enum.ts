@@ -1,10 +1,14 @@
-const MILLISECONDS_IN_SECOND = 1000;
-const SECONDS_IN_MINUTE = 60;
-const MINUTES_IN_HOUR = 60;
+const TimeConstants = {
+	MILLISECONDS_IN_SECOND: 1000,
+	MINUTES_IN_HOUR: 60,
+	SECONDS_IN_MINUTE: 60,
+} as const;
 
 const PWAConfig = {
 	UPDATE_INTERVAL_MS:
-		MINUTES_IN_HOUR * SECONDS_IN_MINUTE * MILLISECONDS_IN_SECOND, // 1 hour
+		TimeConstants.MINUTES_IN_HOUR *
+		TimeConstants.SECONDS_IN_MINUTE *
+		TimeConstants.MILLISECONDS_IN_SECOND,
 } as const;
 
 export { PWAConfig };

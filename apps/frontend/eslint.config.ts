@@ -80,6 +80,17 @@ const overridesConfigs = [
 			"unicorn/prevent-abbreviations": ["off"],
 		},
 	},
+	{
+		files: ["**/*.ts", "**/*.tsx"],
+		rules: {
+			"import/no-unresolved": [
+				"error",
+				{
+					ignore: ["^virtual:"],
+				},
+			],
+		},
+	},
 ] satisfies Linter.Config[];
 
 const config = [

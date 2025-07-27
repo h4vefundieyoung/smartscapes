@@ -12,7 +12,7 @@ import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
 import { NotFound } from "~/pages/not-found/not-found.jsx";
 
-import { Landing } from "./libs/components/landing/landing.jsx";
+import { Landing } from "./pages/landing.js";
 
 createRoot(document.querySelector("#root") as HTMLElement).render(
 	<StrictMode>

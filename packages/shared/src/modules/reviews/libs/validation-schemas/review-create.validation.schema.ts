@@ -1,12 +1,11 @@
-import { z, type ZodType } from "zod";
+import { z } from "zod";
 
 import {
 	ReviewValidationMessage,
 	ReviewValidationRule,
 } from "../enums/enums.js";
-import { type ReviewRequestDto } from "../types/types.js";
 
-const reviewCreate: ZodType<ReviewRequestDto> = z
+const reviewCreate = z
 	.strictObject({
 		content: z
 			.string()
@@ -22,6 +21,10 @@ const reviewCreate: ZodType<ReviewRequestDto> = z
 	})
 	.refine((data) => data.routeId !== null || data.poiId !== null, {
 		message: ReviewValidationMessage.ROUTE_OR_POI_REQUIRED,
+		path: ["routeId"],
+	})
+	.refine((data) => !(data.routeId !== null && data.poiId !== null), {
+		message: ReviewValidationMessage.ONLY_ONE_ALLOWED,
 		path: ["routeId"],
 	});
 

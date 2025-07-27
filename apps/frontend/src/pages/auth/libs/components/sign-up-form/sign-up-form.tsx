@@ -2,10 +2,9 @@ import { Button, Input, Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
-	userSignUpFormValidationSchema,
 	type UserSignUpRequestDto,
+	userSignUpValidationSchema,
 } from "~/modules/users/users.js";
-import { type UserSignUpFormValues } from "~/pages/auth/libs/types/user-sign-up-form-values.types.js";
 
 import { DEFAULT_SIGN_UP_PAYLOAD } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
@@ -15,22 +14,16 @@ type Properties = {
 };
 
 const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
-	const { control, errors, handleSubmit } = useAppForm<UserSignUpFormValues>({
+	const { control, errors, handleSubmit } = useAppForm<UserSignUpRequestDto>({
 		defaultValues: DEFAULT_SIGN_UP_PAYLOAD,
 		mode: "onChange",
-		validationSchema: userSignUpFormValidationSchema,
+		validationSchema: userSignUpValidationSchema,
 	});
 
 	const handleFormSubmit = useCallback(
 		(event_: React.BaseSyntheticEvent): void => {
-			void handleSubmit((formData: UserSignUpFormValues) => {
-				const payload: UserSignUpRequestDto = {
-					email: formData.email,
-					firstName: formData.firstName,
-					lastName: formData.lastName,
-					password: formData.password,
-				};
-				onSubmit(payload);
+			void handleSubmit((formData: UserSignUpRequestDto) => {
+				onSubmit(formData);
 			})(event_);
 		},
 		[handleSubmit, onSubmit],
@@ -48,7 +41,6 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 					name="firstName"
 					type="text"
 				/>
-
 				<Input
 					autocomplete="family-name"
 					control={control}
@@ -57,7 +49,6 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 					name="lastName"
 					type="text"
 				/>
-
 				<Input
 					autocomplete="email"
 					control={control}
@@ -66,7 +57,6 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 					name="email"
 					type="email"
 				/>
-
 				<Input
 					autocomplete="new-password"
 					control={control}
@@ -75,7 +65,6 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 					name="password"
 					type="password"
 				/>
-
 				<Input
 					autocomplete="new-password"
 					control={control}
@@ -84,13 +73,12 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 					name="confirmPassword"
 					type="text"
 				/>
-
 				<Button label="Sign up" type="submit" />
 			</form>
 
 			<div>
 				<p className={styles["login-link-text"]}>
-					Already have an account?
+					Already have an account?&nbsp;
 					<Link to={AppRoute.SIGN_IN}>Log in</Link>
 				</p>
 			</div>

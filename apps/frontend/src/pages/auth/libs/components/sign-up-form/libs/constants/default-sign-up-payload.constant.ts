@@ -1,6 +1,6 @@
-import { type UserSignUpFormValues } from "~/pages/auth/libs/types/user-sign-up-form-values.types.js";
+import { type UserSignUpRequestDto } from "@smartscapes/shared";
 
-const DEFAULT_SIGN_UP_PAYLOAD: UserSignUpFormValues = {
+const DEFAULT_SIGN_UP_PAYLOAD: UserSignUpRequestDto = {
 	confirmPassword: "",
 	email: "",
 	firstName: "",

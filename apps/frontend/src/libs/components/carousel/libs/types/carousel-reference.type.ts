@@ -1,5 +1,5 @@
 type CarouselReference = {
-	carouselReference: React.RefObject<HTMLDivElement | null>;
+	element: React.RefObject<HTMLDivElement | null>;
 	isAnimating: React.RefObject<boolean>;
 	isDragging: React.RefObject<boolean>;
 	momentumID: React.RefObject<null | number>;

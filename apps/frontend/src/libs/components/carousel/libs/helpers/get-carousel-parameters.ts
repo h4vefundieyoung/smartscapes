@@ -1,10 +1,6 @@
 import { CarauselConfig } from "../enums/enums.js";
 import { type CarouselParameters } from "../types/types.js";
 
-type Properties = {
-	carouselReference: React.RefObject<HTMLDivElement | null>;
-};
-
 const initialCarouselParameters: CarouselParameters = {
 	clientWidth: 0,
 	direction: null,
@@ -17,14 +13,14 @@ const initialCarouselParameters: CarouselParameters = {
 	scrollWidth: 0,
 };
 
-const getCarouselParameters = ({
-	carouselReference,
-}: Properties): CarouselParameters => {
-	if (!carouselReference.current) {
+const getCarouselParameters = (
+	reference: React.RefObject<HTMLDivElement | null>,
+): CarouselParameters => {
+	if (!reference.current) {
 		return initialCarouselParameters;
 	}
 
-	const element = carouselReference.current;
+	const element = reference.current;
 
 	const maxScroll = element.scrollWidth - element.clientWidth;
 
@@ -37,12 +33,12 @@ const getCarouselParameters = ({
 	const direction = isAtLeftEdge ? "left" : "right";
 
 	const { clientWidth, offsetLeft, scrollLeft, scrollWidth } =
-		carouselReference.current;
+		reference.current;
 
 	return {
 		clientWidth,
 		direction,
-		element: carouselReference.current,
+		element,
 		isAtLeftEdge,
 		isAtRightEdge,
 		maxScroll,

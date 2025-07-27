@@ -4,43 +4,49 @@ import { CarauselAnimation } from "../enums/carausel-animation.enum.js";
 import { CarauselConfig } from "../enums/enums.js";
 import { getCarouselParameters } from "../helpers/helpers.js";
 import {
-	type CarauselAnimationType,
+	type CarouselCallbacks,
 	type CarouselReference,
+	type CarouselState,
 } from "../types/types.js";
 
 type CarouselMouseEventsProperties = {
-	callbacks: {
-		handleBoundaryCollision: () => void;
-		startMomentum: () => void;
-	};
+	callbacks: CarouselCallbacks;
 	carouselReference: CarouselReference;
-	overdragOffset: number;
-	setAnimationClassName: (className: CarauselAnimationType) => void;
-	setDragging: (value: boolean) => void;
-	setOverdragOffset: (value: number) => void;
-	setSpringBounce: (value: boolean) => void;
+	state: CarouselStateSetters;
 };
+
+type CarouselStateSetters = Pick<
+	CarouselState,
+	| "overdragOffset"
+	| "setAnimationClassName"
+	| "setDragging"
+	| "setOverdragOffset"
+	| "setSpringBounce"
+>;
 
 const useCarouselMouseEvents = ({
 	callbacks,
 	carouselReference,
-	overdragOffset,
-	setAnimationClassName,
-	setDragging,
-	setOverdragOffset,
-	setSpringBounce,
+	state,
 }: CarouselMouseEventsProperties): {
 	handleMouseDown: (event: React.MouseEvent) => void;
 	handleMouseMove: (event: React.MouseEvent) => void;
 	handleMouseUpOrLeave: () => void;
 } => {
 	const { startMomentum } = callbacks;
+	const {
+		overdragOffset,
+		setAnimationClassName,
+		setDragging,
+		setOverdragOffset,
+		setSpringBounce,
+	} = state;
 
 	const handleMouseDown = useCallback(
 		(event: React.MouseEvent): void => {
-			const { offsetLeft, scrollLeft } = getCarouselParameters({
-				carouselReference: carouselReference.carouselReference,
-			});
+			const { offsetLeft, scrollLeft } = getCarouselParameters(
+				carouselReference.element,
+			);
 
 			carouselReference.isAnimating.current = false;
 			setSpringBounce(false);
@@ -67,9 +73,7 @@ const useCarouselMouseEvents = ({
 	);
 
 	const handleMouseUpOrLeave = useCallback((): void => {
-		const { direction } = getCarouselParameters({
-			carouselReference: carouselReference.carouselReference,
-		});
+		const { direction } = getCarouselParameters(carouselReference.element);
 
 		carouselReference.isDragging.current = false;
 		setDragging(false);
@@ -108,9 +112,7 @@ const useCarouselMouseEvents = ({
 	const handleMouseMove = useCallback(
 		(event: React.MouseEvent): void => {
 			const { clientWidth, element, maxScroll, offsetLeft } =
-				getCarouselParameters({
-					carouselReference: carouselReference.carouselReference,
-				});
+				getCarouselParameters(carouselReference.element);
 
 			if (!carouselReference.isDragging.current || !element) {
 				return;

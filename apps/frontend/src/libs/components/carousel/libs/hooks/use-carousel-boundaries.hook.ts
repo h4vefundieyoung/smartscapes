@@ -20,9 +20,7 @@ const useCarouselBoundaries = ({
 } => {
 	const handleBoundaryCollision = useCallback((): void => {
 		const { direction, element, isAtLeftEdge, isAtRightEdge, maxScroll } =
-			getCarouselParameters({
-				carouselReference: carouselReference.carouselReference,
-			});
+			getCarouselParameters(carouselReference.element);
 
 		if (!element || carouselReference.isAnimating.current) {
 			return;

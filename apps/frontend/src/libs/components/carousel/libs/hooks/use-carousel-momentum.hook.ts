@@ -16,9 +16,9 @@ const useCarouselMomentum = ({
 	startMomentum: () => void;
 } => {
 	const animateMomentum = useCallback((): void => {
-		const { element, isAtLeftEdge, isAtRightEdge } = getCarouselParameters({
-			carouselReference: carouselReference.carouselReference,
-		});
+		const { element, isAtLeftEdge, isAtRightEdge } = getCarouselParameters(
+			carouselReference.element,
+		);
 
 		if (!element) {
 			return;

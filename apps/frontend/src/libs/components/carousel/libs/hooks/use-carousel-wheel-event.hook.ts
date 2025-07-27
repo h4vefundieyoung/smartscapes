@@ -16,7 +16,7 @@ const useCarouselWheelEvent = ({
 		(event: WheelEvent): void => {
 			event.preventDefault();
 
-			if (carouselReference.carouselReference.current) {
+			if (carouselReference.element.current) {
 				carouselReference.velocity.current +=
 					event.deltaY * CarauselConfig.WHEEL_MULTIPLIER;
 

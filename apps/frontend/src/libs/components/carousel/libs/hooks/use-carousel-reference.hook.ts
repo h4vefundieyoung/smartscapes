@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { type CarouselReference } from "../types/types.js";
 
 const useCarouselReference = (): CarouselReference => {
-	const carouselReference = useRef<HTMLDivElement>(null);
+	const element = useRef<HTMLDivElement>(null);
 	const isDragging = useRef(false);
 	const startX = useRef(0);
 	const scrollStart = useRef(0);
@@ -12,7 +12,7 @@ const useCarouselReference = (): CarouselReference => {
 	const isAnimating = useRef<boolean>(false);
 
 	return {
-		carouselReference,
+		element,
 		isAnimating,
 		isDragging,
 		momentumID,

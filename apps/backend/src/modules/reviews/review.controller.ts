@@ -18,14 +18,12 @@ import { reviewCreateValidationSchema } from "./libs/validation-schemas/validati
  * @swagger
  * components:
  *   schemas:
- *     Reviews:
+ *     ReviewRequestDto:
  *       type: object
  *       required:
  *         - userId
  *         - content
  *       properties:
- *         id:
- *           type: integer
  *         userId:
  *           type: integer
  *         content:
@@ -39,9 +37,28 @@ import { reviewCreateValidationSchema } from "./libs/validation-schemas/validati
  *         poiId:
  *           type: integer
  *           nullable: true
- *       oneOf:
- *         - required: [routeId]
- *         - required: [poiId]
+ *
+ *     Review:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         content:
+ *           type: string
+ *         likesCount:
+ *           type: integer
+ *         poiId:
+ *           type: integer
+ *           nullable: true
+ *         routeId:
+ *           type: integer
+ *           nullable: true
+ *         userId:
+ *           type: integer
+ *
+ *     ReviewResponseDto:
+ *        type: object
+ *        $ref: '#/components/schemas/Review'
  */
 
 class ReviewController extends BaseController {
@@ -79,33 +96,17 @@ class ReviewController extends BaseController {
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             type: object
-	 *             required:
-	 *               - userId
-	 *               - content
-	 *             properties:
-	 *               userId:
-	 *                 type: integer
-	 *               content:
-	 *                 type: string
-	 *               routeId:
-	 *                 type: integer
-	 *                 nullable: true
-	 *               poiId:
-	 *                 type: integer
-	 *                 nullable: true
-	 *             oneOf:
-	 *               - required: [routeId]
-	 *               - required: [poiId]
+	 *             $ref: '#/components/schemas/ReviewRequestDto'
 	 *     responses:
 	 *       201:
 	 *         description: Review created successfully
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/Reviews'
-	 *       400:
-	 *         description: Bad Request - missing or invalid parameters (e.g., neither routeId nor poiId provided)
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                  $ref: '#/components/schemas/ReviewResponseDto'
 	 */
 
 	public async create(
@@ -138,7 +139,7 @@ class ReviewController extends BaseController {
 	 *                 data:
 	 *                   type: array
 	 *                   items:
-	 *                     $ref: '#/components/schemas/Reviews'
+	 *                     $ref: '#/components/schemas/Review'
 	 */
 	public async findAll(): Promise<APIHandlerResponse<ReviewResponseDto[]>> {
 		const { items } = await this.reviewService.findAll();

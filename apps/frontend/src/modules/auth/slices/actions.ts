@@ -9,6 +9,24 @@ import {
 } from "../libs/types/types.js";
 import { name as sliceName } from "./auth.slice.js";
 
+const getAuthenticatedUser = createAsyncThunk<
+	null | UserAuthResponseDto,
+	undefined,
+	AsyncThunkConfig
+>(`${sliceName}/authenticated-user`, async (_payload, { extra }) => {
+	const { authApi, storage } = extra;
+
+	const hasToken = await storage.has(StorageKey.TOKEN);
+
+	if (!hasToken) {
+		return null;
+	}
+
+	const { data } = await authApi.getAuthenticatedUser();
+
+	return data;
+});
+
 const signUp = createAsyncThunk<
 	UserAuthResponseDto,
 	UserSignUpRequestDto,
@@ -24,4 +42,4 @@ const signUp = createAsyncThunk<
 	return user;
 });
 
-export { signUp };
+export { getAuthenticatedUser, signUp };

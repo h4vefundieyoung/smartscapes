@@ -4,8 +4,9 @@ import {
 	type FastifyRequest,
 } from "fastify";
 import fastifyPlugin from "fastify-plugin";
+import { JOSEError } from "jose/errors";
 
-import { HTTPCode } from "~/libs/modules/http/http.js";
+import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
 import { type HTTPMethod } from "~/libs/types/types.js";
 import { userService } from "~/modules/users/users.js";
 
@@ -60,7 +61,11 @@ const auth = (
 				throw new AuthError();
 			}
 		} catch (error) {
-			reply.status(HTTPCode.UNAUTHORIZED).send(error);
+			let status =
+				error instanceof HTTPError || error instanceof JOSEError
+					? HTTPCode.UNAUTHORIZED
+					: HTTPCode.INTERNAL_SERVER_ERROR;
+			reply.status(status).send(error);
 		}
 	};
 

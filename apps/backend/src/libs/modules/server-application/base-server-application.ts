@@ -76,7 +76,7 @@ class BaseServerApplication implements ServerApplication {
 
 		await this.initServe();
 
-		await this.initRoutesProtection();
+		await this.initPlugins();
 
 		this.initRoutes();
 
@@ -197,18 +197,25 @@ class BaseServerApplication implements ServerApplication {
 		await this.app.register(fastifyHelmet);
 	}
 
+	private async initPlugins(): Promise<void> {
+		const whiteRoutesList = [
+			{
+				method: "POST" as const,
+				path: APIPath.AUTH + AuthApiPath.SIGN_IN,
+			},
+			{
+				method: "POST" as const,
+				path: APIPath.AUTH + AuthApiPath.SIGN_UP,
+			},
+		];
+
+		await this.app.register(authPlugin, { whiteRoutesList });
+	}
+
 	private initRoutes(): void {
 		const routers = this.apis.flatMap((api) => api.routes);
 
 		this.addRoutes(routers);
-	}
-
-	private async initRoutesProtection(): Promise<void> {
-		const whiteRoutesList = [AuthApiPath.SIGN_IN, AuthApiPath.SIGN_UP].map(
-			(path) => ({ method: "POST" as const, path: APIPath.AUTH + path }),
-		);
-
-		await this.app.register(authPlugin, { whiteRoutesList });
 	}
 
 	private async initServe(): Promise<void> {

@@ -3,6 +3,6 @@ export {
 	APIPath,
 	AppEnvironment,
 	AuthApiPath,
-	CommonExceptionMessage,
+	AuthExceptionMessage,
 	HTTPCode,
 } from "@smartscapes/shared";

@@ -25,7 +25,7 @@ export {
 	type ValidationSchema,
 	type ValueOf,
 } from "./libs/types/types.js";
-export { AuthApiPath } from "./modules/auth/auth.js";
+export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
 export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,

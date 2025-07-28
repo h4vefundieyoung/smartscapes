@@ -6,7 +6,7 @@ type APIHandlerOptions<
 	body: HandlerOptions["body"];
 	params: HandlerOptions["params"];
 	query: HandlerOptions["query"];
-	user?: HandlerOptions["user"] | null;
+	user: HandlerOptions["user"] | null;
 };
 
 type DefaultApiHandlerOptions = {

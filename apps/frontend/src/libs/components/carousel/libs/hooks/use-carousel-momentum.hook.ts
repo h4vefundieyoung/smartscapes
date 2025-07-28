@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { CarauselConfig } from "../enums/enums.js";
+import { carouselConfig } from "../enums/enums.js";
 import { getCarouselParameters } from "../helpers/helpers.js";
 import { type CarouselReference } from "../types/types.js";
 
@@ -24,10 +24,10 @@ const useCarouselMomentum = ({
 			return;
 		}
 
-		carouselReference.velocity.current *= CarauselConfig.FRICTION;
+		carouselReference.velocity.current *= carouselConfig.FRICTION;
 
 		if (
-			Math.abs(carouselReference.velocity.current) < CarauselConfig.MIN_VELOCITY
+			Math.abs(carouselReference.velocity.current) < carouselConfig.MIN_VELOCITY
 		) {
 			carouselReference.velocity.current = 0;
 			carouselReference.momentumID.current = null;
@@ -38,7 +38,7 @@ const useCarouselMomentum = ({
 		}
 
 		element.scrollLeft -=
-			carouselReference.velocity.current * CarauselConfig.SCROLL_SPEED;
+			carouselReference.velocity.current * carouselConfig.SCROLL_SPEED;
 
 		if (isAtLeftEdge || isAtRightEdge) {
 			handleBoundaryCollision();

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { CarauselAnimation, CarauselConfig } from "../enums/enums.js";
+import { CarauselAnimation, carouselConfig } from "../enums/enums.js";
 import { getCarouselParameters } from "../helpers/helpers.js";
 import { type CarauselAnimationType } from "../types/carausel-animation-type.type.js";
 import { type CarouselReference } from "../types/types.js";
@@ -42,7 +42,7 @@ const useCarouselBoundaries = ({
 				setSpringBounce(false);
 				setAnimationClassName(null);
 				carouselReference.isAnimating.current = false;
-			}, CarauselConfig.SPRING_ANIMATION_DURATION);
+			}, carouselConfig.SPRING_ANIMATION_DURATION);
 		}
 	}, [carouselReference, setAnimationClassName, setSpringBounce]);
 

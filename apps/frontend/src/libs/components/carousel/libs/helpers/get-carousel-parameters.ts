@@ -1,4 +1,4 @@
-import { CarauselConfig } from "../enums/enums.js";
+import { carouselConfig } from "../enums/enums.js";
 import { type CarouselParameters } from "../types/types.js";
 
 const initialCarouselParameters: CarouselParameters = {
@@ -24,7 +24,7 @@ const getCarouselParameters = (
 
 	const maxScroll = element.scrollWidth - element.clientWidth;
 
-	const edgeThreshold = CarauselConfig.EDGE_THRESHOLD;
+	const edgeThreshold = carouselConfig.EDGE_THRESHOLD;
 
 	const isAtLeftEdge = element.scrollLeft <= edgeThreshold;
 

@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 import { CarauselAnimation } from "../enums/carausel-animation.enum.js";
-import { CarauselConfig } from "../enums/enums.js";
+import { carouselConfig } from "../enums/enums.js";
 import { getCarouselParameters } from "../helpers/helpers.js";
 import {
 	type CarouselCallbacks,
@@ -80,7 +80,7 @@ const useCarouselMouseEvents = ({
 
 		if (overdragOffset !== 0) {
 			const { CSS_ANIMATION_DELAY, SLINGSHOT_ANIMATION_DURATION } =
-				CarauselConfig;
+				carouselConfig;
 			setSpringBounce(false);
 			setAnimationClassName(null);
 			setOverdragOffset(0);
@@ -123,7 +123,7 @@ const useCarouselMouseEvents = ({
 			const x = event.pageX - offsetLeft;
 			const walk = x - carouselReference.startX.current;
 			const newScrollLeft = carouselReference.scrollStart.current - walk;
-			const maxOverdrag = clientWidth * CarauselConfig.OVERDRAG_PERCENTAGE;
+			const maxOverdrag = clientWidth * carouselConfig.OVERDRAG_PERCENTAGE;
 
 			if (newScrollLeft < 0) {
 				setOverdragOffset(maxOverdrag);
@@ -140,7 +140,7 @@ const useCarouselMouseEvents = ({
 			setOverdragOffset(0);
 			element.scrollLeft = newScrollLeft;
 			carouselReference.velocity.current =
-				walk * CarauselConfig.DRAG_MULTIPLIER;
+				walk * carouselConfig.DRAG_MULTIPLIER;
 		},
 		[carouselReference, setOverdragOffset],
 	);

@@ -1,4 +1,7 @@
-export { RouteCategoriesApiPath } from "./libs/enums/enums.js";
+export {
+	RouteCategoriesApiPath,
+	RouteCategoryExceptionMessage,
+} from "./libs/enums/enums.js";
 export {
 	type RouteCategoryGetAllItemResponseDto,
 	type RouteCategoryRequestDto,

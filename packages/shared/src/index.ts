@@ -28,6 +28,7 @@ export {
 export { AuthApiPath } from "./modules/auth/auth.js";
 export {
 	RouteCategoriesApiPath,
+	RouteCategoryExceptionMessage,
 	type RouteCategoryGetAllItemResponseDto,
 	type RouteCategoryRequestDto,
 } from "./modules/route-categories/route-categories.js";

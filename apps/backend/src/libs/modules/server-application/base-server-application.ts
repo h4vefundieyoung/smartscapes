@@ -11,12 +11,7 @@ import Fastify, {
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import {
-	APIErrorType,
-	APIPath,
-	AppEnvironment,
-	AuthApiPath,
-} from "~/libs/enums/enums.js";
+import { APIErrorType, AppEnvironment } from "~/libs/enums/enums.js";
 import { ValidationError } from "~/libs/exceptions/exceptions.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Database } from "~/libs/modules/database/database.js";
@@ -28,6 +23,7 @@ import {
 } from "~/libs/types/types.js";
 
 import { authPlugin } from "../plugins/plugins.js";
+import { WHITE_ROUTES } from "./libs/constants/constants.js";
 import {
 	type ServerApplication,
 	type ServerApplicationApi,
@@ -198,18 +194,7 @@ class BaseServerApplication implements ServerApplication {
 	}
 
 	private async initPlugins(): Promise<void> {
-		const whiteRoutesList = [
-			{
-				method: "POST" as const,
-				path: APIPath.AUTH + AuthApiPath.SIGN_IN,
-			},
-			{
-				method: "POST" as const,
-				path: APIPath.AUTH + AuthApiPath.SIGN_UP,
-			},
-		];
-
-		await this.app.register(authPlugin, { whiteRoutesList });
+		await this.app.register(authPlugin, { whiteRoutesList: WHITE_ROUTES });
 	}
 
 	private initRoutes(): void {

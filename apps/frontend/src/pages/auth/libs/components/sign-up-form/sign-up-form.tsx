@@ -71,7 +71,7 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 					errors={errors}
 					label="Confirm password"
 					name="confirmPassword"
-					type="text"
+					type="password"
 				/>
 				<Button label="Sign up" type="submit" />
 			</form>

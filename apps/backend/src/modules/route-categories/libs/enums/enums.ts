@@ -1,1 +1,4 @@
-export { RouteCategoriesApiPath } from "@smartscapes/shared";
+export {
+	RouteCategoriesApiPath,
+	RouteCategoryExceptionMessage,
+} from "@smartscapes/shared";

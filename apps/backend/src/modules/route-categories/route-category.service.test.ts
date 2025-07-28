@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
+import { HTTPCode } from "~/libs/modules/http/http.js";
+
+import { RouteCategoryExceptionMessage } from "./libs/enums/enums.js";
+import { RouteCategoryError } from "./libs/exceptions/exceptions.js";
 import { RouteCategoryEntity } from "./route-category.entity.js";
 import { type RouteCategoryRepository } from "./route-category.repository.js";
 import { RouteCategoryService } from "./route-category.service.js";
@@ -37,7 +41,7 @@ describe("RouteCategoryService", () => {
 		assert.deepStrictEqual(result, mockRouteCategory);
 	});
 
-	it("create should throw error if category with such name already exists", async () => {
+	it("create should throw exception if category with such name already exists", async () => {
 		const routeCategoryEntity =
 			RouteCategoryEntity.initialize(mockRouteCategory);
 
@@ -62,8 +66,9 @@ describe("RouteCategoryService", () => {
 			});
 			assert.fail("expected exception not thrown");
 		} catch (error) {
-			assert.ok(error instanceof Error);
-			assert.equal(error.message, "Route category already exists");
+			assert.ok(error instanceof RouteCategoryError);
+			assert.equal(error.message, RouteCategoryExceptionMessage.ALREADY_EXISTS);
+			assert.equal(error.status, HTTPCode.CONFLICT);
 		}
 	});
 
@@ -106,7 +111,7 @@ describe("RouteCategoryService", () => {
 		assert.deepStrictEqual(result, routeCategoryEntity.toObject());
 	});
 
-	it("findByName should return null if no category found", async () => {
+	it("findByName should throw exception if no category found", async () => {
 		const routeCategoryRepository = {
 			findByName: (() =>
 				Promise.resolve(null)) as RouteCategoryRepository["findByName"],
@@ -116,8 +121,12 @@ describe("RouteCategoryService", () => {
 			routeCategoryRepository,
 		);
 
-		const result = await routeCategoryService.findByName("Non Existent");
-
-		assert.strictEqual(result, null);
+		try {
+			await routeCategoryService.findByName("Non Existent");
+			assert.fail("expected exception not thrown");
+		} catch (error) {
+			assert.ok(error instanceof Error);
+			assert.equal(error.message, RouteCategoryExceptionMessage.NOT_FOUND);
+		}
 	});
 });

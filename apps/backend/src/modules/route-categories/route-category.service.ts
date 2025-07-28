@@ -1,5 +1,8 @@
+import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
 
+import { RouteCategoryExceptionMessage } from "./libs/enums/enums.js";
+import { RouteCategoryError } from "./libs/exceptions/exceptions.js";
 import {
 	type RouteCategoryGetAllItemResponseDto,
 	type RouteCategoryRequestDto,
@@ -17,10 +20,15 @@ class RouteCategoryService implements Service {
 	public async create(
 		payload: RouteCategoryRequestDto,
 	): Promise<RouteCategoryGetAllItemResponseDto> {
-		const existingRouteCategory = await this.findByName(payload.name);
+		const existingRouteCategory = await this.routeCategoryRepository.findByName(
+			payload.name,
+		);
 
 		if (existingRouteCategory) {
-			throw new Error("Route category already exists");
+			throw new RouteCategoryError({
+				message: RouteCategoryExceptionMessage.ALREADY_EXISTS,
+				status: HTTPCode.CONFLICT,
+			});
 		}
 
 		const item = await this.routeCategoryRepository.create(
@@ -40,10 +48,14 @@ class RouteCategoryService implements Service {
 
 	public async findByName(
 		name: string,
-	): Promise<null | RouteCategoryGetAllItemResponseDto> {
+	): Promise<RouteCategoryGetAllItemResponseDto> {
 		const item = await this.routeCategoryRepository.findByName(name);
 
-		return item ? item.toObject() : null;
+		if (!item) {
+			throw new Error(RouteCategoryExceptionMessage.NOT_FOUND);
+		}
+
+		return item.toObject();
 	}
 }
 

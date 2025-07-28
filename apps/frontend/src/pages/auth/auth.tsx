@@ -1,12 +1,12 @@
+import { Navigate } from "react-router";
+
 import logo from "~/assets/images/logo.svg";
-import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
+import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
 	useCallback,
-	useEffect,
 	useLocation,
-	useNavigate,
 } from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import {
@@ -19,9 +19,12 @@ import styles from "./styles.module.css";
 
 const Auth = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
-	const dataStatus = useAppSelector(({ auth }) => auth.dataStatus);
 	const { pathname } = useLocation();
-	const navigate = useNavigate();
+
+	const authenticatedUser = useAppSelector(
+		({ auth }) => auth.authenticatedUser,
+	);
+	const hasUser = Boolean(authenticatedUser);
 
 	const handleSignInSubmit = useCallback(
 		(payload: UserSignInRequestDto): void => {
@@ -53,22 +56,16 @@ const Auth = (): React.JSX.Element => {
 		[handleSignInSubmit, handleSignUpSubmit],
 	);
 
-	useEffect(() => {
-		const redirect = async (): Promise<void> => {
-			if (dataStatus === DataStatus.FULFILLED) {
-				await navigate(AppRoute.ROOT);
-			}
-		};
-
-		void redirect();
-	}, [dataStatus, navigate]);
+	if (hasUser) {
+		return <Navigate to={AppRoute.ROOT} />;
+	}
 
 	return (
 		<main className={styles["container"]}>
 			<div className={styles["left-panel"]}>
 				<img
 					alt="SmartScapes"
-					className={styles["left-panel-logo"]}
+					className={styles["logo"]}
 					height={24}
 					src={logo}
 					width={136}

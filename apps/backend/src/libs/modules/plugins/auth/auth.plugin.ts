@@ -5,7 +5,7 @@ import {
 } from "fastify";
 import fastifyPlugin from "fastify-plugin";
 
-import { HTTPCode, HTTPError } from "~/libs/modules/http/http.js";
+import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type HTTPMethod } from "~/libs/types/types.js";
 import { userService } from "~/modules/users/users.js";
 
@@ -60,11 +60,7 @@ const auth = (
 				throw new AuthError();
 			}
 		} catch (error) {
-			const status =
-				error instanceof HTTPError
-					? error.status
-					: HTTPCode.INTERNAL_SERVER_ERROR;
-			reply.status(status).send(error);
+			reply.status(HTTPCode.UNAUTHORIZED).send(error);
 		}
 	};
 

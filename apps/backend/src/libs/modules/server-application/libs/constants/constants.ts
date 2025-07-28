@@ -1,13 +1,15 @@
 import { APIPath, AuthApiPath } from "~/libs/enums/enums.js";
 
-const WHITE_ROUTES = [
+import { type WhiteRoute } from "../types/types.js";
+
+const WHITE_ROUTES: WhiteRoute[] = [
 	{
 		method: "POST" as const,
-		path: APIPath.AUTH + AuthApiPath.SIGN_IN,
+		path: `${APIPath.AUTH}${AuthApiPath.SIGN_IN}`,
 	},
 	{
 		method: "POST" as const,
-		path: APIPath.AUTH + AuthApiPath.SIGN_UP,
+		path: `${APIPath.AUTH}${AuthApiPath.SIGN_UP}`,
 	},
 ];
 

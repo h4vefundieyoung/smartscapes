@@ -43,11 +43,11 @@ const auth = (
 		const { userId } = await tokenService.verify<TokenPayload>(token as string);
 		const user = await userService.findById(userId);
 
-		if (user) {
-			request.user = user;
-		} else {
+		if (!user) {
 			throw new AuthError();
 		}
+
+		request.user = user;
 	};
 
 	app.decorate("user", null);
@@ -56,4 +56,4 @@ const auth = (
 
 const authPlugin = fastifyPlugin<PluginOptions>(auth);
 
-export { authPlugin };
+export { authPlugin, type WhiteRoute };

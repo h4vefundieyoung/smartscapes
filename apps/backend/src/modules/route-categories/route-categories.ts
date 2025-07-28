@@ -13,3 +13,7 @@ const routeCategoryController = new RouteCategoryController(
 );
 
 export { routeCategoryController };
+export {
+	type RouteCategoryGetAllItemResponseDto,
+	type RouteCategoryRequestDto,
+} from "./libs/types/types.js";

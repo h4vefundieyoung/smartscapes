@@ -20,9 +20,10 @@ class RouteCategoryService implements Service {
 	public async create(
 		payload: RouteCategoryRequestDto,
 	): Promise<RouteCategoryGetAllItemResponseDto> {
-		const existingRouteCategory = await this.routeCategoryRepository.findByName(
-			payload.name,
-		);
+		const normalizedName = this.normalizeName(payload.name);
+
+		const existingRouteCategory =
+			await this.routeCategoryRepository.findByName(normalizedName);
 
 		if (existingRouteCategory) {
 			throw new RouteCategoryError({
@@ -32,7 +33,7 @@ class RouteCategoryService implements Service {
 		}
 
 		const item = await this.routeCategoryRepository.create(
-			RouteCategoryEntity.initializeNew({ name: payload.name }),
+			RouteCategoryEntity.initializeNew({ name: normalizedName }),
 		);
 
 		return item.toObject();
@@ -49,13 +50,19 @@ class RouteCategoryService implements Service {
 	public async findByName(
 		name: string,
 	): Promise<RouteCategoryGetAllItemResponseDto> {
-		const item = await this.routeCategoryRepository.findByName(name);
+		const normalizedName = this.normalizeName(name);
+
+		const item = await this.routeCategoryRepository.findByName(normalizedName);
 
 		if (!item) {
 			throw new Error(RouteCategoryExceptionMessage.NOT_FOUND);
 		}
 
 		return item.toObject();
+	}
+
+	private normalizeName(name: string): string {
+		return name.toLowerCase();
 	}
 }
 

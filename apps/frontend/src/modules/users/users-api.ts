@@ -5,7 +5,7 @@ import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
 
 import { UsersApiPath } from "./libs/enums/enums.js";
-import { type UserItemResponseDto } from "./libs/types/types.js";
+import { type UserGetByIdItemResponseDto } from "./libs/types/types.js";
 
 type Constructor = {
 	baseUrl: string;
@@ -18,8 +18,8 @@ class UserApi extends BaseHTTPApi {
 		super({ baseUrl, http, path: APIPath.USERS, storage });
 	}
 
-	public async getAll(): Promise<APIResponse<UserItemResponseDto[]>> {
-		const response = await this.load<APIResponse<UserItemResponseDto[]>>(
+	public async getAll(): Promise<APIResponse<UserGetByIdItemResponseDto[]>> {
+		const response = await this.load<APIResponse<UserGetByIdItemResponseDto[]>>(
 			this.getFullEndpoint(UsersApiPath.ROOT, {}),
 			{
 				hasAuth: false,

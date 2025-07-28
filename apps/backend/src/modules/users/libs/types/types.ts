@@ -1,5 +1,5 @@
 export {
-	type UserItemResponseDto,
+	type UserGetByIdItemResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "@smartscapes/shared";

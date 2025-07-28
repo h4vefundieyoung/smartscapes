@@ -3,7 +3,9 @@ import {
 	Header,
 	Loader,
 	RouterOutlet,
+	Sidebar,
 } from "~/libs/components/components.js";
+import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -40,7 +42,22 @@ const App = (): React.JSX.Element => {
 			</div>
 			{isRoot && (
 				<>
-					<Header user={mockUserWithoutAvatar} />
+				  <Header user={mockUserWithoutAvatar} />
+          <Sidebar navigationItems={NAVIGATION_ITEMS} />
+
+          <img alt="logo" className="App-logo" src={reactLogo} width="30" />
+          <ul className="App-navigation-list">
+            <li>
+              <Link to={AppRoute.ROOT}>Root</Link>
+            </li>
+            <li>
+              <Link to={AppRoute.SIGN_IN}>Sign in</Link>
+            </li>
+            <li>
+              <Link to={AppRoute.SIGN_UP}>Sign up</Link>
+            </li>
+          </ul>
+          <p>Current path: {pathname}</p>
 					<p>State: {dataStatus}</p>
 					<Loader />
 					<h3>Users:</h3>

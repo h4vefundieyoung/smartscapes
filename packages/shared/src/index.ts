@@ -27,6 +27,14 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath } from "./modules/auth/auth.js";
 export {
+	EntityType,
+	NotificationApiPath,
+	type NotificationCreateRequestDto,
+	notificationCreateValidationSchema,
+	type NotificationGetAllItemResponseDto,
+	NotificationType,
+} from "./modules/notifications/notifications.js";
+export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetAllItemResponseDto,

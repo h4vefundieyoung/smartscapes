@@ -62,6 +62,7 @@ describe("BaseController", () => {
 			params: { id: "123" },
 			query: { x: "1" },
 			url: "/test/:id",
+			user: null,
 		} as Parameters<ServerApplicationRouteParameters["handler"]>[0];
 
 		const mockHandler = mock.fn<APIHandler>(() => ({
@@ -104,7 +105,7 @@ describe("BaseController", () => {
 			body: mockRequest.body,
 			params: mockRequest.params,
 			query: mockRequest.query,
-			user: undefined,
+			user: mockRequest.user,
 		});
 
 		assert.strictEqual(sentStatus, responseStatus);

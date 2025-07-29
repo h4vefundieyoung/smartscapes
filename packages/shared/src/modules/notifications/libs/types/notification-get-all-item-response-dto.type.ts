@@ -1,5 +1,4 @@
-import { type ValueOf } from "src/libs/types/value-of.type.js";
-
+import { type ValueOf } from "../../../../libs/types/types.js";
 import { type EntityType, type NotificationType } from "../enums/enums.js";
 
 type NotificationGetAllItemResponseDto = {

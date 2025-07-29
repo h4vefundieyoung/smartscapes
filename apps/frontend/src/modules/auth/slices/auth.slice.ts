@@ -19,7 +19,7 @@ const initialState: State = {
 const { actions, name, reducer } = createSlice({
 	extraReducers(builder) {
 		builder.addCase(getAuthenticatedUser.fulfilled, (state, action) => {
-			state.authenticatedUser = action.payload;
+			state.authenticatedUser = action.payload ? action.payload.data : null;
 			state.dataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(getAuthenticatedUser.pending, (state) => {
@@ -31,7 +31,7 @@ const { actions, name, reducer } = createSlice({
 		});
 
 		builder.addCase(signUp.fulfilled, (state, action) => {
-			state.authenticatedUser = action.payload;
+			state.authenticatedUser = action.payload.data.user;
 			state.dataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(signUp.pending, (state) => {

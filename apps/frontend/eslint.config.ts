@@ -7,7 +7,7 @@ import globals from "globals";
 import baseConfig from "../../eslint.config.js";
 
 const ignoresConfig = {
-	ignores: ["build"],
+	ignores: ["build", "dev-dist"],
 } satisfies Linter.Config;
 
 const mainConfig = {

@@ -4,11 +4,11 @@ const TimeConstants = {
 	SECONDS_IN_MINUTE: 60,
 } as const;
 
-const PWAConfig = {
-	UPDATE_INTERVAL_MS:
+const UpdateInterval = {
+	DEFAULT:
 		TimeConstants.MINUTES_IN_HOUR *
 		TimeConstants.SECONDS_IN_MINUTE *
 		TimeConstants.MILLISECONDS_IN_SECOND,
 } as const;
 
-export { PWAConfig };
+export { UpdateInterval };

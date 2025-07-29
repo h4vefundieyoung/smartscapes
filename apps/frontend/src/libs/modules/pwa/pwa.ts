@@ -1,5 +1,5 @@
-import { PWAModule } from "./pwa.module.js";
+import { PWA } from "./pwa.module.js";
 
-const pwaModule = new PWAModule();
+const pwa = new PWA();
 
-export { pwaModule };
+export { pwa };

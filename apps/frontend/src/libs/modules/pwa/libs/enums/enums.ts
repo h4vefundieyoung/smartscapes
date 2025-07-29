@@ -1,1 +1,1 @@
-export { PWAConfig } from "./pwa-config.enum.js";
+export { UpdateInterval } from "./update-interval.enum.js";

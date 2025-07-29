@@ -1,16 +1,16 @@
 import { registerSW } from "virtual:pwa-register";
 
-import { PWAConfig } from "./libs/enums/enums.js";
+import { UpdateInterval } from "./libs/enums/enums.js";
 import {
 	type PWARegistrationConfig,
 	type RegisterSWOptions,
 } from "./libs/types/types.js";
 
-class PWAModule {
+class PWA {
 	private updateInterval: number;
 
 	public constructor() {
-		this.updateInterval = PWAConfig.UPDATE_INTERVAL_MS;
+		this.updateInterval = UpdateInterval.DEFAULT;
 	}
 
 	public register(config: PWARegistrationConfig = {}): void {
@@ -49,4 +49,4 @@ class PWAModule {
 	}
 }
 
-export { PWAModule };
+export { PWA };

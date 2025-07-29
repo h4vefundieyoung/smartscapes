@@ -1,12 +1,11 @@
 .carousel-container {
-	position: relative;
-	padding: 2%;
-	border-radius: 8px;
+	margin: 0.7%;
 }
 
 .carousel {
 	display: flex;
-	gap: 2%;
+	max-height: 100%;
+	aspect-ratio: 5 / 1;
 	overflow-x: auto;
 	scroll-behavior: auto;
 	cursor: grab;
@@ -23,12 +22,11 @@
 }
 
 .carousel-item {
-	flex: 0 0 calc((100% - 8%) / 5);
-	aspect-ratio: 1 / 1;
+	flex: 0 0 20%;
+	padding: 0.7%;
 	overflow: hidden;
 	pointer-events: none;
 	user-select: none;
-	border-radius: 8px;
 }
 
 .carousel-item img {
@@ -38,12 +36,9 @@
 	pointer-events: none;
 	user-select: none;
 	object-fit: cover;
+	border-radius: 5%;
 	-webkit-user-drag: none;
 	transition: transform 0.2s ease;
-}
-
-.carousel-item img:hover {
-	transform: scale(1.05);
 }
 
 .bounce-left {

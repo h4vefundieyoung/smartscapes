@@ -13,6 +13,7 @@ import {
 
 describe("AuthService", () => {
 	const signUpRequestDto: UserSignUpRequestDto = {
+		confirmPassword: "Password123!",
 		email: "test@example.com",
 		firstName: "John",
 		lastName: "Doe",

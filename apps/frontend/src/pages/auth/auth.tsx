@@ -9,7 +9,10 @@ import {
 	useLocation,
 } from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
-import { type UserSignUpRequestDto } from "~/modules/users/users.js";
+import {
+	type UserSignInRequestDto,
+	type UserSignUpRequestDto,
+} from "~/modules/users/users.js";
 
 import { SignInForm, SignUpForm } from "./libs/components/components.js";
 import styles from "./styles.module.css";
@@ -23,9 +26,12 @@ const Auth = (): React.JSX.Element => {
 	);
 	const hasUser = Boolean(authenticatedUser);
 
-	const handleSignInSubmit = useCallback((): void => {
-		// TODO: handle sign in
-	}, []);
+	const handleSignInSubmit = useCallback(
+		(payload: UserSignInRequestDto): void => {
+			void dispatch(authActions.signIn(payload));
+		},
+		[dispatch],
+	);
 
 	const handleSignUpSubmit = useCallback(
 		(payload: UserSignUpRequestDto): void => {

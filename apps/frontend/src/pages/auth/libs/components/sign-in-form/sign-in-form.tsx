@@ -1,6 +1,6 @@
 import { Button, Input, Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
+import { useAppForm } from "~/libs/hooks/hooks.js";
 import {
 	type UserSignInRequestDto,
 	userSignInValidationSchema,
@@ -19,19 +19,10 @@ const SignInForm = ({ onSubmit }: Properties): React.JSX.Element => {
 		validationSchema: userSignInValidationSchema,
 	});
 
-	const handleFormSubmit = useCallback(
-		(event_: React.BaseSyntheticEvent): void => {
-			void handleSubmit((formData: UserSignInRequestDto) => {
-				onSubmit(formData);
-			})(event_);
-		},
-		[handleSubmit, onSubmit],
-	);
-
 	return (
 		<div className={styles["container"]}>
 			<h1 className={styles["form-title"]}>Log In</h1>
-			<form className={styles["form"]} onSubmit={handleFormSubmit}>
+			<form className={styles["form"]} onSubmit={handleSubmit(onSubmit)}>
 				<Input
 					autocomplete="email"
 					control={control}

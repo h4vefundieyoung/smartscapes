@@ -21,11 +21,27 @@ import {
  * @swagger
  * components:
  *   schemas:
+ *     Location:
+ *       type: object
+ *       properties:
+ *         coordinates:
+ *           type: array
+ *           items:
+ *             type: number
+ *           minItems: 2
+ *           maxItems: 2
+ *           example: [-73.968285, 40.785091]
+ *         type:
+ *           type: string
+ *           enum: [Point]
+ *           example: "Point"
  *     PointsOfInterest:
  *       type: object
  *       properties:
  *         id:
  *           type: number
+ *         location:
+ *           $ref: '#/components/schemas/Location'
  *         name:
  *           type: string
  *           example: "Central Park"
@@ -93,10 +109,14 @@ class PointsOfInterestController extends BaseController {
 	 *           schema:
 	 *             type: object
 	 *             required:
+	 *               - location
 	 *               - name
 	 *             properties:
+	 *               location:
+	 *                 $ref: '#/components/schemas/Location'
 	 *               name:
 	 *                 type: string
+	 *                 example: "Central Park"
 	 *     responses:
 	 *       201:
 	 *         description: Point of interest created successfully
@@ -239,11 +259,12 @@ class PointsOfInterestController extends BaseController {
 	 *         application/json:
 	 *           schema:
 	 *             type: object
-	 *             required:
-	 *               - name
 	 *             properties:
+	 *               location:
+	 *                 $ref: '#/components/schemas/Location'
 	 *               name:
 	 *                 type: string
+	 *                 example: "Updated Central Park"
 	 *     responses:
 	 *       200:
 	 *         description: Point of interest updated successfully

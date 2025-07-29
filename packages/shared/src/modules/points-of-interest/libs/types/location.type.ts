@@ -1,6 +1,8 @@
-type Location = {
+import { type PointsOfInterestLocationType } from "./location-type.type.js";
+
+type PointsOfInterestLocation = {
 	coordinates: [number, number];
-	type: "Point";
+	type: PointsOfInterestLocationType;
 };
 
-export { type Location };
+export { type PointsOfInterestLocation };

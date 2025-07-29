@@ -18,13 +18,15 @@ const initialState: State = {
 
 const { actions, name, reducer } = createSlice({
 	extraReducers(builder) {
-		builder.addCase(signUp.fulfilled, (state) => {
+		builder.addCase(signUp.fulfilled, (state, action) => {
+			state.authenticatedUser = action.payload.data.user;
 			state.dataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(signUp.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
 		});
 		builder.addCase(signUp.rejected, (state) => {
+			state.authenticatedUser = null;
 			state.dataStatus = DataStatus.REJECTED;
 		});
 

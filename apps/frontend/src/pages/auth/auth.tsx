@@ -32,6 +32,7 @@ const Auth = (): React.JSX.Element => {
 		},
 		[dispatch],
 	);
+
 	const handleSignUpSubmit = useCallback(
 		(payload: UserSignUpRequestDto): void => {
 			void dispatch(authActions.signUp(payload));
@@ -63,13 +64,10 @@ const Auth = (): React.JSX.Element => {
 	return (
 		<main className={styles["container"]}>
 			<div className={styles["left-panel"]}>
-				<img
-					alt="SmartScapes"
-					className={styles["logo"]}
-					height={24}
-					src={logo}
-					width={136}
-				/>
+				<div className={styles["logo"]}>
+					<img alt="SmartScapes" height="24" src={logo} width="136" />
+				</div>
+
 				{handleFormRender(pathname)}
 			</div>
 

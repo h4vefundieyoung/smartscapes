@@ -39,28 +39,27 @@ const App = (): React.JSX.Element => {
 
 	return (
 		<div className={styles["container"]}>
-			<Header user={mockUserWithoutAvatar} />
-			<Sidebar navigationItems={NAVIGATION_ITEMS} />
-
-			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
-			<ul className="App-navigation-list">
-				<li>
-					<Link to={AppRoute.ROOT}>Root</Link>
-				</li>
-				<li>
-					<Link to={AppRoute.SIGN_IN}>Sign in</Link>
-				</li>
-				<li>
-					<Link to={AppRoute.SIGN_UP}>Sign up</Link>
-				</li>
-			</ul>
-			<p>Current path: {pathname}</p>
-
-			<div>
+			<div className={styles["outlet-container"]}>
 				<RouterOutlet />
 			</div>
 			{isRoot && (
 				<>
+					<Header user={mockUserWithoutAvatar} />
+					<Sidebar navigationItems={NAVIGATION_ITEMS} />
+
+					<img alt="logo" className="App-logo" src={reactLogo} width="30" />
+					<ul className="App-navigation-list">
+						<li>
+							<Link to={AppRoute.ROOT}>Root</Link>
+						</li>
+						<li>
+							<Link to={AppRoute.SIGN_IN}>Sign in</Link>
+						</li>
+						<li>
+							<Link to={AppRoute.SIGN_UP}>Sign up</Link>
+						</li>
+					</ul>
+					<p>Current path: {pathname}</p>
 					<p>State: {dataStatus}</p>
 					<Loader />
 					<h3>Users:</h3>

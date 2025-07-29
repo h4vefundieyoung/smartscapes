@@ -56,10 +56,10 @@ class PointsOfInterestRepository implements Repository {
 	public async findByName(
 		name: string,
 	): Promise<null | PointsOfInterestEntity> {
-		const [point] = await this.pointsOfInterestModel
+		const point = await this.pointsOfInterestModel
 			.query()
-			.where("name", "=", name)
-			.execute();
+			.where("name", "ilike", name)
+			.first();
 
 		return point ? PointsOfInterestEntity.initialize(point) : null;
 	}

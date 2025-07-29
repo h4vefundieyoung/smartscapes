@@ -1,6 +1,6 @@
 import { HTTPCode, HTTPError, type ValueOf } from "@smartscapes/shared";
 
-import { AuthorizationExceptionMessage } from "../enums/auth-exception-message.enum.js";
+import { AuthorizationExceptionMessage } from "~/modules/auth/libs/enums/enums.js";
 
 type Constructor = {
 	cause?: unknown;

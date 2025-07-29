@@ -8,7 +8,7 @@ import {
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
 
-import { AuthorizationExceptionMessage } from "./libs/enums/auth-exception-message.enum.js";
+import { AuthorizationExceptionMessage } from "./libs/enums/enums.js";
 import { AuthorizationError } from "./libs/exceptions/auth.exception.js";
 
 type Constructor = {

@@ -75,6 +75,30 @@ class AuthController extends BaseController {
 		});
 	}
 
+	/**
+	 * @swagger
+	 * /auth/sign-in:
+	 *   post:
+	 *     tags:
+	 *       - Auth
+	 *     summary: Sign in a user
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             $ref: '#/components/schemas/UserSignInRequestDto'
+	 *     responses:
+	 *       200:
+	 *         description: Successful sign-in
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/UserAuthResponseDto'
+	 */
 	public async signIn(
 		options: APIHandlerOptions<{
 			body: UserSignInRequestDto;

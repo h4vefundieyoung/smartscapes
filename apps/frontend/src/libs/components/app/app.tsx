@@ -71,14 +71,9 @@ const App = (): React.JSX.Element => {
 						))}
 					</ul>
 					<Button label="Button for test" type="button" />
+					<Carousel images={mockImages} />
 				</>
 			)}
-			<div
-				className="any-parent-container"
-				style={{ margin: "0 auto", maxWidth: "1000px", padding: "1rem" }}
-			>
-				<Carousel images={mockImages} />
-			</div>
 		</div>
 	);
 };

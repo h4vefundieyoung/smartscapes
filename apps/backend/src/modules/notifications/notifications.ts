@@ -6,10 +6,10 @@ import { NotificationRepository } from "./notification.repository.js";
 import { NotificationService } from "./notification.service.js";
 
 const notificationRepository = new NotificationRepository(NotificationModel);
-const notificaitonService = new NotificationService(notificationRepository);
+const notificationService = new NotificationService(notificationRepository);
 const notificationController = new NotificationController(
 	logger,
-	notificaitonService,
+	notificationService,
 );
 
 export { notificationController };

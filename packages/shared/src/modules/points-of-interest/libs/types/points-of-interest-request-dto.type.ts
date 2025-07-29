@@ -1,4 +1,5 @@
 type PointsOfInterestRequestDto = {
+	location: Location;
 	name: string;
 };
 

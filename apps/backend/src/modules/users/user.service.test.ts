@@ -27,6 +27,7 @@ describe("UserService", () => {
 		const userService = new UserService(userRepository);
 
 		const result = await userService.create({
+			confirmPassword: "Password",
 			email: mockUser.email,
 			firstName: mockUser.firstName,
 			lastName: mockUser.lastName,

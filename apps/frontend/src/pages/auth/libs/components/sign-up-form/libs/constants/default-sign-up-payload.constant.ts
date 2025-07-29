@@ -1,6 +1,7 @@
-import { type UserSignUpRequestDto } from "~/modules/users/users.js";
+import { type UserSignUpRequestDto } from "@smartscapes/shared";
 
 const DEFAULT_SIGN_UP_PAYLOAD: UserSignUpRequestDto = {
+	confirmPassword: "",
 	email: "",
 	firstName: "",
 	lastName: "",

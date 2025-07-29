@@ -1,3 +1,5 @@
+import { type UserAuthResponseDto } from "@smartscapes/shared";
+
 import { APIPath } from "~/libs/enums/enums.js";
 import {
 	type APIHandlerOptions,
@@ -14,6 +16,7 @@ import {
 
 import { type AuthService } from "./auth.service.js";
 import { AuthApiPath } from "./libs/enums/enums.js";
+import { AuthError } from "./libs/exceptions/unauthorized.exception.js";
 
 /**
  * @swagger
@@ -61,6 +64,43 @@ class AuthController extends BaseController {
 				body: userSignUpValidationSchema,
 			},
 		});
+
+		this.addRoute({
+			handler: this.getAuthenticatedUser.bind(this),
+			method: "GET",
+			path: AuthApiPath.AUTH_USER,
+		});
+	}
+
+	/**
+	 * @swagger
+	 * /auth/authenticated-user:
+	 *    get:
+	 *      tags:
+	 *       - Auth
+	 *      summary: Get authorized user
+	 *      responses:
+	 *        200:
+	 *          description: User authorized
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  data:
+	 *                    $ref: '#/components/schemas/UserAuthResponseDto'
+	 */
+	public getAuthenticatedUser({
+		user,
+	}: APIHandlerOptions): APIHandlerResponse<UserAuthResponseDto> {
+		if (!user) {
+			throw new AuthError();
+		}
+
+		return {
+			payload: { data: user },
+			status: HTTPCode.OK,
+		};
 	}
 
 	/**

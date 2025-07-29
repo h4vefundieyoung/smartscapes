@@ -2,12 +2,13 @@ import { type FastifyInstance, type FastifyRequest } from "fastify";
 import fastifyPlugin from "fastify-plugin";
 
 import { type HTTPMethod } from "~/libs/types/types.js";
+import { AuthError } from "~/modules/auth/libs/exceptions/exceptions.js";
 import { userService } from "~/modules/users/users.js";
 
 import { tokenService } from "../../token/token.js";
-import { AuthError } from "./auth.exception.js";
 
 type PluginOptions = {
+	basePath: string;
 	whiteRoutesList: WhiteRoute[];
 };
 
@@ -22,13 +23,29 @@ type WhiteRoute = {
 
 const auth = (
 	app: FastifyInstance,
-	{ whiteRoutesList }: PluginOptions,
+	{ basePath, whiteRoutesList }: PluginOptions,
 ): void => {
 	const requestHandler = async (request: FastifyRequest): Promise<void> => {
 		const { headers, method, url } = request;
 
 		const isWhiteListRoute = whiteRoutesList.some(
-			({ method: _method, path }) => url.endsWith(path) && _method === method,
+			({ method: _method, path }) => {
+				if (_method !== method) {
+					return false;
+				}
+
+				const isRootPath = path.includes("/*");
+
+				if (!isRootPath) {
+					return url.endsWith(path);
+				}
+
+				const firstCharIndex = 0;
+				const lastCharIndex = -2;
+				const rootPath = `${basePath}${path.slice(firstCharIndex, lastCharIndex)}`;
+
+				return url.startsWith(rootPath);
+			},
 		);
 
 		if (isWhiteListRoute) {

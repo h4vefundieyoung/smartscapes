@@ -34,8 +34,7 @@ describe("AuthController", () => {
 		const mockResponseData: UserSignUpResponseDto = {
 			token: mockToken,
 			user: {
-				email: mockUser.email,
-				id: mockUser.id,
+				...mockUser,
 			},
 		};
 
@@ -65,8 +64,7 @@ describe("AuthController", () => {
 				data: {
 					token: mockToken,
 					user: {
-						email: mockUser.email,
-						id: mockUser.id,
+						...mockUser,
 					},
 				},
 			},

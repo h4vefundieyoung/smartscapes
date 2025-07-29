@@ -194,7 +194,11 @@ class BaseServerApplication implements ServerApplication {
 	}
 
 	private async initPlugins(): Promise<void> {
-		await this.app.register(authPlugin, { whiteRoutesList: WHITE_ROUTES });
+		const basePath = this.apis[0]?.basePath ?? "";
+		await this.app.register(authPlugin, {
+			basePath,
+			whiteRoutesList: WHITE_ROUTES,
+		});
 	}
 
 	private initRoutes(): void {

@@ -13,6 +13,8 @@ import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
 import { NotFound } from "~/pages/not-found/not-found.jsx";
 
+import { Landing } from "./pages/landing/landing.jsx";
+
 pwa.register();
 
 createRoot(document.querySelector("#root") as HTMLElement).render(
@@ -32,6 +34,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 							},
 						],
 						element: <App />,
+						path: AppRoute.APP,
+					},
+					{
+						element: <Landing />,
 						path: AppRoute.ROOT,
 					},
 					{

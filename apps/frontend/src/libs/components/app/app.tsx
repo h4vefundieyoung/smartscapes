@@ -1,10 +1,13 @@
 import reactLogo from "~/assets/images/react.svg";
 import {
 	Button,
+	Header,
 	Link,
 	Loader,
 	RouterOutlet,
+	Sidebar,
 } from "~/libs/components/components.js";
+import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -21,7 +24,11 @@ const App = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const dataStatus = useAppSelector(({ users }) => users.dataStatus);
 	const users = useAppSelector(({ users }) => users.data);
-
+	const mockUserWithoutAvatar = {
+		avatarUrl: null,
+		firstName: "John",
+		lastName: "Smith",
+	};
 	const isRoot = pathname === AppRoute.ROOT;
 
 	useEffect(() => {
@@ -32,25 +39,27 @@ const App = (): React.JSX.Element => {
 
 	return (
 		<div className={styles["container"]}>
-			<img alt="logo" className="App-logo" src={reactLogo} width="30" />
-			<ul className="App-navigation-list">
-				<li>
-					<Link to={AppRoute.ROOT}>Root</Link>
-				</li>
-				<li>
-					<Link to={AppRoute.SIGN_IN}>Sign in</Link>
-				</li>
-				<li>
-					<Link to={AppRoute.SIGN_UP}>Sign up</Link>
-				</li>
-			</ul>
-			<p>Current path: {pathname}</p>
-
-			<div>
+			<div className={styles["outlet-container"]}>
 				<RouterOutlet />
 			</div>
 			{isRoot && (
 				<>
+					<Header user={mockUserWithoutAvatar} />
+					<Sidebar navigationItems={NAVIGATION_ITEMS} />
+
+					<img alt="logo" className="App-logo" src={reactLogo} width="30" />
+					<ul className="App-navigation-list">
+						<li>
+							<Link to={AppRoute.ROOT}>Root</Link>
+						</li>
+						<li>
+							<Link to={AppRoute.SIGN_IN}>Sign in</Link>
+						</li>
+						<li>
+							<Link to={AppRoute.SIGN_UP}>Sign up</Link>
+						</li>
+					</ul>
+					<p>Current path: {pathname}</p>
 					<p>State: {dataStatus}</p>
 					<Loader />
 					<h3>Users:</h3>

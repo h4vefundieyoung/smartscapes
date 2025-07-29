@@ -4,11 +4,11 @@ import { type WhiteRoute } from "../types/types.js";
 
 const WHITE_ROUTES: WhiteRoute[] = [
 	{
-		method: "POST" as const,
+		method: "POST",
 		path: `${APIPath.AUTH}${AuthApiPath.SIGN_IN}`,
 	},
 	{
-		method: "POST" as const,
+		method: "POST",
 		path: `${APIPath.AUTH}${AuthApiPath.SIGN_UP}`,
 	},
 ];

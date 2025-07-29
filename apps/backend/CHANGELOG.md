@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.5.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.4.0...backend-v1.5.0) (2025-07-29)
+
+
+### Features
+
+* **backend/shared:** add POIs module ss-52 ([#59](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/59)) ([15ef7fc](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/15ef7fc22a60b2a310f8bd52e6c068258fe89cdd))
+* **frontend/shared:** add sign-in flow to the frontend ss-14 ([#57](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/57)) ([f376d4a](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/f376d4a0d69949f98dd5a3258db9d2664deea568))
+
+## [1.4.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.3.0...backend-v1.4.0) (2025-07-29)
+
+
+### Features
+
+* **backend:** add groups and permissions tables and seeds ss-49 ([#55](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/55)) ([c30a214](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c30a214b14a5a93435ceab298cefcb26296a6706))
+* **backend:** eliminate unnecessary payload nesting when creating JWT token ss-85 ([#86](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/86)) ([f9c62ff](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/f9c62fffdfb2485f3c4ff5f6bcfb8437929da8ba))
+* **frontend/shared:** add sign up flow to the frontend ss-15 ([#47](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/47)) ([127f561](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/127f5610808e212cc051b5c12882d2a5bbc1b85c))
+
 ## [1.3.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.2.0...backend-v1.3.0) (2025-07-24)
 
 

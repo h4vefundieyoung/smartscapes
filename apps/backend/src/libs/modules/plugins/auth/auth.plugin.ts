@@ -50,7 +50,7 @@ const auth = (
 		request.user = user;
 	};
 
-	app.decorate("user", null);
+	app.decorateRequest("user", null);
 	app.addHook("onRequest", requestHandler);
 };
 

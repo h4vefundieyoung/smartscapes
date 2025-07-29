@@ -104,7 +104,7 @@ describe("BaseController", () => {
 			body: mockRequest.body,
 			params: mockRequest.params,
 			query: mockRequest.query,
-			user: null,
+			user: undefined,
 		});
 
 		assert.strictEqual(sentStatus, responseStatus);

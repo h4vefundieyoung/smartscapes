@@ -1,7 +1,10 @@
 import { useCallback } from "react";
 
 import { carouselConfig } from "../enums/enums.js";
-import { getCarouselParameters } from "../helpers/helpers.js";
+import {
+	getCarouselParameters,
+	snapToNearestItem,
+} from "../helpers/helpers.js";
 import { type CarouselReference } from "../types/types.js";
 
 type CarouselMomentumProperties = {
@@ -26,13 +29,17 @@ const useCarouselMomentum = ({
 
 		carouselReference.velocity.current *= carouselConfig.FRICTION;
 
-		if (
-			Math.abs(carouselReference.velocity.current) < carouselConfig.MIN_VELOCITY
-		) {
+		const isVelocityLessThanMinVelocity =
+			Math.abs(carouselReference.velocity.current) <
+			carouselConfig.MIN_VELOCITY;
+
+		if (isVelocityLessThanMinVelocity) {
 			carouselReference.velocity.current = 0;
 			carouselReference.momentumID.current = null;
 
 			handleBoundaryCollision();
+
+			snapToNearestItem(carouselReference, carouselConfig.SNAP_DELAY);
 
 			return;
 		}

@@ -27,10 +27,19 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath } from "./modules/auth/auth.js";
 export {
+	pointOfInterestCreateValidationSchema,
+	pointOfInterestUpdateValidationSchema,
+	type PointsOfInterestRequestDto,
+	type PointsOfInterestResponseDto,
+} from "./modules/points-of-interest/points-of-interest.js";
+export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetAllItemResponseDto,
 	UsersApiPath,
+	type UserSignInRequestDto,
+	type UserSignInResponseDto,
+	userSignInValidationSchema,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 	userSignUpValidationSchema,

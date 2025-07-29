@@ -60,6 +60,55 @@ class UserService implements Service {
 
 		return user ? user.toObject() : null;
 	}
+
+	public async follow(followerId: number, followingId: number): Promise<void> {
+		if (followerId === followingId) {
+			throw new UserError({
+				message: "Cannot follow yourself",
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
+		const isAlreadyFollowing = await this.userRepository.isFollowing(
+			followerId,
+			followingId,
+		);
+
+		if (isAlreadyFollowing) {
+			throw new UserError({
+				message: "Already following this user",
+				status: HTTPCode.CONFLICT,
+			});
+		}
+
+		await this.userRepository.followUser(followerId, followingId);
+	}
+
+	public async unfollow(
+		followerId: number,
+		followingId: number,
+	): Promise<void> {
+		if (followerId === followingId) {
+			throw new UserError({
+				message: "Cannot unfollow yourself",
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
+		const isAlreadyFollowing = await this.userRepository.isFollowing(
+			followerId,
+			followingId,
+		);
+
+		if (!isAlreadyFollowing) {
+			throw new UserError({
+				message: "Not following this user",
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
+		await this.userRepository.unfollowUser(followerId, followingId);
+	}
 }
 
 export { UserService };

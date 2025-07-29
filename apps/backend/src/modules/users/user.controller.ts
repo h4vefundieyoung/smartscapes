@@ -1,5 +1,6 @@
 import { APIPath } from "~/libs/enums/enums.js";
 import {
+	type APIHandlerOptions,
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
@@ -36,6 +37,18 @@ class UserController extends BaseController {
 			method: "GET",
 			path: UsersApiPath.ROOT,
 		});
+
+		this.addRoute({
+			handler: this.follow.bind(this),
+			method: "POST",
+			path: UsersApiPath.FOLLOW,
+		});
+
+		this.addRoute({
+			handler: this.unfollow.bind(this),
+			method: "DELETE",
+			path: UsersApiPath.UNFOLLOW,
+		});
 	}
 
 	/**
@@ -65,6 +78,36 @@ class UserController extends BaseController {
 
 		return {
 			payload: { data: items },
+			status: HTTPCode.OK,
+		};
+	}
+
+	public async follow(
+		request: APIHandlerOptions<{
+			body: { followingId: string };
+			params: { id: string };
+		}>,
+	): Promise<APIHandlerResponse> {
+		const { followingId } = request.body;
+		const { id: followerId } = request.params;
+
+		await this.userService.follow(Number(followerId), Number(followingId));
+
+		return {
+			payload: null,
+			status: HTTPCode.OK,
+		};
+	}
+
+	public async unfollow(
+		request: APIHandlerOptions<{ params: { id: string; userId: string } }>,
+	): Promise<APIHandlerResponse> {
+		const { id: followingId, userId: followerId } = request.params;
+
+		await this.userService.unfollow(Number(followerId), Number(followingId));
+
+		return {
+			payload: null,
 			status: HTTPCode.OK,
 		};
 	}

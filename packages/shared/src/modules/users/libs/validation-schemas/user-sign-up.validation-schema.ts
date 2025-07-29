@@ -7,6 +7,9 @@ const userSignUp = z
 		confirmPassword: z
 			.string()
 			.trim()
+			.nonempty({
+				error: UserValidationMessage.PASSWORD_REQUIRED,
+			})
 			.min(UserValidationRule.PASSWORD_MINIMUM_LENGTH, {
 				error: UserValidationMessage.PASSWORD_MINIMUM_LENGTH,
 			}),
@@ -21,18 +24,27 @@ const userSignUp = z
 		firstName: z
 			.string()
 			.trim()
-			.min(UserValidationRule.FIRST_NAME_MINIMUM_LENGTH, {
+			.nonempty({
 				error: UserValidationMessage.FIRST_NAME_REQUIRED,
+			})
+			.min(UserValidationRule.FIRST_NAME_MINIMUM_LENGTH, {
+				error: UserValidationMessage.FIRST_NAME_MINIMUM_LENGTH,
 			}),
 		lastName: z
 			.string()
 			.trim()
-			.min(UserValidationRule.LAST_NAME_MINIMUM_LENGTH, {
+			.nonempty({
 				error: UserValidationMessage.LAST_NAME_REQUIRED,
+			})
+			.min(UserValidationRule.LAST_NAME_MINIMUM_LENGTH, {
+				error: UserValidationMessage.LAST_NAME_MINIMUM_LENGTH,
 			}),
 		password: z
 			.string()
 			.trim()
+			.nonempty({
+				error: UserValidationMessage.PASSWORD_REQUIRED,
+			})
 			.min(UserValidationRule.PASSWORD_MINIMUM_LENGTH, {
 				error: UserValidationMessage.PASSWORD_MINIMUM_LENGTH,
 			}),

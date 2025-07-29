@@ -21,4 +21,5 @@ export {
 	userSignInValidationSchema,
 	userSignUpValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
+export { UserEntity } from "./user.entity.js";
 export { type UserService } from "./user.service.js";

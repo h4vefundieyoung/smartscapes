@@ -46,6 +46,23 @@ class PointsOfInterestService implements Service {
 		return await this.pointsOfInterestRepository.delete(id);
 	}
 
+	public async ensureIdExists(id: number): Promise<void> {
+		const exists = await this.exists(id);
+
+		if (!exists) {
+			throw new PointOfInterestError({
+				message: PointOfInterestExceptionMessage.ID_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+	}
+
+	public async exists(id: number): Promise<boolean> {
+		const poi = await this.pointsOfInterestRepository.find(id);
+
+		return !!poi;
+	}
+
 	public async find(id: number): Promise<PointsOfInterestResponseDto> {
 		await this.ensureIdExists(id);
 
@@ -110,17 +127,6 @@ class PointsOfInterestService implements Service {
 			...object,
 			id: object.id,
 		};
-	}
-
-	private async ensureIdExists(id: number): Promise<void> {
-		const exists = await this.pointsOfInterestRepository.find(id);
-
-		if (!exists) {
-			throw new PointOfInterestError({
-				message: PointOfInterestExceptionMessage.ID_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
 	}
 
 	private async ensureNameIsUnique(name: string): Promise<void> {

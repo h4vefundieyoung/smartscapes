@@ -33,6 +33,11 @@ export {
 	type PointsOfInterestResponseDto,
 } from "./modules/points-of-interest/points-of-interest.js";
 export {
+	routesCreateValidationSchema,
+	type RoutesRequestDto,
+	type RoutesResponseDto,
+} from "./modules/routes/routes.js";
+export {
 	UserExceptionMessage,
 	type UserGetAllItemResponseDto,
 	UsersApiPath,

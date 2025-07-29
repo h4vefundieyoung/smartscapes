@@ -235,7 +235,7 @@ class PointsOfInterestController extends BaseController {
 	/**
 	 * @swagger
 	 * /points-of-interest/{id}:
-	 *   put:
+	 *   patch:
 	 *     tags:
 	 *       - Points of Interest
 	 *     summary: Update a point of interest

@@ -125,8 +125,9 @@ describe("RouteCategoryService", () => {
 			await routeCategoryService.findByName("Non Existent");
 			assert.fail("expected exception not thrown");
 		} catch (error) {
-			assert.ok(error instanceof Error);
+			assert.ok(error instanceof RouteCategoryError);
 			assert.equal(error.message, RouteCategoryExceptionMessage.NOT_FOUND);
+			assert.equal(error.status, HTTPCode.NOT_FOUND);
 		}
 	});
 });

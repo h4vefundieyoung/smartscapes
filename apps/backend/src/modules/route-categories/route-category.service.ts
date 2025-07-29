@@ -55,7 +55,10 @@ class RouteCategoryService implements Service {
 		const item = await this.routeCategoryRepository.findByName(normalizedName);
 
 		if (!item) {
-			throw new Error(RouteCategoryExceptionMessage.NOT_FOUND);
+			throw new RouteCategoryError({
+				message: RouteCategoryExceptionMessage.NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
 		}
 
 		return item.toObject();

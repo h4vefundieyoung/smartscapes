@@ -39,8 +39,13 @@ describe("RoutesService", () => {
 		} as RoutesRepository;
 
 		const pointsOfInterestService = {
-			ensureIdExists: (() =>
-				Promise.resolve()) as PointsOfInterestService["ensureIdExists"],
+			findById: ((id: number) =>
+				Promise.resolve({
+					createdAt: new Date().toISOString(),
+					description: "Test POI description",
+					id,
+					name: "Test POI",
+				})) as PointsOfInterestService["findById"],
 		} as PointsOfInterestService;
 
 		const routesService = new RoutesService(
@@ -61,10 +66,10 @@ describe("RoutesService", () => {
 		const routesRepository = {} as RoutesRepository;
 
 		const pointsOfInterestService = {
-			ensureIdExists: (() =>
+			findById: (() =>
 				Promise.reject(
 					new Error("POI not found"),
-				)) as PointsOfInterestService["ensureIdExists"],
+				)) as PointsOfInterestService["findById"],
 		} as PointsOfInterestService;
 
 		const routesService = new RoutesService(
@@ -159,8 +164,13 @@ describe("RoutesService", () => {
 		} as RoutesRepository;
 
 		const pointsOfInterestService = {
-			ensureIdExists: (() =>
-				Promise.resolve()) as PointsOfInterestService["ensureIdExists"],
+			findById: ((id: number) =>
+				Promise.resolve({
+					createdAt: new Date().toISOString(),
+					description: "Test POI description",
+					id,
+					name: "Test POI",
+				})) as PointsOfInterestService["findById"],
 		} as PointsOfInterestService;
 
 		const routesService = new RoutesService(
@@ -183,8 +193,13 @@ describe("RoutesService", () => {
 		} as RoutesRepository;
 
 		const pointsOfInterestService = {
-			ensureIdExists: (() =>
-				Promise.resolve()) as PointsOfInterestService["ensureIdExists"],
+			findById: ((id: number) =>
+				Promise.resolve({
+					createdAt: new Date().toISOString(),
+					description: "Test POI description",
+					id,
+					name: "Test POI",
+				})) as PointsOfInterestService["findById"],
 		} as PointsOfInterestService;
 
 		const routesService = new RoutesService(
@@ -205,10 +220,10 @@ describe("RoutesService", () => {
 		const routesRepository = {} as RoutesRepository;
 
 		const pointsOfInterestService = {
-			ensureIdExists: (() =>
+			findById: (() =>
 				Promise.reject(
 					new Error("POI not found"),
-				)) as PointsOfInterestService["ensureIdExists"],
+				)) as PointsOfInterestService["findById"],
 		} as PointsOfInterestService;
 
 		const routesService = new RoutesService(

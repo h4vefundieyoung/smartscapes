@@ -21,8 +21,6 @@ describe("PointsOfInterestController", () => {
 
 	const mockPointOfInterest = {
 		id: 1,
-		latitude: 40.7829,
-		longitude: -73.9654,
 		name: "Point Of Interest Test Name",
 	};
 
@@ -68,8 +66,6 @@ describe("PointsOfInterestController", () => {
 
 		const result = await pointsOfInterestController.create({
 			body: {
-				latitude: mockPointOfInterest.latitude,
-				longitude: mockPointOfInterest.longitude,
 				name: mockPointOfInterest.name,
 			},
 			params: {},
@@ -85,12 +81,12 @@ describe("PointsOfInterestController", () => {
 	});
 
 	it("find should return point of interest by id", async () => {
-		const mockFind: PointsOfInterestService["find"] = () => {
+		const mockFind: PointsOfInterestService["findById"] = () => {
 			return Promise.resolve(mockPointOfInterest);
 		};
 
 		const pointsOfInterestService = {
-			find: mockFind,
+			findById: mockFind,
 		} as PointsOfInterestService;
 
 		const pointsOfInterestController = new PointsOfInterestController(
@@ -98,7 +94,7 @@ describe("PointsOfInterestController", () => {
 			pointsOfInterestService,
 		);
 
-		const result = await pointsOfInterestController.find({
+		const result = await pointsOfInterestController.findById({
 			body: {},
 			params: { id: "1" },
 			query: {},
@@ -118,12 +114,12 @@ describe("PointsOfInterestController", () => {
 			name: "Updated Point Of Interest Test Name",
 		};
 
-		const mockUpdate: PointsOfInterestService["update"] = () => {
+		const mockUpdate: PointsOfInterestService["patch"] = () => {
 			return Promise.resolve(updatedPointOfInterest);
 		};
 
 		const pointsOfInterestService = {
-			update: mockUpdate,
+			patch: mockUpdate,
 		} as PointsOfInterestService;
 
 		const pointsOfInterestController = new PointsOfInterestController(
@@ -131,10 +127,8 @@ describe("PointsOfInterestController", () => {
 			pointsOfInterestService,
 		);
 
-		const result = await pointsOfInterestController.update({
+		const result = await pointsOfInterestController.patch({
 			body: {
-				latitude: updatedPointOfInterest.latitude,
-				longitude: updatedPointOfInterest.longitude,
 				name: updatedPointOfInterest.name,
 			},
 			params: { id: "1" },

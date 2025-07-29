@@ -5,28 +5,10 @@ import {
 	PointsOfInterestValidationRule,
 } from "../enums/enums.js";
 
-const MINIMUM_FIELDS_REQUIRED = 1;
+const MINIMUM_FIELDS_TO_UPDATE = 1;
 
 const pointOfInterestUpdate = z
 	.strictObject({
-		latitude: z
-			.number()
-			.min(PointsOfInterestValidationRule.LATITUDE_MINIMUM, {
-				message: PointsOfInterestValidationMessage.LATITUDE_MINIMUM,
-			})
-			.max(PointsOfInterestValidationRule.LATITUDE_MAXIMUM, {
-				message: PointsOfInterestValidationMessage.LATITUDE_MAXIMUM,
-			})
-			.optional(),
-		longitude: z
-			.number()
-			.min(PointsOfInterestValidationRule.LONGITUDE_MINIMUM, {
-				message: PointsOfInterestValidationMessage.LONGITUDE_MINIMUM,
-			})
-			.max(PointsOfInterestValidationRule.LONGITUDE_MAXIMUM, {
-				message: PointsOfInterestValidationMessage.LONGITUDE_MAXIMUM,
-			})
-			.optional(),
 		name: z
 			.string()
 			.min(PointsOfInterestValidationRule.NAME_MINIMUM_LENGTH, {
@@ -39,10 +21,10 @@ const pointOfInterestUpdate = z
 	})
 	.refine(
 		(data) => {
-			return Object.keys(data).length >= MINIMUM_FIELDS_REQUIRED;
+			return Object.keys(data).length >= MINIMUM_FIELDS_TO_UPDATE;
 		},
 		{
-			message: "At least one field must be provided for update",
+			message: PointsOfInterestValidationMessage.REQUIRED_FIELDS_FOR_UPDATE,
 		},
 	);
 

@@ -12,13 +12,11 @@ class PointsOfInterestRepository implements Repository {
 	public async create(
 		entity: PointsOfInterestEntity,
 	): Promise<PointsOfInterestEntity> {
-		const { latitude, longitude, name } = entity.toNewObject();
+		const { name } = entity.toNewObject();
 
 		const pointOfInterest = await this.pointsOfInterestModel
 			.query()
 			.insert({
-				latitude,
-				longitude,
 				name,
 			})
 			.returning("*")
@@ -33,18 +31,7 @@ class PointsOfInterestRepository implements Repository {
 			.deleteById(id)
 			.execute();
 
-		return !!deletedCount;
-	}
-
-	public async find(id: number): Promise<null | PointsOfInterestEntity> {
-		const pointOfInterest = await this.pointsOfInterestModel
-			.query()
-			.findById(id)
-			.execute();
-
-		return pointOfInterest
-			? PointsOfInterestEntity.initialize(pointOfInterest)
-			: null;
+		return Boolean(deletedCount);
 	}
 
 	public async findAll(): Promise<PointsOfInterestEntity[]> {
@@ -55,37 +42,44 @@ class PointsOfInterestRepository implements Repository {
 		);
 	}
 
+	public async findById(id: number): Promise<null | PointsOfInterestEntity> {
+		const pointOfInterest = await this.pointsOfInterestModel
+			.query()
+			.findById(id)
+			.execute();
+
+		return pointOfInterest
+			? PointsOfInterestEntity.initialize(pointOfInterest)
+			: null;
+	}
+
 	public async findByName(
 		name: string,
 	): Promise<null | PointsOfInterestEntity> {
-		const [point] = await this.pointsOfInterestModel
+		const point = await this.pointsOfInterestModel
 			.query()
-			.where("name", "=", name)
-			.execute();
+			.where("name", "ilike", name)
+			.first();
 
-		if (!point) {
-			return null;
-		}
-
-		return PointsOfInterestEntity.initialize(point);
+		return point ? PointsOfInterestEntity.initialize(point) : null;
 	}
 
-	public async update(
+	public async patch(
 		id: number,
 		entity: PointsOfInterestEntity,
 	): Promise<null | PointsOfInterestEntity> {
-		const { latitude, longitude, name } = entity.toNewObject();
+		const { name } = entity.toNewObject();
 
-		const updatedPointOfInterest = await this.pointsOfInterestModel
+		const [updatedRow] = await this.pointsOfInterestModel
 			.query()
-			.patchAndFetchById(id, {
-				latitude,
-				longitude,
+			.patch({
 				name,
 			})
+			.where("id", "=", id)
+			.returning("*")
 			.execute();
 
-		return PointsOfInterestEntity.initialize(updatedPointOfInterest);
+		return updatedRow ? PointsOfInterestEntity.initialize(updatedRow) : null;
 	}
 }
 

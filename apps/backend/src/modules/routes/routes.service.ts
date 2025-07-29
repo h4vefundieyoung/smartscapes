@@ -109,7 +109,7 @@ class RoutesService implements Service {
 	}): Promise<void> {
 		for (const poiId of payload.pois) {
 			try {
-				await this.pointsOfInterestService.ensureIdExists(poiId);
+				await this.pointsOfInterestService.findById(poiId);
 			} catch {
 				throw new RoutesError({
 					message: RoutesExceptionMessage.POI_NOT_FOUND,

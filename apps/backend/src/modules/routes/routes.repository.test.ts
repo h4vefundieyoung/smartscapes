@@ -72,7 +72,11 @@ describe("RoutesRepository", () => {
 	it("update should return null when route to update not found", async () => {
 		const routeEntity = createMockRouteEntity();
 
+		databaseTracker.on.delete(DatabaseTableName.ROUTES_TO_POIS).response([]);
+
 		databaseTracker.on.update(DatabaseTableName.ROUTES).response([]);
+
+		databaseTracker.on.insert(DatabaseTableName.ROUTES_TO_POIS).response([]);
 
 		const result = await routesRepository.update(NON_EXISTENT_ID, routeEntity);
 

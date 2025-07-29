@@ -1,6 +1,3 @@
-import { type ValueOf } from "../../../../types/types.js";
-import { type HTTPMethodEnum } from "../enums/enums.js";
-
-type HTTPMethod = ValueOf<typeof HTTPMethodEnum>;
+type HTTPMethod = "DELETE" | "GET" | "PATCH" | "POST";
 
 export { type HTTPMethod };

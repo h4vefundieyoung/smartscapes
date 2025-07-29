@@ -22,60 +22,28 @@ class PointsOfInterestService implements Service {
 	): Promise<PointsOfInterestResponseDto> {
 		await this.ensureNameIsUnique(payload.name);
 
-		const { latitude, longitude, name } = payload;
+		const { name } = payload;
 
 		const item = await this.pointsOfInterestRepository.create(
 			PointsOfInterestEntity.initializeNew({
-				latitude,
-				longitude,
 				name,
 			}),
 		);
 
-		const object = item.toObject();
-
-		return {
-			...object,
-			id: object.id,
-		};
+		return item.toObject();
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		await this.ensureIdExists(id);
+		const isDeleted = await this.pointsOfInterestRepository.delete(id);
 
-		return await this.pointsOfInterestRepository.delete(id);
-	}
-
-	public async ensureIdExists(id: number): Promise<void> {
-		const exists = await this.exists(id);
-
-		if (!exists) {
+		if (!isDeleted) {
 			throw new PointOfInterestError({
 				message: PointOfInterestExceptionMessage.ID_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
-	}
 
-	public async exists(id: number): Promise<boolean> {
-		const poi = await this.pointsOfInterestRepository.find(id);
-
-		return !!poi;
-	}
-
-	public async find(id: number): Promise<PointsOfInterestResponseDto> {
-		await this.ensureIdExists(id);
-
-		const item = (await this.pointsOfInterestRepository.find(
-			id,
-		)) as PointsOfInterestEntity;
-
-		const object = item.toObject();
-
-		return {
-			...object,
-			id: object.id,
-		};
+		return true;
 	}
 
 	public async findAll(): Promise<
@@ -85,48 +53,47 @@ class PointsOfInterestService implements Service {
 
 		return {
 			items: items.map((item) => {
-				const object = item.toObject();
-
-				return {
-					...object,
-					id: object.id,
-				};
+				return item.toObject();
 			}),
 		};
 	}
 
-	public async update(
+	public async findById(id: number): Promise<PointsOfInterestResponseDto> {
+		const item = await this.pointsOfInterestRepository.findById(id);
+
+		if (!item) {
+			throw new PointOfInterestError({
+				message: PointOfInterestExceptionMessage.ID_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return item.toObject();
+	}
+
+	public async patch(
 		id: number,
 		payload: PointsOfInterestRequestDto,
 	): Promise<PointsOfInterestResponseDto> {
-		await this.ensureIdExists(id);
+		const { name } = payload;
 
-		await this.ensureNameIsUnique(payload.name);
+		await this.ensureNameIsUnique(name);
 
-		const { latitude, longitude, name } = payload;
-
-		const item = await this.pointsOfInterestRepository.update(
+		const item = await this.pointsOfInterestRepository.patch(
 			id,
 			PointsOfInterestEntity.initializeNew({
-				latitude,
-				longitude,
 				name,
 			}),
 		);
 
 		if (!item) {
 			throw new PointOfInterestError({
-				message: PointOfInterestExceptionMessage.UPDATE_FAILED,
-				status: HTTPCode.INTERNAL_SERVER_ERROR,
+				message: PointOfInterestExceptionMessage.ID_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
-		const object = item.toObject();
-
-		return {
-			...object,
-			id: object.id,
-		};
+		return item.toObject();
 	}
 
 	private async ensureNameIsUnique(name: string): Promise<void> {

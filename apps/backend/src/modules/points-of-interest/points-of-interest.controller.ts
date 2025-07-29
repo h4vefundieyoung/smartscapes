@@ -1,4 +1,4 @@
-import { APIPath, HTTPMethodEnum } from "~/libs/enums/enums.js";
+import { APIPath } from "~/libs/enums/enums.js";
 import {
 	type APIHandlerOptions,
 	type APIHandlerResponse,
@@ -29,12 +29,6 @@ import {
  *         name:
  *           type: string
  *           example: "Central Park"
- *         latitude:
- *           type: number
- *           example: 40.7829
- *         longitude:
- *           type: number
- *           example: -73.9654
  *
  */
 
@@ -50,7 +44,7 @@ class PointsOfInterestController extends BaseController {
 
 		this.addRoute({
 			handler: this.create.bind(this),
-			method: HTTPMethodEnum.POST,
+			method: "POST",
 			path: "/",
 			validation: {
 				body: pointOfInterestCreateValidationSchema,
@@ -59,25 +53,25 @@ class PointsOfInterestController extends BaseController {
 
 		this.addRoute({
 			handler: this.delete.bind(this),
-			method: HTTPMethodEnum.DELETE,
+			method: "DELETE",
 			path: "/:id",
 		});
 
 		this.addRoute({
-			handler: this.find.bind(this),
-			method: HTTPMethodEnum.GET,
+			handler: this.findById.bind(this),
+			method: "GET",
 			path: "/:id",
 		});
 
 		this.addRoute({
 			handler: this.findAll.bind(this),
-			method: HTTPMethodEnum.GET,
+			method: "GET",
 			path: "/",
 		});
 
 		this.addRoute({
-			handler: this.update.bind(this),
-			method: HTTPMethodEnum.PATCH,
+			handler: this.patch.bind(this),
+			method: "PATCH",
 			path: "/:id",
 			validation: {
 				body: pointOfInterestUpdateValidationSchema,
@@ -100,15 +94,9 @@ class PointsOfInterestController extends BaseController {
 	 *             type: object
 	 *             required:
 	 *               - name
-	 *               - latitude
-	 *               - longitude
 	 *             properties:
 	 *               name:
 	 *                 type: string
-	 *               latitude:
-	 *                 type: number
-	 *               longitude:
-	 *                 type: number
 	 *     responses:
 	 *       201:
 	 *         description: Point of interest created successfully
@@ -166,43 +154,6 @@ class PointsOfInterestController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /points-of-interest/{id}:
-	 *   get:
-	 *     tags:
-	 *       - Points of Interest
-	 *     summary: Get a point of interest by ID
-	 *     parameters:
-	 *       - in: path
-	 *         name: id
-	 *         required: true
-	 *         schema:
-	 *           type: string
-	 *     responses:
-	 *       200:
-	 *         description: Point of interest found
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               $ref: '#/components/schemas/PointsOfInterest'
-	 *       404:
-	 *         description: Point of interest not found
-	 */
-	public async find(
-		options: APIHandlerOptions<{
-			params: { id: string };
-		}>,
-	): Promise<APIHandlerResponse<PointsOfInterestResponseDto>> {
-		const id = Number(options.params.id);
-		const pointOfInterest = await this.pointsOfInterestService.find(id);
-
-		return {
-			payload: { data: pointOfInterest },
-			status: HTTPCode.OK,
-		};
-	}
-
-	/**
-	 * @swagger
 	 * /points-of-interest:
 	 *   get:
 	 *     tags:
@@ -235,6 +186,43 @@ class PointsOfInterestController extends BaseController {
 	/**
 	 * @swagger
 	 * /points-of-interest/{id}:
+	 *   get:
+	 *     tags:
+	 *       - Points of Interest
+	 *     summary: Get a point of interest by ID
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     responses:
+	 *       200:
+	 *         description: Point of interest found
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: '#/components/schemas/PointsOfInterest'
+	 *       404:
+	 *         description: Point of interest not found
+	 */
+	public async findById(
+		options: APIHandlerOptions<{
+			params: { id: string };
+		}>,
+	): Promise<APIHandlerResponse<PointsOfInterestResponseDto>> {
+		const id = Number(options.params.id);
+		const pointOfInterest = await this.pointsOfInterestService.findById(id);
+
+		return {
+			payload: { data: pointOfInterest },
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /points-of-interest/{id}:
 	 *   patch:
 	 *     tags:
 	 *       - Points of Interest
@@ -253,15 +241,9 @@ class PointsOfInterestController extends BaseController {
 	 *             type: object
 	 *             required:
 	 *               - name
-	 *               - latitude
-	 *               - longitude
 	 *             properties:
 	 *               name:
 	 *                 type: string
-	 *               latitude:
-	 *                 type: number
-	 *               longitude:
-	 *                 type: number
 	 *     responses:
 	 *       200:
 	 *         description: Point of interest updated successfully
@@ -272,7 +254,7 @@ class PointsOfInterestController extends BaseController {
 	 *       404:
 	 *         description: Point of interest not found
 	 */
-	public async update(
+	public async patch(
 		options: APIHandlerOptions<{
 			body: PointsOfInterestRequestDto;
 			params: { id: string };
@@ -280,7 +262,7 @@ class PointsOfInterestController extends BaseController {
 	): Promise<APIHandlerResponse<PointsOfInterestResponseDto>> {
 		const { body, params } = options;
 		const id = Number(params.id);
-		const pointOfInterest = await this.pointsOfInterestService.update(id, body);
+		const pointOfInterest = await this.pointsOfInterestService.patch(id, body);
 
 		return {
 			payload: { data: pointOfInterest },

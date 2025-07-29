@@ -111,10 +111,14 @@ class RoutesRepository implements Repository {
 	): Promise<null | RouteEntity> {
 		const { description, name, pois } = entity.toNewObject();
 
-		const updatedRoute = await this.routesModel
+		const updatedRoute = (await this.routesModel
 			.query()
 			.patchAndFetchById(id, { description, name })
-			.execute();
+			.execute()) as RoutesModel | undefined;
+
+		if (!updatedRoute) {
+			return null;
+		}
 
 		await this.routesModel
 			.knex()

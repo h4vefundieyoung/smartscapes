@@ -193,6 +193,12 @@ const typescriptConfig: Linter.Config = {
 				ignoreTypeIndexes: true,
 			},
 		],
+		"@typescript-eslint/no-misused-promises": [
+			"error",
+			{
+				checksVoidReturn: false,
+			},
+		],
 		"@typescript-eslint/no-unnecessary-type-parameters": ["off"],
 		"@typescript-eslint/return-await": ["error", "always"],
 	},

@@ -23,6 +23,7 @@ type WhiteRoute = {
 
 const auth = (
 	app: FastifyInstance,
+
 	{ basePath, whiteRoutesList }: PluginOptions,
 ): void => {
 	const requestHandler = async (request: FastifyRequest): Promise<void> => {

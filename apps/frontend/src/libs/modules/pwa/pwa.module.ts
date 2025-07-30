@@ -1,30 +1,38 @@
 import { registerSW } from "virtual:pwa-register";
 
-import { UpdateInterval } from "./libs/enums/enums.js";
+import { UPDATE_INTERVAL } from "./libs/constants/constants.js";
+import { AppEnvironment } from "./libs/enum/enums.js";
 import {
+	type Config,
 	type PWARegistrationConfig,
 	type RegisterSWOptions,
 } from "./libs/types/types.js";
 
 class PWA {
+	private config: Config;
 	private updateInterval: number;
 
-	public constructor() {
-		this.updateInterval = UpdateInterval.DEFAULT;
+	public constructor(config: Config) {
+		this.config = config;
+		this.updateInterval = UPDATE_INTERVAL;
 	}
 
 	public register(config: PWARegistrationConfig = {}): void {
 		const {
-			immediate = true,
+			isImmediate = true,
 			onNeedRefresh,
 			onRegistered,
 			updateIntervalMs = this.updateInterval,
 		} = config;
 
 		registerSW({
-			immediate,
+			immediate: isImmediate,
 			onNeedRefresh: (): void => {
-				if (import.meta.env.DEV) {
+				const isDevelopmentEnvironment =
+					this.config.ENV.APP.ENVIRONMENT === AppEnvironment.DEVELOPMENT ||
+					this.config.ENV.APP.ENVIRONMENT === AppEnvironment.TEST;
+
+				if (isDevelopmentEnvironment) {
 					globalThis.location.reload();
 				}
 

@@ -82,16 +82,58 @@ class UserController extends BaseController {
 		};
 	}
 
-	public async follow(
-		request: APIHandlerOptions<{
-			body: { followingId: string };
-			params: { id: string };
-		}>,
-	): Promise<APIHandlerResponse> {
-		const { followingId } = request.body;
-		const { id: followerId } = request.params;
+	/**
+	 * @swagger
+	 * /users/{userId}/follow:
+	 *   post:
+	 *     tags:
+	 *       - Users
+	 *     summary: Follow a user
+	 *     parameters:
+	 *       - in: path
+	 *         name: userId
+	 *         required: true
+	 *         schema:
+	 *           type: integer
+	 *         description: ID of the user who is following
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             type: object
+	 *             properties:
+	 *               followingId:
+	 *                 type: integer
+	 *                 description: ID of the user to follow
+	 *                 example: 2
+	 *     responses:
+	 *       200:
+	 *         description: Successfully followed the user
+	 *       401:
+	 *         description: Unauthorized – userId does not match authorized user
+	 */
 
-		await this.userService.follow(Number(followerId), Number(followingId));
+	public async follow(
+		request: APIHandlerOptions<
+			{
+				body: { followingId: string };
+				params: { userId: string };
+			} & { user: UserGetByIdItemResponseDto }
+		>,
+	): Promise<APIHandlerResponse> {
+		const followingId = Number(request.body.followingId);
+		const followerId = Number(request.params.userId);
+		const userId = Number(request.user?.id);
+
+		if (userId !== followerId) {
+			return {
+				payload: null,
+				status: HTTPCode.UNAUTHORIZED,
+			};
+		}
+
+		await this.userService.follow(followerId, followingId);
 
 		return {
 			payload: null,
@@ -99,12 +141,52 @@ class UserController extends BaseController {
 		};
 	}
 
-	public async unfollow(
-		request: APIHandlerOptions<{ params: { id: string; userId: string } }>,
-	): Promise<APIHandlerResponse> {
-		const { id: followingId, userId: followerId } = request.params;
+	/**
+	 * @swagger
+	 * /users/{userId}/unfollow/{id}:
+	 *   delete:
+	 *     tags:
+	 *       - Users
+	 *     summary: Unfollow a user
+	 *     parameters:
+	 *       - in: path
+	 *         name: userId
+	 *         required: true
+	 *         schema:
+	 *           type: integer
+	 *         description: ID of the user who wants to unfollow
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: integer
+	 *         description: ID of the user to be unfollowed
+	 *     responses:
+	 *       200:
+	 *         description: Successfully unfollowed the user
+	 *       401:
+	 *         description: Unauthorized – userId does not match authorized user
+	 */
 
-		await this.userService.unfollow(Number(followerId), Number(followingId));
+	public async unfollow(
+		request: APIHandlerOptions<
+			{ params: { id: string; userId: string } } & {
+				user: UserGetByIdItemResponseDto;
+			}
+		>,
+	): Promise<APIHandlerResponse> {
+		const followingId = Number(request.params.id);
+		const followerId = Number(request.params.userId);
+		const userId = Number(request.user?.id);
+
+		if (userId !== followerId) {
+			return {
+				payload: null,
+				status: HTTPCode.UNAUTHORIZED,
+			};
+		}
+
+		await this.userService.unfollow(followerId, followingId);
 
 		return {
 			payload: null,

@@ -1,5 +1,5 @@
 const UsersApiPath = {
-	FOLLOW: "/:userId/followers/:id",
+	FOLLOW: "/:userId/followers",
 	ROOT: "/",
 	UNFOLLOW: "/:userId/followers/:id",
 } as const;

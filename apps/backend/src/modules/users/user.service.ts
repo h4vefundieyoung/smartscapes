@@ -79,6 +79,15 @@ class UserService implements Service {
 			});
 		}
 
+		const followingUser = await this.userRepository.findById(followingId);
+
+		if (!followingUser) {
+			throw new UserError({
+				message: "User to follow not found",
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
 		const isAlreadyFollowing = await this.userRepository.isFollowing(
 			followerId,
 			followingId,
@@ -105,6 +114,15 @@ class UserService implements Service {
 			});
 		}
 
+		const followingUser = await this.userRepository.findById(followingId);
+
+		if (!followingUser) {
+			throw new UserError({
+				message: "The user you are trying to unfollow does not exist",
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
 		const isAlreadyFollowing = await this.userRepository.isFollowing(
 			followerId,
 			followingId,
@@ -112,7 +130,7 @@ class UserService implements Service {
 
 		if (!isAlreadyFollowing) {
 			throw new UserError({
-				message: "Not following this user",
+				message: "You are not following this user",
 				status: HTTPCode.BAD_REQUEST,
 			});
 		}

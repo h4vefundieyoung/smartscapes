@@ -50,13 +50,10 @@ class UserRepository implements Repository {
 		followerId: number,
 		followingId: number,
 	): Promise<void> {
-		const follower = await this.userModel.query().findById(followerId);
-
-		if (!follower) {
-			throw new Error("Follower not found");
-		}
-
-		await follower.$relatedQuery("following").relate(followingId);
+		await this.userModel
+			.relatedQuery("following")
+			.for(followerId)
+			.relate(followingId);
 	}
 
 	public async isFollowing(
@@ -75,16 +72,11 @@ class UserRepository implements Repository {
 		followerId: number,
 		followingId: number,
 	): Promise<void> {
-		const follower = await this.userModel.query().findById(followerId);
-
-		if (!follower) {
-			throw new Error("Follower not found");
-		}
-
-		await follower
-			.$relatedQuery("following")
+		await this.userModel
+			.relatedQuery("following")
+			.for(followerId)
 			.unrelate()
-			.where("id", followingId);
+			.where("users.id", followingId);
 	}
 }
 

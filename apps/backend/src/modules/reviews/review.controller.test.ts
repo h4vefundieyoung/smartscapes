@@ -5,6 +5,7 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { ReviewController } from "./review.controller.js";
+import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import { type ReviewService } from "./review.service.js";
 
 describe("ReviewController", () => {
@@ -14,13 +15,19 @@ describe("ReviewController", () => {
 		info: () => {},
 		warn: () => {},
 	};
+
+	const mockUser = {
+		email: "test@example.com",
+		id: 1,
+	} satisfies UserAuthResponseDto;
+
 	const mockReview = {
 		content: "content",
 		id: 1,
 		likesCount: 5,
 		poiId: null,
 		routeId: 10,
-		userId: 1,
+		userId: mockUser.id,
 	};
 
 	it("findAll should return all reviews", async () => {
@@ -66,6 +73,7 @@ describe("ReviewController", () => {
 			},
 			params: {},
 			query: {},
+			user: mockUser,
 		});
 
 		assert.deepStrictEqual(result, {

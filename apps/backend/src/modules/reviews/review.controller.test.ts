@@ -69,7 +69,6 @@ describe("ReviewController", () => {
 				content: review.content,
 				poiId: review.poiId,
 				routeId: review.routeId,
-				userId: review.userId,
 			},
 			params: {},
 			query: {},
@@ -78,7 +77,7 @@ describe("ReviewController", () => {
 
 		assert.deepStrictEqual(result, {
 			payload: { data: review },
-			status: HTTPCode.OK,
+			status: HTTPCode.CREATED,
 		});
 	});
 });

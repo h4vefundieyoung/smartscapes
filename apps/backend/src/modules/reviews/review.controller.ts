@@ -6,11 +6,12 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import { type ReviewService } from "~/modules/reviews/review.service.js";
 
 import {
+	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
-	type ReviewResponseDto,
 } from "./libs/types/types.js";
 import { reviewCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 
@@ -21,11 +22,8 @@ import { reviewCreateValidationSchema } from "./libs/validation-schemas/validati
  *     ReviewRequestDto:
  *       type: object
  *       required:
- *         - userId
  *         - content
  *       properties:
- *         userId:
- *           type: integer
  *         content:
  *           type: string
  *           example: "This is a review content."
@@ -37,6 +35,8 @@ import { reviewCreateValidationSchema } from "./libs/validation-schemas/validati
  *         poiId:
  *           type: integer
  *           nullable: true
+ *         userId:
+ *           type: integer
  *
  *     Review:
  *       type: object
@@ -56,7 +56,7 @@ import { reviewCreateValidationSchema } from "./libs/validation-schemas/validati
  *         userId:
  *           type: integer
  *
- *     ReviewResponseDto:
+ *     ReviewGetByIdResponseDto:
  *        type: object
  *        $ref: '#/components/schemas/Review'
  */
@@ -106,18 +106,22 @@ class ReviewController extends BaseController {
 	 *               type: object
 	 *               properties:
 	 *                 data:
-	 *                  $ref: '#/components/schemas/ReviewResponseDto'
+	 *                  $ref: '#/components/schemas/ReviewGetByIdResponseDto'
 	 */
 
 	public async create(
 		options: APIHandlerOptions<{ body: ReviewRequestDto }>,
-	): Promise<APIHandlerResponse<ReviewResponseDto>> {
-		const { body } = options;
-		const review = await this.reviewService.create(body);
+	): Promise<APIHandlerResponse<ReviewGetByIdResponseDto>> {
+		const { body, user } = options;
+		const authenticatedUser = user as UserAuthResponseDto;
+		const review = await this.reviewService.create({
+			...body,
+			userId: authenticatedUser.id,
+		});
 
 		return {
 			payload: { data: review },
-			status: HTTPCode.OK,
+			status: HTTPCode.CREATED,
 		};
 	}
 
@@ -141,7 +145,9 @@ class ReviewController extends BaseController {
 	 *                   items:
 	 *                     $ref: '#/components/schemas/Review'
 	 */
-	public async findAll(): Promise<APIHandlerResponse<ReviewResponseDto[]>> {
+	public async findAll(): Promise<
+		APIHandlerResponse<ReviewGetByIdResponseDto[]>
+	> {
 		const { items } = await this.reviewService.findAll();
 
 		return {

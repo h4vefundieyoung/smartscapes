@@ -33,9 +33,10 @@ export {
 	type PointsOfInterestResponseDto,
 } from "./modules/points-of-interest/points-of-interest.js";
 export {
+	type ReviewCreatePayload,
 	reviewCreateValidationSchema,
+	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
-	type ReviewResponseDto,
 } from "./modules/reviews/reviews.js";
 export {
 	type UserAuthResponseDto,

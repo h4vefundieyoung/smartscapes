@@ -17,7 +17,6 @@ const reviewCreate = z
 			}),
 		poiId: z.number().int().positive().nullable(),
 		routeId: z.number().int().positive().nullable(),
-		userId: z.number().int().positive(),
 	})
 	.refine((data) => data.routeId !== null || data.poiId !== null, {
 		message: ReviewValidationMessage.ROUTE_OR_POI_REQUIRED,

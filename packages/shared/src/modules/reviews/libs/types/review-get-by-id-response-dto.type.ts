@@ -1,4 +1,4 @@
-type ReviewResponseDto = {
+type ReviewGetByIdResponseDto = {
 	content: string;
 	id: number;
 	likesCount: number;
@@ -7,4 +7,4 @@ type ReviewResponseDto = {
 	userId: number;
 };
 
-export { type ReviewResponseDto };
+export { type ReviewGetByIdResponseDto };

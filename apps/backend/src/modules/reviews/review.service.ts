@@ -3,8 +3,8 @@ import { ReviewEntity } from "~/modules/reviews/review.entity.js";
 import { type ReviewRepository } from "~/modules/reviews/review.repository.js";
 
 import {
-	type ReviewRequestDto,
-	type ReviewResponseDto,
+	type ReviewCreatePayload,
+	type ReviewGetByIdResponseDto,
 } from "./libs/types/types.js";
 
 class ReviewService implements Service {
@@ -14,7 +14,9 @@ class ReviewService implements Service {
 		this.reviewRepository = reviewRepository;
 	}
 
-	public async create(payload: ReviewRequestDto): Promise<ReviewResponseDto> {
+	public async create(
+		payload: ReviewCreatePayload,
+	): Promise<ReviewGetByIdResponseDto> {
 		const reviewEntity = ReviewEntity.initializeNew({
 			content: payload.content,
 			likesCount: 0,
@@ -28,7 +30,7 @@ class ReviewService implements Service {
 		return item.toObject();
 	}
 
-	public async findAll(): Promise<CollectionResult<ReviewResponseDto>> {
+	public async findAll(): Promise<CollectionResult<ReviewGetByIdResponseDto>> {
 		const items = await this.reviewRepository.findAll();
 
 		return {

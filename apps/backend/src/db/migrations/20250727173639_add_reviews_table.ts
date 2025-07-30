@@ -35,7 +35,7 @@ async function up(knex: Knex): Promise<void> {
 				.references("id")
 				.inTable("users")
 				.onDelete("CASCADE");
-			table.text(ColumnName.CONTENT);
+			table.text(ColumnName.CONTENT).notNullable();
 			table.integer(ColumnName.LIKES_COUNT).defaultTo(0);
 			table
 				.integer(ColumnName.ROUTE_ID)

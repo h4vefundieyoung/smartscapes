@@ -25,7 +25,7 @@ export {
 	type ValidationSchema,
 	type ValueOf,
 } from "./libs/types/types.js";
-export { AuthApiPath } from "./modules/auth/auth.js";
+export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
 export {
 	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
@@ -33,9 +33,21 @@ export {
 	type PointsOfInterestResponseDto,
 } from "./modules/points-of-interest/points-of-interest.js";
 export {
+	type ReviewCreatePayload,
+	reviewCreateValidationSchema,
+	type ReviewGetByIdResponseDto,
+	type ReviewRequestDto,
+} from "./modules/reviews/reviews.js";
+export {
+	RouteCategoriesApiPath,
+	RouteCategoryExceptionMessage,
+	type RouteCategoryGetAllItemResponseDto,
+	type RouteCategoryRequestDto,
+} from "./modules/route-categories/route-categories.js";
+export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,
-	type UserGetAllItemResponseDto,
+	type UserGetByIdItemResponseDto,
 	UsersApiPath,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,

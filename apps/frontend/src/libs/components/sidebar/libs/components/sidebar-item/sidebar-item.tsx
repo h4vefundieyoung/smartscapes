@@ -14,7 +14,7 @@ const SidebarItem = ({
 				<span className={styles["icon"]}>
 					<Icon height={24} name={icon} width={24} />
 				</span>
-				<span className={styles["label"]}>{label}</span>
+				{label && <span className={styles["label"]}>{label}</span>}
 			</Link>
 		</li>
 	);

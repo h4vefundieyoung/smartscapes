@@ -7,6 +7,9 @@ import {
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import {
+	type UserSignInRequestDto,
+	type UserSignInResponseDto,
+	userSignInValidationSchema,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 	userSignUpValidationSchema,
@@ -61,6 +64,54 @@ class AuthController extends BaseController {
 				body: userSignUpValidationSchema,
 			},
 		});
+
+		this.addRoute({
+			handler: this.signIn.bind(this),
+			method: "POST",
+			path: AuthApiPath.SIGN_IN,
+			validation: {
+				body: userSignInValidationSchema,
+			},
+		});
+	}
+
+	/**
+	 * @swagger
+	 * /auth/sign-in:
+	 *   post:
+	 *     tags:
+	 *       - Auth
+	 *     summary: Sign in a user
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             $ref: '#/components/schemas/UserSignInRequestDto'
+	 *     responses:
+	 *       200:
+	 *         description: Successful sign-in
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/UserAuthResponseDto'
+	 */
+	public async signIn(
+		options: APIHandlerOptions<{
+			body: UserSignInRequestDto;
+		}>,
+	): Promise<APIHandlerResponse<UserSignInResponseDto>> {
+		const { body } = options;
+
+		const result = await this.authService.signIn(body);
+
+		return {
+			payload: { data: result },
+			status: HTTPCode.OK,
+		};
 	}
 
 	/**

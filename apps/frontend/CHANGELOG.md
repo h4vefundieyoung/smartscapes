@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.6.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.6.0...frontend-v1.6.1) (2025-07-29)
+
+
+### Bug Fixes
+
+* **frontend:** button line-height ss-105 ([#108](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/108)) ([03e6b54](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/03e6b548d310596611c3d63142612f7794266a5c))
+* **frontend:** change cursor to pointer when button hover ss-109 ([#118](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/118)) ([5af1897](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/5af1897cd1f6581e90397c71469c50d29d969592))
+* **frontend:** fix routing ss-115 ([#117](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/117)) ([572110b](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/572110b1b2124c5bf2cca5d7bcc5dc8c9cb2fe3f))
+
+## [1.6.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.5.0...frontend-v1.6.0) (2025-07-29)
+
+
+### Features
+
+* **frontend/shared:** add sign-in flow to the frontend ss-14 ([#57](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/57)) ([f376d4a](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/f376d4a0d69949f98dd5a3258db9d2664deea568))
+* **frontend:** add link to header logo ss-98 ([#99](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/99)) ([b3e0581](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/b3e0581383ae487fb831a2561a1f5d525b504652))
+* **frontend:** landing and application separation ss-53 ([#74](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/74)) ([d8522b3](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/d8522b3f222ee2fb0843263f2ba656442f2283e6))
+
+## [1.5.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.4.0...frontend-v1.5.0) (2025-07-29)
+
+
+### Features
+
+* **frontend/shared:** add sign up flow to the frontend ss-15 ([#47](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/47)) ([127f561](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/127f5610808e212cc051b5c12882d2a5bbc1b85c))
+* **frontend:** create sidebar component ss-22 ([#45](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/45)) ([62b1cc1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/62b1cc16e260ce456550ea9735380e087d8411eb))
+
 ## [1.4.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.3.0...frontend-v1.4.0) (2025-07-25)
 
 

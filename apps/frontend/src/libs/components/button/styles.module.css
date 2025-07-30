@@ -43,7 +43,7 @@
 	opacity: 0.3;
 }
 
-@media (width <= 576px) {
+@media (width <= 768px) {
 	.button {
 		font-size: var(--font-size-tiny);
 	}

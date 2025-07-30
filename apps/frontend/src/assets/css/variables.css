@@ -1,4 +1,6 @@
 :root {
+	--breakpoint-mobile: 768px;
+	--breakpoint-tablet: 991px;
 	--color-base: hsl(0deg 0% 100%);
 	--color-background-base: hsl(0deg 0% 100% / 100%);
 	--color-brand-1000: hsl(162deg 91% 25% / 100%);

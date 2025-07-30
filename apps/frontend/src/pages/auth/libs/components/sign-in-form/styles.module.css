@@ -34,7 +34,7 @@
 	}
 }
 
-@media (width <= 576px) {
+@media (width <= 768px) {
 	.form-title {
 		margin-bottom: 28px;
 		font-size: var(--font-size-h3);

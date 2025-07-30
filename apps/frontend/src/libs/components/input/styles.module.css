@@ -64,7 +64,7 @@
 	display: none;
 }
 
-@media (width <= 576px) {
+@media (width <= 768px) {
 	.input {
 		padding: 8px 10px;
 	}

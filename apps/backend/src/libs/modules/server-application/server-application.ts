@@ -19,7 +19,6 @@ const apiV1 = new BaseServerApplicationApi(
 	...reviewController.routes,
 	...routeCategoryController.routes,
 	...userController.routes,
-	...pointsOfInterestController.routes,
 	...routesController.routes,
 );
 const serverApplication = new BaseServerApplication({

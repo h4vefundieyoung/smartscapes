@@ -42,3 +42,9 @@
 	box-shadow: none;
 	opacity: 0.3;
 }
+
+@media (width <= 576px) {
+	.button {
+		font-size: var(--font-size-tiny);
+	}
+}

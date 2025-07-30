@@ -29,6 +29,8 @@ const mockRoute = {
 	],
 };
 
+const mockUser = { email: "test@example.com", id: 1 }; // Добавляем mock пользователя
+
 const mockDelete: RoutesService["delete"] = () => {
 	return Promise.resolve(true);
 };
@@ -53,6 +55,7 @@ describe("RoutesController", () => {
 			},
 			params: {},
 			query: {},
+			user: mockUser,
 		});
 
 		assert.deepStrictEqual(result, {
@@ -76,6 +79,7 @@ describe("RoutesController", () => {
 			body: {},
 			params: { id: "1" },
 			query: {},
+			user: mockUser,
 		});
 
 		assert.deepStrictEqual(result, {
@@ -127,6 +131,7 @@ describe("RoutesController", () => {
 			},
 			params: { id: "1" },
 			query: {},
+			user: mockUser,
 		});
 
 		assert.deepStrictEqual(result, {
@@ -146,6 +151,7 @@ describe("RoutesController", () => {
 			body: {},
 			params: { id: "1" },
 			query: {},
+			user: mockUser,
 		});
 
 		assert.deepStrictEqual(result, {

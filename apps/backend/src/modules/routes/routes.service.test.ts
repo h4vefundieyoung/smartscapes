@@ -119,7 +119,8 @@ describe("RoutesService", () => {
 		const routeEntity = createMockEntity();
 
 		const routesRepository = {
-			find: (() => Promise.resolve(routeEntity)) as RoutesRepository["find"],
+			findById: (() =>
+				Promise.resolve(routeEntity)) as RoutesRepository["findById"],
 		} as RoutesRepository;
 
 		const pointsOfInterestService = {} as PointsOfInterestService;
@@ -136,7 +137,7 @@ describe("RoutesService", () => {
 
 	it("find should return null when route not found", async () => {
 		const routesRepository = {
-			find: (() => Promise.resolve(null)) as RoutesRepository["find"],
+			findById: (() => Promise.resolve(null)) as RoutesRepository["findById"],
 		} as RoutesRepository;
 
 		const pointsOfInterestService = {} as PointsOfInterestService;
@@ -159,8 +160,7 @@ describe("RoutesService", () => {
 		const routeEntity = RouteEntity.initializeNew(updatedRoute);
 
 		const routesRepository = {
-			update: (() =>
-				Promise.resolve(routeEntity)) as RoutesRepository["update"],
+			patch: (() => Promise.resolve(routeEntity)) as RoutesRepository["patch"],
 		} as RoutesRepository;
 
 		const pointsOfInterestService = {
@@ -178,7 +178,7 @@ describe("RoutesService", () => {
 			pointsOfInterestService,
 		);
 
-		const result = await routesService.update(EXISTING_ID, {
+		const result = await routesService.patch(EXISTING_ID, {
 			description: updatedRoute.description,
 			name: updatedRoute.name,
 			pois: [FIRST_POI_ID, SECOND_POI_ID],
@@ -189,7 +189,7 @@ describe("RoutesService", () => {
 
 	it("update should return null when route not found", async () => {
 		const routesRepository = {
-			update: (() => Promise.resolve(null)) as RoutesRepository["update"],
+			patch: (() => Promise.resolve(null)) as RoutesRepository["patch"],
 		} as RoutesRepository;
 
 		const pointsOfInterestService = {
@@ -207,7 +207,7 @@ describe("RoutesService", () => {
 			pointsOfInterestService,
 		);
 
-		const result = await routesService.update(NON_EXISTENT_ID, {
+		const result = await routesService.patch(NON_EXISTENT_ID, {
 			description: "Updated description",
 			name: "Updated Test Route",
 			pois: [FIRST_POI_ID, SECOND_POI_ID],
@@ -233,7 +233,7 @@ describe("RoutesService", () => {
 
 		await assert.rejects(
 			async () => {
-				await routesService.update(EXISTING_ID, {
+				await routesService.patch(EXISTING_ID, {
 					description: "Updated description",
 					name: "Updated Test Route",
 					pois: [NON_EXISTENT_ID],

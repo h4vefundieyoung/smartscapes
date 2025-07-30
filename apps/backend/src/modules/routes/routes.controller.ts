@@ -1,4 +1,4 @@
-import { APIPath, HTTPMethodEnum } from "~/libs/enums/enums.js";
+import { APIPath } from "~/libs/enums/enums.js";
 import {
 	type APIHandlerOptions,
 	type APIHandlerResponse,
@@ -11,7 +11,10 @@ import {
 	type RoutesRequestDto,
 	type RoutesResponseDto,
 } from "./libs/types/type.js";
-import { routesCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
+import {
+	routesCreateValidationSchema,
+	routesUpdateValidationSchema,
+} from "./libs/validation-schemas/validation-schemas.js";
 import { type RoutesService } from "./routes.service.js";
 
 /**
@@ -40,30 +43,30 @@ class RoutesController extends BaseController {
 
 		this.addRoute({
 			handler: this.create.bind(this),
-			method: HTTPMethodEnum.POST,
+			method: "POST",
 			path: "/",
 			validation: { body: routesCreateValidationSchema },
 		});
 		this.addRoute({
 			handler: this.delete.bind(this),
-			method: HTTPMethodEnum.DELETE,
+			method: "DELETE",
 			path: "/:id",
 		});
 		this.addRoute({
 			handler: this.find.bind(this),
-			method: HTTPMethodEnum.GET,
+			method: "GET",
 			path: "/:id",
 		});
 		this.addRoute({
 			handler: this.findAll.bind(this),
-			method: HTTPMethodEnum.GET,
+			method: "GET",
 			path: "/",
 		});
 		this.addRoute({
-			handler: this.update.bind(this),
-			method: HTTPMethodEnum.PATCH,
+			handler: this.patch.bind(this),
+			method: "PATCH",
 			path: "/:id",
-			validation: { body: routesCreateValidationSchema },
+			validation: { body: routesUpdateValidationSchema },
 		});
 	}
 
@@ -254,7 +257,7 @@ class RoutesController extends BaseController {
 	 *         description: Route was not found
 	 */
 
-	public async update(
+	public async patch(
 		options: APIHandlerOptions<{
 			body: RoutesRequestDto;
 			params: { id: string };
@@ -263,7 +266,7 @@ class RoutesController extends BaseController {
 		const id = Number(options.params.id);
 		const { description, name, pois } = options.body;
 
-		const route = await this.routesService.update(id, {
+		const route = await this.routesService.patch(id, {
 			description,
 			name,
 			pois,

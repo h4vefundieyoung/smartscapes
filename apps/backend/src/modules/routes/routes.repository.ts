@@ -20,49 +20,54 @@ class RoutesRepository implements Repository {
 			.returning("*")
 			.execute();
 
-		const routeObject = Array.isArray(route)
-			? (route[0] as RoutesModel)
-			: route;
+		const routeObject = (
+			Array.isArray(route) ? route[0] : route
+		) as RoutesModel;
 
 		if (pois.length > 0) {
-			const joinRows = pois.map((poi) => ({
-				poi_id: poi.id,
-				route_id: (routeObject as { id: number }).id,
-				visit_order: poi.visitOrder,
-			}));
-
-			await this.routesModel
-				.knex()
-				.insert(joinRows)
-				.into(DatabaseTableName.ROUTES_TO_POIS);
+			await this.insertRoutePois(routeObject.id, pois);
 		}
 
-		const routePois = await this.getRoutePois(
-			(routeObject as { id: number }).id,
-		);
+		const routePois = await this.getRoutePois(routeObject.id);
 
 		return RouteEntity.initialize({
-			...(routeObject as { description: string; id: number; name: string }),
+			description: routeObject.description,
+			id: routeObject.id,
+			name: routeObject.name,
 			pois: routePois,
 		});
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		await this.routesModel
-			.knex()
-			.table(DatabaseTableName.ROUTES_TO_POIS)
-			.where("route_id", id)
-			.del();
+		const isDeleted = await this.routesModel.query().deleteById(id).execute();
 
-		const deletedCount = await this.routesModel
-			.query()
-			.deleteById(id)
-			.execute();
+		if (isDeleted) {
+			await this.deleteRoutePois(id);
+		}
 
-		return !!deletedCount;
+		return Boolean(isDeleted);
 	}
 
-	public async find(id: number): Promise<null | RouteEntity> {
+	public async findAll(): Promise<RouteEntity[]> {
+		const routes = await this.routesModel.query().execute();
+
+		const routesWithPois = await Promise.all(
+			routes.map(async (route) => {
+				const pois = await this.getRoutePois(route.id);
+
+				return RouteEntity.initialize({
+					description: route.description,
+					id: route.id,
+					name: route.name,
+					pois,
+				});
+			}),
+		);
+
+		return routesWithPois;
+	}
+
+	public async findById(id: number): Promise<null | RouteEntity> {
 		const route = await this.routesModel.query().findById(id).execute();
 
 		if (!route) {
@@ -79,65 +84,39 @@ class RoutesRepository implements Repository {
 		});
 	}
 
-	public async findAll(): Promise<RouteEntity[]> {
-		const routes = await this.routesModel.query().execute();
-
-		const routesWithPois = await Promise.all(
-			routes.map(async (route) => {
-				const pois = await this.getRoutePois(route.id);
-
-				return {
-					description: route.description,
-					id: route.id,
-					name: route.name,
-					pois,
-				};
-			}),
-		);
-
-		return routesWithPois.map((route) =>
-			RouteEntity.initialize({
-				description: route.description,
-				id: route.id,
-				name: route.name,
-				pois: route.pois,
-			}),
-		);
-	}
-
-	public async update(
+	public async patch(
 		id: number,
-		entity: RouteEntity,
+		entity: {
+			description?: string;
+			name?: string;
+			pois?: {
+				id: number;
+				visitOrder: number;
+			}[];
+		},
 	): Promise<null | RouteEntity> {
-		const { description, name, pois } = entity.toNewObject();
+		const { description, name, pois } = entity;
+
+		if (description !== undefined) {
+			await this.routesModel
+				.query()
+				.patchAndFetchById(id, { description })
+				.execute();
+		}
+
+		if (name !== undefined) {
+			await this.routesModel.query().patchAndFetchById(id, { name }).execute();
+		}
+
+		if (pois !== undefined) {
+			await this.deleteRoutePois(id);
+			await this.insertRoutePois(id, pois);
+		}
 
 		const updatedRoute = (await this.routesModel
 			.query()
-			.patchAndFetchById(id, { description, name })
-			.execute()) as RoutesModel | undefined;
-
-		if (!updatedRoute) {
-			return null;
-		}
-
-		await this.routesModel
-			.knex()
-			.table(DatabaseTableName.ROUTES_TO_POIS)
-			.where("route_id", id)
-			.del();
-
-		if (pois.length > 0) {
-			const joinRows = pois.map((poi) => ({
-				poi_id: poi.id,
-				route_id: id,
-				visit_order: poi.visitOrder,
-			}));
-
-			await this.routesModel
-				.knex()
-				.insert(joinRows)
-				.into(DatabaseTableName.ROUTES_TO_POIS);
-		}
+			.findById(id)
+			.execute()) as RoutesModel;
 
 		const updatedPois = await this.getRoutePois(id);
 
@@ -149,28 +128,44 @@ class RoutesRepository implements Repository {
 		});
 	}
 
+	private async deleteRoutePois(routeId: number): Promise<void> {
+		await this.routesModel
+			.knex()
+			.table(DatabaseTableName.ROUTES_TO_POIS)
+			.where("route_id", routeId)
+			.del();
+	}
+
 	private async getRoutePois(
 		routeId: number,
 	): Promise<Array<{ id: number; visitOrder: number }>> {
-		const pois = await this.routesModel
+		const results = await this.routesModel
 			.knex()
-			.select(
-				`${DatabaseTableName.POINTS_OF_INTEREST}.id`,
-				`${DatabaseTableName.ROUTES_TO_POIS}.visit_order as visitOrder`,
-			)
+			.select("poi_id as id", "visit_order as visitOrder")
 			.from(DatabaseTableName.ROUTES_TO_POIS)
 			.where("route_id", routeId)
-			.join(
-				DatabaseTableName.POINTS_OF_INTEREST,
-				`${DatabaseTableName.ROUTES_TO_POIS}.poi_id`,
-				`${DatabaseTableName.POINTS_OF_INTEREST}.id`,
-			)
 			.orderBy("visit_order", "asc");
 
-		return pois.map((poi) => ({
-			id: (poi as { id: number }).id,
-			visitOrder: (poi as { visitOrder: number }).visitOrder,
+		return results.map((row: { id: number; visitOrder: number }) => ({
+			id: row.id,
+			visitOrder: row.visitOrder,
 		}));
+	}
+
+	private async insertRoutePois(
+		routeId: number,
+		pois: Array<{ id: number; visitOrder: number }>,
+	): Promise<void> {
+		const joinRows = pois.map((poi) => ({
+			poi_id: poi.id,
+			route_id: routeId,
+			visit_order: poi.visitOrder,
+		}));
+
+		await this.routesModel
+			.knex()
+			.insert(joinRows)
+			.into(DatabaseTableName.ROUTES_TO_POIS);
 	}
 }
 

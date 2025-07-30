@@ -14,7 +14,6 @@ export {
 	HTTPError,
 	HTTPHeader,
 	type HTTPMethod,
-	HTTPMethodEnum,
 	type HTTPOptions,
 	type HTTPResponse,
 } from "./libs/modules/http/http.js";
@@ -37,6 +36,7 @@ export {
 	routesCreateValidationSchema,
 	type RoutesRequestDto,
 	type RoutesResponseDto,
+	routesUpdateValidationSchema,
 } from "./modules/routes/routes.js";
 export {
 	type UserAuthResponseDto,

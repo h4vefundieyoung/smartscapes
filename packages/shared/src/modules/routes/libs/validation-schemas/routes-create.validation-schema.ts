@@ -1,12 +1,11 @@
-import { z, type ZodType } from "zod";
+import { z } from "zod";
 
 import {
 	RoutesValidationMessage,
 	RoutesValidationRule,
 } from "../enums/enums.js";
-import { type RoutesRequestDto } from "../types/routes-request-dto.type.js";
 
-const routesCreate: ZodType<RoutesRequestDto> = z.strictObject({
+const routesCreate = z.strictObject({
 	description: z
 		.string()
 		.min(RoutesValidationRule.DESCRIPTION_MINIMUM_LENGTH, {

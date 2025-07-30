@@ -64,7 +64,7 @@ describe("RoutesRepository", () => {
 	it("find should return null when route not found", async () => {
 		databaseTracker.on.select(DatabaseTableName.ROUTES).response([]);
 
-		const result = await routesRepository.find(NON_EXISTENT_ID);
+		const result = await routesRepository.findById(NON_EXISTENT_ID);
 
 		assert.strictEqual(result, null);
 	});
@@ -78,7 +78,10 @@ describe("RoutesRepository", () => {
 
 		databaseTracker.on.insert(DatabaseTableName.ROUTES_TO_POIS).response([]);
 
-		const result = await routesRepository.update(NON_EXISTENT_ID, routeEntity);
+		const result = await routesRepository.patch(
+			NON_EXISTENT_ID,
+			routeEntity.toObject(),
+		);
 
 		assert.strictEqual(result, null);
 	});

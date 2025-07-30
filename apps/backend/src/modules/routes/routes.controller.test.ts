@@ -109,17 +109,17 @@ describe("RoutesController", () => {
 			name: "Updated Route",
 		};
 
-		const mockUpdate: RoutesService["update"] = () => {
+		const mockUpdate: RoutesService["patch"] = () => {
 			return Promise.resolve(updatedRoute);
 		};
 
 		const routesService = {
-			update: mockUpdate,
+			patch: mockUpdate,
 		} as RoutesService;
 
 		const controller = new RoutesController(mockLogger, routesService);
 
-		const result = await controller.update({
+		const result = await controller.patch({
 			body: {
 				description: updatedRoute.description,
 				name: updatedRoute.name,

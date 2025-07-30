@@ -41,6 +41,12 @@ export {
 	NotificationType,
 } from "./modules/notifications/notifications.js";
 export {
+	RouteCategoriesApiPath,
+	RouteCategoryExceptionMessage,
+	type RouteCategoryGetAllItemResponseDto,
+	type RouteCategoryRequestDto,
+} from "./modules/route-categories/route-categories.js";
+export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetByIdItemResponseDto,

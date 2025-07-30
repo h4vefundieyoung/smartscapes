@@ -4,6 +4,7 @@ import { logger } from "~/libs/modules/logger/logger.js";
 import { authController } from "~/modules/auth/auth.js";
 import { notificationController } from "~/modules/notifications/notifications.js";
 import { pointsOfInterestController } from "~/modules/points-of-interest/points-of-interest.js";
+import { routeCategoryController } from "~/modules/route-categories/route-categories.js";
 import { userController } from "~/modules/users/users.js";
 
 import { BaseServerApplicationApi } from "./base-server-application-api.js";
@@ -13,6 +14,7 @@ const apiV1 = new BaseServerApplicationApi(
 	"v1",
 	config,
 	...authController.routes,
+	...routeCategoryController.routes,
 	...userController.routes,
 	...notificationController.routes,
 	...pointsOfInterestController.routes,

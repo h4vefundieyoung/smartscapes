@@ -1,10 +1,10 @@
-import { type CarauselAnimationType } from "./carausel-animation-type.type.js";
+import { type CarouselAnimation } from "./carausel-animation.type.js";
 
 type CarouselState = {
-	animationClassName: CarauselAnimationType;
+	animationClassName: CarouselAnimation;
 	dragging: boolean;
 	overdragOffset: number;
-	setAnimationClassName: (className: CarauselAnimationType) => void;
+	setAnimationClassName: (className: CarouselAnimation) => void;
 	setDragging: (value: boolean) => void;
 	setOverdragOffset: (value: number) => void;
 	setSpringBounce: (value: boolean) => void;

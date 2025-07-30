@@ -1,13 +1,13 @@
 import { useCallback } from "react";
 
-import { CarauselAnimation, carouselConfig } from "../enums/enums.js";
+import { CAROUSEL_ANIMATION, CAROUSEL_CONFIG } from "../constants/constants.js";
 import { getCarouselParameters } from "../helpers/helpers.js";
-import { type CarauselAnimationType } from "../types/carausel-animation-type.type.js";
+import { type CarouselAnimation } from "../types/carausel-animation.type.js";
 import { type CarouselReference } from "../types/types.js";
 
 type CarouselBoundariesProperties = {
 	carouselReference: CarouselReference;
-	setAnimationClassName: (className: CarauselAnimationType) => void;
+	setAnimationClassName: (className: CarouselAnimation) => void;
 	setSpringBounce: (value: boolean) => void;
 };
 
@@ -29,8 +29,8 @@ const useCarouselBoundaries = ({
 		if (isAtLeftEdge || isAtRightEdge) {
 			const animationClass =
 				direction === "left"
-					? CarauselAnimation.BOUNCE_LEFT
-					: CarauselAnimation.BOUNCE_RIGHT;
+					? CAROUSEL_ANIMATION.BOUNCE_LEFT
+					: CAROUSEL_ANIMATION.BOUNCE_RIGHT;
 
 			element.scrollLeft = isAtLeftEdge ? 0 : maxScroll;
 			carouselReference.isAnimating.current = true;
@@ -42,7 +42,7 @@ const useCarouselBoundaries = ({
 				setSpringBounce(false);
 				setAnimationClassName(null);
 				carouselReference.isAnimating.current = false;
-			}, carouselConfig.SPRING_ANIMATION_DURATION);
+			}, CAROUSEL_CONFIG.SPRING_ANIMATION_DURATION);
 		}
 	}, [carouselReference, setAnimationClassName, setSpringBounce]);
 

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { carouselConfig } from "../enums/enums.js";
+import { CAROUSEL_CONFIG } from "../constants/constants.js";
 import {
 	getCarouselParameters,
 	snapToNearestItem,
@@ -27,11 +27,11 @@ const useCarouselMomentum = ({
 			return;
 		}
 
-		carouselReference.velocity.current *= carouselConfig.FRICTION;
+		carouselReference.velocity.current *= CAROUSEL_CONFIG.FRICTION;
 
 		const isVelocityLessThanMinVelocity =
 			Math.abs(carouselReference.velocity.current) <
-			carouselConfig.MIN_VELOCITY;
+			CAROUSEL_CONFIG.MIN_VELOCITY;
 
 		if (isVelocityLessThanMinVelocity) {
 			carouselReference.velocity.current = 0;
@@ -39,13 +39,13 @@ const useCarouselMomentum = ({
 
 			handleBoundaryCollision();
 
-			snapToNearestItem(carouselReference, carouselConfig.SNAP_DELAY);
+			snapToNearestItem(carouselReference, CAROUSEL_CONFIG.SNAP_DELAY);
 
 			return;
 		}
 
 		element.scrollLeft -=
-			carouselReference.velocity.current * carouselConfig.SCROLL_SPEED;
+			carouselReference.velocity.current * CAROUSEL_CONFIG.SCROLL_SPEED;
 
 		if (isAtLeftEdge || isAtRightEdge) {
 			handleBoundaryCollision();

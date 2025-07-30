@@ -1,4 +1,4 @@
-export { type CarauselAnimationType } from "./carausel-animation-type.type.js";
+export { type CarouselAnimation } from "./carausel-animation.type.js";
 export { type CarouselCallbacks } from "./carousel-callbacks.type.js";
 export { type CarouselDirection } from "./carousel-direction.type.js";
 export { type CarouselParameters } from "./carousel-parameters.type.js";

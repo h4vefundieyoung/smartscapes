@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
-import { CarauselAnimation } from "../enums/carausel-animation.enum.js";
-import { carouselConfig } from "../enums/enums.js";
+import { CAROUSEL_ANIMATION } from "../constants/carausel-animation.constant.js";
+import { CAROUSEL_CONFIG } from "../constants/constants.js";
 import { getCarouselParameters } from "../helpers/helpers.js";
 import {
 	type CarouselCallbacks,
@@ -80,7 +80,7 @@ const useCarouselMouseEvents = ({
 
 		if (overdragOffset !== 0) {
 			const { CSS_ANIMATION_DELAY, SLINGSHOT_ANIMATION_DURATION } =
-				carouselConfig;
+				CAROUSEL_CONFIG;
 			setSpringBounce(false);
 			setAnimationClassName(null);
 			setOverdragOffset(0);
@@ -88,8 +88,8 @@ const useCarouselMouseEvents = ({
 			setTimeout(() => {
 				const slingshotClass =
 					direction === "left"
-						? CarauselAnimation.SLINGSHOT_LEFT
-						: CarauselAnimation.SLINGSHOT_RIGHT;
+						? CAROUSEL_ANIMATION.SLINGSHOT_LEFT
+						: CAROUSEL_ANIMATION.SLINGSHOT_RIGHT;
 				setAnimationClassName(slingshotClass);
 			}, CSS_ANIMATION_DELAY);
 
@@ -123,7 +123,7 @@ const useCarouselMouseEvents = ({
 			const x = event.pageX - offsetLeft;
 			const walk = x - carouselReference.startX.current;
 			const newScrollLeft = carouselReference.scrollStart.current - walk;
-			const maxOverdrag = clientWidth * carouselConfig.OVERDRAG_PERCENTAGE;
+			const maxOverdrag = clientWidth * CAROUSEL_CONFIG.OVERDRAG_PERCENTAGE;
 
 			if (newScrollLeft < 0) {
 				setOverdragOffset(maxOverdrag);
@@ -140,7 +140,7 @@ const useCarouselMouseEvents = ({
 			setOverdragOffset(0);
 			element.scrollLeft = newScrollLeft;
 			carouselReference.velocity.current =
-				walk * carouselConfig.DRAG_MULTIPLIER;
+				walk * CAROUSEL_CONFIG.DRAG_MULTIPLIER;
 		},
 		[carouselReference, setOverdragOffset],
 	);

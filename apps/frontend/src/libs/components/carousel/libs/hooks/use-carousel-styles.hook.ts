@@ -3,10 +3,10 @@ import { useMemo } from "react";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 
 import styles from "../../style.module.css";
-import { type CarauselAnimationType } from "../types/types.js";
+import { type CarouselAnimation } from "../types/types.js";
 
 type CarouselStylesProperties = {
-	animationClassName: CarauselAnimationType;
+	animationClassName: CarouselAnimation;
 	dragging: boolean;
 	overdragOffset: number;
 };

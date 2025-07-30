@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { carouselConfig } from "../enums/enums.js";
+import { CAROUSEL_CONFIG } from "../constants/constants.js";
 import { type CarouselReference } from "../types/types.js";
 
 type CarouselWheelEventProperties = {
@@ -18,7 +18,7 @@ const useCarouselWheelEvent = ({
 
 			if (carouselReference.element.current) {
 				carouselReference.velocity.current +=
-					event.deltaY * carouselConfig.WHEEL_MULTIPLIER;
+					event.deltaY * CAROUSEL_CONFIG.WHEEL_MULTIPLIER;
 
 				if (!carouselReference.momentumID.current) {
 					startMomentum();

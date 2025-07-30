@@ -1,4 +1,4 @@
-import { carouselConfig } from "../enums/carausel-config.enum.js";
+import { CAROUSEL_CONFIG } from "../constants/carausel-config.constant.js";
 import { getCarouselParameters } from "./helpers.js";
 
 const snapToNearestItem = (
@@ -15,7 +15,7 @@ const snapToNearestItem = (
 		return;
 	}
 
-	const itemWidth = clientWidth * carouselConfig.ITEM_WIDTH_PERCENTAGE;
+	const itemWidth = clientWidth * CAROUSEL_CONFIG.ITEM_WIDTH_PERCENTAGE;
 	const currentScrollLeft = element.scrollLeft;
 	const nearestPosition = Math.round(currentScrollLeft / itemWidth) * itemWidth;
 	const clampedPosition = Math.max(0, Math.min(nearestPosition, maxScroll));

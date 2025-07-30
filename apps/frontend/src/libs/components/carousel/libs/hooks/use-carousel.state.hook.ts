@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-import { type CarauselAnimationType } from "../types/types.js";
+import { type CarouselAnimation } from "../types/types.js";
 
 type CarouselState = {
-	animationClassName: CarauselAnimationType;
+	animationClassName: CarouselAnimation;
 	dragging: boolean;
 	overdragOffset: number;
-	setAnimationClassName: (className: CarauselAnimationType) => void;
+	setAnimationClassName: (className: CarouselAnimation) => void;
 	setDragging: (value: boolean) => void;
 	setOverdragOffset: (value: number) => void;
 	setSpringBounce: (value: boolean) => void;
@@ -18,7 +18,7 @@ const useCarouselState = (): CarouselState => {
 	const [springBounce, setSpringBounce] = useState<boolean>(false);
 	const [overdragOffset, setOverdragOffset] = useState<number>(0);
 	const [animationClassName, setAnimationClassName] =
-		useState<CarauselAnimationType>(null);
+		useState<CarouselAnimation>(null);
 
 	return {
 		animationClassName,

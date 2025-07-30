@@ -1,4 +1,4 @@
-const carouselConfig = {
+const CAROUSEL_CONFIG = {
 	CSS_ANIMATION_DELAY: 10,
 	DRAG_MULTIPLIER: 0.15,
 	EDGE_THRESHOLD: 1,
@@ -13,6 +13,6 @@ const carouselConfig = {
 	SPRING_ANIMATION_DURATION: 200,
 	TRANSITION_DELAY: 100,
 	WHEEL_MULTIPLIER: 0.05,
-} as const;
+};
 
-export { carouselConfig };
+export { CAROUSEL_CONFIG };

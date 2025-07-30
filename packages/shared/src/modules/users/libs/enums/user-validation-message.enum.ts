@@ -2,6 +2,7 @@ import { UserValidationRule } from "./user-validation-rule.enum.js";
 
 const UserValidationMessage = {
 	EMAIL_MAXIMUM_LENGTH: `Email must be at most ${String(UserValidationRule.MAX_LENGTH)} characters long.`,
+	EMAIL_MINIMUM_LENGTH: `Email must be at least ${String(UserValidationRule.EMAIL_MINIMUM_LENGTH)} characters long.`,
 	EMAIL_REQUIRED: "Email is required.",
 	EMAIL_WRONG: "Email format is wrong.",
 	FIRST_NAME_MAXIMUM_LENGTH: `First name must be at most ${String(UserValidationRule.MAX_LENGTH)} characters long`,

@@ -17,13 +17,19 @@ const userSignUp = z
 				error: UserValidationMessage.PASSWORD_MAXIMUM_LENGTH,
 			}),
 		email: z
-			.email({
-				error: UserValidationMessage.EMAIL_WRONG,
-			})
+			.string()
 			.trim()
 			.min(UserValidationRule.REQUIRED_STRING_MIN_LENGTH, {
 				error: UserValidationMessage.EMAIL_REQUIRED,
-			}),
+			})
+			.min(UserValidationRule.EMAIL_MINIMUM_LENGTH, {
+				error: UserValidationMessage.EMAIL_MINIMUM_LENGTH,
+			})
+			.pipe(
+				z.email({
+					error: UserValidationMessage.EMAIL_WRONG,
+				}),
+			),
 		firstName: z
 			.string()
 			.trim()

@@ -1,10 +1,12 @@
+import { type UserAuthResponseDto } from "~/libs/types/types.js";
+
 type APIHandlerOptions<
 	HandlerOptions extends DefaultApiHandlerOptions = DefaultApiHandlerOptions,
 > = {
 	body: HandlerOptions["body"];
 	params: HandlerOptions["params"];
 	query: HandlerOptions["query"];
-	user: HandlerOptions["user"];
+	user: null | UserAuthResponseDto;
 };
 
 type DefaultApiHandlerOptions = {

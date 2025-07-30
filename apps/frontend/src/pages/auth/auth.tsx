@@ -1,3 +1,7 @@
+import { Navigate } from "react-router";
+
+import logo from "~/assets/images/logo.svg";
+import { Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -6,19 +10,29 @@ import {
 	useLocation,
 } from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
-import { type UserSignUpRequestDto } from "~/modules/users/users.js";
+import {
+	type UserSignInRequestDto,
+	type UserSignUpRequestDto,
+} from "~/modules/users/users.js";
 
 import { SignInForm, SignUpForm } from "./libs/components/components.js";
 import styles from "./styles.module.css";
 
 const Auth = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
-	const dataStatus = useAppSelector(({ auth }) => auth.dataStatus);
 	const { pathname } = useLocation();
 
-	const handleSignInSubmit = useCallback((): void => {
-		// TODO: handle sign in
-	}, []);
+	const authenticatedUser = useAppSelector(
+		({ auth }) => auth.authenticatedUser,
+	);
+	const hasUser = Boolean(authenticatedUser);
+
+	const handleSignInSubmit = useCallback(
+		(payload: UserSignInRequestDto): void => {
+			void dispatch(authActions.signIn(payload));
+		},
+		[dispatch],
+	);
 
 	const handleSignUpSubmit = useCallback(
 		(payload: UserSignUpRequestDto): void => {
@@ -44,10 +58,23 @@ const Auth = (): React.JSX.Element => {
 		[handleSignInSubmit, handleSignUpSubmit],
 	);
 
+	if (hasUser) {
+		return <Navigate to={AppRoute.ROOT} />;
+	}
+
 	return (
 		<main className={styles["container"]}>
-			<p>State: {dataStatus}</p>
-			{handleFormRender(pathname)}
+			<div className={styles["left-panel"]}>
+				<div className={styles["logo"]}>
+					<Link to={AppRoute.ROOT}>
+						<img alt="SmartScapes" height="24" src={logo} width="136" />
+					</Link>
+				</div>
+
+				{handleFormRender(pathname)}
+			</div>
+
+			<div className={styles["right-panel"]} />
 		</main>
 	);
 };

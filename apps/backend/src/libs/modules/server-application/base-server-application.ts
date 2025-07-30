@@ -22,6 +22,8 @@ import {
 	type ValidationSchema,
 } from "~/libs/types/types.js";
 
+import { authPlugin } from "../plugins/plugins.js";
+import { WHITE_ROUTES } from "./libs/constants/constants.js";
 import {
 	type ServerApplication,
 	type ServerApplicationApi,
@@ -69,6 +71,8 @@ class BaseServerApplication implements ServerApplication {
 		await this.initMiddlewares();
 
 		await this.initServe();
+
+		await this.initPlugins();
 
 		this.initRoutes();
 
@@ -187,6 +191,10 @@ class BaseServerApplication implements ServerApplication {
 		await this.app.register(fastifyCors);
 
 		await this.app.register(fastifyHelmet);
+	}
+
+	private async initPlugins(): Promise<void> {
+		await this.app.register(authPlugin, { whiteRoutesList: WHITE_ROUTES });
 	}
 
 	private initRoutes(): void {

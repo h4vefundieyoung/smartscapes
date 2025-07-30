@@ -3,7 +3,7 @@ import { type JSX } from "react";
 import appLogo from "~/assets/images/logo.svg";
 import { AppRoute } from "~/libs/enums/enums.js";
 
-import { Avatar, Button } from "../components.js";
+import { Avatar, Button, Link } from "../components.js";
 import { type User } from "./libs/types/types.js";
 import styles from "./styles.module.css";
 
@@ -16,7 +16,9 @@ const Header = ({ user }: Properties): JSX.Element => {
 
 	return (
 		<header className={styles["header"]}>
-			<img alt="SmartScapes Logo" height={24} src={appLogo} width={136} />
+			<Link to={AppRoute.ROOT}>
+				<img alt="SmartScapes Logo" height={24} src={appLogo} width={136} />
+			</Link>
 			{hasUser ? (
 				<div className={styles["user-info"]}>
 					{user && <Avatar user={user} />}

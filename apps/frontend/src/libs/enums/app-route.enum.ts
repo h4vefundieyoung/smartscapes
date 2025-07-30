@@ -1,7 +1,8 @@
 const AppRoute = {
+	APP: "/app",
 	ROOT: "/",
-	SIGN_IN: "/sign-in",
-	SIGN_UP: "/sign-up",
+	SIGN_IN: "/app/sign-in",
+	SIGN_UP: "/app/sign-up",
 } as const;
 
 export { AppRoute };

@@ -18,6 +18,8 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 
 	public version: string;
 
+	public whiteRoutes: WhiteRoute[];
+
 	private config: Config;
 
 	public constructor(
@@ -42,6 +44,8 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 		}));
 
 		this.routes = [healthRoute, ...apiRoutes];
+
+		this.whiteRoutes = [];
 	}
 
 	public generateDoc(title: string): APIDocument {
@@ -72,11 +76,13 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 		}) as APIDocument;
 	}
 
-	public generateWhiteList(whiteRoutes: WhiteRoute[]): WhiteRoute[] {
-		return whiteRoutes.map((whiteRoute) => ({
+	public injectWhiteRoutes(whiteRoutes: WhiteRoute[]): void {
+		const injectedRoutes = whiteRoutes.map((whiteRoute) => ({
 			...whiteRoute,
 			path: `${this.basePath}${whiteRoute.path}`,
 		}));
+
+		this.whiteRoutes = [...this.whiteRoutes, ...injectedRoutes];
 	}
 }
 

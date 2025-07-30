@@ -52,7 +52,7 @@ describe("Auth plugin", () => {
 
 		authPlugin(
 			appMock,
-			{ whiteRoutes: [[{ "method": "POST", path: "/" }]] } as PluginOptions,
+			{ whiteRoutes: [{ "method": "POST", path: "/" }] } as PluginOptions,
 			() => {},
 		);
 
@@ -81,7 +81,7 @@ describe("Auth plugin", () => {
 
 		authPlugin(
 			appMock,
-			{ whiteRoutes: [[{ "method": "GET", path: "/" }]] } as PluginOptions,
+			{ whiteRoutes: [{ "method": "GET", path: "/" }] } as PluginOptions,
 			() => {},
 		);
 
@@ -109,7 +109,7 @@ describe("Auth plugin", () => {
 		authPlugin(
 			appMock,
 			{
-				whiteRoutes: [[{ "method": "GET", path: "/test/*" }]],
+				whiteRoutes: [{ "method": "GET", path: "/test/*" }],
 			} as PluginOptions,
 			() => {},
 		);

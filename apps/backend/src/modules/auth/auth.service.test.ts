@@ -1,15 +1,17 @@
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 
+import { type BaseEncryption } from "~/libs/modules/encryption/libs/base-encryption.module.js";
 import { type BaseToken } from "~/libs/modules/token/token.js";
+import { AuthService } from "~/modules/auth/auth.service.js";
 import {
 	type UserGetByIdItemResponseDto,
 	type UserService,
+	type UserSignInRequestDto,
+	type UserSignInResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
-
-import { AuthService } from "./auth.service.js";
 
 describe("AuthService", () => {
 	const signUpRequestDto: UserSignUpRequestDto = {
@@ -56,7 +58,14 @@ describe("AuthService", () => {
 			findByEmail: mockFindByEmail as UserService["findByEmail"],
 		} as UserService;
 
+		const mockEncryptionService = {
+			compare: mock.fn(() => Promise.resolve(true)),
+			encrypt: mock.fn(() => Promise.resolve("encryptedValue")),
+			hash: mock.fn(() => Promise.resolve("hashedPassword")),
+		} as unknown as BaseEncryption;
+
 		const authService = new AuthService({
+			encryptionService: mockEncryptionService,
 			tokenService: mockTokenService,
 			userService: mockUserService,
 		});
@@ -68,5 +77,73 @@ describe("AuthService", () => {
 
 		assert.deepStrictEqual(result, mockSignUpResponse);
 		assert.deepStrictEqual(userCreateArgument, signUpRequestDto);
+	});
+
+	it("signIn should return token and user data when credentials are valid", async () => {
+		const mockToken = "mock token";
+
+		const signInRequestDto: UserSignInRequestDto = {
+			email: "test@example.com",
+			password: "Password123!",
+		};
+
+		const mockPasswordDetails = {
+			id: 1,
+			passwordHash: "hashedPassword",
+			passwordSalt: "someSalt",
+		};
+
+		const expectedSignInResponse: UserSignInResponseDto = {
+			token: mockToken,
+			user: {
+				email: signInRequestDto.email,
+				id: mockPasswordDetails.id,
+			},
+		};
+
+		const mockTokenCreate = mock.fn<BaseToken["create"]>(() =>
+			Promise.resolve(mockToken),
+		);
+
+		const mockFindPasswordDetails = mock.fn<UserService["findPasswordDetails"]>(
+			(email) => {
+				if (email === signInRequestDto.email) {
+					return Promise.resolve(mockPasswordDetails);
+				}
+
+				return Promise.resolve(null);
+			},
+		);
+
+		const mockTokenService = {
+			create: mockTokenCreate as BaseToken["create"],
+		} as BaseToken;
+
+		const mockUserService = {
+			findPasswordDetails:
+				mockFindPasswordDetails as UserService["findPasswordDetails"],
+		} as UserService;
+
+		const mockEncryptionService = {
+			compare: mock.fn((password, hash) => {
+				if (
+					password === signInRequestDto.password &&
+					hash === mockPasswordDetails.passwordHash
+				) {
+					return Promise.resolve(true);
+				}
+
+				return Promise.resolve(false);
+			}),
+		} as unknown as BaseEncryption;
+		const authService = new AuthService({
+			encryptionService: mockEncryptionService,
+			tokenService: mockTokenService,
+			userService: mockUserService,
+		});
+
+		const result = await authService.signIn(signInRequestDto);
+
+		assert.deepStrictEqual(result, expectedSignInResponse);
 	});
 });

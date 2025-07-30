@@ -5,7 +5,7 @@ import { type WhiteRoute } from "../../auth.plugin.js";
 type CheckIsWhiteRouteParameters = {
 	method: HTTPMethod;
 	url: string;
-	whiteRoutes: WhiteRoute[][];
+	whiteRoutes: WhiteRoute[];
 };
 
 const checkIsWhiteRoute = ({
@@ -13,24 +13,22 @@ const checkIsWhiteRoute = ({
 	url,
 	whiteRoutes,
 }: CheckIsWhiteRouteParameters): boolean => {
-	return whiteRoutes.some((apiRoutes) =>
-		apiRoutes.some(({ method: _method, path }) => {
-			if (_method !== method) {
-				return false;
-			}
+	return whiteRoutes.some(({ method: _method, path }) => {
+		if (_method !== method) {
+			return false;
+		}
 
-			const rootPathCritea = "/*";
-			const isRootPath = path.includes(rootPathCritea);
+		const rootPathCritea = "/*";
+		const isRootPath = path.includes(rootPathCritea);
 
-			if (!isRootPath) {
-				return url === path;
-			}
+		if (!isRootPath) {
+			return url === path;
+		}
 
-			const rootPath = path.replace(rootPathCritea, "");
+		const rootPath = path.replace(rootPathCritea, "");
 
-			return url.startsWith(rootPath);
-		}),
-	);
+		return url.startsWith(rootPath);
+	});
 };
 
 export { checkIsWhiteRoute };

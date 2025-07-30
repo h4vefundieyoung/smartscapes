@@ -23,11 +23,11 @@ import {
 } from "~/libs/types/types.js";
 
 import { authPlugin } from "../plugins/plugins.js";
-import { WHITE_ROUTES } from "./libs/constants/constants.js";
 import {
 	type ServerApplication,
 	type ServerApplicationApi,
 	type ServerApplicationRouteParameters,
+	type WhiteRoute,
 } from "./libs/types/types.js";
 
 type Constructor = {
@@ -194,11 +194,11 @@ class BaseServerApplication implements ServerApplication {
 	}
 
 	private async initPlugins(): Promise<void> {
-		const whiteRoutes = this.apis.map((api, index) => {
-			const apiWhiteRoutes = WHITE_ROUTES[index];
+		let whiteRoutes: WhiteRoute[] = [];
 
-			return apiWhiteRoutes ? api.generateWhiteList(apiWhiteRoutes) : [];
-		});
+		for (const api of this.apis) {
+			whiteRoutes = [...whiteRoutes, ...api.whiteRoutes];
+		}
 
 		await this.app.register(authPlugin, { whiteRoutes });
 	}

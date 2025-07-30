@@ -9,7 +9,7 @@ import { tokenService } from "../../token/token.js";
 import { checkIsWhiteRoute } from "./libs/helpers/helpers.js";
 
 type PluginOptions = {
-	whiteRoutes: WhiteRoute[][];
+	whiteRoutes: WhiteRoute[];
 };
 
 type TokenPayload = {

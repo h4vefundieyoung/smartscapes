@@ -52,7 +52,7 @@ describe("Auth plugin", () => {
 
 		authPlugin(
 			appMock,
-			{ whiteRoutesList: [{ "method": "POST", path: "/" }] } as PluginOptions,
+			{ whiteRoutes: [[{ "method": "POST", path: "/" }]] } as PluginOptions,
 			() => {},
 		);
 
@@ -81,7 +81,7 @@ describe("Auth plugin", () => {
 
 		authPlugin(
 			appMock,
-			{ whiteRoutesList: [{ "method": "GET", path: "/" }] } as PluginOptions,
+			{ whiteRoutes: [[{ "method": "GET", path: "/" }]] } as PluginOptions,
 			() => {},
 		);
 
@@ -105,13 +105,11 @@ describe("Auth plugin", () => {
 			addHook: addHookMock,
 			decorateRequest: () => {},
 		} as unknown as FastifyInstance;
-		const basePath = "/api";
 
 		authPlugin(
 			appMock,
 			{
-				basePath,
-				whiteRoutesList: [{ "method": "GET", path: "/test/*" }],
+				whiteRoutes: [[{ "method": "GET", path: "/test/*" }]],
 			} as PluginOptions,
 			() => {},
 		);
@@ -124,7 +122,7 @@ describe("Auth plugin", () => {
 		const mockRequest = {
 			headers: {},
 			method: "GET",
-			url: `${basePath}/test/something`,
+			url: "/test/something",
 		} as FastifyRequest;
 
 		assert.doesNotReject(() => hook(mockRequest));

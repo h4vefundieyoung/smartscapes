@@ -6,10 +6,10 @@ import { AuthError } from "~/modules/auth/libs/exceptions/exceptions.js";
 import { userService } from "~/modules/users/users.js";
 
 import { tokenService } from "../../token/token.js";
+import { checkIsWhiteRoute } from "./libs/helpers/helpers.js";
 
 type PluginOptions = {
-	basePath: string;
-	whiteRoutesList: WhiteRoute[];
+	whiteRoutes: WhiteRoute[][];
 };
 
 type TokenPayload = {
@@ -21,33 +21,12 @@ type WhiteRoute = {
 	path: string;
 };
 
-const auth = (
-	app: FastifyInstance,
-
-	{ basePath, whiteRoutesList }: PluginOptions,
-): void => {
+const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {
 	const requestHandler = async (request: FastifyRequest): Promise<void> => {
-		const { headers, method, url } = request;
+		const { headers, url } = request;
+		const method = request.method as HTTPMethod;
 
-		const isWhiteListRoute = whiteRoutesList.some(
-			({ method: _method, path }) => {
-				if (_method !== method) {
-					return false;
-				}
-
-				const isRootPath = path.includes("/*");
-
-				if (!isRootPath) {
-					return url.endsWith(path);
-				}
-
-				const firstCharIndex = 0;
-				const lastCharIndex = -2;
-				const rootPath = `${basePath}${path.slice(firstCharIndex, lastCharIndex)}`;
-
-				return url.startsWith(rootPath);
-			},
-		);
+		const isWhiteListRoute = checkIsWhiteRoute({ method, url, whiteRoutes });
 
 		if (isWhiteListRoute) {
 			return;

@@ -194,11 +194,13 @@ class BaseServerApplication implements ServerApplication {
 	}
 
 	private async initPlugins(): Promise<void> {
-		const basePath = this.apis[0]?.basePath ?? "";
-		await this.app.register(authPlugin, {
-			basePath,
-			whiteRoutesList: WHITE_ROUTES,
+		const whiteRoutes = this.apis.map((api, index) => {
+			const apiWhiteRoutes = WHITE_ROUTES[index];
+
+			return apiWhiteRoutes ? api.generateWhiteList(apiWhiteRoutes) : [];
 		});
+
+		await this.app.register(authPlugin, { whiteRoutes });
 	}
 
 	private initRoutes(): void {

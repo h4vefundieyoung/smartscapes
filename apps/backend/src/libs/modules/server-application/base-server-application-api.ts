@@ -8,6 +8,7 @@ import {
 	type APIDoc as APIDocument,
 	type ServerApplicationApi,
 	type ServerApplicationRouteParameters,
+	type WhiteRoute,
 } from "./libs/types/types.js";
 
 class BaseServerApplicationApi implements ServerApplicationApi {
@@ -69,6 +70,13 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 			},
 			failOnErrors: true,
 		}) as APIDocument;
+	}
+
+	public generateWhiteList(whiteRoutes: WhiteRoute[]): WhiteRoute[] {
+		return whiteRoutes.map((whiteRoute) => ({
+			...whiteRoute,
+			path: `${this.basePath}${whiteRoute.path}`,
+		}));
 	}
 }
 

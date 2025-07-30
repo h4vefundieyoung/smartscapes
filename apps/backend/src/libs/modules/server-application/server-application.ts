@@ -17,6 +17,7 @@ const apiV1 = new BaseServerApplicationApi(
 	...userController.routes,
 	...pointsOfInterestController.routes,
 );
+
 const serverApplication = new BaseServerApplication({
 	apis: [apiV1],
 	config,

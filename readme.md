@@ -77,11 +77,11 @@ erDiagram
     int id PK
     dateTime created_at
     dateTime updated_at
-    int user_id
+    int user_id FK
     text content
     int likes_count
-    int route_id
-    int poi_id
+    int route_id FK
+    int poi_id FK
   }
 
   users }|--|| groups : group_id

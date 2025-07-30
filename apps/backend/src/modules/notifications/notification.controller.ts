@@ -38,6 +38,27 @@ class NotificationController extends BaseController {
 		});
 	}
 
+	/**
+	 * @swagger
+	 * /notifications:
+	 *   post:
+	 *     tags:
+	 *       - Notifications
+	 *     summary: Create a new notification
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             $ref: '#/components/schemas/NotificationCreateRequestDto'
+	 *     responses:
+	 *       201:
+	 *         description: Notification created successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: '#/components/schemas/NotificationGetAllItemResponseDto'
+	 */
 	public async create(
 		options: APIHandlerOptions<{
 			body: NotificationCreateRequestDto;
@@ -53,6 +74,31 @@ class NotificationController extends BaseController {
 		};
 	}
 
+	/**
+	 * @swagger
+	 * /notifications:
+	 *   get:
+	 *     tags:
+	 *       - Notifications
+	 *     summary: Get all notifications for the current user
+	 *     security:
+	 *       - bearerAuth: []
+	 *     responses:
+	 *       200:
+	 *         description: A list of notifications
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: object
+	 *                   properties:
+	 *                     items:
+	 *                       type: array
+	 *                       items:
+	 *                         $ref: '#/components/schemas/NotificationGetAllItemResponseDto'
+	 */
 	public async findAllByUserId(
 		options: APIHandlerOptions,
 	): Promise<

@@ -1,6 +1,7 @@
 import { Navigate } from "react-router";
 
 import logo from "~/assets/images/logo.svg";
+import { Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -65,7 +66,9 @@ const Auth = (): React.JSX.Element => {
 		<main className={styles["container"]}>
 			<div className={styles["left-panel"]}>
 				<div className={styles["logo"]}>
-					<img alt="SmartScapes" height="24" src={logo} width="136" />
+					<Link to={AppRoute.ROOT}>
+						<img alt="SmartScapes" height="24" src={logo} width="136" />
+					</Link>
 				</div>
 
 				{handleFormRender(pathname)}

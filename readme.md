@@ -82,6 +82,12 @@ erDiagram
     int likes_count
     int route_id FK
     int poi_id FK
+
+  route_categories {
+      int id PK
+      dateTime created_at
+      dateTime updated_at
+      varchar name
   }
 
   users }|--|| groups : group_id

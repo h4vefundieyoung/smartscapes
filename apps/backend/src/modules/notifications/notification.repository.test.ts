@@ -20,7 +20,7 @@ describe("NotificationRepository", () => {
 
 	const mockNotification: Parameters<typeof NotificationEntity.initialize>[0] =
 		{
-			content: "Someone liked your post",
+			content: "Someone liked your review",
 			createdAt: "2024-01-01T10:00:00Z",
 			entityId: 100,
 			entityType: EntityType.USERS,

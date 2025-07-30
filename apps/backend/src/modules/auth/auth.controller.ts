@@ -1,5 +1,3 @@
-import { type UserAuthResponseDto } from "@smartscapes/shared";
-
 import { APIPath } from "~/libs/enums/enums.js";
 import {
 	type APIHandlerOptions,
@@ -8,6 +6,7 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import {
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,

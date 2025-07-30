@@ -73,4 +73,4 @@ const auth = (
 
 const authPlugin = fastifyPlugin<PluginOptions>(auth);
 
-export { authPlugin, type WhiteRoute };
+export { authPlugin, type PluginOptions, type WhiteRoute };

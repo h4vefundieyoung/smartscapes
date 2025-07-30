@@ -71,4 +71,22 @@ describe("AuthController", () => {
 			status: HTTPCode.CREATED,
 		});
 	});
+
+	it("should reply with authenticated user", () => {
+		const status = HTTPCode.OK;
+		const authController = new AuthController(mockLogger, {} as AuthService);
+
+		const mockRequest = {
+			user: { ...mockUser },
+		};
+
+		const data = authController.getAuthenticatedUser(
+			mockRequest as APIHandlerOptions,
+		);
+
+		assert.deepStrictEqual(data, {
+			payload: { data: { ...mockUser } },
+			status,
+		});
+	});
 });

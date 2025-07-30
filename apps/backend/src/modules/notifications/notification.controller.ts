@@ -54,12 +54,14 @@ class NotificationController extends BaseController {
 	}
 
 	public async findAllByUserId(
-		options: APIHandlerOptions<{
-			user: { id: number };
-		}>,
+		options: APIHandlerOptions,
 	): Promise<
 		APIHandlerResponse<{ items: NotificationGetAllItemResponseDto[] }>
 	> {
+		if (!options.user) {
+			throw new Error("Unauthorized access");
+		}
+
 		const userId = options.user.id;
 
 		const { items } = await this.notificationService.findAllByUserId(userId);

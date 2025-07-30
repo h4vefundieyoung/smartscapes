@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import {
 	EntityType,
 	NotificationType,
@@ -21,6 +22,11 @@ describe("NotificationController", () => {
 		error: () => {},
 		info: () => {},
 		warn: () => {},
+	};
+
+	const mockUser: UserAuthResponseDto = {
+		email: "example@example.com",
+		id: 42,
 	};
 
 	it("create should return created notification", async () => {
@@ -61,7 +67,7 @@ describe("NotificationController", () => {
 			body: dto,
 			params: {},
 			query: {},
-			user: { id: 42 },
+			user: mockUser,
 		});
 
 		assert.deepStrictEqual(result, {
@@ -102,7 +108,7 @@ describe("NotificationController", () => {
 			body: {},
 			params: {},
 			query: {},
-			user: { id: 42 },
+			user: mockUser,
 		});
 
 		assert.deepStrictEqual(result, {

@@ -1,4 +1,5 @@
 import { type Repository } from "~/libs/types/types.js";
+import { type UserPasswordDetails } from "~/modules/users/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
 
@@ -44,6 +45,18 @@ class UserRepository implements Repository {
 		const user = await this.userModel.query().findById(id);
 
 		return user ? UserEntity.initialize(user) : null;
+	}
+
+	public async findPasswordDetails(
+		email: string,
+	): Promise<null | UserPasswordDetails> {
+		const user = await this.userModel
+			.query()
+			.select("id", "passwordHash", "passwordSalt")
+			.where("email", email)
+			.first();
+
+		return user ?? null;
 	}
 }
 

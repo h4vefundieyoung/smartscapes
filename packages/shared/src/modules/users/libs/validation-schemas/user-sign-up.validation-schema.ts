@@ -13,7 +13,7 @@ const userSignUp = z
 			.min(UserValidationRule.PASSWORD_MINIMUM_LENGTH, {
 				error: UserValidationMessage.PASSWORD_MINIMUM_LENGTH,
 			})
-			.max(UserValidationRule.STRING_MAX_LENGTH, {
+			.max(UserValidationRule.MAX_LENGTH, {
 				error: UserValidationMessage.PASSWORD_MAXIMUM_LENGTH,
 			}),
 		email: z
@@ -33,7 +33,7 @@ const userSignUp = z
 			.min(UserValidationRule.FIRST_NAME_MINIMUM_LENGTH, {
 				error: UserValidationMessage.FIRST_NAME_MINIMUM_LENGTH,
 			})
-			.max(UserValidationRule.STRING_MAX_LENGTH, {
+			.max(UserValidationRule.MAX_LENGTH, {
 				error: UserValidationMessage.FIRST_NAME_MAXIMUM_LENGTH,
 			}),
 		lastName: z
@@ -45,7 +45,7 @@ const userSignUp = z
 			.min(UserValidationRule.LAST_NAME_MINIMUM_LENGTH, {
 				error: UserValidationMessage.LAST_NAME_MINIMUM_LENGTH,
 			})
-			.max(UserValidationRule.STRING_MAX_LENGTH, {
+			.max(UserValidationRule.MAX_LENGTH, {
 				error: UserValidationMessage.LAST_NAME_MAXIMUM_LENGTH,
 			}),
 		password: z
@@ -57,7 +57,7 @@ const userSignUp = z
 			.min(UserValidationRule.PASSWORD_MINIMUM_LENGTH, {
 				error: UserValidationMessage.PASSWORD_MINIMUM_LENGTH,
 			})
-			.max(UserValidationRule.STRING_MAX_LENGTH, {
+			.max(UserValidationRule.MAX_LENGTH, {
 				error: UserValidationMessage.PASSWORD_MAXIMUM_LENGTH,
 			}),
 	})

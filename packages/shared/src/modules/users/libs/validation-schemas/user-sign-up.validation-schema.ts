@@ -7,34 +7,64 @@ const userSignUp = z
 		confirmPassword: z
 			.string()
 			.trim()
+			.min(UserValidationRule.REQUIRED_STRING_MIN_LENGTH, {
+				error: UserValidationMessage.PASSWORD_REQUIRED,
+			})
 			.min(UserValidationRule.PASSWORD_MINIMUM_LENGTH, {
 				error: UserValidationMessage.PASSWORD_MINIMUM_LENGTH,
+			})
+			.max(UserValidationRule.MAX_LENGTH, {
+				error: UserValidationMessage.PASSWORD_MAXIMUM_LENGTH,
 			}),
 		email: z
-			.email({
-				error: UserValidationMessage.EMAIL_WRONG,
-			})
+			.string()
 			.trim()
-			.min(UserValidationRule.EMAIL_MINIMUM_LENGTH, {
+			.min(UserValidationRule.REQUIRED_STRING_MIN_LENGTH, {
 				error: UserValidationMessage.EMAIL_REQUIRED,
-			}),
+			})
+			.min(UserValidationRule.EMAIL_MINIMUM_LENGTH, {
+				error: UserValidationMessage.EMAIL_MINIMUM_LENGTH,
+			})
+			.pipe(
+				z.email({
+					error: UserValidationMessage.EMAIL_WRONG,
+				}),
+			),
 		firstName: z
 			.string()
 			.trim()
-			.min(UserValidationRule.FIRST_NAME_MINIMUM_LENGTH, {
+			.min(UserValidationRule.REQUIRED_STRING_MIN_LENGTH, {
 				error: UserValidationMessage.FIRST_NAME_REQUIRED,
+			})
+			.min(UserValidationRule.FIRST_NAME_MINIMUM_LENGTH, {
+				error: UserValidationMessage.FIRST_NAME_MINIMUM_LENGTH,
+			})
+			.max(UserValidationRule.MAX_LENGTH, {
+				error: UserValidationMessage.FIRST_NAME_MAXIMUM_LENGTH,
 			}),
 		lastName: z
 			.string()
 			.trim()
-			.min(UserValidationRule.LAST_NAME_MINIMUM_LENGTH, {
+			.min(UserValidationRule.REQUIRED_STRING_MIN_LENGTH, {
 				error: UserValidationMessage.LAST_NAME_REQUIRED,
+			})
+			.min(UserValidationRule.LAST_NAME_MINIMUM_LENGTH, {
+				error: UserValidationMessage.LAST_NAME_MINIMUM_LENGTH,
+			})
+			.max(UserValidationRule.MAX_LENGTH, {
+				error: UserValidationMessage.LAST_NAME_MAXIMUM_LENGTH,
 			}),
 		password: z
 			.string()
 			.trim()
+			.min(UserValidationRule.REQUIRED_STRING_MIN_LENGTH, {
+				error: UserValidationMessage.PASSWORD_REQUIRED,
+			})
 			.min(UserValidationRule.PASSWORD_MINIMUM_LENGTH, {
 				error: UserValidationMessage.PASSWORD_MINIMUM_LENGTH,
+			})
+			.max(UserValidationRule.MAX_LENGTH, {
+				error: UserValidationMessage.PASSWORD_MAXIMUM_LENGTH,
 			}),
 	})
 	.refine((data) => data["password"] === data["confirmPassword"], {

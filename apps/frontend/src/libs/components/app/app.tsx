@@ -4,7 +4,6 @@ import {
 	Header,
 	Link,
 	Loader,
-	RouteCard,
 	RouterOutlet,
 	Sidebar,
 } from "~/libs/components/components.js";
@@ -70,14 +69,6 @@ const App = (): React.JSX.Element => {
 						))}
 					</ul>
 					<Button label="Button for test" type="button" />
-					<section className={styles["popular-section"]}>
-						<p className={styles["title"]}>Popular Routes</p>
-						<ul className={styles["cards"]}>
-							<RouteCard imageUrl={null} name="Kralovska obora" />
-							<RouteCard imageUrl={null} name="Kralovska obora" />
-							<RouteCard imageUrl={null} name="Kralovska obora" />
-						</ul>
-					</section>
 				</>
 			)}
 		</div>

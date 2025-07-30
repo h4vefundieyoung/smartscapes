@@ -27,12 +27,6 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
 export {
-	pointOfInterestCreateValidationSchema,
-	pointOfInterestUpdateValidationSchema,
-	type PointsOfInterestRequestDto,
-	type PointsOfInterestResponseDto,
-} from "./modules/points-of-interest/points-of-interest.js";
-export {
 	EntityType,
 	NotificationApiPath,
 	type NotificationCreateRequestDto,
@@ -40,6 +34,12 @@ export {
 	type NotificationGetAllItemResponseDto,
 	NotificationType,
 } from "./modules/notifications/notifications.js";
+export {
+	pointOfInterestCreateValidationSchema,
+	pointOfInterestUpdateValidationSchema,
+	type PointsOfInterestRequestDto,
+	type PointsOfInterestResponseDto,
+} from "./modules/points-of-interest/points-of-interest.js";
 export {
 	RouteCategoriesApiPath,
 	RouteCategoryExceptionMessage,

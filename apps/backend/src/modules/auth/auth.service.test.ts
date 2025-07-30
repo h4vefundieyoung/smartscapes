@@ -88,19 +88,17 @@ describe("AuthService", () => {
 			password: "Password123!",
 		};
 
-		const mockUser = {
-			email: "test@example.com",
-			firstName: "John",
+		const mockPasswordDetails = {
 			id: 1,
-			lastName: "Doe",
 			passwordHash: "hashedPassword",
+			passwordSalt: "someSalt",
 		};
 
 		const expectedSignInResponse: UserSignInResponseDto = {
 			token: mockToken,
 			user: {
-				email: mockUser.email,
-				id: mockUser.id,
+				email: signInRequestDto.email,
+				id: mockPasswordDetails.id,
 			},
 		};
 
@@ -108,31 +106,30 @@ describe("AuthService", () => {
 			Promise.resolve(mockToken),
 		);
 
-		const mockFindByEmail = mock.fn<UserService["findByEmail"]>(
-			(email, options) => {
-				if (
-					email === signInRequestDto.email &&
-					options?.includePassword === true
-				) {
-					return Promise.resolve(mockUser);
+		const mockFindPasswordDetails = mock.fn<UserService["findPasswordDetails"]>(
+			(email) => {
+				if (email === signInRequestDto.email) {
+					return Promise.resolve(mockPasswordDetails);
 				}
 
 				return Promise.resolve(null);
 			},
 		);
+
 		const mockTokenService = {
 			create: mockTokenCreate as BaseToken["create"],
 		} as BaseToken;
 
 		const mockUserService = {
-			findByEmail: mockFindByEmail as UserService["findByEmail"],
+			findPasswordDetails:
+				mockFindPasswordDetails as UserService["findPasswordDetails"],
 		} as UserService;
 
 		const mockEncryptionService = {
 			compare: mock.fn((password, hash) => {
 				if (
 					password === signInRequestDto.password &&
-					hash === mockUser.passwordHash
+					hash === mockPasswordDetails.passwordHash
 				) {
 					return Promise.resolve(true);
 				}

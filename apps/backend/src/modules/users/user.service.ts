@@ -7,8 +7,8 @@ import { type UserRepository } from "~/modules/users/user.repository.js";
 
 import { UserError } from "./libs/exceptions/exceptions.js";
 import {
-	type UserEntityModifierOptions,
 	type UserGetByIdItemResponseDto,
+	type UserPasswordDetails,
 	type UserSignUpRequestDto,
 } from "./libs/types/types.js";
 
@@ -58,11 +58,10 @@ class UserService implements Service {
 
 	public async findByEmail(
 		email: string,
-		options?: UserEntityModifierOptions,
 	): Promise<null | UserGetByIdItemResponseDto> {
 		const user = await this.userRepository.findByEmail(email);
 
-		return user ? user.toObject(options) : null;
+		return user ? user.toObject() : null;
 	}
 
 	public async findById(
@@ -71,6 +70,12 @@ class UserService implements Service {
 		const user = await this.userRepository.findById(id);
 
 		return user ? user.toObject() : null;
+	}
+
+	public async findPasswordDetails(
+		email: string,
+	): Promise<null | UserPasswordDetails> {
+		return await this.userRepository.findPasswordDetails(email);
 	}
 }
 

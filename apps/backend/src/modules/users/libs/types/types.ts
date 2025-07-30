@@ -1,4 +1,4 @@
-export { type UserEntityModifierOptions } from "./user-entity-modifier-options.type.js";
+export { type UserPasswordDetails } from "./user-password-details.type.js";
 export {
 	type UserGetByIdItemResponseDto,
 	type UserSignInRequestDto,

@@ -37,11 +37,9 @@ class AuthService {
 	): Promise<UserSignInResponseDto> {
 		const { email, password } = userRequestDto;
 
-		const user = await this.userService.findByEmail(email, {
-			includePassword: true,
-		});
+		const user = await this.userService.findPasswordDetails(email);
 
-		if (!user || !user.passwordHash) {
+		if (!user) {
 			throw new AuthorizationError({
 				message: AuthorizationExceptionMessage.INVALID_CREDENTIALS,
 			});
@@ -63,7 +61,7 @@ class AuthService {
 		return {
 			token,
 			user: {
-				email: user.email,
+				email,
 				id: user.id,
 			},
 		};

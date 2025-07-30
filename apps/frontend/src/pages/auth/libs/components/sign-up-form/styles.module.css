@@ -2,13 +2,14 @@
 	width: 100%;
 	max-width: 364px;
 	margin-top: 58px;
-	margin-bottom: 162px;
+	margin-bottom: clamp(106px, 10vh, 162px);
 }
 
 .form-title {
 	margin: 0 0 48px;
 	font-size: var(--font-size-h1);
 	font-weight: var(--font-weight-semibold);
+	line-height: 1.2;
 }
 
 .form {
@@ -18,16 +19,11 @@
 	margin: 0 0 24px;
 }
 
-.label {
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
-}
-
 .login-link-text {
 	margin: 0;
 	font-size: var(--font-size-tiny);
 	font-weight: var(--font-weight-regular);
+	line-height: 1.4;
 	color: var(--color-text-weak);
 }
 

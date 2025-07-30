@@ -65,10 +65,6 @@
 }
 
 @media (width <= 576px) {
-	.label-caption {
-		font-size: var(--font-size-tiny);
-	}
-
 	.input {
 		padding: 8px 10px;
 	}

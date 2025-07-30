@@ -1,6 +1,8 @@
 .container {
 	width: 100%;
 	max-width: 364px;
+	margin-top: 58px;
+	margin-bottom: clamp(106px, 10vh, 162px);
 }
 
 .form-title {
@@ -23,4 +25,26 @@
 	font-weight: var(--font-weight-regular);
 	line-height: 1.4;
 	color: var(--color-text-weak);
+}
+
+@media (width <= 991px) {
+	.container {
+		max-width: none;
+		margin: 0;
+	}
+}
+
+@media (width <= 576px) {
+	.form {
+		gap: 16px;
+	}
+
+	.form-title {
+		margin-bottom: 28px;
+		font-size: var(--font-size-h3);
+	}
+
+	.label-caption {
+		font-size: 10px;
+	}
 }

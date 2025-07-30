@@ -1,4 +1,5 @@
 import { type Repository } from "~/libs/types/types.js";
+import { type UserPasswordDetails } from "~/modules/users/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
 
@@ -46,6 +47,7 @@ class UserRepository implements Repository {
 		return user ? UserEntity.initialize(user) : null;
 	}
 
+
 	public async followUser(
 		followerId: number,
 		followingId: number,
@@ -77,6 +79,18 @@ class UserRepository implements Repository {
 			.for(followerId)
 			.unrelate()
 			.where("users.id", followingId);
+  }
+
+	public async findPasswordDetails(
+		email: string,
+	): Promise<null | UserPasswordDetails> {
+		const user = await this.userModel
+			.query()
+			.select("id", "passwordHash", "passwordSalt")
+			.where("email", email)
+			.first();
+
+		return user ?? null;
 	}
 }
 

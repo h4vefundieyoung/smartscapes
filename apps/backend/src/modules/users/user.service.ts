@@ -1,4 +1,4 @@
-import { encryption } from "~/libs/modules/encryption/libs/encription.js";
+import { encryption } from "~/libs/modules/encryption/libs/encryption.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
 import { UserExceptionMessage } from "~/modules/users/libs/enums/enums.js";
@@ -8,6 +8,7 @@ import { type UserRepository } from "~/modules/users/user.repository.js";
 import { UserError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserGetByIdItemResponseDto,
+	type UserPasswordDetails,
 	type UserSignUpRequestDto,
 } from "./libs/types/types.js";
 
@@ -70,6 +71,7 @@ class UserService implements Service {
 
 		return user ? user.toObject() : null;
 	}
+
 
 	public async follow(followerId: number, followingId: number): Promise<void> {
 		if (followerId === followingId) {
@@ -136,6 +138,12 @@ class UserService implements Service {
 		}
 
 		await this.userRepository.unfollowUser(followerId, followingId);
+  }
+
+	public async findPasswordDetails(
+		email: string,
+	): Promise<null | UserPasswordDetails> {
+		return await this.userRepository.findPasswordDetails(email);
 	}
 }
 

@@ -6,7 +6,7 @@ import { type BaseToken } from "~/libs/modules/token/token.js";
 import { AuthService } from "~/modules/auth/auth.service.js";
 import {
 	type UserEntity,
-	type UserGetAllItemResponseDto,
+	type UserGetByIdItemResponseDto,
 	type UserService,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
@@ -26,7 +26,7 @@ describe("AuthService", () => {
 	it("signUp should create new user", async () => {
 		const mockToken = "mock token";
 
-		const mockUserServiceResponse: UserGetAllItemResponseDto = {
+		const mockUserServiceResponse: UserGetByIdItemResponseDto = {
 			email: signUpRequestDto.email,
 			firstName: signUpRequestDto.firstName,
 			id: 1,

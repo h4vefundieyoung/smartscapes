@@ -7,7 +7,7 @@ import { type UserRepository } from "~/modules/users/user.repository.js";
 
 import { UserError } from "./libs/exceptions/exceptions.js";
 import {
-	type UserGetAllItemResponseDto,
+	type UserGetByIdItemResponseDto,
 	type UserSignUpRequestDto,
 } from "./libs/types/types.js";
 
@@ -20,7 +20,7 @@ class UserService implements Service {
 
 	public async create(
 		payload: UserSignUpRequestDto,
-	): Promise<UserGetAllItemResponseDto> {
+	): Promise<UserGetByIdItemResponseDto> {
 		const existingUser = await this.findByEmail(payload.email);
 
 		if (existingUser) {
@@ -45,7 +45,9 @@ class UserService implements Service {
 		return item.toObject();
 	}
 
-	public async findAll(): Promise<CollectionResult<UserGetAllItemResponseDto>> {
+	public async findAll(): Promise<
+		CollectionResult<UserGetByIdItemResponseDto>
+	> {
 		const items = await this.userRepository.findAll();
 
 		return {
@@ -55,8 +57,16 @@ class UserService implements Service {
 
 	public async findByEmail(
 		email: string,
-	): Promise<null | UserGetAllItemResponseDto> {
+	): Promise<null | UserGetByIdItemResponseDto> {
 		const user = await this.userRepository.findByEmail(email);
+
+		return user ? user.toObject() : null;
+	}
+
+	public async findById(
+		id: number,
+	): Promise<null | UserGetByIdItemResponseDto> {
+		const user = await this.userRepository.findById(id);
 
 		return user ? user.toObject() : null;
 	}

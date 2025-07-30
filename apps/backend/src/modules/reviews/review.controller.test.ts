@@ -3,9 +3,9 @@ import { describe, it } from "node:test";
 
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type UserAuthResponseDto } from "~/libs/types/types.js";
 
 import { ReviewController } from "./review.controller.js";
-import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import { type ReviewService } from "./review.service.js";
 
 describe("ReviewController", () => {

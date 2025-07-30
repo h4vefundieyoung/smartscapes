@@ -7,6 +7,7 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import {
 	type APIDoc as APIDocument,
 	type ServerApplicationApi,
+	type ServerApplicationApiConstructorParams as ServerApplicationApiConstructorParameters,
 	type ServerApplicationRouteParameters,
 	type WhiteRoute,
 } from "./libs/types/types.js";
@@ -18,14 +19,17 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 
 	public version: string;
 
-	public whiteRoutes: WhiteRoute[];
-
 	private config: Config;
 
+	private whiteRoutes: WhiteRoute[];
+
 	public constructor(
-		version: string,
-		config: Config,
-		...handlers: ServerApplicationRouteParameters[]
+		{
+			config,
+			version,
+			whiteRoutes = [],
+		}: ServerApplicationApiConstructorParameters,
+		...handlers: [...ServerApplicationRouteParameters[]]
 	) {
 		this.version = version;
 		this.config = config;
@@ -45,7 +49,7 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 
 		this.routes = [healthRoute, ...apiRoutes];
 
-		this.whiteRoutes = [];
+		this.whiteRoutes = whiteRoutes;
 	}
 
 	public generateDoc(title: string): APIDocument {
@@ -76,13 +80,16 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 		}) as APIDocument;
 	}
 
-	public injectWhiteRoutes(whiteRoutes: WhiteRoute[]): void {
-		const injectedRoutes = whiteRoutes.map((whiteRoute) => ({
+	public generateWhiteRoutes(): WhiteRoute[] {
+		const swaggerRoute: WhiteRoute = {
+			method: "GET",
+			path: "/documentation/*",
+		};
+
+		return [...this.whiteRoutes, swaggerRoute].map((whiteRoute) => ({
 			...whiteRoute,
 			path: `${this.basePath}${whiteRoute.path}`,
 		}));
-
-		this.whiteRoutes = [...this.whiteRoutes, ...injectedRoutes];
 	}
 }
 

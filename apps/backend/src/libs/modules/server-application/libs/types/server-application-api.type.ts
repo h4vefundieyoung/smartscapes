@@ -7,10 +7,9 @@ import {
 type ServerApplicationApi = {
 	basePath: string;
 	generateDoc(title: string): APIDocument;
-	injectWhiteRoutes(whiteRoutes: WhiteRoute[]): void;
+	generateWhiteRoutes(): WhiteRoute[];
 	routes: ServerApplicationRouteParameters[];
 	version: string;
-	whiteRoutes: WhiteRoute[];
 };
 
 export { type ServerApplicationApi };

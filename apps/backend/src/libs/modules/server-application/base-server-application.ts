@@ -27,7 +27,6 @@ import {
 	type ServerApplication,
 	type ServerApplicationApi,
 	type ServerApplicationRouteParameters,
-	type WhiteRoute,
 } from "./libs/types/types.js";
 
 type Constructor = {
@@ -194,11 +193,7 @@ class BaseServerApplication implements ServerApplication {
 	}
 
 	private async initPlugins(): Promise<void> {
-		let whiteRoutes: WhiteRoute[] = [];
-
-		for (const api of this.apis) {
-			whiteRoutes = [...whiteRoutes, ...api.whiteRoutes];
-		}
+		const whiteRoutes = this.apis.flatMap((api) => api.generateWhiteRoutes());
 
 		await this.app.register(authPlugin, { whiteRoutes });
 	}

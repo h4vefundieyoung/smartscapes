@@ -118,18 +118,30 @@ class UserEntity implements Entity {
 		};
 	}
 
-	public toObject(): {
+	public toObject(options?: { includePassword?: boolean }): {
 		email: string;
 		firstName: string;
 		id: number;
 		lastName: string;
+		passwordHash?: string;
+		passwordSalt?: string;
 	} {
-		return {
+		const baseObject = {
 			email: this.email,
 			firstName: this.firstName,
 			id: this.id as number,
 			lastName: this.lastName,
 		};
+
+		if (options?.includePassword) {
+			return {
+				...baseObject,
+				passwordHash: this.passwordHash,
+				passwordSalt: this.passwordSalt,
+			};
+		}
+
+		return baseObject;
 	}
 }
 

@@ -7,6 +7,7 @@ import { type UserRepository } from "~/modules/users/user.repository.js";
 
 import { UserError } from "./libs/exceptions/exceptions.js";
 import {
+	type UserEntityModifierOptions,
 	type UserGetByIdItemResponseDto,
 	type UserSignUpRequestDto,
 } from "./libs/types/types.js";
@@ -57,10 +58,11 @@ class UserService implements Service {
 
 	public async findByEmail(
 		email: string,
+		options?: UserEntityModifierOptions,
 	): Promise<null | UserGetByIdItemResponseDto> {
 		const user = await this.userRepository.findByEmail(email);
 
-		return user ? user.toObject() : null;
+		return user ? user.toObject(options) : null;
 	}
 
 	public async findById(

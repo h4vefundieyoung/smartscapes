@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { isLatinLetters } from "../../../../libs/helpers/helpers.js";
 import { UserValidationMessage, UserValidationRule } from "../enums/enums.js";
 
 const userSignUp = z
@@ -23,12 +24,18 @@ const userSignUp = z
 			.trim()
 			.min(UserValidationRule.FIRST_NAME_MINIMUM_LENGTH, {
 				error: UserValidationMessage.FIRST_NAME_REQUIRED,
+			})
+			.refine(isLatinLetters, {
+				message: UserValidationMessage.FIRST_NAME_INVALID,
 			}),
 		lastName: z
 			.string()
 			.trim()
 			.min(UserValidationRule.LAST_NAME_MINIMUM_LENGTH, {
 				error: UserValidationMessage.LAST_NAME_REQUIRED,
+			})
+			.refine(isLatinLetters, {
+				message: UserValidationMessage.LAST_NAME_INVALID,
 			}),
 		password: z
 			.string()

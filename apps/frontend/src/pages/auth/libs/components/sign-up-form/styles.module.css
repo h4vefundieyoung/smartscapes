@@ -35,16 +35,12 @@
 }
 
 @media (width <= 576px) {
-	.form {
-		gap: 16px;
-	}
-
 	.form-title {
 		margin-bottom: 28px;
 		font-size: var(--font-size-h3);
 	}
 
-	.label-caption {
-		font-size: 10px;
+	.form {
+		gap: 16px;
 	}
 }

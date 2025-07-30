@@ -5,7 +5,6 @@ import { type BaseEncryption } from "~/libs/modules/encryption/libs/base-encrypt
 import { type BaseToken } from "~/libs/modules/token/token.js";
 import { AuthService } from "~/modules/auth/auth.service.js";
 import {
-	type UserEntity,
 	type UserGetByIdItemResponseDto,
 	type UserService,
 	type UserSignInRequestDto,
@@ -84,50 +83,63 @@ describe("AuthService", () => {
 	it("signIn should return token and user data when credentials are valid", async () => {
 		const mockToken = "mock token";
 
-		const userId = 1;
-
 		const signInRequestDto: UserSignInRequestDto = {
 			email: "test@example.com",
 			password: "Password123!",
 		};
 
 		const mockUser = {
-			getId: () => userId,
-			getPasswordHash: () => "hashedPassword",
-			toObject: () => ({
-				email: "test@example.com",
-				firstName: "John",
-				id: 1,
-				lastName: "Doe",
-			}),
-		} as unknown as UserEntity;
+			email: "test@example.com",
+			firstName: "John",
+			id: 1,
+			lastName: "Doe",
+			passwordHash: "hashedPassword",
+		};
 
 		const expectedSignInResponse: UserSignInResponseDto = {
 			token: mockToken,
-			user: mockUser.toObject(),
+			user: {
+				email: mockUser.email,
+				id: mockUser.id,
+			},
 		};
 
 		const mockTokenCreate = mock.fn<BaseToken["create"]>(() =>
 			Promise.resolve(mockToken),
 		);
 
-		const mockFindEntityByEmail = mock.fn<UserService["findEntityByEmail"]>(
-			() => Promise.resolve(mockUser),
-		);
+		const mockFindByEmail = mock.fn<UserService["findByEmail"]>(
+			(email, options) => {
+				if (
+					email === signInRequestDto.email &&
+					options?.includePassword === true
+				) {
+					return Promise.resolve(mockUser);
+				}
 
+				return Promise.resolve(null);
+			},
+		);
 		const mockTokenService = {
 			create: mockTokenCreate as BaseToken["create"],
 		} as BaseToken;
 
 		const mockUserService = {
-			findEntityByEmail:
-				mockFindEntityByEmail as UserService["findEntityByEmail"],
+			findByEmail: mockFindByEmail as UserService["findByEmail"],
 		} as UserService;
 
 		const mockEncryptionService = {
-			compare: mock.fn(() => Promise.resolve(true)),
-		} as unknown as BaseEncryption;
+			compare: mock.fn((password, hash) => {
+				if (
+					password === signInRequestDto.password &&
+					hash === mockUser.passwordHash
+				) {
+					return Promise.resolve(true);
+				}
 
+				return Promise.resolve(false);
+			}),
+		} as unknown as BaseEncryption;
 		const authService = new AuthService({
 			encryptionService: mockEncryptionService,
 			tokenService: mockTokenService,

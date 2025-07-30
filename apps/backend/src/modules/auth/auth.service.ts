@@ -37,9 +37,11 @@ class AuthService {
 	): Promise<UserSignInResponseDto> {
 		const { email, password } = userRequestDto;
 
-		const user = await this.userService.findEntityByEmail(email);
+		const user = await this.userService.findByEmail(email, {
+			includePassword: true,
+		});
 
-		if (!user) {
+		if (!user || !user.passwordHash) {
 			throw new AuthorizationError({
 				message: AuthorizationExceptionMessage.INVALID_CREDENTIALS,
 			});
@@ -47,7 +49,7 @@ class AuthService {
 
 		const arePasswordsMatch = await this.encryptionService.compare(
 			password,
-			user.getPasswordHash(),
+			user.passwordHash,
 		);
 
 		if (!arePasswordsMatch) {
@@ -56,9 +58,15 @@ class AuthService {
 			});
 		}
 
-		const token = await this.tokenService.create({ userId: user.getId() });
+		const token = await this.tokenService.create({ userId: user.id });
 
-		return { token, user: user.toObject() };
+		return {
+			token,
+			user: {
+				email: user.email,
+				id: user.id,
+			},
+		};
 	}
 
 	public async signUp(

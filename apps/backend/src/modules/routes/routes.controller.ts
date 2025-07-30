@@ -176,7 +176,7 @@ class RoutesController extends BaseController {
 		options: APIHandlerOptions<{ params: { id: string } }>,
 	): Promise<APIHandlerResponse<unknown>> {
 		const id = Number(options.params.id);
-		const route = await this.routesService.find(id);
+		const route = await this.routesService.findById(id);
 
 		return {
 			payload: { data: route },
@@ -262,7 +262,7 @@ class RoutesController extends BaseController {
 			body: RoutesRequestDto;
 			params: { id: string };
 		}>,
-	): Promise<APIHandlerResponse<unknown>> {
+	): Promise<APIHandlerResponse<RoutesResponseDto>> {
 		const id = Number(options.params.id);
 		const { description, name, pois } = options.body;
 

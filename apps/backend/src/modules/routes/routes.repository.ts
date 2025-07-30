@@ -39,11 +39,9 @@ class RoutesRepository implements Repository {
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		const isDeleted = await this.routesModel.query().deleteById(id).execute();
+		await this.deleteRoutePois(id);
 
-		if (isDeleted) {
-			await this.deleteRoutePois(id);
-		}
+		const isDeleted = await this.routesModel.query().deleteById(id).execute();
 
 		return Boolean(isDeleted);
 	}
@@ -94,7 +92,7 @@ class RoutesRepository implements Repository {
 				visitOrder: number;
 			}[];
 		},
-	): Promise<null | RouteEntity> {
+	): Promise<RouteEntity> {
 		const { description, name, pois } = entity;
 
 		if (description !== undefined) {

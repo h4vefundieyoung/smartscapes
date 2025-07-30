@@ -43,18 +43,9 @@ class RoutesService implements Service {
 	}
 
 	public async delete(id: number): Promise<boolean> {
+		await this.findById(id);
+
 		return await this.routesRepository.delete(id);
-	}
-
-	public async find(id: number): Promise<null | {
-		description: string;
-		id: number;
-		name: string;
-		pois: { id: number; visitOrder: number }[];
-	}> {
-		const route = await this.routesRepository.findById(id);
-
-		return route ? route.toObject() : null;
 	}
 
 	public async findAll(): Promise<
@@ -72,6 +63,19 @@ class RoutesService implements Service {
 		};
 	}
 
+	public async findById(id: number): Promise<RoutesResponseDto> {
+		const route = await this.routesRepository.findById(id);
+
+		if (!route) {
+			throw new RoutesError({
+				message: RoutesExceptionMessage.ROUTE_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return route.toObject();
+	}
+
 	public async patch(
 		id: number,
 		payload: {
@@ -79,7 +83,9 @@ class RoutesService implements Service {
 			name?: string;
 			pois?: number[];
 		},
-	): Promise<null | RoutesResponseDto> {
+	): Promise<RoutesResponseDto> {
+		await this.findById(id);
+
 		let formattedPayload = {
 			description: payload.description,
 			name: payload.name,
@@ -101,7 +107,7 @@ class RoutesService implements Service {
 			routeEntity.toObject(),
 		);
 
-		return updatedRoute ? updatedRoute.toObject() : null;
+		return updatedRoute.toObject();
 	}
 
 	private async ensurePoisExist(pois: number[]): Promise<void> {

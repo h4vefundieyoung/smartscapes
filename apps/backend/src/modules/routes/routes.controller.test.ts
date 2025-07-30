@@ -62,12 +62,12 @@ describe("RoutesController", () => {
 	});
 
 	it("find should return route by id", async () => {
-		const mockFind: RoutesService["find"] = () => {
+		const mockFind: RoutesService["findById"] = () => {
 			return Promise.resolve(mockRoute);
 		};
 
 		const routesService = {
-			find: mockFind,
+			findById: mockFind,
 		} as RoutesService;
 
 		const controller = new RoutesController(mockLogger, routesService);

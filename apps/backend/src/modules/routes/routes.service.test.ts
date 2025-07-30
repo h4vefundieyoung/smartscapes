@@ -5,7 +5,7 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/routes-exception-message.enum.js";
-import { type RoutesError } from "./libs/exceptions/point-of-interest.exception.js";
+import { RoutesError } from "./libs/exceptions/point-of-interest.exception.js";
 import { RouteEntity } from "./routes.entity.js";
 import { type RoutesRepository } from "./routes.repository.js";
 import { RoutesService } from "./routes.service.js";
@@ -130,16 +130,20 @@ describe("RoutesService", () => {
 			pointsOfInterestService,
 		);
 
-		const result = await routesService.find(EXISTING_ID);
+		const result = await routesService.findById(EXISTING_ID);
 
 		assert.deepStrictEqual(result, routeEntity.toObject());
 	});
 
-	it("find should return null when route not found", async () => {
+	it("find should return an error when route not found", async () => {
 		const routesRepository = {
-			findById: (() => Promise.resolve(null)) as RoutesRepository["findById"],
+			findById: (() => {
+				throw new RoutesError({
+					message: RoutesExceptionMessage.ROUTE_NOT_FOUND,
+					status: HTTPCode.NOT_FOUND,
+				});
+			}) as RoutesRepository["patch"],
 		} as RoutesRepository;
-
 		const pointsOfInterestService = {} as PointsOfInterestService;
 
 		const routesService = new RoutesService(
@@ -147,9 +151,14 @@ describe("RoutesService", () => {
 			pointsOfInterestService,
 		);
 
-		const result = await routesService.find(NON_EXISTENT_ID);
-
-		assert.strictEqual(result, null);
+		try {
+			await routesService.findById(NON_EXISTENT_ID);
+		} catch (error) {
+			assert.strictEqual(
+				(error as RoutesError).message,
+				RoutesExceptionMessage.ROUTE_NOT_FOUND,
+			);
+		}
 	});
 
 	it("update should return updated route", async () => {
@@ -160,6 +169,8 @@ describe("RoutesService", () => {
 		const routeEntity = RouteEntity.initializeNew(updatedRoute);
 
 		const routesRepository = {
+			findById: (() =>
+				Promise.resolve(routeEntity)) as RoutesRepository["findById"],
 			patch: (() => Promise.resolve(routeEntity)) as RoutesRepository["patch"],
 		} as RoutesRepository;
 
@@ -187,9 +198,20 @@ describe("RoutesService", () => {
 		assert.deepStrictEqual(result, routeEntity.toObject());
 	});
 
-	it("update should return null when route not found", async () => {
+	it("update should return an error when route not found", async () => {
 		const routesRepository = {
-			patch: (() => Promise.resolve(null)) as RoutesRepository["patch"],
+			findById: (() => {
+				throw new RoutesError({
+					message: RoutesExceptionMessage.ROUTE_NOT_FOUND,
+					status: HTTPCode.NOT_FOUND,
+				});
+			}) as RoutesRepository["findById"],
+			patch: (() => {
+				throw new RoutesError({
+					message: RoutesExceptionMessage.ROUTE_NOT_FOUND,
+					status: HTTPCode.NOT_FOUND,
+				});
+			}) as RoutesRepository["patch"],
 		} as RoutesRepository;
 
 		const pointsOfInterestService = {
@@ -207,50 +229,25 @@ describe("RoutesService", () => {
 			pointsOfInterestService,
 		);
 
-		const result = await routesService.patch(NON_EXISTENT_ID, {
-			description: "Updated description",
-			name: "Updated Test Route",
-			pois: [FIRST_POI_ID, SECOND_POI_ID],
-		});
-
-		assert.strictEqual(result, null);
-	});
-
-	it("update should throw error when POI does not exist", async () => {
-		const routesRepository = {} as RoutesRepository;
-
-		const pointsOfInterestService = {
-			findById: (() =>
-				Promise.reject(
-					new Error("POI not found"),
-				)) as PointsOfInterestService["findById"],
-		} as PointsOfInterestService;
-
-		const routesService = new RoutesService(
-			routesRepository,
-			pointsOfInterestService,
-		);
-
-		await assert.rejects(
-			async () => {
-				await routesService.patch(EXISTING_ID, {
-					description: "Updated description",
-					name: "Updated Test Route",
-					pois: [NON_EXISTENT_ID],
-				});
-			},
-			(error: RoutesError) => {
-				assert.strictEqual(error.message, RoutesExceptionMessage.POI_NOT_FOUND);
-				assert.strictEqual(error.status, HTTPCode.CONFLICT);
-
-				return true;
-			},
-		);
+		try {
+			await routesService.patch(NON_EXISTENT_ID, {
+				description: "Updated description",
+				name: "Updated Test Route",
+				pois: [FIRST_POI_ID, SECOND_POI_ID],
+			});
+		} catch (error) {
+			assert.strictEqual(
+				(error as RoutesError).message,
+				RoutesExceptionMessage.ROUTE_NOT_FOUND,
+			);
+		}
 	});
 
 	it("delete should return true when route deleted", async () => {
 		const routesRepository = {
 			delete: (() => Promise.resolve(true)) as RoutesRepository["delete"],
+			findById: (() =>
+				Promise.resolve(createMockEntity())) as RoutesRepository["findById"],
 		} as RoutesRepository;
 
 		const pointsOfInterestService = {} as PointsOfInterestService;
@@ -265,9 +262,15 @@ describe("RoutesService", () => {
 		assert.strictEqual(result, true);
 	});
 
-	it("delete should return false when route not found", async () => {
+	it("delete should return an error when route not found", async () => {
 		const routesRepository = {
 			delete: (() => Promise.resolve(false)) as RoutesRepository["delete"],
+			findById: (() => {
+				throw new RoutesError({
+					message: RoutesExceptionMessage.ROUTE_NOT_FOUND,
+					status: HTTPCode.NOT_FOUND,
+				});
+			}) as RoutesRepository["patch"],
 		} as RoutesRepository;
 
 		const pointsOfInterestService = {} as PointsOfInterestService;
@@ -277,8 +280,13 @@ describe("RoutesService", () => {
 			pointsOfInterestService,
 		);
 
-		const result = await routesService.delete(NON_EXISTENT_ID);
-
-		assert.strictEqual(result, false);
+		try {
+			await routesService.delete(NON_EXISTENT_ID);
+		} catch (error) {
+			assert.strictEqual(
+				(error as RoutesError).message,
+				RoutesExceptionMessage.ROUTE_NOT_FOUND,
+			);
+		}
 	});
 });

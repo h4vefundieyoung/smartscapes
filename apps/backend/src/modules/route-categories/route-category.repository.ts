@@ -35,7 +35,7 @@ class RouteCategoryRepository implements Repository {
 	public async findByName(name: string): Promise<null | RouteCategoryEntity> {
 		const routeCategory = await this.routeCategoryModel
 			.query()
-			.where("name", name)
+			.whereRaw("LOWER(name) LIKE ?", [`%${name.toLowerCase()}%`])
 			.first()
 			.execute();
 

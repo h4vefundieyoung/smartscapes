@@ -23,6 +23,9 @@ import {
  *   schemas:
  *     Location:
  *       type: object
+ *       required:
+ *         - coordinates
+ *         - type
  *       properties:
  *         coordinates:
  *           type: array
@@ -37,9 +40,14 @@ import {
  *           example: "Point"
  *     PointsOfInterest:
  *       type: object
+ *       required:
+ *         - id
+ *         - location
+ *         - name
  *       properties:
  *         id:
  *           type: number
+ *           example: 1
  *         location:
  *           $ref: '#/components/schemas/Location'
  *         name:
@@ -118,12 +126,15 @@ class PointsOfInterestController extends BaseController {
 	 *                 type: string
 	 *                 example: "Central Park"
 	 *     responses:
-	 *       201:
+	 *       200:
 	 *         description: Point of interest created successfully
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/PointsOfInterest'
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/PointsOfInterest'
 	 */
 	public async create(
 		options: APIHandlerOptions<{
@@ -155,6 +166,13 @@ class PointsOfInterestController extends BaseController {
 	 *     responses:
 	 *       200:
 	 *         description: Point of interest deleted successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: boolean
 	 *       404:
 	 *         description: Point of interest not found
 	 */
@@ -222,7 +240,10 @@ class PointsOfInterestController extends BaseController {
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/PointsOfInterest'
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/PointsOfInterest'
 	 *       404:
 	 *         description: Point of interest not found
 	 */
@@ -271,7 +292,10 @@ class PointsOfInterestController extends BaseController {
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/PointsOfInterest'
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/PointsOfInterest'
 	 *       404:
 	 *         description: Point of interest not found
 	 */

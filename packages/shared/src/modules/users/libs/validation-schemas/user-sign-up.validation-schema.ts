@@ -27,9 +27,7 @@ const userSignUp = z
 			})
 			.refine(
 				(email) => {
-					const bannedDomains = [".ru"];
-
-					return !bannedDomains.some((domain) =>
+					return !UserValidationRule.BANNED_EMAIL_DOAMINS.some((domain) =>
 						email.toLowerCase().endsWith(domain),
 					);
 				},

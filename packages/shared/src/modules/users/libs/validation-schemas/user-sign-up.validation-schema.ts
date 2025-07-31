@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { isLatinLetters } from "../../../../libs/helpers/helpers.js";
+import { checkIsLatinLetter } from "../../../../libs/helpers/helpers.js";
 import { UserValidationMessage, UserValidationRule } from "../enums/enums.js";
 
 const userSignUp = z
@@ -43,7 +43,7 @@ const userSignUp = z
 			.max(UserValidationRule.MAX_LENGTH, {
 				error: UserValidationMessage.FIRST_NAME_MAXIMUM_LENGTH,
 			})
-			.refine(isLatinLetters, {
+			.refine(checkIsLatinLetter, {
 				message: UserValidationMessage.FIRST_NAME_INVALID,
 			}),
 		lastName: z
@@ -58,7 +58,7 @@ const userSignUp = z
 			.max(UserValidationRule.MAX_LENGTH, {
 				error: UserValidationMessage.LAST_NAME_MAXIMUM_LENGTH,
 			})
-			.refine(isLatinLetters, {
+			.refine(checkIsLatinLetter, {
 				message: UserValidationMessage.LAST_NAME_INVALID,
 			}),
 		password: z

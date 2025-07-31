@@ -18,7 +18,9 @@ describe("ReviewController", () => {
 
 	const mockUser = {
 		email: "test@example.com",
+		firstName: "John",
 		id: 1,
+		lastName: "Doe",
 	} satisfies UserAuthResponseDto;
 
 	const mockReview = {

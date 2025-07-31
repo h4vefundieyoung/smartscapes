@@ -37,8 +37,7 @@ describe("AuthService", () => {
 		const mockSignUpResponse: UserSignUpResponseDto = {
 			token: mockToken,
 			user: {
-				email: mockUserServiceResponse.email,
-				id: mockUserServiceResponse.id,
+				...mockUserServiceResponse,
 			},
 		};
 

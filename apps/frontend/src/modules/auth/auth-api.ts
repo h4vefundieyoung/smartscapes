@@ -26,7 +26,7 @@ class AuthApi extends BaseHTTPApi {
 		APIResponse<UserAuthResponseDto>
 	> {
 		const response = await this.load<APIResponse<UserAuthResponseDto>>(
-			this.getFullEndpoint(AuthApiPath.AUTHENTICATED_USER, {}),
+			this.getFullEndpoint(AuthApiPath.AUTH_USER, {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,

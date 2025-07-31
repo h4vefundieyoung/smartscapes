@@ -7,7 +7,9 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import {
 	type APIDoc as APIDocument,
 	type ServerApplicationApi,
+	type ServerApplicationApiConstructorParams as ServerApplicationApiConstructorParameters,
 	type ServerApplicationRouteParameters,
+	type WhiteRoute,
 } from "./libs/types/types.js";
 
 class BaseServerApplicationApi implements ServerApplicationApi {
@@ -17,16 +19,26 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 
 	public version: string;
 
+	public whiteRoutes: WhiteRoute[];
+
 	private config: Config;
 
 	public constructor(
-		version: string,
-		config: Config,
-		...handlers: ServerApplicationRouteParameters[]
+		{
+			config,
+			version,
+			whiteRoutes = [],
+		}: ServerApplicationApiConstructorParameters,
+		...handlers: [...ServerApplicationRouteParameters[]]
 	) {
 		this.version = version;
 		this.config = config;
 		this.basePath = `/api/${this.version}`;
+
+		const swaggerRoute: WhiteRoute = {
+			method: "GET",
+			path: "/documentation/*",
+		};
 
 		const healthRoute: ServerApplicationRouteParameters = {
 			handler: async (_, reply) =>
@@ -41,6 +53,15 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 		}));
 
 		this.routes = [healthRoute, ...apiRoutes];
+
+		this.whiteRoutes = whiteRoutes;
+
+		this.whiteRoutes = [...this.whiteRoutes, swaggerRoute].map(
+			(whiteRoute) => ({
+				...whiteRoute,
+				path: `${this.basePath}${whiteRoute.path}`,
+			}),
+		);
 	}
 
 	public generateDoc(title: string): APIDocument {

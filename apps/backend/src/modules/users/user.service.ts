@@ -26,7 +26,7 @@ class UserService implements Service {
 
 		if (existingUser) {
 			throw new UserError({
-				message: UserExceptionMessage.INVALID_CREDENTIALS,
+				message: UserExceptionMessage.USER_ALLREADY_EXISTS,
 				status: HTTPCode.CONFLICT,
 			});
 		}

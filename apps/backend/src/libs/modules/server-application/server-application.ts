@@ -1,3 +1,4 @@
+import { APIPath, AuthApiPath } from "~/libs/enums/enums.js";
 import { config } from "~/libs/modules/config/config.js";
 import { database } from "~/libs/modules/database/database.js";
 import { logger } from "~/libs/modules/logger/logger.js";
@@ -11,8 +12,20 @@ import { BaseServerApplicationApi } from "./base-server-application-api.js";
 import { BaseServerApplication } from "./base-server-application.js";
 
 const apiV1 = new BaseServerApplicationApi(
-	"v1",
-	config,
+	{
+		config,
+		version: "v1",
+		whiteRoutes: [
+			{
+				method: "POST",
+				path: `${APIPath.AUTH}${AuthApiPath.SIGN_UP}`,
+			},
+			{
+				method: "POST",
+				path: `${APIPath.AUTH}${AuthApiPath.SIGN_IN}`,
+			},
+		],
+	},
 	...authController.routes,
 	...pointsOfInterestController.routes,
 	...reviewController.routes,

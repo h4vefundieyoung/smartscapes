@@ -34,8 +34,7 @@ describe("AuthController", () => {
 		const mockResponseData: UserSignUpResponseDto = {
 			token: mockToken,
 			user: {
-				email: mockUser.email,
-				id: mockUser.id,
+				...mockUser,
 			},
 		};
 
@@ -65,12 +64,29 @@ describe("AuthController", () => {
 				data: {
 					token: mockToken,
 					user: {
-						email: mockUser.email,
-						id: mockUser.id,
+						...mockUser,
 					},
 				},
 			},
 			status: HTTPCode.CREATED,
+		});
+	});
+
+	it("should reply with authenticated user", () => {
+		const status = HTTPCode.OK;
+		const authController = new AuthController(mockLogger, {} as AuthService);
+
+		const mockRequest = {
+			user: { ...mockUser },
+		};
+
+		const data = authController.getAuthenticatedUser(
+			mockRequest as APIHandlerOptions,
+		);
+
+		assert.deepStrictEqual(data, {
+			payload: { data: { ...mockUser } },
+			status,
 		});
 	});
 });

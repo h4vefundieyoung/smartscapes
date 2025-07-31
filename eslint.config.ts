@@ -106,6 +106,7 @@ const sonarConfig: Linter.Config = {
 		"sonarjs/no-duplicate-string": ["off"],
 		"sonarjs/no-hardcoded-passwords": ["off"],
 		"sonarjs/todo-tag": ["off"],
+		"sonarjs/prefer-regexp-exec": ["off"],
 	},
 };
 

@@ -31,10 +31,9 @@
 	.container {
 		align-items: center;
 		justify-content: center;
-		background-image: url("../../assets/images/auth-page-background-responsive.jpg");
-		background-repeat: no-repeat;
-		background-position: center;
-		background-size: cover;
+		background:
+			linear-gradient(var(--color-text-weak), var(--color-text-weak)),
+			url("../../assets/images/auth-page-background-responsive.jpg");
 	}
 
 	.left-panel {

@@ -14,13 +14,7 @@ const HeroSection = (): React.JSX.Element => {
 				</p>
 			</div>
 
-			<div className={styles["section-cover"]}>
-				<img
-					alt="Landing - forest view"
-					className={styles["section-cover-image"]}
-					src="/assets/images/landing-cover.jpg"
-				/>
-			</div>
+			<div className={styles["section-cover"]} />
 		</section>
 	);
 };

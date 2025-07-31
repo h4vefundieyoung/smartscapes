@@ -27,7 +27,7 @@ const userSignUp = z
 			})
 			.refine(
 				(email) => {
-					return !UserValidationRule.BANNED_EMAIL_DOAMINS.some((domain) =>
+					return !UserValidationRule.BANNED_EMAIL_DOMAINS.some((domain) =>
 						email.toLowerCase().endsWith(domain),
 					);
 				},

@@ -91,8 +91,8 @@ erDiagram
   users }|--|| groups : group_id
   groups ||--|{ groups_to_permissions : group_id
   permissions ||--|{ groups_to_permissions : permission_id
-  users ||--|{ user_follows : follower
-  users ||--|{ user_follows : following
+  users ||--|{ user_follows : follower_id
+  users ||--|{ user_follows : following_id
 ```
 
 ## 5. Architecture

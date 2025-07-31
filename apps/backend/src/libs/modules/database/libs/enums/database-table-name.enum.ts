@@ -4,7 +4,6 @@ const DatabaseTableName = {
 	MIGRATIONS: "migrations",
 	PERMISSIONS: "permissions",
 	POINTS_OF_INTEREST: "points_of_interest",
-	REVIEWS: "reviews",
 	ROUTE_CATEGORIES: "route_categories",
 	USERS: "users",
 } as const;

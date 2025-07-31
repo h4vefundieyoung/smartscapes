@@ -83,6 +83,8 @@ class PointsOfInterestController extends BaseController {
 	 * @swagger
 	 * /points-of-interest:
 	 *   post:
+	 *     security:
+	 *      - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
 	 *     summary: Create a new point of interest
@@ -123,6 +125,8 @@ class PointsOfInterestController extends BaseController {
 	 * @swagger
 	 * /points-of-interest/{id}:
 	 *   delete:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
 	 *     summary: Delete a point of interest
@@ -156,6 +160,8 @@ class PointsOfInterestController extends BaseController {
 	 * @swagger
 	 * /points-of-interest:
 	 *   get:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
 	 *     summary: Retrieve all points of interest
@@ -187,6 +193,8 @@ class PointsOfInterestController extends BaseController {
 	 * @swagger
 	 * /points-of-interest/{id}:
 	 *   get:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
 	 *     summary: Get a point of interest by ID
@@ -224,6 +232,8 @@ class PointsOfInterestController extends BaseController {
 	 * @swagger
 	 * /points-of-interest/{id}:
 	 *   patch:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
 	 *     summary: Update a point of interest

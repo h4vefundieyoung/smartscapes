@@ -1,6 +1,7 @@
 import { UserValidationRule } from "./user-validation-rule.enum.js";
 
 const UserValidationMessage = {
+	EMAIL_DOMAIN_NOT_ALLOWED: "Email adresses with such domains are not allowed.",
 	EMAIL_MAXIMUM_LENGTH: `Email must be at most ${String(UserValidationRule.MAX_LENGTH)} characters long.`,
 	EMAIL_MINIMUM_LENGTH: `Email must be at least ${String(UserValidationRule.EMAIL_MINIMUM_LENGTH)} characters long.`,
 	EMAIL_REQUIRED: "Email is required.",

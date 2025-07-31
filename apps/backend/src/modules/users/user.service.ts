@@ -44,14 +44,7 @@ class UserService implements Service {
 		const { encryptedData, salt } = await encryption.encrypt(payload.password);
 		const group = await this.groupRepository.findByKey(GroupKeys.USERS);
 
-		if (!group) {
-			throw new UserError({
-				message: GroupExceptionMessage.GROUP_NOT_FOUND as string,
-				status: HTTPCode.CONFLICT,
-			});
-		}
-
-		if (group.toObject().id === null) {
+	if (group?.toObject().id == null) {
 			throw new UserError({
 				message: GroupExceptionMessage.GROUP_NOT_FOUND as string,
 				status: HTTPCode.CONFLICT,

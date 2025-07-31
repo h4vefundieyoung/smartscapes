@@ -20,20 +20,14 @@ class RoutesRepository implements Repository {
 			.returning("*")
 			.execute();
 
-		const routeObject = (
-			Array.isArray(route) ? route[0] : route
-		) as RoutesModel;
+		await this.insertRoutePois(route.id, pois);
 
-		if (pois.length > 0) {
-			await this.insertRoutePois(routeObject.id, pois);
-		}
-
-		const routePois = await this.getRoutePois(routeObject.id);
+		const routePois = await this.getRoutePois(route.id);
 
 		return RouteEntity.initialize({
-			description: routeObject.description,
-			id: routeObject.id,
-			name: routeObject.name,
+			description: route.description,
+			id: route.id,
+			name: route.name,
 			pois: routePois,
 		});
 	}
@@ -95,26 +89,20 @@ class RoutesRepository implements Repository {
 	): Promise<RouteEntity> {
 		const { description, name, pois } = entity;
 
-		if (description !== undefined) {
-			await this.routesModel
-				.query()
-				.patchAndFetchById(id, { description })
-				.execute();
-		}
+		const patchData = {
+			...(description === undefined ? {} : { description }),
+			...(name === undefined ? {} : { name }),
+		};
 
-		if (name !== undefined) {
-			await this.routesModel.query().patchAndFetchById(id, { name }).execute();
-		}
+		const updatedRoute = await this.routesModel
+			.query()
+			.patchAndFetchById(id, patchData)
+			.execute();
 
 		if (pois !== undefined) {
 			await this.deleteRoutePois(id);
 			await this.insertRoutePois(id, pois);
 		}
-
-		const updatedRoute = (await this.routesModel
-			.query()
-			.findById(id)
-			.execute()) as RoutesModel;
 
 		const updatedPois = await this.getRoutePois(id);
 

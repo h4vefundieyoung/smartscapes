@@ -81,6 +81,13 @@ erDiagram
     int following_id FK
   }
 
+  route_categories {
+      int id PK
+      dateTime created_at
+      dateTime updated_at
+      varchar name
+  }
+
   users }|--|| groups : group_id
   groups ||--|{ groups_to_permissions : group_id
   permissions ||--|{ groups_to_permissions : permission_id

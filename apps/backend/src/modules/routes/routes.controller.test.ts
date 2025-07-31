@@ -29,7 +29,12 @@ const mockRoute = {
 	],
 };
 
-const mockUser = { email: "test@example.com", id: 1 };
+const mockUser = {
+	email: "test@example.com",
+	firstName: "John",
+	id: 1,
+	lastName: "Doe",
+};
 
 const mockDelete: RoutesService["delete"] = () => {
 	return Promise.resolve(true);

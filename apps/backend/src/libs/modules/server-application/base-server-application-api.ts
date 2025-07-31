@@ -2,12 +2,13 @@ import swaggerJsdoc from "swagger-jsdoc";
 
 import { AppEnvironment } from "~/libs/enums/enums.js";
 import { type Config } from "~/libs/modules/config/config.js";
-import { HTTPCode } from "~/libs/modules/http/http.js";
 
 import {
 	type APIDoc as APIDocument,
 	type ServerApplicationApi,
+	type ServerApplicationApiConstructorParams as ServerApplicationApiConstructorParameters,
 	type ServerApplicationRouteParameters,
+	type WhiteRoute,
 } from "./libs/types/types.js";
 
 class BaseServerApplicationApi implements ServerApplicationApi {
@@ -17,22 +18,25 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 
 	public version: string;
 
+	public whiteRoutes: WhiteRoute[];
+
 	private config: Config;
 
 	public constructor(
-		version: string,
-		config: Config,
-		...handlers: ServerApplicationRouteParameters[]
+		{
+			config,
+			version,
+			whiteRoutes = [],
+		}: ServerApplicationApiConstructorParameters,
+		...handlers: [...ServerApplicationRouteParameters[]]
 	) {
 		this.version = version;
 		this.config = config;
 		this.basePath = `/api/${this.version}`;
 
-		const healthRoute: ServerApplicationRouteParameters = {
-			handler: async (_, reply) =>
-				await reply.status(HTTPCode.OK).send({ ok: true }),
+		const swaggerRoute: WhiteRoute = {
 			method: "GET",
-			path: `${this.basePath}/health`,
+			path: "/documentation/*",
 		};
 
 		const apiRoutes = handlers.map((handler) => ({
@@ -40,7 +44,16 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 			path: `${this.basePath}${handler.path}`,
 		}));
 
-		this.routes = [healthRoute, ...apiRoutes];
+		this.routes = apiRoutes;
+
+		this.whiteRoutes = whiteRoutes;
+
+		this.whiteRoutes = [...this.whiteRoutes, swaggerRoute].map(
+			(whiteRoute) => ({
+				...whiteRoute,
+				path: `${this.basePath}${whiteRoute.path}`,
+			}),
+		);
 	}
 
 	public generateDoc(title: string): APIDocument {

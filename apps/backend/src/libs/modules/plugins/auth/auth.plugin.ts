@@ -2,13 +2,14 @@ import { type FastifyInstance, type FastifyRequest } from "fastify";
 import fastifyPlugin from "fastify-plugin";
 
 import { type HTTPMethod } from "~/libs/types/types.js";
+import { AuthError } from "~/modules/auth/libs/exceptions/exceptions.js";
 import { userService } from "~/modules/users/users.js";
 
 import { tokenService } from "../../token/token.js";
-import { AuthError } from "./auth.exception.js";
+import { checkIsWhiteRoute } from "./libs/helpers/helpers.js";
 
 type PluginOptions = {
-	whiteRoutesList: WhiteRoute[];
+	whiteRoutes: WhiteRoute[];
 };
 
 type TokenPayload = {
@@ -20,16 +21,12 @@ type WhiteRoute = {
 	path: string;
 };
 
-const auth = (
-	app: FastifyInstance,
-	{ whiteRoutesList }: PluginOptions,
-): void => {
+const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {
 	const requestHandler = async (request: FastifyRequest): Promise<void> => {
-		const { headers, method, url } = request;
+		const { headers, url } = request;
+		const method = request.method as HTTPMethod;
 
-		const isWhiteListRoute = whiteRoutesList.some(
-			({ method: _method, path }) => url.endsWith(path) && _method === method,
-		);
+		const isWhiteListRoute = checkIsWhiteRoute({ method, url, whiteRoutes });
 
 		if (isWhiteListRoute) {
 			return;
@@ -56,4 +53,4 @@ const auth = (
 
 const authPlugin = fastifyPlugin<PluginOptions>(auth);
 
-export { authPlugin, type WhiteRoute };
+export { authPlugin, type PluginOptions, type WhiteRoute };

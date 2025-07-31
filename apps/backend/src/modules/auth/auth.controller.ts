@@ -6,6 +6,7 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import {
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
@@ -17,6 +18,7 @@ import {
 
 import { type AuthService } from "./auth.service.js";
 import { AuthApiPath } from "./libs/enums/enums.js";
+import { AuthError } from "./libs/exceptions/unauthorized.exception.js";
 
 /**
  * @swagger
@@ -66,6 +68,12 @@ class AuthController extends BaseController {
 		});
 
 		this.addRoute({
+			handler: this.getAuthenticatedUser.bind(this),
+			method: "GET",
+			path: AuthApiPath.AUTH_USER,
+		});
+
+		this.addRoute({
 			handler: this.signIn.bind(this),
 			method: "POST",
 			path: AuthApiPath.SIGN_IN,
@@ -75,6 +83,36 @@ class AuthController extends BaseController {
 		});
 	}
 
+	/**
+	 * @swagger
+	 * /auth/authenticated-user:
+	 *    get:
+	 *      tags:
+	 *       - Auth
+	 *      summary: Get authorized user
+	 *      responses:
+	 *        200:
+	 *          description: User authorized
+	 *          content:
+	 *            application/json:
+	 *              schema:
+	 *                type: object
+	 *                properties:
+	 *                  data:
+	 *                    $ref: '#/components/schemas/UserAuthResponseDto'
+	 */
+	public getAuthenticatedUser({
+		user,
+	}: APIHandlerOptions): APIHandlerResponse<UserAuthResponseDto> {
+		if (!user) {
+			throw new AuthError();
+		}
+
+		return {
+			payload: { data: user },
+			status: HTTPCode.OK,
+		};
+	}
 	/**
 	 * @swagger
 	 * /auth/sign-in:
@@ -99,6 +137,7 @@ class AuthController extends BaseController {
 	 *                 data:
 	 *                   $ref: '#/components/schemas/UserAuthResponseDto'
 	 */
+
 	public async signIn(
 		options: APIHandlerOptions<{
 			body: UserSignInRequestDto;

@@ -29,7 +29,7 @@ const mockRoute = {
 	],
 };
 
-const mockUser = { email: "test@example.com", id: 1 }; // Добавляем mock пользователя
+const mockUser = { email: "test@example.com", id: 1 };
 
 const mockDelete: RoutesService["delete"] = () => {
 	return Promise.resolve(true);

@@ -7,7 +7,7 @@ import { type ValueOf } from "~/libs/types/types.js";
 import { signIn, signUp } from "./actions.js";
 
 type State = {
-	authenticatedUser: null | UserAuthResponseDto;
+	authenticatedUser: null | Pick<UserAuthResponseDto, "email" | "id">;
 	dataStatus: ValueOf<typeof DataStatus>;
 };
 

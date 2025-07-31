@@ -23,7 +23,6 @@ import {
 } from "~/libs/types/types.js";
 
 import { authPlugin } from "../plugins/plugins.js";
-import { WHITE_ROUTES } from "./libs/constants/constants.js";
 import {
 	type ServerApplication,
 	type ServerApplicationApi,
@@ -194,7 +193,9 @@ class BaseServerApplication implements ServerApplication {
 	}
 
 	private async initPlugins(): Promise<void> {
-		await this.app.register(authPlugin, { whiteRoutesList: WHITE_ROUTES });
+		const whiteRoutes = this.apis.flatMap((api) => api.whiteRoutes);
+
+		await this.app.register(authPlugin, { whiteRoutes });
 	}
 
 	private initRoutes(): void {

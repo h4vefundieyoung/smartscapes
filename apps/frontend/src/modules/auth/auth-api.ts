@@ -6,6 +6,7 @@ import { type APIResponse } from "~/libs/types/types.js";
 
 import { AuthApiPath } from "./libs/enums/enums.js";
 import {
+	type UserAuthResponseDto,
 	type UserSignInRequestDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
@@ -20,6 +21,20 @@ type Constructor = {
 class AuthApi extends BaseHTTPApi {
 	public constructor({ baseUrl, http, storage }: Constructor) {
 		super({ baseUrl, http, path: APIPath.AUTH, storage });
+	}
+	public async getAuthenticatedUser(): Promise<
+		APIResponse<UserAuthResponseDto>
+	> {
+		const response = await this.load<APIResponse<UserAuthResponseDto>>(
+			this.getFullEndpoint(AuthApiPath.AUTH_USER, {}),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "GET",
+			},
+		);
+
+		return await response.json();
 	}
 
 	public async signIn(

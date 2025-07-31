@@ -64,7 +64,7 @@ describe("Auth plugin", () => {
 		const mockRequest = {
 			headers: {},
 			method: "GET",
-			url: "/",
+			url: "/api/v1/users",
 		} as FastifyRequest;
 
 		assert.equal(typeof hook, "function");

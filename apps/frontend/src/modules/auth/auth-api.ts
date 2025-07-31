@@ -8,6 +8,7 @@ import { AuthApiPath } from "./libs/enums/enums.js";
 import {
 	type UserAuthResponseDto,
 	type UserSignInRequestDto,
+	type UserSignInResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "./libs/types/types.js";
@@ -39,8 +40,8 @@ class AuthApi extends BaseHTTPApi {
 
 	public async signIn(
 		payload: UserSignInRequestDto,
-	): Promise<APIResponse<UserSignUpResponseDto>> {
-		const response = await this.load<APIResponse<UserSignUpResponseDto>>(
+	): Promise<APIResponse<UserSignInResponseDto>> {
+		const response = await this.load<APIResponse<UserSignInResponseDto>>(
 			this.getFullEndpoint(AuthApiPath.SIGN_IN, {}),
 			{
 				contentType: ContentType.JSON,

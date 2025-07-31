@@ -30,7 +30,7 @@ const App = (): React.JSX.Element => {
 		firstName: "John",
 		lastName: "Smith",
 	};
-	const isRoot = pathname === AppRoute.ROOT;
+	const isRoot = pathname === AppRoute.APP;
 
 	useEffect(() => {
 		if (isRoot) {

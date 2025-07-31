@@ -6,10 +6,23 @@ export { Icon } from "./icon/icon.js";
 export { Input } from "./input/input.js";
 export { Link } from "./link/link.js";
 export { Loader } from "./loader/loader.js";
-export { Map, type PointOfInterest } from "./map/map.js";
+export {
+	Map,
+	type PointOfInterest,
+	Feature,
+	Layer,
+	LayerControl,
+	Line,
+	Marker,
+	Popup,
+	RotationControl,
+	ScaleControl,
+	ZoomControl,
+} from "./map/map.js";
 export { RouteCard } from "./route-card/route-card.js";
 export { RouterProvider } from "./router-provider/router-provider.js";
 export { Sidebar } from "./sidebar/sidebar.js";
 export { ToastContainer } from "./toast-container/toast-container.js";
+// export { UserLocationControl } from "./user-location-control/user-location-control.js";
 export { Provider as StoreProvider } from "react-redux";
 export { Outlet as RouterOutlet } from "react-router";

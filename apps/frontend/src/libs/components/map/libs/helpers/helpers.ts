@@ -34,14 +34,26 @@ const getRouteCoordinates = async (
 
 	const url = `${MAPBOX_DIRECTIONS_BASE_URL}/${MAPBOX_WALKING_PROFILE}/${String(start[FIRST_COORDINATE_INDEX])},${String(start[SECOND_COORDINATE_INDEX])};${String(end[FIRST_COORDINATE_INDEX])},${String(end[SECOND_COORDINATE_INDEX])}?geometries=geojson&overview=full&steps=true&access_token=${accessToken}`;
 
+	console.log("Fetching route from Mapbox:", url);
+
 	try {
 		const response = await fetch(url);
+		console.log("Mapbox response status:", response.status);
+
 		const data = (await response.json()) as MapboxResponse;
+		console.log("Mapbox response data:", data);
 
 		if (data.routes && data.routes.length > 0) {
-			return data.routes[0]?.geometry.coordinates ?? null;
+			const coordinates = data.routes[0]?.geometry.coordinates ?? null;
+			console.log(
+				"Route coordinates retrieved:",
+				coordinates?.length,
+				"points",
+			);
+			return coordinates;
 		}
 
+		console.log("No routes found in response");
 		return null;
 	} catch (error) {
 		// eslint-disable-next-line no-console
@@ -58,43 +70,23 @@ const createPopupContent = (name: string): string => {
 const buildRouteCoordinates = async (
 	poisList: PointOfInterest[],
 ): Promise<number[][]> => {
-	const allRouteCoordinates: number[][] = [];
+	console.log(
+		"🗺️ BUILDING ROUTE: Creating simple direct route for",
+		poisList.length,
+		"POIs",
+	);
 
-	for (
-		let index = 0;
-		index < poisList.length - NEXT_POI_INDEX_OFFSET;
-		index += NEXT_POI_INDEX_OFFSET
-	) {
-		const currentPoi = poisList[index];
-		const nextPoi = poisList[index + NEXT_POI_INDEX_OFFSET];
-
-		if (!currentPoi || !nextPoi) {
-			continue;
-		}
-
-		const start: [number, number] = [currentPoi.longitude, currentPoi.latitude];
-		const end: [number, number] = [nextPoi.longitude, nextPoi.latitude];
-
-		const routeCoordinates = await getRouteCoordinates(start, end);
-
-		if (routeCoordinates) {
-			if (allRouteCoordinates.length === 0) {
-				allRouteCoordinates.push(...routeCoordinates);
-			} else {
-				allRouteCoordinates.push(
-					...routeCoordinates.slice(ROUTE_COORDINATE_SLICE_START),
-				);
-			}
-		} else {
-			if (allRouteCoordinates.length === 0) {
-				allRouteCoordinates.push(start);
-			}
-
-			allRouteCoordinates.push(end);
-		}
+	// Create a simple route connecting all POIs
+	const simpleRoute: number[][] = [];
+	for (const poi of poisList) {
+		simpleRoute.push([poi.longitude, poi.latitude]);
+		console.log(
+			`📍 Adding POI: ${poi.name} at [${poi.longitude}, ${poi.latitude}]`,
+		);
 	}
 
-	return allRouteCoordinates;
+	console.log("✅ ROUTE COMPLETE:", simpleRoute.length, "coordinate points");
+	console.log("📊 Route data:", simpleRoute);
+	return simpleRoute;
 };
-
 export { buildRouteCoordinates, createPopupContent };

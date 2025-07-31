@@ -19,9 +19,9 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 
 	public version: string;
 
-	private config: Config;
+	public whiteRoutes: WhiteRoute[];
 
-	private whiteRoutes: WhiteRoute[];
+	private config: Config;
 
 	public constructor(
 		{
@@ -34,6 +34,11 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 		this.version = version;
 		this.config = config;
 		this.basePath = `/api/${this.version}`;
+
+		const swaggerRoute: WhiteRoute = {
+			method: "GET",
+			path: "/documentation/*",
+		};
 
 		const healthRoute: ServerApplicationRouteParameters = {
 			handler: async (_, reply) =>
@@ -50,6 +55,13 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 		this.routes = [healthRoute, ...apiRoutes];
 
 		this.whiteRoutes = whiteRoutes;
+
+		this.whiteRoutes = [...this.whiteRoutes, swaggerRoute].map(
+			(whiteRoute) => ({
+				...whiteRoute,
+				path: `${this.basePath}${whiteRoute.path}`,
+			}),
+		);
 	}
 
 	public generateDoc(title: string): APIDocument {
@@ -78,18 +90,6 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 			},
 			failOnErrors: true,
 		}) as APIDocument;
-	}
-
-	public generateWhiteRoutes(): WhiteRoute[] {
-		const swaggerRoute: WhiteRoute = {
-			method: "GET",
-			path: "/documentation/*",
-		};
-
-		return [...this.whiteRoutes, swaggerRoute].map((whiteRoute) => ({
-			...whiteRoute,
-			path: `${this.basePath}${whiteRoute.path}`,
-		}));
 	}
 }
 

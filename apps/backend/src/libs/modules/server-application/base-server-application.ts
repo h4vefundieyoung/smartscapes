@@ -193,7 +193,7 @@ class BaseServerApplication implements ServerApplication {
 	}
 
 	private async initPlugins(): Promise<void> {
-		const whiteRoutes = this.apis.flatMap((api) => api.generateWhiteRoutes());
+		const whiteRoutes = this.apis.flatMap((api) => api.whiteRoutes);
 
 		await this.app.register(authPlugin, { whiteRoutes });
 	}

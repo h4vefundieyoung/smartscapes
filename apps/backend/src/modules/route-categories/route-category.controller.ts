@@ -64,6 +64,8 @@ class RouteCategoryController extends BaseController {
 	 * @swagger
 	 * /route-categories:
 	 *   post:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - RouteCategories
 	 *     summary: Create new route category
@@ -122,6 +124,8 @@ class RouteCategoryController extends BaseController {
 	 * @swagger
 	 * /route-categories:
 	 *   get:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - RouteCategories
 	 *     summary: Retrieve all route categories

@@ -87,6 +87,8 @@ class AuthController extends BaseController {
 	 * @swagger
 	 * /auth/authenticated-user:
 	 *    get:
+	 *      security:
+	 *        - bearerAuth: []
 	 *      tags:
 	 *       - Auth
 	 *      summary: Get authorized user

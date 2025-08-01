@@ -26,7 +26,9 @@ describe("NotificationController", () => {
 
 	const mockUser: UserAuthResponseDto = {
 		email: "example@example.com",
+		firstName: "John",
 		id: 42,
+		lastName: "Doe",
 	};
 
 	it("create should return created notification", async () => {

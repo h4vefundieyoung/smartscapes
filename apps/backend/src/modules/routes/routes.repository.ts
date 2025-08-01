@@ -89,29 +89,22 @@ class RoutesRepository implements Repository {
 	): Promise<RouteEntity> {
 		const { description, name, pois } = entity;
 
-		const patchData = {
-			...(description === undefined ? {} : { description }),
-			...(name === undefined ? {} : { name }),
-		};
+		if (description !== undefined || name !== undefined) {
+			const patchData = Object.fromEntries(
+				Object.entries({ description, name }).filter(
+					([, value]) => value !== undefined,
+				),
+			);
 
-		const updatedRoute = await this.routesModel
-			.query()
-			.patchAndFetchById(id, patchData)
-			.execute();
+			await this.routesModel.query().patchAndFetchById(id, patchData).execute();
+		}
 
 		if (pois !== undefined) {
 			await this.deleteRoutePois(id);
 			await this.insertRoutePois(id, pois);
 		}
 
-		const updatedPois = await this.getRoutePois(id);
-
-		return RouteEntity.initialize({
-			description: updatedRoute.description,
-			id: updatedRoute.id,
-			name: updatedRoute.name,
-			pois: updatedPois,
-		});
+		return await (this.findById(id) as Promise<RouteEntity>);
 	}
 
 	private async deleteRoutePois(routeId: number): Promise<void> {

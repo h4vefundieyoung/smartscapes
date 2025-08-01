@@ -81,4 +81,3 @@ const Carousel = ({ images }: Properties): React.JSX.Element => {
 };
 
 export { Carousel };
-export { mockImages } from "./mock-images.js";

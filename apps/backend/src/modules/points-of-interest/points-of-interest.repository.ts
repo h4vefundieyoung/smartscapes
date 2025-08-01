@@ -2,7 +2,10 @@ import { type Repository } from "~/libs/types/types.js";
 import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
 import { type PointsOfInterestModel } from "~/modules/points-of-interest/points-of-interest.model.js";
 
-import { type PointsOfInterestLocation } from "./libs/types/type.js";
+import {
+	type PointsOfInterestLocation,
+	type PointsOfInterestSearchQuery,
+} from "./libs/types/type.js";
 
 class PointsOfInterestRepository implements Repository {
 	private pointsOfInterestModel: typeof PointsOfInterestModel;
@@ -83,6 +86,40 @@ class PointsOfInterestRepository implements Repository {
 			.first();
 
 		return this.toEntityFromDbRecord(point);
+	}
+
+	public async findNearby(
+		options: PointsOfInterestSearchQuery,
+	): Promise<PointsOfInterestEntity[]> {
+		const { latitude, longitude, radius } = options;
+
+		const DEFAULT_RADIUS_KM = 10;
+		const THOUSAND = 1000;
+		const searchRadiusKm = radius || DEFAULT_RADIUS_KM;
+		const searchRadiusMeters = searchRadiusKm * THOUSAND;
+
+		const pointsOfInterest = await this.pointsOfInterestModel
+			.query()
+			.select("id", "name", "created_at", "updated_at")
+			.select(
+				this.pointsOfInterestModel.raw("ST_AsGeoJSON(location) as location"),
+			)
+			.select(
+				this.pointsOfInterestModel.raw(
+					"ST_Distance(location::geography, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography) as distance",
+					[longitude, latitude],
+				),
+			)
+			.whereRaw(
+				"ST_DWithin(location::geography, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography, ?)",
+				[longitude, latitude, searchRadiusMeters],
+			)
+			.orderByRaw("distance ASC")
+			.execute();
+
+		return pointsOfInterest
+			.map((point) => this.toEntityFromDbRecord(point))
+			.filter(Boolean) as PointsOfInterestEntity[];
 	}
 
 	public async patch(

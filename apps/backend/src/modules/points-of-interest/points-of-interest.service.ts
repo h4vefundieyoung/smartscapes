@@ -8,6 +8,7 @@ import { PointOfInterestError } from "./libs/exceptions/exceptions.js";
 import {
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
+	type PointsOfInterestSearchQuery,
 } from "./libs/types/type.js";
 
 class PointsOfInterestService implements Service {
@@ -47,10 +48,20 @@ class PointsOfInterestService implements Service {
 		return true;
 	}
 
-	public async findAll(): Promise<
-		CollectionResult<PointsOfInterestResponseDto>
-	> {
-		const items = await this.pointsOfInterestRepository.findAll();
+	public async findAll(
+		options: PointsOfInterestSearchQuery = {},
+	): Promise<CollectionResult<PointsOfInterestResponseDto>> {
+		if (!options.latitude && !options.longitude) {
+			const items = await this.pointsOfInterestRepository.findAll();
+
+			return {
+				items: items.map((item) => {
+					return item.toObject();
+				}),
+			};
+		}
+
+		const items = await this.pointsOfInterestRepository.findNearby(options);
 
 		return {
 			items: items.map((item) => {

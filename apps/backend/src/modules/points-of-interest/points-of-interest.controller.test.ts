@@ -90,6 +90,47 @@ describe("PointsOfInterestController", () => {
 		});
 	});
 
+	it("findAll should return nearby points of interest when location provided", async () => {
+		const pointsOfInterest = [mockPointOfInterest];
+		const RADIUS = 5;
+
+		const mockFindAll: PointsOfInterestService["findAll"] = (options) => {
+			assert.ok(options, "Options should be defined");
+			assert.strictEqual(Number(options.latitude), TEST_LATITUDE);
+			assert.strictEqual(Number(options.longitude), TEST_LONGITUDE);
+			assert.strictEqual(Number(options.radius), RADIUS);
+
+			return Promise.resolve({ items: pointsOfInterest });
+		};
+
+		const pointsOfInterestService = {
+			findAll: mockFindAll,
+		} as PointsOfInterestService;
+
+		const pointsOfInterestController = new PointsOfInterestController(
+			mockLogger,
+			pointsOfInterestService,
+		);
+
+		const result = await pointsOfInterestController.findAll({
+			body: {},
+			params: {},
+			query: {
+				latitude: String(TEST_LATITUDE),
+				longitude: String(TEST_LONGITUDE),
+				radius: "5",
+			},
+			user: null,
+		});
+
+		assert.deepStrictEqual(result, {
+			payload: {
+				data: pointsOfInterest,
+			},
+			status: HTTPCode.OK,
+		});
+	});
+
 	it("find should return point of interest by id", async () => {
 		const mockFind: PointsOfInterestService["findById"] = () => {
 			return Promise.resolve(mockPointOfInterest);

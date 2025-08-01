@@ -1,33 +1,10 @@
 import { z } from "zod";
 
-import {
-	PointsOfInterestValidationMessage,
-	PointsOfInterestValidationRule,
-} from "../enums/enums.js";
+import { PointsOfInterestValidationMessage } from "../enums/enums.js";
+import { coordinatesSchema } from "./coordinates.validation-schema.js";
 
 const locationSchema = z.object({
-	coordinates: z.tuple([
-		z
-			.number()
-			.min(
-				PointsOfInterestValidationRule.LONGITUDE_MIN,
-				PointsOfInterestValidationMessage.LONGITUDE_MIN,
-			)
-			.max(
-				PointsOfInterestValidationRule.LONGITUDE_MAX,
-				PointsOfInterestValidationMessage.LONGITUDE_MAX,
-			),
-		z
-			.number()
-			.min(
-				PointsOfInterestValidationRule.LATITUDE_MIN,
-				PointsOfInterestValidationMessage.LATITUDE_MIN,
-			)
-			.max(
-				PointsOfInterestValidationRule.LATITUDE_MAX,
-				PointsOfInterestValidationMessage.LATITUDE_MAX,
-			),
-	]),
+	coordinates: coordinatesSchema,
 	type: z.literal("Point", {
 		message: PointsOfInterestValidationMessage.INVALID_LOCATION_TYPE,
 	}),

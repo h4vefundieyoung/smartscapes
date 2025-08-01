@@ -32,6 +32,8 @@ export {
 	type PointsOfInterestLocation,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
+	type PointsOfInterestSearchQuery,
+	pointsOfInterestSearchQueryValidationSchema,
 } from "./modules/points-of-interest/points-of-interest.js";
 export {
 	RouteCategoriesApiPath,

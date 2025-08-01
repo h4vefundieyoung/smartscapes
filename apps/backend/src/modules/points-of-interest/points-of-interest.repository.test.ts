@@ -80,6 +80,37 @@ describe("PointsOfInterestRepository", () => {
 		assert.deepStrictEqual(result, pointOfInterestEntities);
 	});
 
+	it("findNearby should return nearby points of interest", async () => {
+		const pointOfInterestEntities = [createMockEntity()];
+
+		databaseTracker.on
+			.select(DatabaseTableName.POINTS_OF_INTEREST)
+			.response(pointOfInterestEntities);
+
+		const result = await pointsOfInterestRepository.findNearby({
+			latitude: TEST_LATITUDE,
+			longitude: TEST_LONGITUDE,
+			radius: 5,
+		});
+
+		assert.deepStrictEqual(result, pointOfInterestEntities);
+	});
+
+	it("findNearby should use default radius when not provided", async () => {
+		const pointOfInterestEntities = [createMockEntity()];
+
+		databaseTracker.on
+			.select(DatabaseTableName.POINTS_OF_INTEREST)
+			.response(pointOfInterestEntities);
+
+		const result = await pointsOfInterestRepository.findNearby({
+			latitude: TEST_LATITUDE,
+			longitude: TEST_LONGITUDE,
+		});
+
+		assert.deepStrictEqual(result, pointOfInterestEntities);
+	});
+
 	it("find should return point of interest by id", async () => {
 		const pointOfInterestEntity =
 			PointsOfInterestEntity.initialize(mockPointOfInterest);

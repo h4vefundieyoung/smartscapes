@@ -75,6 +75,55 @@ describe("PointsOfInterestService", () => {
 		});
 	});
 
+	it("findAll should return nearby points of interest when location provided", async () => {
+		const pointOfInterestEntity = createMockEntity();
+
+		const pointsOfInterestRepository = {
+			findNearby: (() =>
+				Promise.resolve([
+					pointOfInterestEntity,
+				])) as PointsOfInterestRepository["findNearby"],
+		} as PointsOfInterestRepository;
+
+		const pointsOfInterestService = new PointsOfInterestService(
+			pointsOfInterestRepository,
+		);
+
+		const result = await pointsOfInterestService.findAll({
+			latitude: TEST_LATITUDE,
+			longitude: TEST_LONGITUDE,
+			radius: 5,
+		});
+
+		assert.deepStrictEqual(result, {
+			items: [pointOfInterestEntity.toObject()],
+		});
+	});
+
+	it("findAll should use default radius when radius not provided", async () => {
+		const pointOfInterestEntity = createMockEntity();
+
+		const pointsOfInterestRepository = {
+			findNearby: (() =>
+				Promise.resolve([
+					pointOfInterestEntity,
+				])) as PointsOfInterestRepository["findNearby"],
+		} as PointsOfInterestRepository;
+
+		const pointsOfInterestService = new PointsOfInterestService(
+			pointsOfInterestRepository,
+		);
+
+		const result = await pointsOfInterestService.findAll({
+			latitude: TEST_LATITUDE,
+			longitude: TEST_LONGITUDE,
+		});
+
+		assert.deepStrictEqual(result, {
+			items: [pointOfInterestEntity.toObject()],
+		});
+	});
+
 	it("findById should return point of interest by id", async () => {
 		const pointOfInterestEntity = createMockEntity();
 

@@ -11,21 +11,49 @@ import { type PointsOfInterestService } from "~/modules/points-of-interest/point
 import {
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
+	type PointsOfInterestSearchQuery,
 } from "./libs/types/type.js";
 import {
 	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
+	pointsOfInterestSearchQueryValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
+
+type PointsOfInterestFindAllOptions =
+	| APIHandlerOptions
+	| PointsOfInterestFindAllOptionsQuery;
+
+type PointsOfInterestFindAllOptionsQuery = APIHandlerOptions<{
+	query?: PointsOfInterestSearchQuery;
+}>;
 
 /**
  * @swagger
  * components:
  *   schemas:
+ *     PointsOfInterestLocation:
+ *       type: object
+ *       required:
+ *         - coordinates
+ *         - type
+ *       properties:
+ *         coordinates:
+ *           type: array
+ *           items:
+ *             type: number
+ *           example: [30.5234, 50.4501]
+ *         type:
+ *           type: string
+ *           example: "Point"
+ *
  *     PointsOfInterestRequestDto:
  *       type: object
  *       required:
+ *         - location
  *         - name
  *       properties:
+ *         location:
+ *           $ref: '#/components/schemas/PointsOfInterestLocation'
  *         name:
  *           type: string
  *           example: "Central Park"
@@ -40,6 +68,8 @@ import {
  *         id:
  *           type: number
  *           example: 1
+ *         location:
+ *           $ref: '#/components/schemas/PointsOfInterestLocation'
  *         name:
  *           type: string
  *           example: "Central Park"
@@ -81,6 +111,9 @@ class PointsOfInterestController extends BaseController {
 			handler: this.findAll.bind(this),
 			method: "GET",
 			path: "/",
+			validation: {
+				query: pointsOfInterestSearchQueryValidationSchema,
+			},
 		});
 
 		this.addRoute({
@@ -181,7 +214,23 @@ class PointsOfInterestController extends BaseController {
 	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
-	 *     summary: Retrieve all points of interest
+	 *     summary: Retrieve points of interest with optional location-based filtering
+	 *     parameters:
+	 *       - in: query
+	 *         name: latitude
+	 *         schema:
+	 *           type: string
+	 *         description: User's latitude for location-based search
+	 *       - in: query
+	 *         name: longitude
+	 *         schema:
+	 *           type: string
+	 *         description: User's longitude for location-based search
+	 *       - in: query
+	 *         name: radius
+	 *         schema:
+	 *           type: string
+	 *         description: Search radius in kilometers
 	 *     responses:
 	 *       200:
 	 *         description: A list of points of interest
@@ -195,10 +244,11 @@ class PointsOfInterestController extends BaseController {
 	 *                   items:
 	 *                     $ref: '#/components/schemas/PointsOfInterestResponseDto'
 	 */
-	public async findAll(): Promise<
-		APIHandlerResponse<PointsOfInterestResponseDto[]>
-	> {
-		const { items } = await this.pointsOfInterestService.findAll();
+	public async findAll(
+		options?: PointsOfInterestFindAllOptions,
+	): Promise<APIHandlerResponse<PointsOfInterestResponseDto[]>> {
+		const query = options && "query" in options ? options.query : {};
+		const { items } = await this.pointsOfInterestService.findAll(query ?? {});
 
 		return {
 			payload: { data: items },

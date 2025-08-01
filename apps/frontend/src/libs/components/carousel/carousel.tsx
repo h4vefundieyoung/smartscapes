@@ -51,9 +51,16 @@ const Carousel = ({ images }: Properties): React.JSX.Element => {
 			},
 		});
 
-	const { carouselClassName, carouselStyle } = useCarouselStyles({
+	const {
+		carouselClassName,
+		carouselStyle,
+		scrollButtonClassName,
+		scrollButtonStyle,
+	} = useCarouselStyles({
 		animationClassName,
 		dragging,
+		element,
+		imagesLength: images.length,
 		overdragOffset,
 	});
 
@@ -76,6 +83,7 @@ const Carousel = ({ images }: Properties): React.JSX.Element => {
 					</div>
 				))}
 			</div>
+			<div className={scrollButtonClassName} style={scrollButtonStyle} />
 		</div>
 	);
 };

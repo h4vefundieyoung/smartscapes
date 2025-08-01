@@ -8,6 +8,8 @@ type CarouselParameters = {
 	isAtRightEdge: boolean;
 	maxScroll: number;
 	offsetLeft: number;
+	scrollBarPosition: number;
+	scrollBarWidthPercent: number;
 	scrollLeft: number;
 	scrollWidth: number;
 };

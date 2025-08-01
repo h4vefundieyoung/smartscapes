@@ -20,7 +20,9 @@ const Header = ({ user }: Properties): JSX.Element => {
 				<img
 					alt="SmartScapes Logo"
 					className={styles["header-logo"]}
+					height={24}
 					src={appLogo}
+					width={136}
 				/>
 			</Link>
 			{hasUser ? (

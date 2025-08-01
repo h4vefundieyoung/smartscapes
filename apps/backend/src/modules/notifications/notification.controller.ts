@@ -6,7 +6,11 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import { NotificationApiPath } from "~/modules/notifications/libs/enums/enums.js";
+import {
+	NotificationApiPath,
+	NotificationExceptionMessage,
+} from "~/modules/notifications/libs/enums/enums.js";
+import { NotificationError } from "~/modules/notifications/libs/exceptions/exceptions.js";
 import {
 	type NotificationCreateRequestDto,
 	type NotificationGetAllItemResponseDto,
@@ -105,10 +109,20 @@ class NotificationController extends BaseController {
 		APIHandlerResponse<{ items: NotificationGetAllItemResponseDto[] }>
 	> {
 		if (!options.user) {
-			throw new Error("Unauthorized access");
+			throw new NotificationError({
+				message: NotificationExceptionMessage.NOTIFICATION_UNAUTHORIZED,
+				status: HTTPCode.UNAUTHORIZED,
+			});
 		}
 
 		const userId = options.user.id;
+
+		if (!userId) {
+			throw new NotificationError({
+				message: NotificationExceptionMessage.NOTIFICATION_UNAUTHORIZED,
+				status: HTTPCode.UNAUTHORIZED,
+			});
+		}
 
 		const { items } = await this.notificationService.findAllByUserId(userId);
 

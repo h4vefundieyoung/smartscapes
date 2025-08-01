@@ -31,6 +31,7 @@ export {
 	NotificationApiPath,
 	type NotificationCreateRequestDto,
 	notificationCreateValidationSchema,
+	NotificationExceptionMessage,
 	type NotificationGetAllItemResponseDto,
 	NotificationType,
 } from "./modules/notifications/notifications.js";

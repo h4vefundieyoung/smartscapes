@@ -79,13 +79,14 @@ describe("PointsOfInterestController", () => {
 			},
 			params: {},
 			query: {},
+			user: null,
 		});
 
 		assert.deepStrictEqual(result, {
 			payload: {
 				data: mockPointOfInterest,
 			},
-			status: HTTPCode.OK,
+			status: HTTPCode.CREATED,
 		});
 	});
 
@@ -107,6 +108,7 @@ describe("PointsOfInterestController", () => {
 			body: {},
 			params: { id: "1" },
 			query: {},
+			user: null,
 		});
 
 		assert.deepStrictEqual(result, {
@@ -143,6 +145,7 @@ describe("PointsOfInterestController", () => {
 			},
 			params: { id: "1" },
 			query: {},
+			user: null,
 		});
 
 		assert.deepStrictEqual(result, {
@@ -167,6 +170,7 @@ describe("PointsOfInterestController", () => {
 			body: {},
 			params: { id: "1" },
 			query: {},
+			user: null,
 		});
 
 		assert.deepStrictEqual(result, {

@@ -5,7 +5,7 @@ import { type APIHandlerOptions } from "~/libs/modules/controller/controller.js"
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import {
-	type UserGetAllItemResponseDto,
+	type UserGetByIdItemResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
@@ -16,7 +16,7 @@ import { type AuthService } from "./auth.service.js";
 describe("AuthController", () => {
 	const mockToken = "mock token";
 
-	const mockUser: UserGetAllItemResponseDto = {
+	const mockUser: UserGetByIdItemResponseDto = {
 		email: "test@example.com",
 		firstName: "John",
 		id: 1,
@@ -34,8 +34,7 @@ describe("AuthController", () => {
 		const mockResponseData: UserSignUpResponseDto = {
 			token: mockToken,
 			user: {
-				email: mockUser.email,
-				id: mockUser.id,
+				...mockUser,
 			},
 		};
 
@@ -65,12 +64,29 @@ describe("AuthController", () => {
 				data: {
 					token: mockToken,
 					user: {
-						email: mockUser.email,
-						id: mockUser.id,
+						...mockUser,
 					},
 				},
 			},
 			status: HTTPCode.CREATED,
+		});
+	});
+
+	it("should reply with authenticated user", () => {
+		const status = HTTPCode.OK;
+		const authController = new AuthController(mockLogger, {} as AuthService);
+
+		const mockRequest = {
+			user: { ...mockUser },
+		};
+
+		const data = authController.getAuthenticatedUser(
+			mockRequest as APIHandlerOptions,
+		);
+
+		assert.deepStrictEqual(data, {
+			payload: { data: { ...mockUser } },
+			status,
 		});
 	});
 });

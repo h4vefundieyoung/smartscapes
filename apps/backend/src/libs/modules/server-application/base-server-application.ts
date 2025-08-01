@@ -22,6 +22,7 @@ import {
 	type ValidationSchema,
 } from "~/libs/types/types.js";
 
+import { authPlugin } from "../plugins/plugins.js";
 import {
 	type ServerApplication,
 	type ServerApplicationApi,
@@ -69,6 +70,8 @@ class BaseServerApplication implements ServerApplication {
 		await this.initMiddlewares();
 
 		await this.initServe();
+
+		await this.initPlugins();
 
 		this.initRoutes();
 
@@ -187,6 +190,12 @@ class BaseServerApplication implements ServerApplication {
 		await this.app.register(fastifyCors);
 
 		await this.app.register(fastifyHelmet);
+	}
+
+	private async initPlugins(): Promise<void> {
+		const whiteRoutes = this.apis.flatMap((api) => api.whiteRoutes);
+
+		await this.app.register(authPlugin, { whiteRoutes });
 	}
 
 	private initRoutes(): void {

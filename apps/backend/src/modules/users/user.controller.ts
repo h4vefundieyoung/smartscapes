@@ -8,7 +8,7 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
 import { UsersApiPath } from "./libs/enums/enums.js";
-import { type UserGetAllItemResponseDto } from "./libs/types/types.js";
+import { type UserGetByIdItemResponseDto } from "./libs/types/types.js";
 
 /**
  * @swagger
@@ -22,6 +22,12 @@ import { type UserGetAllItemResponseDto } from "./libs/types/types.js";
  *         email:
  *           type: string
  *           example: user@example.com
+ *         lastName:
+ *          type: string
+ *          example: Doe
+ *         firstName:
+ *          type: string
+ *          example: John
  */
 
 class UserController extends BaseController {
@@ -42,6 +48,8 @@ class UserController extends BaseController {
 	 * @swagger
 	 * /users:
 	 *   get:
+	 *     security:
+	 *      - bearerAuth: []
 	 *     tags:
 	 *       - Users
 	 *     summary: Retrieve all users
@@ -59,7 +67,7 @@ class UserController extends BaseController {
 	 *                     $ref: '#/components/schemas/User'
 	 */
 	public async findAll(): Promise<
-		APIHandlerResponse<UserGetAllItemResponseDto[]>
+		APIHandlerResponse<UserGetByIdItemResponseDto[]>
 	> {
 		const { items } = await this.userService.findAll();
 

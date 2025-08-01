@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.6.3](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.6.2...backend-v1.6.3) (2025-08-01)
+
+
+### Bug Fixes
+
+* **frontend:** fix auth swagger ss-169 ([#175](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/175)) ([2c68ef4](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2c68ef4b9c1de8da5697b10f0d2b996ed052b996))
+* **frontend:** fix poi swagger ss-173 ([#176](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/176)) ([da2f5c5](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/da2f5c5b0413d98973c7670fa6fd5f4275c10bb4))
+
+## [1.6.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.6.1...backend-v1.6.2) (2025-07-31)
+
+
+### Bug Fixes
+
+* **backend:** attach token to swagger requests ss-149 ([#154](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/154)) ([740b897](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/740b8974816b46813ec8c95b3a7e7c6b4737da9c))
+
+## [1.6.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.6.0...backend-v1.6.1) (2025-07-31)
+
+
+### Bug Fixes
+
+* **backend:** fix white listing rules ss-148 ([#150](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/150)) ([2adff00](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2adff007dac3f3b00cae3540fd65854cdbf2a728))
+
+## [1.6.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.5.0...backend-v1.6.0) (2025-07-31)
+
+
+### Features
+
+* **backend/shared:** add protected routing ss-23 ([#82](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/82)) ([bc5ff87](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/bc5ff87c7b10b2550eb02aabc4bcad86ccb4155e))
+* **backend/shared:** add reviews module ss-75 ([#90](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/90)) ([30aead5](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/30aead509166e1b06ebd4301a738364313a55f8e))
+* **backend/shared:** add sign in flow to the backend ss-17 ([#67](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/67)) ([dc3f06d](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/dc3f06da34c840187d7644b23893ed7fca06ad43))
+* **backend:** add route categories module ss-76 ([#97](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/97)) ([c94a521](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c94a521cfbbd9b113c1d705b7f97f9c82a7db30d))
+* **backend:** add user auth flow ss-26 ([#122](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/122)) ([abd0433](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/abd0433761fadcab8b9111d871b6fa9a8da496ab))
+
+
+### Bug Fixes
+
+* **backend:** change error message for user with same email ss-134 ([#140](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/140)) ([1f6dbb6](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/1f6dbb692d18f54f8bed9f8507b88813c05a6b34))
+
 ## [1.5.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.4.0...backend-v1.5.0) (2025-07-29)
 
 
@@ -33,14 +71,12 @@
 
 ## [1.1.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.0.0...backend-v1.1.0) (2025-07-21)
 
-
 ### Features
 
-* **backend/frontend/shared:** unify api response, improve server structure ss-1 ([#11](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/11)) ([75221e0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/75221e0a432d1480fa5c5e6647e359a0f51dc1de))
+- **backend/frontend/shared:** unify api response, improve server structure ss-1 ([#11](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/11)) ([75221e0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/75221e0a432d1480fa5c5e6647e359a0f51dc1de))
 
 ## 1.0.0 (2025-07-18)
 
-
 ### Features
 
-* **frontend/backend/shared:** add project starter ss-1 ([#4](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/4)) ([f7e4e76](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/f7e4e76eda8edf3619b45d3b604587dd1407296c))
+- **frontend/backend/shared:** add project starter ss-1 ([#4](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/4)) ([f7e4e76](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/f7e4e76eda8edf3619b45d3b604587dd1407296c))

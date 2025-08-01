@@ -1,7 +1,7 @@
-import { DatabaseColumnName } from "~/libs/modules/database/libs/enums/enums.js";
 import { type Repository, type ValueOf } from "~/libs/types/types.js";
 import {
 	type EntityType,
+	NotificationColumnName,
 	type NotificationType,
 } from "~/modules/notifications/libs/enums/enums.js";
 
@@ -42,8 +42,8 @@ class NotificationRepository implements Repository {
 	public async findAllByUserId(userId: number): Promise<NotificationEntity[]> {
 		const notifications = await this.notificationModel
 			.query()
-			.where(DatabaseColumnName.USER_ID, userId)
-			.orderBy(DatabaseColumnName.CREATED_AT, "desc")
+			.where(NotificationColumnName.USER_ID, userId)
+			.orderBy(NotificationColumnName.CREATED_AT, "desc")
 			.execute();
 
 		return notifications.map((notification) =>

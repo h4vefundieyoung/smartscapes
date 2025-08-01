@@ -1,4 +1,4 @@
-const DatabaseColumnName = {
+const NotificationColumnName = {
 	CONTENT: "content",
 	CREATED_AT: "created_at",
 	EMAIL: "email",
@@ -15,4 +15,4 @@ const DatabaseColumnName = {
 	USER_ID: "user_id",
 } as const;
 
-export { DatabaseColumnName };
+export { NotificationColumnName };

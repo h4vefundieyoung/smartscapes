@@ -21,11 +21,21 @@ import {
  * @swagger
  * components:
  *   schemas:
- *     PointsOfInterest:
+ *     PointsOfInterestRequestDto:
+ *       type: object
+ *       required:
+ *         - name
+ *       properties:
+ *         name:
+ *           type: string
+ *           example: "Central Park"
+ *
+ *     PointsOfInterestResponseDto:
  *       type: object
  *       properties:
  *         id:
  *           type: number
+ *           example: 1
  *         name:
  *           type: string
  *           example: "Central Park"
@@ -83,6 +93,8 @@ class PointsOfInterestController extends BaseController {
 	 * @swagger
 	 * /points-of-interest:
 	 *   post:
+	 *     security:
+	 *      - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
 	 *     summary: Create a new point of interest
@@ -91,19 +103,17 @@ class PointsOfInterestController extends BaseController {
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             type: object
-	 *             required:
-	 *               - name
-	 *             properties:
-	 *               name:
-	 *                 type: string
+	 *             $ref: '#/components/schemas/PointsOfInterestRequestDto'
 	 *     responses:
 	 *       201:
 	 *         description: Point of interest created successfully
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/PointsOfInterest'
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/PointsOfInterestResponseDto'
 	 */
 	public async create(
 		options: APIHandlerOptions<{
@@ -115,7 +125,7 @@ class PointsOfInterestController extends BaseController {
 
 		return {
 			payload: { data: pointOfInterest },
-			status: HTTPCode.OK,
+			status: HTTPCode.CREATED,
 		};
 	}
 
@@ -123,6 +133,8 @@ class PointsOfInterestController extends BaseController {
 	 * @swagger
 	 * /points-of-interest/{id}:
 	 *   delete:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
 	 *     summary: Delete a point of interest
@@ -135,8 +147,13 @@ class PointsOfInterestController extends BaseController {
 	 *     responses:
 	 *       200:
 	 *         description: Point of interest deleted successfully
-	 *       404:
-	 *         description: Point of interest not found
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: boolean
 	 */
 	public async delete(
 		options: APIHandlerOptions<{
@@ -156,6 +173,8 @@ class PointsOfInterestController extends BaseController {
 	 * @swagger
 	 * /points-of-interest:
 	 *   get:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
 	 *     summary: Retrieve all points of interest
@@ -170,7 +189,7 @@ class PointsOfInterestController extends BaseController {
 	 *                 data:
 	 *                   type: array
 	 *                   items:
-	 *                     $ref: '#/components/schemas/PointsOfInterest'
+	 *                     $ref: '#/components/schemas/PointsOfInterestResponseDto'
 	 */
 	public async findAll(): Promise<
 		APIHandlerResponse<PointsOfInterestResponseDto[]>
@@ -187,6 +206,8 @@ class PointsOfInterestController extends BaseController {
 	 * @swagger
 	 * /points-of-interest/{id}:
 	 *   get:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
 	 *     summary: Get a point of interest by ID
@@ -202,9 +223,10 @@ class PointsOfInterestController extends BaseController {
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/PointsOfInterest'
-	 *       404:
-	 *         description: Point of interest not found
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/PointsOfInterestResponseDto'
 	 */
 	public async findById(
 		options: APIHandlerOptions<{
@@ -224,6 +246,8 @@ class PointsOfInterestController extends BaseController {
 	 * @swagger
 	 * /points-of-interest/{id}:
 	 *   patch:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
 	 *     summary: Update a point of interest
@@ -238,21 +262,17 @@ class PointsOfInterestController extends BaseController {
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             type: object
-	 *             required:
-	 *               - name
-	 *             properties:
-	 *               name:
-	 *                 type: string
+	 *             $ref: '#/components/schemas/PointsOfInterestRequestDto'
 	 *     responses:
 	 *       200:
 	 *         description: Point of interest updated successfully
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/PointsOfInterest'
-	 *       404:
-	 *         description: Point of interest not found
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/PointsOfInterestResponseDto'
 	 */
 	public async patch(
 		options: APIHandlerOptions<{

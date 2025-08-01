@@ -1,13 +1,13 @@
 .section {
 	display: flex;
 	flex-direction: column;
-	gap: 100px;
+	gap: 96px;
 	width: 100%;
-	margin-top: 100px;
+	padding-top: 96px;
 }
 
 .section-title {
-	margin-bottom: 0;
+	margin: 0;
 	font-size: var(--font-size-display);
 	font-weight: var(--font-weight-bold);
 	color: var(--color-text-strong);
@@ -22,14 +22,11 @@
 	text-align: center;
 }
 
-.section-cover-image {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	object-position: center;
-}
-
 .section-cover {
-	padding: 0;
-	margin: 0;
+	width: 100%;
+	aspect-ratio: 320 / 119;
+	background-image: url("/assets/images/landing-cover.jpg");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
 }

@@ -1,5 +1,56 @@
 # Changelog
 
+## [1.9.3](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.9.2...v1.9.3) (2025-08-01)
+
+
+### Bug Fixes
+
+* **frontend:** fix inline paddings in header ss-168 ([#177](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/177)) ([57567ca](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/57567caa20c8d92bf6e3a9f6a93bc52832236de9))
+
+## [1.9.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.9.1...v1.9.2) (2025-08-01)
+
+
+### Bug Fixes
+
+* **frontend:** enable auth header for getAll request ss-163 ([#170](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/170)) ([2d4fe58](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2d4fe5871e7cf697877f070056ff644c49e65a2f))
+* **frontend:** fix app page layout and fix image loading ss-161 ([#166](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/166)) ([166ed24](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/166ed24bd86de4f35de55dd013fb1fb37cc6ee06))
+* **frontend:** fix auth swagger ss-169 ([#175](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/175)) ([2c68ef4](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2c68ef4b9c1de8da5697b10f0d2b996ed052b996))
+* **frontend:** fix poi swagger ss-173 ([#176](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/176)) ([da2f5c5](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/da2f5c5b0413d98973c7670fa6fd5f4275c10bb4))
+
+## [1.9.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.9.0...v1.9.1) (2025-07-31)
+
+
+### Bug Fixes
+
+* **frontend:** popular routes typo ss-165 ([#167](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/167)) ([397503a](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/397503aee26885fb650c8f98f5fa8929f31ce547))
+* **frontend:** store token in localstorage after successful login ss-159 ([#164](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/164)) ([a0deeb6](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/a0deeb69dab222040ad7507d870ba26035d8da23))
+
+## [1.9.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.8.0...v1.9.0) (2025-07-31)
+
+
+### Features
+
+* **frontend:** add mobile responsiveness for sign in and sign up ss-114 ([#139](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/139)) ([36888ae](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/36888aedbf4fb9fda99dfc2a4c774c9ba538a889))
+* **shared:** implement additional checking for email field with banned domain ss-144 ([#145](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/145)) ([5ba138a](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/5ba138a9ac9ce23d073d2929e219452f7730735b))
+
+
+### Bug Fixes
+
+* **frontend:** fix landing page ui issues, remove unused styles ss-152 ([#156](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/156)) ([48bd01f](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/48bd01fceb0bfb5a625148966f447d8bf0ab3002))
+* **shared:** add Latin letters validation for user names ss-129 ([#137](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/137)) ([43bf6c3](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/43bf6c346ef3e8daa7327e936b9c9debbad5dd88))
+
+## [1.8.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.7.0...v1.8.0) (2025-07-31)
+
+
+### Features
+
+* **frontend:** add authenticated user flow on the frontend ss-27 ([#101](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/101)) ([aaebf88](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/aaebf88c868c0844aa75f899d23fefe91bf7bf2a))
+
+
+### Bug Fixes
+
+* **backend:** fix white listing rules ss-148 ([#150](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/150)) ([2adff00](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2adff007dac3f3b00cae3540fd65854cdbf2a728))
+
 ## [1.7.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.6.1...v1.7.0) (2025-07-31)
 
 

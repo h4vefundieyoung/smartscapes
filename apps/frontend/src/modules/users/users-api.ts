@@ -22,7 +22,7 @@ class UserApi extends BaseHTTPApi {
 		const response = await this.load<APIResponse<UserGetByIdItemResponseDto[]>>(
 			this.getFullEndpoint(UsersApiPath.ROOT, {}),
 			{
-				hasAuth: false,
+				hasAuth: true,
 				method: "GET",
 			},
 		);

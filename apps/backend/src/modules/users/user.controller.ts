@@ -48,6 +48,8 @@ class UserController extends BaseController {
 	 * @swagger
 	 * /users:
 	 *   get:
+	 *     security:
+	 *      - bearerAuth: []
 	 *     tags:
 	 *       - Users
 	 *     summary: Retrieve all users

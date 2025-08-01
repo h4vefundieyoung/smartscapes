@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.7.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/shared-v1.7.0...shared-v1.7.1) (2025-08-01)
+
+
+### Bug Fixes
+
+* **shared:** improve validation schemas for sign in ss-171 ([#174](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/174)) ([8804b66](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/8804b66c52cf56ea43015422b7f13b6955b1e61d))
+
+## [1.7.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/shared-v1.6.0...shared-v1.7.0) (2025-07-31)
+
+
+### Features
+
+* **shared:** implement additional checking for email field with banned domain ss-144 ([#145](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/145)) ([5ba138a](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/5ba138a9ac9ce23d073d2929e219452f7730735b))
+
+
+### Bug Fixes
+
+* **shared:** add Latin letters validation for user names ss-129 ([#137](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/137)) ([43bf6c3](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/43bf6c346ef3e8daa7327e936b9c9debbad5dd88))
+
 ## [1.6.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/shared-v1.5.0...shared-v1.6.0) (2025-07-31)
 
 

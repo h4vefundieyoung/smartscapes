@@ -1,5 +1,4 @@
 type CarouselCallbacks = {
-	handleBoundaryCollision: () => void;
 	startMomentum: () => void;
 };
 

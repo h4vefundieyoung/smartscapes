@@ -2,7 +2,6 @@ import { useEffect } from "react";
 
 import { type CarouselReference, type CarouselState } from "../types/types.js";
 import {
-	useCarouselBoundaries,
 	useCarouselMomentum,
 	useCarouselMouseEvents,
 	useCarouselWheelEvent,
@@ -10,17 +9,8 @@ import {
 
 type CarouselEventsProperties = {
 	carouselReference: CarouselReference;
-	state: CarouselStateSetters;
+	state: CarouselState;
 };
-
-type CarouselStateSetters = Pick<
-	CarouselState,
-	| "overdragOffset"
-	| "setAnimationClassName"
-	| "setDragging"
-	| "setOverdragOffset"
-	| "setSpringBounce"
->;
 
 const useCarouselEvents = ({
 	carouselReference,
@@ -31,22 +21,12 @@ const useCarouselEvents = ({
 	handleMouseUpOrLeave: () => void;
 	handleWheelEvent: (event: WheelEvent) => void;
 } => {
-	const { setAnimationClassName, setSpringBounce } = state;
-
-	const { handleBoundaryCollision } = useCarouselBoundaries({
-		carouselReference,
-		setAnimationClassName,
-		setSpringBounce,
-	});
-
 	const { startMomentum } = useCarouselMomentum({
 		carouselReference,
-		handleBoundaryCollision,
 	});
 
 	const mouseHandlers = useCarouselMouseEvents({
 		callbacks: {
-			handleBoundaryCollision,
 			startMomentum,
 		},
 		carouselReference,

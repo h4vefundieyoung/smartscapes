@@ -11,31 +11,15 @@ type Properties = {
 };
 
 const Carousel = ({ images }: Properties): React.JSX.Element => {
-	const {
-		element,
-		isAnimating,
-		isDragging,
-		momentumID,
-		scrollStart,
-		startX,
-		velocity,
-	} = useCarouselReference();
+	const { element, isDragging, momentumID, scrollStart, startX, velocity } =
+		useCarouselReference();
 
-	const {
-		animationClassName,
-		dragging,
-		overdragOffset,
-		setAnimationClassName,
-		setDragging,
-		setOverdragOffset,
-		setSpringBounce,
-	} = useCarouselState();
+	const { dragging, setDragging } = useCarouselState();
 
 	const { handleMouseDown, handleMouseMove, handleMouseUpOrLeave } =
 		useCarouselEvents({
 			carouselReference: {
 				element,
-				isAnimating,
 				isDragging,
 				momentumID,
 				scrollStart,
@@ -43,25 +27,13 @@ const Carousel = ({ images }: Properties): React.JSX.Element => {
 				velocity,
 			},
 			state: {
-				overdragOffset,
-				setAnimationClassName,
+				dragging,
 				setDragging,
-				setOverdragOffset,
-				setSpringBounce,
 			},
 		});
 
-	const {
-		carouselClassName,
-		carouselStyle,
-		scrollButtonClassName,
-		scrollButtonStyle,
-	} = useCarouselStyles({
-		animationClassName,
+	const { carouselClassName } = useCarouselStyles({
 		dragging,
-		element,
-		imagesLength: images.length,
-		overdragOffset,
 	});
 
 	return (
@@ -74,7 +46,6 @@ const Carousel = ({ images }: Properties): React.JSX.Element => {
 				onMouseUp={handleMouseUpOrLeave}
 				ref={element}
 				role="tablist"
-				style={carouselStyle}
 				tabIndex={0}
 			>
 				{images.map((image) => (
@@ -83,7 +54,6 @@ const Carousel = ({ images }: Properties): React.JSX.Element => {
 					</div>
 				))}
 			</div>
-			<div className={scrollButtonClassName} style={scrollButtonStyle} />
 		</div>
 	);
 };

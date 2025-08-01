@@ -1,4 +1,3 @@
-export { useCarouselBoundaries } from "./use-carousel-boundaries.hook.js";
 export { useCarouselEvents } from "./use-carousel-events.hook.js";
 export { useCarouselMomentum } from "./use-carousel-momentum.hook.js";
 export { useCarouselMouseEvents } from "./use-carousel-mouse-events.hook.js";

@@ -9,11 +9,9 @@ const useCarouselReference = (): CarouselReference => {
 	const scrollStart = useRef(0);
 	const velocity = useRef(0);
 	const momentumID = useRef<null | number>(null);
-	const isAnimating = useRef<boolean>(false);
 
 	return {
 		element,
-		isAnimating,
 		isDragging,
 		momentumID,
 		scrollStart,

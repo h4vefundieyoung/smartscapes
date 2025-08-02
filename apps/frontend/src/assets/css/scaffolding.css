@@ -34,17 +34,12 @@ body {
 }
 
 ::-webkit-scrollbar {
-	width: 8px;
-	height: 8px;
+	height: 16px;
 }
 
-::-webkit-scrollbar-track {
-	background: var(--color-background-base);
-	border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-	background-color: var(--color-fill-brand-strong);
-	border: 1px solid var(--color-background-base);
-	border-radius: 8px;
+@supports (scrollbar-width: auto) {
+	html {
+		scrollbar-color: var(--color-fill-brand-strong) var(--color-background-base);
+		scrollbar-width: auto;
+	}
 }

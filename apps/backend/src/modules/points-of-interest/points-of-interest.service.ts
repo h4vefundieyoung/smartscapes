@@ -55,12 +55,11 @@ class PointsOfInterestService implements Service {
 		const THOUSAND = 1000;
 		const radiusKm = query?.radius || DEFAULT_RADIUS_KM;
 		const radiusMeters = radiusKm * THOUSAND;
-		const hasQuery = query && query.latitude && query.longitude;
-
 		const normalizedQuery = {
 			...query,
 			radius: radiusMeters,
 		} as PointsOfInterestSearchQuery;
+		const hasQuery = Boolean(query?.latitude) && Boolean(query?.longitude);
 
 		const items = hasQuery
 			? await this.pointsOfInterestRepository.findNearby(normalizedQuery)

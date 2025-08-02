@@ -106,6 +106,7 @@ describe("PointsOfInterestRepository", () => {
 		const result = await pointsOfInterestRepository.findNearby({
 			latitude: TEST_LATITUDE,
 			longitude: TEST_LONGITUDE,
+			radius: 5,
 		});
 
 		assert.deepStrictEqual(result, pointOfInterestEntities);

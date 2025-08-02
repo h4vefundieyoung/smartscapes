@@ -32,6 +32,10 @@ import { type RoutesService } from "./routes.service.js";
  *         description:
  *           type: string
  *           example: An alley with blooming flowers
+ *         pois:
+ *           type: object
+ *           example: [{id: 1, visitOrder: 0}, {id: 2, visitOrder: 1}]
+ *
  */
 
 class RoutesController extends BaseController {
@@ -148,7 +152,7 @@ class RoutesController extends BaseController {
 
 		return {
 			payload: { data: isDeleted },
-			status: HTTPCode.OK,
+			status: isDeleted ? HTTPCode.OK : HTTPCode.NOT_FOUND,
 		};
 	}
 
@@ -174,7 +178,7 @@ class RoutesController extends BaseController {
 
 	public async find(
 		options: APIHandlerOptions<{ params: { id: string } }>,
-	): Promise<APIHandlerResponse<unknown>> {
+	): Promise<APIHandlerResponse<RoutesResponseDto>> {
 		const id = Number(options.params.id);
 		const route = await this.routesService.findById(id);
 
@@ -205,7 +209,7 @@ class RoutesController extends BaseController {
 	 *                     $ref: '#/components/schemas/Route'
 	 * */
 
-	public async findAll(): Promise<APIHandlerResponse<unknown[]>> {
+	public async findAll(): Promise<APIHandlerResponse<RoutesResponseDto[]>> {
 		const { items } = await this.routesService.findAll();
 
 		return {

@@ -11,6 +11,7 @@ const routesUpdate = z
 	.strictObject({
 		description: z
 			.string()
+			.trim()
 			.min(RoutesValidationRule.DESCRIPTION_MINIMUM_LENGTH, {
 				message: RoutesValidationMessage.DESCRIPTION_MINIMUM_LENGTH,
 			})
@@ -20,6 +21,7 @@ const routesUpdate = z
 			.optional(),
 		name: z
 			.string()
+			.trim()
 			.min(RoutesValidationRule.NAME_MINIMUM_LENGTH, {
 				message: RoutesValidationMessage.NAME_MINIMUM_LENGTH,
 			})

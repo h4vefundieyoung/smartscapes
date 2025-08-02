@@ -48,19 +48,10 @@ class RoutesService implements Service {
 		return await this.routesRepository.delete(id);
 	}
 
-	public async findAll(): Promise<
-		CollectionResult<{
-			description: string;
-			id: number;
-			name: string;
-			pois: { id: number; visitOrder: number }[];
-		}>
-	> {
+	public async findAll(): Promise<CollectionResult<RoutesResponseDto>> {
 		const items = await this.routesRepository.findAll();
 
-		return {
-			items: items.map((item) => item.toObject()),
-		};
+		return { items: items.map((item) => item.toObject()) };
 	}
 
 	public async findById(id: number): Promise<RoutesResponseDto> {

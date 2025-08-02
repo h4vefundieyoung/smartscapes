@@ -26,6 +26,14 @@ const useCarouselMouseEvents = ({
 	const { startMomentum } = callbacks;
 	const { setDragging } = state;
 
+	const removeFocus = useCallback((): void => {
+		const element = carouselReference.element.current;
+
+		if (element) {
+			element.blur();
+		}
+	}, [carouselReference.element]);
+
 	const handleMouseDown = useCallback(
 		(event: React.MouseEvent): void => {
 			const { offsetLeft, scrollLeft } = getCarouselParameters(
@@ -49,10 +57,12 @@ const useCarouselMouseEvents = ({
 		carouselReference.isDragging.current = false;
 		setDragging(false);
 
+		removeFocus();
+
 		if (Math.abs(carouselReference.velocity.current) > 0) {
 			startMomentum();
 		}
-	}, [startMomentum, setDragging, carouselReference]);
+	}, [startMomentum, setDragging, carouselReference, removeFocus]);
 
 	const handleMouseMove = useCallback(
 		(event: React.MouseEvent): void => {

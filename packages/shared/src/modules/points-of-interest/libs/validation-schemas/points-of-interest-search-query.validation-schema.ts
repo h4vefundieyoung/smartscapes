@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { parseToFloat } from "../../../../libs/helpers/helpers.js";
 import {
 	PointsOfInterestValidationMessage,
 	PointsOfInterestValidationRule,
@@ -15,7 +16,7 @@ const pointsOfInterestSearchQuery = z
 		longitude: longitudeSchema.optional(),
 		radius: z
 			.string()
-			.transform((value) => Number.parseFloat(value))
+			.transform(parseToFloat)
 			.pipe(
 				z
 					.number()

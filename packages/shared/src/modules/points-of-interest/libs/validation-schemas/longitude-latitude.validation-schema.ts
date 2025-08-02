@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { parseToFloat } from "../../../../libs/helpers/helpers.js";
 import {
 	PointsOfInterestValidationMessage,
 	PointsOfInterestValidationRule,
@@ -7,7 +8,7 @@ import {
 
 const longitudeSchema = z
 	.string()
-	.transform((value) => Number.parseFloat(value))
+	.transform(parseToFloat)
 	.pipe(
 		z
 			.number()
@@ -24,7 +25,7 @@ const longitudeSchema = z
 
 const latitudeSchema = z
 	.string()
-	.transform((value) => Number.parseFloat(value))
+	.transform(parseToFloat)
 	.pipe(
 		z
 			.number()

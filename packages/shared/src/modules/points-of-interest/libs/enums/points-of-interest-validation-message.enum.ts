@@ -4,7 +4,7 @@ const PointsOfInterestValidationMessage = {
 	COORDS_REQUIRED_TOGETHER:
 		"Both latitude and longitude must be provided together.",
 	COORDS_REQUIRED_WITH_RADIUS:
-		"Location coordinates are required when radius is provided",
+		"Location coordinates are required when radius is provided.",
 	INVALID_LOCATION_TYPE: "Location type must be 'Point'.",
 	LATITUDE_MAX: `Latitude must be less than ${String(PointsOfInterestValidationRule.LATITUDE_MAX)}.`,
 	LATITUDE_MIN: `Latitude must be greater than ${String(PointsOfInterestValidationRule.LATITUDE_MIN)}.`,

@@ -1,7 +1,8 @@
+import { useState } from "~/libs/hooks/hooks.js";
+
 import {
 	useCarouselEvents,
 	useCarouselReference,
-	useCarouselState,
 	useCarouselStyles,
 } from "./libs/hooks/hooks.js";
 import styles from "./style.module.css";
@@ -11,25 +12,13 @@ type Properties = {
 };
 
 const Carousel = ({ images }: Properties): React.JSX.Element => {
-	const { element, isDragging, momentumID, scrollStart, startX, velocity } =
-		useCarouselReference();
-
-	const { dragging, setDragging } = useCarouselState();
+	const [dragging, setDragging] = useState<boolean>(false);
+	const carouselReference = useCarouselReference();
 
 	const { handleMouseDown, handleMouseMove, handleMouseUpOrLeave } =
 		useCarouselEvents({
-			carouselReference: {
-				element,
-				isDragging,
-				momentumID,
-				scrollStart,
-				startX,
-				velocity,
-			},
-			state: {
-				dragging,
-				setDragging,
-			},
+			carouselReference,
+			setDragging,
 		});
 
 	const { carouselClassName } = useCarouselStyles({
@@ -44,7 +33,7 @@ const Carousel = ({ images }: Properties): React.JSX.Element => {
 				onMouseLeave={handleMouseUpOrLeave}
 				onMouseMove={handleMouseMove}
 				onMouseUp={handleMouseUpOrLeave}
-				ref={element}
+				ref={carouselReference.element}
 				role="tablist"
 				tabIndex={0}
 			>

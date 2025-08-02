@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef } from "~/libs/hooks/hooks.js";
 
 import { type CarouselReference } from "../types/types.js";
 

@@ -1,31 +1,26 @@
-import { useCallback } from "react";
+import { useCallback } from "~/libs/hooks/hooks.js";
 
 import { CAROUSEL_CONFIG } from "../constants/constants.js";
 import { getCarouselParameters } from "../helpers/helpers.js";
-import {
-	type CarouselCallbacks,
-	type CarouselReference,
-	type CarouselState,
-} from "../types/types.js";
+import { type CarouselReference } from "../types/types.js";
 
-type CarouselMouseEventsProperties = {
-	callbacks: CarouselCallbacks;
-	carouselReference: CarouselReference;
-	state: CarouselState;
-};
-
-const useCarouselMouseEvents = ({
-	callbacks,
-	carouselReference,
-	state,
-}: CarouselMouseEventsProperties): {
+type CarouselMouseEvents = {
 	handleMouseDown: (event: React.MouseEvent) => void;
 	handleMouseMove: (event: React.MouseEvent) => void;
 	handleMouseUpOrLeave: () => void;
-} => {
-	const { startMomentum } = callbacks;
-	const { setDragging } = state;
+};
 
+type CarouselMouseEventsProperties = {
+	carouselReference: CarouselReference;
+	setDragging: (dragging: boolean) => void;
+	startMomentum: () => void;
+};
+
+const useCarouselMouseEvents = ({
+	carouselReference,
+	setDragging,
+	startMomentum,
+}: CarouselMouseEventsProperties): CarouselMouseEvents => {
 	const removeFocus = useCallback((): void => {
 		const element = carouselReference.element.current;
 

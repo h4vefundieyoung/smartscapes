@@ -49,24 +49,25 @@ class PointsOfInterestService implements Service {
 	}
 
 	public async findAll(
-		options: PointsOfInterestSearchQuery = {},
+		query: null | PointsOfInterestSearchQuery = null,
 	): Promise<CollectionResult<PointsOfInterestResponseDto>> {
-		if (!options.latitude && !options.longitude) {
-			const items = await this.pointsOfInterestRepository.findAll();
+		const DEFAULT_RADIUS_KM = 5;
+		const THOUSAND = 1000;
+		const radiusKm = query?.radius || DEFAULT_RADIUS_KM;
+		const radiusMeters = radiusKm * THOUSAND;
+		const hasQuery = query && query.latitude && query.longitude;
 
-			return {
-				items: items.map((item) => {
-					return item.toObject();
-				}),
-			};
-		}
+		const normalizedQuery = {
+			...query,
+			radius: radiusMeters,
+		} as PointsOfInterestSearchQuery;
 
-		const items = await this.pointsOfInterestRepository.findNearby(options);
+		const items = hasQuery
+			? await this.pointsOfInterestRepository.findNearby(normalizedQuery)
+			: await this.pointsOfInterestRepository.findAll();
 
 		return {
-			items: items.map((item) => {
-				return item.toObject();
-			}),
+			items: items.map((item) => item.toObject()),
 		};
 	}
 

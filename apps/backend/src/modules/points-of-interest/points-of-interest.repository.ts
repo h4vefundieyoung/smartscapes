@@ -89,14 +89,9 @@ class PointsOfInterestRepository implements Repository {
 	}
 
 	public async findNearby(
-		options: PointsOfInterestSearchQuery,
+		normalizedQuery: PointsOfInterestSearchQuery,
 	): Promise<PointsOfInterestEntity[]> {
-		const { latitude, longitude, radius } = options;
-
-		const DEFAULT_RADIUS_KM = 10;
-		const THOUSAND = 1000;
-		const searchRadiusKm = radius || DEFAULT_RADIUS_KM;
-		const searchRadiusMeters = searchRadiusKm * THOUSAND;
+		const { latitude, longitude, radius } = normalizedQuery;
 
 		const pointsOfInterest = await this.pointsOfInterestModel
 			.query()
@@ -112,7 +107,7 @@ class PointsOfInterestRepository implements Repository {
 			)
 			.whereRaw(
 				"ST_DWithin(location::geography, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography, ?)",
-				[longitude, latitude, searchRadiusMeters],
+				[longitude, latitude, radius],
 			)
 			.orderByRaw("distance ASC")
 			.execute();

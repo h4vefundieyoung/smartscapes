@@ -44,4 +44,40 @@ describe("UserController", () => {
 			status: HTTPCode.OK,
 		});
 	});
+
+	it("patch should update user profile", async () => {
+		const updatedUser = {
+			email: "test@example.com",
+			firstName: "Jane",
+			id: 1,
+			lastName: "Smith",
+		};
+
+		const mockPatch: UserService["patch"] = () => {
+			return Promise.resolve(updatedUser);
+		};
+
+		const userService = {
+			patch: mockPatch,
+		} as UserService;
+
+		const userController = new UserController(mockLogger, userService);
+
+		const result = await userController.patch({
+			body: {
+				firstName: "Jane",
+				lastName: "Smith",
+			},
+			params: { id: "1" },
+			query: {},
+			user: null,
+		});
+
+		assert.deepStrictEqual(result, {
+			payload: {
+				data: updatedUser,
+			},
+			status: HTTPCode.OK,
+		});
+	});
 });

@@ -2,6 +2,7 @@ export { UserExceptionMessage, UsersApiPath } from "./libs/enums/enums.js";
 export {
 	type UserAuthResponseDto,
 	type UserGetByIdItemResponseDto,
+	type UserPatchProfileRequestDto,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
 	type UserSignUpRequestDto,

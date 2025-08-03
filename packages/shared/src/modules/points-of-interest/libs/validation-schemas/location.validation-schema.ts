@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-import { PointsOfInterestValidationMessage } from "../enums/enums.js";
+import { LocationType } from "../../../../libs/enums/enums.js";
+import { PointsOfInterestValidationMessage } from "../enums/points-of-interest-validation-message.enum.js";
 import {
 	latitudeSchema,
 	longitudeSchema,
@@ -8,7 +9,7 @@ import {
 
 const locationSchema = z.object({
 	coordinates: z.tuple([longitudeSchema, latitudeSchema]),
-	type: z.literal("Point", {
+	type: z.literal(LocationType.POINT, {
 		message: PointsOfInterestValidationMessage.INVALID_LOCATION_TYPE,
 	}),
 });

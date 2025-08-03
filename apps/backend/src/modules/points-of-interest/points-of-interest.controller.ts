@@ -142,7 +142,7 @@ class PointsOfInterestController extends BaseController {
 	 *           schema:
 	 *             $ref: '#/components/schemas/PointsOfInterestRequestDto'
 	 *     responses:
-	 *       200:
+	 *       201:
 	 *         description: Point of interest created successfully
 	 *         content:
 	 *           application/json:

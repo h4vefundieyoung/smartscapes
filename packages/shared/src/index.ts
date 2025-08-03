@@ -22,6 +22,7 @@ export {
 	type APIErrorResponse,
 	type APIResponse,
 	type APIValidationErrorDetail,
+	type PointGeometry,
 	type ValidationSchema,
 	type ValueOf,
 } from "./libs/types/types.js";
@@ -29,7 +30,6 @@ export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
 export {
 	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
-	type PointsOfInterestLocation,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 	type PointsOfInterestSearchQuery,

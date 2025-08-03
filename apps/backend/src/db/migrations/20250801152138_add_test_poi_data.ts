@@ -4,10 +4,7 @@ const TABLE_NAME = "points_of_interest";
 
 const createTestPoiData = (
 	knex: Knex,
-): {
-	location: Knex.Raw;
-	name: string;
-}[] => [
+): { location: Knex.Raw; name: string }[] => [
 	{
 		location: knex.raw(
 			"ST_GeomFromText('POINT(30.54774957435002 50.495672989398045)', 4326)",

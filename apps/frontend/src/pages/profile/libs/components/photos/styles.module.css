@@ -5,9 +5,3 @@
 	justify-content: space-between;
 	height: 100vh;
 }
-
-.title {
-	align-self: flex-start;
-	font-size: 24px;
-	font-weight: 600;
-}

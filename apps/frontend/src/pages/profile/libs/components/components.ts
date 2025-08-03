@@ -1,1 +1,2 @@
-export { ProfileForm } from "./profile-form/profile-form.js";
+export { Photos } from "./photos/photos.js";
+export { UserDetails } from "./user-details/user-details.js";

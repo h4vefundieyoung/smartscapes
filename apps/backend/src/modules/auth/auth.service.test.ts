@@ -104,6 +104,7 @@ describe("AuthService", () => {
 		const mockPasswordDetails = {
 			groupId: group_mock.toObject().id,
 			id: 1,
+			key: group_mock.toObject().key,
 			passwordHash: "hashedPassword",
 			passwordSalt: "someSalt",
 		};

@@ -53,11 +53,22 @@ class UserRepository implements Repository {
 	): Promise<null | UserPasswordDetails> {
 		const user = await this.userModel
 			.query()
-			.select("id", "passwordHash", "passwordSalt", "groupId")
+			.select("users.id", "passwordHash", "passwordSalt", "groupId")
+			.withGraphJoined("group")
 			.where("email", email)
 			.first();
 
-		return user ?? null;
+		if (!user || !user.group) {
+			return null;
+		}
+
+		return {
+			groupId: user.groupId,
+			id: user.id,
+			key: user.group.key,
+			passwordHash: user.passwordHash,
+			passwordSalt: user.passwordSalt,
+		};
 	}
 }
 

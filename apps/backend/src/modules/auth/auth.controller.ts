@@ -107,12 +107,36 @@ import { AuthError } from "./libs/exceptions/unauthorized.exception.js";
  *       required:
  *         - token
  *         - user
+ *         - group
  *       properties:
  *         token:
  *           type: string
  *           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *         user:
- *           $ref: '#/components/schemas/UserAuthResponseDto'
+ *           type: object
+ *           required:
+ *             - id
+ *             - email
+ *           properties:
+ *             id:
+ *               type: integer
+ *               example: 1
+ *             email:
+ *               type: string
+ *               format: email
+ *               example: "user@example.com"
+ *         group:
+ *           type: object
+ *           required:
+ *             - id
+ *             - key
+ *           properties:
+ *             id:
+ *               type: integer
+ *               example: 2
+ *             key:
+ *               type: string
+ *               example: "users"
  *
  *     UserSignUpResponseDto:
  *       type: object
@@ -214,7 +238,7 @@ class AuthController extends BaseController {
 	 *               type: object
 	 *               properties:
 	 *                 data:
-	 *                   $ref: '#/components/schemas/UserAuthResponseDto'
+	 *                   $ref: '#/components/schemas/UserSignInResponseDto'
 	 */
 
 	public async signIn(

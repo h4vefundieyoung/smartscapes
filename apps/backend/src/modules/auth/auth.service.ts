@@ -8,33 +8,28 @@ import {
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
 
-import { type GroupRepository } from "../groups/group.repository.js";
 import { AuthorizationExceptionMessage } from "./libs/enums/enums.js";
 import { AuthorizationError } from "./libs/exceptions/auth.exception.js";
 
 type Constructor = {
 	encryptionService: typeof encryption;
-	groupRepository: GroupRepository;
 	tokenService: BaseToken;
 	userService: UserService;
 };
 
 class AuthService {
 	private encryptionService: typeof encryption;
-	private groupRepository: GroupRepository;
 	private tokenService: BaseToken;
 	private userService: UserService;
 
 	public constructor({
 		encryptionService,
-		groupRepository,
 		tokenService,
 		userService,
 	}: Constructor) {
 		this.encryptionService = encryptionService;
 		this.tokenService = tokenService;
 		this.userService = userService;
-		this.groupRepository = groupRepository;
 	}
 
 	public async signIn(

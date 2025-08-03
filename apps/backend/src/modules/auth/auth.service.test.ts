@@ -13,8 +13,6 @@ import {
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
 
-import { type GroupRepository } from "../groups/group.repository.js";
-
 describe("AuthService", () => {
 	const signUpRequestDto: UserSignUpRequestDto = {
 		confirmPassword: "Password123!",
@@ -66,13 +64,8 @@ describe("AuthService", () => {
 			hash: mock.fn(() => Promise.resolve("hashedPassword")),
 		} as unknown as BaseEncryption;
 
-		const mockGroupRepository = {
-			findByKey: mock.fn(() => Promise.resolve("users")),
-		} as unknown as GroupRepository;
-
 		const authService = new AuthService({
 			encryptionService: mockEncryptionService,
-			groupRepository: mockGroupRepository,
 			tokenService: mockTokenService,
 			userService: mockUserService,
 		});
@@ -154,13 +147,8 @@ describe("AuthService", () => {
 			}),
 		} as unknown as BaseEncryption;
 
-		const mockGroupRepository = {
-			findById: mock.fn(() => Promise.resolve(group_mock)),
-		} as unknown as GroupRepository;
-
 		const authService = new AuthService({
 			encryptionService: mockEncryptionService,
-			groupRepository: mockGroupRepository,
 			tokenService: mockTokenService,
 			userService: mockUserService,
 		});

@@ -3,6 +3,12 @@ import { type UserPasswordDetails } from "~/modules/users/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
 
+import { GroupModel } from "../groups/group.model.js";
+import {
+	GroupExceptionMessage,
+	GroupKeys,
+} from "../groups/libs/enums/enums.js";
+
 class UserRepository implements Repository {
 	private userModel: typeof UserModel;
 
@@ -11,8 +17,20 @@ class UserRepository implements Repository {
 	}
 
 	public async create(entity: UserEntity): Promise<UserEntity> {
-		const { email, firstName, groupId, lastName, passwordHash, passwordSalt } =
+		const { email, firstName, lastName, passwordHash, passwordSalt } =
 			entity.toNewObject();
+
+		const groupId = await GroupModel.query()
+			.select("id")
+			.where("key", GroupKeys.USERS)
+			.first()
+			.then((group) => {
+				if (!group) {
+					throw new Error(GroupExceptionMessage.GROUP_NOT_FOUND);
+				}
+
+				return group.id;
+			});
 
 		const user = await this.userModel
 			.query()

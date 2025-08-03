@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
-import { describe, it, mock } from "node:test";
+import { describe, it } from "node:test";
 
-import { type GroupRepository } from "../groups/group.repository.js";
 import { UserEntity } from "./user.entity.js";
 import { type UserRepository } from "./user.repository.js";
 import { UserService } from "./user.service.js";
@@ -26,19 +25,7 @@ describe("UserService", () => {
 				Promise.resolve(null)) as UserRepository["findByEmail"],
 		} as UserRepository;
 
-		const mockGroupRepository = {
-			findByKey: mock.fn(() =>
-				Promise.resolve({
-					toObject: () => ({
-						id: 2,
-						key: "users",
-						name: "Users",
-					}),
-				}),
-			),
-		} as unknown as GroupRepository;
-
-		const userService = new UserService(userRepository, mockGroupRepository);
+		const userService = new UserService(userRepository);
 
 		const result = await userService.create({
 			confirmPassword: "Password",
@@ -64,19 +51,7 @@ describe("UserService", () => {
 			findAll: () => Promise.resolve([userEntity]),
 		} as UserRepository;
 
-		const mockGroupRepository = {
-			findByKey: mock.fn(() =>
-				Promise.resolve({
-					toObject: () => ({
-						id: 2,
-						key: "users",
-						name: "Users",
-					}),
-				}),
-			),
-		} as unknown as GroupRepository;
-
-		const userService = new UserService(userRepository, mockGroupRepository);
+		const userService = new UserService(userRepository);
 
 		const result = await userService.findAll();
 

@@ -5,7 +5,7 @@ class UserEntity implements Entity {
 
 	private firstName: string;
 
-	private groupId: number;
+	private groupId: null | number;
 
 	private id: null | number;
 
@@ -26,7 +26,7 @@ class UserEntity implements Entity {
 	}: {
 		email: string;
 		firstName: string;
-		groupId: number;
+		groupId: null | number;
 		id: null | number;
 		lastName: string;
 		passwordHash: string;
@@ -72,14 +72,12 @@ class UserEntity implements Entity {
 	public static initializeNew({
 		email,
 		firstName,
-		groupId,
 		lastName,
 		passwordHash,
 		passwordSalt,
 	}: {
 		email: string;
 		firstName: string;
-		groupId: number;
 		lastName: string;
 		passwordHash: string;
 		passwordSalt: string;
@@ -87,7 +85,7 @@ class UserEntity implements Entity {
 		return new UserEntity({
 			email,
 			firstName,
-			groupId,
+			groupId: null,
 			id: null,
 			lastName,
 			passwordHash,
@@ -98,7 +96,6 @@ class UserEntity implements Entity {
 	public toNewObject(): {
 		email: string;
 		firstName: string;
-		groupId: number;
 		lastName: string;
 		passwordHash: string;
 		passwordSalt: string;
@@ -106,7 +103,6 @@ class UserEntity implements Entity {
 		return {
 			email: this.email,
 			firstName: this.firstName,
-			groupId: this.groupId,
 			lastName: this.lastName,
 			passwordHash: this.passwordHash,
 			passwordSalt: this.passwordSalt,
@@ -116,7 +112,7 @@ class UserEntity implements Entity {
 	public toObject(): {
 		email: string;
 		firstName: string;
-		groupId: number;
+		groupId: null | number;
 		id: number;
 		lastName: string;
 	} {

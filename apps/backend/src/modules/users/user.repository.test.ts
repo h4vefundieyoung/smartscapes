@@ -3,6 +3,7 @@ import { createTracker, MockClient, type Tracker } from "knex-mock-client";
 import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
 
+import { GroupModel } from "../groups/group.model.js";
 import { UserEntity } from "./user.entity.js";
 import { UserModel } from "./user.model.js";
 import { UserRepository } from "./user.repository.js";
@@ -28,7 +29,11 @@ describe("UserRepository", () => {
 
 		UserModel.knex(database);
 
+		GroupModel.knex(database);
+
 		userRepository = new UserRepository(UserModel);
+
+		databaseTracker.on.select("groups").response([{ id: 2 }]);
 	});
 
 	afterEach(() => {

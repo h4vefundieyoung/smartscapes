@@ -5,11 +5,6 @@ import { UserExceptionMessage } from "~/modules/users/libs/enums/enums.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
 
-import { type GroupRepository } from "../groups/group.repository.js";
-import {
-	GroupExceptionMessage,
-	GroupKeys,
-} from "../groups/libs/enums/enums.js";
 import { UserError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserGetByIdItemResponseDto,
@@ -18,15 +13,10 @@ import {
 } from "./libs/types/types.js";
 
 class UserService implements Service {
-	private groupRepository: GroupRepository;
 	private userRepository: UserRepository;
 
-	public constructor(
-		userRepository: UserRepository,
-		groupRepository: GroupRepository,
-	) {
+	public constructor(userRepository: UserRepository) {
 		this.userRepository = userRepository;
-		this.groupRepository = groupRepository;
 	}
 
 	public async create(
@@ -42,27 +32,11 @@ class UserService implements Service {
 		}
 
 		const { encryptedData, salt } = await encryption.encrypt(payload.password);
-		const group = await this.groupRepository.findByKey(GroupKeys.USERS);
-
-		if (!group) {
-			throw new UserError({
-				message: GroupExceptionMessage.GROUP_NOT_FOUND as string,
-				status: HTTPCode.CONFLICT,
-			});
-		}
-
-		if (group.toObject().id === null) {
-			throw new UserError({
-				message: GroupExceptionMessage.GROUP_NOT_FOUND as string,
-				status: HTTPCode.CONFLICT,
-			});
-		}
 
 		const item = await this.userRepository.create(
 			UserEntity.initializeNew({
 				email: payload.email,
 				firstName: payload.firstName,
-				groupId: group.toObject().id as number,
 				lastName: payload.lastName,
 				passwordHash: encryptedData,
 				passwordSalt: salt,

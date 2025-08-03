@@ -1,6 +1,10 @@
 .form {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
-	height: 100%;
+	gap: 1.8rem;
+	margin-bottom: 1.8rem;
+}
+
+.form > button {
+	width: 50%;
 }

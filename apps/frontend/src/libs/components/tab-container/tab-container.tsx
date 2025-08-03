@@ -43,7 +43,7 @@ const TabContainer = ({
 		navigationClassName,
 	);
 
-	const contentClass = combineClassNames(styles["content"], contentClassName);
+	const tabClass = combineClassNames(styles["tab"], tabClassName);
 
 	return (
 		<div className={containerClass}>
@@ -51,7 +51,7 @@ const TabContainer = ({
 				{tabs.map((tab) => (
 					<button
 						className={combineClassNames(
-							tabClassName,
+							tabClass,
 							activeTab === tab.id && activeTabClassName,
 						)}
 						key={tab.id}
@@ -62,7 +62,7 @@ const TabContainer = ({
 					</button>
 				))}
 			</nav>
-			<div className={contentClass}>
+			<div className={contentClassName}>
 				{activeTabData ? activeTabData.element : <></>}
 			</div>
 		</div>

@@ -32,3 +32,9 @@ body {
 	clip: rect(0 0 0 0);
 	clip-path: inset(100%);
 }
+
+button {
+	cursor: pointer;
+	background: none;
+	border: none;
+}

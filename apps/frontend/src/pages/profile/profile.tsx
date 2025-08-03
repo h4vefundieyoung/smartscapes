@@ -19,15 +19,15 @@ const Profile = (): React.JSX.Element => {
 	];
 
 	return (
-		<main className={styles["container"]}>
-			<h1 className={styles["title"]}>My Profile</h1>
+		<main className={styles["profile-container"]}>
+			<h1 className={styles["profile-title"]}>My Profile</h1>
 			<TabContainer
-				activeTabClassName={styles["tabActive"]}
-				containerClassName={styles["tabContainer"]}
-				contentClassName={styles["tabContent"]}
+				activeTabClassName={styles["profile-active-tab"]}
+				containerClassName={styles["profile-tab-container"]}
+				contentClassName={styles["profile-content"]}
 				defaultTabId="user-details"
-				navigationClassName={styles["tabNavigation"]}
-				tabClassName={styles["tab"]}
+				navigationClassName={styles["profile-navigation"]}
+				tabClassName={styles["profile-tab"]}
 				tabs={tabs}
 			/>
 			<Button label="Delete Account" />

@@ -7,11 +7,13 @@ import styles from "./styles.module.css";
 const DEFAULT_AVATAR_SIZE = 32;
 
 type Properties = {
+	hidden?: boolean;
 	size?: number;
 	user: User;
 };
 
 const Avatar = ({
+	hidden = false,
 	size = DEFAULT_AVATAR_SIZE,
 	user,
 }: Properties): JSX.Element => {
@@ -23,7 +25,7 @@ const Avatar = ({
 			className={styles["avatar"]}
 			style={{ "--avatar-size": `${String(size)}px` } as React.CSSProperties}
 		>
-			{hasAvatar ? (
+			{hasAvatar && !hidden ? (
 				<img
 					alt="User Avatar"
 					className={styles["avatar-image"]}

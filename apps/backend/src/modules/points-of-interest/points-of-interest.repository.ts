@@ -2,8 +2,6 @@ import { type Repository } from "~/libs/types/types.js";
 import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
 import { type PointsOfInterestModel } from "~/modules/points-of-interest/points-of-interest.model.js";
 
-import { type PointsOfInterestLocation } from "./libs/types/type.js";
-
 class PointsOfInterestRepository implements Repository {
 	private pointsOfInterestModel: typeof PointsOfInterestModel;
 
@@ -27,11 +25,13 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"created_at",
 				"updated_at",
-				this.pointsOfInterestModel.raw("ST_AsGeoJSON(location) as location"),
+				this.pointsOfInterestModel.raw(
+					"ST_AsGeoJSON(location)::json as location",
+				),
 			])
 			.execute();
 
-		return this.toEntityFromDbRecord(pointOfInterest) as PointsOfInterestEntity;
+		return PointsOfInterestEntity.initialize(pointOfInterest);
 	}
 
 	public async delete(id: number): Promise<boolean> {
@@ -48,13 +48,15 @@ class PointsOfInterestRepository implements Repository {
 			.query()
 			.select("id", "name", "created_at", "updated_at")
 			.select(
-				this.pointsOfInterestModel.raw("ST_AsGeoJSON(location) as location"),
+				this.pointsOfInterestModel.raw(
+					"ST_AsGeoJSON(location)::json as location",
+				),
 			)
 			.execute();
 
-		return pointsOfInterest
-			.map((point) => this.toEntityFromDbRecord(point))
-			.filter(Boolean) as PointsOfInterestEntity[];
+		return pointsOfInterest.map((point) =>
+			PointsOfInterestEntity.initialize(point),
+		);
 	}
 
 	public async findById(id: number): Promise<null | PointsOfInterestEntity> {
@@ -62,27 +64,39 @@ class PointsOfInterestRepository implements Repository {
 			.query()
 			.select("id", "name", "created_at", "updated_at")
 			.select(
-				this.pointsOfInterestModel.raw("ST_AsGeoJSON(location) as location"),
+				this.pointsOfInterestModel.raw(
+					"ST_AsGeoJSON(location)::json as location",
+				),
 			)
 			.findById(id)
 			.execute();
 
-		return this.toEntityFromDbRecord(pointOfInterest);
+		if (!pointOfInterest) {
+			return null;
+		}
+
+		return PointsOfInterestEntity.initialize(pointOfInterest);
 	}
 
 	public async findByName(
 		name: string,
 	): Promise<null | PointsOfInterestEntity> {
-		const point = await this.pointsOfInterestModel
+		const pointOfInterest = await this.pointsOfInterestModel
 			.query()
 			.select("id", "name", "created_at", "updated_at")
 			.select(
-				this.pointsOfInterestModel.raw("ST_AsGeoJSON(location) as location"),
+				this.pointsOfInterestModel.raw(
+					"ST_AsGeoJSON(location)::json as location",
+				),
 			)
 			.where("name", "ilike", name)
 			.first();
 
-		return this.toEntityFromDbRecord(point);
+		if (!pointOfInterest) {
+			return null;
+		}
+
+		return PointsOfInterestEntity.initialize(pointOfInterest);
 	}
 
 	public async patch(
@@ -91,7 +105,7 @@ class PointsOfInterestRepository implements Repository {
 	): Promise<null | PointsOfInterestEntity> {
 		const { location, name } = entity.toNewObject();
 
-		const [updatedRow] = await this.pointsOfInterestModel
+		const [updatedPointOfInterest] = await this.pointsOfInterestModel
 			.query()
 			.patch({
 				location,
@@ -103,36 +117,17 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"created_at",
 				"updated_at",
-				this.pointsOfInterestModel.raw("ST_AsGeoJSON(location) as location"),
+				this.pointsOfInterestModel.raw(
+					"ST_AsGeoJSON(location)::json as location",
+				),
 			])
 			.execute();
 
-		return this.toEntityFromDbRecord(updatedRow);
-	}
-
-	private toEntityFromDbRecord(
-		point: PointsOfInterestModel | undefined,
-	): null | PointsOfInterestEntity {
-		if (!point) {
+		if (!updatedPointOfInterest) {
 			return null;
 		}
 
-		const locationString =
-			typeof point.location === "string"
-				? point.location
-				: JSON.stringify(point.location);
-
-		const parsedLocation = JSON.parse(
-			locationString,
-		) as PointsOfInterestLocation;
-
-		return PointsOfInterestEntity.initialize({
-			createdAt: point.createdAt,
-			id: point.id,
-			location: parsedLocation,
-			name: point.name,
-			updatedAt: point.updatedAt,
-		});
+		return PointsOfInterestEntity.initialize(updatedPointOfInterest);
 	}
 }
 

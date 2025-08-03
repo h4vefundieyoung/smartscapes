@@ -1,10 +1,8 @@
-import { type Entity } from "~/libs/types/types.js";
-
-import { type PointsOfInterestLocation } from "./libs/types/type.js";
+import { type Entity, type PointGeometry } from "~/libs/types/types.js";
 
 class PointsOfInterestEntity implements Entity {
 	private id: null | number;
-	private location: PointsOfInterestLocation;
+	private location: PointGeometry;
 	private name: string;
 
 	private constructor({
@@ -13,7 +11,7 @@ class PointsOfInterestEntity implements Entity {
 		name,
 	}: {
 		id: null | number;
-		location: PointsOfInterestLocation;
+		location: PointGeometry;
 		name: string;
 	}) {
 		this.id = id;
@@ -24,7 +22,7 @@ class PointsOfInterestEntity implements Entity {
 	public static initialize(data: {
 		createdAt: string;
 		id: number;
-		location: PointsOfInterestLocation;
+		location: PointGeometry;
 		name: string;
 		updatedAt: string;
 	}): PointsOfInterestEntity {
@@ -39,7 +37,7 @@ class PointsOfInterestEntity implements Entity {
 		location,
 		name,
 	}: {
-		location: PointsOfInterestLocation;
+		location: PointGeometry;
 		name: string;
 	}): PointsOfInterestEntity {
 		return new PointsOfInterestEntity({
@@ -50,7 +48,7 @@ class PointsOfInterestEntity implements Entity {
 	}
 
 	public toNewObject(): {
-		location: PointsOfInterestLocation;
+		location: PointGeometry;
 		name: string;
 	} {
 		return {
@@ -61,7 +59,7 @@ class PointsOfInterestEntity implements Entity {
 
 	public toObject(): {
 		id: number;
-		location: PointsOfInterestLocation;
+		location: PointGeometry;
 		name: string;
 	} {
 		return {

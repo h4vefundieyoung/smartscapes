@@ -1,7 +1,7 @@
-import { type PointsOfInterestLocation } from "./location.type.js";
+import { type PointGeometry } from "../../../../libs/types/types.js";
 
 type PointsOfInterestRequestDto = {
-	location: PointsOfInterestLocation;
+	location: PointGeometry;
 	name: string;
 };
 

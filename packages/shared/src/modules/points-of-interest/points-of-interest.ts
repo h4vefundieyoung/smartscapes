@@ -1,5 +1,4 @@
 export {
-	type PointsOfInterestLocation,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 } from "./libs/types/types.js";

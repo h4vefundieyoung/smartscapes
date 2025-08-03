@@ -13,6 +13,7 @@ import { Auth } from "~/pages/auth/auth.jsx";
 import { NotFound } from "~/pages/not-found/not-found.jsx";
 
 import { Landing } from "./pages/landing/landing.jsx";
+import { Profile } from "./pages/profile/profile.js";
 
 createRoot(document.querySelector("#root") as HTMLElement).render(
 	<StrictMode>
@@ -36,6 +37,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 					{
 						element: <Landing />,
 						path: AppRoute.ROOT,
+					},
+					{
+						element: <Profile />,
+						path: AppRoute.PROFILE,
 					},
 					{
 						element: <NotFound />,

@@ -9,8 +9,6 @@ const INITIAL_CAROUSEL_PARAMETERS: CarouselParameters = {
 	isAtRightEdge: false,
 	maxScroll: 0,
 	offsetLeft: 0,
-	scrollBarPosition: 0,
-	scrollBarWidthPercent: 0,
 	scrollLeft: 0,
 	scrollWidth: 0,
 };
@@ -21,8 +19,6 @@ const getCarouselParameters = (
 	if (!reference.current) {
 		return INITIAL_CAROUSEL_PARAMETERS;
 	}
-
-	const ONE_HUNDRED = 100;
 
 	const element = reference.current;
 
@@ -39,12 +35,6 @@ const getCarouselParameters = (
 	const { clientWidth, offsetLeft, scrollLeft, scrollWidth } =
 		reference.current;
 
-	const scrollBarPosition =
-		maxScroll > 0 ? (scrollLeft / maxScroll) * ONE_HUNDRED : 0;
-
-	const scrollBarWidthPercent =
-		scrollWidth > 0 ? (clientWidth / scrollWidth) * ONE_HUNDRED : ONE_HUNDRED;
-
 	return {
 		clientWidth,
 		direction,
@@ -53,8 +43,6 @@ const getCarouselParameters = (
 		isAtRightEdge,
 		maxScroll,
 		offsetLeft,
-		scrollBarPosition,
-		scrollBarWidthPercent,
 		scrollLeft,
 		scrollWidth,
 	};

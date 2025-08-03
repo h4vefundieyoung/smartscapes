@@ -12,6 +12,11 @@ const NAVIGATION_ITEMS: NavigationItem[] = [
 		icon: "analytics",
 		label: "List of places",
 	},
+	{
+		href: AppRoute.PROFILE,
+		icon: "profile",
+		label: "User profile & settings",
+	},
 ];
 
 export { NAVIGATION_ITEMS };

@@ -1,5 +1,6 @@
 import Analytics from "~/assets/images/icons/analytics.svg?react";
 import Dashboard from "~/assets/images/icons/dashboard.svg?react";
+import Profile from "~/assets/images/icons/settings.svg?react";
 import { type IconName } from "~/libs/types/types.js";
 
 const iconNameToSvg: Record<
@@ -8,6 +9,7 @@ const iconNameToSvg: Record<
 > = {
 	analytics: Analytics,
 	dashboard: Dashboard,
+	profile: Profile,
 };
 
 export { iconNameToSvg };

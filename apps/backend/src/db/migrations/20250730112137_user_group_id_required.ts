@@ -13,12 +13,14 @@ async function down(knex: Knex): Promise<void> {
 }
 
 async function up(knex: Knex): Promise<void> {
-	await knex(TABLE_NAME)
-		.whereNull(ColumnName.GROUP_ID)
-		.update({ [ColumnName.GROUP_ID]: 2 });
+	await knex.transaction(async (trx) => {
+		await trx(TABLE_NAME)
+			.whereNull(ColumnName.GROUP_ID)
+			.update({ [ColumnName.GROUP_ID]: 2 });
 
-	await knex.schema.alterTable(TABLE_NAME, (table) => {
-		table.integer(ColumnName.GROUP_ID).notNullable().alter();
+		await trx.schema.alterTable(TABLE_NAME, (table) => {
+			table.integer(ColumnName.GROUP_ID).notNullable().alter();
+		});
 	});
 }
 

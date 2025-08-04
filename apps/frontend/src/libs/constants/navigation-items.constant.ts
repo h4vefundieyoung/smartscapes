@@ -3,7 +3,7 @@ import { type NavigationItem } from "~/libs/types/types.js";
 
 const NAVIGATION_ITEMS: NavigationItem[] = [
 	{
-		href: AppRoute.ROOT,
+		href: AppRoute.APP,
 		icon: "dashboard",
 		label: "Dashboard",
 	},

@@ -7,7 +7,12 @@ import {
 } from "~/libs/components/components.js";
 import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import { useAppDispatch, useEffect, useLocation } from "~/libs/hooks/hooks.js";
+import {
+	useAppDispatch,
+	useEffect,
+	useLocation,
+	useState,
+} from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import { actions as userActions } from "~/modules/users/users.js";
 
@@ -24,6 +29,8 @@ const App = (): React.JSX.Element => {
 		lastName: "Smith",
 	};
 
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+
 	const isRoot = pathname === AppRoute.APP;
 
 	useEffect(() => {
@@ -31,8 +38,20 @@ const App = (): React.JSX.Element => {
 			void dispatch(userActions.loadAll());
 		}
 
-		void dispatch(authActions.getAuthenticatedUser());
+		const dispatchUser = async (): Promise<void> => {
+			try {
+				await dispatch(authActions.getAuthenticatedUser());
+			} finally {
+				setIsLoading(false);
+			}
+		};
+
+		void dispatchUser();
 	}, [isRoot, dispatch]);
+
+	if (isLoading) {
+		return <></>;
+	}
 
 	return (
 		<div className={styles["container"]}>

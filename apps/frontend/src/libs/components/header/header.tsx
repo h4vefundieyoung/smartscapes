@@ -17,7 +17,13 @@ const Header = ({ user }: Properties): JSX.Element => {
 	return (
 		<header className={styles["header"]}>
 			<Link to={AppRoute.ROOT}>
-				<img alt="SmartScapes Logo" height={24} src={appLogo} width={136} />
+				<img
+					alt="SmartScapes Logo"
+					className={styles["header-logo"]}
+					height={24}
+					src={appLogo}
+					width={136}
+				/>
 			</Link>
 			{hasUser ? (
 				<div className={styles["user-info"]}>

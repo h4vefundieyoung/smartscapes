@@ -77,7 +77,7 @@ describe("PointsOfInterestController", () => {
 			payload: {
 				data: mockPointOfInterest,
 			},
-			status: HTTPCode.OK,
+			status: HTTPCode.CREATED,
 		});
 	});
 

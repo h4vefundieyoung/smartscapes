@@ -8,12 +8,15 @@ import {
 	ToastContainer,
 } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
+import { pwa } from "~/libs/modules/pwa/pwa.js";
 import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
 import { NotFound } from "~/pages/not-found/not-found.jsx";
 
 import { Landing } from "./pages/landing/landing.jsx";
 import { Profile } from "./pages/profile/profile.js";
+
+pwa.register();
 
 createRoot(document.querySelector("#root") as HTMLElement).render(
 	<StrictMode>

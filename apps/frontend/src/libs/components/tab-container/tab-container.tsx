@@ -23,13 +23,9 @@ const TabContainer = ({
 
 	const activeTabData = tabs.find((tab) => tab.id === activeTab);
 
-	const handleTabClick = (tabId: string): void => {
-		setActiveTab(tabId);
-	};
-
-	const createTabClickHandler = (tabId: string): (() => void) => {
+	const handleTabClick = (tabId: string): (() => void) => {
 		return () => {
-			handleTabClick(tabId);
+			setActiveTab(tabId);
 		};
 	};
 
@@ -55,7 +51,7 @@ const TabContainer = ({
 							activeTab === tab.id && activeTabClassName,
 						)}
 						key={tab.id}
-						onClick={createTabClickHandler(tab.id)}
+						onClick={handleTabClick(tab.id)}
 						type="button"
 					>
 						{tab.label}

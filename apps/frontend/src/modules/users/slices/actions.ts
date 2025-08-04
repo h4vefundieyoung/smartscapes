@@ -31,6 +31,7 @@ const patch = createAsyncThunk<
 		const updatedUser = await userApi.patch(id, payload);
 
 		const state = getState();
+
 		const currentUserId = state.auth.authenticatedUser?.id;
 
 		if (updatedUser.data.id === currentUserId) {

@@ -6,6 +6,7 @@ export {
 	type APIErrorResponse,
 	type APIResponse,
 	type HTTPMethod,
+	type PointGeometry,
 	type UserAuthResponseDto,
 	type ValidationSchema,
 	type ValueOf,

@@ -23,21 +23,20 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 					{
 						children: [
 							{
-								children: [
-									{
-										element: <Auth />,
-										path: AppRoute.SIGN_IN,
-									},
-									{
-										element: <Auth />,
-										path: AppRoute.SIGN_UP,
-									},
-								],
-								element: <App />,
+								element: <Auth />,
+								path: AppRoute.SIGN_IN,
+							},
+							{
+								element: <Auth />,
+								path: AppRoute.SIGN_UP,
+							},
+							{
+								element: <ProtectedRoutes />,
 								path: AppRoute.APP,
 							},
 						],
-						element: <ProtectedRoutes />,
+						element: <App />,
+						path: AppRoute.APP,
 					},
 					{
 						element: <Landing />,

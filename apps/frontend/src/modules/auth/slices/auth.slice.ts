@@ -1,13 +1,16 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { type UserAuthResponseDto } from "@smartscapes/shared";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
+import {
+	type UserAuthResponseDto,
+	type UserGetByIdItemResponseDto,
+} from "~/modules/users/users.js";
 
 import { getAuthenticatedUser, signIn, signUp } from "./actions.js";
 
 type State = {
-	authenticatedUser: null | Pick<UserAuthResponseDto, "email" | "id">;
+	authenticatedUser: null | UserAuthResponseDto;
 	dataStatus: ValueOf<typeof DataStatus>;
 };
 
@@ -56,7 +59,14 @@ const { actions, name, reducer } = createSlice({
 	},
 	initialState,
 	name: "auth",
-	reducers: {},
+	reducers: {
+		setAuthenticatedUser(
+			state,
+			action: PayloadAction<UserGetByIdItemResponseDto>,
+		) {
+			state.authenticatedUser = action.payload;
+		},
+	},
 });
 
 export { actions, name, reducer };

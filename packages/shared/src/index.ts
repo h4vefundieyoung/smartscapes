@@ -42,7 +42,7 @@ export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetByIdItemResponseDto,
-	type UserPatchProfileRequestDto,
+	type UserProfileRequestDto,
 	userProfileValidationSchema,
 	UsersApiPath,
 	type UserSignInRequestDto,

@@ -8,7 +8,10 @@ import {
 import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppDispatch, useEffect, useLocation } from "~/libs/hooks/hooks.js";
-import { actions as userActions } from "~/modules/users/users.js";
+import {
+	actions as userActions,
+	type UserAuthResponseDto,
+} from "~/modules/users/users.js";
 
 import { mockImages } from "../carousel/assets/mock-images/mock-images.js";
 import { Carousel } from "../carousel/carousel.js";
@@ -17,9 +20,13 @@ import styles from "./styles.module.css";
 const App = (): React.JSX.Element => {
 	const { pathname } = useLocation();
 	const dispatch = useAppDispatch();
-	const mockUserWithoutAvatar = {
+	const mockUserWithoutAvatar: UserAuthResponseDto & {
+		avatarUrl?: null | string;
+	} = {
 		avatarUrl: null,
+		email: "john.smith@example.com",
 		firstName: "John",
+		id: 1,
 		lastName: "Smith",
 	};
 

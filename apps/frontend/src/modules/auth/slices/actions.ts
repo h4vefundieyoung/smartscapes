@@ -2,14 +2,14 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
-
 import {
 	type UserAuthResponseDto,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
-} from "../libs/types/types.js";
+} from "~/modules/users/users.js";
+
 import { name as sliceName } from "./auth.slice.js";
 
 const getAuthenticatedUser = createAsyncThunk<

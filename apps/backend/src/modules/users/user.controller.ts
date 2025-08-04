@@ -11,7 +11,7 @@ import { type UserService } from "~/modules/users/user.service.js";
 import { UsersApiPath } from "./libs/enums/enums.js";
 import {
 	type UserGetByIdItemResponseDto,
-	type UserPatchProfileRequestDto,
+	type UserProfileRequestDto,
 } from "./libs/types/types.js";
 import { userProfileValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 
@@ -51,7 +51,7 @@ class UserController extends BaseController {
 		this.addRoute({
 			handler: this.patch.bind(this),
 			method: "PATCH",
-			path: "/:id",
+			path: UsersApiPath.BY_ID,
 			validation: {
 				body: userProfileValidationSchema,
 			},
@@ -133,7 +133,7 @@ class UserController extends BaseController {
 	 */
 	public async patch(
 		options: APIHandlerOptions<{
-			body: UserPatchProfileRequestDto;
+			body: UserProfileRequestDto;
 			params: { id: string };
 		}>,
 	): Promise<APIHandlerResponse<UserGetByIdItemResponseDto>> {

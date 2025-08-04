@@ -1,6 +1,7 @@
 import { type JSX } from "react";
 
-import { type User } from "../header/libs/types/types.js";
+import { type UserAuthResponseDto } from "~/modules/users/users.js";
+
 import { getUserInitials } from "./libs/helpers/helpers.js";
 import styles from "./styles.module.css";
 
@@ -9,7 +10,7 @@ const DEFAULT_AVATAR_SIZE = 32;
 type Properties = {
 	hidden?: boolean;
 	size?: number;
-	user: User;
+	user: UserAuthResponseDto & { avatarUrl?: null | string };
 };
 
 const Avatar = ({
@@ -29,7 +30,7 @@ const Avatar = ({
 				<img
 					alt="User Avatar"
 					className={styles["avatar-image"]}
-					src={avatarUrl as string}
+					src={avatarUrl ?? ""}
 				/>
 			) : (
 				<span className={styles["fallback"]}>

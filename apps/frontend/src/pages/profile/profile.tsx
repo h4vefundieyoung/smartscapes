@@ -1,5 +1,5 @@
-import { Button } from "~/libs/components/button/button.js";
-import { TabContainer } from "~/libs/components/components.js";
+import { Button, TabContainer } from "~/libs/components/components.js";
+import { useCallback } from "~/libs/hooks/hooks.js";
 
 import { Photos, UserDetails } from "./libs/components/components.js";
 import styles from "./styles.module.css";
@@ -18,6 +18,8 @@ const Profile = (): React.JSX.Element => {
 		},
 	];
 
+	const handleDeleteAccount = useCallback(() => {}, []);
+
 	return (
 		<main className={styles["profile-container"]}>
 			<h1 className={styles["profile-title"]}>My Profile</h1>
@@ -30,7 +32,7 @@ const Profile = (): React.JSX.Element => {
 				tabClassName={styles["profile-tab"]}
 				tabs={tabs}
 			/>
-			<Button label="Delete Account" />
+			<Button label="Delete Account" onClick={handleDeleteAccount} />
 		</main>
 	);
 };

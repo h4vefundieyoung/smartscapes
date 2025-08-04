@@ -2,13 +2,13 @@ import { type JSX } from "react";
 
 import appLogo from "~/assets/images/logo.svg";
 import { AppRoute } from "~/libs/enums/enums.js";
+import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
 import { Avatar, Button, Link } from "../components.js";
-import { type User } from "./libs/types/types.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	user: null | User;
+	user: null | (UserAuthResponseDto & { avatarUrl?: null | string });
 };
 
 const Header = ({ user }: Properties): JSX.Element => {

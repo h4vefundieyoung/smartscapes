@@ -8,7 +8,10 @@ import {
 	RouterOutlet,
 	Sidebar,
 } from "~/libs/components/components.js";
-import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
+import {
+	DEFAULT_POSITION,
+	NAVIGATION_ITEMS,
+} from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -24,11 +27,9 @@ import { Carousel } from "../carousel/carousel.js";
 import { MOCK_POI_DATA } from "../map/mock-data.js";
 import styles from "./styles.module.css";
 
-const DEFAULT_LONGITUDE = 30.5234;
-const DEFAULT_LATITUDE = 50.4501;
-const DEFAULT_POSITION: [number, number] = [
-	DEFAULT_LONGITUDE,
-	DEFAULT_LATITUDE,
+const DEFAULT_POSITION_COORDINATES: [number, number] = [
+	DEFAULT_POSITION.LONGITUDE,
+	DEFAULT_POSITION.LATITUDE,
 ];
 const LOCATION_PRECISION_DIGITS = 6;
 
@@ -41,7 +42,9 @@ const mockUserWithoutAvatar = {
 const App = (): React.JSX.Element => {
 	const { pathname } = useLocation();
 	const dispatch = useAppDispatch();
-	const [position, setPosition] = useState<[number, number]>(DEFAULT_POSITION);
+	const [position, setPosition] = useState<[number, number]>(
+		DEFAULT_POSITION_COORDINATES,
+	);
 
 	const isRoot = pathname === AppRoute.APP;
 
@@ -120,7 +123,7 @@ const App = (): React.JSX.Element => {
 								Standard street map with controls
 							</span>
 							<Map
-								center={DEFAULT_POSITION}
+								center={DEFAULT_POSITION_COORDINATES}
 								style="mapbox://styles/mapbox/streets-v12"
 								zoom={13}
 							/>
@@ -149,7 +152,7 @@ const App = (): React.JSX.Element => {
 								Map with Points of Interest (POI) - Centered on Kyiv
 							</span>
 							<Map
-								center={DEFAULT_POSITION}
+								center={DEFAULT_POSITION_COORDINATES}
 								onPoiClick={handlePoiClick}
 								poisData={MOCK_POI_DATA}
 								style="mapbox://styles/mapbox/outdoors-v12"

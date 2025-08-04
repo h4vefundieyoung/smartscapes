@@ -2,15 +2,18 @@
 	display: flex;
 	flex: 1;
 	flex-direction: column;
-	padding: 1.8rem;
+	padding: 30px;
 }
 
 .profile-title {
 	align-self: flex-start;
-	font-family: var(--font-family);
 	font-size: var(--font-size-h3);
 	font-weight: var(--font-weight-semibold);
 	color: var(--color-text-strong);
+}
+
+.profile-navigation {
+	margin: 16px 0;
 }
 
 .profile-tab-container {
@@ -30,9 +33,9 @@
 }
 
 .profile-tab {
-	padding: 0.5rem 1rem;
+	padding: 8px 16px;
 	font-family: var(--font-family);
-	font-size: var(--font-size-h4);
+	font-size: var(--font-size-small);
 	font-weight: var(--font-weight-regular);
 	color: var(--color-text-weak);
 }
@@ -44,5 +47,36 @@
 
 .profile-container > button {
 	align-self: flex-start;
-	width: 15rem;
+	width: 100px;
+	line-height: 0.5;
+	color: var(--color-text-error);
+	background-color: var(--color-background-base);
+	border: 2px solid var(--color-text-error);
+}
+
+.profile-container > button:hover,
+.profile-container > button:focus,
+.profile-container > button:disabled {
+	background-color: var(--color-background-base);
+}
+
+.profile-container > button:focus::after {
+	border: 2px solid var(--color-text-error);
+}
+
+@media (width <= 768px) {
+	.profile-container > button {
+		align-self: center;
+	}
+
+	.profile-container {
+		padding: 16px;
+	}
+}
+
+@media screen and (width <= 480px) {
+	.profile-tab {
+		padding: 4px 8px;
+		font-size: var(--font-size-tiny);
+	}
 }

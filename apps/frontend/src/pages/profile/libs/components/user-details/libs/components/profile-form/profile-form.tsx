@@ -43,7 +43,7 @@ const ProfileForm = ({
 				name="lastName"
 				type="text"
 			/>
-			<Button label="Update my settings" />
+			<Button label="Update My Settings" />
 		</form>
 	);
 };

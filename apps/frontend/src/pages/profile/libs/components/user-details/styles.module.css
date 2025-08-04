@@ -1,12 +1,83 @@
+.user-details-container {
+	display: flex;
+	flex: 0 1 33.333%;
+	flex-direction: column;
+	height: 100%;
+}
+
 .user-details-avatar {
 	display: flex;
-	gap: 1rem;
+	gap: 16px;
 	align-items: center;
-	margin: 1.8rem 0;
+	margin: 16px 0;
 }
 
 .user-details-button-container {
 	display: flex;
 	flex-direction: column;
-	gap: 1rem;
+	gap: 16px;
+}
+
+.user-details-button-container > button:first-child,
+.user-details-button-container > button:last-child {
+	line-height: 0.5;
+}
+
+.user-details-button-container > button:first-child {
+	color: var(--color-text-strong);
+	background-color: var(--color-background-base);
+	border: 2px solid var(--color-fill-brand-strong);
+}
+
+.user-details-button-container > button:last-child {
+	color: var(--color-text-error);
+	background-color: var(--color-background-base);
+	border: 2px solid var(--color-text-error);
+}
+
+.user-details-button-container > button:first-child:hover,
+.user-details-button-container > button:first-child:focus,
+.user-details-button-container > button:first-child:disabled,
+.user-details-button-container > button:last-child:hover,
+.user-details-button-container > button:last-child:focus,
+.user-details-button-container > button:last-child:disabled {
+	background-color: var(--color-background-base);
+}
+
+.user-details-button-container > button:last-child:focus::after {
+	border: 2px solid var(--color-text-error);
+}
+
+@media screen and (width <= 1024px) {
+	.user-details-avatar {
+		flex-direction: column;
+	}
+
+	.user-details-button-container {
+		flex-direction: row;
+	}
+
+	.user-details-container {
+		flex: 0 1 66.666%;
+	}
+}
+
+@media screen and (width <= 768px) {
+	.user-details-button-container {
+		flex-direction: column;
+	}
+
+	.user-details-avatar {
+		flex-direction: row;
+	}
+}
+
+@media screen and (width <= 480px) {
+	.user-details-container {
+		flex: 0 1 75%;
+	}
+
+	.user-details-avatar {
+		flex-direction: column;
+	}
 }

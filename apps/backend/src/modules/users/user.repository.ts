@@ -75,13 +75,9 @@ class UserRepository implements Repository {
 	): Promise<null | UserEntity> {
 		const { firstName, lastName } = payload;
 
-		const patchData = Object.fromEntries(
-			Object.entries({ firstName, lastName }).filter(([, value]) => value),
-		);
-
 		const [updatedRow] = await this.userModel
 			.query()
-			.patch(patchData)
+			.patch({ firstName, lastName })
 			.where("id", "=", id)
 			.returning("*")
 			.execute();

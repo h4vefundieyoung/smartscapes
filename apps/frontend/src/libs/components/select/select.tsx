@@ -50,11 +50,11 @@ const createHandleChange =
 	};
 
 const classNames = {
-	control: (): string => styles["control"] ?? "",
-	menu: (): string => styles["menu"] ?? "",
-	multiValue: (): string => styles["multi-value"] ?? "",
-	multiValueLabel: (): string => styles["multi-value-label"] ?? "",
-	multiValueRemove: (): string => styles["multi-value-remove"] ?? "",
+	control: (): string => styles["control"] as string,
+	menu: (): string => styles["menu"] as string,
+	multiValue: (): string => styles["multi-value"] as string,
+	multiValueLabel: (): string => styles["multi-value-label"] as string,
+	multiValueRemove: (): string => styles["multi-value-remove"] as string,
 	option: ({
 		isFocused,
 		isSelected,
@@ -67,8 +67,8 @@ const classNames = {
 			isFocused && styles["option-focused"],
 			isSelected && styles["option-selected"],
 		),
-	placeholder: (): string => styles["placeholder"] ?? "",
-	singleValue: (): string => styles["single-value"] ?? "",
+	placeholder: (): string => styles["placeholder"] as string,
+	singleValue: (): string => styles["single-value"] as string,
 };
 
 const Select = <TFieldValues extends FieldValues, TOptionValue = string>({

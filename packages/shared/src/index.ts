@@ -22,6 +22,7 @@ export {
 	type APIErrorResponse,
 	type APIResponse,
 	type APIValidationErrorDetail,
+	type PointGeometry,
 	type ValidationSchema,
 	type ValueOf,
 } from "./libs/types/types.js";
@@ -38,6 +39,10 @@ export {
 	type RouteCategoryGetAllItemResponseDto,
 	type RouteCategoryRequestDto,
 } from "./modules/route-categories/route-categories.js";
+export {
+	type ConstructRouteRequestDto,
+	RouteApiPath,
+} from "./modules/routes/routes.js";
 export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,

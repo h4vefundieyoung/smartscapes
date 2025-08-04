@@ -16,7 +16,7 @@ type Constructor = {
 	type: ValueOf<typeof APIErrorType>;
 };
 
-class HTTPError extends LibraryHTTPError {
+class HTTPClientError extends LibraryHTTPError {
 	public details: APIValidationErrorDetail[];
 
 	public type: ValueOf<typeof APIErrorType>;
@@ -33,4 +33,4 @@ class HTTPError extends LibraryHTTPError {
 	}
 }
 
-export { HTTPError };
+export { HTTPClientError };

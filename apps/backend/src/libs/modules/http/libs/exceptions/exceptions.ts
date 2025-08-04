@@ -1,1 +1,1 @@
-export { HTTPError as HTTPClientError } from "./http-error.exception.js";
+export { HTTPClientError } from "./http-error.exception.js";

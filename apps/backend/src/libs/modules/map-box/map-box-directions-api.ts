@@ -33,16 +33,22 @@ class MapBoxDirectionsApi extends BaseHTTPApi {
 		coordinates: Coordinate[],
 		geometricsType: ValueOf<typeof MapBoxAPIGeometricsType>,
 	): Promise<GetMapBoxRouteResponseDto> {
+		const queryString = new URLSearchParams({
+			access_token: this.accessToken,
+			alternatives: "false",
+			geometries: geometricsType,
+			overview: "simplified",
+			steps: "false",
+		});
+
 		const URLCoords = coordinates
 			.map((coordinate) => `${coordinate.join(",")};`)
-			.join("");
-		const URL = `${profile}/${URLCoords}`;
+			.join("")
+			.replace(/.$/, "");
+		const URL = `${profile}/${URLCoords}?${queryString}`;
 
 		const response = await this.load<GetMapBoxRouteResponseDto>(
-			this.getFullEndpoint(URL, {
-				access_token: this.accessToken,
-				geometries: geometricsType,
-			}),
+			this.getFullEndpoint(URL, {}),
 			{
 				contentType: ContentType.JSON,
 				method: "GET",

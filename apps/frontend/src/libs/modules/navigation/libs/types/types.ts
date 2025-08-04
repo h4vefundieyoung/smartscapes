@@ -8,7 +8,4 @@ type NavigationModule = {
 	isSupported: () => boolean;
 };
 
-export {
-	type Position,
-	type NavigationModule,
-};
+export { type Position, type NavigationModule };

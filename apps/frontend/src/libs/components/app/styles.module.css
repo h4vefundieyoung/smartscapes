@@ -24,3 +24,10 @@
 	width: 50%;
 	margin-bottom: 5rem;
 }
+
+.map-container {
+	width: 80%;
+	height: 400px;
+	overflow: hidden;
+	border-radius: 8px;
+}

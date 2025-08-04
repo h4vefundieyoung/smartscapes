@@ -205,6 +205,8 @@ As we are already using js on both frontend and backend it would be useful to sh
 - `npm run migrate:dev:make -w apps/backend -- <name>` - Create a new migration file (specify `<name>`)
 - `npm run migrate:dev:down -w apps/backend` - Roll back the most recent migration
 - `npm run migrate:dev:rollback -w apps/backend` - Roll back _all_ migrations
+- `npm run seed:dev:make <name> -w apps/backend` - Create a new seed file (specify `<name>`)
+- `npm run seed:dev -w apps/backend` - Apply all seeds
 
 #### Development
 

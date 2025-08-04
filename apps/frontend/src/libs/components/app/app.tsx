@@ -39,9 +39,7 @@ const App = (): React.JSX.Element => {
 			{isRoot && (
 				<div className={styles["components-container"]}>
 					<Header user={mockUserWithoutAvatar} />
-					<div className={styles["sidebar-container"]}>
-						<Sidebar navigationItems={NAVIGATION_ITEMS} />
-					</div>
+					<Sidebar navigationItems={NAVIGATION_ITEMS} />
 					<Loader />
 					<div className={styles["button-container"]}>
 						<Button label="Button for test" type="button" />

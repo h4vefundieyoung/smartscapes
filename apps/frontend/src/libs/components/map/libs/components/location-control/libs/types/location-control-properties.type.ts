@@ -1,7 +1,7 @@
-import type {
-	BaseControlProperties,
-	LocationFoundEvent,
-	PositionOptions,
+import {
+	type BaseControlProperties,
+	type LocationFoundEvent,
+	type PositionOptions,
 } from "../../../../types/shared.type.js";
 
 type LocationControlProperties = BaseControlProperties & {

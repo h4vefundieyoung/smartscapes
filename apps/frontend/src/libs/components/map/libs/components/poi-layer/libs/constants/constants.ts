@@ -1,0 +1,11 @@
+const POI_LAYER_DEFAULTS = {
+	MARKER_COLOR: "hsl(162deg 91% 25% / 100%)",
+	MARKER_SIZE: 1,
+} as const;
+
+const COORDINATE_INDICES = {
+	LATITUDE: 1,
+	LONGITUDE: 0,
+} as const;
+
+export { COORDINATE_INDICES, POI_LAYER_DEFAULTS };

@@ -1,10 +1,10 @@
-import type mapboxgl from "mapbox-gl";
+import { type Map } from "mapbox-gl";
 
 type CurrentPositionProperties = {
-	mapInstance: mapboxgl.Map | null;
-	isMapReady: boolean;
-	position?: [number, number] | null | undefined;
 	color?: string;
+	isMapReady: boolean;
+	mapInstance: Map | null;
+	position?: [number, number] | null | undefined;
 };
 
 export { type CurrentPositionProperties };

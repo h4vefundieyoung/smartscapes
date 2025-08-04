@@ -8,41 +8,43 @@ import React, {
 	useState,
 } from "react";
 
-import { type MapProperties } from "./libs/types/types.js";
-
 import {
 	CurrentPosition,
 	LocationControl,
 	MapControl,
+	PoiLayer,
 	ScaleControl,
 } from "./libs/components/components.js";
 import { MAP_DEFAULTS } from "./libs/constants/constants.js";
+import { type MapProperties } from "./libs/types/types.js";
 import styles from "./styles.module.css";
 
-const Map = ({
-	className,
+const MapComponent = ({
 	center,
-	zoom = MAP_DEFAULTS.ZOOM,
-	style = MAP_DEFAULTS.STYLE,
+	className,
 	currentPosition,
 	currentPositionColor = MAP_DEFAULTS.CURRENT_POSITION_COLOR,
+	isLocationControl = MAP_DEFAULTS.IS_LOCATION_CONTROL,
 	isMapControl = MAP_DEFAULTS.IS_MAP_CONTROL,
-	isZoomControl = MAP_DEFAULTS.IS_ZOOM_CONTROL,
-	zoomControlPosition = MAP_DEFAULTS.ZOOM_CONTROL_POSITION,
-	isShowCompass = MAP_DEFAULTS.IS_SHOW_COMPASS,
 	isScaleControl = MAP_DEFAULTS.IS_SCALE_CONTROL,
+	isShowCompass = MAP_DEFAULTS.IS_SHOW_COMPASS,
+	isTrackUserLocation = MAP_DEFAULTS.IS_TRACK_USER_LOCATION,
+	isZoomControl = MAP_DEFAULTS.IS_ZOOM_CONTROL,
+	locationControlPosition = MAP_DEFAULTS.LOCATION_CONTROL_POSITION,
+	onLocationError,
+	onLocationFound,
+	onMapReady,
+	onPoiClick,
+	poisData,
 	scaleControlPosition = MAP_DEFAULTS.SCALE_CONTROL_POSITION,
 	scaleControlUnit = MAP_DEFAULTS.SCALE_CONTROL_UNIT,
-	isLocationControl = MAP_DEFAULTS.IS_LOCATION_CONTROL,
-	locationControlPosition = MAP_DEFAULTS.LOCATION_CONTROL_POSITION,
-	isTrackUserLocation = MAP_DEFAULTS.IS_TRACK_USER_LOCATION,
-	onLocationFound,
-	onLocationError,
-	onMapReady,
+	style = MAP_DEFAULTS.STYLE,
+	zoom = MAP_DEFAULTS.ZOOM,
+	zoomControlPosition = MAP_DEFAULTS.ZOOM_CONTROL_POSITION,
 }: MapProperties): React.JSX.Element => {
 	const mapContainer = useRef<HTMLDivElement>(null);
 	const mapInstance = useRef<mapboxgl.Map | null>(null);
-	const [isMapReady, setIsMapReady] = useState(false);
+	const [isMapReady, setIsMapReady] = useState<boolean>(false);
 
 	const shouldUseLocationControl = useMemo(() => !center, [center]);
 	const initialCenter = useMemo(
@@ -55,26 +57,32 @@ const Map = ({
 	);
 
 	useEffect(() => {
-		if (!mapContainer.current || mapInstance.current) return;
+		if (!mapContainer.current || mapInstance.current) {
+			return;
+		}
 
 		const token = import.meta.env["VITE_APP_MAPBOX_ACCESS_TOKEN"] as string;
+
 		if (token) {
 			(mapboxgl as unknown as { accessToken: string }).accessToken = token;
 		}
 
 		mapInstance.current = new mapboxgl.Map({
+			center: initialCenter,
 			container: mapContainer.current,
 			style,
-			center: initialCenter,
 			zoom: initialZoom,
 		});
 
-		mapInstance.current.on("load", () => {
+		mapInstance.current.on("load", (): void => {
 			setIsMapReady(true);
-			onMapReady?.(mapInstance.current!);
+
+			if (mapInstance.current) {
+				onMapReady?.(mapInstance.current);
+			}
 		});
 
-		return () => {
+		return (): void => {
 			mapInstance.current?.remove();
 			mapInstance.current = null;
 			setIsMapReady(false);
@@ -82,7 +90,7 @@ const Map = ({
 	}, [style, initialCenter, initialZoom, onMapReady]);
 
 	const handleLocationFound = useCallback(
-		(location: { latitude: number; longitude: number }) => {
+		(location: { latitude: number; longitude: number }): void => {
 			if (shouldUseLocationControl && mapInstance.current && isMapReady) {
 				const newCenter: [number, number] = [
 					location.longitude,
@@ -91,8 +99,8 @@ const Map = ({
 
 				mapInstance.current.flyTo({
 					center: newCenter,
-					zoom: MAP_DEFAULTS.LOCATION_ZOOM,
 					duration: MAP_DEFAULTS.FLY_TO_DURATION,
+					zoom: MAP_DEFAULTS.LOCATION_ZOOM,
 				});
 			}
 
@@ -102,7 +110,9 @@ const Map = ({
 	);
 
 	useEffect(() => {
-		if (!mapInstance.current || !isMapReady || !mapContainer.current) return;
+		if (!mapInstance.current || !isMapReady || !mapContainer.current) {
+			return;
+		}
 
 		const resizeObserver = new ResizeObserver(() => {
 			setTimeout(() => {
@@ -111,59 +121,70 @@ const Map = ({
 		});
 
 		resizeObserver.observe(mapContainer.current);
-		return () => resizeObserver.disconnect();
+
+		return (): void => {
+			resizeObserver.disconnect();
+		};
 	}, [isMapReady]);
 
 	return (
 		<div className={styles["map-container"]}>
 			<div
+				className={[styles["map"], className].filter(Boolean).join(" ")}
 				ref={mapContainer}
-				className={`${styles["map"]} ${className || ""}`.trim()}
 			/>
 			{isMapControl && (
 				<MapControl
-					mapInstance={mapInstance.current}
 					isMapReady={isMapReady}
-					showZoom={isZoomControl}
-					showCompass={isShowCompass}
+					mapInstance={mapInstance.current}
 					position={zoomControlPosition}
+					showCompass={isShowCompass}
+					showZoom={isZoomControl}
 				/>
 			)}
 			{isScaleControl && (
 				<ScaleControl
-					mapInstance={mapInstance.current}
-					isMapReady={isMapReady}
 					enabled={isScaleControl}
+					isMapReady={isMapReady}
+					mapInstance={mapInstance.current}
 					position={scaleControlPosition}
 					unit={scaleControlUnit}
 				/>
 			)}
 			{isLocationControl && (
 				<LocationControl
-					mapInstance={mapInstance.current}
-					isMapReady={isMapReady}
-					enabled={isLocationControl}
-					position={locationControlPosition}
-					onLocationFound={handleLocationFound}
-					onLocationError={onLocationError}
 					autoTrigger={shouldUseLocationControl}
+					enabled={isLocationControl}
+					isMapReady={isMapReady}
+					mapInstance={mapInstance.current}
+					onLocationError={onLocationError}
+					onLocationFound={handleLocationFound}
+					position={locationControlPosition}
+					showAccuracyCircle
+					showUserHeading
 					trackUserLocation={isTrackUserLocation}
-					showUserHeading={shouldUseLocationControl}
-					showAccuracyCircle={shouldUseLocationControl}
 				/>
 			)}
 			{currentPosition && (
 				<CurrentPosition
-					mapInstance={mapInstance.current}
-					isMapReady={isMapReady}
-					position={currentPosition}
 					color={currentPositionColor}
+					isMapReady={isMapReady}
+					mapInstance={mapInstance.current}
+					position={currentPosition}
+				/>
+			)}
+			{poisData && poisData.length > 0 && (
+				<PoiLayer
+					isMapReady={isMapReady}
+					mapInstance={mapInstance.current}
+					onPoiClick={onPoiClick}
+					poisData={poisData}
 				/>
 			)}
 		</div>
 	);
 };
 
-const MemoizedMap = React.memo(Map);
+const MemoizedMap = React.memo(MapComponent);
 
 export { MemoizedMap as Map };

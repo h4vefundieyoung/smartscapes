@@ -1,4 +1,6 @@
-import mapboxgl from "mapbox-gl";
+import { type Map } from "mapbox-gl";
+
+import { type PointOfInterest } from "../components/poi-layer/libs/types/types.js";
 import {
 	type ControlPosition,
 	type LocationFoundEvent,
@@ -6,25 +8,27 @@ import {
 } from "./shared.type.js";
 
 type MapProperties = {
-	className?: string;
 	center?: [number, number] | undefined;
-	zoom?: number;
-	style?: string;
+	className?: string;
 	currentPosition?: [number, number] | null;
 	currentPositionColor?: string;
+	isLocationControl?: boolean;
 	isMapControl?: boolean;
-	isZoomControl?: boolean;
-	zoomControlPosition?: ControlPosition;
-	isShowCompass?: boolean;
 	isScaleControl?: boolean;
+	isShowCompass?: boolean;
+	isTrackUserLocation?: boolean;
+	isZoomControl?: boolean;
+	locationControlPosition?: ControlPosition;
+	onLocationError?: (error: string) => void;
+	onLocationFound?: (location: LocationFoundEvent) => void;
+	onMapReady?: (map: Map) => void;
+	onPoiClick?: (poi: PointOfInterest) => void;
+	poisData?: PointOfInterest[];
 	scaleControlPosition?: ControlPosition;
 	scaleControlUnit?: ScaleUnit;
-	isLocationControl?: boolean;
-	locationControlPosition?: ControlPosition;
-	isTrackUserLocation?: boolean;
-	onLocationFound?: (location: LocationFoundEvent) => void;
-	onLocationError?: (error: string) => void;
-	onMapReady?: (map: mapboxgl.Map) => void;
+	style?: string;
+	zoom?: number;
+	zoomControlPosition?: ControlPosition;
 };
 
 export { type MapProperties };

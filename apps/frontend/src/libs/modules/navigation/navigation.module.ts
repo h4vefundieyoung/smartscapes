@@ -1,14 +1,15 @@
 import {
-	DEFAULT_POSITION_OPTIONS,
 	DEFAULT_POSITION,
+	DEFAULT_POSITION_OPTIONS,
 } from "./libs/constants/constants.js";
 import { type NavigationModule, type Position } from "./libs/types/types.js";
 
 class Navigation implements NavigationModule {
-	private defaultPositionOptions: PositionOptions;
 	private defaultPosition: Position;
 
-	constructor() {
+	private defaultPositionOptions: PositionOptions;
+
+	public constructor() {
 		this.defaultPositionOptions = {
 			enableHighAccuracy: DEFAULT_POSITION_OPTIONS.ENABLE_HIGH_ACCURACY,
 			maximumAge: DEFAULT_POSITION_OPTIONS.MAXIMUM_AGE,
@@ -20,18 +21,9 @@ class Navigation implements NavigationModule {
 		};
 	}
 
-	private handleGeolocationResult(
-		geolocationPosition: GeolocationPosition | null,
-		resolve: (value: Position) => void,
-	): void {
-		if (geolocationPosition) {
-			const position: Position = {
-				latitude: geolocationPosition.coords.latitude,
-				longitude: geolocationPosition.coords.longitude,
-			};
-			resolve(position);
-		} else {
-			resolve(this.defaultPosition);
+	public clearWatch(watchId: number): void {
+		if (this.isSupported() && watchId) {
+			navigator.geolocation.clearWatch(watchId);
 		}
 	}
 
@@ -41,6 +33,7 @@ class Navigation implements NavigationModule {
 		return new Promise<Position>((resolve): void => {
 			if (!this.isSupported()) {
 				resolve(this.defaultPosition);
+
 				return;
 			}
 
@@ -54,6 +47,7 @@ class Navigation implements NavigationModule {
 				this.handleGeolocationResult(null, resolve);
 			};
 
+			// eslint-disable-next-line sonarjs/no-intrusive-permissions
 			navigator.geolocation.getCurrentPosition(
 				handleResolve,
 				handleError,
@@ -62,12 +56,17 @@ class Navigation implements NavigationModule {
 		});
 	}
 
+	public isSupported(): boolean {
+		return "geolocation" in navigator;
+	}
+
 	public watchPosition(
 		onPositionUpdate: (position: Position) => void,
 		options: PositionOptions = this.defaultPositionOptions,
-	): number | null {
+	): null | number {
 		if (!this.isSupported()) {
 			onPositionUpdate(this.defaultPosition);
+
 			return null;
 		}
 
@@ -83,6 +82,7 @@ class Navigation implements NavigationModule {
 			onPositionUpdate(this.defaultPosition);
 		};
 
+		// eslint-disable-next-line sonarjs/no-intrusive-permissions
 		return navigator.geolocation.watchPosition(
 			handleSuccess,
 			handleError,
@@ -90,14 +90,19 @@ class Navigation implements NavigationModule {
 		);
 	}
 
-	public clearWatch(watchId: number): void {
-		if (this.isSupported() && watchId) {
-			navigator.geolocation.clearWatch(watchId);
+	private handleGeolocationResult(
+		geolocationPosition: GeolocationPosition | null,
+		resolve: (value: Position) => void,
+	): void {
+		if (geolocationPosition) {
+			const position: Position = {
+				latitude: geolocationPosition.coords.latitude,
+				longitude: geolocationPosition.coords.longitude,
+			};
+			resolve(position);
+		} else {
+			resolve(this.defaultPosition);
 		}
-	}
-
-	public isSupported(): boolean {
-		return "geolocation" in navigator;
 	}
 }
 

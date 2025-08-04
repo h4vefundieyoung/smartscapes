@@ -5,8 +5,8 @@ import {
 
 type ScaleControlProperties = BaseControlProperties & {
 	enabled?: boolean;
-	unit?: ScaleUnit;
 	maxWidth?: number;
+	unit?: ScaleUnit;
 };
 
 export { type ScaleControlProperties };

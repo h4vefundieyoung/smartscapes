@@ -4,100 +4,99 @@ import { useEffect, useRef } from "react";
 import { LOCATION_CONTROL_DEFAULTS } from "./libs/constants/constants.js";
 import { type LocationControlProperties } from "./libs/types/types.js";
 
+const TRIGGER_DELAY_MS = 500;
+
 const LocationControl = ({
-	mapInstance,
-	isMapReady,
-	enabled = LOCATION_CONTROL_DEFAULTS.ENABLED,
-	position = LOCATION_CONTROL_DEFAULTS.POSITION,
-	onLocationFound,
-	onLocationError,
-	trackUserLocation = LOCATION_CONTROL_DEFAULTS.TRACK_USER_LOCATION,
-	showUserHeading = LOCATION_CONTROL_DEFAULTS.SHOW_USER_HEADING,
-	showAccuracyCircle = LOCATION_CONTROL_DEFAULTS.SHOW_ACCURACY_CIRCLE,
 	autoTrigger = false,
+	enabled = LOCATION_CONTROL_DEFAULTS.ENABLED,
+	isMapReady,
+	mapInstance,
+	onLocationError,
+	onLocationFound,
+	position = LOCATION_CONTROL_DEFAULTS.POSITION,
+	showAccuracyCircle = LOCATION_CONTROL_DEFAULTS.SHOW_ACCURACY_CIRCLE,
+	showUserHeading = LOCATION_CONTROL_DEFAULTS.SHOW_USER_HEADING,
+	trackUserLocation = LOCATION_CONTROL_DEFAULTS.TRACK_USER_LOCATION,
 }: LocationControlProperties): null => {
-	const controlRef = useRef<mapboxgl.GeolocateControl | null>(null);
-	const handlerRef = useRef<((event: GeolocationPosition) => void) | null>(
-		null,
-	);
-	const errorHandlerRef = useRef<
+	const controlReference = useRef<mapboxgl.GeolocateControl | null>(null);
+	const handlerReference = useRef<
+		((event: GeolocationPosition) => void) | null
+	>(null);
+	const errorHandlerReference = useRef<
 		((error: GeolocationPositionError) => void) | null
 	>(null);
-	const isControlAddedRef = useRef<boolean>(false);
+	const isControlAddedReference = useRef<boolean>(false);
 
 	useEffect(() => {
 		if (!mapInstance || !isMapReady || !enabled) {
 			return;
 		}
 
-		if (controlRef.current) {
+		if (controlReference.current) {
 			return;
 		}
 
 		const control = new mapboxgl.GeolocateControl({
 			positionOptions: LOCATION_CONTROL_DEFAULTS.POSITION_OPTIONS,
-			trackUserLocation,
-			showUserHeading,
 			showAccuracyCircle,
+			showUserHeading,
+			trackUserLocation,
 		});
 
-		const handleGeolocate = (event: GeolocationPosition) => {
+		const handleGeolocate = (event: GeolocationPosition): void => {
 			onLocationFound?.({
 				latitude: event.coords.latitude,
 				longitude: event.coords.longitude,
 			});
 		};
 
-		const handleGeolocateError = (error: GeolocationPositionError) => {
+		const handleGeolocateError = (error: GeolocationPositionError): void => {
 			onLocationError?.(error.message);
 		};
 
-		controlRef.current = control;
-		handlerRef.current = handleGeolocate;
-		errorHandlerRef.current = handleGeolocateError;
+		controlReference.current = control;
+		handlerReference.current = handleGeolocate;
+		errorHandlerReference.current = handleGeolocateError;
 
 		control.on("geolocate", handleGeolocate);
 		control.on("error", handleGeolocateError);
 		mapInstance.addControl(control, position);
-		isControlAddedRef.current = true;
+		isControlAddedReference.current = true;
 
 		if (autoTrigger) {
-			setTimeout(() => {
+			setTimeout((): void => {
 				if (
-					controlRef.current &&
-					typeof controlRef.current.trigger === "function"
+					controlReference.current &&
+					typeof controlReference.current.trigger === "function"
 				) {
-					controlRef.current.trigger();
+					controlReference.current.trigger();
 				}
-			}, 500);
+			}, TRIGGER_DELAY_MS);
 		}
 
-		return () => {
-			const currentControl = controlRef.current;
-			const currentHandler = handlerRef.current;
-			const currentErrorHandler = errorHandlerRef.current;
+		return (): void => {
+			const currentControl = controlReference.current;
+			const currentHandler = handlerReference.current;
+			const currentErrorHandler = errorHandlerReference.current;
 
-			if (currentControl && currentHandler && isControlAddedRef.current) {
-				if (typeof currentControl.off === "function") {
-					currentControl.off("geolocate", currentHandler);
-					if (currentErrorHandler) {
-						currentControl.off("error", currentErrorHandler);
-					}
+			if (currentControl && currentHandler && isControlAddedReference.current) {
+				currentControl.off("geolocate", currentHandler);
+
+				if (currentErrorHandler) {
+					currentControl.off("error", currentErrorHandler);
 				}
 
-				if (mapInstance && typeof mapInstance.removeControl === "function") {
-					try {
-						mapInstance.removeControl(currentControl);
-						isControlAddedRef.current = false;
-					} catch {
-						isControlAddedRef.current = false;
-					}
+				try {
+					mapInstance.removeControl(currentControl);
+					isControlAddedReference.current = false;
+				} catch {
+					isControlAddedReference.current = false;
 				}
 			}
 
-			controlRef.current = null;
-			handlerRef.current = null;
-			errorHandlerRef.current = null;
+			controlReference.current = null;
+			handlerReference.current = null;
+			errorHandlerReference.current = null;
 		};
 	}, [
 		mapInstance,
@@ -111,41 +110,6 @@ const LocationControl = ({
 		onLocationFound,
 		onLocationError,
 	]);
-
-	useEffect(() => {
-		return () => {
-			const currentControl = controlRef.current;
-			const currentHandler = handlerRef.current;
-			const currentErrorHandler = errorHandlerRef.current;
-
-			if (
-				currentControl &&
-				currentHandler &&
-				mapInstance &&
-				isControlAddedRef.current
-			) {
-				if (typeof currentControl.off === "function") {
-					currentControl.off("geolocate", currentHandler);
-					if (currentErrorHandler) {
-						currentControl.off("error", currentErrorHandler);
-					}
-				}
-
-				if (typeof mapInstance.removeControl === "function") {
-					try {
-						mapInstance.removeControl(currentControl);
-						isControlAddedRef.current = false;
-					} catch {
-						isControlAddedRef.current = false;
-					}
-				}
-			}
-
-			controlRef.current = null;
-			handlerRef.current = null;
-			errorHandlerRef.current = null;
-		};
-	}, []);
 
 	return null;
 };

@@ -5,33 +5,35 @@ import { CURRENT_POSITION_DEFAULTS } from "./libs/constants/constants.js";
 import { type CurrentPositionProperties } from "./libs/types/types.js";
 
 const CurrentPosition = ({
-	mapInstance,
-	isMapReady,
-	position,
 	color = CURRENT_POSITION_DEFAULTS.COLOR,
+	isMapReady,
+	mapInstance,
+	position,
 }: CurrentPositionProperties): null => {
-	const markerRef = useRef<mapboxgl.Marker | null>(null);
+	const markerReference = useRef<mapboxgl.Marker | null>(null);
 
 	useEffect(() => {
-		if (!mapInstance || !isMapReady) return;
+		if (!mapInstance || !isMapReady) {
+			return;
+		}
 
-		if (markerRef.current) {
-			markerRef.current.remove();
-			markerRef.current = null;
+		if (markerReference.current) {
+			markerReference.current.remove();
+			markerReference.current = null;
 		}
 
 		if (position) {
-			markerRef.current = new mapboxgl.Marker({
+			markerReference.current = new mapboxgl.Marker({
 				color,
 			})
 				.setLngLat(position)
 				.addTo(mapInstance);
 		}
 
-		return () => {
-			if (markerRef.current) {
-				markerRef.current.remove();
-				markerRef.current = null;
+		return (): void => {
+			if (markerReference.current) {
+				markerReference.current.remove();
+				markerReference.current = null;
 			}
 		};
 	}, [mapInstance, isMapReady, position, color]);

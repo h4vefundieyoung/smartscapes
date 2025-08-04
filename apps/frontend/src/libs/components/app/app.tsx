@@ -21,9 +21,16 @@ import { actions as userActions } from "~/modules/users/users.js";
 
 import { mockImages } from "../carousel/assets/mock-images/mock-images.js";
 import { Carousel } from "../carousel/carousel.js";
+import { MOCK_POI_DATA } from "../map/mock-data.js";
 import styles from "./styles.module.css";
 
-const DEFAULT_POSITION: [number, number] = [24.0322, 49.8421];
+const DEFAULT_LONGITUDE = 30.5234;
+const DEFAULT_LATITUDE = 50.4501;
+const DEFAULT_POSITION: [number, number] = [
+	DEFAULT_LONGITUDE,
+	DEFAULT_LATITUDE,
+];
+const LOCATION_PRECISION_DIGITS = 6;
 
 const mockUserWithoutAvatar = {
 	avatarUrl: null,
@@ -61,7 +68,7 @@ const App = (): React.JSX.Element => {
 		try {
 			const currentPosition = await navigation.getCurrentPosition();
 			alert(
-				`Position: Lat ${currentPosition.latitude.toFixed(6)}, Lng ${currentPosition.longitude.toFixed(6)}`,
+				`Position: Lat ${currentPosition.latitude.toFixed(LOCATION_PRECISION_DIGITS)}, Lng ${currentPosition.longitude.toFixed(LOCATION_PRECISION_DIGITS)}`,
 			);
 		} catch {
 			// handle error
@@ -74,9 +81,13 @@ const App = (): React.JSX.Element => {
 		}
 	}, [isRoot, dispatch]);
 
-	const handleMapLocationFound = useCallback(
-		(location: { latitude: number; longitude: number }): void => {
-			// handle location found, e.g. show alert or update state
+	const handlePoiClick = useCallback(
+		(poi: {
+			id: number;
+			location: { coordinates: [number, number] };
+			name: string;
+		}): void => {
+			alert(`POI clicked: ${poi.name} (ID: ${String(poi.id)})`);
 		},
 		[],
 	);
@@ -103,28 +114,48 @@ const App = (): React.JSX.Element => {
 							type="button"
 						/>
 					</div>
-					<div className={styles["map-container"]}>
-						<Map
-							center={DEFAULT_POSITION}
-							style="mapbox://styles/mapbox/streets-v12"
-							zoom={13}
-							onLocationFound={handleMapLocationFound}
-						/>
-					</div>
-					<div className={styles["map-container"]}>
-						<Map style="mapbox://styles/mapbox/satellite-v9" />
-					</div>
-					<div className={styles["map-container"]}>
-						<Map
-							center={position}
-							currentPosition={position}
-							style="mapbox://styles/mapbox/light-v11"
-							zoom={15}
-							isMapControl={false}
-							isZoomControl={false}
-							isScaleControl={false}
-							isLocationControl={false}
-						/>
+					<div className={styles["maps-grid"]}>
+						<div className={styles["map-container"]}>
+							<span className={styles["map-label"]}>
+								Standard street map with controls
+							</span>
+							<Map
+								center={DEFAULT_POSITION}
+								style="mapbox://styles/mapbox/streets-v12"
+								zoom={13}
+							/>
+						</div>
+						<div className={styles["map-container"]}>
+							<span className={styles["map-label"]}>Satellite view map</span>
+							<Map style="mapbox://styles/mapbox/satellite-v9" />
+						</div>
+						<div className={styles["map-container"]}>
+							<span className={styles["map-label"]}>
+								Light theme map with current position
+							</span>
+							<Map
+								center={position}
+								currentPosition={position}
+								isLocationControl={false}
+								isMapControl={false}
+								isScaleControl={false}
+								isZoomControl={false}
+								style="mapbox://styles/mapbox/light-v11"
+								zoom={15}
+							/>
+						</div>
+						<div className={styles["map-container"]}>
+							<span className={styles["map-label"]}>
+								Map with Points of Interest (POI) - Centered on Kyiv
+							</span>
+							<Map
+								center={DEFAULT_POSITION}
+								onPoiClick={handlePoiClick}
+								poisData={MOCK_POI_DATA}
+								style="mapbox://styles/mapbox/outdoors-v12"
+								zoom={11}
+							/>
+						</div>
 					</div>
 					<div className={styles["carousel-container"]}>
 						<Carousel images={mockImages} />

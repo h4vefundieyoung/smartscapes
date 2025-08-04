@@ -5,19 +5,21 @@ import { MAP_CONTROL_DEFAULTS } from "./libs/constants/constants.js";
 import { type MapControlProperties } from "./libs/types/types.js";
 
 const MapControl = ({
-	mapInstance,
 	isMapReady,
-	showZoom = MAP_CONTROL_DEFAULTS.SHOW_ZOOM,
-	showCompass = MAP_CONTROL_DEFAULTS.SHOW_COMPASS,
+	mapInstance,
 	position = MAP_CONTROL_DEFAULTS.POSITION,
+	showCompass = MAP_CONTROL_DEFAULTS.SHOW_COMPASS,
+	showZoom = MAP_CONTROL_DEFAULTS.SHOW_ZOOM,
 }: MapControlProperties): null => {
-	const controlRef = useRef<mapboxgl.NavigationControl | null>(null);
-	const isControlAddedRef = useRef<boolean>(false);
+	const controlReference = useRef<mapboxgl.NavigationControl | null>(null);
+	const isControlAddedReference = useRef<boolean>(false);
 
 	useEffect(() => {
-		if (!mapInstance || !isMapReady || (!showZoom && !showCompass)) return;
+		if (!mapInstance || !isMapReady || (!showZoom && !showCompass)) {
+			return;
+		}
 
-		if (controlRef.current) {
+		if (controlReference.current) {
 			return;
 		}
 
@@ -26,46 +28,25 @@ const MapControl = ({
 			showZoom,
 		});
 
-		controlRef.current = control;
+		controlReference.current = control;
 		mapInstance.addControl(control, position);
-		isControlAddedRef.current = true;
+		isControlAddedReference.current = true;
 
-		return () => {
-			const currentControl = controlRef.current;
+		return (): void => {
+			const currentControl = controlReference.current;
 
-			if (currentControl && mapInstance && isControlAddedRef.current) {
-				if (typeof mapInstance.removeControl === "function") {
-					try {
-						mapInstance.removeControl(currentControl);
-						isControlAddedRef.current = false;
-					} catch {
-						isControlAddedRef.current = false;
-					}
+			if (currentControl && isControlAddedReference.current) {
+				try {
+					mapInstance.removeControl(currentControl);
+					isControlAddedReference.current = false;
+				} catch {
+					isControlAddedReference.current = false;
 				}
 			}
 
-			controlRef.current = null;
+			controlReference.current = null;
 		};
 	}, [mapInstance, isMapReady, showZoom, showCompass, position]);
-
-	useEffect(() => {
-		return () => {
-			const currentControl = controlRef.current;
-
-			if (currentControl && mapInstance && isControlAddedRef.current) {
-				if (typeof mapInstance.removeControl === "function") {
-					try {
-						mapInstance.removeControl(currentControl);
-						isControlAddedRef.current = false;
-					} catch {
-						isControlAddedRef.current = false;
-					}
-				}
-			}
-
-			controlRef.current = null;
-		};
-	}, []);
 
 	return null;
 };

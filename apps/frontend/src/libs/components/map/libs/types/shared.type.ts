@@ -1,12 +1,16 @@
-import type mapboxgl from "mapbox-gl";
+import { type Map } from "mapbox-gl";
+
+type BaseControlProperties = {
+	isMapReady: boolean;
+	mapInstance: Map | null;
+	position?: ControlPosition;
+};
 
 type ControlPosition =
-	| "top-left"
-	| "top-right"
 	| "bottom-left"
-	| "bottom-right";
-
-type ScaleUnit = "metric" | "imperial" | "nautical";
+	| "bottom-right"
+	| "top-left"
+	| "top-right";
 
 type LocationFoundEvent = {
 	latitude: number;
@@ -15,20 +19,16 @@ type LocationFoundEvent = {
 
 type PositionOptions = {
 	enableHighAccuracy?: boolean;
-	timeout?: number;
 	maximumAge?: number;
+	timeout?: number;
 };
 
-type BaseControlProperties = {
-	mapInstance: mapboxgl.Map | null;
-	isMapReady: boolean;
-	position?: ControlPosition;
-};
+type ScaleUnit = "imperial" | "metric" | "nautical";
 
 export {
+	type BaseControlProperties,
 	type ControlPosition,
-	type ScaleUnit,
 	type LocationFoundEvent,
 	type PositionOptions,
-	type BaseControlProperties,
+	type ScaleUnit,
 };

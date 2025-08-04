@@ -5,20 +5,22 @@ import { SCALE_CONTROL_DEFAULTS } from "./libs/constants/constants.js";
 import { type ScaleControlProperties } from "./libs/types/types.js";
 
 const ScaleControl = ({
-	mapInstance,
-	isMapReady,
 	enabled = SCALE_CONTROL_DEFAULTS.ENABLED,
+	isMapReady,
+	mapInstance,
+	maxWidth = SCALE_CONTROL_DEFAULTS.MAX_WIDTH,
 	position = SCALE_CONTROL_DEFAULTS.POSITION,
 	unit = SCALE_CONTROL_DEFAULTS.UNIT,
-	maxWidth = SCALE_CONTROL_DEFAULTS.MAX_WIDTH,
 }: ScaleControlProperties): null => {
-	const controlRef = useRef<mapboxgl.ScaleControl | null>(null);
-	const isControlAddedRef = useRef<boolean>(false);
+	const controlReference = useRef<mapboxgl.ScaleControl | null>(null);
+	const isControlAddedReference = useRef<boolean>(false);
 
 	useEffect(() => {
-		if (!mapInstance || !isMapReady || !enabled) return;
+		if (!mapInstance || !isMapReady || !enabled) {
+			return;
+		}
 
-		if (controlRef.current) {
+		if (controlReference.current) {
 			return;
 		}
 
@@ -27,46 +29,25 @@ const ScaleControl = ({
 			unit,
 		});
 
-		controlRef.current = control;
+		controlReference.current = control;
 		mapInstance.addControl(control, position);
-		isControlAddedRef.current = true;
+		isControlAddedReference.current = true;
 
-		return () => {
-			const currentControl = controlRef.current;
+		return (): void => {
+			const currentControl = controlReference.current;
 
-			if (currentControl && mapInstance && isControlAddedRef.current) {
-				if (typeof mapInstance.removeControl === "function") {
-					try {
-						mapInstance.removeControl(currentControl);
-						isControlAddedRef.current = false;
-					} catch {
-						isControlAddedRef.current = false;
-					}
+			if (currentControl && isControlAddedReference.current) {
+				try {
+					mapInstance.removeControl(currentControl);
+					isControlAddedReference.current = false;
+				} catch {
+					isControlAddedReference.current = false;
 				}
 			}
 
-			controlRef.current = null;
+			controlReference.current = null;
 		};
 	}, [mapInstance, isMapReady, enabled, position, unit, maxWidth]);
-
-	useEffect(() => {
-		return () => {
-			const currentControl = controlRef.current;
-
-			if (currentControl && mapInstance && isControlAddedRef.current) {
-				if (typeof mapInstance.removeControl === "function") {
-					try {
-						mapInstance.removeControl(currentControl);
-						isControlAddedRef.current = false;
-					} catch {
-						isControlAddedRef.current = false;
-					}
-				}
-			}
-
-			controlRef.current = null;
-		};
-	}, []);
 
 	return null;
 };

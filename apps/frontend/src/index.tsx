@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 
 import {
 	App,
-	ProtectedRoutes,
+	ProtectedRoute,
 	RouterProvider,
 	StoreProvider,
 	ToastContainer,
@@ -31,7 +31,7 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 								path: AppRoute.SIGN_UP,
 							},
 							{
-								element: <ProtectedRoutes />,
+								element: <ProtectedRoute />,
 								path: AppRoute.APP,
 							},
 						],

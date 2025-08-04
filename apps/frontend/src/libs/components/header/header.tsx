@@ -28,18 +28,14 @@ const Header = ({ user }: Properties): JSX.Element => {
 			);
 		}
 
-		if (hasUser) {
-			return (
-				<div className={styles["user-info"]}>
-					{user && <Avatar user={user} />}
-					<div className={styles["name"]}>
-						{user?.firstName} {user?.lastName}
-					</div>
+		return hasUser ? (
+			<div className={styles["user-info"]}>
+				{user && <Avatar user={user} />}
+				<div className={styles["name"]}>
+					{user?.firstName} {user?.lastName}
 				</div>
-			);
-		}
-
-		return (
+			</div>
+		) : (
 			<div className={styles["buttons"]}>
 				<Button label="Sign in" to={AppRoute.SIGN_IN} type="button" />
 			</div>

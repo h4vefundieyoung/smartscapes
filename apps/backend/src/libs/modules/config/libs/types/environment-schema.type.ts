@@ -21,6 +21,9 @@ type EnvironmentSchema = {
 	ENCRYPTION: {
 		SALT_ROUNDS: number;
 	};
+	MAPBOX_DIRECTIONS_API: {
+		MAPBOX_ACCESS_TOKEN: string;
+	};
 };
 
 export { type EnvironmentSchema };

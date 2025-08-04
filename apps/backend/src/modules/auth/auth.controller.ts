@@ -23,31 +23,108 @@ import { AuthError } from "./libs/exceptions/unauthorized.exception.js";
 /**
  * @swagger
  * components:
- *    schemas:
- *      UserSignUpRequestDto:
- *        type: object
- *        required:
- *          - email
- *          - firstName
- *          - lastName
- *          - password
- *        properties:
- *          email:
- *            type: string
- *            example: user@example.com
- *          firstName:
- *            type: string
- *            example: John
- *          lastName:
- *            type: string
- *            example: Doe
- *          password:
- *            type: string
- *            example: strongP@ssw0rd
+ *   schemas:
+ *     UserSignInRequestDto:
+ *       type: object
+ *       required:
+ *         - email
+ *         - password
+ *       properties:
+ *         email:
+ *           type: string
+ *           minLength: 6
+ *           maxLength: 64
+ *           format: email
+ *           example: user@example.com
+ *         password:
+ *           type: string
+ *           minLength: 6
+ *           maxLength: 64
+ *           example: strongP@ssw0rd
  *
- *      UserAuthResponseDto:
- *        type: object
- *        $ref: '#/components/schemas/User'
+ *     UserSignUpRequestDto:
+ *       type: object
+ *       required:
+ *         - email
+ *         - firstName
+ *         - lastName
+ *         - password
+ *         - confirmPassword
+ *       properties:
+ *         email:
+ *           type: string
+ *           minLength: 6
+ *           maxLength: 64
+ *           format: email
+ *           example: user@example.com
+ *         firstName:
+ *           type: string
+ *           minLength: 2
+ *           maxLength: 64
+ *           pattern: '^[a-zA-Z\\s]+$'
+ *           example: John
+ *         lastName:
+ *           type: string
+ *           minLength: 2
+ *           maxLength: 64
+ *           pattern: '^[a-zA-Z\\s]+$'
+ *           example: Doe
+ *         password:
+ *           type: string
+ *           minLength: 6
+ *           maxLength: 64
+ *           example: strongP@ssw0rd
+ *         confirmPassword:
+ *           type: string
+ *           minLength: 6
+ *           maxLength: 64
+ *           example: strongP@ssw0rd
+ *
+ *     UserAuthResponseDto:
+ *       type: object
+ *       required:
+ *         - id
+ *         - email
+ *         - firstName
+ *         - lastName
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         email:
+ *           type: string
+ *           format: email
+ *           example: user@example.com
+ *         firstName:
+ *           type: string
+ *           example: John
+ *         lastName:
+ *           type: string
+ *           example: Doe
+ *
+ *     UserSignInResponseDto:
+ *       type: object
+ *       required:
+ *         - token
+ *         - user
+ *       properties:
+ *         token:
+ *           type: string
+ *           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *         user:
+ *           $ref: '#/components/schemas/UserAuthResponseDto'
+ *
+ *     UserSignUpResponseDto:
+ *       type: object
+ *       required:
+ *         - token
+ *         - user
+ *       properties:
+ *         token:
+ *           type: string
+ *           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *         user:
+ *           $ref: '#/components/schemas/UserAuthResponseDto'
  */
 
 class AuthController extends BaseController {
@@ -86,22 +163,22 @@ class AuthController extends BaseController {
 	/**
 	 * @swagger
 	 * /auth/authenticated-user:
-	 *    get:
-	 *      security:
-	 *        - bearerAuth: []
-	 *      tags:
+	 *   get:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
 	 *       - Auth
-	 *      summary: Get authorized user
-	 *      responses:
-	 *        200:
-	 *          description: User authorized
-	 *          content:
-	 *            application/json:
-	 *              schema:
-	 *                type: object
-	 *                properties:
-	 *                  data:
-	 *                    $ref: '#/components/schemas/UserAuthResponseDto'
+	 *     summary: Get authorized user
+	 *     responses:
+	 *       200:
+	 *         description: User authorized
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/UserAuthResponseDto'
 	 */
 	public getAuthenticatedUser({
 		user,
@@ -158,26 +235,26 @@ class AuthController extends BaseController {
 	/**
 	 * @swagger
 	 * /auth/sign-up:
-	 *    post:
-	 *      tags:
+	 *   post:
+	 *     tags:
 	 *       - Auth
-	 *      summary: Register a new user
-	 *      requestBody:
-	 *        required: true
-	 *        content:
-	 *          application/json:
-	 *            schema:
-	 *              $ref: '#/components/schemas/UserSignUpRequestDto'
-	 *      responses:
-	 *        201:
-	 *          description: User registered
-	 *          content:
-	 *            application/json:
-	 *              schema:
-	 *                type: object
-	 *                properties:
-	 *                  data:
-	 *                    $ref: '#/components/schemas/UserAuthResponseDto'
+	 *     summary: Register a new user
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             $ref: '#/components/schemas/UserSignUpRequestDto'
+	 *     responses:
+	 *       201:
+	 *         description: User registered
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/UserSignUpResponseDto'
 	 */
 	public async signUp(
 		options: APIHandlerOptions<{

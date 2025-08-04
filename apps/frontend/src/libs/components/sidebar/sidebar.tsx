@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import smartScapesLogo from "~/assets/images/logo.svg";
 import { Link } from "~/libs/components/components.js";
@@ -17,38 +17,68 @@ const Sidebar = ({ navigationItems }: Properties): React.JSX.Element => {
 
 	const handleClick = useCallback((): void => {
 		setIsOpen((previous) => !previous);
-	}, []);
+	}, [setIsOpen]);
+
+	const handleKeyDown = useCallback(
+		(event: KeyboardEvent) => {
+			if (event.key === "Escape") {
+				setIsOpen(false);
+			}
+		},
+		[setIsOpen],
+	);
+
+	useEffect(() => {
+		document.addEventListener("keydown", handleKeyDown);
+
+		return (): void => {
+			document.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [setIsOpen, handleKeyDown]);
 
 	return (
-		<div className={styles["collapsable-wrapper"]} data-open={isOpen}>
-			<button
-				className={styles["close-button"]}
-				onClick={handleClick}
-				type="button"
-			>
-				<span className={styles["burger-icon"]} />
-			</button>
-			<div className={styles["sidebar"]}>
-				<Link to={AppRoute.ROOT}>
-					<img
-						alt="SmartScapes"
-						className={styles["logo"]}
-						height="24"
-						src={smartScapesLogo}
-						width="136"
-					/>
-				</Link>
-				<ul className={styles["navigation-list"]}>
-					{navigationItems.map((item) => (
-						<SidebarItem
-							href={item.href}
-							icon={item.icon}
-							key={item.icon}
-							label={isOpen ? item.label : ""}
+		<div className={styles["container"]}>
+			<div className={styles["drawer"]} data-open={isOpen}>
+				<div className={styles["button-container"]}>
+					<button
+						className={styles["close-button"]}
+						data-open={isOpen}
+						onClick={handleClick}
+						type="button"
+					>
+						<span className={styles["burger-icon"]} />
+					</button>
+
+					<Link to={AppRoute.ROOT}>
+						<img
+							alt="SmartScapes"
+							className={styles["logo"]}
+							height="24"
+							src={smartScapesLogo}
+							width="136"
 						/>
-					))}
-				</ul>
+					</Link>
+				</div>
+				<div className={styles["sidebar"]}>
+					<ul className={styles["navigation-list"]}>
+						{navigationItems.map((item) => (
+							<SidebarItem
+								href={item.href}
+								icon={item.icon}
+								key={item.icon}
+								label={isOpen ? item.label : ""}
+							/>
+						))}
+					</ul>
+				</div>
 			</div>
+			{isOpen && (
+				<button
+					aria-label="Close sidebar"
+					className={styles["backdrop"]}
+					onClick={handleClick}
+				/>
+			)}
 		</div>
 	);
 };

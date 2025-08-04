@@ -35,10 +35,6 @@ class PWA {
 			},
 		} satisfies RegisterSWOptions);
 	}
-
-	public setUpdateInterval(intervalMs: number): void {
-		this.updateInterval = intervalMs;
-	}
 }
 
 export { PWA };

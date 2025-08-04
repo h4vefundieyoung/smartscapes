@@ -1,7 +1,7 @@
 import { APIPath, ContentType } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
-import { type Storage } from "~/libs/modules/storage/storage.js";
+import { type Storage, StorageKey } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
 
 import { AuthApiPath } from "./libs/enums/enums.js";
@@ -20,8 +20,11 @@ type Constructor = {
 };
 
 class AuthApi extends BaseHTTPApi {
+	private _storage: Storage;
+
 	public constructor({ baseUrl, http, storage }: Constructor) {
 		super({ baseUrl, http, path: APIPath.AUTH, storage });
+		this._storage = storage;
 	}
 	public async getAuthenticatedUser(): Promise<
 		APIResponse<UserAuthResponseDto>
@@ -36,6 +39,16 @@ class AuthApi extends BaseHTTPApi {
 		);
 
 		return await response.json();
+	}
+
+	public async logout(): Promise<void> {
+		await this.load(this.getFullEndpoint(AuthApiPath.LOGOUT, {}), {
+			contentType: ContentType.JSON,
+			hasAuth: true,
+			method: "POST",
+		});
+
+		await this._storage.drop(StorageKey.TOKEN);
 	}
 
 	public async signIn(

@@ -6,19 +6,7 @@ export { Icon } from "./icon/icon.js";
 export { Input } from "./input/input.js";
 export { Link } from "./link/link.js";
 export { Loader } from "./loader/loader.js";
-export {
-	Map,
-	type PointOfInterest,
-	Feature,
-	Layer,
-	LayerControl,
-	Line,
-	Marker,
-	Popup,
-	RotationControl,
-	ScaleControl,
-	ZoomControl,
-} from "./map/map.js";
+export { Map, type MapProperties } from "./map/map.js";
 export { RouteCard } from "./route-card/route-card.js";
 export { RouterProvider } from "./router-provider/router-provider.js";
 export { Sidebar } from "./sidebar/sidebar.js";

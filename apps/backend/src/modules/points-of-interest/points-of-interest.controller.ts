@@ -19,14 +19,6 @@ import {
 	pointsOfInterestSearchQueryValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 
-type PointsOfInterestFindAllOptions =
-	| APIHandlerOptions
-	| PointsOfInterestFindAllOptionsQuery;
-
-type PointsOfInterestFindAllOptionsQuery = APIHandlerOptions<{
-	query?: PointsOfInterestSearchQuery;
-}>;
-
 /**
  * @swagger
  * components:
@@ -294,12 +286,11 @@ class PointsOfInterestController extends BaseController {
 	 *                         coordinates: [30.5234, 50.4501]
 	 */
 	public async findAll(
-		options?: PointsOfInterestFindAllOptions,
+		options: APIHandlerOptions<{
+			query?: null | PointsOfInterestSearchQuery;
+		}>,
 	): Promise<APIHandlerResponse<PointsOfInterestResponseDto[]>> {
-		const query =
-			options && "query" in options
-				? (options.query as PointsOfInterestSearchQuery)
-				: null;
+		const { query = null } = options;
 
 		const { items } = await this.pointsOfInterestService.findAll(query);
 

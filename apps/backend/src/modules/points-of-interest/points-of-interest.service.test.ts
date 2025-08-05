@@ -68,7 +68,7 @@ describe("PointsOfInterestService", () => {
 			pointsOfInterestRepository,
 		);
 
-		const result = await pointsOfInterestService.findAll();
+		const result = await pointsOfInterestService.findAll(null);
 
 		assert.deepStrictEqual(result, {
 			items: [pointOfInterestEntity.toObject()],

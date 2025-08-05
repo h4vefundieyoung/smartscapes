@@ -49,20 +49,23 @@ class PointsOfInterestService implements Service {
 	}
 
 	public async findAll(
-		query: null | PointsOfInterestSearchQuery = null,
+		query: null | PointsOfInterestSearchQuery,
 	): Promise<CollectionResult<PointsOfInterestResponseDto>> {
-		const DEFAULT_RADIUS_KM = 5;
+		const DEFAULT_SEARCH_RADIUS_KM = 5;
 		const THOUSAND = 1000;
-		const radiusKm = query?.radius || DEFAULT_RADIUS_KM;
-		const radiusMeters = radiusKm * THOUSAND;
-		const normalizedQuery = {
+
+		const hasLocationFilter =
+			Boolean(query?.latitude) && Boolean(query?.longitude);
+
+		const radiusMeters = (query?.radius ?? DEFAULT_SEARCH_RADIUS_KM) * THOUSAND;
+
+		const searchParameters = {
 			...query,
 			radius: radiusMeters,
 		} as PointsOfInterestSearchQuery;
-		const hasQuery = Boolean(query?.latitude) && Boolean(query?.longitude);
 
-		const items = hasQuery
-			? await this.pointsOfInterestRepository.findNearby(normalizedQuery)
+		const items = hasLocationFilter
+			? await this.pointsOfInterestRepository.findNearby(searchParameters)
 			: await this.pointsOfInterestRepository.findAll();
 
 		return {

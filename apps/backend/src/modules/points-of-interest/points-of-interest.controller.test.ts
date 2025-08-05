@@ -48,7 +48,12 @@ describe("PointsOfInterestController", () => {
 			pointsOfInterestService,
 		);
 
-		const result = await pointsOfInterestController.findAll();
+		const result = await pointsOfInterestController.findAll({
+			body: {},
+			params: {},
+			query: null,
+			user: null,
+		});
 
 		assert.deepStrictEqual(result, {
 			payload: {
@@ -116,9 +121,9 @@ describe("PointsOfInterestController", () => {
 			body: {},
 			params: {},
 			query: {
-				latitude: String(TEST_LATITUDE),
-				longitude: String(TEST_LONGITUDE),
-				radius: "5",
+				latitude: TEST_LATITUDE,
+				longitude: TEST_LONGITUDE,
+				radius: 5,
 			},
 			user: null,
 		});

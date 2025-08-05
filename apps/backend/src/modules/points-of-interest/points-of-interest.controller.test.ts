@@ -70,6 +70,7 @@ describe("PointsOfInterestController", () => {
 			},
 			params: {},
 			query: {},
+			token: null,
 			user: null,
 		});
 
@@ -99,6 +100,7 @@ describe("PointsOfInterestController", () => {
 			body: {},
 			params: { id: "1" },
 			query: {},
+			token: null,
 			user: null,
 		});
 
@@ -135,6 +137,7 @@ describe("PointsOfInterestController", () => {
 			},
 			params: { id: "1" },
 			query: {},
+			token: null,
 			user: null,
 		});
 
@@ -160,6 +163,7 @@ describe("PointsOfInterestController", () => {
 			body: {},
 			params: { id: "1" },
 			query: {},
+			token: null,
 			user: null,
 		});
 

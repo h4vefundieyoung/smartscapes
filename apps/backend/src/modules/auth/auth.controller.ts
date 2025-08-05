@@ -158,6 +158,12 @@ class AuthController extends BaseController {
 				body: userSignInValidationSchema,
 			},
 		});
+
+		this.addRoute({
+			handler: this.logout.bind(this),
+			method: "POST",
+			path: AuthApiPath.LOGOUT,
+		});
 	}
 
 	/**
@@ -189,6 +195,21 @@ class AuthController extends BaseController {
 
 		return {
 			payload: { data: user },
+			status: HTTPCode.OK,
+		};
+	}
+
+	public async logout({
+		token,
+	}: APIHandlerOptions): Promise<APIHandlerResponse> {
+		if (!token) {
+			throw new AuthError();
+		}
+
+		await this.authService.logout(token);
+
+		return {
+			payload: null,
 			status: HTTPCode.OK,
 		};
 	}

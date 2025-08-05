@@ -6,6 +6,7 @@ type APIHandlerOptions<
 	body: HandlerOptions["body"];
 	params: HandlerOptions["params"];
 	query: HandlerOptions["query"];
+	token: null | string;
 	user: null | UserAuthResponseDto;
 };
 
@@ -13,6 +14,7 @@ type DefaultApiHandlerOptions = {
 	body?: unknown;
 	params?: unknown;
 	query?: unknown;
+	token?: unknown;
 	user?: unknown;
 };
 

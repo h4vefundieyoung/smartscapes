@@ -56,6 +56,7 @@ const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {
 			}
 
 			request.user = user;
+			request.token = token as string;
 		} catch (error) {
 			throw new AuthError({
 				cause: error,
@@ -65,6 +66,7 @@ const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {
 	};
 
 	app.decorateRequest("user", null);
+	app.decorateRequest("token", null);
 	app.addHook("onRequest", requestHandler);
 };
 

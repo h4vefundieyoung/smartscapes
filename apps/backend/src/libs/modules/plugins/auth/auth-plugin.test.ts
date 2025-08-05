@@ -19,10 +19,14 @@ describe("Auth plugin", () => {
 
 		authPlugin(appMock, {} as PluginOptions, () => {});
 
-		const callCount = 1;
+		const callDecorateRequestCount = 2;
+		const callHookCount = 1;
 
-		assert.equal(decorateRequestMock.mock.callCount(), callCount);
-		assert.equal(addHookMock.mock.callCount(), callCount);
+		assert.equal(
+			decorateRequestMock.mock.callCount(),
+			callDecorateRequestCount,
+		);
+		assert.equal(addHookMock.mock.callCount(), callHookCount);
 	});
 
 	it("should set null as default user value", () => {

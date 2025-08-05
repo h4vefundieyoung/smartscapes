@@ -10,21 +10,16 @@ const useMouseLeave = (
 	carouselReference: CarouselReference,
 	startMomentum: () => void,
 ): CarouselEvents => {
-	const removeFocus = useCallback((): void => {
-		const element = carouselReference.element.current;
-
-		if (element) {
-			element.blur();
-		}
-	}, [carouselReference.element]);
-
 	const handleMouseLeave = useCallback((): void => {
-		removeFocus();
-
 		if (Math.abs(carouselReference.velocity.current) > 0) {
 			startMomentum();
 		}
-	}, [startMomentum, carouselReference, removeFocus]);
+
+		if (carouselReference.element.current) {
+			carouselReference.element.current.style.scrollbarColor =
+				"transparent transparent";
+		}
+	}, [startMomentum, carouselReference]);
 
 	return {
 		handleMouseLeave,

@@ -41,6 +41,9 @@ export {
 } from "./modules/route-categories/route-categories.js";
 export {
 	type ConstructRouteRequestDto,
+	constructRouteValidationSchema,
+	type Coordinate,
+	type GetMapBoxRouteResponseDto,
 	RouteApiPath,
 } from "./modules/routes/routes.js";
 export {

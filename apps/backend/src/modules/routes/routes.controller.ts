@@ -1,15 +1,18 @@
 import { APIPath, HTTPCode } from "~/libs/enums/enums.js";
-import { BaseController } from "~/libs/modules/controller/base-controller.module.js";
 import {
 	type APIHandlerOptions,
 	type APIHandlerResponse,
+	BaseController,
 } from "~/libs/modules/controller/controller.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import { type GetMapBoxRouteResponseDto } from "~/libs/modules/map-box/map-box.js";
 
 import { RouteApiPath, RoutesExceptionMessage } from "./libs/enums/enums.js";
-import { RoutesError } from "./libs/exceptions/routes.exception.js";
-import { type ConstructRouteRequestDto } from "./libs/types/types.js";
+import { RoutesError } from "./libs/exceptions/exceptions.js";
+import {
+	type ConstructRouteRequestDto,
+	type GetMapBoxRouteResponseDto,
+} from "./libs/types/types.js";
+import { constructRouteValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 import { type RoutesService } from "./routes.service.js";
 
 const MAX_REQUESTS_PER_MINUTE = 5;
@@ -31,6 +34,9 @@ class RoutesController extends BaseController {
 			handler: this.constructRoute.bind(this),
 			method: "POST",
 			path: RouteApiPath.CONSTRUCT,
+			validation: {
+				body: constructRouteValidationSchema,
+			},
 		});
 	}
 

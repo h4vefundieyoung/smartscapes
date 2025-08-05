@@ -2,7 +2,6 @@ import swaggerJsdoc from "swagger-jsdoc";
 
 import { AppEnvironment } from "~/libs/enums/enums.js";
 import { type Config } from "~/libs/modules/config/config.js";
-import { HTTPCode } from "~/libs/modules/http/http.js";
 
 import {
 	type APIDoc as APIDocument,
@@ -40,19 +39,12 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 			path: "/documentation/*",
 		};
 
-		const healthRoute: ServerApplicationRouteParameters = {
-			handler: async (_, reply) =>
-				await reply.status(HTTPCode.OK).send({ ok: true }),
-			method: "GET",
-			path: `${this.basePath}/health`,
-		};
-
 		const apiRoutes = handlers.map((handler) => ({
 			...handler,
 			path: `${this.basePath}${handler.path}`,
 		}));
 
-		this.routes = [healthRoute, ...apiRoutes];
+		this.routes = apiRoutes;
 
 		this.whiteRoutes = whiteRoutes;
 

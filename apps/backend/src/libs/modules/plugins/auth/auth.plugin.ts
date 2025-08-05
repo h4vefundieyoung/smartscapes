@@ -5,7 +5,7 @@ import { type HTTPMethod } from "~/libs/types/types.js";
 import { AuthError } from "~/modules/auth/libs/exceptions/exceptions.js";
 import { userService } from "~/modules/users/users.js";
 
-import { tokenService } from "../../token/token.js";
+import { tokenBlacklistService, tokenService } from "../../token/token.js";
 import { checkIsWhiteRoute } from "./libs/helpers/helpers.js";
 
 type PluginOptions = {
@@ -37,14 +37,31 @@ const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {
 		}
 
 		const [, token] = headers.authorization.split(" ");
-		const { userId } = await tokenService.verify<TokenPayload>(token as string);
-		const user = await userService.findById(userId);
+		const isTokenBlacklisted = tokenBlacklistService.has(token as string);
 
-		if (!user) {
-			throw new AuthError();
+		if (isTokenBlacklisted) {
+			throw new AuthError({
+				message: "Token is revoked.",
+			});
 		}
 
-		request.user = user;
+		try {
+			const { userId } = await tokenService.verify<TokenPayload>(
+				token as string,
+			);
+			const user = await userService.findById(userId);
+
+			if (!user) {
+				throw new AuthError();
+			}
+
+			request.user = user;
+		} catch (error) {
+			throw new AuthError({
+				cause: error,
+				message: "Invalid or expired token.",
+			});
+		}
 	};
 
 	app.decorateRequest("user", null);

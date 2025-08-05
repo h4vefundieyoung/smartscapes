@@ -1,10 +1,11 @@
 import { type Knex } from "knex";
 
 const TableName = {
-	GROUP_KEY: "admins",
 	GROUPS: "groups",
 	USERS: "users",
 } as const;
+
+const GROUP_KEY = "admins";
 
 const ColumnName = {
 	EMAIL: "email",
@@ -28,7 +29,7 @@ async function up(knex: Knex): Promise<void> {
 			.first();
 
 		if (!group || !group.id) {
-			throw new Error(`Group "${TableName.GROUP_KEY}" not found`);
+			throw new Error(`Group "${GROUP_KEY}" not found`);
 		}
 
 		await trx(TableName.USERS).insert({

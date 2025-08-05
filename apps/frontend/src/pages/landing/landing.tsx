@@ -7,7 +7,7 @@ import styles from "./styles.module.css";
 const Landing = (): React.JSX.Element => {
 	return (
 		<main className={styles["landing"]}>
-			<Header user={null} />
+			<Header />
 			<HeroSection />
 			<PopularSection />
 		</main>

@@ -18,11 +18,6 @@ import styles from "./styles.module.css";
 const App = (): React.JSX.Element => {
 	const { pathname } = useLocation();
 	const dispatch = useAppDispatch();
-	const mockUserWithoutAvatar = {
-		avatarUrl: null,
-		firstName: "John",
-		lastName: "Smith",
-	};
 
 	const isRoot = pathname === AppRoute.APP;
 
@@ -40,7 +35,7 @@ const App = (): React.JSX.Element => {
 			</div>
 			{isRoot && (
 				<div className={styles["components-container"]}>
-					<Header user={mockUserWithoutAvatar} />
+					<Header />
 					<div className={styles["sidebar-container"]}>
 						<Sidebar navigationItems={NAVIGATION_ITEMS} />
 					</div>

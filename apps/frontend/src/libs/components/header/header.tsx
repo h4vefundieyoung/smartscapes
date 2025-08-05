@@ -5,19 +5,13 @@ import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppSelector, useLocation } from "~/libs/hooks/hooks.js";
 
 import { Avatar, Button, Link } from "../components.js";
-import { type User } from "./libs/types/types.js";
 import styles from "./styles.module.css";
 
-type Properties = {
-	user: null | User;
-};
-
-const Header = ({ user }: Properties): JSX.Element => {
+const Header = (): JSX.Element => {
 	const { pathname } = useLocation();
 	const authenticatedUser = useAppSelector(
 		({ auth }) => auth.authenticatedUser,
 	);
-	const hasUser = Boolean(authenticatedUser);
 
 	const renderHeaderContent = (): React.JSX.Element => {
 		if (pathname === AppRoute.ROOT) {
@@ -28,12 +22,12 @@ const Header = ({ user }: Properties): JSX.Element => {
 			);
 		}
 
-		if (hasUser) {
+		if (authenticatedUser) {
 			return (
 				<div className={styles["user-info"]}>
-					{user && <Avatar user={user} />}
+					<Avatar user={authenticatedUser} />
 					<div className={styles["name"]}>
-						{user?.firstName} {user?.lastName}
+						{authenticatedUser.firstName} {authenticatedUser.lastName}
 					</div>
 				</div>
 			);

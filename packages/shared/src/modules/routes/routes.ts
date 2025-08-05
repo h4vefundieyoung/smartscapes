@@ -1,5 +1,6 @@
 export {
-	type RoutesRequestDto,
+	type RoutesRequestCreateDto,
+	type RoutesRequestPatchDto,
 	type RoutesResponseDto,
 } from "./libs/types/types.js";
 export { routesCreate as routesCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";

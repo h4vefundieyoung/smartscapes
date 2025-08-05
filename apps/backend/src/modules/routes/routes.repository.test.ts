@@ -19,11 +19,9 @@ describe("RoutesRepository", () => {
 	let databaseTracker: Tracker;
 
 	const mockRoute = {
-		createdAt: "2024-01-01T00:00:00Z",
 		description: "A test route description",
 		id: 1,
 		name: "Test Route",
-		updatedAt: "2024-01-01T00:00:00Z",
 	};
 
 	const createMockRouteEntity = (): RouteEntity =>
@@ -48,17 +46,14 @@ describe("RoutesRepository", () => {
 
 	it("create should create and return new route", async () => {
 		const routeEntity = createMockRouteEntity();
+		const routeObject = routeEntity.toObject();
 
-		databaseTracker.on.insert(DatabaseTableName.ROUTES).response([mockRoute]);
-
+		databaseTracker.on.insert(DatabaseTableName.ROUTES).response([routeObject]);
 		databaseTracker.on.insert(DatabaseTableName.ROUTES_TO_POIS).response([]);
 
-		databaseTracker.on
-			.select(DatabaseTableName.ROUTES_TO_POIS)
-			.response([{ id: 1, visitOrder: 1 }]);
-
 		const result = await routesRepository.create(routeEntity);
-		assert.deepStrictEqual(result.toObject(), routeEntity.toObject());
+
+		assert.deepStrictEqual(structuredClone(result), routeObject);
 	});
 
 	it("find should return null when route not found", async () => {

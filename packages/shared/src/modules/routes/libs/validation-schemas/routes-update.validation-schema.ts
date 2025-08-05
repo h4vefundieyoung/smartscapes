@@ -29,12 +29,6 @@ const routesUpdate = z
 				message: RoutesValidationMessage.NAME_MAXIMUM_LENGTH,
 			})
 			.optional(),
-		pois: z
-			.array(z.number().int().positive())
-			.min(RoutesValidationRule.ROUTES_MINIMUM_COUNT, {
-				message: RoutesValidationMessage.ROUTES_MINIMUM_COUNT,
-			})
-			.optional(),
 	})
 	.refine(
 		(data) => {

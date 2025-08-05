@@ -82,19 +82,19 @@ erDiagram
   }
 
   routes {
-        int id PK ""
-        dateTime created_at ""
-        dateTime updated_at ""
-        varchar name ""
-        varchar description ""
+        int id PK
+        dateTime created_at
+        dateTime updated_at
+        varchar name
+        varchar description
     }
 
   routes_to_pois {
-      int id PK ""
-      dateTime created_at  ""
-      dateTime updated_at  ""
-      int route_id FK ""
-      int poi_id FK ""
+      int id PK
+      dateTime created_at
+      dateTime updated_at
+      int route_id FK
+      int poi_id FK
   }
 
   users }|--|| groups : group_id

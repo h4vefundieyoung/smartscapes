@@ -1,7 +1,13 @@
+import {
+	type RoutesRequestPatchDto,
+	type RoutesResponseDto,
+} from "@smartscapes/shared";
+import { type QueryBuilder } from "objection";
+
 import { DatabaseTableName } from "~/libs/modules/database/database.js";
 import { type Repository } from "~/libs/types/types.js";
 
-import { RouteEntity } from "./routes.entity.js";
+import { type RouteEntity } from "./routes.entity.js";
 import { type RoutesModel } from "./routes.model.js";
 
 class RoutesRepository implements Repository {
@@ -11,25 +17,19 @@ class RoutesRepository implements Repository {
 		this.routesModel = routesModel;
 	}
 
-	public async create(entity: RouteEntity): Promise<RouteEntity> {
-		const { description, name, pois } = entity.toNewObject();
+	public async create(entity: RouteEntity): Promise<RoutesResponseDto> {
+		const insertData = entity.toNewObject();
 
-		const route = await this.routesModel
+		const result = (await this.routesModel
 			.query()
-			.insert({ description, name })
-			.returning("*")
-			.execute();
+			.insertGraph(insertData, { relate: ["pois"] })
+			.returning([
+				"id",
+				"name",
+				"description",
+			])) as unknown as RoutesResponseDto;
 
-		await this.insertRoutePois(route.id, pois);
-
-		const routePois = await this.getRoutePois(route.id);
-
-		return RouteEntity.initialize({
-			description: route.description,
-			id: route.id,
-			name: route.name,
-			pois: routePois,
-		});
+		return result;
 	}
 
 	public async delete(id: number): Promise<boolean> {
@@ -40,71 +40,39 @@ class RoutesRepository implements Repository {
 		return Boolean(isDeleted);
 	}
 
-	public async findAll(): Promise<RouteEntity[]> {
-		const routes = await this.routesModel.query().execute();
+	public async findAll(): Promise<RoutesResponseDto[]> {
+		const routesWithPois = await this.queryRoute();
 
-		const routesWithPois = await Promise.all(
-			routes.map(async (route) => {
-				const pois = await this.getRoutePois(route.id);
-
-				return RouteEntity.initialize({
-					description: route.description,
-					id: route.id,
-					name: route.name,
-					pois,
-				});
-			}),
-		);
-
-		return routesWithPois;
+		return routesWithPois as unknown as RoutesResponseDto[];
 	}
 
-	public async findById(id: number): Promise<null | RouteEntity> {
-		const route = await this.routesModel.query().findById(id).execute();
+	public async findById(id: number): Promise<null | RoutesResponseDto> {
+		const route = (await this.queryRoute()
+			.where("routes.id", id)
+			.first()) as unknown as RoutesResponseDto;
 
-		if (!route) {
+		if (!JSON.stringify(route)) {
 			return null;
 		}
 
-		const pois = await this.getRoutePois(id);
-
-		return RouteEntity.initialize({
-			description: route.description,
-			id: route.id,
-			name: route.name,
-			pois,
-		});
+		return route;
 	}
 
 	public async patch(
 		id: number,
-		entity: {
-			description?: string;
-			name?: string;
-			pois?: {
-				id: number;
-				visitOrder: number;
-			}[];
-		},
-	): Promise<RouteEntity> {
-		const { description, name, pois } = entity;
+		entity: RoutesRequestPatchDto,
+	): Promise<RoutesResponseDto> {
+		const { description, name } = entity;
 
-		if (description !== undefined || name !== undefined) {
-			const patchData = Object.fromEntries(
-				Object.entries({ description, name }).filter(
-					([, value]) => value !== undefined,
-				),
-			);
+		const patchData = Object.fromEntries(
+			Object.entries({ description, name }).filter(
+				([, value]) => value !== undefined,
+			),
+		);
 
-			await this.routesModel.query().patchAndFetchById(id, patchData).execute();
-		}
+		await this.routesModel.query().patchAndFetchById(id, patchData).execute();
 
-		if (pois !== undefined) {
-			await this.deleteRoutePois(id);
-			await this.insertRoutePois(id, pois);
-		}
-
-		return await (this.findById(id) as Promise<RouteEntity>);
+		return (await this.findById(id)) as RoutesResponseDto;
 	}
 
 	private async deleteRoutePois(routeId: number): Promise<void> {
@@ -115,36 +83,16 @@ class RoutesRepository implements Repository {
 			.del();
 	}
 
-	private async getRoutePois(
-		routeId: number,
-	): Promise<Array<{ id: number; visitOrder: number }>> {
-		const results = await this.routesModel
-			.knex()
-			.select("poi_id as id", "visit_order as visitOrder")
-			.from(DatabaseTableName.ROUTES_TO_POIS)
-			.where("route_id", routeId)
-			.orderBy("visit_order", "asc");
-
-		return results.map((row: { id: number; visitOrder: number }) => ({
-			id: row.id,
-			visitOrder: row.visitOrder,
-		}));
-	}
-
-	private async insertRoutePois(
-		routeId: number,
-		pois: Array<{ id: number; visitOrder: number }>,
-	): Promise<void> {
-		const joinRows = pois.map((poi) => ({
-			poi_id: poi.id,
-			route_id: routeId,
-			visit_order: poi.visitOrder,
-		}));
-
-		await this.routesModel
-			.knex()
-			.insert(joinRows)
-			.into(DatabaseTableName.ROUTES_TO_POIS);
+	private queryRoute(): QueryBuilder<RoutesModel, RoutesModel[]> {
+		return this.routesModel
+			.query()
+			.withGraphFetched("pois(selectIdOrder)")
+			.modifiers({
+				selectIdOrder(builder) {
+					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
+				},
+			})
+			.select("routes.id", "routes.name", "routes.description");
 	}
 }
 

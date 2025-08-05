@@ -8,7 +8,8 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import {
-	type RoutesRequestDto,
+	type RoutesRequestCreateDto,
+	type RoutesRequestPatchDto,
 	type RoutesResponseDto,
 } from "./libs/types/type.js";
 import {
@@ -111,7 +112,7 @@ class RoutesController extends BaseController {
 
 	public async create(
 		options: APIHandlerOptions<{
-			body: RoutesRequestDto;
+			body: RoutesRequestCreateDto;
 		}>,
 	): Promise<APIHandlerResponse<RoutesResponseDto>> {
 		const { description, name, pois } = options.body;
@@ -140,8 +141,23 @@ class RoutesController extends BaseController {
 	 *     responses:
 	 *       200:
 	 *         description: Route deleted successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: boolean
 	 *       404:
 	 *         description: Route was not found
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: boolean
+	 *                   const: false
 	 */
 
 	public async delete(
@@ -171,21 +187,39 @@ class RoutesController extends BaseController {
 	 *           type: string
 	 *     responses:
 	 *       200:
-	 *         description: Route was found successfully
+	 *         description: Route was found succesfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: '#/components/schemas/Route'
 	 *       404:
 	 *         description: Route was not found
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: boolean
+	 *                   const: false
 	 */
 
 	public async find(
 		options: APIHandlerOptions<{ params: { id: string } }>,
-	): Promise<APIHandlerResponse<RoutesResponseDto>> {
+	): Promise<APIHandlerResponse<false | RoutesResponseDto>> {
 		const id = Number(options.params.id);
+
 		const route = await this.routesService.findById(id);
 
-		return {
-			payload: { data: route },
-			status: HTTPCode.OK,
-		};
+		return route
+			? {
+					payload: { data: route },
+					status: HTTPCode.OK,
+				}
+			: {
+					payload: { data: false },
+					status: HTTPCode.NOT_FOUND,
+				};
 	}
 
 	/**
@@ -246,10 +280,6 @@ class RoutesController extends BaseController {
 	 *                 type: string
 	 *               description:
 	 *                 type: string
-	 *               pois:
-	 *                 type: array
-	 *                 items:
-	 *                   type: number
 	 *     responses:
 	 *       200:
 	 *         description: Route updated successfully
@@ -259,27 +289,39 @@ class RoutesController extends BaseController {
 	 *               $ref: '#/components/schemas/Route'
 	 *       404:
 	 *         description: Route was not found
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: boolean
+	 *                   const: false
 	 */
 
 	public async patch(
 		options: APIHandlerOptions<{
-			body: RoutesRequestDto;
+			body: RoutesRequestPatchDto;
 			params: { id: string };
 		}>,
-	): Promise<APIHandlerResponse<RoutesResponseDto>> {
+	): Promise<APIHandlerResponse<false | RoutesResponseDto>> {
 		const id = Number(options.params.id);
-		const { description, name, pois } = options.body;
+		const { description, name } = options.body;
 
 		const route = await this.routesService.patch(id, {
 			description,
 			name,
-			pois,
 		});
 
-		return {
-			payload: { data: route },
-			status: HTTPCode.OK,
-		};
+		return route
+			? {
+					payload: { data: route },
+					status: HTTPCode.OK,
+				}
+			: {
+					payload: { data: false },
+					status: HTTPCode.NOT_FOUND,
+				};
 	}
 }
 

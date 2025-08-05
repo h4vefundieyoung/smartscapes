@@ -1,5 +1,6 @@
 import {
-	type RoutesRequestDto,
+	type RoutesRequestCreateDto,
+	type RoutesRequestPatchDto,
 	type RoutesResponseDto,
 } from "@smartscapes/shared";
 
@@ -24,7 +25,9 @@ class RoutesService implements Service {
 		this.pointsOfInterestService = pointsOfInterestService;
 	}
 
-	public async create(payload: RoutesRequestDto): Promise<RoutesResponseDto> {
+	public async create(
+		payload: RoutesRequestCreateDto,
+	): Promise<RoutesResponseDto> {
 		await this.ensurePoisExist(payload.pois);
 
 		const formattedPayload = {
@@ -39,66 +42,36 @@ class RoutesService implements Service {
 
 		const route = await this.routesRepository.create(routeEntity);
 
-		return route.toObject();
+		return route;
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		await this.findById(id);
-
 		return await this.routesRepository.delete(id);
 	}
 
 	public async findAll(): Promise<CollectionResult<RoutesResponseDto>> {
 		const items = await this.routesRepository.findAll();
 
-		return { items: items.map((item) => item.toObject()) };
+		return { items };
 	}
 
-	public async findById(id: number): Promise<RoutesResponseDto> {
+	public async findById(id: number): Promise<null | RoutesResponseDto> {
 		const route = await this.routesRepository.findById(id);
 
-		if (!route) {
-			throw new RoutesError({
-				message: RoutesExceptionMessage.ROUTE_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		return route.toObject();
+		return route;
 	}
 
 	public async patch(
 		id: number,
-		payload: {
-			description?: string;
-			name?: string;
-			pois?: number[];
-		},
-	): Promise<RoutesResponseDto> {
-		await this.findById(id);
-
-		let formattedPayload = {
-			description: payload.description,
-			name: payload.name,
-		} as RoutesResponseDto;
-
-		if (payload.pois) {
-			await this.ensurePoisExist(payload.pois);
-
-			formattedPayload.pois = payload.pois.map((id, index) => ({
-				id,
-				visitOrder: index,
-			})) as { id: number; visitOrder: number }[];
+		payload: RoutesRequestPatchDto,
+	): Promise<null | RoutesResponseDto> {
+		if (!(await this.findById(id))) {
+			return null;
 		}
 
-		const routeEntity = RouteEntity.initializeNew(formattedPayload);
+		const updatedRoute = await this.routesRepository.patch(id, payload);
 
-		const updatedRoute = await this.routesRepository.patch(
-			id,
-			routeEntity.toObject(),
-		);
-
-		return updatedRoute.toObject();
+		return updatedRoute;
 	}
 
 	private async ensurePoisExist(pois: number[]): Promise<void> {

@@ -132,7 +132,6 @@ describe("RoutesController", () => {
 			body: {
 				description: updatedRoute.description,
 				name: updatedRoute.name,
-				pois: [FIRST_POI_ID, SECOND_POI_ID],
 			},
 			params: { id: "1" },
 			query: {},

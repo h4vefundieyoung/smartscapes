@@ -1,6 +1,6 @@
 export {
-	EntityType,
 	NotificationApiPath,
+	NotificationEntityType,
 	NotificationExceptionMessage,
 	NotificationType,
 } from "./libs/enums/enums.js";

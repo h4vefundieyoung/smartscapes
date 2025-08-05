@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import {
-	EntityType,
+	NotificationEntityType,
 	NotificationType,
 	NotificationValidationMessage,
 	NotificationValidationRule,
@@ -25,9 +25,12 @@ const notificationCreate = z.strictObject({
 		.positive({
 			message: NotificationValidationMessage.ENTITY_ID_MUST_BE_POSITIVE,
 		}),
-	entityType: z.enum(Object.values(EntityType) as [string, ...string[]], {
-		message: NotificationValidationMessage.ENTITY_TYPE_INVALID,
-	}),
+	entityType: z.enum(
+		Object.values(NotificationEntityType) as [string, ...string[]],
+		{
+			message: NotificationValidationMessage.ENTITY_TYPE_INVALID,
+		},
+	),
 	notificationType: z.enum(
 		Object.values(NotificationType) as [string, ...string[]],
 		{

@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
 
 import {
-	EntityType,
+	NotificationEntityType,
 	NotificationType,
 } from "~/modules/notifications/libs/enums/enums.js";
 
@@ -23,7 +23,7 @@ describe("NotificationRepository", () => {
 			content: "Someone liked your review",
 			createdAt: "2024-01-01T10:00:00Z",
 			entityId: 100,
-			entityType: EntityType.USERS,
+			entityType: NotificationEntityType.USERS,
 			id: 1,
 			notificationType: NotificationType.USER_FOLLOWED,
 			readAt: null,

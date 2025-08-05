@@ -1,6 +1,6 @@
 import { type Entity, type ValueOf } from "~/libs/types/types.js";
 import {
-	type EntityType,
+	type NotificationEntityType,
 	type NotificationType,
 } from "~/modules/notifications/libs/enums/enums.js";
 
@@ -11,7 +11,7 @@ class NotificationEntity implements Entity {
 
 	private entityId: number;
 
-	private entityType: ValueOf<typeof EntityType>;
+	private entityType: ValueOf<typeof NotificationEntityType>;
 
 	private id: null | number;
 
@@ -37,7 +37,7 @@ class NotificationEntity implements Entity {
 		content: string;
 		createdAt: null | string;
 		entityId: number;
-		entityType: ValueOf<typeof EntityType>;
+		entityType: ValueOf<typeof NotificationEntityType>;
 		id: null | number;
 		notificationType: ValueOf<typeof NotificationType>;
 		readAt: null | string;
@@ -69,7 +69,7 @@ class NotificationEntity implements Entity {
 		content: string;
 		createdAt: string;
 		entityId: number;
-		entityType: ValueOf<typeof EntityType>;
+		entityType: ValueOf<typeof NotificationEntityType>;
 		id: number;
 		notificationType: ValueOf<typeof NotificationType>;
 		readAt: null | string;
@@ -98,7 +98,7 @@ class NotificationEntity implements Entity {
 	}: {
 		content: string;
 		entityId: number;
-		entityType: ValueOf<typeof EntityType>;
+		entityType: ValueOf<typeof NotificationEntityType>;
 		notificationType: ValueOf<typeof NotificationType>;
 		userId: number;
 	}): NotificationEntity {
@@ -118,7 +118,7 @@ class NotificationEntity implements Entity {
 	public toNewObject(): {
 		content: string;
 		entityId: number;
-		entityType: ValueOf<typeof EntityType>;
+		entityType: ValueOf<typeof NotificationEntityType>;
 		notificationType: ValueOf<typeof NotificationType>;
 		readAt: null | string;
 		userId: number;
@@ -137,7 +137,7 @@ class NotificationEntity implements Entity {
 		content: string;
 		createdAt: string;
 		entityId: number;
-		entityType: ValueOf<typeof EntityType>;
+		entityType: ValueOf<typeof NotificationEntityType>;
 		id: number;
 		notificationType: ValueOf<typeof NotificationType>;
 		readAt: null | string;

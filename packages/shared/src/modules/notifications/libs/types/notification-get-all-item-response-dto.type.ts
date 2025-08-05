@@ -1,11 +1,14 @@
 import { type ValueOf } from "../../../../libs/types/types.js";
-import { type EntityType, type NotificationType } from "../enums/enums.js";
+import {
+	type NotificationEntityType,
+	type NotificationType,
+} from "../enums/enums.js";
 
 type NotificationGetAllItemResponseDto = {
 	content: string;
 	createdAt: string;
 	entityId: number;
-	entityType: ValueOf<typeof EntityType>;
+	entityType: ValueOf<typeof NotificationEntityType>;
 	id: number;
 	notificationType: ValueOf<typeof NotificationType>;
 	readAt: null | string;

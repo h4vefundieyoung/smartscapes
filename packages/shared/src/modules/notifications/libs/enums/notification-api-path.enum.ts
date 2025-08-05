@@ -1,5 +1,5 @@
 const NotificationApiPath = {
-	$ID: ":/id",
+	$ID: "/:id",
 	ROOT: "/",
 } as const;
 

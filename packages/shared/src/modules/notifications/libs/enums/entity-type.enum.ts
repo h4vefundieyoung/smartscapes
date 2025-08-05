@@ -1,5 +1,5 @@
-const EntityType = {
+const NotificationEntityType = {
 	USERS: "users",
 } as const;
 
-export { EntityType };
+export { NotificationEntityType };

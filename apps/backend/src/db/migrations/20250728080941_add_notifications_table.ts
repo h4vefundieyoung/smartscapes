@@ -19,7 +19,7 @@ const NotificationType = {
 	USER_FOLLOWED: "user_followed",
 } as const;
 
-const EntityType = {
+const NotificationEntityType = {
 	USERS: "users",
 } as const;
 
@@ -38,7 +38,7 @@ async function up(knex: Knex): Promise<void> {
 		`);
 
 		await trx.raw(`
-			CREATE TYPE entity_type AS ENUM ('${Object.values(EntityType).join("', '")}')
+			CREATE TYPE notification_entity_type AS ENUM ('${Object.values(NotificationEntityType).join("', '")}')
 		`);
 
 		await trx.schema.createTable(TABLE_NAME, (table) => {

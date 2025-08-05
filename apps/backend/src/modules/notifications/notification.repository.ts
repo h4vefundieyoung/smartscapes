@@ -1,7 +1,6 @@
 import { type Repository, type ValueOf } from "~/libs/types/types.js";
 import {
-	type EntityType,
-	NotificationColumnName,
+	type NotificationEntityType,
 	type NotificationType,
 } from "~/modules/notifications/libs/enums/enums.js";
 
@@ -28,7 +27,9 @@ class NotificationRepository implements Repository {
 			content: newNotification.content,
 			createdAt: newNotification.createdAt,
 			entityId: newNotification.entityId,
-			entityType: newNotification.entityType as ValueOf<typeof EntityType>,
+			entityType: newNotification.entityType as ValueOf<
+				typeof NotificationEntityType
+			>,
 			id: newNotification.id,
 			notificationType: newNotification.notificationType as ValueOf<
 				typeof NotificationType
@@ -42,8 +43,8 @@ class NotificationRepository implements Repository {
 	public async findAllByUserId(userId: number): Promise<NotificationEntity[]> {
 		const notifications = await this.notificationModel
 			.query()
-			.where(NotificationColumnName.USER_ID, userId)
-			.orderBy(NotificationColumnName.CREATED_AT, "desc")
+			.where("user_id", userId)
+			.orderBy("created_at", "desc")
 			.execute();
 
 		return notifications.map((notification) =>
@@ -51,7 +52,9 @@ class NotificationRepository implements Repository {
 				content: notification.content,
 				createdAt: notification.createdAt,
 				entityId: notification.entityId,
-				entityType: notification.entityType as ValueOf<typeof EntityType>,
+				entityType: notification.entityType as ValueOf<
+					typeof NotificationEntityType
+				>,
 				id: notification.id,
 				notificationType: notification.notificationType as ValueOf<
 					typeof NotificationType

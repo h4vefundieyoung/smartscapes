@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import {
-	EntityType,
+	NotificationEntityType,
 	NotificationType,
 } from "~/modules/notifications/libs/enums/enums.js";
 
@@ -12,7 +12,7 @@ describe("NotificationEntity", () => {
 	const mockNewNotificationPayload = {
 		content: "User 10 followed you!",
 		entityId: 10,
-		entityType: EntityType.USERS,
+		entityType: NotificationEntityType.USERS,
 		notificationType: NotificationType.USER_FOLLOWED,
 		userId: 1,
 	};
@@ -21,7 +21,7 @@ describe("NotificationEntity", () => {
 		content: "User 20 followed you!",
 		createdAt: "2023-01-01T10:00:00.000Z",
 		entityId: 20,
-		entityType: EntityType.USERS,
+		entityType: NotificationEntityType.USERS,
 		id: 1,
 		notificationType: NotificationType.USER_FOLLOWED,
 		readAt: null,

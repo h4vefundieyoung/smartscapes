@@ -5,7 +5,7 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import {
-	EntityType,
+	NotificationEntityType,
 	NotificationType,
 } from "~/modules/notifications/libs/enums/enums.js";
 import {
@@ -36,7 +36,7 @@ describe("NotificationController", () => {
 			content: "Test content",
 			createdAt: new Date().toISOString(),
 			entityId: 100,
-			entityType: EntityType.USERS,
+			entityType: NotificationEntityType.USERS,
 			id: 1,
 			notificationType: NotificationType.USER_FOLLOWED,
 			readAt: null,
@@ -60,7 +60,7 @@ describe("NotificationController", () => {
 		const dto: NotificationCreateRequestDto = {
 			content: "Test content",
 			entityId: 100,
-			entityType: EntityType.USERS,
+			entityType: NotificationEntityType.USERS,
 			notificationType: NotificationType.USER_FOLLOWED,
 			userId: 42,
 		};
@@ -84,7 +84,7 @@ describe("NotificationController", () => {
 				content: "You've got a reply",
 				createdAt: new Date().toISOString(),
 				entityId: 101,
-				entityType: EntityType.USERS,
+				entityType: NotificationEntityType.USERS,
 				id: 1,
 				notificationType: NotificationType.USER_FOLLOWED,
 				readAt: null,

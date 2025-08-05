@@ -6,11 +6,13 @@ import {
 	type Path,
 	type PathValue,
 } from "react-hook-form";
-import ReactSelect, { type MultiValue, type SingleValue } from "react-select";
+import ReactSelect from "react-select";
 
-import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
 
+import { selectClassNames } from "./libs/constants/constants.js";
+import { createHandleChange } from "./libs/helpers/helpers.js";
+import { mapSelectValue } from "./libs/mappers/mappers.js";
 import { type SelectOption } from "./libs/types/select-option.type.js";
 import styles from "./styles.module.css";
 
@@ -21,54 +23,6 @@ type Properties<TFieldValues extends FieldValues, TOptionValue = string> = {
 	name: FieldPath<TFieldValues>;
 	options: SelectOption<TOptionValue>[];
 	placeholder?: string;
-};
-
-const isMultiValue = <TOptionValue,>(
-	value:
-		| MultiValue<SelectOption<TOptionValue>>
-		| SingleValue<SelectOption<TOptionValue>>,
-): value is MultiValue<SelectOption<TOptionValue>> => {
-	return Array.isArray(value);
-};
-
-const createHandleChange =
-	<TOptionValue,>(
-		onChange: (value: null | TOptionValue | TOptionValue[]) => void,
-	) =>
-	(
-		newValue:
-			| MultiValue<SelectOption<TOptionValue>>
-			| SingleValue<SelectOption<TOptionValue>>,
-	): void => {
-		if (isMultiValue<TOptionValue>(newValue)) {
-			const values = newValue.map((o) => o.value);
-			onChange(values);
-		} else {
-			const single = newValue?.value ?? null;
-			onChange(single);
-		}
-	};
-
-const classNames = {
-	control: (): string => styles["control"] as string,
-	menu: (): string => styles["menu"] as string,
-	multiValue: (): string => styles["multi-value"] as string,
-	multiValueLabel: (): string => styles["multi-value-label"] as string,
-	multiValueRemove: (): string => styles["multi-value-remove"] as string,
-	option: ({
-		isFocused,
-		isSelected,
-	}: {
-		isFocused: boolean;
-		isSelected: boolean;
-	}): string =>
-		combineClassNames(
-			styles["option"],
-			isFocused && styles["option-focused"],
-			isSelected && styles["option-selected"],
-		),
-	placeholder: (): string => styles["placeholder"] as string,
-	singleValue: (): string => styles["single-value"] as string,
 };
 
 const Select = <TFieldValues extends FieldValues, TOptionValue = string>({
@@ -82,12 +36,7 @@ const Select = <TFieldValues extends FieldValues, TOptionValue = string>({
 	const { field } = useFormController<TFieldValues>({ control, name });
 
 	const rawValue = field.value as null | TOptionValue | TOptionValue[];
-	const value = isMulti
-		? options.filter((option) =>
-				Array.isArray(rawValue) ? rawValue.includes(option.value) : false,
-			)
-		: (options.find((option) => option.value === rawValue) ?? null);
-
+	const value = mapSelectValue<TOptionValue>(rawValue, options, isMulti);
 	const handleChange = React.useMemo(
 		() => createHandleChange<TOptionValue>(field.onChange),
 		[field.onChange],
@@ -97,7 +46,7 @@ const Select = <TFieldValues extends FieldValues, TOptionValue = string>({
 		<label className={styles["label"]}>
 			<span className={styles["label-caption"]}>{label}</span>
 			<ReactSelect
-				classNames={classNames}
+				classNames={selectClassNames}
 				isMulti={isMulti}
 				name={name}
 				onChange={handleChange}

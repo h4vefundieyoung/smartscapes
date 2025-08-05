@@ -97,6 +97,18 @@ erDiagram
       int poi_id FK
   }
 
+  notifications {
+      int id PK
+      timestamp created_at
+      timestamp updated_at
+      int user_id FK
+      enum notification_type
+      enum entity_type
+      int entity_id
+      text content
+      timestamp read_at
+  }
+
   users }|--|| groups : group_id
   groups ||--|{ groups_to_permissions : group_id
   permissions ||--|{ groups_to_permissions : permission_id
@@ -105,6 +117,7 @@ erDiagram
   users ||--|{ reviews : user_id
   routes ||--|{ reviews : route_id
   points_of_interest ||--|{ reviews : poi_id
+  users ||--o{ notifications : user_id
 ```
 
 ## 5. Architecture

@@ -54,7 +54,6 @@ async function up(knex: Knex): Promise<void> {
 
 			table
 				.integer(ColumnName.USER_ID)
-				.unsigned()
 				.notNullable()
 				.references(ColumnName.ID)
 				.inTable(USERS_TABLE_NAME)

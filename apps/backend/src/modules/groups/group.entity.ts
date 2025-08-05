@@ -58,12 +58,12 @@ class GroupEntity implements Entity {
 	}
 
 	public toObject(): {
-		id: null | number;
+		id: number;
 		key: string;
 		name: string;
 	} {
 		return {
-			id: this.id,
+			id: this.id as number,
 			key: this.key,
 			name: this.name,
 		};

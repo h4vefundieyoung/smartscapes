@@ -29,7 +29,8 @@ export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
 export {
 	type GroupAuthResponseDto,
 	GroupExceptionMessage,
-	GroupKeys,
+	type GroupItemResponseDto,
+	GroupKey,
 } from "./modules/groups/groups.js";
 export {
 	pointOfInterestCreateValidationSchema,
@@ -44,6 +45,7 @@ export {
 	type RouteCategoryRequestDto,
 } from "./modules/route-categories/route-categories.js";
 export {
+	type UserAuthRequestDto,
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetByIdItemResponseDto,

@@ -28,6 +28,13 @@ describe("AuthService", () => {
 		const mockUserServiceResponse: UserGetByIdItemResponseDto = {
 			email: signUpRequestDto.email,
 			firstName: signUpRequestDto.firstName,
+			group: {
+				id: 2,
+				key: "users",
+				name: "Users",
+				permissions: [],
+			},
+			groupId: 2,
 			id: 1,
 			lastName: signUpRequestDto.lastName,
 		};
@@ -83,10 +90,8 @@ describe("AuthService", () => {
 		const mockToken = "mock token";
 
 		const group_mock = {
-			toObject: (): { id: number; key: string } => ({
-				id: 2,
-				key: "users",
-			}),
+			id: 2,
+			key: "users",
 		};
 
 		const signInRequestDto: UserSignInRequestDto = {
@@ -95,18 +100,23 @@ describe("AuthService", () => {
 		};
 
 		const mockPasswordDetails = {
-			groupId: group_mock.toObject().id,
+			group: {
+				id: group_mock.id,
+				key: group_mock.key,
+				name: "Users",
+			},
+			groupId: group_mock.id,
 			id: 1,
-			key: group_mock.toObject().key,
+			key: group_mock.key,
 			passwordHash: "hashedPassword",
 			passwordSalt: "someSalt",
 		};
 
 		const expectedSignInResponse: UserSignInResponseDto = {
-			group: { id: 2, key: "users" },
 			token: mockToken,
 			user: {
 				email: signInRequestDto.email,
+				groupId: 2,
 				id: mockPasswordDetails.id,
 			},
 		};

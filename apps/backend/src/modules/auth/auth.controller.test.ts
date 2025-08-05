@@ -19,6 +19,24 @@ describe("AuthController", () => {
 	const mockUser: UserGetByIdItemResponseDto = {
 		email: "test@example.com",
 		firstName: "John",
+		group: {
+			id: 2,
+			key: "users",
+			name: "Users",
+			permissions: [
+				{
+					id: 1,
+					key: "read",
+					name: "Read Permission",
+				},
+				{
+					id: 2,
+					key: "write",
+					name: "Write Permission",
+				},
+			],
+		},
+		groupId: 2,
 		id: 1,
 		lastName: "Doe",
 	};
@@ -81,7 +99,7 @@ describe("AuthController", () => {
 		};
 
 		const data = authController.getAuthenticatedUser(
-			mockRequest as APIHandlerOptions,
+			mockRequest as unknown as APIHandlerOptions,
 		);
 
 		assert.deepStrictEqual(data, {

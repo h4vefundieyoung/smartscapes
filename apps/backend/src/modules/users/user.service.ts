@@ -69,7 +69,7 @@ class UserService implements Service {
 	): Promise<null | UserGetByIdItemResponseDto> {
 		const user = await this.userRepository.findById(id);
 
-		return user ? user.toObject() : null;
+		return user;
 	}
 
 	public async findPasswordDetails(

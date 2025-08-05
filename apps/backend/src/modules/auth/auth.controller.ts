@@ -6,8 +6,8 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import {
+	type UserAuthResponseDto,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
 	userSignInValidationSchema,

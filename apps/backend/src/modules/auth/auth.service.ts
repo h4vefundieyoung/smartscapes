@@ -59,13 +59,11 @@ class AuthService {
 		const token = await this.tokenService.create({ userId: user.id });
 
 		return {
-			group: {
-				id: user.groupId,
-				key: user.key,
-			},
 			token,
 			user: {
 				email,
+				group: user.group,
+				groupId: user.groupId,
 				id: user.id,
 			},
 		};

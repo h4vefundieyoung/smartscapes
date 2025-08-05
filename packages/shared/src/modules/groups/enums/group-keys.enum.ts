@@ -1,6 +1,6 @@
-const GroupKeys = {
+const GroupKey = {
 	ADMINS: "admins",
 	USERS: "users",
 } as const;
 
-export { GroupKeys };
+export { GroupKey };

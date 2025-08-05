@@ -116,6 +116,11 @@ describe("AuthService", () => {
 			token: mockToken,
 			user: {
 				email: signInRequestDto.email,
+				group: {
+					id: mockPasswordDetails.group.id,
+					key: mockPasswordDetails.group.key,
+					name: mockPasswordDetails.group.name,
+				},
 				groupId: 2,
 				id: mockPasswordDetails.id,
 			},

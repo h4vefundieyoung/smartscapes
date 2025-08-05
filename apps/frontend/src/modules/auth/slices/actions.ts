@@ -32,8 +32,15 @@ const getAuthenticatedUser = createAsyncThunk<
 
 const logout = createAsyncThunk<null, undefined, AsyncThunkConfig>(
 	`${sliceName}/logout`,
-	async (_payload, { extra }) => {
-		const { storage } = extra;
+	async (_payload, { extra: { authApi, storage } }) => {
+		const token = await storage.get<null | string>(StorageKey.TOKEN);
+
+		if (!token) {
+			throw new Error("Failed to revoke token on backned.");
+		}
+
+		await authApi.logout(token);
+
 		await storage.drop(StorageKey.TOKEN);
 
 		return null;

@@ -25,7 +25,7 @@ async function up(knex: Knex): Promise<void> {
 	await knex.transaction(async (trx) => {
 		const group = await trx<IdRecord>(TableName.GROUPS)
 			.select(ColumnName.ID)
-			.where(ColumnName.KEY, "admins")
+			.where(ColumnName.KEY, GROUP_KEY)
 			.first();
 
 		if (!group || !group.id) {

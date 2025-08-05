@@ -3,6 +3,8 @@ import { type PointsOfInterestSearchQuery } from "~/modules/points-of-interest/l
 import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
 import { type PointsOfInterestModel } from "~/modules/points-of-interest/points-of-interest.model.js";
 
+import { SortingOrder } from "./libs/enums/enums.js";
+
 class PointsOfInterestRepository implements Repository {
 	private pointsOfInterestModel: typeof PointsOfInterestModel;
 
@@ -47,12 +49,15 @@ class PointsOfInterestRepository implements Repository {
 	public async findAll(): Promise<PointsOfInterestEntity[]> {
 		const pointsOfInterest = await this.pointsOfInterestModel
 			.query()
-			.select("id", "name", "created_at", "updated_at")
-			.select(
+			.select([
+				"id",
+				"name",
+				"created_at",
+				"updated_at",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
-			)
+			])
 			.execute();
 
 		return pointsOfInterest.map((point) =>
@@ -63,12 +68,15 @@ class PointsOfInterestRepository implements Repository {
 	public async findById(id: number): Promise<null | PointsOfInterestEntity> {
 		const pointOfInterest = await this.pointsOfInterestModel
 			.query()
-			.select("id", "name", "created_at", "updated_at")
-			.select(
+			.select([
+				"id",
+				"name",
+				"created_at",
+				"updated_at",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
-			)
+			])
 			.findById(id)
 			.execute();
 
@@ -84,12 +92,15 @@ class PointsOfInterestRepository implements Repository {
 	): Promise<null | PointsOfInterestEntity> {
 		const pointOfInterest = await this.pointsOfInterestModel
 			.query()
-			.select("id", "name", "created_at", "updated_at")
-			.select(
+			.select([
+				"id",
+				"name",
+				"created_at",
+				"updated_at",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
-			)
+			])
 			.where("name", "ilike", name)
 			.first();
 
@@ -107,23 +118,24 @@ class PointsOfInterestRepository implements Repository {
 
 		const pointsOfInterest = await this.pointsOfInterestModel
 			.query()
-			.select("id", "name", "created_at", "updated_at")
-			.select(
+			.select([
+				"id",
+				"name",
+				"created_at",
+				"updated_at",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
-			)
-			.select(
 				this.pointsOfInterestModel.raw(
 					"ST_Distance(location::geography, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography) as distance",
 					[longitude, latitude],
 				),
-			)
+			])
 			.whereRaw(
 				"ST_DWithin(location::geography, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography, ?)",
 				[longitude, latitude, radius],
 			)
-			.orderByRaw("distance ASC")
+			.orderBy("distance", SortingOrder.ASC)
 			.execute();
 
 		return pointsOfInterest

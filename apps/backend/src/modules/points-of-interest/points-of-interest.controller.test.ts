@@ -92,13 +92,13 @@ describe("PointsOfInterestController", () => {
 
 	it("findAll should return nearby points of interest when location provided", async () => {
 		const pointsOfInterest = [mockPointOfInterest];
-		const RADIUS = 5;
+		const RADIUS_IN_KM = 5;
 
 		const mockFindAll: PointsOfInterestService["findAll"] = (options) => {
 			assert.ok(options, "Options should be defined");
 			assert.strictEqual(Number(options.latitude), TEST_LATITUDE);
 			assert.strictEqual(Number(options.longitude), TEST_LONGITUDE);
-			assert.strictEqual(Number(options.radius), RADIUS);
+			assert.strictEqual(Number(options.radius), RADIUS_IN_KM);
 
 			return Promise.resolve({ items: pointsOfInterest });
 		};

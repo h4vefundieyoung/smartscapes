@@ -1,1 +1,1 @@
-export { RoutesError } from "./point-of-interest.exception.js";
+export { RoutesError } from "./routes-error.exception.js";

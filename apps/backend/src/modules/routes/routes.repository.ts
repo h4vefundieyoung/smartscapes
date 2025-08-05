@@ -4,7 +4,6 @@ import {
 } from "@smartscapes/shared";
 import { type QueryBuilder } from "objection";
 
-import { DatabaseTableName } from "~/libs/modules/database/database.js";
 import { type Repository } from "~/libs/types/types.js";
 
 import { type RouteEntity } from "./routes.entity.js";
@@ -33,8 +32,6 @@ class RoutesRepository implements Repository {
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		await this.deleteRoutePois(id);
-
 		const isDeleted = await this.routesModel.query().deleteById(id).execute();
 
 		return Boolean(isDeleted);
@@ -49,9 +46,9 @@ class RoutesRepository implements Repository {
 	public async findById(id: number): Promise<null | RoutesResponseDto> {
 		const route = (await this.queryRoute()
 			.where("routes.id", id)
-			.first()) as unknown as RoutesResponseDto;
+			.first()) as unknown as RoutesResponseDto | undefined;
 
-		if (!JSON.stringify(route)) {
+		if (!route) {
 			return null;
 		}
 
@@ -62,25 +59,12 @@ class RoutesRepository implements Repository {
 		id: number,
 		entity: RoutesRequestPatchDto,
 	): Promise<RoutesResponseDto> {
-		const { description, name } = entity;
-
-		const patchData = Object.fromEntries(
-			Object.entries({ description, name }).filter(
-				([, value]) => value !== undefined,
-			),
-		);
-
-		await this.routesModel.query().patchAndFetchById(id, patchData).execute();
+		await this.routesModel
+			.query()
+			.patchAndFetchById(id, entity as Partial<RoutesModel>)
+			.execute();
 
 		return (await this.findById(id)) as RoutesResponseDto;
-	}
-
-	private async deleteRoutePois(routeId: number): Promise<void> {
-		await this.routesModel
-			.knex()
-			.table(DatabaseTableName.ROUTES_TO_POIS)
-			.where("route_id", routeId)
-			.del();
 	}
 
 	private queryRoute(): QueryBuilder<RoutesModel, RoutesModel[]> {

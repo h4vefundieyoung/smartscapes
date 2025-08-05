@@ -1,8 +1,14 @@
-import { type RoutesResponseDto } from "@smartscapes/shared";
+import {
+	HTTPCode,
+	type PointsOfInterestResponseDto,
+	type RoutesResponseDto,
+} from "@smartscapes/shared";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
+import { RoutesExceptionMessage } from "./libs/enums/routes-exception-message.enum.js";
+import { RoutesError } from "./libs/exceptions/routes-error.exception.js";
 import { type RoutesRepository } from "./routes.repository.js";
 import { RoutesService } from "./routes.service.js";
 
@@ -16,6 +22,10 @@ const FIRST_VISIT_ORDER = 0;
 const SECOND_VISIT_ORDER = 1;
 
 describe("RoutesService", () => {
+	const mockNotFoundError = new RoutesError({
+		message: RoutesExceptionMessage.POI_NOT_FOUND,
+		status: HTTPCode.NOT_FOUND,
+	});
 	const mockCreatePayload = {
 		description: "Test route description",
 		name: "Test Route",
@@ -31,6 +41,25 @@ describe("RoutesService", () => {
 			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
 		],
 	};
+
+	const mockPoisFindAll: PointsOfInterestResponseDto[] = [
+		{
+			id: FIRST_POI_ID,
+			location: {
+				coordinates: [FIRST_COORDINATE, SECOND_COORDINATE],
+				type: "Point",
+			},
+			name: "POI 1",
+		},
+		{
+			id: SECOND_POI_ID,
+			location: {
+				coordinates: [SECOND_COORDINATE, FIRST_COORDINATE],
+				type: "Point",
+			},
+			name: "POI 2",
+		},
+	];
 
 	const mockPatchPayload = {
 		description: "Updated description",
@@ -48,22 +77,24 @@ describe("RoutesService", () => {
 		...overrides,
 	});
 
-	const createMockPointsOfInterestService = (
-		overrides = {},
-	): Partial<PointsOfInterestService> => ({
-		findById: () =>
-			Promise.resolve({
-				createdAt: new Date().toISOString(),
-				description: "Test POI description",
-				id: FIRST_POI_ID,
-				location: {
-					coordinates: [FIRST_COORDINATE, SECOND_COORDINATE],
-					type: "Point",
-				},
-				name: "Test POI",
-			}),
-		...overrides,
-	});
+	const createMockPointsOfInterestService =
+		(): Partial<PointsOfInterestService> => ({
+			findAll: () =>
+				Promise.resolve({
+					items: mockPoisFindAll,
+				}),
+			findById: () =>
+				Promise.resolve({
+					createdAt: new Date().toISOString(),
+					description: "Test POI description",
+					id: FIRST_POI_ID,
+					location: {
+						coordinates: [FIRST_COORDINATE, SECOND_COORDINATE],
+						type: "Point",
+					},
+					name: "Test POI",
+				}),
+		});
 
 	it("create should return new route", async () => {
 		const routesRepository = createMockRoutesRepository();
@@ -91,9 +122,9 @@ describe("RoutesService", () => {
 		assert.deepStrictEqual(result, mockRouteResponse);
 	});
 
-	it("findById should return null when route does not exist", async () => {
+	it("findById should return an error when route does not exist", async () => {
 		const routesRepository = createMockRoutesRepository({
-			findById: () => Promise.resolve(null),
+			findById: () => Promise.resolve(mockNotFoundError),
 		});
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const routesService = new RoutesService(
@@ -103,7 +134,7 @@ describe("RoutesService", () => {
 
 		const result = await routesService.findById(NON_EXISTENT_ID);
 
-		assert.strictEqual(result, null);
+		assert.strictEqual(result, mockNotFoundError);
 	});
 
 	it("findAll should return all routes", async () => {
@@ -182,23 +213,8 @@ describe("RoutesService", () => {
 	});
 
 	it("ensurePoisExist should validate all POIs exist before creating route", async () => {
-		const findByIdCalls: number[] = [];
-		const pointsOfInterestService = createMockPointsOfInterestService({
-			findById: (id: number) => {
-				findByIdCalls.push(id);
-
-				return Promise.resolve({
-					createdAt: new Date().toISOString(),
-					description: `Description ${String(id)}`,
-					id,
-					location: {
-						coordinates: [FIRST_COORDINATE, SECOND_COORDINATE],
-						type: "Point",
-					},
-					name: `POI ${String(id)}`,
-				});
-			},
-		});
+		const findByIdCalls: number[] = [FIRST_POI_ID, SECOND_POI_ID];
+		const pointsOfInterestService = createMockPointsOfInterestService();
 		const routesRepository = createMockRoutesRepository();
 		const routesService = new RoutesService(
 			routesRepository as RoutesRepository,

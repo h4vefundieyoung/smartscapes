@@ -47,15 +47,17 @@ class PointsOfInterestService implements Service {
 		return true;
 	}
 
-	public async findAll(): Promise<
-		CollectionResult<PointsOfInterestResponseDto>
-	> {
+	public async findAll(
+		filterIds?: number[],
+	): Promise<CollectionResult<PointsOfInterestResponseDto>> {
 		const items = await this.pointsOfInterestRepository.findAll();
 
+		const objs = items.map((item) => item.toObject());
+
 		return {
-			items: items.map((item) => {
-				return item.toObject();
-			}),
+			items: filterIds
+				? objs.filter((itemObject) => filterIds.includes(itemObject.id))
+				: objs,
 		};
 	}
 

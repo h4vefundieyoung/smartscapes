@@ -6,8 +6,8 @@ const POI_TABLE = "points_of_interest";
 
 async function down(knex: Knex): Promise<void> {
 	await knex.transaction(async (trx) => {
-		await trx.schema.dropTableIfExists(ROUTES_TABLE);
 		await trx.schema.dropTableIfExists(ROUTES_TO_POIS_TABLE);
+		await trx.schema.dropTableIfExists(ROUTES_TABLE);
 	});
 }
 
@@ -29,9 +29,10 @@ async function up(knex: Knex): Promise<void> {
 				.integer("route_id")
 				.notNullable()
 				.references("id")
-				.inTable(ROUTES_TABLE);
+				.inTable(ROUTES_TABLE)
+				.onDelete("CASCADE");
 			table.integer("poi_id").notNullable().references("id").inTable(POI_TABLE);
-			table.integer("visit_order");
+			table.integer("visit_order").notNullable();
 		});
 	});
 }

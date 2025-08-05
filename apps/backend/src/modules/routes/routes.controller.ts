@@ -148,16 +148,6 @@ class RoutesController extends BaseController {
 	 *               properties:
 	 *                 data:
 	 *                   type: boolean
-	 *       404:
-	 *         description: Route was not found
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               type: object
-	 *               properties:
-	 *                 data:
-	 *                   type: boolean
-	 *                   const: false
 	 */
 
 	public async delete(
@@ -168,7 +158,7 @@ class RoutesController extends BaseController {
 
 		return {
 			payload: { data: isDeleted },
-			status: isDeleted ? HTTPCode.OK : HTTPCode.NOT_FOUND,
+			status: HTTPCode.OK,
 		};
 	}
 
@@ -192,34 +182,19 @@ class RoutesController extends BaseController {
 	 *           application/json:
 	 *             schema:
 	 *               $ref: '#/components/schemas/Route'
-	 *       404:
-	 *         description: Route was not found
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               type: object
-	 *               properties:
-	 *                 data:
-	 *                   type: boolean
-	 *                   const: false
 	 */
 
 	public async find(
 		options: APIHandlerOptions<{ params: { id: string } }>,
-	): Promise<APIHandlerResponse<false | RoutesResponseDto>> {
+	): Promise<APIHandlerResponse<RoutesResponseDto>> {
 		const id = Number(options.params.id);
 
 		const route = await this.routesService.findById(id);
 
-		return route
-			? {
-					payload: { data: route },
-					status: HTTPCode.OK,
-				}
-			: {
-					payload: { data: false },
-					status: HTTPCode.NOT_FOUND,
-				};
+		return {
+			payload: { data: route },
+			status: HTTPCode.OK,
+		};
 	}
 
 	/**
@@ -287,16 +262,6 @@ class RoutesController extends BaseController {
 	 *           application/json:
 	 *             schema:
 	 *               $ref: '#/components/schemas/Route'
-	 *       404:
-	 *         description: Route was not found
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               type: object
-	 *               properties:
-	 *                 data:
-	 *                   type: boolean
-	 *                   const: false
 	 */
 
 	public async patch(
@@ -304,7 +269,7 @@ class RoutesController extends BaseController {
 			body: RoutesRequestPatchDto;
 			params: { id: string };
 		}>,
-	): Promise<APIHandlerResponse<false | RoutesResponseDto>> {
+	): Promise<APIHandlerResponse<RoutesResponseDto>> {
 		const id = Number(options.params.id);
 		const { description, name } = options.body;
 
@@ -313,15 +278,10 @@ class RoutesController extends BaseController {
 			name,
 		});
 
-		return route
-			? {
-					payload: { data: route },
-					status: HTTPCode.OK,
-				}
-			: {
-					payload: { data: false },
-					status: HTTPCode.NOT_FOUND,
-				};
+		return {
+			payload: { data: route },
+			status: HTTPCode.OK,
+		};
 	}
 }
 

@@ -55,8 +55,15 @@ class RoutesService implements Service {
 		return { items };
 	}
 
-	public async findById(id: number): Promise<null | RoutesResponseDto> {
+	public async findById(id: number): Promise<RoutesResponseDto> {
 		const route = await this.routesRepository.findById(id);
+
+		if (!route) {
+			throw new RoutesError({
+				message: RoutesExceptionMessage.ROUTE_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
 
 		return route;
 	}
@@ -64,10 +71,8 @@ class RoutesService implements Service {
 	public async patch(
 		id: number,
 		payload: RoutesRequestPatchDto,
-	): Promise<null | RoutesResponseDto> {
-		if (!(await this.findById(id))) {
-			return null;
-		}
+	): Promise<RoutesResponseDto> {
+		await this.findById(id);
 
 		const updatedRoute = await this.routesRepository.patch(id, payload);
 
@@ -75,15 +80,13 @@ class RoutesService implements Service {
 	}
 
 	private async ensurePoisExist(pois: number[]): Promise<void> {
-		for (const poiId of pois) {
-			try {
-				await this.pointsOfInterestService.findById(poiId);
-			} catch {
-				throw new RoutesError({
-					message: RoutesExceptionMessage.POI_NOT_FOUND,
-					status: HTTPCode.CONFLICT,
-				});
-			}
+		const filteredPois = await this.pointsOfInterestService.findAll(pois);
+
+		if (pois.length !== filteredPois.items.length) {
+			throw new RoutesError({
+				message: RoutesExceptionMessage.POI_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
 		}
 	}
 }

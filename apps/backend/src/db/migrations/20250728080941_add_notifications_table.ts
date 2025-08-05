@@ -24,47 +24,50 @@ const EntityType = {
 } as const;
 
 async function down(knex: Knex): Promise<void> {
-	await knex.schema.dropTableIfExists(TABLE_NAME).then(async () => {
-		await knex.raw("DROP TYPE IF EXISTS notification_type");
-		await knex.raw("DROP TYPE IF EXISTS entity_type");
+	await knex.transaction(async (trx) => {
+		await trx.schema.dropTableIfExists(TABLE_NAME);
+		await trx.raw("DROP TYPE IF EXISTS notification_type");
+		await trx.raw("DROP TYPE IF EXISTS entity_type");
 	});
 }
 
 async function up(knex: Knex): Promise<void> {
-	await knex.raw(`
-		CREATE TYPE notification_type AS ENUM ('${Object.values(NotificationType).join("', '")}')
-	`);
+	await knex.transaction(async (trx) => {
+		await trx.raw(`
+			CREATE TYPE notification_type AS ENUM ('${Object.values(NotificationType).join("', '")}')
+		`);
 
-	await knex.raw(`
-		CREATE TYPE entity_type AS ENUM ('${Object.values(EntityType).join("', '")}')
-	`);
+		await trx.raw(`
+			CREATE TYPE entity_type AS ENUM ('${Object.values(EntityType).join("', '")}')
+		`);
 
-	await knex.schema.createTable(TABLE_NAME, (table) => {
-		table.increments(ColumnName.ID).primary();
-		table
-			.dateTime(ColumnName.CREATED_AT)
-			.notNullable()
-			.defaultTo(knex.fn.now());
-		table
-			.dateTime(ColumnName.UPDATED_AT)
-			.notNullable()
-			.defaultTo(knex.fn.now());
+		await trx.schema.createTable(TABLE_NAME, (table) => {
+			table.increments(ColumnName.ID).primary();
+			table
+				.dateTime(ColumnName.CREATED_AT)
+				.notNullable()
+				.defaultTo(trx.fn.now());
+			table
+				.dateTime(ColumnName.UPDATED_AT)
+				.notNullable()
+				.defaultTo(trx.fn.now());
 
-		table
-			.integer(ColumnName.USER_ID)
-			.unsigned()
-			.notNullable()
-			.references(ColumnName.ID)
-			.inTable(USERS_TABLE_NAME)
-			.onDelete("CASCADE");
+			table
+				.integer(ColumnName.USER_ID)
+				.unsigned()
+				.notNullable()
+				.references(ColumnName.ID)
+				.inTable(USERS_TABLE_NAME)
+				.onDelete("CASCADE");
 
-		table
-			.specificType(ColumnName.NOTIFICATION_TYPE, "notification_type")
-			.notNullable();
-		table.specificType(ColumnName.ENTITY_TYPE, "entity_type").notNullable();
-		table.integer(ColumnName.ENTITY_ID).notNullable();
-		table.text(ColumnName.CONTENT).notNullable();
-		table.dateTime(ColumnName.READ_AT).nullable();
+			table
+				.specificType(ColumnName.NOTIFICATION_TYPE, "notification_type")
+				.notNullable();
+			table.specificType(ColumnName.ENTITY_TYPE, "entity_type").notNullable();
+			table.integer(ColumnName.ENTITY_ID).notNullable();
+			table.text(ColumnName.CONTENT).notNullable();
+			table.dateTime(ColumnName.READ_AT).nullable();
+		});
 	});
 }
 

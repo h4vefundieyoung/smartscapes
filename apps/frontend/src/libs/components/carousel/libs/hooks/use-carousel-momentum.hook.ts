@@ -1,20 +1,15 @@
 import { useCallback } from "~/libs/hooks/hooks.js";
 
 import { CAROUSEL_CONFIG } from "../constants/constants.js";
-import { getCarouselParameters } from "../helpers/helpers.js";
 import { type CarouselReference } from "../types/types.js";
 
-type CarouselMomentumProperties = {
-	carouselReference: CarouselReference;
-};
-
-const useCarouselMomentum = ({
-	carouselReference,
-}: CarouselMomentumProperties): {
+const useCarouselMomentum = (
+	carouselReference: CarouselReference,
+): {
 	startMomentum: () => void;
 } => {
 	const animateMomentum = useCallback((): void => {
-		const { element } = getCarouselParameters(carouselReference.element);
+		const element = carouselReference.element.current;
 
 		if (!element) {
 			return;

@@ -15,7 +15,7 @@ const ColumnName = {
 
 type IdRecord = { id: number };
 
-const SUPERADMIN_EMAIL = "superadmin@mail.com";
+const SUPERADMIN_EMAIL = "superadmin@smart-scapes.com";
 
 async function down(knex: Knex): Promise<void> {
 	await knex(TableName.USERS).where(ColumnName.EMAIL, SUPERADMIN_EMAIL).del();
@@ -33,13 +33,15 @@ async function up(knex: Knex): Promise<void> {
 		}
 
 		await trx(TableName.USERS).insert({
+			created_at: trx.fn.now(),
 			email: SUPERADMIN_EMAIL,
-			first_name: "Super",
+			first_name: "Anna",
 			group_id: group.id,
-			last_name: "Admin",
+			last_name: "Smith",
 			password_hash:
-				"$2b$10$Vf0bjBcbQWPr5hMg069YpOey4ONpeAngfdMhIMDPXbeTt0e1kHh4q",
-			password_salt: "$2b$10$Vf0bjBcbQWPr5hMg069YpO",
+				"$2b$10$hT3tqQLq08s0i7rLgSQi/uU/4PODBIW0ZNH6qQfrYzPvYvtZZ1.zO",
+			password_salt: "$2b$10$hT3tqQLq08s0i7rLgSQi/u",
+			updated_at: trx.fn.now(),
 		});
 	});
 }

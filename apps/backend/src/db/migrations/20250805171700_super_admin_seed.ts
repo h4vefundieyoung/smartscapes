@@ -15,7 +15,7 @@ const ColumnName = {
 
 type IdRecord = { id: number };
 
-const SUPERADMIN_EMAIL = "superadmin@smart-scapes.com";
+const SUPERADMIN_EMAIL = "asmith@smart-scapes.com";
 
 async function down(knex: Knex): Promise<void> {
 	await knex(TableName.USERS).where(ColumnName.EMAIL, SUPERADMIN_EMAIL).del();

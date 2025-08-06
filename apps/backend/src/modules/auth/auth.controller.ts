@@ -199,6 +199,22 @@ class AuthController extends BaseController {
 		};
 	}
 
+	/**
+	 * @swagger
+	 * /auth/logout:
+	 *   post:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - Auth
+	 *     summary: Log out a user
+	 *     description: Logs out the currently authenticated user by invalidating the token.
+	 *     responses:
+	 *       200:
+	 *         description: Successfully logged out
+	 *       401:
+	 *         description: Unauthorized - Invalid or missing token
+	 */
 	public async logout({
 		token,
 	}: APIHandlerOptions): Promise<APIHandlerResponse> {

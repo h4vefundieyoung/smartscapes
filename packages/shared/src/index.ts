@@ -1,3 +1,4 @@
+export { METERS_IN_KM } from "./libs/constants/constants.js";
 export {
 	APIErrorType,
 	APIPath,
@@ -41,6 +42,8 @@ export {
 	pointOfInterestUpdateValidationSchema,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
+	type PointsOfInterestSearchQuery,
+	pointsOfInterestSearchQueryValidationSchema,
 } from "./modules/points-of-interest/points-of-interest.js";
 export {
 	RouteCategoriesApiPath,

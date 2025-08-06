@@ -160,7 +160,7 @@ class RoutesController extends BaseController {
 	 *                 data:
 	 *                   $ref: '#/components/schemas/GetMapBoxRouteResponseDto'
 	 */
-	private async constructRoute({
+	public async constructRoute({
 		body: { pointsOfInterest },
 		user,
 	}: APIHandlerOptions<{ body: ConstructRouteRequestDto }>): Promise<

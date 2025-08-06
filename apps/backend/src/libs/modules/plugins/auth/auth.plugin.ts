@@ -1,12 +1,16 @@
 import { type FastifyInstance, type FastifyRequest } from "fastify";
 import fastifyPlugin from "fastify-plugin";
 
+import { tokenService } from "~/libs/modules/token/token.js";
 import { type HTTPMethod } from "~/libs/types/types.js";
 import { AuthError } from "~/modules/auth/libs/exceptions/exceptions.js";
 import { userService } from "~/modules/users/users.js";
 
-import { tokenBlacklistService, tokenService } from "../../token/token.js";
-import { checkIsWhiteRoute } from "./libs/helpers/helpers.js";
+import {
+	checkIsWhiteRoute,
+	isTokenValid,
+	validationAuthHeader,
+} from "./libs/helpers/helpers.js";
 
 type PluginOptions = {
 	whiteRoutes: WhiteRoute[];
@@ -19,34 +23,6 @@ type TokenPayload = {
 type WhiteRoute = {
 	method: HTTPMethod;
 	path: string;
-};
-
-const validationAuthHeader = (authHeader: string | undefined): string => {
-	if (!authHeader?.startsWith("Bearer ")) {
-		throw new AuthError({
-			message: "Invalid or missing authrization header.",
-		});
-	}
-
-	const [, token] = authHeader.split(" ");
-
-	if (!token) {
-		throw new AuthError({
-			message: "Token not provided.",
-		});
-	}
-
-	return token;
-};
-
-const isTokenValid = (token: string): void => {
-	const isTokenBlacklisted = tokenBlacklistService.has(token);
-
-	if (isTokenBlacklisted) {
-		throw new AuthError({
-			message: "Token is revoked.",
-		});
-	}
 };
 
 const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {

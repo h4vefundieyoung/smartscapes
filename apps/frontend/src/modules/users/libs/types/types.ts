@@ -1,7 +1,7 @@
 export {
 	type UserAuthResponseDto,
 	type UserGetByIdItemResponseDto,
-	type UserProfileRequestDto,
+	type UserProfilePatchRequestDto,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
 	type UserSignUpRequestDto,

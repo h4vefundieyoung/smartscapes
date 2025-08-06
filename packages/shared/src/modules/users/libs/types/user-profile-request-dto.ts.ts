@@ -1,6 +1,6 @@
-type UserProfileRequestDto = {
+type UserProfilePatchRequestDto = {
 	firstName: string;
 	lastName: string;
 };
 
-export { type UserProfileRequestDto };
+export { type UserProfilePatchRequestDto };

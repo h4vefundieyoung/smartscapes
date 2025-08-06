@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { UserValidationMessage, UserValidationRule } from "../enums/enums.js";
-import { emailValidationSchema } from "./email.validation-schema.js";
+import { emailValidationSchema } from "./user-auth-email.validation-schema.js";
 
 const userSignIn = z.strictObject({
 	email: emailValidationSchema,

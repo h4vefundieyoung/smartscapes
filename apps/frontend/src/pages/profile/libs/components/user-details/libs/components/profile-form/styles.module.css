@@ -4,12 +4,12 @@
 	gap: 30px;
 }
 
-.form > button {
+.form-button {
 	width: 50%;
 }
 
 @media screen and (width <= 768px) {
-	.form > button {
+	.form-button {
 		width: 100%;
 	}
 }

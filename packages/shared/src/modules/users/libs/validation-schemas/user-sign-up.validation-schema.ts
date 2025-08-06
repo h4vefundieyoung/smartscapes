@@ -1,9 +1,8 @@
 import { z } from "zod";
 
+import { checkIsLatinLetter } from "../../../../libs/helpers/helpers.js";
 import { UserValidationMessage, UserValidationRule } from "../enums/enums.js";
-import { emailValidationSchema } from "./email.validation-schema.js";
-import { firstNameValidationSchema } from "./first-name.validation-schema.js";
-import { lastNameValidationSchema } from "./last-name.validation-schema.js";
+import { emailValidationSchema } from "./user-auth-email.validation-schema.js";
 
 const userSignUp = z
 	.strictObject({
@@ -20,8 +19,36 @@ const userSignUp = z
 				error: UserValidationMessage.PASSWORD_MAXIMUM_LENGTH,
 			}),
 		email: emailValidationSchema,
-		firstName: firstNameValidationSchema,
-		lastName: lastNameValidationSchema,
+		firstName: z
+			.string()
+			.trim()
+			.min(UserValidationRule.REQUIRED_STRING_MIN_LENGTH, {
+				error: UserValidationMessage.FIRST_NAME_REQUIRED,
+			})
+			.min(UserValidationRule.FIRST_NAME_MINIMUM_LENGTH, {
+				error: UserValidationMessage.FIRST_NAME_MINIMUM_LENGTH,
+			})
+			.max(UserValidationRule.MAX_LENGTH, {
+				error: UserValidationMessage.FIRST_NAME_MAXIMUM_LENGTH,
+			})
+			.refine(checkIsLatinLetter, {
+				message: UserValidationMessage.FIRST_NAME_INVALID,
+			}),
+		lastName: z
+			.string()
+			.trim()
+			.min(UserValidationRule.REQUIRED_STRING_MIN_LENGTH, {
+				error: UserValidationMessage.LAST_NAME_REQUIRED,
+			})
+			.min(UserValidationRule.LAST_NAME_MINIMUM_LENGTH, {
+				error: UserValidationMessage.LAST_NAME_MINIMUM_LENGTH,
+			})
+			.max(UserValidationRule.MAX_LENGTH, {
+				error: UserValidationMessage.LAST_NAME_MAXIMUM_LENGTH,
+			})
+			.refine(checkIsLatinLetter, {
+				message: UserValidationMessage.LAST_NAME_INVALID,
+			}),
 		password: z
 			.string()
 			.trim()

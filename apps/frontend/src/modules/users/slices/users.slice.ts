@@ -4,7 +4,7 @@ import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 import { type UserGetByIdItemResponseDto } from "~/modules/users/users.js";
 
-import { loadAll, patch } from "./actions.js";
+import { loadAll, patchProfile } from "./actions.js";
 
 type State = {
 	data: UserGetByIdItemResponseDto[];
@@ -28,17 +28,17 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(loadAll.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
 		});
-		builder.addCase(patch.fulfilled, (state, action) => {
+		builder.addCase(patchProfile.fulfilled, (state, action) => {
 			const updatedUser = action.payload.data;
 			const index = state.data.findIndex((user) => user.id === updatedUser.id);
 
 			state.data[index] = updatedUser;
 			state.dataStatus = DataStatus.FULFILLED;
 		});
-		builder.addCase(patch.pending, (state) => {
+		builder.addCase(patchProfile.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
 		});
-		builder.addCase(patch.rejected, (state) => {
+		builder.addCase(patchProfile.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
 		});
 	},

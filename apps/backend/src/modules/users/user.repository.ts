@@ -1,7 +1,7 @@
 import { type Repository } from "~/libs/types/types.js";
 import {
 	type UserPasswordDetails,
-	type UserProfileRequestDto,
+	type UserProfilePatchRequestDto,
 } from "~/modules/users/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
@@ -71,7 +71,7 @@ class UserRepository implements Repository {
 
 	public async patch(
 		id: number,
-		payload: UserProfileRequestDto,
+		payload: UserProfilePatchRequestDto,
 	): Promise<null | UserEntity> {
 		const { firstName, lastName } = payload;
 

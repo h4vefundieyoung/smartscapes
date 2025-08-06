@@ -1,5 +1,5 @@
 export {
-	userProfileValidationSchema,
+	userProfilePatchValidationSchema,
 	userSignInValidationSchema,
 	userSignUpValidationSchema,
 } from "@smartscapes/shared";

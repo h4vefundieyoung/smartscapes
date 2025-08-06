@@ -7,7 +7,7 @@ import { type APIResponse } from "~/libs/types/types.js";
 import { UsersApiPath } from "./libs/enums/enums.js";
 import {
 	type UserGetByIdItemResponseDto,
-	type UserProfileRequestDto,
+	type UserProfilePatchRequestDto,
 } from "./libs/types/types.js";
 
 type Constructor = {
@@ -35,10 +35,10 @@ class UserApi extends BaseHTTPApi {
 
 	public async patch(
 		id: string,
-		payload: UserProfileRequestDto,
+		payload: UserProfilePatchRequestDto,
 	): Promise<APIResponse<UserGetByIdItemResponseDto>> {
 		const response = await this.load<APIResponse<UserGetByIdItemResponseDto>>(
-			this.getFullEndpoint(UsersApiPath.BY_ID, { id }),
+			this.getFullEndpoint(UsersApiPath.$ID, { id }),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,

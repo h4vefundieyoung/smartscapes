@@ -4,7 +4,7 @@ import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import {
 	type UserGetByIdItemResponseDto,
-	type UserProfileRequestDto,
+	type UserProfilePatchRequestDto,
 } from "~/modules/users/users.js";
 
 import { name as sliceName } from "./users.slice.js";
@@ -19,9 +19,9 @@ const loadAll = createAsyncThunk<
 	return await userApi.getAll();
 });
 
-const patch = createAsyncThunk<
+const patchProfile = createAsyncThunk<
 	APIResponse<UserGetByIdItemResponseDto>,
-	{ id: string; payload: UserProfileRequestDto },
+	{ id: string; payload: UserProfilePatchRequestDto },
 	AsyncThunkConfig
 >(
 	`${sliceName}/patch`,
@@ -47,4 +47,4 @@ const patch = createAsyncThunk<
 	},
 );
 
-export { loadAll, patch };
+export { loadAll, patchProfile };

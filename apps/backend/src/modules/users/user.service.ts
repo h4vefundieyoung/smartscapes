@@ -9,7 +9,7 @@ import { UserError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserGetByIdItemResponseDto,
 	type UserPasswordDetails,
-	type UserProfileRequestDto,
+	type UserProfilePatchRequestDto,
 	type UserSignUpRequestDto,
 } from "./libs/types/types.js";
 
@@ -81,7 +81,7 @@ class UserService implements Service {
 
 	public async patch(
 		id: number,
-		payload: UserProfileRequestDto,
+		payload: UserProfilePatchRequestDto,
 	): Promise<UserGetByIdItemResponseDto> {
 		const item = await this.userRepository.patch(id, payload);
 

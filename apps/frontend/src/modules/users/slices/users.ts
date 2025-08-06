@@ -1,10 +1,10 @@
-import { loadAll, patch } from "./actions.js";
+import { loadAll, patchProfile } from "./actions.js";
 import { actions } from "./users.slice.js";
 
 const allActions = {
 	...actions,
 	loadAll,
-	patch,
+	patchProfile,
 };
 
 export { allActions as actions };

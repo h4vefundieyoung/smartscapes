@@ -10,7 +10,7 @@ import {
 import {
 	actions as userActions,
 	type UserAuthResponseDto,
-	type UserProfileRequestDto,
+	type UserProfilePatchRequestDto,
 } from "~/modules/users/users.js";
 
 import { ProfileForm } from "./libs/components/components.js";
@@ -24,10 +24,10 @@ const UserDetails = (): null | React.JSX.Element => {
 	);
 
 	const handleFormSubmit = useCallback(
-		(payload: UserProfileRequestDto): void => {
+		(payload: UserProfilePatchRequestDto): void => {
 			if (authenticatedUser) {
 				void dispatch(
-					userActions.patch({
+					userActions.patchProfile({
 						id: authenticatedUser.id.toString(),
 						payload,
 					}),

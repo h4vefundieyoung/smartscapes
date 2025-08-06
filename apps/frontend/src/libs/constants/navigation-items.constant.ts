@@ -14,7 +14,7 @@ const NAVIGATION_ITEMS: NavigationItem[] = [
 	},
 	{
 		href: AppRoute.PROFILE,
-		icon: "profile",
+		icon: "settings",
 		label: "User profile & settings",
 	},
 ];

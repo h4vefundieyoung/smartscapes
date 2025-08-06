@@ -1,3 +1,3 @@
-type IconName = "analytics" | "dashboard" | "profile";
+type IconName = "analytics" | "dashboard" | "settings";
 
 export { type IconName };

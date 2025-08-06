@@ -9,7 +9,7 @@ const ToastContainer = (): React.JSX.Element => {
 			autoClose={3000}
 			closeOnClick
 			draggable
-			hideProgressBar
+			hideProgressBar={false}
 			limit={3}
 			newestOnTop={false}
 			pauseOnFocusLoss

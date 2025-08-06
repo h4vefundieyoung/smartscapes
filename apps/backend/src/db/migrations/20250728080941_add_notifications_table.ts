@@ -27,7 +27,7 @@ async function down(knex: Knex): Promise<void> {
 	await knex.transaction(async (trx) => {
 		await trx.schema.dropTableIfExists(TABLE_NAME);
 		await trx.raw("DROP TYPE IF EXISTS notification_type");
-		await trx.raw("DROP TYPE IF EXISTS entity_type");
+		await trx.raw("DROP TYPE IF EXISTS notification_entity_type");
 	});
 }
 
@@ -62,7 +62,9 @@ async function up(knex: Knex): Promise<void> {
 			table
 				.specificType(ColumnName.NOTIFICATION_TYPE, "notification_type")
 				.notNullable();
-			table.specificType(ColumnName.ENTITY_TYPE, "entity_type").notNullable();
+			table
+				.specificType(ColumnName.ENTITY_TYPE, "notification_entity_type")
+				.notNullable();
 			table.integer(ColumnName.ENTITY_ID).notNullable();
 			table.text(ColumnName.CONTENT).notNullable();
 			table.dateTime(ColumnName.READ_AT).nullable();

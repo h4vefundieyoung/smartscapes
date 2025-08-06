@@ -1,8 +1,8 @@
-import type mapboxgl from "mapbox-gl";
+import { type default as mapboxgl } from "mapbox-gl";
 
 type MapContextValue = {
-	accessToken: string | null;
-	mapClient: typeof mapboxgl | null;
+	accessToken: null | string;
+	mapClient: null | typeof mapboxgl;
 };
 
 type MapProviderProperties = {

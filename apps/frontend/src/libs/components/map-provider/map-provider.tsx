@@ -20,8 +20,10 @@ const MapProvider = ({
 
 		(mapboxgl as typeof mapboxgl & { accessToken: string }).accessToken =
 			accessToken;
+
 		return mapboxgl;
 	}, [accessToken]);
+
 	const contextValue = useMemo<MapContextValue>(
 		() => ({
 			accessToken: accessToken || null,

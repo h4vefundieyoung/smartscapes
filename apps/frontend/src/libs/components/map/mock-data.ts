@@ -1,4 +1,4 @@
-import { type Marker } from "./libs/types/types.js";
+import { type LngLatLike } from "./libs/types/types.js";
 
 const COORDINATES = {
 	FEOFANIYA_LAKE: {
@@ -27,7 +27,7 @@ const COORDINATES = {
 	},
 } as const;
 
-const MOCK_MARKERS: Marker[] = [
+const MOCK_MARKERS: LngLatLike[] = [
 	[COORDINATES.SUP_KAYAK_CLUB.LONGITUDE, COORDINATES.SUP_KAYAK_CLUB.LATITUDE],
 	[COORDINATES.RIVER_GRILL.LONGITUDE, COORDINATES.RIVER_GRILL.LATITUDE],
 	[COORDINATES.FEOFANIYA_LAKE.LONGITUDE, COORDINATES.FEOFANIYA_LAKE.LATITUDE],

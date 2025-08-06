@@ -1,42 +1,43 @@
-import type {
-	Map as MapboxMap,
-	Marker as MapboxMarker,
-	ScaleControlOptions,
-} from "mapbox-gl";
-
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { useMap } from "~/libs/hooks/hooks.js";
 
 import {
-	type LocationData,
-	type LngLatLike,
-	type MapProperties,
-	type Marker,
-} from "./libs/types/types.js";
-import {
 	GEOLOCATE_CONTROLS_PARAMETERS,
 	MAP_PARAMETERS,
-	MARKER_PARAMETERS,
 	NAVIGATION_CONTROL_PARAMETERS,
 	SCALE_CONTROL_PARAMETERS,
 } from "./libs/consts/consts.js";
+import {
+	autoLocation,
+	cleanupMapInstance,
+	clearMarkersArray,
+	isContainerReady,
+	mapResize,
+	setupContainerRetry,
+} from "./libs/helpers/helpers.js";
+import {
+	createGeolocateControl,
+	createMap,
+	createMarker,
+	createNavigationControl,
+	createScaleControl,
+	setupGeolocateControlEvents,
+} from "./libs/modules/modules.js";
+import {
+	type LngLatLike,
+	type LocationData,
+	type MapboxGL,
+	type MapboxMap,
+	type MapboxMarker,
+	type MapProperties,
+} from "./libs/types/types.js";
+import {
+	isMapClientReady,
+	validateMarkerPosition,
+} from "./libs/validations/validations.js";
 import styles from "./styles.module.css";
-
-const COORDINATE_ARRAY_LENGTH = 2;
-const RESIZE_TIMEOUT = 100;
-
-const isValidMarkerPosition = (position: Marker): position is LngLatLike => {
-	return (
-		Array.isArray(position) &&
-		position.length === COORDINATE_ARRAY_LENGTH &&
-		position.every(
-			(coordinate) =>
-				typeof coordinate === "number" && Number.isFinite(coordinate),
-		)
-	);
-};
 
 const MapComponent = ({
 	center,
@@ -51,10 +52,6 @@ const MapComponent = ({
 	const mapInstance = useRef<MapboxMap | null>(null);
 	const [isMapReady, setIsMapReady] = useState<boolean>(false);
 	const markersReference = useRef<MapboxMarker[]>([]);
-
-	const handleMapLoad = useCallback((): void => {
-		setIsMapReady(true);
-	}, []);
 
 	const handleLocationFound = useCallback(
 		(location: LocationData): void => {
@@ -74,175 +71,82 @@ const MapComponent = ({
 		if (
 			!mapContainer.current ||
 			mapInstance.current ||
-			!accessToken ||
-			!mapClient
+			!isMapClientReady(accessToken, mapClient)
 		) {
 			return;
 		}
 
 		const container = mapContainer.current;
 
-		if (!container.offsetWidth || !container.offsetHeight) {
-			const retryTimeout = setTimeout(() => {
-				if (
-					container.offsetWidth &&
-					container.offsetHeight &&
-					!mapInstance.current
-				) {
-					// Container is ready for retry
-				}
-			}, MAP_PARAMETERS.CONTAINER_RETRY_DELAY);
-
-			return (): void => {
-				clearTimeout(retryTimeout);
-			};
-		}
-
-		const map = new mapClient.Map({
-			center: center || (MAP_PARAMETERS.DEFAULT_CENTER as LngLatLike),
-			container,
-			style: MAP_PARAMETERS.MAP_STYLE,
-			zoom: MAP_PARAMETERS.DEFAULT_ZOOM,
-		});
-
-		const navigationControl = new mapClient.NavigationControl({
-			showCompass: NAVIGATION_CONTROL_PARAMETERS.SHOW_COMPASS,
-			showZoom: NAVIGATION_CONTROL_PARAMETERS.SHOW_ZOOM,
-			visualizePitch: NAVIGATION_CONTROL_PARAMETERS.VISUALIZE_PITCH,
-		});
-
-		const scaleControlOptions: ScaleControlOptions = {
-			maxWidth: SCALE_CONTROL_PARAMETERS.MAX_WIDTH,
-		};
-
-		if (SCALE_CONTROL_PARAMETERS.UNIT) {
-			scaleControlOptions.unit = SCALE_CONTROL_PARAMETERS.UNIT;
-		}
-
-		const scaleControl = new mapClient.ScaleControl(scaleControlOptions);
-
-		const geolocateControl = new mapClient.GeolocateControl({
-			positionOptions: {
-				enableHighAccuracy:
-					GEOLOCATE_CONTROLS_PARAMETERS.POSITION_OPTIONS.ENABLE_HIGH_ACCURACY,
-			},
-			showAccuracyCircle: GEOLOCATE_CONTROLS_PARAMETERS.SHOW_ACCURACY_CIRCLE,
-			showUserHeading: GEOLOCATE_CONTROLS_PARAMETERS.SHOW_USER_HEADING,
-			trackUserLocation: GEOLOCATE_CONTROLS_PARAMETERS.TRACK_USER_LOCATION,
-		});
-
-		map.addControl(navigationControl, NAVIGATION_CONTROL_PARAMETERS.POSITION);
-		map.addControl(scaleControl, SCALE_CONTROL_PARAMETERS.POSITION);
-		map.addControl(geolocateControl, GEOLOCATE_CONTROLS_PARAMETERS.POSITION);
-
-		geolocateControl.on("geolocate", (event: GeolocationPosition) => {
-			handleLocationFound({
-				latitude: event.coords.latitude,
-				longitude: event.coords.longitude,
+		if (!isContainerReady(container)) {
+			return setupContainerRetry(container, () => {
+				setIsMapReady(false);
 			});
-		});
-
-		geolocateControl.on("error", (error: GeolocationPositionError) => {
-			onLocationError?.(error.message);
-		});
-
-		map.on("load", handleMapLoad);
-
-		if (!center) {
-			setTimeout(() => {
-				if (typeof geolocateControl.trigger === "function") {
-					geolocateControl.trigger();
-				} else {
-					map.flyTo({
-						center: MAP_PARAMETERS.DEFAULT_CENTER as LngLatLike,
-						zoom: MAP_PARAMETERS.DEFAULT_ZOOM,
-					});
-				}
-			}, MAP_PARAMETERS.BEFORE_LOAD_DELAY);
 		}
+
+		const map = createMap(mapClient as MapboxGL, container, center);
+
+		map.on("load", () => {
+			const navigationControl = createNavigationControl(mapClient as MapboxGL);
+			const scaleControl = createScaleControl(mapClient as MapboxGL);
+			const geolocateControl = createGeolocateControl(mapClient as MapboxGL);
+
+			map.addControl(navigationControl, NAVIGATION_CONTROL_PARAMETERS.POSITION);
+			map.addControl(scaleControl, SCALE_CONTROL_PARAMETERS.POSITION);
+			map.addControl(geolocateControl, GEOLOCATE_CONTROLS_PARAMETERS.POSITION);
+
+			setupGeolocateControlEvents(
+				geolocateControl,
+				handleLocationFound,
+				onLocationError,
+			);
+
+			setIsMapReady(true);
+			autoLocation(geolocateControl, map, center);
+		});
 
 		mapInstance.current = map;
 
 		return (): void => {
-			if (mapInstance.current) {
-				mapInstance.current.remove();
-			}
-			mapInstance.current = null;
-			setIsMapReady(false);
+			cleanupMapInstance(mapInstance, setIsMapReady);
 		};
-	}, [
-		center,
-		handleLocationFound,
-		handleMapLoad,
-		onLocationError,
-		accessToken,
-		mapClient,
-	]);
+	}, [center, handleLocationFound, onLocationError, accessToken, mapClient]);
 
 	useEffect(() => {
-		if (!isMapReady || !mapInstance.current || !accessToken || !mapClient) {
+		if (!mapInstance.current || !isMapReady || !mapClient) {
 			return;
 		}
 
-		for (const marker of markersReference.current) {
-			marker.remove();
-		}
+		clearMarkersArray(markersReference);
 
-		markersReference.current = [];
+		const currentMapInstance = mapInstance.current;
+		const currentMapClient = mapClient;
 
-		if (markers && markers.length > 0) {
-			for (const markerPosition of markers) {
-				if (!isValidMarkerPosition(markerPosition)) {
-					continue;
-				}
+		for (const markerPosition of markers.filter(
+			(marker): marker is LngLatLike => validateMarkerPosition(marker),
+		)) {
+			const marker = createMarker({
+				map: currentMapInstance,
+				mapClient: currentMapClient,
+				...(onMarkerClick && { onMarkerClick }),
+				position: markerPosition,
+			});
 
-				const marker = new mapClient.Marker({
-					color: MARKER_PARAMETERS.DEFAULT_COLOR,
-					scale: MARKER_PARAMETERS.DEFAULT_SCALE,
-				})
-					.setLngLat(markerPosition)
-					.addTo(mapInstance.current);
-
-				if (onMarkerClick) {
-					const element = marker.getElement();
-					element.style.cursor = "pointer";
-					element.addEventListener("click", () => {
-						onMarkerClick(markerPosition);
-					});
-				}
-
-				markersReference.current.push(marker);
-			}
+			markersReference.current.push(marker);
 		}
 
 		return (): void => {
-			for (const marker of markersReference.current) {
-				marker.remove();
-			}
-
-			markersReference.current = [];
+			clearMarkersArray(markersReference);
 		};
-	}, [isMapReady, markers, onMarkerClick, accessToken, mapClient]);
+	}, [isMapReady, markers, onMarkerClick, mapClient]);
 
 	useEffect(() => {
-		if (!mapContainer.current) {
+		if (!mapContainer.current || !mapInstance.current) {
 			return;
 		}
 
-		const resizeObserver = new ResizeObserver((): void => {
-			if (mapInstance.current) {
-				setTimeout(() => {
-					return mapInstance.current?.resize();
-				}, RESIZE_TIMEOUT);
-			}
-		});
-
-		resizeObserver.observe(mapContainer.current);
-
-		return (): void => {
-			resizeObserver.disconnect();
-		};
-	}, []);
+		return mapResize(mapContainer.current, mapInstance.current);
+	}, [isMapReady]);
 
 	return (
 		<div className={styles["map-container"]}>

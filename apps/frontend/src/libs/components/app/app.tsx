@@ -1,3 +1,5 @@
+import { type LngLatLike } from "mapbox-gl";
+
 import {
 	Button,
 	Header,
@@ -19,9 +21,6 @@ import { actions as userActions } from "~/modules/users/users.js";
 import { mockImages } from "../carousel/assets/mock-images/mock-images.js";
 import { Carousel } from "../carousel/carousel.js";
 import { MOCK_MARKERS } from "../map/mock-data.js";
-
-import { type LngLatLike } from "mapbox-gl";
-
 import styles from "./styles.module.css";
 
 const mockUserWithoutAvatar = {

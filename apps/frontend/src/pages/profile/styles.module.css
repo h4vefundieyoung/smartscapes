@@ -14,7 +14,7 @@
 	color: var(--color-text-strong);
 }
 
-.profile-container > button {
+.profile-container > [class*="button"] {
 	align-self: flex-start;
 	width: 100px;
 	line-height: 0.5;
@@ -23,18 +23,18 @@
 	border: 2px solid var(--color-text-error);
 }
 
-.profile-container > button:hover,
-.profile-container > button:focus,
-.profile-container > button:disabled {
+.profile-container > [class*="button"]:hover,
+.profile-container > [class*="button"]:focus,
+.profile-container > [class*="button"]:disabled {
 	background-color: var(--color-background-base);
 }
 
-.profile-container > button:focus::after {
+.profile-container > [class*="button"]:focus::after {
 	border: 2px solid var(--color-text-error);
 }
 
 @media (width <= 768px) {
-	.profile-container > button {
+	.profile-container > [class*="button"] {
 		align-self: center;
 	}
 

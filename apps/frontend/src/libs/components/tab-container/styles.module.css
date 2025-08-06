@@ -30,9 +30,16 @@
 }
 
 .tab-content {
+	display: flex;
 	flex: 1;
+	justify-content: center;
+	width: 100%;
 	background-color: var(--color-background-base);
 	border-radius: 15px;
+}
+
+.tab-content > [class*="loader"] {
+	margin: auto;
 }
 
 .first-tab-active .tab-content {

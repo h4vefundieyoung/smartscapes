@@ -21,33 +21,33 @@
 	gap: 16px;
 }
 
-.user-details-button-container > button:first-child,
-.user-details-button-container > button:last-child {
+.user-details-button-container > [class*="button"]:first-child,
+.user-details-button-container > [class*="button"]:last-child {
 	line-height: 0.5;
 }
 
-.user-details-button-container > button:first-child {
+.user-details-button-container > [class*="button"]:first-child {
 	color: var(--color-text-strong);
 	background-color: var(--color-background-base);
 	border: 2px solid var(--color-fill-brand-strong);
 }
 
-.user-details-button-container > button:last-child {
+.user-details-button-container > [class*="button"]:last-child {
 	color: var(--color-text-error);
 	background-color: var(--color-background-base);
 	border: 2px solid var(--color-text-error);
 }
 
-.user-details-button-container > button:first-child:hover,
-.user-details-button-container > button:first-child:focus,
-.user-details-button-container > button:first-child:disabled,
-.user-details-button-container > button:last-child:hover,
-.user-details-button-container > button:last-child:focus,
-.user-details-button-container > button:last-child:disabled {
+.user-details-button-container > [class*="button"]:first-child:hover,
+.user-details-button-container > [class*="button"]:first-child:focus,
+.user-details-button-container > [class*="button"]:first-child:disabled,
+.user-details-button-container > [class*="button"]:last-child:hover,
+.user-details-button-container > [class*="button"]:last-child:focus,
+.user-details-button-container > [class*="button"]:last-child:disabled {
 	background-color: var(--color-background-base);
 }
 
-.user-details-button-container > button:last-child:focus::after {
+.user-details-button-container > [class*="button"]:last-child:focus::after {
 	border: 2px solid var(--color-text-error);
 }
 

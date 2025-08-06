@@ -20,7 +20,7 @@ const Sidebar = ({ navigationItems }: Properties): React.JSX.Element => {
 	}, [setIsOpen]);
 
 	const handleKeyDown = useCallback(
-		(event: KeyboardEvent) => {
+		(event: KeyboardEvent | React.KeyboardEvent) => {
 			if (event.key === KeyboardKey.ESCAPE) {
 				setIsOpen(false);
 			}
@@ -39,7 +39,7 @@ const Sidebar = ({ navigationItems }: Properties): React.JSX.Element => {
 	return (
 		<div className={styles["container"]}>
 			<div className={styles["drawer"]} data-open={isOpen}>
-				<div className={styles["button-container"]}>
+				<div className={styles["header"]}>
 					<button
 						className={styles["close-button"]}
 						data-open={isOpen}
@@ -49,15 +49,17 @@ const Sidebar = ({ navigationItems }: Properties): React.JSX.Element => {
 						<span className={styles["burger-icon"]} />
 					</button>
 
-					<Link to={AppRoute.ROOT}>
-						<img
-							alt="SmartScapes"
-							className={styles["logo"]}
-							height="24"
-							src={smartScapesLogo}
-							width="136"
-						/>
-					</Link>
+					<div className={isOpen ? "" : "visually-hidden"}>
+						<Link to={AppRoute.ROOT}>
+							<img
+								alt="SmartScapes"
+								className={styles["logo-image"]}
+								height="24"
+								src={smartScapesLogo}
+								width="136"
+							/>
+						</Link>
+					</div>
 				</div>
 				<div className={styles["sidebar"]}>
 					<ul className={styles["navigation-list"]}>
@@ -73,8 +75,8 @@ const Sidebar = ({ navigationItems }: Properties): React.JSX.Element => {
 				</div>
 			</div>
 			{isOpen && (
-				<button
-					aria-label="Close sidebar"
+				<div
+					aria-hidden="true"
 					className={styles["backdrop"]}
 					onClick={handleClick}
 				/>

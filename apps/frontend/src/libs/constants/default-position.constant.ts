@@ -1,6 +1,0 @@
-const DEFAULT_POSITION = {
-	LATITUDE: 50.4501,
-	LONGITUDE: 30.5234,
-} as const;
-
-export { DEFAULT_POSITION };

@@ -1,0 +1,6 @@
+const MARKER_PARAMETERS = {
+	DEFAULT_COLOR: "hsl(162deg 91% 25% / 100%)",
+	DEFAULT_SCALE: 1,
+};
+
+export { MARKER_PARAMETERS };

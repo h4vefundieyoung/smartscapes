@@ -3,11 +3,13 @@ import { createRoot } from "react-dom/client";
 
 import {
 	App,
+	MapProvider,
 	RouterProvider,
 	StoreProvider,
 	ToastContainer,
 } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
+import { config } from "~/libs/modules/config/config.js";
 import { pwa } from "~/libs/modules/pwa/pwa.js";
 import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
@@ -20,33 +22,35 @@ pwa.register();
 createRoot(document.querySelector("#root") as HTMLElement).render(
 	<StrictMode>
 		<StoreProvider store={store.instance}>
-			<RouterProvider
-				routes={[
-					{
-						children: [
-							{
-								element: <Auth />,
-								path: AppRoute.SIGN_IN,
-							},
-							{
-								element: <Auth />,
-								path: AppRoute.SIGN_UP,
-							},
-						],
-						element: <App />,
-						path: AppRoute.APP,
-					},
-					{
-						element: <Landing />,
-						path: AppRoute.ROOT,
-					},
-					{
-						element: <NotFound />,
-						path: "*",
-					},
-				]}
-			/>
-			<ToastContainer />
+			<MapProvider accessToken={config.ENV.MAPBOX.ACCESS_TOKEN}>
+				<RouterProvider
+					routes={[
+						{
+							children: [
+								{
+									element: <Auth />,
+									path: AppRoute.SIGN_IN,
+								},
+								{
+									element: <Auth />,
+									path: AppRoute.SIGN_UP,
+								},
+							],
+							element: <App />,
+							path: AppRoute.APP,
+						},
+						{
+							element: <Landing />,
+							path: AppRoute.ROOT,
+						},
+						{
+							element: <NotFound />,
+							path: "*",
+						},
+					]}
+				/>
+				<ToastContainer />
+			</MapProvider>
 		</StoreProvider>
 	</StrictMode>,
 );

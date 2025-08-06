@@ -7,6 +7,7 @@ export { Input } from "./input/input.js";
 export { Link } from "./link/link.js";
 export { Loader } from "./loader/loader.js";
 export { Map } from "./map/map.js";
+export { MapProvider } from "./map-provider/map-provider.js";
 export { RouteCard } from "./route-card/route-card.js";
 export { RouterProvider } from "./router-provider/router-provider.js";
 export { Sidebar } from "./sidebar/sidebar.js";

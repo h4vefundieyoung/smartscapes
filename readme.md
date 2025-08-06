@@ -66,11 +66,12 @@ erDiagram
       varchar key
   }
 
-  points_of_interest {
+   points_of_interest {
     int id PK
     dateTime created_at
     dateTime updated_at
     varchar name
+    geometry location
   }
 
   route_categories {
@@ -80,9 +81,22 @@ erDiagram
       varchar name
   }
 
+  notifications {
+      int id PK
+      timestamp created_at
+      timestamp updated_at
+      int user_id FK
+      enum notification_type
+      enum entity_type
+      int entity_id
+      text content
+      timestamp read_at
+  }
+
   users }|--|| groups : group_id
   groups ||--|{ groups_to_permissions : group_id
   permissions ||--|{ groups_to_permissions : permission_id
+  users ||--o{ notifications : user_id
 ```
 
 ## 5. Architecture

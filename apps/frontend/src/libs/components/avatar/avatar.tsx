@@ -1,23 +1,21 @@
-import { type JSX } from "react";
-
+import { getUserInitials } from "~/libs/helpers/helpers.js";
 import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
-import { getUserInitials } from "./libs/helpers/helpers.js";
 import styles from "./styles.module.css";
 
 const DEFAULT_AVATAR_SIZE = 32;
 
 type Properties = {
-	hidden?: boolean;
 	size?: number;
-	user: UserAuthResponseDto & { avatarUrl?: null | string };
+	user: UserAuthResponseDto;
 };
 
 const Avatar = ({
 	size = DEFAULT_AVATAR_SIZE,
 	user,
-}: Properties): JSX.Element => {
-	const { avatarUrl, firstName, lastName } = user;
+}: Properties): React.JSX.Element => {
+	const { firstName, lastName } = user;
+	const avatarUrl = "avatarUrl" in user ? user.avatarUrl : null;
 	const hasAvatar = Boolean(avatarUrl);
 
 	return (

@@ -15,6 +15,7 @@ import { actions as authActions } from "~/modules/auth/auth.js";
 
 import { Avatar, Button, Link } from "../components.js";
 import { UserDropdown } from "../user-dropdown/user-dropdown.js";
+import DropdownArrow from "./dropdown-arrow.svg?react";
 import { type User } from "./libs/types/types.js";
 import styles from "./styles.module.css";
 
@@ -105,18 +106,12 @@ const Header = ({ user }: Properties): JSX.Element => {
 						<div className={styles["name"]}>
 							{user?.firstName} {user?.lastName}
 						</div>
-						<svg
+						<DropdownArrow
 							className={combineClassNames(
 								styles["dropdown-arrow"],
 								isDropdownOpen && styles["open"],
 							)}
-							fill="currentColor"
-							height="1em"
-							viewBox="0 0 24 24"
-							width="1em"
-						>
-							<path d="M7 10l5 5 5-5z" />
-						</svg>
+						/>
 					</div>
 					{isDropdownOpen && <UserDropdown onLogout={handleLogout} />}
 				</div>

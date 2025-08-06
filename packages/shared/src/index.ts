@@ -28,6 +28,15 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
 export {
+	NotificationApiPath,
+	type NotificationCreateRequestDto,
+	notificationCreateValidationSchema,
+	NotificationEntityType,
+	NotificationExceptionMessage,
+	type NotificationGetAllItemResponseDto,
+	NotificationType,
+} from "./modules/notifications/notifications.js";
+export {
 	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
 	type PointsOfInterestRequestDto,

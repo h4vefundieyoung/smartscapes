@@ -1,20 +1,37 @@
-import { Navigate, Outlet } from "react-router";
+import { Navigate } from "react-router";
 
 import { AppRoute } from "~/libs/enums/app-route.enum.js";
+import { DataStatus } from "~/libs/enums/data-status.enum.js";
 import { useAppSelector } from "~/libs/hooks/hooks.js";
 
-const ProtectedRoute = (): React.JSX.Element => {
+import { Loader } from "../components.js";
+import styles from "./styles.module.css";
+
+type Properties = {
+	children: React.JSX.Element;
+};
+
+const ProtectedRoute = ({ children }: Properties): React.JSX.Element => {
 	const authenticatedUser = useAppSelector(
 		({ auth }) => auth.authenticatedUser,
 	);
+	const authDataStatus = useAppSelector(({ auth }) => auth.dataStatus);
+	const isLoading =
+		authDataStatus === DataStatus.PENDING || authDataStatus === DataStatus.IDLE;
 
-	const isAuthenticated = Boolean(authenticatedUser);
+	if (isLoading) {
+		return (
+			<div className={styles["loader-container"]}>
+				<Loader />
+			</div>
+		);
+	}
 
-	return isAuthenticated ? (
-		<Outlet />
-	) : (
-		<Navigate replace to={AppRoute.SIGN_IN} />
-	);
+	if (!authenticatedUser) {
+		return <Navigate replace to={AppRoute.SIGN_IN} />;
+	}
+
+	return <>{children}</>;
 };
 
 export { ProtectedRoute };

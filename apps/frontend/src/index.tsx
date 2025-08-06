@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 
 import {
 	App,
+	Dashboard,
 	ProtectedRoute,
 	RouterProvider,
 	StoreProvider,
@@ -34,7 +35,11 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 								path: AppRoute.SIGN_UP,
 							},
 							{
-								element: <ProtectedRoute />,
+								element: (
+									<ProtectedRoute>
+										<Dashboard />
+									</ProtectedRoute>
+								),
 								path: AppRoute.APP,
 							},
 						],

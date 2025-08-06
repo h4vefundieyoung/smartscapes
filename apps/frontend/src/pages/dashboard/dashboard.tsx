@@ -2,20 +2,40 @@ import {
 	Button,
 	Header,
 	Loader,
+	Select,
 	Sidebar,
 } from "~/libs/components/components.js";
+import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
 import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import { useAppSelector } from "~/libs/hooks/hooks.js";
+import { useAppForm, useAppSelector } from "~/libs/hooks/hooks.js";
 
 import { mockImages } from "../../libs/components/carousel/assets/mock-images/mock-images.js";
 import { Carousel } from "../../libs/components/carousel/carousel.js";
 import styles from "./styles.module.css";
 
+type FormValues = {
+	multiColors: string[];
+	singleColor: null | string;
+};
+
 const Dashboard = (): React.JSX.Element => {
 	const authenticatedUser = useAppSelector(
 		({ auth }) => auth.authenticatedUser,
 	);
+
+	const colorOptions: SelectOption<string>[] = [
+		{ label: "Red", value: "red" },
+		{ label: "Green", value: "green" },
+		{ label: "Blue", value: "blue" },
+	];
+
+	const { control } = useAppForm<FormValues>({
+		defaultValues: {
+			multiColors: [],
+			singleColor: null,
+		},
+	});
 
 	return (
 		<div className={styles["container"]}>
@@ -33,6 +53,21 @@ const Dashboard = (): React.JSX.Element => {
 				</div>
 				<div className={styles["carousel-container"]}>
 					<Carousel images={mockImages} />
+				</div>
+				<div className={styles["select-container"]}>
+					<Select
+						control={control}
+						label="Single select"
+						name="singleColor"
+						options={colorOptions}
+					/>
+					<Select
+						control={control}
+						isMulti
+						label="Multi select"
+						name="multiColors"
+						options={colorOptions}
+					/>
 				</div>
 			</div>
 		</div>

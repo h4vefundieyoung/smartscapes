@@ -9,6 +9,7 @@ export { Loader } from "./loader/loader.js";
 export { ProtectedRoute } from "./protected-route/protected-route.js";
 export { RouteCard } from "./route-card/route-card.js";
 export { RouterProvider } from "./router-provider/router-provider.js";
+export { Select } from "./select/select.js";
 export { Sidebar } from "./sidebar/sidebar.js";
 export { ToastContainer } from "./toast-container/toast-container.js";
 export { Provider as StoreProvider } from "react-redux";

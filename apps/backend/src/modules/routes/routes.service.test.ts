@@ -257,7 +257,7 @@ describe("RoutesService", () => {
 		};
 		const routesService = new RoutesService(
 			routesRepository as RoutesRepository,
-			pointsOfInterestService as PointsOfInterestService,
+			pointsOfInterestService as unknown as PointsOfInterestService,
 		);
 
 		await assert.rejects(

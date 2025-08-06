@@ -1,15 +1,18 @@
 .user-details-container {
 	display: flex;
-	flex: 0 1 33.333%;
 	flex-direction: column;
-	height: 100%;
+	align-items: center;
+	width: 33.333%;
+	padding: 16px;
+	margin: 0 auto;
 }
 
 .user-details-avatar {
 	display: flex;
 	gap: 16px;
 	align-items: center;
-	margin: 16px 0;
+	width: 100%;
+	padding: 16px 0;
 }
 
 .user-details-button-container {

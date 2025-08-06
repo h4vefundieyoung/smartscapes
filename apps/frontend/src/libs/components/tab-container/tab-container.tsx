@@ -1,54 +1,45 @@
 import { combineClassNames } from "~/libs/helpers/helpers.js";
-import { useState } from "~/libs/hooks/hooks.js";
 
-import { type TabContainerProperties } from "./libs/types/types.js";
+import { useNavigationTab } from "./libs/hooks/hooks.js";
 import styles from "./styles.module.css";
 
+type TabContainerProperties = {
+	tabsData: {
+		element: React.JSX.Element;
+		id: string;
+		label: string;
+	}[];
+};
+
 const TabContainer = ({
-	activeTabClassName,
-	containerClassName,
-	contentClassName,
-	defaultTabId,
-	navigationClassName,
-	tabClassName,
-	tabs,
+	tabsData,
 }: TabContainerProperties): React.JSX.Element => {
-	const [activeTab, setActiveTab] = useState<string>(() => {
-		if (defaultTabId && tabs.some((tab) => tab.id === defaultTabId)) {
-			return defaultTabId;
-		}
+	const defaultTabId = tabsData[0]?.id ?? "";
+	const { activeTabId, setTabInUrl } = useNavigationTab(defaultTabId);
 
-		return tabs[0]?.id ?? "";
-	});
-
-	const activeTabData = tabs.find((tab) => tab.id === activeTab);
+	const activeTabElement = tabsData.find(
+		(tab) => tab.id === activeTabId,
+	)?.element;
 
 	const handleTabClick = (tabId: string): (() => void) => {
 		return () => {
-			setActiveTab(tabId);
+			setTabInUrl(tabId);
 		};
 	};
 
-	const containerClass = combineClassNames(
-		styles["container"],
-		containerClassName,
-	);
-
-	const navigationClass = combineClassNames(
-		styles["navigation"],
-		navigationClassName,
-	);
-
-	const tabClass = combineClassNames(styles["tab"], tabClassName);
-
 	return (
-		<div className={containerClass}>
-			<nav className={navigationClass}>
-				{tabs.map((tab) => (
+		<div
+			className={combineClassNames(
+				styles["tab-container"],
+				activeTabId === defaultTabId && styles["first-tab-active"],
+			)}
+		>
+			<nav className={styles["tab-navigation"]}>
+				{tabsData.map((tab) => (
 					<button
 						className={combineClassNames(
-							tabClass,
-							activeTab === tab.id && activeTabClassName,
+							styles["tab-item"],
+							activeTabId === tab.id && styles["active-tab-item"],
 						)}
 						key={tab.id}
 						onClick={handleTabClick(tab.id)}
@@ -58,9 +49,7 @@ const TabContainer = ({
 					</button>
 				))}
 			</nav>
-			<div className={contentClassName}>
-				{activeTabData ? activeTabData.element : <></>}
-			</div>
+			<div className={styles["tab-content"]}>{activeTabElement}</div>
 		</div>
 	);
 };

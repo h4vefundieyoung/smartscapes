@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.11.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.10.0...backend-v1.11.0) (2025-08-06)
+
+
+### Features
+
+* **backend:** add security to swagger documentation of notifications ss-233 ([#234](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/234)) ([923e93e](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/923e93e1b2194455590794f45fe1ce9ff87bf598))
+
+## [1.10.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.9.0...backend-v1.10.0) (2025-08-06)
+
+
+### Features
+
+* **backend:** add super admin seed ss-187 ([#212](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/212)) ([15457e0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/15457e0521ea078d179bd0471402713f92b9b751))
+
+## [1.9.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.8.2...backend-v1.9.0) (2025-08-06)
+
+
+### Features
+
+* **backend:** search closest points to authenticated user ss-188 ([#198](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/198)) ([144e41c](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/144e41c87e7f4fbf313cac3fc2ac6c53464949e9))
+
+
+### Bug Fixes
+
+* **backend:** introduce swagger doc for dto in notifications ss-229 ([#230](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/230)) ([20f10d8](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/20f10d8877c683e15920ca354b5accfe114c9f9f))
+
 ## [1.8.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.8.1...backend-v1.8.2) (2025-08-06)
 
 

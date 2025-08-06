@@ -100,6 +100,7 @@ describe("AuthService", () => {
 		};
 
 		const mockPasswordDetails = {
+			firstName: "John",
 			group: {
 				id: group_mock.id,
 				key: group_mock.key,
@@ -109,6 +110,7 @@ describe("AuthService", () => {
 			groupId: group_mock.id,
 			id: 1,
 			key: group_mock.key,
+			lastName: "Doe",
 			passwordHash: "hashedPassword",
 			passwordSalt: "someSalt",
 		};
@@ -117,6 +119,7 @@ describe("AuthService", () => {
 			token: mockToken,
 			user: {
 				email: signInRequestDto.email,
+				firstName: mockPasswordDetails.firstName,
 				group: {
 					id: mockPasswordDetails.group.id,
 					key: mockPasswordDetails.group.key,
@@ -125,6 +128,7 @@ describe("AuthService", () => {
 				},
 				groupId: 2,
 				id: mockPasswordDetails.id,
+				lastName: mockPasswordDetails.lastName,
 			},
 		};
 

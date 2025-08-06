@@ -62,9 +62,11 @@ class AuthService {
 			token,
 			user: {
 				email,
+				firstName: user.firstName,
 				group: user.group,
 				groupId: user.groupId,
 				id: user.id,
+				lastName: user.lastName,
 			},
 		};
 	}

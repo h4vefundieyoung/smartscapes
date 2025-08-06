@@ -1,4 +1,5 @@
 type UserPasswordDetails = {
+	firstName: string;
 	group: {
 		id: number;
 		key: string;
@@ -11,6 +12,7 @@ type UserPasswordDetails = {
 	};
 	groupId: number;
 	id: number;
+	lastName: string;
 	passwordHash: string;
 	passwordSalt: string;
 };

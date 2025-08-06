@@ -106,13 +106,15 @@ class UserRepository implements Repository {
 		return this.mapUserModelToDto(user);
 	}
 
-public async findPasswordDetails(
+	public async findPasswordDetails(
 		email: string,
 	): Promise<null | UserPasswordDetails> {
 		const user = await this.userModel
 			.query()
 			.select(
 				"users.id",
+				"users.first_name",
+				"users.last_name",
 				"users.password_hash as passwordHash",
 				"users.password_salt as passwordSalt",
 				"users.group_id as groupId",
@@ -126,6 +128,7 @@ public async findPasswordDetails(
 		}
 
 		return {
+			firstName: user.firstName,
 			group: {
 				id: user.group.id,
 				key: user.group.key,
@@ -138,6 +141,7 @@ public async findPasswordDetails(
 			},
 			groupId: user.groupId,
 			id: user.id,
+			lastName: user.lastName,
 			passwordHash: user.passwordHash,
 			passwordSalt: user.passwordSalt,
 		};

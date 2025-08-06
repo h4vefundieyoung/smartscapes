@@ -2,12 +2,13 @@
 	display: flex;
 	flex: 1;
 	flex-direction: column;
-	padding: 30px;
+	padding: 26px;
 	background-color: var(--color-fill-grey);
 }
 
 .profile-title {
 	align-self: flex-start;
+	margin: 0;
 	font-size: var(--font-size-h3);
 	font-weight: var(--font-weight-semibold);
 	color: var(--color-text-strong);
@@ -38,6 +39,6 @@
 	}
 
 	.profile-container {
-		padding: 16px;
+		padding: 24px;
 	}
 }

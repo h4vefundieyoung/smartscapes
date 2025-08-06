@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.14.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.13.0...v1.14.0) (2025-08-06)
+
+
+### Features
+
+* **backend:** add security to swagger documentation of notifications ss-233 ([#234](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/234)) ([923e93e](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/923e93e1b2194455590794f45fe1ce9ff87bf598))
+* **frontend:** frontend protected routes ss-24 ([#199](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/199)) ([ad96806](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/ad96806486f6168a4f49d9807544107c99e5f37e))
+
+## [1.13.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.12.0...v1.13.0) (2025-08-06)
+
+
+### Features
+
+* **backend:** add super admin seed ss-187 ([#212](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/212)) ([15457e0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/15457e0521ea078d179bd0471402713f92b9b751))
+
+## [1.12.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.11.2...v1.12.0) (2025-08-06)
+
+
+### Features
+
+* **backend:** search closest points to authenticated user ss-188 ([#198](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/198)) ([144e41c](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/144e41c87e7f4fbf313cac3fc2ac6c53464949e9))
+* **frontend:** toast notification smoother show ss-181 ([#191](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/191)) ([3328e0c](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/3328e0c29f1ef63efb20c08dfd04982439c0c924))
+
+
+### Bug Fixes
+
+* **backend:** introduce swagger doc for dto in notifications ss-229 ([#230](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/230)) ([20f10d8](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/20f10d8877c683e15920ca354b5accfe114c9f9f))
+
 ## [1.11.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.11.1...v1.11.2) (2025-08-06)
 
 

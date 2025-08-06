@@ -34,16 +34,6 @@ body {
 	clip-path: inset(100%);
 }
 
-button {
-	cursor: pointer;
-	background: none;
-	border: none;
-}
-
-h1 {
-	margin: 0;
-}
-
 ::-webkit-scrollbar {
 	height: 16px;
 }

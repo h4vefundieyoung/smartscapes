@@ -14,7 +14,6 @@ type Properties = {
 };
 
 const Avatar = ({
-	hidden = false,
 	size = DEFAULT_AVATAR_SIZE,
 	user,
 }: Properties): JSX.Element => {
@@ -26,11 +25,11 @@ const Avatar = ({
 			className={styles["avatar"]}
 			style={{ "--avatar-size": `${String(size)}px` } as React.CSSProperties}
 		>
-			{hasAvatar && !hidden ? (
+			{hasAvatar ? (
 				<img
 					alt="User Avatar"
 					className={styles["avatar-image"]}
-					src={avatarUrl ?? ""}
+					src={avatarUrl as string}
 				/>
 			) : (
 				<span className={styles["fallback"]}>

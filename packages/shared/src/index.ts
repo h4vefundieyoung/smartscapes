@@ -1,3 +1,4 @@
+export { METERS_IN_KM } from "./libs/constants/constants.js";
 export {
 	APIErrorType,
 	APIPath,
@@ -34,10 +35,21 @@ export {
 	GroupKey,
 } from "./modules/groups/groups.js";
 export {
+	NotificationApiPath,
+	type NotificationCreateRequestDto,
+	notificationCreateValidationSchema,
+	NotificationEntityType,
+	NotificationExceptionMessage,
+	type NotificationGetAllItemResponseDto,
+	NotificationType,
+} from "./modules/notifications/notifications.js";
+export {
 	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
+	type PointsOfInterestSearchQuery,
+	pointsOfInterestSearchQueryValidationSchema,
 } from "./modules/points-of-interest/points-of-interest.js";
 export {
 	RouteCategoriesApiPath,

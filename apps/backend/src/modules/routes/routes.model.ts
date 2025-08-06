@@ -28,6 +28,10 @@ class RoutesModel extends Model {
 	public description!: string;
 	public id!: number;
 	public name!: string;
+	public pois!: {
+		id: number;
+		visitOrder: number;
+	}[];
 }
 
 export { RoutesModel };

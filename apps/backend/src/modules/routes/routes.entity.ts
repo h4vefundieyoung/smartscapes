@@ -1,6 +1,6 @@
 import { type Entity } from "~/libs/types/types.js";
 
-class RouteEntity implements Entity {
+class RoutesEntity implements Entity {
 	private description: string;
 	private id: null | number;
 	private name: string;
@@ -37,8 +37,8 @@ class RouteEntity implements Entity {
 			id: number;
 			visitOrder: number;
 		}[];
-	}): RouteEntity {
-		return new RouteEntity({
+	}): RoutesEntity {
+		return new RoutesEntity({
 			description: data.description,
 			id: data.id,
 			name: data.name,
@@ -57,8 +57,8 @@ class RouteEntity implements Entity {
 			id: number;
 			visitOrder: number;
 		}[];
-	}): RouteEntity {
-		return new RouteEntity({
+	}): RoutesEntity {
+		return new RoutesEntity({
 			description,
 			id: null,
 			name,
@@ -99,4 +99,4 @@ class RouteEntity implements Entity {
 	}
 }
 
-export { RouteEntity };
+export { RoutesEntity };

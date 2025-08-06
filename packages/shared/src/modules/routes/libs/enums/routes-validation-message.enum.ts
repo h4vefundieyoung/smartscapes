@@ -1,4 +1,4 @@
-import { RoutesValidationRule } from "./routes-validation-rule.js";
+import { RoutesValidationRule } from "./routes-validation-rule.enum.js";
 
 const RoutesValidationMessage = {
 	DESCRIPTION_MAXIMUM_LENGTH: `Description more than ${String(RoutesValidationRule.NAME_MAXIMUM_LENGTH)} characters.`,

@@ -10,7 +10,7 @@ import { type CollectionResult, type Service } from "~/libs/types/types.js";
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
-import { RouteEntity } from "./routes.entity.js";
+import { RoutesEntity } from "./routes.entity.js";
 import { type RoutesRepository } from "./routes.repository.js";
 
 class RoutesService implements Service {
@@ -38,49 +38,69 @@ class RoutesService implements Service {
 			})),
 		};
 
-		const routeEntity = RouteEntity.initializeNew(formattedPayload);
+		const routeEntity = RoutesEntity.initializeNew(formattedPayload);
 
 		const route = await this.routesRepository.create(routeEntity);
 
-		return route;
+		return route.toObject();
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		return await this.routesRepository.delete(id);
-	}
+		const isDeleted = await this.routesRepository.delete(id);
 
-	public async findAll(): Promise<CollectionResult<RoutesResponseDto>> {
-		const items = await this.routesRepository.findAll();
-
-		return { items };
-	}
-
-	public async findById(id: number): Promise<RoutesResponseDto> {
-		const route = await this.routesRepository.findById(id);
-
-		if (!route) {
+		if (!isDeleted) {
 			throw new RoutesError({
 				message: RoutesExceptionMessage.ROUTE_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
-		return route;
+		return isDeleted;
+	}
+
+	public async findAll(): Promise<CollectionResult<RoutesResponseDto>> {
+		const items = await this.routesRepository.findAll();
+
+		return {
+			items: items.map((item) => {
+				return item.toObject();
+			}),
+		};
+	}
+
+	public async findById(id: number): Promise<RoutesResponseDto> {
+		const item = await this.routesRepository.findById(id);
+
+		if (!item) {
+			throw new RoutesError({
+				message: RoutesExceptionMessage.ROUTE_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return item.toObject();
 	}
 
 	public async patch(
 		id: number,
 		payload: RoutesRequestPatchDto,
 	): Promise<RoutesResponseDto> {
-		await this.findById(id);
+		const item = await this.routesRepository.patch(id, payload);
 
-		const updatedRoute = await this.routesRepository.patch(id, payload);
+		if (!item) {
+			throw new RoutesError({
+				message: RoutesExceptionMessage.ROUTE_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
 
-		return updatedRoute;
+		return item.toObject();
 	}
 
 	private async ensurePoisExist(pois: number[]): Promise<void> {
-		const filteredPois = await this.pointsOfInterestService.findAll(pois);
+		const filteredPois = await this.pointsOfInterestService.findAll({
+			ids: pois,
+		});
 
 		if (pois.length !== filteredPois.items.length) {
 			throw new RoutesError({

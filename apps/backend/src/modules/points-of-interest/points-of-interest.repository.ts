@@ -2,6 +2,8 @@ import { type Repository } from "~/libs/types/types.js";
 import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
 import { type PointsOfInterestModel } from "~/modules/points-of-interest/points-of-interest.model.js";
 
+import { type PointsOfInterestFindAllOptions } from "./libs/types/type.js";
+
 class PointsOfInterestRepository implements Repository {
 	private pointsOfInterestModel: typeof PointsOfInterestModel;
 
@@ -43,7 +45,9 @@ class PointsOfInterestRepository implements Repository {
 		return Boolean(deletedCount);
 	}
 
-	public async findAll(): Promise<PointsOfInterestEntity[]> {
+	public async findAll(
+		options: PointsOfInterestFindAllOptions = {},
+	): Promise<PointsOfInterestEntity[]> {
 		const pointsOfInterest = await this.pointsOfInterestModel
 			.query()
 			.select("id", "name", "created_at", "updated_at")
@@ -52,6 +56,11 @@ class PointsOfInterestRepository implements Repository {
 					"ST_AsGeoJSON(location)::json as location",
 				),
 			)
+			.modify((builder) => {
+				if (options.ids) {
+					builder.whereIn("id", options.ids);
+				}
+			})
 			.execute();
 
 		return pointsOfInterest.map((point) =>

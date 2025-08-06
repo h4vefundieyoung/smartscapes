@@ -1,12 +1,8 @@
-import {
-	type RoutesRequestPatchDto,
-	type RoutesResponseDto,
-} from "@smartscapes/shared";
-import { type QueryBuilder } from "objection";
+import { type RoutesRequestPatchDto } from "@smartscapes/shared";
 
 import { type Repository } from "~/libs/types/types.js";
 
-import { type RouteEntity } from "./routes.entity.js";
+import { RoutesEntity } from "./routes.entity.js";
 import { type RoutesModel } from "./routes.model.js";
 
 class RoutesRepository implements Repository {
@@ -16,19 +12,15 @@ class RoutesRepository implements Repository {
 		this.routesModel = routesModel;
 	}
 
-	public async create(entity: RouteEntity): Promise<RoutesResponseDto> {
+	public async create(entity: RoutesEntity): Promise<RoutesEntity> {
 		const insertData = entity.toNewObject();
 
-		const result = (await this.routesModel
+		const result = await this.routesModel
 			.query()
 			.insertGraph(insertData, { relate: ["pois"] })
-			.returning([
-				"id",
-				"name",
-				"description",
-			])) as unknown as RoutesResponseDto;
+			.returning(["id", "name", "description"]);
 
-		return result;
+		return RoutesEntity.initialize(result);
 	}
 
 	public async delete(id: number): Promise<boolean> {
@@ -37,46 +29,60 @@ class RoutesRepository implements Repository {
 		return Boolean(isDeleted);
 	}
 
-	public async findAll(): Promise<RoutesResponseDto[]> {
-		const routesWithPois = await this.queryRoute();
+	public async findAll(): Promise<RoutesEntity[]> {
+		const routes = await this.routesModel
+			.query()
+			.withGraphFetched("pois(selectPoiIdOrder)")
+			.modifiers({
+				selectPoiIdOrder(builder) {
+					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
+				},
+			})
+			.select("routes.id", "routes.name", "routes.description");
 
-		return routesWithPois as unknown as RoutesResponseDto[];
+		return routes.map((point) => RoutesEntity.initialize(point));
 	}
 
-	public async findById(id: number): Promise<null | RoutesResponseDto> {
-		const route = (await this.queryRoute()
+	public async findById(id: number): Promise<null | RoutesEntity> {
+		const route = await this.routesModel
+			.query()
+			.withGraphFetched("pois(selectPoiIdOrder)")
+			.modifiers({
+				selectPoiIdOrder(builder) {
+					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
+				},
+			})
+			.select("routes.id", "routes.name", "routes.description")
 			.where("routes.id", id)
-			.first()) as unknown as RoutesResponseDto | undefined;
+			.first();
 
 		if (!route) {
 			return null;
 		}
 
-		return route;
+		return RoutesEntity.initialize(route);
 	}
 
 	public async patch(
 		id: number,
 		entity: RoutesRequestPatchDto,
-	): Promise<RoutesResponseDto> {
-		await this.routesModel
+	): Promise<null | RoutesEntity> {
+		const route = await this.routesModel
 			.query()
 			.patchAndFetchById(id, entity as Partial<RoutesModel>)
-			.execute();
-
-		return (await this.findById(id)) as RoutesResponseDto;
-	}
-
-	private queryRoute(): QueryBuilder<RoutesModel, RoutesModel[]> {
-		return this.routesModel
-			.query()
-			.withGraphFetched("pois(selectIdOrder)")
+			.withGraphFetched("pois(selectPoiIdOrder)")
 			.modifiers({
-				selectIdOrder(builder) {
+				selectPoiIdOrder(builder) {
 					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
 				},
 			})
 			.select("routes.id", "routes.name", "routes.description");
+
+		if (!JSON.stringify(route)) {
+			return null;
+		}
+
+		return RoutesEntity.initialize(route);
 	}
 }
 

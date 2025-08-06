@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, it } from "node:test";
 
 import { DatabaseTableName } from "~/libs/modules/database/database.js";
 
-import { RouteEntity } from "./routes.entity.js";
+import { RoutesEntity } from "./routes.entity.js";
 import { RoutesModel } from "./routes.model.js";
 import { RoutesRepository } from "./routes.repository.js";
 
@@ -24,8 +24,8 @@ describe("RoutesRepository", () => {
 		name: "Test Route",
 	};
 
-	const createMockRouteEntity = (): RouteEntity =>
-		RouteEntity.initialize({
+	const createMockRouteEntity = (): RoutesEntity =>
+		RoutesEntity.initialize({
 			...mockRoute,
 			pois: [{ id: 1, visitOrder: 1 }],
 		});

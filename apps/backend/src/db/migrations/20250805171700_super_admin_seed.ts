@@ -28,7 +28,7 @@ async function up(knex: Knex): Promise<void> {
 			.where(ColumnName.KEY, GROUP_KEY)
 			.first();
 
-		if (!group || !group.id) {
+		if (!group) {
 			throw new Error(`Group "${GROUP_KEY}" not found`);
 		}
 

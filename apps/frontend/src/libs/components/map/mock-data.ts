@@ -42,4 +42,4 @@ const MOCK_MARKERS: LngLatLike[] = [
 	],
 ];
 
-export { MOCK_MARKERS };
+export { COORDINATES, MOCK_MARKERS };

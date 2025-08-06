@@ -1,7 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React from "react";
 
 import { combineClassNames } from "~/libs/helpers/helpers.js";
-import { useMap } from "~/libs/hooks/hooks.js";
+import {
+	useCallback,
+	useEffect,
+	useMap,
+	useRef,
+	useState,
+} from "~/libs/hooks/hooks.js";
 
 import {
 	GEOLOCATE_CONTROLS_PARAMETERS,

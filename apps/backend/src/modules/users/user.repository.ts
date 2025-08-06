@@ -47,34 +47,31 @@ class UserRepository implements Repository {
 	public async findAll(): Promise<UserGetByIdItemResponseDto[]> {
 		const users = await this.userModel
 			.query()
-			.withGraphJoined("group.permissions")
+			.select([
+				"users.id",
+				"firstName",
+				"lastName",
+				"users.group_id as groupId",
+				"email",
+				"groups.id",
+				"groups.key as groupKey",
+				"groups.name as groupName",
+			])
+			.innerJoin("groups", "users.group_id", "groups.id")
+			.leftJoin(
+				"groups_to_permissions",
+				"groups.id",
+				"groups_to_permissions.group_id",
+			)
+			.leftJoin(
+				"permissions",
+				"groups_to_permissions.permission_id",
+				"permissions.id",
+			)
+			.castTo<UserGetByIdItemResponseDto[]>()
 			.execute();
 
-		return users.flatMap((user): UserGetByIdItemResponseDto[] => {
-			if (!user.group || !user.group.permissions) {
-				return [];
-			}
-
-			return [
-				{
-					email: user.email,
-					firstName: user.firstName,
-					group: {
-						id: user.group.id,
-						key: user.group.key,
-						name: user.group.name,
-						permissions: user.group.permissions.map((permission) => ({
-							id: permission.id,
-							key: permission.key,
-							name: permission.name,
-						})),
-					},
-					groupId: user.groupId,
-					id: user.id,
-					lastName: user.lastName,
-				},
-			];
-		});
+		return users;
 	}
 
 	public async findByEmail(

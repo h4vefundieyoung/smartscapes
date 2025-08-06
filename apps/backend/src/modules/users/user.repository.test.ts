@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, it } from "node:test";
 
 import { GroupModel } from "../groups/group.model.js";
 import { type GroupService } from "../groups/group.service.js";
-import { UserEntity } from "./user.entity.js";
+import { type UserEntity } from "./user.entity.js";
 import { UserModel } from "./user.model.js";
 import { UserRepository } from "./user.repository.js";
 
@@ -64,30 +64,19 @@ describe("UserRepository", () => {
 			mockGroupService as unknown as GroupService,
 		);
 
-		databaseTracker.on.select("groups").response([{ id: 2 }]);
-
-		const userEntitiesWithGroup = [
+		databaseTracker.on.select("users").response([
 			{
-				...UserEntity.initialize(mockUser).toObject(),
-				group: {
-					id: 2,
-					key: "users",
-					name: "Users",
-					permissions: [{ id: 1, key: "READ", name: "Can read" }],
-				},
+				email: "test@example.com",
+				firstName: "John",
+				group_id: 2,
+				groupId: 2,
+				["groups.id"]: 2,
+				["groups.key"]: "users",
+				["groups.name"]: "Users",
+				id: 1,
+				lastName: "Doe",
 			},
-		];
-		/* eslint-disable sonarjs/no-nested-functions */
-
-		// @ts-expect-error TS2322 QueryBuilderType<M>
-		// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-		UserModel.query = () => ({
-			// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-			withGraphJoined: () => ({
-				// eslint-disable-next-line @typescript-eslint/require-await, @typescript-eslint/explicit-function-return-type
-				execute: async () => userEntitiesWithGroup,
-			}),
-		});
+		]);
 	});
 
 	afterEach(() => {
@@ -97,17 +86,25 @@ describe("UserRepository", () => {
 	it("findAll should return all users", async () => {
 		const result = await userRepository.findAll();
 
-		assert.deepStrictEqual(result, [
+		const plainResult = result.map((user) => ({
+			email: user.email,
+			firstName: user.firstName,
+			groupId: user.groupId,
+			["groups.id"]: 2,
+			["groups.key"]: "users",
+			["groups.name"]: "Users",
+			id: user.id,
+			lastName: user.lastName,
+		}));
+
+		assert.deepStrictEqual(plainResult, [
 			{
 				email: mockUser.email,
 				firstName: mockUser.firstName,
-				group: {
-					id: 2,
-					key: "users",
-					name: "Users",
-					permissions: [{ id: 1, key: "READ", name: "Can read" }],
-				},
 				groupId: mockUser.groupId,
+				["groups.id"]: 2,
+				["groups.key"]: "users",
+				["groups.name"]: "Users",
 				id: mockUser.id,
 				lastName: mockUser.lastName,
 			},

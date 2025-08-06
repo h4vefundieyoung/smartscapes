@@ -239,7 +239,6 @@ class AuthController extends BaseController {
 	 *               properties:
 	 *                 data:
 	 *                   $ref: '#/components/schemas/UserSignInResponseDto'
-	 *                   $ref: '#/components/schemas/UserSignInResponseDto'
 	 */
 
 	public async signIn(

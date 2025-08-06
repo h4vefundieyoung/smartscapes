@@ -6,8 +6,8 @@ import {
 } from "~/libs/components/components.js";
 import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
 
-import { mockImages } from "../carousel/assets/mock-images/mock-images.js";
-import { Carousel } from "../carousel/carousel.js";
+import { mockImages } from "../../libs/components/carousel/assets/mock-images/mock-images.js";
+import { Carousel } from "../../libs/components/carousel/carousel.js";
 import styles from "./styles.module.css";
 
 const Dashboard = (): React.JSX.Element => {

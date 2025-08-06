@@ -1,11 +1,7 @@
 import { RouterOutlet } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import {
-	useAppDispatch,
-	useAppSelector,
-	useEffect,
-	useLocation,
-} from "~/libs/hooks/hooks.js";
+import { useAppDispatch, useEffect, useLocation } from "~/libs/hooks/hooks.js";
+import { storage, StorageKey } from "~/libs/modules/storage/storage.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import { actions as userActions } from "~/modules/users/users.js";
 
@@ -17,8 +13,6 @@ const App = (): React.JSX.Element => {
 
 	const isRoot = pathname === AppRoute.APP;
 
-	const hasToken = useAppSelector(({ auth }) => auth.authenticatedUser);
-
 	useEffect(() => {
 		if (isRoot) {
 			void dispatch(userActions.loadAll());
@@ -26,10 +20,16 @@ const App = (): React.JSX.Element => {
 	}, [isRoot, dispatch]);
 
 	useEffect(() => {
-		if (!hasToken) {
-			void dispatch(authActions.getAuthenticatedUser());
-		}
-	}, [dispatch, hasToken]);
+		const fetchToken = async (): Promise<void> => {
+			const hasToken = await storage.get(StorageKey.TOKEN);
+
+			if (hasToken) {
+				void dispatch(authActions.getAuthenticatedUser());
+			}
+		};
+
+		void fetchToken();
+	}, [dispatch]);
 
 	return (
 		<div className={styles["container"]}>

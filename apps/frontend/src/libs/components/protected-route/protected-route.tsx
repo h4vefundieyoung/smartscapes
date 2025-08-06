@@ -16,8 +16,7 @@ const ProtectedRoute = ({ children }: Properties): React.JSX.Element => {
 		({ auth }) => auth.authenticatedUser,
 	);
 	const authDataStatus = useAppSelector(({ auth }) => auth.dataStatus);
-	const isLoading =
-		authDataStatus === DataStatus.PENDING || authDataStatus === DataStatus.IDLE;
+	const isLoading = authDataStatus === DataStatus.PENDING;
 
 	if (isLoading) {
 		return (

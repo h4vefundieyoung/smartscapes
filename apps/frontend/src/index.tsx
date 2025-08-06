@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 
 import {
 	App,
-	Dashboard,
 	ProtectedRoute,
 	RouterProvider,
 	StoreProvider,
@@ -15,6 +14,7 @@ import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
 import { NotFound } from "~/pages/not-found/not-found.jsx";
 
+import { Dashboard } from "./pages/dashboard/dashboard.js";
 import { Landing } from "./pages/landing/landing.jsx";
 
 pwa.register();

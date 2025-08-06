@@ -52,7 +52,7 @@ class UserRepository implements Repository {
 	): Promise<null | UserPasswordDetails> {
 		const user = await this.userModel
 			.query()
-			.select("id", "passwordHash", "passwordSalt")
+			.select("id", "firstName", "lastName", "passwordHash", "passwordSalt")
 			.where("email", email)
 			.first();
 

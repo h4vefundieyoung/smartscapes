@@ -1,7 +1,7 @@
 type UserGetByIdItemResponseDto = {
 	email: string;
 	firstName: string;
-	group?: {
+	group: {
 		id: number;
 		key: string;
 		name: string;
@@ -11,7 +11,7 @@ type UserGetByIdItemResponseDto = {
 			name: string;
 		}[];
 	};
-	groupId: null | number;
+	groupId: number;
 	id: number;
 	lastName: string;
 };

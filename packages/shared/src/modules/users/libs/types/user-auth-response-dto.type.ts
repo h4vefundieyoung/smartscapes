@@ -1,12 +1,17 @@
 type UserAuthResponseDto = {
 	email: string;
 	firstName: string;
-	group?: {
+	group: {
 		id: number;
 		key: string;
-		name?: string;
+		name: string;
+		permissions: {
+			id: number;
+			key: string;
+			name: string;
+		}[];
 	};
-	groupId: null | number;
+	groupId: number;
 	id: number;
 	lastName: string;
 };

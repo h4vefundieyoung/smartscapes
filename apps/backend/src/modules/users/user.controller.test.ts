@@ -20,6 +20,12 @@ describe("UserController", () => {
 			{
 				email: "test@example.com",
 				firstName: "John",
+				group: {
+					id: 2,
+					key: "users",
+					name: "Users",
+					permissions: [{ id: 1, key: "READ", name: "Can read" }],
+				},
 				groupId: 2,
 				id: 1,
 				lastName: "Doe",

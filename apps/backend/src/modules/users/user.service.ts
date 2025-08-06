@@ -1,3 +1,5 @@
+import { CommonExceptionMessage } from "@smartscapes/shared";
+
 import { encryption } from "~/libs/modules/encryption/libs/encryption.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
@@ -43,7 +45,23 @@ class UserService implements Service {
 			}),
 		);
 
-		return item.toObject();
+		if (!item.toObject().id) {
+			throw new UserError({
+				message: CommonExceptionMessage.COMMON_EXCEPTION_MESSAGE,
+				status: HTTPCode.INTERNAL_SERVER_ERROR,
+			});
+		}
+
+		const newUser = await this.findById(item.toObject().id);
+
+		if (!newUser) {
+			throw new UserError({
+				message: CommonExceptionMessage.COMMON_EXCEPTION_MESSAGE,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return newUser;
 	}
 
 	public async findAll(): Promise<
@@ -52,7 +70,7 @@ class UserService implements Service {
 		const items = await this.userRepository.findAll();
 
 		return {
-			items: items.map((item) => item.toObject()),
+			items,
 		};
 	}
 
@@ -61,7 +79,7 @@ class UserService implements Service {
 	): Promise<null | UserGetByIdItemResponseDto> {
 		const user = await this.userRepository.findByEmail(email);
 
-		return user ? user.toObject() : null;
+		return user;
 	}
 
 	public async findById(

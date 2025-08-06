@@ -23,6 +23,20 @@ describe("UserService", () => {
 			create: (() => Promise.resolve(userEntity)) as UserRepository["create"],
 			findByEmail: (() =>
 				Promise.resolve(null)) as UserRepository["findByEmail"],
+			findById: (() =>
+				Promise.resolve({
+					email: mockUser.email,
+					firstName: mockUser.firstName,
+					group: {
+						id: 2,
+						key: "users",
+						name: "Users",
+						permissions: [{ id: 1, key: "READ", name: "Can read" }],
+					},
+					groupId: mockUser.groupId,
+					id: mockUser.id,
+					lastName: mockUser.lastName,
+				})) as UserRepository["findById"],
 		} as UserRepository;
 
 		const userService = new UserService(userRepository);
@@ -38,6 +52,12 @@ describe("UserService", () => {
 		assert.deepStrictEqual(result, {
 			email: mockUser.email,
 			firstName: mockUser.firstName,
+			group: {
+				id: 2,
+				key: "users",
+				name: "Users",
+				permissions: [{ id: 1, key: "READ", name: "Can read" }],
+			},
 			groupId: mockUser.groupId,
 			id: mockUser.id,
 			lastName: mockUser.lastName,
@@ -48,7 +68,18 @@ describe("UserService", () => {
 		const userEntity = UserEntity.initialize(mockUser);
 
 		const userRepository = {
-			findAll: () => Promise.resolve([userEntity]),
+			findAll: () =>
+				Promise.resolve([
+					{
+						...userEntity.toObject(),
+						group: {
+							id: 2,
+							key: "users",
+							name: "Users",
+							permissions: [{ id: 1, key: "READ", name: "Can read" }],
+						},
+					},
+				]),
 		} as UserRepository;
 
 		const userService = new UserService(userRepository);
@@ -56,7 +87,21 @@ describe("UserService", () => {
 		const result = await userService.findAll();
 
 		assert.deepStrictEqual(result, {
-			items: [userEntity.toObject()],
+			items: [
+				{
+					email: mockUser.email,
+					firstName: mockUser.firstName,
+					group: {
+						id: 2,
+						key: "users",
+						name: "Users",
+						permissions: [{ id: 1, key: "READ", name: "Can read" }],
+					},
+					groupId: mockUser.groupId,
+					id: mockUser.id,
+					lastName: mockUser.lastName,
+				},
+			],
 		});
 	});
 });

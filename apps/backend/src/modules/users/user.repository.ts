@@ -6,7 +6,6 @@ import {
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
 
-import { groupService } from "../groups/group.js";
 import { type GroupService } from "../groups/group.service.js";
 import { GroupExceptionMessage, GroupKey } from "../groups/libs/enums/enums.js";
 
@@ -14,7 +13,7 @@ class UserRepository implements Repository {
 	private groupService: GroupService;
 	private userModel: typeof UserModel;
 
-	public constructor(userModel: typeof UserModel) {
+	public constructor(userModel: typeof UserModel, groupService: GroupService) {
 		this.userModel = userModel;
 		this.groupService = groupService;
 	}
@@ -23,11 +22,7 @@ class UserRepository implements Repository {
 		const { email, firstName, lastName, passwordHash, passwordSalt } =
 			entity.toNewObject();
 
-		const group = await this.groupService
-			.findByKey(GroupKey.USERS)
-			.catch(() => {
-				throw new Error(GroupExceptionMessage.GROUP_NOT_FOUND);
-			});
+		const group = await this.groupService.findByKey(GroupKey.USERS);
 
 		if (!group) {
 			throw new Error(GroupExceptionMessage.GROUP_NOT_FOUND);
@@ -49,16 +44,53 @@ class UserRepository implements Repository {
 		return UserEntity.initialize(user);
 	}
 
-	public async findAll(): Promise<UserEntity[]> {
-		const users = await this.userModel.query().execute();
+	public async findAll(): Promise<UserGetByIdItemResponseDto[]> {
+		const users = await this.userModel
+			.query()
+			.withGraphJoined("group.permissions")
+			.execute();
 
-		return users.map((user) => UserEntity.initialize(user));
+		return users.flatMap((user): UserGetByIdItemResponseDto[] => {
+			if (!user.group || !user.group.permissions) {
+				return [];
+			}
+
+			return [
+				{
+					email: user.email,
+					firstName: user.firstName,
+					group: {
+						id: user.group.id,
+						key: user.group.key,
+						name: user.group.name,
+						permissions: user.group.permissions.map((permission) => ({
+							id: permission.id,
+							key: permission.key,
+							name: permission.name,
+						})),
+					},
+					groupId: user.groupId,
+					id: user.id,
+					lastName: user.lastName,
+				},
+			];
+		});
 	}
 
-	public async findByEmail(email: string): Promise<null | UserEntity> {
-		const user = await this.userModel.query().where("email", email).first();
+	public async findByEmail(
+		email: string,
+	): Promise<null | UserGetByIdItemResponseDto> {
+		const user = await this.userModel
+			.query()
+			.where("email", email)
+			.withGraphJoined("group.permissions")
+			.first();
 
-		return user ? UserEntity.initialize(user) : null;
+		if (!user || !user.group || !user.group.permissions) {
+			return null;
+		}
+
+		return this.mapUserModelToDto(user);
 	}
 
 	public async findById(
@@ -70,7 +102,54 @@ class UserRepository implements Repository {
 			.withGraphJoined("group.permissions")
 			.first();
 
-		if (!user || !user.group) {
+		if (!user || !user.group || !user.group.permissions) {
+			return null;
+		}
+
+		return this.mapUserModelToDto(user);
+	}
+
+	public async findPasswordDetails(
+		email: string,
+	): Promise<null | UserPasswordDetails> {
+		const user = await this.userModel
+			.query()
+			.select(
+				"users.id",
+				"users.password_hash as passwordHash",
+				"users.password_salt as passwordSalt",
+				"users.group_id as groupId",
+			)
+			.withGraphJoined("group.permissions")
+			.where("users.email", email)
+			.first();
+
+		if (!user || !user.group || !user.group.permissions) {
+			return null;
+		}
+
+		return {
+			group: {
+				id: user.group.id,
+				key: user.group.key,
+				name: user.group.name,
+				permissions: user.group.permissions.map((permission) => ({
+					id: permission.id,
+					key: permission.key,
+					name: permission.name,
+				})),
+			},
+			groupId: user.groupId,
+			id: user.id,
+			passwordHash: user.passwordHash,
+			passwordSalt: user.passwordSalt,
+		};
+	}
+
+	private mapUserModelToDto(
+		user: UserModel,
+	): null | UserGetByIdItemResponseDto {
+		if (!user.group || !user.group.permissions) {
 			return null;
 		}
 
@@ -81,44 +160,15 @@ class UserRepository implements Repository {
 				id: user.group.id,
 				key: user.group.key,
 				name: user.group.name,
-				permissions:
-					user.group.permissions?.map((permission) => ({
-						id: permission.id,
-						key: permission.key,
-						name: permission.name,
-					})) || [],
+				permissions: user.group.permissions.map((p) => ({
+					id: p.id,
+					key: p.key,
+					name: p.name,
+				})),
 			},
 			groupId: user.groupId,
 			id: user.id,
 			lastName: user.lastName,
-		};
-	}
-
-	public async findPasswordDetails(
-		email: string,
-	): Promise<null | UserPasswordDetails> {
-		const user = await this.userModel
-			.query()
-			.select("users.id", "passwordHash", "passwordSalt", "groupId")
-			.withGraphJoined("group")
-			.where("email", email)
-			.first();
-
-		if (!user || !user.group) {
-			return null;
-		}
-
-		return {
-			group: {
-				id: user.group.id,
-				key: user.group.key,
-				name: user.group.name,
-			},
-			groupId: user.groupId,
-			id: user.id,
-			key: user.group.key,
-			passwordHash: user.passwordHash,
-			passwordSalt: user.passwordSalt,
 		};
 	}
 }

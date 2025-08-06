@@ -43,7 +43,7 @@ class GroupService implements Service<GroupItemResponseDto> {
 	public async findByKey(key: string): Promise<GroupItemResponseDto | null> {
 		const group = await this.groupRepository.findByKey(key);
 
-		return group?.toObject() || null;
+		return group?.toObject() ?? null;
 	}
 }
 

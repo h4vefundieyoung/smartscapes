@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.8.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.8.1...backend-v1.8.2) (2025-08-06)
+
+
+### Bug Fixes
+
+* **backend:** correct value of type ss-226 ([#227](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/227)) ([085b1b9](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/085b1b908a9575d4b0394c7fb6f8b3cfc414e926))
+
+## [1.8.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.8.0...backend-v1.8.1) (2025-08-05)
+
+
+### Bug Fixes
+
+* **backend:** update swagger sign-in response example ss-221 ([#222](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/222)) ([7fc47cc](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/7fc47ccaeef644774be314cb7b2fa5be3b04d1d2))
+
+## [1.8.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.7.0...backend-v1.8.0) (2025-08-05)
+
+
+### Features
+
+* **shared/backend:** add notifications module ss-73 ([#131](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/131)) ([e2b4a15](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/e2b4a1514dd0a10f89a36d8bc3894c61444f168f))
+
 ## [1.7.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.6.3...backend-v1.7.0) (2025-08-04)
 
 

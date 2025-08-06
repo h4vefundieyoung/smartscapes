@@ -1,2 +1,2 @@
-export { isMultiValue } from "./is-multi-value/is-multi-value.helper.js";
-export { createHandleChange } from "./select/select.helper.js";
+export { getSelectNewValue } from "./get-select-new-value/get-select-new-value.helper.js";
+export { mapSelectValue } from "./map-select-value/map-select-value.helper.js";

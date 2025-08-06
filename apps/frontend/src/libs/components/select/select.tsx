@@ -6,13 +6,12 @@ import {
 	type Path,
 	type PathValue,
 } from "react-hook-form";
-import ReactSelect from "react-select";
+import ReactSelect, { type MultiValue, type SingleValue } from "react-select";
 
-import { useFormController } from "~/libs/hooks/hooks.js";
+import { useFormController, useMemo } from "~/libs/hooks/hooks.js";
 
-import { selectClassNames } from "./libs/constants/constants.js";
-import { createHandleChange } from "./libs/helpers/helpers.js";
-import { mapSelectValue } from "./libs/mappers/mappers.js";
+import { selectStylesConfig } from "./libs/constants/constants.js";
+import { getSelectNewValue, mapSelectValue } from "./libs/helpers/helpers.js";
 import { type SelectOption } from "./libs/types/select-option.type.js";
 import styles from "./styles.module.css";
 
@@ -35,18 +34,28 @@ const Select = <TFieldValues extends FieldValues, TOptionValue = string>({
 }: Properties<TFieldValues, TOptionValue>): React.JSX.Element => {
 	const { field } = useFormController<TFieldValues>({ control, name });
 
-	const rawValue = field.value as null | TOptionValue | TOptionValue[];
-	const value = mapSelectValue<TOptionValue>(rawValue, options, isMulti);
-	const handleChange = React.useMemo(
-		() => createHandleChange<TOptionValue>(field.onChange),
-		[field.onChange],
-	);
+	const value = useMemo(() => {
+		const rawValue = (field.value ?? []) as TOptionValue[];
+
+		return mapSelectValue<TOptionValue>(rawValue, options);
+	}, [field.value, options]);
+
+	const handleChange = useMemo((): ((
+		newValue:
+			| MultiValue<SelectOption<TOptionValue>>
+			| SingleValue<SelectOption<TOptionValue>>,
+	) => void) => {
+		return (newValue) => {
+			const cleanValue = getSelectNewValue(newValue);
+			field.onChange(cleanValue);
+		};
+	}, [field]);
 
 	return (
 		<label className={styles["label"]}>
 			<span className={styles["label-caption"]}>{label}</span>
 			<ReactSelect
-				classNames={selectClassNames}
+				classNames={selectStylesConfig}
 				isMulti={isMulti}
 				name={name}
 				onChange={handleChange}

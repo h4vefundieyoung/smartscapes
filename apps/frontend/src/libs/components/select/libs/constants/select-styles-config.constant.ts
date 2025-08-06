@@ -2,7 +2,7 @@ import { combineClassNames } from "~/libs/helpers/helpers.js";
 
 import styles from "../../styles.module.css";
 
-const selectClassNames = {
+const selectStylesConfig = {
 	control: (): string => styles["control"] as string,
 	menu: (): string => styles["menu"] as string,
 	multiValue: (): string => styles["multi-value"] as string,
@@ -24,4 +24,4 @@ const selectClassNames = {
 	singleValue: (): string => styles["single-value"] as string,
 };
 
-export { selectClassNames };
+export { selectStylesConfig };

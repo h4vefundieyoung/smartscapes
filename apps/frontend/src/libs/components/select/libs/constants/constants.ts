@@ -1,1 +1,1 @@
-export { selectClassNames } from "./select-class-names.constant.js";
+export { selectStylesConfig } from "./select-styles-config.constant.js";

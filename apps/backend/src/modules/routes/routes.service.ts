@@ -100,8 +100,6 @@ class RoutesService implements Service {
 	private async ensurePoisExist(pois: number[]): Promise<void> {
 		const filteredPois = await this.pointsOfInterestService.findAll({
 			ids: pois,
-			latitude: 0,
-			longitude: 0,
 		});
 
 		if (pois.length !== filteredPois.items.length) {

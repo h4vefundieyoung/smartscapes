@@ -249,7 +249,6 @@ class RoutesController extends BaseController {
 	 *             required:
 	 *               - name
 	 *               - description
-	 *               - pois
 	 *             properties:
 	 *               name:
 	 *                 type: string
@@ -261,7 +260,19 @@ class RoutesController extends BaseController {
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/Route'
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: object
+	 *                   properties:
+	 *                     id:
+	 *                       type: number
+	 *                     name:
+	 *                       type: string
+	 *                       example: Landscape alley
+	 *                     description:
+	 *                       type: string
+	 *                       example: An alley with blooming flowers
 	 */
 
 	public async patch(

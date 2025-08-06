@@ -67,22 +67,14 @@ class RoutesRepository implements Repository {
 		id: number,
 		entity: RoutesRequestPatchDto,
 	): Promise<null | RoutesEntity> {
-		const route = (await this.routesModel
+		const [updatedRoute] = await this.routesModel
 			.query()
-			.patchAndFetchById(id, entity as Partial<RoutesModel>)
-			.withGraphFetched("pois(selectPoiIdOrder)")
-			.modifiers({
-				selectPoiIdOrder(builder) {
-					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
-				},
-			})
-			.select(
-				"routes.id",
-				"routes.name",
-				"routes.description",
-			)) as null | RoutesModel;
+			.patch(entity as Partial<RoutesModel>)
+			.where({ id })
+			.returning(["id", "name", "description"])
+			.execute();
 
-		return route ? RoutesEntity.initialize(route) : null;
+		return updatedRoute ? RoutesEntity.initialize(updatedRoute) : null;
 	}
 }
 

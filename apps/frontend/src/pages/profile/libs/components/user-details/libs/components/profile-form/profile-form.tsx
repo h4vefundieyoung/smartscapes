@@ -44,7 +44,7 @@ const ProfileForm = ({
 				name="lastName"
 				type="text"
 			/>
-			<Button className={styles["form-button"]} label="Update My Settings" />
+			<Button label="Update My Settings" />
 		</form>
 	);
 };

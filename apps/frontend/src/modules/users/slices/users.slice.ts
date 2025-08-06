@@ -16,6 +16,8 @@ const initialState: State = {
 	dataStatus: DataStatus.IDLE,
 };
 
+const INDEX_NOT_FOUND = -1;
+
 const { actions, name, reducer } = createSlice({
 	extraReducers(builder) {
 		builder.addCase(loadAll.pending, (state) => {
@@ -31,8 +33,14 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(patchProfile.fulfilled, (state, action) => {
 			const updatedUser = action.payload.data;
 			const index = state.data.findIndex((user) => user.id === updatedUser.id);
+			const isUserExists = index !== INDEX_NOT_FOUND;
 
-			state.data[index] = updatedUser;
+			if (isUserExists) {
+				state.data[index] = updatedUser;
+			} else {
+				state.data = [...state.data, updatedUser];
+			}
+
 			state.dataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(patchProfile.pending, (state) => {

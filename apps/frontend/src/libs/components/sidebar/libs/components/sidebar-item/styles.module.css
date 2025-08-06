@@ -1,3 +1,8 @@
+.item {
+	container-name: sidebar-item;
+	container-type: inline-size;
+}
+
 .item a {
 	display: flex;
 	gap: 12px;
@@ -33,4 +38,10 @@
 	font-weight: var(--font-weight-regular);
 	line-height: 1.5;
 	white-space: nowrap;
+}
+
+@container sidebar-item (max-width: 80px) {
+	.item a {
+		gap: 0;
+	}
 }

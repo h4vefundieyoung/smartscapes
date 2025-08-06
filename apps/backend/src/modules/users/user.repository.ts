@@ -106,7 +106,7 @@ class UserRepository implements Repository {
 		return this.mapUserModelToDto(user);
 	}
 
-	public async findPasswordDetails(
+public async findPasswordDetails(
 		email: string,
 	): Promise<null | UserPasswordDetails> {
 		const user = await this.userModel

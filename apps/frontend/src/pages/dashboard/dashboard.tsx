@@ -7,7 +7,8 @@ import {
 } from "~/libs/components/components.js";
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
 import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
-import { useAppForm } from "~/libs/hooks/hooks.js";
+import { AppRoute } from "~/libs/enums/enums.js";
+import { useAppForm, useAppSelector } from "~/libs/hooks/hooks.js";
 
 import { mockImages } from "../../libs/components/carousel/assets/mock-images/mock-images.js";
 import { Carousel } from "../../libs/components/carousel/carousel.js";
@@ -19,11 +20,9 @@ type FormValues = {
 };
 
 const Dashboard = (): React.JSX.Element => {
-	const mockUserWithoutAvatar = {
-		avatarUrl: null,
-		firstName: "John",
-		lastName: "Smith",
-	};
+	const authenticatedUser = useAppSelector(
+		({ auth }) => auth.authenticatedUser,
+	);
 
 	const colorOptions: SelectOption<string>[] = [
 		{ label: "Red", value: "red" },
@@ -41,7 +40,10 @@ const Dashboard = (): React.JSX.Element => {
 	return (
 		<div className={styles["container"]}>
 			<div className={styles["components-container"]}>
-				<Header user={mockUserWithoutAvatar} />
+				<Header
+					actions={[{ label: "Sign in", to: AppRoute.SIGN_IN }]}
+					user={authenticatedUser}
+				/>
 				<div className={styles["sidebar-container"]}>
 					<Sidebar navigationItems={NAVIGATION_ITEMS} />
 				</div>

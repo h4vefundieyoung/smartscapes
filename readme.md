@@ -95,6 +95,7 @@ erDiagram
       dateTime updated_at
       int route_id FK
       int poi_id FK
+      int visit_order
   }
 
   notifications {

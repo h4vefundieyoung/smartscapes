@@ -51,7 +51,7 @@ describe("PointsOfInterestController", () => {
 		const result = await pointsOfInterestController.findAll({
 			body: {},
 			params: {},
-			query: null,
+			query: undefined,
 			user: null,
 		});
 

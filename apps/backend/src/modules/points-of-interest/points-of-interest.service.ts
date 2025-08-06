@@ -1,3 +1,4 @@
+import { METERS_IN_KM } from "~/libs/constants/constants.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
 import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
@@ -51,22 +52,28 @@ class PointsOfInterestService implements Service {
 	public async findAll(
 		query: null | PointsOfInterestSearchQuery,
 	): Promise<CollectionResult<PointsOfInterestResponseDto>> {
-		const DEFAULT_SEARCH_RADIUS_KM = 5;
-		const THOUSAND = 1000;
-
 		const hasLocationFilter =
-			Boolean(query?.latitude) && Boolean(query?.longitude);
+			query && Boolean(query.latitude) && Boolean(query.longitude);
 
-		const radiusMeters = (query?.radius ?? DEFAULT_SEARCH_RADIUS_KM) * THOUSAND;
+		if (!hasLocationFilter) {
+			const items = await this.pointsOfInterestRepository.findAll();
+
+			return {
+				items: items.map((item) => item.toObject()),
+			};
+		}
+
+		const DEFAULT_SEARCH_RADIUS_KM = 5;
+
+		const { radius = DEFAULT_SEARCH_RADIUS_KM } = query;
 
 		const searchParameters = {
 			...query,
-			radius: radiusMeters,
-		} as PointsOfInterestSearchQuery;
+			radius: radius * METERS_IN_KM,
+		};
 
-		const items = hasLocationFilter
-			? await this.pointsOfInterestRepository.findNearby(searchParameters)
-			: await this.pointsOfInterestRepository.findAll();
+		const items =
+			await this.pointsOfInterestRepository.findNearby(searchParameters);
 
 		return {
 			items: items.map((item) => item.toObject()),

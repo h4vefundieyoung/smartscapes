@@ -1,9 +1,8 @@
+import { SortingOrder } from "~/libs/enums/enums.js";
 import { type Repository } from "~/libs/types/types.js";
 import { type PointsOfInterestSearchQuery } from "~/modules/points-of-interest/libs/types/type.js";
 import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
 import { type PointsOfInterestModel } from "~/modules/points-of-interest/points-of-interest.model.js";
-
-import { SortingOrder } from "./libs/enums/enums.js";
 
 class PointsOfInterestRepository implements Repository {
 	private pointsOfInterestModel: typeof PointsOfInterestModel;
@@ -139,8 +138,8 @@ class PointsOfInterestRepository implements Repository {
 			.execute();
 
 		return pointsOfInterest
-			.map((point) => PointsOfInterestEntity.initialize(point))
-			.filter(Boolean);
+			.filter(Boolean)
+			.map((point) => PointsOfInterestEntity.initialize(point));
 	}
 
 	public async patch(

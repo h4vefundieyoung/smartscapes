@@ -1,3 +1,4 @@
+export { METERS_IN_KM } from "./libs/constants/constants.js";
 export {
 	APIErrorType,
 	APIPath,

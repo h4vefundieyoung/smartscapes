@@ -287,7 +287,7 @@ class PointsOfInterestController extends BaseController {
 	 */
 	public async findAll(
 		options: APIHandlerOptions<{
-			query?: null | PointsOfInterestSearchQuery;
+			query?: PointsOfInterestSearchQuery;
 		}>,
 	): Promise<APIHandlerResponse<PointsOfInterestResponseDto[]>> {
 		const { query = null } = options;

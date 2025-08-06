@@ -21,6 +21,34 @@ type WhiteRoute = {
 	path: string;
 };
 
+const validationAuthHeader = (authHeader: string | undefined): string => {
+	if (!authHeader?.startsWith("Bearer ")) {
+		throw new AuthError({
+			message: "Invalid or missing authrization header.",
+		});
+	}
+
+	const [, token] = authHeader.split(" ");
+
+	if (!token) {
+		throw new AuthError({
+			message: "Token not provided.",
+		});
+	}
+
+	return token;
+};
+
+const isTokenValid = (token: string): void => {
+	const isTokenBlacklisted = tokenBlacklistService.has(token);
+
+	if (isTokenBlacklisted) {
+		throw new AuthError({
+			message: "Token is revoked.",
+		});
+	}
+};
+
 const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {
 	const requestHandler = async (request: FastifyRequest): Promise<void> => {
 		const { headers, url } = request;
@@ -36,19 +64,11 @@ const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {
 			throw new AuthError();
 		}
 
-		const [, token] = headers.authorization.split(" ");
-		const isTokenBlacklisted = tokenBlacklistService.has(token as string);
-
-		if (isTokenBlacklisted) {
-			throw new AuthError({
-				message: "Token is revoked.",
-			});
-		}
+		const token = validationAuthHeader(headers.authorization);
+		isTokenValid(token);
 
 		try {
-			const { userId } = await tokenService.verify<TokenPayload>(
-				token as string,
-			);
+			const { userId } = await tokenService.verify<TokenPayload>(token);
 			const user = await userService.findById(userId);
 
 			if (!user) {
@@ -56,7 +76,7 @@ const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {
 			}
 
 			request.user = user;
-			request.token = token as string;
+			request.token = token;
 		} catch (error) {
 			throw new AuthError({
 				cause: error,

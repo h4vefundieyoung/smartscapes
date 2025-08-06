@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
-
 import smartScapesLogo from "~/assets/images/logo.svg";
 import { Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
+import { useCallback, useEffect, useState } from "~/libs/hooks/hooks.js";
 import { type NavigationItem } from "~/libs/types/types.js";
 
 import { SidebarItem } from "./libs/components/components.js";
+import { KeyboardKey } from "./libs/enums/enums.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -21,7 +21,7 @@ const Sidebar = ({ navigationItems }: Properties): React.JSX.Element => {
 
 	const handleKeyDown = useCallback(
 		(event: KeyboardEvent) => {
-			if (event.key === "Escape") {
+			if (event.key === KeyboardKey.ESCAPE) {
 				setIsOpen(false);
 			}
 		},

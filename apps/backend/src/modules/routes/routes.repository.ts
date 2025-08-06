@@ -67,7 +67,7 @@ class RoutesRepository implements Repository {
 		id: number,
 		entity: RoutesRequestPatchDto,
 	): Promise<null | RoutesEntity> {
-		const route = await this.routesModel
+		const route = (await this.routesModel
 			.query()
 			.patchAndFetchById(id, entity as Partial<RoutesModel>)
 			.withGraphFetched("pois(selectPoiIdOrder)")
@@ -76,13 +76,13 @@ class RoutesRepository implements Repository {
 					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
 				},
 			})
-			.select("routes.id", "routes.name", "routes.description");
+			.select(
+				"routes.id",
+				"routes.name",
+				"routes.description",
+			)) as null | RoutesModel;
 
-		if (!JSON.stringify(route)) {
-			return null;
-		}
-
-		return RoutesEntity.initialize(route);
+		return route ? RoutesEntity.initialize(route) : null;
 	}
 }
 

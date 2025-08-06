@@ -50,13 +50,13 @@ class PointsOfInterestService implements Service {
 	}
 
 	public async findAll(
-		query: null | PointsOfInterestFindAllOptions,
+		options: null | PointsOfInterestFindAllOptions,
 	): Promise<CollectionResult<PointsOfInterestResponseDto>> {
 		const hasLocationFilter =
-			query && Boolean(query.latitude) && Boolean(query.longitude);
+			options && Boolean(options.latitude) && Boolean(options.longitude);
 
 		if (!hasLocationFilter) {
-			const items = await this.pointsOfInterestRepository.findAll(query);
+			const items = await this.pointsOfInterestRepository.findAll(options);
 
 			return {
 				items: items.map((item) => item.toObject()),
@@ -65,10 +65,10 @@ class PointsOfInterestService implements Service {
 
 		const DEFAULT_SEARCH_RADIUS_KM = 5;
 
-		const { radius = DEFAULT_SEARCH_RADIUS_KM } = query;
+		const { radius = DEFAULT_SEARCH_RADIUS_KM } = options;
 
 		const searchParameters = {
-			...query,
+			...options,
 			radius: radius * METERS_IN_KM,
 		};
 

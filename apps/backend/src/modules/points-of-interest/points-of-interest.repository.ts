@@ -63,7 +63,7 @@ class PointsOfInterestRepository implements Repository {
 				),
 			])
 			.modify((builder) => {
-				if (options && options.ids) {
+				if (options?.ids) {
 					builder.whereIn("id", options.ids);
 				}
 			})

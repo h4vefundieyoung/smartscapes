@@ -79,6 +79,8 @@ class RoutesController extends BaseController {
 	 * @swagger
 	 * /routes:
 	 *   post:
+	 *     security:
+	 *      - bearerAuth: []
 	 *     tags:
 	 *       - Routes
 	 *     summary: Create a new route
@@ -129,6 +131,8 @@ class RoutesController extends BaseController {
 	 * @swagger
 	 * /routes/{id}:
 	 *   delete:
+	 *     security:
+	 *      - bearerAuth: []
 	 *     tags:
 	 *       - Routes
 	 *     summary: Delete a route
@@ -166,6 +170,8 @@ class RoutesController extends BaseController {
 	 * @swagger
 	 * /routes/{id}:
 	 *   get:
+	 *     security:
+	 *      - bearerAuth: []
 	 *     tags:
 	 *       - Routes
 	 *     summary: Get a route
@@ -201,6 +207,8 @@ class RoutesController extends BaseController {
 	 * @swagger
 	 * /routes:
 	 *   get:
+	 *     security:
+	 *      - bearerAuth:  []
 	 *     tags:
 	 *       - Routes
 	 *     summary: Retrieve all routes
@@ -231,6 +239,8 @@ class RoutesController extends BaseController {
 	 * @swagger
 	 * /routes/{id}:
 	 *   patch:
+	 *     security:
+	 *      - bearerAuth: []
 	 *     tags:
 	 *       - Routes
 	 *     summary: Update a route

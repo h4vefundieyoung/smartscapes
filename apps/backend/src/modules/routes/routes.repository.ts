@@ -1,5 +1,3 @@
-import { type RoutesRequestPatchDto } from "@smartscapes/shared";
-
 import { type Repository } from "~/libs/types/types.js";
 
 import { RoutesEntity } from "./routes.entity.js";
@@ -65,11 +63,17 @@ class RoutesRepository implements Repository {
 
 	public async patch(
 		id: number,
-		entity: RoutesRequestPatchDto,
+		entity: Partial<RoutesEntity["toObject"]>,
 	): Promise<null | RoutesEntity> {
 		const [updatedRoute] = await this.routesModel
 			.query()
-			.patch(entity as Partial<RoutesModel>)
+			.patch(entity)
+			.withGraphFetched("pois(selectPoiIdOrder)")
+			.modifiers({
+				selectPoiIdOrder(builder) {
+					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
+				},
+			})
 			.where({ id })
 			.returning(["id", "name", "description"])
 			.execute();

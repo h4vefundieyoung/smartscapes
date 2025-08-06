@@ -14,6 +14,7 @@ import {
 	useLocation,
 } from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
+import { actions as userActions } from "~/modules/users/users.js";
 
 import { mockImages } from "../carousel/assets/mock-images/mock-images.js";
 import { Carousel } from "../carousel/carousel.js";
@@ -31,6 +32,7 @@ const App = (): React.JSX.Element => {
 
 	useEffect(() => {
 		if (isRoot) {
+			void dispatch(userActions.loadAll());
 			void dispatch(authActions.getAuthenticatedUser());
 		}
 	}, [isRoot, dispatch]);

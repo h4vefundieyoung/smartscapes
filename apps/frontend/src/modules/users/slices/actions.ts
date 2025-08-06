@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
-import { actions as authActions } from "~/modules/auth/auth.js";
 import {
 	type UserGetByIdItemResponseDto,
 	type UserProfilePatchRequestDto,
@@ -23,28 +22,10 @@ const patchProfile = createAsyncThunk<
 	APIResponse<UserGetByIdItemResponseDto>,
 	{ id: string; payload: UserProfilePatchRequestDto },
 	AsyncThunkConfig
->(
-	`${sliceName}/patch`,
-	async ({ id, payload }, { dispatch, extra, getState }) => {
-		const { userApi } = extra;
+>(`${sliceName}/patch`, async ({ id, payload }, { extra }) => {
+	const { userApi } = extra;
 
-		const updatedUser = await userApi.patch(id, payload);
-
-		const state = getState();
-
-		const currentUserId = state.auth.authenticatedUser?.id;
-
-		if (updatedUser.data.id === currentUserId) {
-			dispatch(
-				authActions.setAuthenticatedUser({
-					...state.auth.authenticatedUser,
-					...updatedUser.data,
-				}),
-			);
-		}
-
-		return updatedUser;
-	},
-);
+	return await userApi.patch(id, payload);
+});
 
 export { loadAll, patchProfile };

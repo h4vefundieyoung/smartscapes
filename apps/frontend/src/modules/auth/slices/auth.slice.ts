@@ -1,11 +1,9 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
-import {
-	type UserAuthResponseDto,
-	type UserGetByIdItemResponseDto,
-} from "~/modules/users/users.js";
+import { patchProfile } from "~/modules/users/slices/actions.js";
+import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
 import { getAuthenticatedUser, signIn, signUp } from "./actions.js";
 
@@ -56,17 +54,19 @@ const { actions, name, reducer } = createSlice({
 			state.authenticatedUser = null;
 			state.dataStatus = DataStatus.REJECTED;
 		});
+
+		builder.addCase(patchProfile.fulfilled, (state, action) => {
+			if (
+				state.authenticatedUser &&
+				state.authenticatedUser.id === action.payload.data.id
+			) {
+				state.authenticatedUser = action.payload.data;
+			}
+		});
 	},
 	initialState,
 	name: "auth",
-	reducers: {
-		setAuthenticatedUser(
-			state,
-			action: PayloadAction<UserGetByIdItemResponseDto>,
-		) {
-			state.authenticatedUser = action.payload;
-		},
-	},
+	reducers: {},
 });
 
 export { actions, name, reducer };

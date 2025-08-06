@@ -42,6 +42,7 @@ const { actions, name, reducer } = createSlice({
 			})
 			.addMatcher(isRejected(loadAll, patchProfile), (state) => {
 				state.dataStatus = DataStatus.REJECTED;
+				state.data = [];
 			});
 	},
 	initialState,

@@ -42,3 +42,14 @@ button {
 h1 {
 	margin: 0;
 }
+
+::-webkit-scrollbar {
+	height: 16px;
+}
+
+@supports (scrollbar-width: auto) {
+	html {
+		scrollbar-color: var(--color-fill-brand-strong) var(--color-background-base);
+		scrollbar-width: auto;
+	}
+}

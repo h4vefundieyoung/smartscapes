@@ -1,11 +1,22 @@
 import { RouterOutlet } from "~/libs/components/components.js";
-import { useAppDispatch, useEffect } from "~/libs/hooks/hooks.js";
+import { AppRoute } from "~/libs/enums/enums.js";
+import { useAppDispatch, useEffect, useLocation } from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
+import { actions as userActions } from "~/modules/users/users.js";
 
 import styles from "./styles.module.css";
 
 const App = (): React.JSX.Element => {
+	const { pathname } = useLocation();
 	const dispatch = useAppDispatch();
+
+	const isRoot = pathname === AppRoute.APP;
+
+	useEffect(() => {
+		if (isRoot) {
+			void dispatch(userActions.loadAll());
+		}
+	}, [isRoot, dispatch]);
 
 	useEffect(() => {
 		void dispatch(authActions.getAuthenticatedUser());

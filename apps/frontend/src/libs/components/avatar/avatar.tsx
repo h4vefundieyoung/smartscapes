@@ -16,7 +16,7 @@ const Avatar = ({
 	size = DEFAULT_AVATAR_SIZE,
 	user,
 }: Properties): React.JSX.Element => {
-	const { firstName = "", lastName = "" } = user;
+	const { firstName, lastName } = user;
 	const hasAvatar = Boolean(avatarUrl);
 
 	return (

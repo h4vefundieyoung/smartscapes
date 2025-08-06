@@ -2,32 +2,27 @@ import { type JSX } from "react";
 
 import appLogo from "~/assets/images/logo.svg";
 import { AppRoute } from "~/libs/enums/enums.js";
-import { useAppSelector, useLocation } from "~/libs/hooks/hooks.js";
+import { type UserAuthResponseDto, type ValueOf } from "~/libs/types/types.js";
 
 import { Avatar, Button, Link } from "../components.js";
 import styles from "./styles.module.css";
 
-const Header = (): JSX.Element => {
-	const { pathname } = useLocation();
-	const authenticatedUser = useAppSelector(
-		({ auth }) => auth.authenticatedUser,
-	);
+type Properties = {
+	actions: {
+		label: string;
+		to: ValueOf<typeof AppRoute>;
+	}[];
+	user: null | UserAuthResponseDto;
+};
 
-	const renderHeaderContent = (): React.JSX.Element => {
-		if (pathname === AppRoute.ROOT) {
-			return (
-				<div className={styles["buttons"]}>
-					<Button label="Explore" to={AppRoute.APP} type="button" />
-				</div>
-			);
-		}
-
-		if (authenticatedUser) {
+const Header = ({ actions, user }: Properties): JSX.Element => {
+	const renderHeaderContent = (): JSX.Element => {
+		if (user) {
 			return (
 				<div className={styles["user-info"]}>
-					<Avatar user={authenticatedUser} />
+					<Avatar user={user} />
 					<div className={styles["name"]}>
-						{authenticatedUser.firstName} {authenticatedUser.lastName}
+						{user.firstName} {user.lastName}
 					</div>
 				</div>
 			);
@@ -35,7 +30,9 @@ const Header = (): JSX.Element => {
 
 		return (
 			<div className={styles["buttons"]}>
-				<Button label="Sign in" to={AppRoute.SIGN_IN} type="button" />
+				{actions.map(({ label, to }) => (
+					<Button key={to} label={label} to={to} type="button" />
+				))}
 			</div>
 		);
 	};

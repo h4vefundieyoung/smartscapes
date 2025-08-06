@@ -7,7 +7,12 @@ import {
 } from "~/libs/components/components.js";
 import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import { useAppDispatch, useEffect, useLocation } from "~/libs/hooks/hooks.js";
+import {
+	useAppDispatch,
+	useAppSelector,
+	useEffect,
+	useLocation,
+} from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import { actions as userActions } from "~/modules/users/users.js";
 
@@ -18,6 +23,10 @@ import styles from "./styles.module.css";
 const App = (): React.JSX.Element => {
 	const { pathname } = useLocation();
 	const dispatch = useAppDispatch();
+
+	const authenticatedUser = useAppSelector(
+		({ auth }) => auth.authenticatedUser,
+	);
 
 	const isRoot = pathname === AppRoute.APP;
 
@@ -35,7 +44,10 @@ const App = (): React.JSX.Element => {
 			</div>
 			{isRoot && (
 				<div className={styles["components-container"]}>
-					<Header />
+					<Header
+						actions={[{ label: "Sign in", to: AppRoute.SIGN_IN }]}
+						user={authenticatedUser}
+					/>
 					<div className={styles["sidebar-container"]}>
 						<Sidebar navigationItems={NAVIGATION_ITEMS} />
 					</div>

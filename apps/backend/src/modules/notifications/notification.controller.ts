@@ -110,6 +110,8 @@ class NotificationController extends BaseController {
 	 *     tags:
 	 *       - Notifications
 	 *     summary: Create a new notification
+	 *     security:
+	 *       - bearerAuth: []
 	 *     requestBody:
 	 *       required: true
 	 *       content:

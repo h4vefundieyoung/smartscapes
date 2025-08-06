@@ -41,12 +41,12 @@ class AuthApi extends BaseHTTPApi {
 		return await response.json();
 	}
 
-	public async logout(token: string): Promise<void> {
+	public async logout(): Promise<void> {
 		await this.load(this.getFullEndpoint(AuthApiPath.LOGOUT, {}), {
 			contentType: ContentType.JSON,
-			hasAuth: false,
+			hasAuth: true,
 			method: "POST",
-			payload: JSON.stringify({ token }),
+			payload: JSON.stringify({}),
 		});
 	}
 

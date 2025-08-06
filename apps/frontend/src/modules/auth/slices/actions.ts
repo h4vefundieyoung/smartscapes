@@ -39,7 +39,7 @@ const logout = createAsyncThunk<null, undefined, AsyncThunkConfig>(
 			throw new Error("Failed to revoke token on backned.");
 		}
 
-		await authApi.logout(token);
+		await authApi.logout();
 
 		await storage.drop(StorageKey.TOKEN);
 

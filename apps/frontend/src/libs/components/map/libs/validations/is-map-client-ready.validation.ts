@@ -1,16 +1,9 @@
-type MapboxGLType = {
-	accessToken?: string;
-	GeolocateControl: unknown;
-	Map: unknown;
-	Marker: unknown;
-	NavigationControl: unknown;
-	ScaleControl: unknown;
-};
+import { type MapboxGL } from "../types/types.js";
 
 const isMapClientReady = (
 	accessToken: null | string | undefined,
-	mapClient: MapboxGLType | null,
-): mapClient is MapboxGLType => {
+	mapClient: MapboxGL | null,
+): mapClient is MapboxGL => {
 	return Boolean(accessToken && mapClient);
 };
 

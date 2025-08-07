@@ -35,8 +35,6 @@ import {
 import {
 	type LngLatLike,
 	type LocationData,
-	type MapboxGL,
-	type MapBoxGLWithToken,
 	type MapboxMap,
 	type MapboxMarker,
 	type MapProperties,
@@ -55,30 +53,11 @@ const MapComponent = ({
 	onLocationFound,
 	onMarkerClick,
 }: MapProperties): React.JSX.Element => {
-	const { accessToken } = useMap();
+	const { accessToken, mapClient } = useMap();
 	const mapContainer = useRef<HTMLDivElement>(null);
 	const mapInstance = useRef<MapboxMap | null>(null);
 	const [isMapReady, setIsMapReady] = useState<boolean>(false);
-	const [mapClient, setMapClient] = useState<MapboxGL | null>(null);
 	const markersReference = useRef<MapboxMarker[]>([]);
-
-	useEffect(() => {
-		const loadMapboxGL = async (): Promise<void> => {
-			if (!accessToken || mapClient) {
-				return;
-			}
-
-			const [mapboxgl] = await Promise.all([
-				import("mapbox-gl"),
-				import("mapbox-gl/dist/mapbox-gl.css"),
-			]);
-
-			(mapboxgl.default as MapBoxGLWithToken).accessToken = accessToken;
-			setMapClient(mapboxgl.default);
-		};
-
-		void loadMapboxGL();
-	}, [accessToken, mapClient]);
 
 	const handleLocationFound = useCallback(
 		(location: LocationData): void => {

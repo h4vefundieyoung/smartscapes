@@ -185,7 +185,10 @@ class RoutesController extends BaseController {
 	 *     tags:
 	 *       - Routes
 	 *     summary: Construct Mapbox route
+<<<<<<< HEAD
 	 *     requestBody:
+=======
+>>>>>>> ca44f3a89cf40ca39dd4bf685cbad25ed274bf79
 	 *       required: true
 	 *       content:
 	 *         application/json:
@@ -229,7 +232,6 @@ class RoutesController extends BaseController {
 	 * /routes:
 	 *   post:
 	 *     security:
-	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Routes
 	 *     summary: Create a new route

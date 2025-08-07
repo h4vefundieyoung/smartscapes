@@ -1,5 +1,41 @@
 # Changelog
 
+## [1.18.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.17.2...v1.18.0) (2025-08-07)
+
+
+### Features
+
+* **frontend:** add styles to select ss-255 ([#257](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/257)) ([3a8be15](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/3a8be15b012417608f56dcc3024ddbc01fc92547))
+
+## [1.17.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.17.1...v1.17.2) (2025-08-07)
+
+
+### Bug Fixes
+
+* **backend:** fix poi location schema in swagger documentation ss-258 ([#259](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/259)) ([323d2cf](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/323d2cfb51ba8c817bff46f00b9d079efffacca7))
+
+## [1.17.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.17.0...v1.17.1) (2025-08-07)
+
+
+### Bug Fixes
+
+* **backend:** update reviews module swagger docs ss-251 ([#253](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/253)) ([4753c0e](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/4753c0e243a7d4d8b39ae271c911b0bfe5995d51))
+
+## [1.17.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.16.0...v1.17.0) (2025-08-07)
+
+
+### Features
+
+* **backend/shared:** add reviews module ss-75 ([#147](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/147)) ([435363e](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/435363e7ee382997fab923744e484ecc0efde238))
+
+## [1.16.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.15.0...v1.16.0) (2025-08-07)
+
+
+### Features
+
+* **backend/shared:** add routes module ss-69 ([#104](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/104)) ([b419013](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/b419013fd741b365045a9e6f3d49c30a1885a6b7))
+* **frontend:** update buttons in header ss-186 ([#210](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/210)) ([e4f8d7f](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/e4f8d7ffe91ea72f18bc8932a086e4c7e1194f42))
+
 ## [1.15.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.14.0...v1.15.0) (2025-08-06)
 
 

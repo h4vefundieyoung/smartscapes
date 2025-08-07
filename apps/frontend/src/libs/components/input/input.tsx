@@ -36,7 +36,7 @@ const Input = <T extends FieldValues>({
 
 	const error = errors[name]?.message;
 	const hasError = Boolean(error);
-	const isPasswordType = type === "password";
+	const isPasswordButtonShown = type === "password" && field.value;
 
 	const onPassAppearanceToggle = useCallback((): void => {
 		const state: "password" | "text" =
@@ -69,7 +69,7 @@ const Input = <T extends FieldValues>({
 						{error as string}
 					</span>
 				)}
-				{isPasswordType && (
+				{isPasswordButtonShown && field.value && (
 					<button
 						className={styles["password-toggle-button"]}
 						onClick={onPassAppearanceToggle}

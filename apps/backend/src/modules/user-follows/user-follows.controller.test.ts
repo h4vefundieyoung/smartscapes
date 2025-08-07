@@ -29,7 +29,20 @@ describe("UserFollowsController", () => {
 
 	const TEST_FOLLOWER_ID = 42;
 	const TEST_FOLLOWING_ID = 31;
-	const TEST_EMAIL = "test@gmail.com";
+
+	const mockAuthenticatedUser = {
+		email: "test@example.com",
+		firstName: "John",
+		id: TEST_FOLLOWER_ID,
+		lastName: "Doe",
+	};
+
+	const mockAnotherUser = {
+		email: "another@example.com",
+		firstName: "Alice",
+		id: TEST_FOLLOWING_ID,
+		lastName: "Smith",
+	};
 
 	const mockFollow: UserFollowsService["follow"] =
 		createMockFollowServiceMethod(TEST_FOLLOWER_ID, TEST_FOLLOWING_ID);
@@ -51,7 +64,7 @@ describe("UserFollowsController", () => {
 			body: { followingId: TEST_FOLLOWING_ID },
 			params: { userId: String(TEST_FOLLOWER_ID) },
 			query: null,
-			user: { email: TEST_EMAIL, id: TEST_FOLLOWER_ID },
+			user: mockAuthenticatedUser,
 		};
 
 		const result = await controller.follow(request);
@@ -76,7 +89,7 @@ describe("UserFollowsController", () => {
 			body: { followingId: TEST_FOLLOWING_ID },
 			params: { userId: String(TEST_FOLLOWER_ID) },
 			query: null,
-			user: { email: TEST_EMAIL, id: 100 },
+			user: mockAnotherUser,
 		};
 
 		const result = await controller.follow(request);
@@ -104,7 +117,7 @@ describe("UserFollowsController", () => {
 				userId: String(TEST_FOLLOWER_ID),
 			},
 			query: null,
-			user: { email: TEST_EMAIL, id: TEST_FOLLOWER_ID },
+			user: mockAuthenticatedUser,
 		};
 
 		const result = await controller.unfollow(request);
@@ -132,7 +145,7 @@ describe("UserFollowsController", () => {
 				userId: String(TEST_FOLLOWER_ID),
 			},
 			query: null,
-			user: { email: TEST_EMAIL, id: 100 },
+			user: mockAnotherUser,
 		};
 
 		const result = await controller.unfollow(request);

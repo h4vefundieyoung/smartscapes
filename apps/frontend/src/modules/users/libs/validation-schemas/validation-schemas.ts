@@ -1,3 +1,3 @@
-export { userProfilePatchValidationSchema } from "@smartscapes/shared";
+export { userAuthPatchValidationSchema } from "@smartscapes/shared";
 export { userSignInValidationSchema } from "@smartscapes/shared";
 export { userSignUpValidationSchema } from "@smartscapes/shared";

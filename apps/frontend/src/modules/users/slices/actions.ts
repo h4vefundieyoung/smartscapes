@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 import {
 	type UserGetByIdItemResponseDto,
-	type UserProfilePatchRequestDto,
+	type UserAuthPatchRequestDto,
 } from "~/modules/users/users.js";
 
 import { name as sliceName } from "./users.slice.js";
@@ -20,7 +20,7 @@ const loadAll = createAsyncThunk<
 
 const patchProfile = createAsyncThunk<
 	APIResponse<UserGetByIdItemResponseDto>,
-	{ id: string; payload: UserProfilePatchRequestDto },
+	{ id: string; payload: UserAuthPatchRequestDto },
 	AsyncThunkConfig
 >(`${sliceName}/patch`, async ({ id, payload }, { extra }) => {
 	const { userApi } = extra;

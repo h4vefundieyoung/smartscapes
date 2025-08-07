@@ -8,6 +8,8 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import {
+	type UserAuthPatchRequestDto,
+	userAuthPatchValidationSchema,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
 	userSignInValidationSchema,
@@ -79,6 +81,28 @@ import { AuthError } from "./libs/exceptions/unauthorized.exception.js";
  *           minLength: 6
  *           maxLength: 64
  *           example: strongP@ssw0rd
+ *
+ *     UserAuthPatchRequestDto:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *           minLength: 6
+ *           maxLength: 64
+ *           format: email
+ *           example: user@example.com
+ *         firstName:
+ *           type: string
+ *           minLength: 2
+ *           maxLength: 64
+ *           pattern: '^[a-zA-Z\\s]+$'
+ *           example: John
+ *         lastName:
+ *           type: string
+ *           minLength: 2
+ *           maxLength: 64
+ *           pattern: '^[a-zA-Z\\s]+$'
+ *           example: Doe
  *
  *     UserAuthResponseDto:
  *       type: object
@@ -169,6 +193,15 @@ class AuthController extends BaseController {
 				body: userSignInValidationSchema,
 			},
 		});
+
+		this.addRoute({
+			handler: this.patch.bind(this),
+			method: "PATCH",
+			path: AuthApiPath.AUTH_USER + "/:id",
+			validation: {
+				body: userAuthPatchValidationSchema,
+			},
+		});
 	}
 
 	/**
@@ -203,6 +236,63 @@ class AuthController extends BaseController {
 			status: HTTPCode.OK,
 		};
 	}
+
+	/**
+	 * @swagger
+	 * /auth/authenticated-user/{id}:
+	 *   patch:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - Auth
+	 *     summary: Update user information
+	 *     description: |
+	 *       Update the authenticated user's information.
+	 *       Requires a valid JWT token in the Authorization header.
+	 *       Only the user can update their own information.
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *         description: User ID to update
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             $ref: '#/components/schemas/UserAuthPatchRequestDto'
+	 *     responses:
+	 *       200:
+	 *         description: User updated successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/UserAuthResponseDto'
+	 */
+	public async patch(
+		options: APIHandlerOptions<{
+			body: UserAuthPatchRequestDto;
+			params: {
+				id: string;
+			};
+		}>,
+	): Promise<APIHandlerResponse<UserAuthResponseDto>> {
+		const { body, params } = options;
+		const id = Number(params.id);
+
+		const result = await this.authService.patch(id, body);
+
+		return {
+			payload: { data: result },
+			status: HTTPCode.OK,
+		};
+	}
+
 	/**
 	 * @swagger
 	 * /auth/sign-in:

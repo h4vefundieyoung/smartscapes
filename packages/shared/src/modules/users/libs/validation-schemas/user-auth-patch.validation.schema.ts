@@ -4,7 +4,7 @@ import { checkIsLatinLetter } from "../../../../libs/helpers/helpers.js";
 import { UserValidationMessage } from "../enums/user-validation-message.enum.js";
 import { UserValidationRule } from "../enums/user-validation-rule.enum.js";
 
-const userProfilePatch = z
+const userAuthPatch = z
 	.object({
 		firstName: z
 			.string()
@@ -43,4 +43,4 @@ const userProfilePatch = z
 		message: UserValidationMessage.FIRST_OR_LAST_NAME_REQUIRED,
 	});
 
-export { userProfilePatch };
+export { userAuthPatch };

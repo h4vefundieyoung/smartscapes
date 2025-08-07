@@ -52,11 +52,11 @@ export {
 	type RouteCategoryRequestDto,
 } from "./modules/route-categories/route-categories.js";
 export {
+	type UserAuthPatchRequestDto,
+	userAuthPatchValidationSchema,
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetByIdItemResponseDto,
-	type UserProfilePatchRequestDto,
-	userProfilePatchValidationSchema,
 	UsersApiPath,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,

@@ -52,6 +52,13 @@ export {
 	type RouteCategoryRequestDto,
 } from "./modules/route-categories/route-categories.js";
 export {
+	routesCreateValidationSchema,
+	type RoutesRequestCreateDto,
+	type RoutesRequestPatchDto,
+	type RoutesResponseDto,
+	routesUpdateValidationSchema,
+} from "./modules/routes/routes.js";
+export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetByIdItemResponseDto,

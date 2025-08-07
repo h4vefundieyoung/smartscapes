@@ -27,16 +27,12 @@ import { reviewCreateValidationSchema } from "./libs/validation-schemas/validati
  *         content:
  *           type: string
  *           example: "This is a review content."
- *         likesCount:
- *           type: integer
  *         routeId:
  *           type: integer
  *           nullable: true
  *         poiId:
  *           type: integer
  *           nullable: true
- *         userId:
- *           type: integer
  *
  *     Review:
  *       type: object

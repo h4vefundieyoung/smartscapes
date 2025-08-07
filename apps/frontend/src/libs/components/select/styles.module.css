@@ -81,6 +81,16 @@
 	background-color: var(--color-text-error);
 }
 
+.clear-indicator {
+	color: var(--color-text-strong);
+	cursor: pointer;
+}
+
+.clear-indicator:hover {
+	color: var(--color-base);
+	background-color: var(--color-text-error);
+}
+
 @media (width <=768px) {
 	.control {
 		padding: 8px 10px;

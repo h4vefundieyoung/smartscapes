@@ -19,6 +19,7 @@
 	background-color: var(--color-background-base);
 	border: 1px solid var(--color-stroke-strong);
 	border-radius: 8px;
+	transition: background-color 0.3s ease;
 }
 
 .control:hover {
@@ -26,9 +27,7 @@
 }
 
 .control:focus-within {
-	outline: 2px solid var(--color-stroke-focus);
-	outline-offset: 2px;
-	background-color: initial;
+	border: 1px solid var(--color-stroke-focus);
 }
 
 .menu {
@@ -74,11 +73,21 @@
 .multi-value-remove {
 	color: var(--color-text-strong);
 	cursor: pointer;
+	transition: background-color 0.3s ease;
 }
 
 .multi-value-remove:hover {
-	color: var(--color-base);
-	background-color: var(--color-text-error);
+	background-color: var(--color-fill-hover);
+}
+
+.clear-indicator {
+	color: var(--color-text-strong);
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.clear-indicator:hover {
+	background-color: var(--color-fill-hover);
 }
 
 @media (width <=768px) {

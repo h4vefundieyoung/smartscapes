@@ -59,7 +59,7 @@ const Auth = (): React.JSX.Element => {
 	);
 
 	if (hasUser) {
-		return <Navigate to={AppRoute.ROOT} />;
+		return <Navigate to={AppRoute.APP} />;
 	}
 
 	return (
@@ -67,7 +67,13 @@ const Auth = (): React.JSX.Element => {
 			<div className={styles["left-panel"]}>
 				<div className={styles["logo"]}>
 					<Link to={AppRoute.ROOT}>
-						<img alt="SmartScapes" height="24" src={logo} width="136" />
+						<img
+							alt="SmartScapes"
+							className={styles["auth-logo"]}
+							height="24"
+							src={logo}
+							width="136"
+						/>
 					</Link>
 				</div>
 

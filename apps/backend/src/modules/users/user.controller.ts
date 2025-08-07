@@ -22,6 +22,12 @@ import { type UserGetByIdItemResponseDto } from "./libs/types/types.js";
  *         email:
  *           type: string
  *           example: user@example.com
+ *         lastName:
+ *          type: string
+ *          example: Doe
+ *         firstName:
+ *          type: string
+ *          example: John
  */
 
 class UserController extends BaseController {
@@ -42,6 +48,8 @@ class UserController extends BaseController {
 	 * @swagger
 	 * /users:
 	 *   get:
+	 *     security:
+	 *      - bearerAuth: []
 	 *     tags:
 	 *       - Users
 	 *     summary: Retrieve all users

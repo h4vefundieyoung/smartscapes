@@ -2,10 +2,14 @@ const DatabaseTableName = {
 	GROUPS: "groups",
 	GROUPS_TO_PERMISSIONS: "groups_to_permissions",
 	MIGRATIONS: "migrations",
+	NOTIFICATIONS: "notifications",
 	PERMISSIONS: "permissions",
 	POINTS_OF_INTEREST: "points_of_interest",
+	REVIEWS: "reviews",
 	ROUTE_CATEGORIES: "route_categories",
-	USER_FOLLOWS: "user_follows",
+	ROUTES: "routes",
+	ROUTES_TO_POIS: "routes_to_pois",
+  USER_FOLLOWS: "user_follows",
 	USERS: "users",
 } as const;
 

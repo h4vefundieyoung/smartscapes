@@ -62,7 +62,9 @@ class AuthService {
 			token,
 			user: {
 				email,
+				firstName: user.firstName,
 				id: user.id,
+				lastName: user.lastName,
 			},
 		};
 	}
@@ -70,10 +72,10 @@ class AuthService {
 	public async signUp(
 		userRequestDto: UserSignUpRequestDto,
 	): Promise<UserSignUpResponseDto> {
-		const { email, id } = await this.userService.create(userRequestDto);
-		const token = await this.tokenService.create({ userId: id });
+		const user = await this.userService.create(userRequestDto);
+		const token = await this.tokenService.create({ userId: user.id });
 
-		return { token, user: { email, id } };
+		return { token, user };
 	}
 }
 

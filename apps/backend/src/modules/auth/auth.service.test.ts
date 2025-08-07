@@ -35,8 +35,7 @@ describe("AuthService", () => {
 		const mockSignUpResponse: UserSignUpResponseDto = {
 			token: mockToken,
 			user: {
-				email: mockUserServiceResponse.email,
-				id: mockUserServiceResponse.id,
+				...mockUserServiceResponse,
 			},
 		};
 
@@ -89,7 +88,9 @@ describe("AuthService", () => {
 		};
 
 		const mockPasswordDetails = {
+			firstName: "John",
 			id: 1,
+			lastName: "Doe",
 			passwordHash: "hashedPassword",
 			passwordSalt: "someSalt",
 		};
@@ -98,7 +99,9 @@ describe("AuthService", () => {
 			token: mockToken,
 			user: {
 				email: signInRequestDto.email,
+				firstName: mockPasswordDetails.firstName,
 				id: mockPasswordDetails.id,
+				lastName: mockPasswordDetails.lastName,
 			},
 		};
 

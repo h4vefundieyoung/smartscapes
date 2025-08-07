@@ -11,21 +11,57 @@ import { type PointsOfInterestService } from "~/modules/points-of-interest/point
 import {
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
+	type PointsOfInterestSearchQuery,
 } from "./libs/types/type.js";
 import {
 	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
+	pointsOfInterestSearchQueryValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 
 /**
  * @swagger
  * components:
  *   schemas:
- *     PointsOfInterest:
+ *     PointsOfInterestLocation:
  *       type: object
+ *       required:
+ *         - coordinates
+ *         - type
+ *       properties:
+ *         coordinates:
+ *           type: array
+ *           items:
+ *             type: string
+ *           example: ["30.5234", "50.4501"]
+ *         type:
+ *           type: string
+ *           example: "Point"
+ *
+ *     PointsOfInterestRequestDto:
+ *       type: object
+ *       required:
+ *         - location
+ *         - name
+ *       properties:
+ *         location:
+ *           $ref: '#/components/schemas/PointsOfInterestLocation'
+ *         name:
+ *           type: string
+ *           example: "Central Park"
+ *
+ *     PointsOfInterestResponseDto:
+ *       type: object
+ *       required:
+ *         - id
+ *         - location
+ *         - name
  *       properties:
  *         id:
  *           type: number
+ *           example: 1
+ *         location:
+ *           $ref: '#/components/schemas/PointsOfInterestLocation'
  *         name:
  *           type: string
  *           example: "Central Park"
@@ -67,6 +103,9 @@ class PointsOfInterestController extends BaseController {
 			handler: this.findAll.bind(this),
 			method: "GET",
 			path: "/",
+			validation: {
+				query: pointsOfInterestSearchQueryValidationSchema,
+			},
 		});
 
 		this.addRoute({
@@ -83,6 +122,8 @@ class PointsOfInterestController extends BaseController {
 	 * @swagger
 	 * /points-of-interest:
 	 *   post:
+	 *     security:
+	 *      - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
 	 *     summary: Create a new point of interest
@@ -91,19 +132,17 @@ class PointsOfInterestController extends BaseController {
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             type: object
-	 *             required:
-	 *               - name
-	 *             properties:
-	 *               name:
-	 *                 type: string
+	 *             $ref: '#/components/schemas/PointsOfInterestRequestDto'
 	 *     responses:
 	 *       201:
 	 *         description: Point of interest created successfully
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/PointsOfInterest'
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/PointsOfInterestResponseDto'
 	 */
 	public async create(
 		options: APIHandlerOptions<{
@@ -115,7 +154,7 @@ class PointsOfInterestController extends BaseController {
 
 		return {
 			payload: { data: pointOfInterest },
-			status: HTTPCode.OK,
+			status: HTTPCode.CREATED,
 		};
 	}
 
@@ -123,6 +162,8 @@ class PointsOfInterestController extends BaseController {
 	 * @swagger
 	 * /points-of-interest/{id}:
 	 *   delete:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
 	 *     summary: Delete a point of interest
@@ -135,8 +176,13 @@ class PointsOfInterestController extends BaseController {
 	 *     responses:
 	 *       200:
 	 *         description: Point of interest deleted successfully
-	 *       404:
-	 *         description: Point of interest not found
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: boolean
 	 */
 	public async delete(
 		options: APIHandlerOptions<{
@@ -156,12 +202,52 @@ class PointsOfInterestController extends BaseController {
 	 * @swagger
 	 * /points-of-interest:
 	 *   get:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
-	 *     summary: Retrieve all points of interest
+	 *     summary: Retrieve points of interest with optional location-based filtering
+	 *     description: |
+	 *       Get all points of interest or filter them by location.
+	 *
+	 *       **Without query parameters**: Returns all points of interest
+	 *
+	 *       **With location parameters**: Returns points of interest within specified radius
+	 *       from the given coordinates (latitude/longitude)
+	 *     parameters:
+	 *       - in: query
+	 *         name: latitude
+	 *         schema:
+	 *           type: string
+	 *           pattern: '^-?([1-8]?[0-9](\.[0-9]+)?|90(\.0+)?)$'
+	 *           example: "50.4501"
+	 *         description: |
+	 *           User's latitude for location-based search.
+	 *           Must be between -90 and 90 degrees.
+	 *           Required if longitude is provided.
+	 *       - in: query
+	 *         name: longitude
+	 *         schema:
+	 *           type: string
+	 *           pattern: '^-?((1[0-7][0-9]|[1-9]?[0-9])(\.[0-9]+)?|180(\.0+)?)$'
+	 *           example: "30.5234"
+	 *         description: |
+	 *           User's longitude for location-based search.
+	 *           Must be between -180 and 180 degrees.
+	 *           Required if latitude is provided.
+	 *       - in: query
+	 *         name: radius
+	 *         schema:
+	 *           type: string
+	 *           pattern: '^[0-9]+(\.[0-9]+)?$'
+	 *           example: "5"
+	 *         description: |
+	 *           Search radius in kilometers.
+	 *           Default value is 5 km if not specified.
+	 *           Must be between 0.1 and 50 km.
 	 *     responses:
 	 *       200:
-	 *         description: A list of points of interest
+	 *         description: Successfully retrieved points of interest
 	 *         content:
 	 *           application/json:
 	 *             schema:
@@ -170,12 +256,43 @@ class PointsOfInterestController extends BaseController {
 	 *                 data:
 	 *                   type: array
 	 *                   items:
-	 *                     $ref: '#/components/schemas/PointsOfInterest'
+	 *                     $ref: '#/components/schemas/PointsOfInterestResponseDto'
+	 *                   description: Array of points of interest
+	 *             examples:
+	 *               all_pois:
+	 *                 summary: All points of interest
+	 *                 description: Response when no location filters are provided
+	 *                 value:
+	 *                   data:
+	 *                     - id: 1
+	 *                       name: "Central Park"
+	 *                       location:
+	 *                         type: "Point"
+	 *                         coordinates: [30.5234, 50.4501]
+	 *                     - id: 2
+	 *                       name: "Glass Bridge"
+	 *                       location:
+	 *                         type: "Point"
+	 *                         coordinates: [30.5289, 50.4553]
+	 *               nearby_pois:
+	 *                 summary: Nearby points of interest
+	 *                 description: Response when location filters are provided
+	 *                 value:
+	 *                   data:
+	 *                     - id: 1
+	 *                       name: "Central Park"
+	 *                       location:
+	 *                         type: "Point"
+	 *                         coordinates: [30.5234, 50.4501]
 	 */
-	public async findAll(): Promise<
-		APIHandlerResponse<PointsOfInterestResponseDto[]>
-	> {
-		const { items } = await this.pointsOfInterestService.findAll();
+	public async findAll(
+		options: APIHandlerOptions<{
+			query?: PointsOfInterestSearchQuery;
+		}>,
+	): Promise<APIHandlerResponse<PointsOfInterestResponseDto[]>> {
+		const { query = null } = options;
+
+		const { items } = await this.pointsOfInterestService.findAll(query);
 
 		return {
 			payload: { data: items },
@@ -187,6 +304,8 @@ class PointsOfInterestController extends BaseController {
 	 * @swagger
 	 * /points-of-interest/{id}:
 	 *   get:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
 	 *     summary: Get a point of interest by ID
@@ -202,9 +321,10 @@ class PointsOfInterestController extends BaseController {
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/PointsOfInterest'
-	 *       404:
-	 *         description: Point of interest not found
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/PointsOfInterestResponseDto'
 	 */
 	public async findById(
 		options: APIHandlerOptions<{
@@ -224,6 +344,8 @@ class PointsOfInterestController extends BaseController {
 	 * @swagger
 	 * /points-of-interest/{id}:
 	 *   patch:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
 	 *     summary: Update a point of interest
@@ -238,21 +360,17 @@ class PointsOfInterestController extends BaseController {
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             type: object
-	 *             required:
-	 *               - name
-	 *             properties:
-	 *               name:
-	 *                 type: string
+	 *             $ref: '#/components/schemas/PointsOfInterestRequestDto'
 	 *     responses:
 	 *       200:
 	 *         description: Point of interest updated successfully
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/PointsOfInterest'
-	 *       404:
-	 *         description: Point of interest not found
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/PointsOfInterestResponseDto'
 	 */
 	public async patch(
 		options: APIHandlerOptions<{

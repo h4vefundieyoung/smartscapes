@@ -1,6 +1,10 @@
-import { type default as mapboxgl } from "mapbox-gl";
+import { type default as mapboxgl, type MapOptions } from "mapbox-gl";
 
 type MapboxGL = typeof mapboxgl;
+
+type MapBoxGLWithToken = MapboxGL & { accessToken: MapToken };
+
+type MapToken = MapOptions["accessToken"] | null;
 
 export { type LocationData } from "./location-data.type.js";
 export { type MapProperties } from "./map-properties.type.js";
@@ -14,4 +18,4 @@ export {
 	type ScaleControl,
 	type ScaleControlOptions,
 } from "mapbox-gl";
-export { type MapboxGL };
+export { type MapboxGL, type MapBoxGLWithToken };

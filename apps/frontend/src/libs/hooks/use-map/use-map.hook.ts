@@ -9,7 +9,6 @@ const useMap = (): MapContextValue => {
 	if (!context) {
 		return {
 			accessToken: null,
-			mapClient: null,
 		};
 	}
 

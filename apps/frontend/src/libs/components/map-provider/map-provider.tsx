@@ -1,8 +1,6 @@
-import mapboxgl from "mapbox-gl";
 import React, { createContext, useMemo } from "react";
 
 import {
-	type MapBoxGLWithToken,
 	type MapContextValue,
 	type MapProviderProperties,
 } from "./libs/types/types.js";
@@ -13,22 +11,11 @@ const MapProvider = ({
 	accessToken,
 	children,
 }: MapProviderProperties): React.JSX.Element => {
-	const mapClient = useMemo(() => {
-		if (!accessToken) {
-			return null;
-		}
-
-		(mapboxgl as MapBoxGLWithToken).accessToken = accessToken;
-
-		return mapboxgl;
-	}, [accessToken]);
-
 	const contextValue = useMemo<MapContextValue>(
 		() => ({
 			accessToken: accessToken || null,
-			mapClient,
 		}),
-		[accessToken, mapClient],
+		[accessToken],
 	);
 
 	return (

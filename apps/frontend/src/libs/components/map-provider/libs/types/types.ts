@@ -1,12 +1,7 @@
-import { type default as mapboxgl, type MapOptions } from "mapbox-gl";
-
-type MapboxGL = typeof mapboxgl;
-
-type MapBoxGLWithToken = MapboxGL & { accessToken: MapToken };
+import { type MapOptions } from "mapbox-gl";
 
 type MapContextValue = {
 	accessToken: MapToken;
-	mapClient: MapboxGL | null;
 };
 
 type MapProviderProperties = {
@@ -16,8 +11,4 @@ type MapProviderProperties = {
 
 type MapToken = MapOptions["accessToken"] | null;
 
-export {
-	type MapBoxGLWithToken,
-	type MapContextValue,
-	type MapProviderProperties,
-};
+export { type MapContextValue, type MapProviderProperties };

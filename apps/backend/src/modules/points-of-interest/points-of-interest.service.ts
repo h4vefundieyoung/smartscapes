@@ -1,3 +1,4 @@
+import { METERS_IN_KM } from "~/libs/constants/constants.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
 import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
@@ -49,9 +50,30 @@ class PointsOfInterestService implements Service {
 	}
 
 	public async findAll(
-		filters?: PointsOfInterestFindAllOptions,
+		options: null | PointsOfInterestFindAllOptions,
 	): Promise<CollectionResult<PointsOfInterestResponseDto>> {
-		const items = await this.pointsOfInterestRepository.findAll(filters);
+		const hasLocationFilter =
+			options && Boolean(options.latitude) && Boolean(options.longitude);
+
+		if (!hasLocationFilter) {
+			const items = await this.pointsOfInterestRepository.findAll(options);
+
+			return {
+				items: items.map((item) => item.toObject()),
+			};
+		}
+
+		const DEFAULT_SEARCH_RADIUS_KM = 5;
+
+		const { radius = DEFAULT_SEARCH_RADIUS_KM } = options;
+
+		const searchParameters = {
+			...options,
+			radius: radius * METERS_IN_KM,
+		};
+
+		const items =
+			await this.pointsOfInterestRepository.findNearby(searchParameters);
 
 		return {
 			items: items.map((item) => item.toObject()),

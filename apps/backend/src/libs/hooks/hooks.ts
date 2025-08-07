@@ -1,1 +1,1 @@
-export { getRequestDebouncer } from "./debouncer/get-request-debouncer.hook.js";
+export { setRateLimit } from "./debouncer/set-rate-limit.hook.js";

@@ -1,1 +1,1 @@
-export { type Hook } from "./hook.type.js";
+export { type APIPreHandler } from "./api-prehandler.type.js";

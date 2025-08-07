@@ -61,6 +61,7 @@ describe("BaseController", () => {
 			method: "GET",
 			params: { id: "123" },
 			query: { x: "1" },
+			token: "mock-token-value",
 			url: "/test/:id",
 			user: null,
 		} as Parameters<ServerApplicationRouteParameters["handler"]>[0];
@@ -105,6 +106,7 @@ describe("BaseController", () => {
 			body: mockRequest.body,
 			params: mockRequest.params,
 			query: mockRequest.query,
+			token: mockRequest.token,
 			user: mockRequest.user,
 		});
 

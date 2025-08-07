@@ -10,16 +10,16 @@ import {
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
+import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 
 import { Avatar } from "../components.js";
 import { UserDropdown } from "../user-dropdown/user-dropdown.js";
 import DropdownArrow from "./dropdown-arrow.svg?react";
-import { type User } from "./libs/types/types.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	user: User;
+	user: UserAuthResponseDto;
 };
 
 const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {

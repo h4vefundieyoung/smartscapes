@@ -23,6 +23,8 @@ describe("PointsOfInterestController", () => {
 		warn: () => {},
 	};
 
+	const mockToken = "mock-token-value";
+
 	const mockPointOfInterest = {
 		id: 1,
 		location: {
@@ -52,6 +54,7 @@ describe("PointsOfInterestController", () => {
 			body: {},
 			params: {},
 			query: undefined,
+			token: mockToken,
 			user: null,
 		});
 
@@ -126,6 +129,7 @@ describe("PointsOfInterestController", () => {
 				longitude: TEST_LONGITUDE,
 				radius: 5,
 			},
+			token: mockToken,
 			user: null,
 		});
 

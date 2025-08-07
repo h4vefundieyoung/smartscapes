@@ -77,6 +77,7 @@ describe("AuthController", () => {
 		const authController = new AuthController(mockLogger, {} as AuthService);
 
 		const mockRequest = {
+			token: mockToken,
 			user: { ...mockUser },
 		};
 

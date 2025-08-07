@@ -21,7 +21,7 @@ describe("UserService", () => {
 		permissions: [mockPermission],
 	});
 
-	const mockUser: Parameters<typeof UserEntity.initialize>[0] = {
+	const mockUser = UserEntity.initialize({
 		email: "test@example.com",
 		firstName: "John",
 		group: mockGroup,
@@ -30,10 +30,19 @@ describe("UserService", () => {
 		lastName: "Doe",
 		passwordHash: "hash",
 		passwordSalt: "salt",
-	};
+	});
 
 	it("create should return new user", async () => {
-		const userEntity = UserEntity.initialize(mockUser);
+		const userEntity = UserEntity.initialize({
+			email: "test@example.com",
+			firstName: "John",
+			group: mockGroup,
+			groupId: 2,
+			id: 1,
+			lastName: "Doe",
+			passwordHash: "hash",
+			passwordSalt: "salt",
+		});
 
 		const userRepository: UserRepository = {
 			create: () => userEntity,
@@ -47,43 +56,43 @@ describe("UserService", () => {
 
 		const result = await userService.create({
 			confirmPassword: "Password",
-			email: mockUser.email,
-			firstName: mockUser.firstName,
-			lastName: mockUser.lastName,
+			email: mockUser.toObject().email,
+			firstName: mockUser.toObject().firstName,
+			lastName: mockUser.toObject().lastName,
 			password: "Password",
 		});
 
 		assert.deepStrictEqual(result, {
-			email: mockUser.email,
-			firstName: mockUser.firstName,
+			email: mockUser.toObject().email,
+			firstName: mockUser.toObject().firstName,
 			group: {
 				id: 2,
 				key: "users",
 				name: "Users",
 				permissions: [{ id: 1, key: "read", name: "Read" }],
 			},
-			groupId: mockUser.groupId,
-			id: mockUser.id,
-			lastName: mockUser.lastName,
+			groupId: mockUser.toObject().groupId,
+			id: mockUser.toObject().id,
+			lastName: mockUser.toObject().lastName,
 		});
 	});
 
 	it("findAll should return all users", async () => {
-		const userEntity = UserEntity.initialize(mockUser);
+		const userEntity = UserEntity.initialize({
+			email: "test@example.com",
+			firstName: "John",
+			group: mockGroup,
+			groupId: 2,
+			id: 1,
+			lastName: "Doe",
+			passwordHash: "hash",
+			passwordSalt: "salt",
+		});
 
 		const userRepository = {
-			findAll: () =>
-				Promise.resolve([
-					{
-						...userEntity.toObject(),
-						group: {
-							id: 2,
-							key: "users",
-							name: "Users",
-							permissions: [{ id: 1, key: "READ", name: "Can read" }],
-						},
-					},
-				]),
+			findAll: () => {
+				return [userEntity];
+			},
 		} as unknown as UserRepository;
 
 		const userService = new UserService(userRepository);
@@ -91,21 +100,7 @@ describe("UserService", () => {
 		const result = await userService.findAll();
 
 		assert.deepStrictEqual(result, {
-			items: [
-				{
-					email: mockUser.email,
-					firstName: mockUser.firstName,
-					group: {
-						id: 2,
-						key: "users",
-						name: "Users",
-						permissions: [{ id: 1, key: "READ", name: "Can read" }],
-					},
-					groupId: mockUser.groupId,
-					id: mockUser.id,
-					lastName: mockUser.lastName,
-				},
-			],
+			items: [mockUser.toObject()],
 		});
 	});
 });

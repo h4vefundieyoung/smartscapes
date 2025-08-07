@@ -1,6 +1,7 @@
-type GroupItemResponseDto = {
+type GroupResponseDto = {
 	id: number;
 	key: string;
+	name: string;
 };
 
-export { type GroupItemResponseDto };
+export { type GroupResponseDto };

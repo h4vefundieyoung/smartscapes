@@ -31,8 +31,8 @@ export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
 export {
 	type GroupAuthResponseDto,
 	GroupExceptionMessage,
-	type GroupItemResponseDto,
 	GroupKey,
+	type GroupResponseDto,
 } from "./modules/groups/groups.js";
 export {
 	NotificationApiPath,
@@ -73,7 +73,7 @@ export {
 export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,
-	type UserGetAllItemsResponseDto,
+	type UserGetByIdItemResponseDto,
 	UsersApiPath,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,

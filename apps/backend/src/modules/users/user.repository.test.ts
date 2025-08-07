@@ -19,7 +19,7 @@ describe("UserRepository", () => {
 		name: "Users",
 	});
 
-	const mockUser: Parameters<typeof UserEntity.initialize>[0] = {
+	const mockUser = UserEntity.initialize({
 		email: "test@example.com",
 		firstName: "John",
 		group: mockGroup,
@@ -28,10 +28,10 @@ describe("UserRepository", () => {
 		lastName: "Doe",
 		passwordHash: "hash",
 		passwordSalt: "salt",
-	};
+	});
 
 	const mockGroupService = {
-		findByKey: () => mockGroup,
+		findByKey: () => mockGroup.toObject(),
 	} as unknown as GroupService;
 
 	beforeEach(() => {
@@ -49,7 +49,16 @@ describe("UserRepository", () => {
 	});
 
 	it("create create and return new user", async () => {
-		const userEntity = UserEntity.initialize(mockUser);
+		const userEntity = UserEntity.initialize({
+			email: "test@example.com",
+			firstName: "John",
+			group: mockGroup,
+			groupId: 2,
+			id: 1,
+			lastName: "Doe",
+			passwordHash: "hash",
+			passwordSalt: "salt",
+		});
 
 		databaseTracker.on.insert("users").response([userEntity]);
 
@@ -59,7 +68,7 @@ describe("UserRepository", () => {
 	});
 
 	it("findAll should return all users", async () => {
-		const userEntities = [UserEntity.initialize(mockUser).toObject()];
+		const userEntities = [mockUser];
 
 		databaseTracker.on.select("users").response(userEntities);
 

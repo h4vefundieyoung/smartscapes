@@ -1,4 +1,4 @@
-import { type UserGetAllItemsResponseDto } from "@smartscapes/shared";
+import { type UserGetByIdItemResponseDto } from "@smartscapes/shared";
 
 import { APIPath } from "~/libs/enums/enums.js";
 import {
@@ -68,7 +68,7 @@ class UserController extends BaseController {
 	 *                     $ref: '#/components/schemas/User'
 	 */
 	public async findAll(): Promise<
-		APIHandlerResponse<UserGetAllItemsResponseDto[]>
+		APIHandlerResponse<UserGetByIdItemResponseDto[]>
 	> {
 		const { items } = await this.userService.findAll();
 

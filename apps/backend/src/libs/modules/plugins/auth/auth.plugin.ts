@@ -1,10 +1,7 @@
 import { type FastifyInstance, type FastifyRequest } from "fastify";
 import fastifyPlugin from "fastify-plugin";
 
-import {
-	type HTTPMethod,
-	type UserAuthResponseDto,
-} from "~/libs/types/types.js";
+import { type HTTPMethod } from "~/libs/types/types.js";
 import { AuthError } from "~/modules/auth/libs/exceptions/exceptions.js";
 import { userService } from "~/modules/users/users.js";
 
@@ -47,7 +44,7 @@ const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {
 			throw new AuthError();
 		}
 
-		request.user = user.toObject() as UserAuthResponseDto;
+		request.user = user;
 	};
 
 	app.decorateRequest("user", null);

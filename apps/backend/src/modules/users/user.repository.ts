@@ -1,13 +1,11 @@
-import { type UserGetAllItemsResponseDto } from "@smartscapes/shared";
-
 import { type Repository } from "~/libs/types/types.js";
 import { type UserPasswordDetails } from "~/modules/users/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
 
+import { GroupEntity } from "../groups/group.entity.js";
 import { type GroupService } from "../groups/group.service.js";
-import { GroupExceptionMessage, GroupKey } from "../groups/libs/enums/enums.js";
-import { toGroupEntity } from "../groups/libs/helpers/to-group-entity.js";
+import { GroupKey } from "../groups/libs/enums/enums.js";
 
 class UserRepository implements Repository {
 	private groupService: GroupService;
@@ -23,10 +21,6 @@ class UserRepository implements Repository {
 			entity.toNewObject();
 
 		const group = await this.groupService.findByKey(GroupKey.USERS);
-
-		if (!group) {
-			throw new Error(GroupExceptionMessage.GROUP_NOT_FOUND);
-		}
 
 		const user = await this.userModel
 			.query()
@@ -44,7 +38,7 @@ class UserRepository implements Repository {
 		return UserEntity.initialize({
 			email: user.email,
 			firstName: user.firstName,
-			group: user.group ? toGroupEntity(user.group) : null,
+			group: user.group ? GroupEntity.initialize(group) : null,
 			groupId: user.groupId,
 			id: user.id,
 			lastName: user.lastName,
@@ -53,7 +47,7 @@ class UserRepository implements Repository {
 		});
 	}
 
-	public async findAll(): Promise<UserGetAllItemsResponseDto[]> {
+	public async findAll(): Promise<UserEntity[]> {
 		const users = await this.userModel
 			.query()
 			.select([
@@ -83,14 +77,14 @@ class UserRepository implements Repository {
 			UserEntity.initialize({
 				email: user.email,
 				firstName: user.firstName,
-				group: user.group ? toGroupEntity(user.group) : null,
+				group: user.group ? GroupEntity.initialize(user.group) : null,
 				groupId: user.groupId,
 				id: user.id,
 				lastName: user.lastName,
-				passwordHash: "",
-				passwordSalt: "",
-			}).toObject(),
-		) as UserGetAllItemsResponseDto[];
+				passwordHash: user.passwordHash,
+				passwordSalt: user.passwordSalt,
+			}),
+		);
 	}
 
 	public async findByEmail(email: string): Promise<null | UserEntity> {
@@ -107,7 +101,7 @@ class UserRepository implements Repository {
 		return UserEntity.initialize({
 			email: user.email,
 			firstName: user.firstName,
-			group: user.group ? toGroupEntity(user.group) : null,
+			group: user.group ? GroupEntity.initialize(user.group) : null,
 			groupId: user.groupId,
 			id: user.id,
 			lastName: user.lastName,
@@ -130,7 +124,7 @@ class UserRepository implements Repository {
 		return UserEntity.initialize({
 			email: user.email,
 			firstName: user.firstName,
-			group: user.group ? toGroupEntity(user.group) : null,
+			group: user.group ? GroupEntity.initialize(user.group) : null,
 			groupId: user.groupId,
 			id: user.id,
 			lastName: user.lastName,

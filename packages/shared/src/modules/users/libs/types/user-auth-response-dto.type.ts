@@ -1,7 +1,7 @@
 type UserAuthResponseDto = {
 	email: string;
 	firstName: string;
-	group: {
+	group: null | {
 		id: number;
 		key: string;
 		name: string;

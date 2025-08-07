@@ -1,7 +1,7 @@
 import {
 	CommonExceptionMessage,
 	type UserAuthResponseDto,
-	type UserGetAllItemsResponseDto,
+	type UserGetByIdItemResponseDto,
 } from "@smartscapes/shared";
 
 import { encryption } from "~/libs/modules/encryption/libs/encryption.js";
@@ -55,7 +55,7 @@ class UserService implements Service {
 			});
 		}
 
-		const newUser = await this.findById(item.toObject().id);
+		const newUser = await this.userRepository.findById(item.toObject().id);
 
 		if (!newUser) {
 			throw new UserError({
@@ -68,25 +68,27 @@ class UserService implements Service {
 	}
 
 	public async findAll(): Promise<
-		CollectionResult<UserGetAllItemsResponseDto>
+		CollectionResult<UserGetByIdItemResponseDto>
 	> {
 		const items = await this.userRepository.findAll();
 
 		return {
-			items,
+			items: items.map((item) => item.toObject()),
 		};
 	}
 
-	public async findByEmail(email: string): Promise<null | UserEntity> {
+	public async findByEmail(
+		email: string,
+	): Promise<null | UserGetByIdItemResponseDto> {
 		const user = await this.userRepository.findByEmail(email);
 
-		return user;
+		return user ? user.toObject() : null;
 	}
 
-	public async findById(id: number): Promise<null | UserEntity> {
+	public async findById(id: number): Promise<null | UserAuthResponseDto> {
 		const user = await this.userRepository.findById(id);
 
-		return user;
+		return user ? user.toObject() : null;
 	}
 
 	public async findPasswordDetails(

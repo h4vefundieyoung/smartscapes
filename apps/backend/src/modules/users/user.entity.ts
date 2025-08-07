@@ -9,7 +9,7 @@ class UserEntity implements Entity {
 
 	private group: GroupEntity | null;
 
-	private groupId: null | number;
+	private groupId: number;
 
 	private id: null | number;
 
@@ -32,7 +32,7 @@ class UserEntity implements Entity {
 		email: string;
 		firstName: string;
 		group: GroupEntity | null;
-		groupId: null | number;
+		groupId: number;
 		id: null | number;
 		lastName: string;
 		passwordHash: string;
@@ -96,7 +96,7 @@ class UserEntity implements Entity {
 			email,
 			firstName,
 			group: null,
-			groupId: null,
+			groupId: -1,
 			id: null,
 			lastName,
 			passwordHash,
@@ -133,7 +133,7 @@ class UserEntity implements Entity {
 				name: string;
 			}[];
 		};
-		groupId: null | number;
+		groupId: number;
 		id: number;
 		lastName: string;
 	} {

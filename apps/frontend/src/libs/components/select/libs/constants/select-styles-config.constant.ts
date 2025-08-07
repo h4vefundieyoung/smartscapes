@@ -3,6 +3,7 @@ import { combineClassNames } from "~/libs/helpers/helpers.js";
 import styles from "../../styles.module.css";
 
 const selectStylesConfig = {
+	clearIndicator: (): string => styles["clear-indicator"] as string,
 	control: (): string => styles["control"] as string,
 	menu: (): string => styles["menu"] as string,
 	multiValue: (): string => styles["multi-value"] as string,

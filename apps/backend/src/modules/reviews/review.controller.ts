@@ -88,6 +88,8 @@ class ReviewController extends BaseController {
 	 * @swagger
 	 * /reviews:
 	 *   post:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Reviews
 	 *     summary: Create a new review
@@ -129,6 +131,8 @@ class ReviewController extends BaseController {
 	 * @swagger
 	 * /reviews:
 	 *   get:
+	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Reviews
 	 *     summary: Retrieve all reviews

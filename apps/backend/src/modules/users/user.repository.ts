@@ -6,6 +6,7 @@ import { type UserModel } from "~/modules/users/user.model.js";
 import { GroupEntity } from "../groups/group.entity.js";
 import { type GroupService } from "../groups/group.service.js";
 import { GroupKey } from "../groups/libs/enums/enums.js";
+import { PermissionEntity } from "../permission/permission.entity.js";
 
 class UserRepository implements Repository {
 	private groupService: GroupService;
@@ -38,7 +39,7 @@ class UserRepository implements Repository {
 		return UserEntity.initialize({
 			email: user.email,
 			firstName: user.firstName,
-			group: user.group ? GroupEntity.initialize(group) : null,
+			group: user.group ? GroupEntity.initialize(user.group).toObject() : null,
 			groupId: user.groupId,
 			id: user.id,
 			lastName: user.lastName,
@@ -77,7 +78,9 @@ class UserRepository implements Repository {
 			UserEntity.initialize({
 				email: user.email,
 				firstName: user.firstName,
-				group: user.group ? GroupEntity.initialize(user.group) : null,
+				group: user.group
+					? GroupEntity.initialize(user.group).toObject()
+					: null,
 				groupId: user.groupId,
 				id: user.id,
 				lastName: user.lastName,
@@ -101,7 +104,18 @@ class UserRepository implements Repository {
 		return UserEntity.initialize({
 			email: user.email,
 			firstName: user.firstName,
-			group: user.group ? GroupEntity.initialize(user.group) : null,
+			group: user.group
+				? GroupEntity.initializeWithPermissions({
+						id: user.group.id,
+						key: user.group.key,
+						name: user.group.name,
+						permissions: user.group.permissions
+							? user.group.permissions.map((per) =>
+									PermissionEntity.initialize(per).toObject(),
+								)
+							: [],
+					}).toObject()
+				: null,
 			groupId: user.groupId,
 			id: user.id,
 			lastName: user.lastName,
@@ -124,7 +138,18 @@ class UserRepository implements Repository {
 		return UserEntity.initialize({
 			email: user.email,
 			firstName: user.firstName,
-			group: user.group ? GroupEntity.initialize(user.group) : null,
+			group: user.group
+				? GroupEntity.initializeWithPermissions({
+						id: user.group.id,
+						key: user.group.key,
+						name: user.group.name,
+						permissions: user.group.permissions
+							? user.group.permissions.map((per) =>
+									PermissionEntity.initialize(per).toObject(),
+								)
+							: [],
+					}).toObject()
+				: null,
 			groupId: user.groupId,
 			id: user.id,
 			lastName: user.lastName,

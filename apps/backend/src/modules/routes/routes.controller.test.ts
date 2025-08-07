@@ -41,7 +41,7 @@ const mockGroup = GroupEntity.initializeWithPermissions({
 	id: 2,
 	key: "users",
 	name: "Users",
-	permissions: [mockPermission],
+	permissions: [mockPermission.toObject()],
 });
 
 const mockUser = {

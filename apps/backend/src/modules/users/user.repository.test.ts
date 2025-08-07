@@ -22,7 +22,7 @@ describe("UserRepository", () => {
 	const mockUser = UserEntity.initialize({
 		email: "test@example.com",
 		firstName: "John",
-		group: mockGroup,
+		group: mockGroup.toObject(),
 		groupId: 2,
 		id: 1,
 		lastName: "Doe",
@@ -52,7 +52,7 @@ describe("UserRepository", () => {
 		const userEntity = UserEntity.initialize({
 			email: "test@example.com",
 			firstName: "John",
-			group: mockGroup,
+			group: mockGroup.toObject(),
 			groupId: 2,
 			id: 1,
 			lastName: "Doe",
@@ -66,7 +66,6 @@ describe("UserRepository", () => {
 
 		assert.deepStrictEqual(result, userEntity);
 	});
-
 	it("findAll should return all users", async () => {
 		const userEntities = [mockUser];
 

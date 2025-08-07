@@ -6,7 +6,7 @@ class GroupEntity implements Entity {
 	private id: null | number;
 	private key: string;
 	private name: string;
-	private permissions: null | PermissionEntity[];
+	private permissions: null | ReturnType<PermissionEntity["toObject"]>[];
 
 	private constructor({
 		id,
@@ -17,7 +17,7 @@ class GroupEntity implements Entity {
 		id: null | number;
 		key: string;
 		name: string;
-		permissions?: PermissionEntity[];
+		permissions?: ReturnType<PermissionEntity["toObject"]>[];
 	}) {
 		this.id = id;
 		this.key = key;
@@ -60,7 +60,7 @@ class GroupEntity implements Entity {
 		id: number;
 		key: string;
 		name: string;
-		permissions: PermissionEntity[];
+		permissions: ReturnType<PermissionEntity["toObject"]>[];
 	}): GroupEntity {
 		return new GroupEntity({ id, key, name, permissions });
 	}
@@ -79,21 +79,13 @@ class GroupEntity implements Entity {
 		id: number;
 		key: string;
 		name: string;
-		permissions: {
-			id: number;
-			key: string;
-			name: string;
-		}[];
+		permissions: ReturnType<PermissionEntity["toObject"]>[];
 	} {
 		return {
 			id: this.id as number,
 			key: this.key,
 			name: this.name,
-			permissions: (this.permissions ?? []).map((p) => {
-				const { id, key, name } = p.toObject();
-
-				return { id, key, name };
-			}),
+			permissions: this.permissions ?? [],
 		};
 	}
 }

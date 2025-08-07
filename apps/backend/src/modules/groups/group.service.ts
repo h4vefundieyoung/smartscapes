@@ -8,7 +8,7 @@ import { type Service } from "~/libs/types/service.type.js";
 
 import { type GroupEntity } from "./group.entity.js";
 import { type GroupRepository } from "./group.repository.js";
-import { GroupError } from "./libs/exeptions/group-not-found.exeption.js";
+import { GroupError } from "./libs/exceptions/group-not-found.exception.js";
 
 class GroupService implements Service<GroupResponseDto> {
 	private groupRepository: GroupRepository;

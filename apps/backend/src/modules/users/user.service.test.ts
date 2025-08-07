@@ -18,13 +18,13 @@ describe("UserService", () => {
 		id: 2,
 		key: "users",
 		name: "Users",
-		permissions: [mockPermission],
+		permissions: [mockPermission.toObject()],
 	});
 
 	const mockUser = UserEntity.initialize({
 		email: "test@example.com",
 		firstName: "John",
-		group: mockGroup,
+		group: mockGroup.toObject(),
 		groupId: 2,
 		id: 1,
 		lastName: "Doe",
@@ -36,7 +36,7 @@ describe("UserService", () => {
 		const userEntity = UserEntity.initialize({
 			email: "test@example.com",
 			firstName: "John",
-			group: mockGroup,
+			group: mockGroup.toObject(),
 			groupId: 2,
 			id: 1,
 			lastName: "Doe",
@@ -81,7 +81,7 @@ describe("UserService", () => {
 		const userEntity = UserEntity.initialize({
 			email: "test@example.com",
 			firstName: "John",
-			group: mockGroup,
+			group: mockGroup.toObject(),
 			groupId: 2,
 			id: 1,
 			lastName: "Doe",

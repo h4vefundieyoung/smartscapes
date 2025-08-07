@@ -7,9 +7,9 @@ class UserEntity implements Entity {
 
 	private firstName: string;
 
-	private group: GroupEntity | null;
+	private group: null | ReturnType<GroupEntity["toObject"]>;
 
-	private groupId: number;
+	private groupId: null | number;
 
 	private id: null | number;
 
@@ -31,8 +31,8 @@ class UserEntity implements Entity {
 	}: {
 		email: string;
 		firstName: string;
-		group: GroupEntity | null;
-		groupId: number;
+		group: null | ReturnType<GroupEntity["toObject"]>;
+		groupId: null | number;
 		id: null | number;
 		lastName: string;
 		passwordHash: string;
@@ -60,8 +60,8 @@ class UserEntity implements Entity {
 	}: {
 		email: string;
 		firstName: string;
-		group: GroupEntity | null;
-		groupId: number;
+		group: null | ReturnType<GroupEntity["toObject"]>;
+		groupId: null | number;
 		id: number;
 		lastName: string;
 		passwordHash: string;
@@ -96,7 +96,7 @@ class UserEntity implements Entity {
 			email,
 			firstName,
 			group: null,
-			groupId: -1,
+			groupId: null,
 			id: null,
 			lastName,
 			passwordHash,
@@ -123,16 +123,7 @@ class UserEntity implements Entity {
 	public toObject(): {
 		email: string;
 		firstName: string;
-		group: null | {
-			id: number;
-			key: string;
-			name: string;
-			permissions: {
-				id: number;
-				key: string;
-				name: string;
-			}[];
-		};
+		group: ReturnType<GroupEntity["toObject"]>;
 		groupId: number;
 		id: number;
 		lastName: string;
@@ -140,8 +131,8 @@ class UserEntity implements Entity {
 		return {
 			email: this.email,
 			firstName: this.firstName,
-			group: this.group ? this.group.toObject() : null,
-			groupId: this.groupId,
+			group: this.group as ReturnType<GroupEntity["toObject"]>,
+			groupId: this.groupId as number,
 			id: this.id as number,
 			lastName: this.lastName,
 		};

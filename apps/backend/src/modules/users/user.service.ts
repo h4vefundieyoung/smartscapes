@@ -31,7 +31,7 @@ class UserService implements Service {
 
 		if (existingUser) {
 			throw new UserError({
-				message: UserExceptionMessage.USER_ALLREADY_EXISTS as string,
+				message: UserExceptionMessage.USER_ALLREADY_EXISTS,
 				status: HTTPCode.CONFLICT,
 			});
 		}

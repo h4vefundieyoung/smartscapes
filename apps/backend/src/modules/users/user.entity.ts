@@ -1,9 +1,13 @@
 import { type Entity } from "~/libs/types/types.js";
 
+import { type GroupEntity } from "../groups/group.entity.js";
+
 class UserEntity implements Entity {
 	private email: string;
 
 	private firstName: string;
+
+	private group: GroupEntity | null;
 
 	private groupId: null | number;
 
@@ -18,6 +22,7 @@ class UserEntity implements Entity {
 	private constructor({
 		email,
 		firstName,
+		group,
 		groupId,
 		id,
 		lastName,
@@ -26,6 +31,7 @@ class UserEntity implements Entity {
 	}: {
 		email: string;
 		firstName: string;
+		group: GroupEntity | null;
 		groupId: null | number;
 		id: null | number;
 		lastName: string;
@@ -38,12 +44,14 @@ class UserEntity implements Entity {
 		this.lastName = lastName;
 		this.passwordHash = passwordHash;
 		this.passwordSalt = passwordSalt;
+		this.group = group;
 		this.groupId = groupId;
 	}
 
 	public static initialize({
 		email,
 		firstName,
+		group,
 		groupId,
 		id,
 		lastName,
@@ -52,6 +60,7 @@ class UserEntity implements Entity {
 	}: {
 		email: string;
 		firstName: string;
+		group: GroupEntity | null;
 		groupId: number;
 		id: number;
 		lastName: string;
@@ -61,6 +70,7 @@ class UserEntity implements Entity {
 		return new UserEntity({
 			email,
 			firstName,
+			group,
 			groupId,
 			id,
 			lastName,
@@ -85,6 +95,7 @@ class UserEntity implements Entity {
 		return new UserEntity({
 			email,
 			firstName,
+			group: null,
 			groupId: null,
 			id: null,
 			lastName,
@@ -112,6 +123,16 @@ class UserEntity implements Entity {
 	public toObject(): {
 		email: string;
 		firstName: string;
+		group: null | {
+			id: number;
+			key: string;
+			name: string;
+			permissions: {
+				id: number;
+				key: string;
+				name: string;
+			}[];
+		};
 		groupId: null | number;
 		id: number;
 		lastName: string;
@@ -119,6 +140,7 @@ class UserEntity implements Entity {
 		return {
 			email: this.email,
 			firstName: this.firstName,
+			group: this.group ? this.group.toObject() : null,
 			groupId: this.groupId,
 			id: this.id as number,
 			lastName: this.lastName,

@@ -60,7 +60,7 @@ export {
 export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,
-	type UserGetByIdItemResponseDto,
+	type UserGetAllItemsResponseDto,
 	UsersApiPath,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,

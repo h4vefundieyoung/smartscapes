@@ -1,4 +1,8 @@
-import { CommonExceptionMessage } from "@smartscapes/shared";
+import {
+	CommonExceptionMessage,
+	type UserAuthResponseDto,
+	type UserGetAllItemsResponseDto,
+} from "@smartscapes/shared";
 
 import { encryption } from "~/libs/modules/encryption/libs/encryption.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
@@ -9,7 +13,6 @@ import { type UserRepository } from "~/modules/users/user.repository.js";
 
 import { UserError } from "./libs/exceptions/exceptions.js";
 import {
-	type UserGetByIdItemResponseDto,
 	type UserPasswordDetails,
 	type UserSignUpRequestDto,
 } from "./libs/types/types.js";
@@ -23,7 +26,7 @@ class UserService implements Service {
 
 	public async create(
 		payload: UserSignUpRequestDto,
-	): Promise<UserGetByIdItemResponseDto> {
+	): Promise<UserAuthResponseDto> {
 		const existingUser = await this.findByEmail(payload.email);
 
 		if (existingUser) {
@@ -61,11 +64,11 @@ class UserService implements Service {
 			});
 		}
 
-		return newUser;
+		return newUser.toObject() as UserAuthResponseDto;
 	}
 
 	public async findAll(): Promise<
-		CollectionResult<UserGetByIdItemResponseDto>
+		CollectionResult<UserGetAllItemsResponseDto>
 	> {
 		const items = await this.userRepository.findAll();
 
@@ -74,17 +77,13 @@ class UserService implements Service {
 		};
 	}
 
-	public async findByEmail(
-		email: string,
-	): Promise<null | UserGetByIdItemResponseDto> {
+	public async findByEmail(email: string): Promise<null | UserEntity> {
 		const user = await this.userRepository.findByEmail(email);
 
 		return user;
 	}
 
-	public async findById(
-		id: number,
-	): Promise<null | UserGetByIdItemResponseDto> {
+	public async findById(id: number): Promise<null | UserEntity> {
 		const user = await this.userRepository.findById(id);
 
 		return user;

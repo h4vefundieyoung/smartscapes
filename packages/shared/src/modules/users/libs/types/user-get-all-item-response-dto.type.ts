@@ -1,19 +1,9 @@
-type UserGetByIdItemResponseDto = {
+type UserGetAllItemsResponseDto = {
 	email: string;
 	firstName: string;
-	group: {
-		id: number;
-		key: string;
-		name: string;
-		permissions: {
-			id: number;
-			key: string;
-			name: string;
-		}[];
-	};
 	groupId: number;
 	id: number;
 	lastName: string;
 };
 
-export { type UserGetByIdItemResponseDto };
+export { type UserGetAllItemsResponseDto };

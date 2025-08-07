@@ -9,6 +9,7 @@ describe("GroupEntity", () => {
 			id: 1,
 			key: "admins",
 			name: "Administrators",
+			permissions: [],
 		};
 
 		const groupEntity = GroupEntity.initialize(groupData);

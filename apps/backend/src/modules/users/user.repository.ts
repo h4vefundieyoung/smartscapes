@@ -1,13 +1,13 @@
+import { type UserGetAllItemsResponseDto } from "@smartscapes/shared";
+
 import { type Repository } from "~/libs/types/types.js";
-import {
-	type UserGetByIdItemResponseDto,
-	type UserPasswordDetails,
-} from "~/modules/users/libs/types/types.js";
+import { type UserPasswordDetails } from "~/modules/users/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
 
 import { type GroupService } from "../groups/group.service.js";
 import { GroupExceptionMessage, GroupKey } from "../groups/libs/enums/enums.js";
+import { toGroupEntity } from "../groups/libs/helpers/to-group-entity.js";
 
 class UserRepository implements Repository {
 	private groupService: GroupService;
@@ -41,10 +41,19 @@ class UserRepository implements Repository {
 			.returning("*")
 			.execute();
 
-		return UserEntity.initialize(user);
+		return UserEntity.initialize({
+			email: user.email,
+			firstName: user.firstName,
+			group: user.group ? toGroupEntity(user.group) : null,
+			groupId: user.groupId,
+			id: user.id,
+			lastName: user.lastName,
+			passwordHash: user.passwordHash,
+			passwordSalt: user.passwordSalt,
+		});
 	}
 
-	public async findAll(): Promise<UserGetByIdItemResponseDto[]> {
+	public async findAll(): Promise<UserGetAllItemsResponseDto[]> {
 		const users = await this.userModel
 			.query()
 			.select([
@@ -68,42 +77,66 @@ class UserRepository implements Repository {
 				"groups_to_permissions.permission_id",
 				"permissions.id",
 			)
-			.castTo<UserGetByIdItemResponseDto[]>()
 			.execute();
 
-		return users;
+		return users.map((user) =>
+			UserEntity.initialize({
+				email: user.email,
+				firstName: user.firstName,
+				group: user.group ? toGroupEntity(user.group) : null,
+				groupId: user.groupId,
+				id: user.id,
+				lastName: user.lastName,
+				passwordHash: "",
+				passwordSalt: "",
+			}).toObject(),
+		) as UserGetAllItemsResponseDto[];
 	}
 
-	public async findByEmail(
-		email: string,
-	): Promise<null | UserGetByIdItemResponseDto> {
+	public async findByEmail(email: string): Promise<null | UserEntity> {
 		const user = await this.userModel
 			.query()
 			.where("email", email)
 			.withGraphJoined("group.permissions")
 			.first();
 
-		if (!user || !user.group || !user.group.permissions) {
+		if (!user) {
 			return null;
 		}
 
-		return this.mapUserModelToDto(user);
+		return UserEntity.initialize({
+			email: user.email,
+			firstName: user.firstName,
+			group: user.group ? toGroupEntity(user.group) : null,
+			groupId: user.groupId,
+			id: user.id,
+			lastName: user.lastName,
+			passwordHash: user.passwordHash,
+			passwordSalt: user.passwordSalt,
+		});
 	}
 
-	public async findById(
-		id: number,
-	): Promise<null | UserGetByIdItemResponseDto> {
+	public async findById(id: number): Promise<null | UserEntity> {
 		const user = await this.userModel
 			.query()
 			.findById(id)
 			.withGraphJoined("group.permissions")
 			.first();
 
-		if (!user || !user.group || !user.group.permissions) {
+		if (!user) {
 			return null;
 		}
 
-		return this.mapUserModelToDto(user);
+		return UserEntity.initialize({
+			email: user.email,
+			firstName: user.firstName,
+			group: user.group ? toGroupEntity(user.group) : null,
+			groupId: user.groupId,
+			id: user.id,
+			lastName: user.lastName,
+			passwordHash: user.passwordHash,
+			passwordSalt: user.passwordSalt,
+		});
 	}
 
 	public async findPasswordDetails(
@@ -144,32 +177,6 @@ class UserRepository implements Repository {
 			lastName: user.lastName,
 			passwordHash: user.passwordHash,
 			passwordSalt: user.passwordSalt,
-		};
-	}
-
-	private mapUserModelToDto(
-		user: UserModel,
-	): null | UserGetByIdItemResponseDto {
-		if (!user.group || !user.group.permissions) {
-			return null;
-		}
-
-		return {
-			email: user.email,
-			firstName: user.firstName,
-			group: {
-				id: user.group.id,
-				key: user.group.key,
-				name: user.group.name,
-				permissions: user.group.permissions.map((p) => ({
-					id: p.id,
-					key: p.key,
-					name: p.name,
-				})),
-			},
-			groupId: user.groupId,
-			id: user.id,
-			lastName: user.lastName,
 		};
 	}
 }

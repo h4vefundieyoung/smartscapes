@@ -8,6 +8,7 @@ describe("UserEntity", () => {
 		const userData = {
 			email: "test@example.com",
 			firstName: "John",
+			group: null,
 			groupId: 2,
 			id: 1,
 			lastName: "Doe",
@@ -26,6 +27,7 @@ describe("UserEntity", () => {
 		const userData = {
 			email: "test@example.com",
 			firstName: "John",
+			group: null,
 			groupId: 2,
 			lastName: "Doe",
 			passwordHash: "hash",

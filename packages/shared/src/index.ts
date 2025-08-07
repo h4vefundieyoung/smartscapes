@@ -39,6 +39,13 @@ export {
 	type RouteCategoryRequestDto,
 } from "./modules/route-categories/route-categories.js";
 export {
+	UserFollowsApiPath,
+	UserFollowsExceptionMessage,
+	type UserFollowsFollowParametersDto,
+	type UserFollowsFollowRequestDto,
+	type UserFollowsUnfollowParametersDto,
+} from "./modules/user-follows/user-follows.js";
+export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetByIdItemResponseDto,

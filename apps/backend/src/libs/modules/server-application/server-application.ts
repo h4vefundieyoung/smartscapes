@@ -4,6 +4,7 @@ import { logger } from "~/libs/modules/logger/logger.js";
 import { authController } from "~/modules/auth/auth.js";
 import { pointsOfInterestController } from "~/modules/points-of-interest/points-of-interest.js";
 import { routeCategoryController } from "~/modules/route-categories/route-categories.js";
+import { userFollowsController } from "~/modules/user-follows/user-follows.js";
 import { userController } from "~/modules/users/users.js";
 
 import { BaseServerApplicationApi } from "./base-server-application-api.js";
@@ -16,6 +17,7 @@ const apiV1 = new BaseServerApplicationApi(
 	...routeCategoryController.routes,
 	...userController.routes,
 	...pointsOfInterestController.routes,
+	...userFollowsController.routes,
 );
 
 const serverApplication = new BaseServerApplication({

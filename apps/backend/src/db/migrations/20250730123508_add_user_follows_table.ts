@@ -22,7 +22,6 @@ function up(knex: Knex): Promise<void> {
 		table
 			.integer(ColumnName.FOLLOWER_ID)
 			.notNullable()
-			.unsigned()
 			.references(ColumnName.ID)
 			.inTable(REF_TABLE_NAME)
 			.onDelete("CASCADE");
@@ -30,7 +29,6 @@ function up(knex: Knex): Promise<void> {
 		table
 			.integer(ColumnName.FOLLOWING_ID)
 			.notNullable()
-			.unsigned()
 			.references(ColumnName.ID)
 			.inTable(REF_TABLE_NAME)
 			.onDelete("CASCADE");

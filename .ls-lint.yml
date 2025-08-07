@@ -21,3 +21,4 @@ ignore:
   - "**/build"
   - "**/CHANGELOG.md"
   - ".vscode"
+  - "**/dev-dist"

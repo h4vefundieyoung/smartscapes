@@ -1,20 +1,7 @@
 import { TabContainer } from "~/libs/components/components.js";
 
-import { MyReviews, UserDetails } from "./libs/components/components.js";
+import { PROFILE_TABS } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
-
-const PROFILE_TABS = [
-	{
-		element: <UserDetails />,
-		id: "user-details",
-		label: "User details",
-	},
-	{
-		element: <MyReviews />,
-		id: "my-reviews",
-		label: "My reviews",
-	},
-];
 
 const Profile = (): React.JSX.Element => {
 	return (

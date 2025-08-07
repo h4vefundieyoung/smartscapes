@@ -1,9 +1,9 @@
 import { Button, Input } from "~/libs/components/components.js";
 import { useAppForm } from "~/libs/hooks/hooks.js";
 import {
-	type UserAuthResponseDto,
 	type UserAuthPatchRequestDto,
 	userAuthPatchValidationSchema,
+	type UserAuthResponseDto,
 } from "~/modules/users/users.js";
 
 import styles from "./styles.module.css";

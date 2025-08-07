@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 
-import { type MapBoxDirectionsApi } from "~/libs/modules/map-box/map-box-directions-api.js";
+import { type MapboxDirectionsApi } from "~/libs/modules/mapbox/mapbox-directions-api.js";
+import { type PointGeometry } from "~/libs/types/types.js";
 
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
-import { type Coordinate } from "./libs/types/types.js";
 import { RoutesService } from "./routes.service.js";
 
 describe("Routes service", () => {
@@ -28,30 +28,31 @@ describe("Routes service", () => {
 				location: { coordinates: [numsMap.three, numsMap.four] },
 			},
 		];
-		const getRoute = mock.fn((_: string, coords: Coordinate[]) =>
-			Promise.resolve(coords),
+		const getRoute = mock.fn(
+			(_: string, coords: PointGeometry["coordinates"][]) =>
+				Promise.resolve(coords),
 		);
-		const findAllById = mock.fn((ids: number[]) => {
+		const findAll = mock.fn(({ ids }: { ids: number[] }) => {
 			return Promise.resolve({
 				items: entities.filter(({ id }) => ids.includes(id)),
 			});
 		});
 
 		const poiServiceMock = {
-			findAllById,
+			findAll,
 		} as unknown as PointsOfInterestService;
 
-		const mapBoxApiMock = {
+		const mapboxApiMock = {
 			getRoute,
-		} as unknown as MapBoxDirectionsApi;
+		} as unknown as MapboxDirectionsApi;
 
-		const routeService = new RoutesService(mapBoxApiMock, poiServiceMock);
-		const data = (await routeService.buildRoute([
+		const routeService = new RoutesService(mapboxApiMock, poiServiceMock);
+		const data = (await routeService.construct([
 			numsMap.one,
 			numsMap.two,
 		])) as unknown as [];
 
-		assert.equal(findAllById.mock.callCount(), numsMap.one);
+		assert.equal(findAll.mock.callCount(), numsMap.one);
 		assert.equal(getRoute.mock.callCount(), numsMap.one);
 		assert.equal(Array.isArray(data), true);
 		assert.equal(data.length, entitiesIds.length);
@@ -72,23 +73,23 @@ describe("Routes service", () => {
 				location: { coordinates: [numsMap.one, numsMap.two] },
 			},
 		];
-		const findAllById = mock.fn(
-			async (ids: number[]) =>
+		const findAll = mock.fn(
+			async ({ ids }: { ids: number[] }) =>
 				await Promise.resolve({
 					items: entities.filter(({ id }) => ids.includes(id)),
 				}),
 		);
 
 		const poiServiceMock = {
-			findAllById,
+			findAll,
 		} as unknown as PointsOfInterestService;
 
-		const mapBoxApiMock = {} as MapBoxDirectionsApi;
+		const mapboxApiMock = {} as MapboxDirectionsApi;
 
-		const routeService = new RoutesService(mapBoxApiMock, poiServiceMock);
+		const routeService = new RoutesService(mapboxApiMock, poiServiceMock);
 
 		assert.rejects(
-			async () => await routeService.buildRoute(entitiesIds),
+			async () => await routeService.construct(entitiesIds),
 			RoutesError,
 		);
 	});

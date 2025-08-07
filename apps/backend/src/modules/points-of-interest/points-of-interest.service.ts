@@ -6,6 +6,7 @@ import { type PointsOfInterestRepository } from "~/modules/points-of-interest/po
 import { PointOfInterestExceptionMessage } from "./libs/enums/enums.js";
 import { PointOfInterestError } from "./libs/exceptions/exceptions.js";
 import {
+	type PointsOfInterestFindAllOptions,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 } from "./libs/types/type.js";
@@ -47,27 +48,13 @@ class PointsOfInterestService implements Service {
 		return true;
 	}
 
-	public async findAll(): Promise<
-		CollectionResult<PointsOfInterestResponseDto>
-	> {
-		const items = await this.pointsOfInterestRepository.findAll();
-
-		return {
-			items: items.map((item) => {
-				return item.toObject();
-			}),
-		};
-	}
-
-	public async findAllById(
-		ids: number[],
+	public async findAll(
+		filters?: PointsOfInterestFindAllOptions,
 	): Promise<CollectionResult<PointsOfInterestResponseDto>> {
-		const items = await this.pointsOfInterestRepository.findAllById(ids);
+		const items = await this.pointsOfInterestRepository.findAll(filters);
 
 		return {
-			items: items.map((item) => {
-				return item.toObject();
-			}),
+			items: items.map((item) => item.toObject()),
 		};
 	}
 

@@ -1,1 +1,1 @@
-export { RouteApiPath } from "./route-api-path.js";
+export { RouteApiPath } from "./route-api-path.enum.js";

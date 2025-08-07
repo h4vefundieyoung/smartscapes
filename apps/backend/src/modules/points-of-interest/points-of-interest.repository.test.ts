@@ -80,20 +80,6 @@ describe("PointsOfInterestRepository", () => {
 		assert.deepStrictEqual(result, pointOfInterestEntities);
 	});
 
-	it("findAllById should return all points of interest", async () => {
-		const pointOfInterestEntities = [createMockEntity(), createMockEntity()];
-
-		databaseTracker.on
-			.select(DatabaseTableName.POINTS_OF_INTEREST)
-			.response(pointOfInterestEntities);
-
-		const result = await pointsOfInterestRepository.findAllById([
-			mockPointOfInterest.id,
-		]);
-
-		assert.deepStrictEqual(result, pointOfInterestEntities);
-	});
-
 	it("find should return point of interest by id", async () => {
 		const pointOfInterestEntity =
 			PointsOfInterestEntity.initialize(mockPointOfInterest);

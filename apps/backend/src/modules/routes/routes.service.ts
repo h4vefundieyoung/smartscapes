@@ -1,32 +1,33 @@
 import { HTTPCode } from "~/libs/enums/enums.js";
 import {
-	type GetMapBoxRouteResponseDto,
-	MapBoxAPIGeometricsType,
-	MapBoxAPIProfiles,
-	type MapBoxDirectionsApi,
-} from "~/libs/modules/map-box/map-box.js";
+	type GetMapboxRouteResponseDto,
+	MapboxAPIGeometricsType,
+	MapboxAPIProfile,
+	type MapboxDirectionsApi,
+} from "~/libs/modules/mapbox/mapbox.js";
 
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
-import { RoutesExceptionMessage } from "./libs/enums/routes-exception-message.enum.js";
+import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
 
 class RoutesService {
-	private mapBoxDirectionApi: MapBoxDirectionsApi;
+	private mapboxDirectionApi: MapboxDirectionsApi;
 	private pointsOfInterestService: PointsOfInterestService;
 
 	public constructor(
-		mapBoxDirectionsApi: MapBoxDirectionsApi,
+		mapboxDirectionsApi: MapboxDirectionsApi,
 		pointOfInterestService: PointsOfInterestService,
 	) {
 		this.pointsOfInterestService = pointOfInterestService;
-		this.mapBoxDirectionApi = mapBoxDirectionsApi;
+		this.mapboxDirectionApi = mapboxDirectionsApi;
 	}
 
-	public async buildRoute(
+	public async construct(
 		pointsOfInterest: number[],
-	): Promise<GetMapBoxRouteResponseDto> {
-		const { items } =
-			await this.pointsOfInterestService.findAllById(pointsOfInterest);
+	): Promise<GetMapboxRouteResponseDto> {
+		const { items } = await this.pointsOfInterestService.findAll({
+			ids: pointsOfInterest,
+		});
 
 		if (items.length !== pointsOfInterest.length) {
 			throw new RoutesError({
@@ -37,10 +38,10 @@ class RoutesService {
 
 		const coordinates = items.map(({ location }) => location.coordinates);
 
-		const responseData = await this.mapBoxDirectionApi.getRoute(
-			MapBoxAPIProfiles.WALKING,
+		const responseData = await this.mapboxDirectionApi.getRoute(
+			MapboxAPIProfile.WALKING,
 			coordinates,
-			MapBoxAPIGeometricsType.GEOJSON,
+			MapboxAPIGeometricsType.GEOJSON,
 		);
 
 		return responseData;

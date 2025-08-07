@@ -1,4 +1,5 @@
 import { APIPath, HTTPCode } from "~/libs/enums/enums.js";
+import { getRequestDebouncer } from "~/libs/hooks/hooks.js";
 import {
 	type APIHandlerOptions,
 	type APIHandlerResponse,
@@ -6,19 +7,13 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
-import { RouteApiPath, RoutesExceptionMessage } from "./libs/enums/enums.js";
-import { RoutesError } from "./libs/exceptions/exceptions.js";
+import { RouteApiPath } from "./libs/enums/enums.js";
 import {
 	type ConstructRouteRequestDto,
-	type GetMapBoxRouteResponseDto,
+	type GetMapboxRouteResponseDto,
 } from "./libs/types/types.js";
 import { constructRouteValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 import { type RoutesService } from "./routes.service.js";
-
-const MAX_REQUESTS_PER_MINUTE = 5;
-const SECONDS = 60;
-const SECOND_MS = 1000;
-const MINUTE_MS = SECONDS * SECOND_MS;
 
 /**
  * @swagger
@@ -32,7 +27,7 @@ const MINUTE_MS = SECONDS * SECOND_MS;
  *       maxItems: 2
  *       example: [30.5, 50.4]
  *
- *     GetMapBoxRouteResponseDto:
+ *     GetMapboxRouteResponseDto:
  *       type: object
  *       properties:
  *         code:
@@ -40,15 +35,15 @@ const MINUTE_MS = SECONDS * SECOND_MS;
  *         routes:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/MapBoxRoute'
+ *             $ref: '#/components/schemas/MapboxRoute'
  *         uuid:
  *           type: string
  *         waypoints:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/MapBoxWaypoint'
+ *             $ref: '#/components/schemas/MapboxWaypoint'
  *
- *     MapBoxRoute:
+ *     MapboxRoute:
  *       type: object
  *       properties:
  *         distance:
@@ -67,13 +62,13 @@ const MINUTE_MS = SECONDS * SECOND_MS;
  *         legs:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/MapBoxLegs'
+ *             $ref: '#/components/schemas/MapboxLegs'
  *         weight:
  *           type: number
  *         weight_name:
  *           type: string
  *
- *     MapBoxLegs:
+ *     MapboxLegs:
  *       type: object
  *       properties:
  *         admins:
@@ -94,7 +89,7 @@ const MINUTE_MS = SECONDS * SECOND_MS;
  *         weight:
  *           type: number
  *
- *     MapBoxWaypoint:
+ *     MapboxWaypoint:
  *       type: object
  *       properties:
  *         distance:
@@ -107,19 +102,19 @@ const MINUTE_MS = SECONDS * SECOND_MS;
  *           type: string
  */
 class RoutesController extends BaseController {
-	private debounceMap: Record<number, number>;
 	private routesService: RoutesService;
 
 	public constructor(logger: Logger, routesService: RoutesService) {
 		super(logger, APIPath.ROUTES);
 
 		this.routesService = routesService;
-		this.debounceMap = {};
 
+		const constructRequestsPerMinute = 5;
 		this.addRoute({
 			handler: this.constructRoute.bind(this),
 			method: "POST",
 			path: RouteApiPath.CONSTRUCT,
+			preHandlers: [getRequestDebouncer(constructRequestsPerMinute)],
 			validation: {
 				body: constructRouteValidationSchema,
 			},
@@ -158,47 +153,19 @@ class RoutesController extends BaseController {
 	 *               type: object
 	 *               properties:
 	 *                 data:
-	 *                   $ref: '#/components/schemas/GetMapBoxRouteResponseDto'
+	 *                   $ref: '#/components/schemas/GetMapboxRouteResponseDto'
 	 */
 	public async constructRoute({
 		body: { pointsOfInterest },
-		user,
 	}: APIHandlerOptions<{ body: ConstructRouteRequestDto }>): Promise<
-		APIHandlerResponse<GetMapBoxRouteResponseDto>
+		APIHandlerResponse<GetMapboxRouteResponseDto>
 	> {
-		if (user) {
-			this.debounce(user.id);
-		}
-
-		const data = await this.routesService.buildRoute(pointsOfInterest);
+		const data = await this.routesService.construct(pointsOfInterest);
 
 		return {
 			payload: { data },
 			status: HTTPCode.OK,
 		};
-	}
-
-	private debounce(id: number): void {
-		if (!this.debounceMap[id]) {
-			this.debounceMap[id] = 1;
-
-			setTimeout(() => {
-				this.debounceMap[id] = 0;
-			}, MINUTE_MS);
-
-			return;
-		}
-
-		const requestsAmount = this.debounceMap[id];
-
-		if (requestsAmount === MAX_REQUESTS_PER_MINUTE) {
-			throw new RoutesError({
-				message: RoutesExceptionMessage.LIMIT_REACHED,
-				status: HTTPCode.REQUEST_LIMIT,
-			});
-		}
-
-		this.debounceMap[id]++;
 	}
 }
 

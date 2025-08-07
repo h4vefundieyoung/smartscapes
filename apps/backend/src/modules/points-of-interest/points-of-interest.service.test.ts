@@ -75,26 +75,6 @@ describe("PointsOfInterestService", () => {
 		});
 	});
 
-	it("findAll should return all points of interest by id", async () => {
-		const pointOfInterestEntities = [createMockEntity(), createMockEntity()];
-
-		const pointsOfInterestRepository = {
-			findAllById: () => Promise.resolve(pointOfInterestEntities),
-		} as unknown as PointsOfInterestRepository;
-
-		const pointsOfInterestService = new PointsOfInterestService(
-			pointsOfInterestRepository,
-		);
-
-		const result = await pointsOfInterestService.findAllById([
-			mockPointOfInterest.id,
-		]);
-
-		assert.deepStrictEqual(result, {
-			items: pointOfInterestEntities.map((entity) => entity.toObject()),
-		});
-	});
-
 	it("findById should return point of interest by id", async () => {
 		const pointOfInterestEntity = createMockEntity();
 

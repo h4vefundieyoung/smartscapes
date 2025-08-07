@@ -38,19 +38,15 @@ class BaseHTTPApi implements HTTPApi {
 		path: string,
 		options: HTTPApiOptions,
 	): Promise<HTTPResponse<T>> {
-		const {
-			bearerAuth = null,
-			contentType = null,
-			method,
-			payload = null,
-		} = options;
+		const { contentType = null, method, payload = null, query } = options;
 
 		const headers = this.getHeaders({
-			bearerAuth,
 			contentType,
 		});
 
-		const response = await this.http.load<T>(path, {
+		const queryString = query ? new URLSearchParams(query) : null;
+		const url = queryString ? `${path}?${queryString}` : path;
+		const response = await this.http.load<T>(url, {
 			headers,
 			method,
 			payload,
@@ -84,15 +80,11 @@ class BaseHTTPApi implements HTTPApi {
 		return response;
 	}
 
-	private getHeaders({ bearerAuth, contentType }: GetHeadersOptions): Headers {
+	private getHeaders({ contentType }: GetHeadersOptions): Headers {
 		const headers = new Headers();
 
 		if (contentType) {
 			headers.append(HTTPHeader.CONTENT_TYPE, contentType);
-		}
-
-		if (bearerAuth) {
-			headers.append(HTTPHeader.AUTHORIZATION, `Bearer ${bearerAuth}`);
 		}
 
 		return headers;

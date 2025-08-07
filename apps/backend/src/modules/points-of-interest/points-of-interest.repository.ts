@@ -2,6 +2,8 @@ import { type Repository } from "~/libs/types/types.js";
 import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
 import { type PointsOfInterestModel } from "~/modules/points-of-interest/points-of-interest.model.js";
 
+import { type PointsOfInterestFindAllOptions } from "./libs/types/points-of-interest-find-all-filter.type.js";
+
 class PointsOfInterestRepository implements Repository {
 	private pointsOfInterestModel: typeof PointsOfInterestModel;
 
@@ -43,36 +45,29 @@ class PointsOfInterestRepository implements Repository {
 		return Boolean(deletedCount);
 	}
 
-	public async findAll(): Promise<PointsOfInterestEntity[]> {
-		const pointsOfInterest = await this.pointsOfInterestModel
+	public async findAll(
+		options?: PointsOfInterestFindAllOptions,
+	): Promise<PointsOfInterestEntity[]> {
+		let query = this.pointsOfInterestModel
 			.query()
-			.select("id", "name", "created_at", "updated_at")
-			.select(
+			.select([
+				"id",
+				"name",
+				"created_at",
+				"updated_at",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
-			)
-			.execute();
+			]);
+
+		if (options?.ids) {
+			query.whereIn("id", options.ids);
+		}
+
+		const pointsOfInterest = await query.execute();
 
 		return pointsOfInterest.map((point) =>
 			PointsOfInterestEntity.initialize(point),
-		);
-	}
-
-	public async findAllById(ids: number[]): Promise<PointsOfInterestEntity[]> {
-		const pointsOfInterest = await this.pointsOfInterestModel
-			.query()
-			.select("id", "name", "created_at", "updated_at")
-			.select(
-				this.pointsOfInterestModel.raw(
-					"ST_AsGeoJSON(location)::json as location",
-				),
-			)
-			.whereIn("id", ids)
-			.execute();
-
-		return pointsOfInterest.map((pointOfInterest) =>
-			PointsOfInterestEntity.initialize(pointOfInterest),
 		);
 	}
 

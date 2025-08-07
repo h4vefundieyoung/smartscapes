@@ -1,8 +1,8 @@
 import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
 import React, { createContext, useMemo } from "react";
 
 import {
+	type MapBoxGLWithToken,
 	type MapContextValue,
 	type MapProviderProperties,
 } from "./libs/types/types.js";
@@ -18,8 +18,7 @@ const MapProvider = ({
 			return null;
 		}
 
-		(mapboxgl as typeof mapboxgl & { accessToken: string }).accessToken =
-			accessToken;
+		(mapboxgl as MapBoxGLWithToken).accessToken = accessToken;
 
 		return mapboxgl;
 	}, [accessToken]);

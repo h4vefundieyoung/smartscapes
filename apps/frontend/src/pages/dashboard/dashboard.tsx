@@ -29,6 +29,10 @@ type FormValues = {
 	singleColor: null | string;
 };
 
+const handleMarkerClick = (): void => {
+	alert("Marker clicked");
+};
+
 const Dashboard = (): React.JSX.Element => {
 	const authenticatedUser = useAppSelector(
 		({ auth }) => auth.authenticatedUser,
@@ -73,13 +77,14 @@ const Dashboard = (): React.JSX.Element => {
 							<Map
 								center={MOCK_MARKERS[0] ?? DEFAULT_KYIV_COORDINATES}
 								markers={MOCK_MARKERS}
+								onMarkerClick={handleMarkerClick}
 							/>
 						</div>
 					</div>
 					<div>
 						<h3 className={styles["map-title"]}>Map Not Centered</h3>
 						<div className={styles["map-container"]}>
-							<Map markers={MOCK_MARKERS} />
+							<Map markers={MOCK_MARKERS} onMarkerClick={handleMarkerClick} />
 						</div>
 					</div>
 				</div>

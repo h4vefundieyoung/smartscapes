@@ -1,13 +1,23 @@
-import { type default as mapboxgl } from "mapbox-gl";
+import { type default as mapboxgl, type MapOptions } from "mapbox-gl";
+
+type MapboxGL = typeof mapboxgl;
+
+type MapBoxGLWithToken = MapboxGL & { accessToken: MapToken };
 
 type MapContextValue = {
-	accessToken: null | string;
-	mapClient: null | typeof mapboxgl;
+	accessToken: MapToken;
+	mapClient: MapboxGL | null;
 };
 
 type MapProviderProperties = {
-	accessToken: string;
+	accessToken: MapToken;
 	children: React.ReactNode;
 };
 
-export { type MapContextValue, type MapProviderProperties };
+type MapToken = MapOptions["accessToken"] | null;
+
+export {
+	type MapBoxGLWithToken,
+	type MapContextValue,
+	type MapProviderProperties,
+};

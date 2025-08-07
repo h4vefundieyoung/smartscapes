@@ -1,9 +1,9 @@
 import { type MapboxGL } from "../types/types.js";
 
 const isMapClientReady = (
-	accessToken: null | string,
+	accessToken: null | string | undefined,
 	mapClient: MapboxGL | null,
-): boolean => {
+): mapClient is MapboxGL => {
 	return Boolean(accessToken && mapClient);
 };
 

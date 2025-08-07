@@ -1,4 +1,5 @@
-import React from "react";
+import "mapbox-gl/dist/mapbox-gl.css";
+import React, { lazy, Suspense } from "react";
 
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 import {
@@ -9,6 +10,7 @@ import {
 	useState,
 } from "~/libs/hooks/hooks.js";
 
+import { Loader } from "../loader/loader.js";
 import {
 	GEOLOCATE_CONTROLS_PARAMETERS,
 	MAP_PARAMETERS,
@@ -34,7 +36,6 @@ import {
 import {
 	type LngLatLike,
 	type LocationData,
-	type MapboxGL,
 	type MapboxMap,
 	type MapboxMarker,
 	type MapProperties,
@@ -73,7 +74,7 @@ const MapComponent = ({
 		[center, onLocationFound],
 	);
 
-	useEffect(() => {
+	const initializeMap = useCallback(() => {
 		if (
 			!mapContainer.current ||
 			mapInstance.current ||
@@ -90,12 +91,12 @@ const MapComponent = ({
 			});
 		}
 
-		const map = createMap(mapClient as MapboxGL, container, center);
+		const map = createMap(mapClient, container, center);
 
 		map.on("load", () => {
-			const navigationControl = createNavigationControl(mapClient as MapboxGL);
-			const scaleControl = createScaleControl(mapClient as MapboxGL);
-			const geolocateControl = createGeolocateControl(mapClient as MapboxGL);
+			const navigationControl = createNavigationControl(mapClient);
+			const scaleControl = createScaleControl(mapClient);
+			const geolocateControl = createGeolocateControl(mapClient);
 
 			map.addControl(navigationControl, NAVIGATION_CONTROL_PARAMETERS.POSITION);
 			map.addControl(scaleControl, SCALE_CONTROL_PARAMETERS.POSITION);
@@ -117,6 +118,10 @@ const MapComponent = ({
 			cleanupMapInstance(mapInstance, setIsMapReady);
 		};
 	}, [center, handleLocationFound, onLocationError, accessToken, mapClient]);
+
+	useEffect(() => {
+		return initializeMap();
+	}, [initializeMap]);
 
 	useEffect(() => {
 		if (!mapInstance.current || !isMapReady || !mapClient) {
@@ -165,5 +170,22 @@ const MapComponent = ({
 };
 
 const MemoizedMap = React.memo(MapComponent);
+const LazyMapComponent = lazy(() => Promise.resolve({ default: MemoizedMap }));
 
-export { MemoizedMap as Map };
+const MapWithSuspense = (properties: MapProperties): React.JSX.Element => {
+	return (
+		<Suspense
+			fallback={
+				<div className={styles["map-container"]}>
+					<div className={styles["map-loader-container"]}>
+						<Loader sizeInPx={48} />
+					</div>
+				</div>
+			}
+		>
+			<LazyMapComponent {...properties} />
+		</Suspense>
+	);
+};
+
+export { MapWithSuspense as Map };

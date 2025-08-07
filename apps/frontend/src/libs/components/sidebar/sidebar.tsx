@@ -1,19 +1,18 @@
 import smartScapesLogo from "~/assets/images/logo.svg";
 import { Link } from "~/libs/components/components.js";
-import { AppRoute } from "~/libs/enums/enums.js";
+import { AppRoute, KeyboardKey } from "~/libs/enums/enums.js";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { useCallback, useEffect, useState } from "~/libs/hooks/hooks.js";
-import { type NavigationItem } from "~/libs/types/types.js";
+import { type NavigationItemsGroup } from "~/libs/types/types.js";
 
 import { SidebarItem } from "./libs/components/components.js";
-import { KeyboardKey } from "./libs/enums/enums.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	navigationItems: Record<"ADMIN" | "USER", NavigationItem[]>;
+	navigationItemsGroups: NavigationItemsGroup[];
 };
 
-const Sidebar = ({ navigationItems }: Properties): React.JSX.Element => {
+const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
 	const handleClick = useCallback((): void => {
@@ -63,38 +62,37 @@ const Sidebar = ({ navigationItems }: Properties): React.JSX.Element => {
 					</div>
 				</div>
 				<div className={styles["sidebar"]}>
-					<div className={styles["admin-navigation"]}>
+					{navigationItemsGroups.map(({ hasLabel, items, name }) => (
 						<div
 							className={combineClassNames(
-								styles["list-title"],
-								isOpen ? "" : "visually-hidden",
+								styles["group"],
+								hasLabel ? styles["shifted"] : "",
 							)}
+							key={name}
 						>
-							<span className={styles["title-text"]}>Administration</span>
+							{hasLabel && (
+								<div
+									className={combineClassNames(
+										styles["title"],
+										isOpen ? "" : "visually-hidden",
+									)}
+								>
+									<span className={styles["title-text"]}>{name}</span>
+								</div>
+							)}
+							<ul className={styles["navigation-list"]}>
+								{items.map((item) => (
+									<SidebarItem
+										href={item.href}
+										icon={item.icon}
+										isLabelHidden={!isOpen}
+										key={item.icon}
+										label={item.label}
+									/>
+								))}
+							</ul>
 						</div>
-
-						<ul className={styles["navigation-list"]}>
-							{navigationItems.ADMIN.map((item) => (
-								<SidebarItem
-									href={item.href}
-									icon={item.icon}
-									key={item.icon}
-									label={isOpen ? item.label : ""}
-								/>
-							))}
-						</ul>
-					</div>
-
-					<ul className={styles["navigation-list"]}>
-						{navigationItems.USER.map((item) => (
-							<SidebarItem
-								href={item.href}
-								icon={item.icon}
-								key={item.icon}
-								label={isOpen ? item.label : ""}
-							/>
-						))}
-					</ul>
+					))}
 				</div>
 			</div>
 			{isOpen && (

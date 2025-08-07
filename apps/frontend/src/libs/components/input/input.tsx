@@ -1,3 +1,4 @@
+import { useCallback, useState } from "react";
 import {
 	type Control,
 	type FieldErrors,
@@ -5,7 +6,7 @@ import {
 	type FieldValues,
 } from "react-hook-form";
 
-import errorIcon from "~/assets/images/error.svg";
+import { Icon } from "~/libs/components/icon/icon.js";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
 
@@ -30,32 +31,60 @@ const Input = <T extends FieldValues>({
 	placeholder = "",
 	type = "text",
 }: Properties<T>): React.JSX.Element => {
+	const [typeState, setTypeState] = useState<Properties<never>["type"]>(type);
 	const { field } = useFormController({ control, name });
 
 	const error = errors[name]?.message;
 	const hasError = Boolean(error);
+	const isPasswordType = type === "password";
+
+	const onPassAppearanceToggle = useCallback((): void => {
+		const state: "password" | "text" =
+			typeState === "password" ? "text" : "password";
+
+		setTypeState(state);
+	}, [typeState, setTypeState]);
+	const toggleButtonIcon: "eye" | "eyeOff" =
+		typeState === "text" ? "eyeOff" : "eye";
 
 	return (
 		<label className={styles["label"]}>
 			<span className={styles["label-caption"]}>{label}</span>
-			<input
-				autoComplete={autocomplete}
-				className={combineClassNames(
-					styles["input"],
-					hasError && styles["input-error"],
+			<span className={styles["input-container"]}>
+				<input
+					autoComplete={autocomplete}
+					className={combineClassNames(
+						styles["input"],
+						hasError && styles["input-error"],
+					)}
+					name={field.name}
+					onChange={field.onChange}
+					placeholder={placeholder}
+					type={typeState}
+					value={field.value}
+				/>
+				{hasError && (
+					<span className={styles["error"]}>
+						<Icon height={24} name="error" width={24} />
+						{error as string}
+					</span>
 				)}
-				name={field.name}
-				onChange={field.onChange}
-				placeholder={placeholder}
-				type={type}
-				value={field.value}
-			/>
-			{hasError && (
-				<span className={styles["error"]}>
-					<img alt="error-icon" src={errorIcon} />
-					{error as string}
-				</span>
-			)}
+				{isPasswordType && (
+					<button
+						className={styles["password-toggle-button"]}
+						onClick={onPassAppearanceToggle}
+						type="button"
+					>
+						<span className="visually-hidden">toggle password appearance</span>
+						<Icon
+							className={styles["password-toggle-button-icon"] || ""}
+							height={24}
+							name={toggleButtonIcon}
+							width={24}
+						/>
+					</button>
+				)}
+			</span>
 		</label>
 	);
 };

@@ -37,6 +37,19 @@ body {
 	height: 16px;
 }
 
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+	display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button {
+	position: absolute;
+	right: 0;
+	display: none;
+	visibility: hidden;
+	pointer-events: none;
+}
+
 @supports (scrollbar-width: auto) {
 	html {
 		scrollbar-color: var(--color-fill-brand-strong) var(--color-background-base);

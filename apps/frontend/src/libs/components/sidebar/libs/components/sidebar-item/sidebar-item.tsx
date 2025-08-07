@@ -19,7 +19,7 @@ const SidebarItem = ({
 				<span
 					className={combineClassNames(
 						styles["label"],
-						isLabelHidden ? "visually-hidden" : "",
+						isLabelHidden && "visually-hidden",
 					)}
 				>
 					{label}

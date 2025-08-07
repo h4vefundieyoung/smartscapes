@@ -66,7 +66,7 @@ const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
 						<div
 							className={combineClassNames(
 								styles["group"],
-								hasLabel ? styles["shifted"] : "",
+								hasLabel && styles["shifted"],
 							)}
 							key={name}
 						>
@@ -74,7 +74,7 @@ const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
 								<div
 									className={combineClassNames(
 										styles["title"],
-										isOpen ? "" : "visually-hidden",
+										!isOpen && "visually-hidden",
 									)}
 								>
 									<span className={styles["title-text"]}>{name}</span>

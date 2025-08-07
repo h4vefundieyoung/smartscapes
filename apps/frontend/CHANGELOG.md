@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.13.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.12.0...frontend-v1.13.0) (2025-08-06)
+
+
+### Features
+
+* **frontend:** add custom select component ss-192 ([#217](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/217)) ([8e1e395](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/8e1e3950088ad6ea842ed26ff91e5a01731b06ac))
+
+## [1.12.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.11.0...frontend-v1.12.0) (2025-08-06)
+
+
+### Features
+
+* **frontend:** frontend protected routes ss-24 ([#199](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/199)) ([ad96806](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/ad96806486f6168a4f49d9807544107c99e5f37e))
+
+## [1.11.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.10.0...frontend-v1.11.0) (2025-08-06)
+
+
+### Features
+
+* **frontend:** toast notification smoother show ss-181 ([#191](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/191)) ([3328e0c](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/3328e0c29f1ef63efb20c08dfd04982439c0c924))
+
 ## [1.10.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.9.3...frontend-v1.10.0) (2025-08-05)
 
 

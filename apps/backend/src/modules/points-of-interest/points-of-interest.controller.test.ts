@@ -48,7 +48,12 @@ describe("PointsOfInterestController", () => {
 			pointsOfInterestService,
 		);
 
-		const result = await pointsOfInterestController.findAll();
+		const result = await pointsOfInterestController.findAll({
+			body: {},
+			params: {},
+			query: undefined,
+			user: null,
+		});
 
 		assert.deepStrictEqual(result, {
 			payload: {
@@ -87,6 +92,47 @@ describe("PointsOfInterestController", () => {
 				data: mockPointOfInterest,
 			},
 			status: HTTPCode.CREATED,
+		});
+	});
+
+	it("findAll should return nearby points of interest when location provided", async () => {
+		const pointsOfInterest = [mockPointOfInterest];
+		const RADIUS_IN_KM = 5;
+
+		const mockFindAll: PointsOfInterestService["findAll"] = (options) => {
+			assert.ok(options, "Options should be defined");
+			assert.strictEqual(Number(options.latitude), TEST_LATITUDE);
+			assert.strictEqual(Number(options.longitude), TEST_LONGITUDE);
+			assert.strictEqual(Number(options.radius), RADIUS_IN_KM);
+
+			return Promise.resolve({ items: pointsOfInterest });
+		};
+
+		const pointsOfInterestService = {
+			findAll: mockFindAll,
+		} as PointsOfInterestService;
+
+		const pointsOfInterestController = new PointsOfInterestController(
+			mockLogger,
+			pointsOfInterestService,
+		);
+
+		const result = await pointsOfInterestController.findAll({
+			body: {},
+			params: {},
+			query: {
+				latitude: TEST_LATITUDE,
+				longitude: TEST_LONGITUDE,
+				radius: 5,
+			},
+			user: null,
+		});
+
+		assert.deepStrictEqual(result, {
+			payload: {
+				data: pointsOfInterest,
+			},
+			status: HTTPCode.OK,
 		});
 	});
 

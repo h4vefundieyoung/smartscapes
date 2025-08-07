@@ -1,0 +1,21 @@
+.components-container {
+	display: flex;
+	flex-direction: column;
+	gap: 5rem;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.sidebar-container {
+	align-self: flex-start;
+}
+
+.carousel-container {
+	width: 50%;
+	margin-bottom: 10rem;
+}
+
+.select-container {
+	width: 50%;
+	margin-bottom: 5rem;
+}

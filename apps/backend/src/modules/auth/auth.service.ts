@@ -83,7 +83,9 @@ class AuthService {
 			token,
 			user: {
 				email,
+				firstName: user.firstName,
 				id: user.id,
+				lastName: user.lastName,
 			},
 		};
 	}

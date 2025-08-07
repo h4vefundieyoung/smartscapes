@@ -29,6 +29,14 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
 export {
+	type CreateFileRecordRequestDto,
+	type CreateFileRecordResponseDto,
+	fileCreateValidationSchema,
+	fileGetUploadUrlValidationSchema,
+	type FileUploadUrlResponseDto,
+	type GetUploadUrlRequestDto,
+} from "./modules/files/files.js";
+export {
 	NotificationApiPath,
 	type NotificationCreateRequestDto,
 	notificationCreateValidationSchema,

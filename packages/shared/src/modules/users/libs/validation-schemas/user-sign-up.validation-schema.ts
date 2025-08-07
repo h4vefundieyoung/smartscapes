@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { checkIsLatinLetter } from "../../../../libs/helpers/helpers.js";
 import { UserValidationMessage, UserValidationRule } from "../enums/enums.js";
-import { emailValidationSchema } from "./user-auth-email.validation-schema.js";
+import { userEmailValidationSchema } from "./user-email.validation-schema.js";
 
 const userSignUp = z
 	.strictObject({
@@ -18,7 +18,7 @@ const userSignUp = z
 			.max(UserValidationRule.MAX_LENGTH, {
 				error: UserValidationMessage.PASSWORD_MAXIMUM_LENGTH,
 			}),
-		email: emailValidationSchema,
+		email: userEmailValidationSchema,
 		firstName: z
 			.string()
 			.trim()

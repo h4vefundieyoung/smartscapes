@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { UserValidationMessage, UserValidationRule } from "../enums/enums.js";
 
-const emailValidationSchema = z
+const userEmailValidationSchema = z
 	.string()
 	.trim()
 	.min(UserValidationRule.REQUIRED_STRING_MIN_LENGTH, {
@@ -27,4 +27,4 @@ const emailValidationSchema = z
 		}),
 	);
 
-export { emailValidationSchema };
+export { userEmailValidationSchema };

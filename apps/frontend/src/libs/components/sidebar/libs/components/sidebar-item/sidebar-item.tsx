@@ -1,4 +1,5 @@
 import { Icon, Link } from "~/libs/components/components.js";
+import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { type NavigationItem } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
@@ -6,6 +7,7 @@ import styles from "./styles.module.css";
 const SidebarItem = ({
 	href,
 	icon,
+	isLabelHidden,
 	label,
 }: NavigationItem): React.JSX.Element => {
 	return (
@@ -14,7 +16,14 @@ const SidebarItem = ({
 				<span className={styles["icon"]}>
 					<Icon height={24} name={icon} width={24} />
 				</span>
-				<span className={styles["label"]}>{label}</span>
+				<span
+					className={combineClassNames(
+						styles["label"],
+						isLabelHidden ? "visually-hidden" : "",
+					)}
+				>
+					{label}
+				</span>
 			</Link>
 		</li>
 	);

@@ -7,15 +7,14 @@ const DEFAULT_AVATAR_SIZE = 32;
 
 type Properties = {
 	size?: number;
-	user: UserAuthResponseDto;
+	user: UserAuthResponseDto & { avatarUrl?: string };
 };
 
 const Avatar = ({
 	size = DEFAULT_AVATAR_SIZE,
 	user,
 }: Properties): React.JSX.Element => {
-	const { firstName, lastName } = user;
-	const avatarUrl = "avatarUrl" in user ? user.avatarUrl : null;
+	const { avatarUrl, firstName, lastName } = user;
 	const hasAvatar = Boolean(avatarUrl);
 
 	return (

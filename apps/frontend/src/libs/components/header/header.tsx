@@ -22,7 +22,7 @@ const Header = ({ actions, user }: Properties): JSX.Element => {
 		if (user) {
 			return (
 				<div className={styles["user-info"]}>
-					<Avatar user={user} />
+					<Avatar user={user as UserAuthResponseDto & { avatarUrl?: string }} />
 					<div className={styles["name"]}>
 						{user.firstName} {user.lastName}
 					</div>

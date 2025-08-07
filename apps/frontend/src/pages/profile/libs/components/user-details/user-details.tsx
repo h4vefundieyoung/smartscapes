@@ -57,7 +57,10 @@ const UserDetails = (): null | React.JSX.Element => {
 	return (
 		<div className={styles["user-details-container"]}>
 			<div className={styles["user-details-avatar"]}>
-				<Avatar size={140} user={user} />
+				<Avatar
+					size={140}
+					user={user as UserAuthResponseDto & { avatarUrl?: string }}
+				/>
 				<div className={styles["user-details-button-container"]}>
 					<Button label="Upload Avatar" onClick={handleUpdateAvatar} />
 					<Button label="Delete Avatar" onClick={handleDeleteAvatar} />

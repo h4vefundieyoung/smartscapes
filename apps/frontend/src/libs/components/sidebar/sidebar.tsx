@@ -1,6 +1,7 @@
 import smartScapesLogo from "~/assets/images/logo.svg";
 import { Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
+import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { useCallback, useEffect, useState } from "~/libs/hooks/hooks.js";
 import { type NavigationItem } from "~/libs/types/types.js";
 
@@ -9,7 +10,7 @@ import { KeyboardKey } from "./libs/enums/enums.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	navigationItems: NavigationItem[];
+	navigationItems: Record<"ADMIN" | "USER", NavigationItem[]>;
 };
 
 const Sidebar = ({ navigationItems }: Properties): React.JSX.Element => {
@@ -62,8 +63,30 @@ const Sidebar = ({ navigationItems }: Properties): React.JSX.Element => {
 					</div>
 				</div>
 				<div className={styles["sidebar"]}>
+					<div className={styles["admin-navigation"]}>
+						<div
+							className={combineClassNames(
+								styles["list-title"],
+								isOpen ? "" : "visually-hidden",
+							)}
+						>
+							<span className={styles["title-text"]}>Administration</span>
+						</div>
+
+						<ul className={styles["navigation-list"]}>
+							{navigationItems.ADMIN.map((item) => (
+								<SidebarItem
+									href={item.href}
+									icon={item.icon}
+									key={item.icon}
+									label={isOpen ? item.label : ""}
+								/>
+							))}
+						</ul>
+					</div>
+
 					<ul className={styles["navigation-list"]}>
-						{navigationItems.map((item) => (
+						{navigationItems.USER.map((item) => (
 							<SidebarItem
 								href={item.href}
 								icon={item.icon}

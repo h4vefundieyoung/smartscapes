@@ -19,6 +19,7 @@
 	background-color: var(--color-background-base);
 	border: 1px solid var(--color-stroke-strong);
 	border-radius: 8px;
+	transition: background-color 0.3s ease;
 }
 
 .control:hover {

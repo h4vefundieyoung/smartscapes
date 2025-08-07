@@ -3,6 +3,7 @@ import fastifyPlugin from "fastify-plugin";
 
 import { tokenService } from "~/libs/modules/token/token.js";
 import { type HTTPMethod } from "~/libs/types/types.js";
+import { AuthExceptionMessage } from "~/modules/auth/libs/enums/enums.js";
 import { AuthError } from "~/modules/auth/libs/exceptions/exceptions.js";
 import { userService } from "~/modules/users/users.js";
 
@@ -56,7 +57,7 @@ const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {
 		} catch (error) {
 			throw new AuthError({
 				cause: error,
-				message: "Invalid or expired token.",
+				message: AuthExceptionMessage.INVALID_TOKEN,
 			});
 		}
 	};

@@ -1,9 +1,10 @@
+import { AuthExceptionMessage } from "~/modules/auth/libs/enums/enums.js";
 import { AuthError } from "~/modules/auth/libs/exceptions/exceptions.js";
 
 const validationAuthHeader = (authHeader: string | undefined): string => {
 	if (!authHeader?.startsWith("Bearer ")) {
 		throw new AuthError({
-			message: "Invalid or missing authrization header.",
+			message: AuthExceptionMessage.INVALID_HEADER,
 		});
 	}
 
@@ -11,7 +12,7 @@ const validationAuthHeader = (authHeader: string | undefined): string => {
 
 	if (!token) {
 		throw new AuthError({
-			message: "Token not provided.",
+			message: AuthExceptionMessage.TOKEN_NOT_PROVIDED,
 		});
 	}
 

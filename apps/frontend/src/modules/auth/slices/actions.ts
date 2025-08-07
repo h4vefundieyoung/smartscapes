@@ -41,7 +41,7 @@ const logout = createAsyncThunk<null, undefined, AsyncThunkConfig>(
 
 		await authApi.logout();
 
-		await storage.drop(StorageKey.TOKEN);
+		await storage.drop(token);
 
 		return null;
 	},

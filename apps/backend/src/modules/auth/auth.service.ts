@@ -42,7 +42,7 @@ class AuthService {
 
 		if (!expirationTimeSeconds) {
 			throw new AuthError({
-				message: "Token payload is missing expiration date.",
+				message: AuthExceptionMessage.TOKEN_MISS_EXP,
 			});
 		}
 

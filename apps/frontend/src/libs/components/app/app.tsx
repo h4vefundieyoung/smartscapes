@@ -1,11 +1,6 @@
-import { Loader, RouterOutlet } from "~/libs/components/components.js";
+import { RouterOutlet } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import {
-	useAppDispatch,
-	useEffect,
-	useLocation,
-	useState,
-} from "~/libs/hooks/hooks.js";
+import { useAppDispatch, useEffect, useLocation } from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import { actions as userActions } from "~/modules/users/users.js";
 
@@ -14,7 +9,6 @@ import styles from "./styles.module.css";
 const App = (): React.JSX.Element => {
 	const { pathname } = useLocation();
 	const dispatch = useAppDispatch();
-	const [isAuthInitialized, setIsAuthInitialized] = useState<boolean>(false);
 
 	const isRoot = pathname === AppRoute.APP;
 
@@ -25,21 +19,8 @@ const App = (): React.JSX.Element => {
 	}, [isRoot, dispatch]);
 
 	useEffect(() => {
-		const initAuth = async (): Promise<void> => {
-			await dispatch(authActions.getAuthenticatedUser());
-			setIsAuthInitialized(true);
-		};
-
-		void initAuth();
+		void dispatch(authActions.getAuthenticatedUser());
 	}, [dispatch]);
-
-	if (!isAuthInitialized) {
-		return (
-			<div className={styles["loader-container"]}>
-				<Loader />
-			</div>
-		);
-	}
 
 	return (
 		<div className={styles["container"]}>

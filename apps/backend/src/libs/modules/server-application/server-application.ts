@@ -3,6 +3,7 @@ import { config } from "~/libs/modules/config/config.js";
 import { database } from "~/libs/modules/database/database.js";
 import { logger } from "~/libs/modules/logger/logger.js";
 import { authController } from "~/modules/auth/auth.js";
+import { filesController } from "~/modules/files/files.js";
 import { notificationController } from "~/modules/notifications/notifications.js";
 import { pointsOfInterestController } from "~/modules/points-of-interest/points-of-interest.js";
 import { routeCategoryController } from "~/modules/route-categories/route-categories.js";
@@ -27,6 +28,7 @@ const apiV1 = new BaseServerApplicationApi(
 		],
 	},
 	...authController.routes,
+	...filesController.routes,
 	...routeCategoryController.routes,
 	...userController.routes,
 	...notificationController.routes,

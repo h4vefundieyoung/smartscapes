@@ -1,9 +1,9 @@
-import { type FileContentType } from "../enums/enums.js";
+import { type FileContentType } from "../types/types.js";
 
-type GetUploadUrlRequestDto = {
+type FileGetUploadUrlRequestDto = {
 	fileName: string;
 	fileSize: number;
 	fileType: FileContentType;
 };
 
-export { type GetUploadUrlRequestDto };
+export { type FileGetUploadUrlRequestDto };

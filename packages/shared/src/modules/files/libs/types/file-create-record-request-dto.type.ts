@@ -1,10 +1,8 @@
-import { type FileContentType } from "../enums/enums.js";
+import { type FileContentType } from "../types/types.js";
 
-type CreateFileRecordRequestDto = {
+type FileCreateRecordRequestDto = {
 	contentType: FileContentType;
-	fileName: string;
-	fileSize: number;
 	url: string;
 };
 
-export { type CreateFileRecordRequestDto };
+export { type FileCreateRecordRequestDto };

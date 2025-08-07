@@ -14,6 +14,7 @@ type ControllerRouteParameters<
 	preHandlers?: ServerApplicationRouteParameters["preHandlers"];
 	validation?: {
 		body?: ValidationSchema;
+		query?: ValidationSchema;
 	};
 };
 

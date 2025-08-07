@@ -5,4 +5,5 @@ export {
 	AppEnvironment,
 	AuthApiPath,
 	HTTPCode,
+	UsersApiPath,
 } from "@smartscapes/shared";

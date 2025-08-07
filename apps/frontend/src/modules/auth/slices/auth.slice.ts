@@ -2,10 +2,9 @@ import { createSlice, isPending, isRejected } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
-import { patchProfile } from "~/modules/users/slices/actions.js";
 import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
-import { getAuthenticatedUser, signIn, signUp } from "./actions.js";
+import { authPatch, getAuthenticatedUser, signIn, signUp } from "./actions.js";
 
 type State = {
 	authenticatedUser: null | UserAuthResponseDto;
@@ -32,16 +31,23 @@ const { actions, name, reducer } = createSlice({
 				state.authenticatedUser = action.payload.data.user;
 				state.dataStatus = DataStatus.FULFILLED;
 			})
-			.addCase(patchProfile.fulfilled, (state, action) => {
+			.addCase(authPatch.fulfilled, (state, action) => {
 				state.authenticatedUser = action.payload.data;
+				state.dataStatus = DataStatus.FULFILLED;
 			})
-			.addMatcher(isPending(getAuthenticatedUser, signUp, signIn), (state) => {
-				state.dataStatus = DataStatus.PENDING;
-			})
-			.addMatcher(isRejected(getAuthenticatedUser, signUp, signIn), (state) => {
-				state.authenticatedUser = null;
-				state.dataStatus = DataStatus.REJECTED;
-			});
+			.addMatcher(
+				isPending(getAuthenticatedUser, signUp, signIn, authPatch),
+				(state) => {
+					state.dataStatus = DataStatus.PENDING;
+				},
+			)
+			.addMatcher(
+				isRejected(getAuthenticatedUser, signUp, signIn, authPatch),
+				(state) => {
+					state.authenticatedUser = null;
+					state.dataStatus = DataStatus.REJECTED;
+				},
+			);
 	},
 	initialState,
 	name: "auth",

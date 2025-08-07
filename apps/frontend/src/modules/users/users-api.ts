@@ -1,14 +1,11 @@
-import { APIPath, ContentType } from "~/libs/enums/enums.js";
+import { APIPath } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
 
 import { UsersApiPath } from "./libs/enums/enums.js";
-import {
-	type UserGetByIdItemResponseDto,
-	type UserAuthPatchRequestDto,
-} from "./libs/types/types.js";
+import { type UserGetByIdItemResponseDto } from "./libs/types/types.js";
 
 type Constructor = {
 	baseUrl: string;
@@ -27,23 +24,6 @@ class UserApi extends BaseHTTPApi {
 			{
 				hasAuth: true,
 				method: "GET",
-			},
-		);
-
-		return await response.json();
-	}
-
-	public async patch(
-		id: string,
-		payload: UserAuthPatchRequestDto,
-	): Promise<APIResponse<UserGetByIdItemResponseDto>> {
-		const response = await this.load<APIResponse<UserGetByIdItemResponseDto>>(
-			this.getFullEndpoint(UsersApiPath.$ID, { id }),
-			{
-				contentType: ContentType.JSON,
-				hasAuth: true,
-				method: "PATCH",
-				payload: JSON.stringify(payload),
 			},
 		);
 

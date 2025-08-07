@@ -197,7 +197,7 @@ class AuthController extends BaseController {
 		this.addRoute({
 			handler: this.patch.bind(this),
 			method: "PATCH",
-			path: AuthApiPath.AUTH_USER + "/:id",
+			path: AuthApiPath.AUTH_USER + AuthApiPath.$ID,
 			validation: {
 				body: userAuthPatchValidationSchema,
 			},

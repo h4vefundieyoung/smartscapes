@@ -1,10 +1,11 @@
-import { createSlice, isPending, isRejected } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
+import { authPatch } from "~/modules/auth/slices/actions.js";
 import { type UserGetByIdItemResponseDto } from "~/modules/users/users.js";
 
-import { loadAll, patchProfile } from "./actions.js";
+import { loadAll } from "./actions.js";
 
 type State = {
 	data: UserGetByIdItemResponseDto[];
@@ -25,7 +26,14 @@ const { actions, name, reducer } = createSlice({
 				state.data = action.payload.data;
 				state.dataStatus = DataStatus.FULFILLED;
 			})
-			.addCase(patchProfile.fulfilled, (state, action) => {
+			.addCase(loadAll.pending, (state) => {
+				state.dataStatus = DataStatus.PENDING;
+			})
+			.addCase(loadAll.rejected, (state) => {
+				state.dataStatus = DataStatus.REJECTED;
+				state.data = [];
+			})
+			.addCase(authPatch.fulfilled, (state, action) => {
 				const updated = action.payload.data;
 				const index = state.data.findIndex((u) => u.id === updated.id);
 
@@ -36,13 +44,6 @@ const { actions, name, reducer } = createSlice({
 				}
 
 				state.dataStatus = DataStatus.FULFILLED;
-			})
-			.addMatcher(isPending(loadAll, patchProfile), (state) => {
-				state.dataStatus = DataStatus.PENDING;
-			})
-			.addMatcher(isRejected(loadAll, patchProfile), (state) => {
-				state.dataStatus = DataStatus.REJECTED;
-				state.data = [];
 			});
 	},
 	initialState,

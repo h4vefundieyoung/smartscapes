@@ -7,10 +7,10 @@ import {
 	useAppSelector,
 	useCallback,
 } from "~/libs/hooks/hooks.js";
+import { actions as authActions } from "~/modules/auth/auth.js";
 import {
-	actions as userActions,
-	type UserAuthResponseDto,
 	type UserAuthPatchRequestDto,
+	type UserAuthResponseDto,
 } from "~/modules/users/users.js";
 
 import { ProfileForm } from "./libs/components/components.js";
@@ -18,16 +18,16 @@ import styles from "./styles.module.css";
 
 const UserDetails = (): null | React.JSX.Element => {
 	const dispatch = useAppDispatch();
-	const { authenticatedUser } = useAppSelector((state) => state.auth);
-	const isLoading = useAppSelector(
-		(state) => state.users.dataStatus === DataStatus.PENDING,
+	const { authenticatedUser, dataStatus } = useAppSelector(
+		(state) => state.auth,
 	);
+	const isLoading = dataStatus === DataStatus.PENDING;
 
 	const handleFormSubmit = useCallback(
 		(payload: UserAuthPatchRequestDto): void => {
 			if (authenticatedUser) {
 				void dispatch(
-					userActions.patchProfile({
+					authActions.authPatch({
 						id: authenticatedUser.id.toString(),
 						payload,
 					}),

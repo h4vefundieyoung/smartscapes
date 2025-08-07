@@ -1,4 +1,5 @@
 const AuthApiPath = {
+	$ID: "/:id",
 	AUTH_USER: "/authenticated-user",
 	SIGN_IN: "/sign-in",
 	SIGN_UP: "/sign-up",

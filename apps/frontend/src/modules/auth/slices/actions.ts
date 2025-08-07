@@ -3,7 +3,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 import {
+	type UserAuthPatchRequestDto,
 	type UserAuthResponseDto,
+	type UserGetByIdItemResponseDto,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
 	type UserSignUpRequestDto,
@@ -58,4 +60,14 @@ const signIn = createAsyncThunk<
 	return user;
 });
 
-export { getAuthenticatedUser, signIn, signUp };
+const authPatch = createAsyncThunk<
+	APIResponse<UserGetByIdItemResponseDto>,
+	{ id: string; payload: UserAuthPatchRequestDto },
+	AsyncThunkConfig
+>(`${sliceName}/patch`, async ({ id, payload }, { extra }) => {
+	const { authApi } = extra;
+
+	return await authApi.patch(id, payload);
+});
+
+export { authPatch, getAuthenticatedUser, signIn, signUp };

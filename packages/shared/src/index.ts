@@ -40,6 +40,7 @@ export {
 export {
 	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
+	PointsOfInterestApiPath,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 	type PointsOfInterestSearchQuery,

@@ -4,8 +4,8 @@ import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 import {
 	type UserAuthPatchRequestDto,
+	type UserAuthPatchResponseDto,
 	type UserAuthResponseDto,
-	type UserGetByIdItemResponseDto,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
 	type UserSignUpRequestDto,
@@ -60,14 +60,21 @@ const signIn = createAsyncThunk<
 	return user;
 });
 
-const authPatch = createAsyncThunk<
-	APIResponse<UserGetByIdItemResponseDto>,
-	{ id: number; payload: UserAuthPatchRequestDto },
+const patchAuthenticatedUser = createAsyncThunk<
+	APIResponse<UserAuthPatchResponseDto>,
+	UserAuthPatchRequestDto,
 	AsyncThunkConfig
->(`${sliceName}/patch`, async ({ id, payload }, { extra }) => {
+>(`${sliceName}/patch`, async (payload, { extra, getState }) => {
 	const { authApi } = extra;
+	const state = getState() as {
+		auth: { authenticatedUser: null | { id: number } };
+	};
 
-	return await authApi.patch(id, payload);
+	if (!state.auth.authenticatedUser) {
+		throw new Error("User not authenticated");
+	}
+
+	return await authApi.patch(state.auth.authenticatedUser.id, payload);
 });
 
-export { authPatch, getAuthenticatedUser, signIn, signUp };
+export { getAuthenticatedUser, patchAuthenticatedUser, signIn, signUp };

@@ -4,7 +4,7 @@ import { checkIsLatinLetter } from "../../../../libs/helpers/helpers.js";
 import { UserValidationMessage } from "../enums/user-validation-message.enum.js";
 import { UserValidationRule } from "../enums/user-validation-rule.enum.js";
 
-const userAuthPatch = z
+const authenticatedUserPatch = z
 	.object({
 		firstName: z
 			.string()
@@ -43,4 +43,24 @@ const userAuthPatch = z
 		message: UserValidationMessage.FIRST_OR_LAST_NAME_REQUIRED,
 	});
 
-export { userAuthPatch };
+const createAuthenticatedUserPatchSchema = (originalData: {
+	firstName: string;
+	lastName: string;
+}): z.ZodType => {
+	return authenticatedUserPatch.refine(
+		(data): boolean => {
+			const hasChanges =
+				(Boolean(data.firstName) &&
+					data.firstName !== originalData.firstName) ||
+				(Boolean(data.lastName) && data.lastName !== originalData.lastName);
+
+			return hasChanges;
+		},
+		{
+			message: UserValidationMessage.NO_CHANGES,
+			path: ["firstName"],
+		},
+	);
+};
+
+export { authenticatedUserPatch, createAuthenticatedUserPatchSchema };

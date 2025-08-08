@@ -43,6 +43,14 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 								),
 								path: AppRoute.APP,
 							},
+							{
+								element: (
+									<ProtectedRoute>
+										<Profile />
+									</ProtectedRoute>
+								),
+								path: AppRoute.PROFILE,
+							},
 						],
 						element: <App />,
 						path: AppRoute.APP,
@@ -50,10 +58,6 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 					{
 						element: <Landing />,
 						path: AppRoute.ROOT,
-					},
-					{
-						element: <Profile />,
-						path: AppRoute.PROFILE,
 					},
 					{
 						element: <NotFound />,

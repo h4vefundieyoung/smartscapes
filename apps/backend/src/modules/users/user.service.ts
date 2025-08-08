@@ -8,6 +8,7 @@ import { type UserRepository } from "~/modules/users/user.repository.js";
 import { UserError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserAuthPatchRequestDto,
+	type UserAuthPatchResponseDto,
 	type UserGetByIdItemResponseDto,
 	type UserPasswordDetails,
 	type UserSignUpRequestDto,
@@ -82,7 +83,7 @@ class UserService implements Service {
 	public async patch(
 		id: number,
 		payload: UserAuthPatchRequestDto,
-	): Promise<UserGetByIdItemResponseDto> {
+	): Promise<UserAuthPatchResponseDto> {
 		const item = await this.userRepository.patch(id, payload);
 
 		if (!item) {

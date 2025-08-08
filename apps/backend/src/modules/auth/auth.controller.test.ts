@@ -6,6 +6,7 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import {
 	type UserAuthPatchRequestDto,
+	type UserAuthPatchResponseDto,
 	type UserGetByIdItemResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
@@ -24,6 +25,13 @@ describe("AuthController", () => {
 		lastName: "Doe",
 	};
 
+	const mockPatchUser: UserAuthPatchResponseDto = {
+		email: "test@example.com",
+		firstName: "Jane",
+		id: 1,
+		lastName: "Smith",
+	};
+
 	const mockLogger: Logger = {
 		debug: () => {},
 		error: () => {},
@@ -33,7 +41,7 @@ describe("AuthController", () => {
 
 	it("patch should return updated user information", async () => {
 		const updatedUser = {
-			...mockUser,
+			...mockPatchUser,
 			firstName: "Jane",
 			lastName: "Smith",
 		};

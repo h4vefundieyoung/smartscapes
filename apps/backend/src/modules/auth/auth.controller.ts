@@ -8,8 +8,8 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import {
+	authenticatedUserPatchValidationSchema,
 	type UserAuthPatchRequestDto,
-	userAuthPatchValidationSchema,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
 	userSignInValidationSchema,
@@ -199,7 +199,7 @@ class AuthController extends BaseController {
 			method: "PATCH",
 			path: AuthApiPath.AUTHENTICATED_USER_$ID,
 			validation: {
-				body: userAuthPatchValidationSchema,
+				body: authenticatedUserPatchValidationSchema,
 			},
 		});
 	}

@@ -23,18 +23,14 @@ const UserDetails = (): null | React.JSX.Element => {
 		authenticatedUser: UserAuthResponseDto;
 		dataPatchStatus: ValueOf<typeof DataStatus>;
 	};
+
 	const isLoading = dataPatchStatus === DataStatus.PENDING;
 
 	const handleFormSubmit = useCallback(
 		(payload: UserAuthPatchRequestDto): void => {
-			void dispatch(
-				authActions.authPatch({
-					id: authenticatedUser.id,
-					payload,
-				}),
-			);
+			void dispatch(authActions.patchAuthenticatedUser(payload));
 		},
-		[dispatch, authenticatedUser],
+		[dispatch],
 	);
 
 	const user = {

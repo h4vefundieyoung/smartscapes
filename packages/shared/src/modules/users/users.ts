@@ -1,6 +1,7 @@
 export { UserExceptionMessage, UsersApiPath } from "./libs/enums/enums.js";
 export {
 	type UserAuthPatchRequestDto,
+	type UserAuthPatchResponseDto,
 	type UserAuthResponseDto,
 	type UserGetByIdItemResponseDto,
 	type UserSignInRequestDto,
@@ -9,7 +10,8 @@ export {
 	type UserSignUpResponseDto,
 } from "./libs/types/types.js";
 export {
-	userAuthPatch as userAuthPatchValidationSchema,
+	authenticatedUserPatch as authenticatedUserPatchValidationSchema,
+	createAuthenticatedUserPatchSchema as createAuthenticatedUserPatchValidationSchema,
 	userSignIn as userSignInValidationSchema,
 	userSignUp as userSignUpValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";

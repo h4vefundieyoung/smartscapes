@@ -5,8 +5,8 @@ import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
 import {
 	type UserAuthPatchRequestDto,
+	type UserAuthPatchResponseDto,
 	type UserAuthResponseDto,
-	type UserGetByIdItemResponseDto,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
 	type UserSignUpRequestDto,
@@ -43,8 +43,8 @@ class AuthApi extends BaseHTTPApi {
 	public async patch(
 		id: number,
 		payload: UserAuthPatchRequestDto,
-	): Promise<APIResponse<UserGetByIdItemResponseDto>> {
-		const response = await this.load<APIResponse<UserGetByIdItemResponseDto>>(
+	): Promise<APIResponse<UserAuthPatchResponseDto>> {
+		const response = await this.load<APIResponse<UserAuthPatchResponseDto>>(
 			this.getFullEndpoint(AuthApiPath.AUTHENTICATED_USER_$ID, {
 				id: id.toString(),
 			}),

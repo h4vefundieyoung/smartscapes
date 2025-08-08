@@ -17,6 +17,7 @@ const UserValidationMessage = {
 	LAST_NAME_MAXIMUM_LENGTH: `Last name must be at most ${String(UserValidationRule.MAX_LENGTH)} characters long.`,
 	LAST_NAME_MINIMUM_LENGTH: `Last name must be at least ${String(UserValidationRule.LAST_NAME_MINIMUM_LENGTH)} characters long.`,
 	LAST_NAME_REQUIRED: "Last name is required.",
+	NO_CHANGES: "At least one field must be changed.",
 	PASSWORD_MAXIMUM_LENGTH: `Password must be at most ${String(UserValidationRule.MAX_LENGTH)} characters long.`,
 	PASSWORD_MINIMUM_LENGTH: `Password must be at least ${String(UserValidationRule.PASSWORD_MINIMUM_LENGTH)} characters long.`,
 	PASSWORD_REQUIRED: "Password is required.",

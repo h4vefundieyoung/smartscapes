@@ -1,26 +1,26 @@
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 
-import { useNavigationTab } from "./libs/hooks/hooks.js";
 import { type TabItem } from "./libs/types/types.js";
 import styles from "./styles.module.css";
 
 type TabContainerProperties = {
+	activeTabId: string;
+	onTabChange: (tabId: string) => void;
 	tabsData: TabItem[];
 };
 
 const TabContainer = ({
+	activeTabId,
+	onTabChange,
 	tabsData,
 }: TabContainerProperties): React.JSX.Element => {
-	const defaultTabId = tabsData[0]?.id ?? "";
-	const { activeTabId, setTabInUrl } = useNavigationTab(defaultTabId);
-
 	const activeTabElement = tabsData.find(
 		(tab) => tab.id === activeTabId,
 	)?.element;
 
 	const handleTabClick = (tabId: string): (() => void) => {
 		return () => {
-			setTabInUrl(tabId);
+			onTabChange(tabId);
 		};
 	};
 
@@ -28,7 +28,7 @@ const TabContainer = ({
 		<div
 			className={combineClassNames(
 				styles["tab-container"],
-				activeTabId === defaultTabId && styles["first-tab-active"],
+				activeTabId === tabsData[0]?.id && styles["first-tab-active"],
 			)}
 		>
 			<nav className={styles["tab-navigation"]}>

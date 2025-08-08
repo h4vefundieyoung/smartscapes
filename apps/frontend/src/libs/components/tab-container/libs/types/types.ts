@@ -1,1 +1,1 @@
-export { type TabItem } from "./profile-tab.type.js";
+export { type TabItem } from "./tab-item.type.js";

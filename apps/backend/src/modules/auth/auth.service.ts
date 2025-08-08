@@ -2,7 +2,7 @@ import { type encryption } from "~/libs/modules/encryption/libs/encryption.js";
 import { type BaseToken } from "~/libs/modules/token/token.js";
 import {
 	type UserAuthPatchRequestDto,
-	type UserGetByIdItemResponseDto,
+	type UserAuthPatchResponseDto,
 	type UserService,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
@@ -37,7 +37,7 @@ class AuthService {
 	public async patch(
 		id: number,
 		userRequestDto: UserAuthPatchRequestDto,
-	): Promise<UserGetByIdItemResponseDto> {
+	): Promise<UserAuthPatchResponseDto> {
 		const user = await this.userService.patch(id, userRequestDto);
 
 		return user;

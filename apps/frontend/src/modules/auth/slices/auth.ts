@@ -1,10 +1,15 @@
-import { authPatch, getAuthenticatedUser, signIn, signUp } from "./actions.js";
+import {
+	getAuthenticatedUser,
+	patchAuthenticatedUser,
+	signIn,
+	signUp,
+} from "./actions.js";
 import { actions } from "./auth.slice.js";
 
 const allActions = {
 	...actions,
-	authPatch,
 	getAuthenticatedUser,
+	patchAuthenticatedUser,
 	signIn,
 	signUp,
 };

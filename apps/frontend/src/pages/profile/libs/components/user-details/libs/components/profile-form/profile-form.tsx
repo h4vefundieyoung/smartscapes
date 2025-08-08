@@ -1,23 +1,28 @@
 import { Button, Input } from "~/libs/components/components.js";
-import { useAppForm } from "~/libs/hooks/hooks.js";
+import { useAppForm, useMemo } from "~/libs/hooks/hooks.js";
 import {
+	createAuthenticatedUserPatchValidationSchema,
 	type UserAuthPatchRequestDto,
-	userAuthPatchValidationSchema,
 	type UserAuthResponseDto,
 } from "~/modules/users/users.js";
 
 import styles from "./styles.module.css";
 
-type ProfileFormProperties = {
+type Properties = {
 	onSubmit: (data: UserAuthPatchRequestDto) => void;
 	user: UserAuthResponseDto;
 };
 
-const ProfileForm = ({
-	onSubmit,
-	user,
-}: ProfileFormProperties): React.JSX.Element => {
+const ProfileForm = ({ onSubmit, user }: Properties): React.JSX.Element => {
 	const { firstName, lastName } = user;
+
+	const authenticatedUserPatchValidationSchema = useMemo(() => {
+		return createAuthenticatedUserPatchValidationSchema({
+			firstName,
+			lastName,
+		});
+	}, [firstName, lastName]);
+
 	const { control, errors, handleSubmit } = useAppForm<UserAuthPatchRequestDto>(
 		{
 			defaultValues: {
@@ -25,7 +30,7 @@ const ProfileForm = ({
 				lastName,
 			},
 			mode: "onChange",
-			validationSchema: userAuthPatchValidationSchema,
+			validationSchema: authenticatedUserPatchValidationSchema,
 		},
 	);
 
@@ -45,7 +50,7 @@ const ProfileForm = ({
 				name="lastName"
 				type="text"
 			/>
-			<Button label="Update My Settings" />
+			<Button label="Update profile" />
 		</form>
 	);
 };

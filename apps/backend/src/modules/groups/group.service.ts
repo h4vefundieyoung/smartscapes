@@ -1,14 +1,13 @@
-import {
-	GroupExceptionMessage,
-	type GroupResponseDto,
-} from "@smartscapes/shared";
-
 import { type CollectionResult } from "~/libs/types/collection-result.type.js";
 import { type Service } from "~/libs/types/service.type.js";
 
 import { type GroupEntity } from "./group.entity.js";
 import { type GroupRepository } from "./group.repository.js";
 import { GroupError } from "./libs/exceptions/group-not-found.exception.js";
+import {
+	GroupExceptionMessage,
+	type GroupResponseDto,
+} from "./libs/types/types.js";
 
 class GroupService implements Service<GroupResponseDto> {
 	private groupRepository: GroupRepository;

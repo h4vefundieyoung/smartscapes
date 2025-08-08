@@ -1,20 +1,20 @@
-import {
-	CommonExceptionMessage,
-	GroupKey,
-	type UserAuthResponseDto,
-	type UserGetByIdItemResponseDto,
-} from "@smartscapes/shared";
-
 import { encryption } from "~/libs/modules/encryption/libs/encryption.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
-import { type CollectionResult, type Service } from "~/libs/types/types.js";
+import {
+	type CollectionResult,
+	type Service,
+	type UserAuthResponseDto,
+} from "~/libs/types/types.js";
 import { UserExceptionMessage } from "~/modules/users/libs/enums/enums.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
 
 import { type GroupService } from "../groups/group.service.js";
+import { GroupKey } from "../groups/libs/enums/enums.js";
 import { UserError } from "./libs/exceptions/exceptions.js";
 import {
+	CommonExceptionMessage,
+	type UserGetByIdItemResponseDto,
 	type UserPasswordDetails,
 	type UserSignUpRequestDto,
 } from "./libs/types/types.js";

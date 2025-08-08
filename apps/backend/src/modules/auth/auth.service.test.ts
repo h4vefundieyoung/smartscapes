@@ -1,4 +1,3 @@
-import { GroupKey } from "@smartscapes/shared";
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 
@@ -15,6 +14,7 @@ import {
 } from "~/modules/users/users.js";
 
 import { GroupEntity } from "../groups/group.entity.js";
+import { GroupKey } from "../groups/libs/enums/enums.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
 
 describe("AuthService", () => {

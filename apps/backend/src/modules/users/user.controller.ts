@@ -1,5 +1,3 @@
-import { type UserGetByIdItemResponseDto } from "@smartscapes/shared";
-
 import { APIPath } from "~/libs/enums/enums.js";
 import {
 	type APIHandlerResponse,
@@ -10,6 +8,7 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
 import { UsersApiPath } from "./libs/enums/enums.js";
+import { type UserGetByIdItemResponseDto } from "./libs/types/types.js";
 
 /**
  * @swagger

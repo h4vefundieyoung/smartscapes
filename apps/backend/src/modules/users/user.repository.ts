@@ -179,11 +179,13 @@ class UserRepository implements Repository {
 				id: user.group.id,
 				key: user.group.key,
 				name: user.group.name,
-				permissions: user.group.permissions.map((permission) => ({
-					id: permission.id,
-					key: permission.key,
-					name: permission.name,
-				})),
+				permissions: user.group.permissions.map((permission) =>
+					PermissionEntity.initialize({
+						id: permission.id,
+						key: permission.key,
+						name: permission.name,
+					}).toObject(),
+				),
 			},
 			groupId: user.groupId,
 			id: user.id,

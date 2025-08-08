@@ -1,4 +1,4 @@
-import { type GroupItemWithPermissionsDto } from "@smartscapes/shared";
+import { type GroupItemWithPermissionsDto } from "~/modules/groups/libs/types/types.js";
 
 type UserPasswordDetails = {
 	firstName: string;

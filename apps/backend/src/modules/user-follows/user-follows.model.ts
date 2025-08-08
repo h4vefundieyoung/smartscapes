@@ -8,9 +8,9 @@ class UserFollowsModel extends AbstractModel {
 		return DatabaseTableName.USER_FOLLOWS;
 	}
 
-	private followerId!: number;
+	public followerId!: number;
 
-	private followingId!: number;
+	public followingId!: number;
 }
 
 export { UserFollowsModel };

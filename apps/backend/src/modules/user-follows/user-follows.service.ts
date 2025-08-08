@@ -44,12 +44,12 @@ class UserFollowsService {
 			});
 		}
 
-		const deletedCount = await this.userFollowsRepository.unfollowUser(
+		const isDeleted = await this.userFollowsRepository.unfollowUser(
 			followerId,
 			followingId,
 		);
 
-		if (!deletedCount) {
+		if (!isDeleted) {
 			throw new UserFollowsError({
 				message: UserFollowsExceptionMessage.NOT_FOLLOWING,
 				status: HTTPCode.BAD_REQUEST,

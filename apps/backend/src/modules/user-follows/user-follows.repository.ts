@@ -1,4 +1,4 @@
-import { UserFollowsModel } from "~/modules/user-follows/user-follows.model.js";
+import { type UserFollowsModel } from "~/modules/user-follows/user-follows.model.js";
 
 class UserFollowsRepository {
 	private userFollowsModel: typeof UserFollowsModel;
@@ -11,7 +11,8 @@ class UserFollowsRepository {
 		followerId: number,
 		followingId: number,
 	): Promise<boolean> {
-		const relation = await UserFollowsModel.query()
+		const relation = await this.userFollowsModel
+			.query()
 			.where({ followerId, followingId })
 			.first();
 
@@ -22,17 +23,17 @@ class UserFollowsRepository {
 		followerId: number,
 		followingId: number,
 	): Promise<void> {
-		await UserFollowsModel.query().insert({
+		await this.userFollowsModel.query().insert({
 			followerId,
 			followingId,
-		} as Partial<UserFollowsModel>);
+		});
 	}
 
 	public async unfollowUser(
 		followerId: number,
 		followingId: number,
 	): Promise<boolean> {
-		const deleteCount = await UserFollowsModel.query().delete().where({
+		const deleteCount = await this.userFollowsModel.query().delete().where({
 			followerId,
 			followingId,
 		});

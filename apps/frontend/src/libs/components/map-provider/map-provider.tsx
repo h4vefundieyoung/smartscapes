@@ -1,50 +1,85 @@
-import React, { createContext, useEffect, useMemo, useState } from "react";
-
-import { type MapboxGL } from "~/libs/components/map/libs/types/types.js";
+import React, { createContext, useContext, useEffect, useRef } from "react";
 
 import {
-	type MapBoxGLWithToken,
-	type MapContextValue,
-	type MapProviderProperties,
-} from "./libs/types/types.js";
+	MapClient,
+	type MapOptions,
+	type MarkerOptions,
+} from "~/libs/modules/map-client/map-client.module.js";
 
-const MapContext = createContext<MapContextValue | null>(null);
+import styles from "./styles.module.css";
+
+const MapContext = createContext<MapClient | null>(null);
+
+type MapProviderProps = {
+	center?: [number, number];
+	children?: React.ReactNode;
+	className?: string;
+	markers?: Array<{ id: string } & MarkerOptions>;
+	onMarkerClick?: (id: string, coordinates: [number, number]) => void;
+};
 
 const MapProvider = ({
-	accessToken,
+	center,
 	children,
-}: MapProviderProperties): React.JSX.Element => {
-	const [mapClient, setMapClient] = useState<MapboxGL | null>(null);
+	className,
+	markers = [],
+	onMarkerClick,
+}: MapProviderProps): React.JSX.Element => {
+	const clientRef = useRef<MapClient>(new MapClient());
+	const containerRef = useRef<HTMLDivElement>(null);
+	const initializedRef = useRef<boolean>(false);
 
 	useEffect(() => {
-		const loadMapboxGL = async (): Promise<void> => {
-			if (!accessToken || mapClient) {
-				return;
-			}
+		const client = clientRef.current;
+		const container = containerRef.current;
 
-			const [mapboxgl] = await Promise.all([
-				import("mapbox-gl"),
-				import("mapbox-gl/dist/mapbox-gl.css"),
-			]);
+		if (!container || initializedRef.current) return;
 
-			(mapboxgl.default as MapBoxGLWithToken).accessToken = accessToken;
-			setMapClient(mapboxgl.default);
+		const mapOptions: MapOptions = {};
+		if (center !== undefined) mapOptions.center = center;
+
+		client.init(container, mapOptions);
+		client.addAllMapControls();
+		initializedRef.current = true;
+
+		return () => {
+			client.destroy();
+			initializedRef.current = false;
 		};
+	}, []);
 
-		void loadMapboxGL();
-	}, [accessToken, mapClient]);
+	useEffect(() => {
+		const client = clientRef.current;
 
-	const contextValue = useMemo<MapContextValue>(
-		() => ({
-			accessToken: accessToken || null,
-			mapClient,
-		}),
-		[accessToken, mapClient],
-	);
+		if (!initializedRef.current || !client.getMap() || !center) return;
+
+		client.flyTo(center);
+	}, [center]);
+
+	useEffect(() => {
+		const client = clientRef.current;
+
+		if (!client.getMap()) return;
+
+		client.clearAllMarkers();
+
+		client.addMarkers(markers);
+
+		if (onMarkerClick) {
+			client.setMarkerClickHandler(onMarkerClick);
+		}
+	}, [markers, onMarkerClick]);
 
 	return (
-		<MapContext.Provider value={contextValue}>{children}</MapContext.Provider>
+		<MapContext.Provider value={clientRef.current}>
+			<div className={`${styles["map-wrapper"]} ${className || ""}`}>
+				<div className={styles["map"]} ref={containerRef} />
+				{children}
+			</div>
+		</MapContext.Provider>
 	);
 };
 
-export { MapContext, MapProvider };
+const useMapContext = (): MapClient | null => useContext(MapContext);
+
+export { MapProvider, useMapContext };

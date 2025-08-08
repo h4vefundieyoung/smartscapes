@@ -2,7 +2,6 @@ import {
 	Button,
 	Header,
 	Loader,
-	Map,
 	Select,
 	Sidebar,
 } from "~/libs/components/components.js";
@@ -13,24 +12,13 @@ import { useAppForm, useAppSelector } from "~/libs/hooks/hooks.js";
 
 import { mockImages } from "../../libs/components/carousel/assets/mock-images/mock-images.js";
 import { Carousel } from "../../libs/components/carousel/carousel.js";
-import {
-	COORDINATES,
-	MOCK_MARKERS,
-} from "../../libs/components/map/mock-data.js";
 import styles from "./styles.module.css";
-
-const DEFAULT_KYIV_COORDINATES: [number, number] = [
-	COORDINATES.GLASS_BRIDGE.LONGITUDE,
-	COORDINATES.GLASS_BRIDGE.LATITUDE,
-];
+import { MapProvider } from "~/libs/components/components.js";
+import { MapShowcase } from "./libs/components/map-showcase/map-showcase.js";
 
 type FormValues = {
 	multiColors: string[];
 	singleColor: null | string;
-};
-
-const handleMarkerClick = (): void => {
-	alert("Marker clicked");
 };
 
 const Dashboard = (): React.JSX.Element => {
@@ -68,25 +56,10 @@ const Dashboard = (): React.JSX.Element => {
 				<div className={styles["carousel-container"]}>
 					<Carousel images={mockImages} />
 				</div>
-				<div className={styles["maps-container"]}>
-					<div>
-						<h3 className={styles["map-title"]}>
-							Map Centered on Mock Data (Kyiv, Ukraine)
-						</h3>
-						<div className={styles["map-container"]}>
-							<Map
-								center={MOCK_MARKERS[0] ?? DEFAULT_KYIV_COORDINATES}
-								markers={MOCK_MARKERS}
-								onMarkerClick={handleMarkerClick}
-							/>
-						</div>
-					</div>
-					<div>
-						<h3 className={styles["map-title"]}>Map Not Centered</h3>
-						<div className={styles["map-container"]}>
-							<Map markers={MOCK_MARKERS} onMarkerClick={handleMarkerClick} />
-						</div>
-					</div>
+				<div className={styles["map-container"]}>
+					<MapProvider center={[30.5234, 50.4501]}>
+						<MapShowcase />
+					</MapProvider>
 				</div>
 				<div className={styles["select-container"]}>
 					<Select

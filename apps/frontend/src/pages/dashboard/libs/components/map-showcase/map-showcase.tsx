@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { useMapClient } from "~/libs/hooks/use-map-client/use-map-client.hook.js";
+import { useMapClient } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 

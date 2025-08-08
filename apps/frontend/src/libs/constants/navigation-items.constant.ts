@@ -8,7 +8,7 @@ const NAVIGATION_ITEMS: NavigationItem[] = [
 		label: "Dashboard",
 	},
 	{
-		href: AppRoute.SIGN_UP,
+		href: AppRoute.EXPLORE,
 		icon: "analytics",
 		label: "List of places",
 	},

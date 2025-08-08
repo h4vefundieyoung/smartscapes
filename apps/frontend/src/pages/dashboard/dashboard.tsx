@@ -6,15 +6,13 @@ import {
 	Sidebar,
 } from "~/libs/components/components.js";
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
-import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
+import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppForm, useAppSelector } from "~/libs/hooks/hooks.js";
 
 import { mockImages } from "../../libs/components/carousel/assets/mock-images/mock-images.js";
 import { Carousel } from "../../libs/components/carousel/carousel.js";
 import styles from "./styles.module.css";
-import { MapProvider } from "~/libs/components/components.js";
-import { MapShowcase } from "./libs/components/map-showcase/map-showcase.js";
 
 type FormValues = {
 	multiColors: string[];
@@ -47,7 +45,7 @@ const Dashboard = (): React.JSX.Element => {
 					user={authenticatedUser}
 				/>
 				<div className={styles["sidebar-container"]}>
-					<Sidebar navigationItems={NAVIGATION_ITEMS} />
+					<Sidebar navigationItemsGroups={NAVIGATION_ITEMS_GROUPS} />
 				</div>
 				<Loader />
 				<div className={styles["button-container"]}>
@@ -55,11 +53,6 @@ const Dashboard = (): React.JSX.Element => {
 				</div>
 				<div className={styles["carousel-container"]}>
 					<Carousel images={mockImages} />
-				</div>
-				<div className={styles["map-container"]}>
-					<MapProvider center={[30.5234, 50.4501]}>
-						<MapShowcase />
-					</MapProvider>
 				</div>
 				<div className={styles["select-container"]}>
 					<Select

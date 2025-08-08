@@ -1,0 +1,35 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+}
+
+.content {
+	display: flex;
+	flex: 1;
+	overflow: hidden;
+}
+
+.sidebar {
+	flex-shrink: 0;
+}
+
+.main {
+	flex: 1;
+	padding: 2rem;
+	overflow-y: auto;
+}
+
+.title {
+	margin-bottom: 1rem;
+	font-size: 2rem;
+	font-weight: bold;
+	color: var(--color-text-primary);
+}
+
+.description {
+	margin-bottom: 2rem;
+	font-size: 1.1rem;
+	line-height: 1.6;
+	color: var(--color-text-secondary);
+}

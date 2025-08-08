@@ -265,4 +265,4 @@ class MapClient {
 	}
 }
 
-export { MapClient, type MapOptions, type MarkerOptions };
+export { MapClient};

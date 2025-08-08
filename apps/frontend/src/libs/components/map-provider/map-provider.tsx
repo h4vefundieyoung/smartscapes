@@ -1,14 +1,15 @@
-import React, { createContext, useContext, useEffect, useRef } from "react";
+import React, {createContext,} from "react";
+import { useContext, useEffect, useRef } from '~/libs/hooks/hooks.js';
 
 import {
-	MapClient,
+	mapClient,
 	type MapOptions,
 	type MarkerOptions,
-} from "~/libs/modules/map-client/map-client.module.js";
+} from "~/libs/modules/map-client/map-client.js";
 
 import styles from "./styles.module.css";
 
-const MapContext = createContext<MapClient | null>(null);
+const MapContext = createContext<typeof mapClient | null>(null);
 
 type MapProviderProps = {
 	center?: [number, number];
@@ -25,7 +26,7 @@ const MapProvider = ({
 	markers = [],
 	onMarkerClick,
 }: MapProviderProps): React.JSX.Element => {
-	const clientRef = useRef<MapClient>(new MapClient());
+	const clientRef = useRef<typeof mapClient>(mapClient);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const initializedRef = useRef<boolean>(false);
 
@@ -80,6 +81,6 @@ const MapProvider = ({
 	);
 };
 
-const useMapContext = (): MapClient | null => useContext(MapContext);
+const useMapContext = (): typeof mapClient | null => useContext(MapContext);
 
 export { MapProvider, useMapContext };

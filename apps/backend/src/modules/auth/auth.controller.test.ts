@@ -90,4 +90,31 @@ describe("AuthController", () => {
 			status,
 		});
 	});
+
+	it("should call authService.logout and return a 200 status", async () => {
+		const mockLogout: AuthService["logout"] = (token) => {
+			assert.strictEqual(
+				token,
+				mockToken,
+				"Expected authService.logout to be called with the correct token.",
+			);
+
+			return Promise.resolve();
+		};
+
+		const authService = {
+			logout: mockLogout,
+		} as AuthService;
+
+		const authController = new AuthController(mockLogger, authService);
+
+		const options = { token: mockToken } as APIHandlerOptions;
+
+		const result = await authController.logout(options);
+
+		assert.deepStrictEqual(result, {
+			payload: null,
+			status: HTTPCode.OK,
+		});
+	});
 });

@@ -245,6 +245,16 @@ class PointsOfInterestController extends BaseController {
 	 *           Search radius in kilometers.
 	 *           Default value is 5 km if not specified.
 	 *           Must be between 0.1 and 50 km.
+	 *       - in: query
+	 *         name: name
+	 *         schema:
+	 *           type: string
+	 *           pattern: '^[A-Za-z0-9 ,\-]+$'
+	 *           example: "Park"
+	 *         description: |
+	 *           Full or partial name to search for.
+	 *           Allows letters, digits, spaces, commas, and hyphens.
+	 *           Case-insensitive search is supported.
 	 *     responses:
 	 *       200:
 	 *         description: Successfully retrieved points of interest

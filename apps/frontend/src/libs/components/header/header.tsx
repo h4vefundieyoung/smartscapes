@@ -4,10 +4,9 @@ import appLogo from "~/assets/images/logo.svg";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { type UserAuthResponseDto, type ValueOf } from "~/libs/types/types.js";
 
-import { Link } from "../components.js";
+import { Button, Link } from "../components.js";
 import { AuthenticatedHeader } from "./authenticated-header.js";
 import styles from "./styles.module.css";
-import { UnautharizedHeader } from "./unauthorized-header.js";
 
 type Properties = {
 	actions: {
@@ -23,7 +22,13 @@ const Header = ({ actions, user }: Properties): JSX.Element => {
 			return <AuthenticatedHeader user={user} />;
 		}
 
-		return <UnautharizedHeader actions={actions} />;
+		return (
+			<div className={styles["buttons"]}>
+				{actions.map(({ label, to }) => (
+					<Button key={to} label={label} to={to} type="button" />
+				))}
+			</div>
+		);
 	};
 
 	return (

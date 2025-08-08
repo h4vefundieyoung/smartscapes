@@ -1,10 +1,11 @@
-import { type Entity } from "~/libs/types/types.js";
+import { type Entity, type ValueOf } from "~/libs/types/types.js";
 
 import { type PermissionEntity } from "../permission/permission.entity.js";
+import { type GroupKey } from "./libs/enums/enums.js";
 
 class GroupEntity implements Entity {
 	private id: null | number;
-	private key: string;
+	private key: ValueOf<typeof GroupKey>;
 	private name: string;
 	private permissions: null | ReturnType<PermissionEntity["toObject"]>[];
 
@@ -15,7 +16,7 @@ class GroupEntity implements Entity {
 		permissions = [],
 	}: {
 		id: null | number;
-		key: string;
+		key: ValueOf<typeof GroupKey>;
 		name: string;
 		permissions?: ReturnType<PermissionEntity["toObject"]>[];
 	}) {
@@ -31,7 +32,7 @@ class GroupEntity implements Entity {
 		name,
 	}: {
 		id: number;
-		key: string;
+		key: ValueOf<typeof GroupKey>;
 		name: string;
 	}): GroupEntity {
 		return new GroupEntity({ id, key, name });
@@ -41,7 +42,7 @@ class GroupEntity implements Entity {
 		key,
 		name,
 	}: {
-		key: string;
+		key: ValueOf<typeof GroupKey>;
 		name: string;
 	}): GroupEntity {
 		return new GroupEntity({
@@ -58,7 +59,7 @@ class GroupEntity implements Entity {
 		permissions,
 	}: {
 		id: number;
-		key: string;
+		key: ValueOf<typeof GroupKey>;
 		name: string;
 		permissions: ReturnType<PermissionEntity["toObject"]>[];
 	}): GroupEntity {
@@ -66,7 +67,7 @@ class GroupEntity implements Entity {
 	}
 
 	public toNewObject(): {
-		key: string;
+		key: ValueOf<typeof GroupKey>;
 		name: string;
 	} {
 		return {
@@ -77,7 +78,7 @@ class GroupEntity implements Entity {
 
 	public toObject(): {
 		id: number;
-		key: string;
+		key: ValueOf<typeof GroupKey>;
 		name: string;
 		permissions: ReturnType<PermissionEntity["toObject"]>[];
 	} {

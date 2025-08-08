@@ -2,12 +2,13 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import { GroupEntity } from "./group.entity.js";
+import { GroupKey } from "./libs/enums/enums.js";
 
 describe("GroupEntity", () => {
 	it("create group entity with id", () => {
 		const groupData = {
 			id: 1,
-			key: "admins",
+			key: GroupKey.ADMINS,
 			name: "Administrators",
 			permissions: [],
 		};
@@ -22,7 +23,7 @@ describe("GroupEntity", () => {
 
 	it("initialize new group entity without id", () => {
 		const groupData = {
-			key: "users",
+			key: GroupKey.ADMINS,
 			name: "Regular Users",
 		};
 

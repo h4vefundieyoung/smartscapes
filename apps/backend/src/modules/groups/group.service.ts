@@ -45,7 +45,7 @@ class GroupService implements Service<GroupResponseDto> {
 		const group = await this.groupRepository.findByKey(key);
 
 		if (!group) {
-			throw new Error(GroupExceptionMessage.GROUP_NOT_FOUND);
+			throw new GroupError({ message: GroupExceptionMessage.GROUP_NOT_FOUND });
 		}
 
 		return group.toObject();

@@ -1,16 +1,9 @@
+import { type GroupItemDto } from "../../../groups/types/types.js";
+
 type UserGetByIdItemResponseDto = {
 	email: string;
 	firstName: string;
-	group: null | {
-		id: number;
-		key: string;
-		name: string;
-		permissions: {
-			id: number;
-			key: string;
-			name: string;
-		}[];
-	};
+	group: GroupItemDto;
 	groupId: number;
 	id: number;
 	lastName: string;

@@ -64,23 +64,27 @@ describe("UserFollowsRepository", () => {
 		await userFollowsRepository.followUser(TEST_FOLLOWER_ID, TEST_FOLLOWING_ID);
 	});
 
-	it("unfollowUser should delete follow relation and return delete count", async () => {
+	it("unfollowUser should delete follow relation and return true", async () => {
 		databaseTracker.on.delete("user_follows").response(DELETED_COUNT_ONE);
 
-		const deletedCount = await userFollowsRepository.unfollowUser(
-			TEST_FOLLOWER_ID,
-			TEST_FOLLOWING_ID,
+		const deletedCount = Boolean(
+			await userFollowsRepository.unfollowUser(
+				TEST_FOLLOWER_ID,
+				TEST_FOLLOWING_ID,
+			),
 		);
-		assert.strictEqual(deletedCount, DELETED_COUNT_ONE);
+		assert.strictEqual(deletedCount, true);
 	});
 
-	it("unfollowUser should return 0 if no rows deleted", async () => {
+	it("unfollowUser should return false if no rows deleted", async () => {
 		databaseTracker.on.delete("user_follows").response(DELETED_COUNT_NONE);
 
-		const deletedCount = await userFollowsRepository.unfollowUser(
-			TEST_FOLLOWER_ID,
-			TEST_FOLLOWING_ID,
+		const deletedCount = Boolean(
+			await userFollowsRepository.unfollowUser(
+				TEST_FOLLOWER_ID,
+				TEST_FOLLOWING_ID,
+			),
 		);
-		assert.strictEqual(deletedCount, DELETED_COUNT_NONE);
+		assert.strictEqual(deletedCount, false);
 	});
 });

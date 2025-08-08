@@ -3,6 +3,8 @@ import { describe, it } from "node:test";
 
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { UserFollowsExceptionMessage } from "~/modules/user-follows/libs/enums/enums.js";
+import { UserFollowsError } from "~/modules/user-follows/libs/exceptions/user-follows.exceptions.js";
 import { type UserFollowsService } from "~/modules/user-follows/user-follows.service.js";
 
 import { UserFollowsController } from "./user-follows.controller.js";
@@ -92,12 +94,17 @@ describe("UserFollowsController", () => {
 			user: mockAnotherUser,
 		};
 
-		const result = await controller.follow(request);
-
-		assert.deepStrictEqual(result, {
-			payload: null,
-			status: HTTPCode.UNAUTHORIZED,
-		});
+		try {
+			await controller.follow(request);
+			assert.fail("Expected UserFollowsError was not thrown");
+		} catch (error) {
+			assert.ok(error instanceof UserFollowsError);
+			assert.equal(
+				error.message,
+				UserFollowsExceptionMessage.UNAUTHORIZED_USER,
+			);
+			assert.equal(error.status, HTTPCode.UNAUTHORIZED);
+		}
 	});
 
 	it("Unfollow should return 200 OK when userId matches followerId", async () => {
@@ -148,11 +155,16 @@ describe("UserFollowsController", () => {
 			user: mockAnotherUser,
 		};
 
-		const result = await controller.unfollow(request);
-
-		assert.deepStrictEqual(result, {
-			payload: null,
-			status: HTTPCode.UNAUTHORIZED,
-		});
+		try {
+			await controller.unfollow(request);
+			assert.fail("Expected UserFollowsError was not thrown");
+		} catch (error) {
+			assert.ok(error instanceof UserFollowsError);
+			assert.equal(
+				error.message,
+				UserFollowsExceptionMessage.UNAUTHORIZED_USER,
+			);
+			assert.equal(error.status, HTTPCode.UNAUTHORIZED);
+		}
 	});
 });

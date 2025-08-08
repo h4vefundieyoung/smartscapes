@@ -6,14 +6,18 @@ import {
 } from "~/libs/modules/controller/libs/types/types.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/libs/types/logger.type.js";
-import { UserFollowsApiPath } from "~/modules/user-follows/libs/enums/enums.js";
+import {
+	UserFollowsApiPath,
+	UserFollowsExceptionMessage,
+} from "~/modules/user-follows/libs/enums/enums.js";
+import { UserFollowsError } from "~/modules/user-follows/libs/exceptions/user-follows.exceptions.js";
 import { type UserFollowsService } from "~/modules/user-follows/user-follows.service.js";
 
 import {
-	type UserFollowsFollowParametersDto,
-	type UserFollowsFollowRequestDto,
-	type UserFollowsUnfollowParametersDto,
-	type UserGetByIdItemResponseDto,
+	type UserAuthResponseDto,
+	type UserFollowsFollowParametersDtoTypes,
+	type UserFollowsFollowRequestDtoTypes,
+	type UserFollowsUnfollowParametersDtoTypes,
 } from "./libs/types/types.js";
 
 class UserFollowsController extends BaseController {
@@ -26,13 +30,13 @@ class UserFollowsController extends BaseController {
 		this.addRoute({
 			handler: this.follow.bind(this),
 			method: "POST",
-			path: UserFollowsApiPath.FOLLOW,
+			path: UserFollowsApiPath.$USER_ID_FOLLOWERS,
 		});
 
 		this.addRoute({
 			handler: this.unfollow.bind(this),
 			method: "DELETE",
-			path: UserFollowsApiPath.UNFOLLOW,
+			path: UserFollowsApiPath.$USER_ID_FOLLOWERS_$ID,
 		});
 	}
 
@@ -43,6 +47,8 @@ class UserFollowsController extends BaseController {
 	 *     tags:
 	 *       - Users
 	 *     summary: Follow a user
+	 *     security:
+	 * 	       - bearerAuth: []
 	 *     parameters:
 	 *       - in: path
 	 *         name: userId
@@ -69,22 +75,22 @@ class UserFollowsController extends BaseController {
 	 */
 
 	public async follow(
-		request: APIHandlerOptions<
-			{
-				body: UserFollowsFollowRequestDto;
-				params: UserFollowsFollowParametersDto;
-			} & { user: UserGetByIdItemResponseDto }
-		>,
+		options: APIHandlerOptions<{
+			body: UserFollowsFollowRequestDtoTypes;
+			params: UserFollowsFollowParametersDtoTypes;
+		}>,
 	): Promise<APIHandlerResponse> {
-		const followingId = Number(request.body.followingId);
-		const followerId = Number(request.params.userId);
-		const userId = Number(request.user?.id);
+		const { body, params, user } = options;
+
+		const followingId = Number(body.followingId);
+		const followerId = Number(params.userId);
+		const userId = (user as UserAuthResponseDto).id;
 
 		if (userId !== followerId) {
-			return {
-				payload: null,
+			throw new UserFollowsError({
+				message: UserFollowsExceptionMessage.UNAUTHORIZED_USER,
 				status: HTTPCode.UNAUTHORIZED,
-			};
+			});
 		}
 
 		await this.userFollowsService.follow(followerId, followingId);
@@ -102,6 +108,8 @@ class UserFollowsController extends BaseController {
 	 *     tags:
 	 *       - Users
 	 *     summary: Unfollow a user
+	 *     security:
+	 * 	       - bearerAuth: []
 	 *     parameters:
 	 *       - in: path
 	 *         name: userId
@@ -123,21 +131,21 @@ class UserFollowsController extends BaseController {
 	 */
 
 	public async unfollow(
-		request: APIHandlerOptions<
-			{ params: UserFollowsUnfollowParametersDto } & {
-				user: UserGetByIdItemResponseDto;
-			}
-		>,
+		options: APIHandlerOptions<{
+			params: UserFollowsUnfollowParametersDtoTypes;
+		}>,
 	): Promise<APIHandlerResponse> {
-		const followingId = Number(request.params.id);
-		const followerId = Number(request.params.userId);
-		const userId = Number(request.user?.id);
+		const { params, user } = options;
+
+		const followingId = Number(params.id);
+		const followerId = Number(params.userId);
+		const userId = (user as UserAuthResponseDto).id;
 
 		if (userId !== followerId) {
-			return {
-				payload: null,
+			throw new UserFollowsError({
+				message: UserFollowsExceptionMessage.UNAUTHORIZED_USER,
 				status: HTTPCode.UNAUTHORIZED,
-			};
+			});
 		}
 
 		await this.userFollowsService.unfollow(followerId, followingId);

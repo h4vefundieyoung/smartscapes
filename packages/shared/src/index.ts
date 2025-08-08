@@ -67,9 +67,9 @@ export {
 export {
 	UserFollowsApiPath,
 	UserFollowsExceptionMessage,
-	type UserFollowsFollowParametersDto,
-	type UserFollowsFollowRequestDto,
-	type UserFollowsUnfollowParametersDto,
+	type UserFollowsFollowParametersDtoTypes,
+	type UserFollowsFollowRequestDtoTypes,
+	type UserFollowsUnfollowParametersDtoTypes,
 } from "./modules/user-follows/user-follows.js";
 export {
 	type UserAuthResponseDto,

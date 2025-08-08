@@ -49,7 +49,7 @@ class UserFollowsService {
 			followingId,
 		);
 
-		if (deletedCount === 0) {
+		if (!deletedCount) {
 			throw new UserFollowsError({
 				message: UserFollowsExceptionMessage.NOT_FOLLOWING,
 				status: HTTPCode.BAD_REQUEST,

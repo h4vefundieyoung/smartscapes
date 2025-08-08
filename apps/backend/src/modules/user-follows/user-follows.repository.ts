@@ -31,13 +31,13 @@ class UserFollowsRepository {
 	public async unfollowUser(
 		followerId: number,
 		followingId: number,
-	): Promise<number> {
+	): Promise<boolean> {
 		const deleteCount = await UserFollowsModel.query().delete().where({
 			followerId,
 			followingId,
 		});
 
-		return deleteCount;
+		return Boolean(deleteCount);
 	}
 }
 

@@ -23,7 +23,7 @@ describe("UserFollowsService", () => {
 				Promise.resolve()) as UserFollowsRepository["followUser"],
 			unfollowUser: (() =>
 				Promise.resolve(
-					DELETED_COUNT_ONE,
+					Boolean(DELETED_COUNT_ONE),
 				)) as UserFollowsRepository["unfollowUser"],
 		} as UserFollowsRepository;
 
@@ -50,7 +50,7 @@ describe("UserFollowsService", () => {
 				Promise.resolve()) as UserFollowsRepository["followUser"],
 			unfollowUser: (() =>
 				Promise.resolve(
-					DELETED_COUNT_ONE,
+					Boolean(DELETED_COUNT_ONE),
 				)) as UserFollowsRepository["unfollowUser"],
 		} as UserFollowsRepository;
 
@@ -79,7 +79,7 @@ describe("UserFollowsService", () => {
 				Promise.resolve()) as UserFollowsRepository["followUser"],
 			unfollowUser: (() =>
 				Promise.resolve(
-					DELETED_COUNT_ONE,
+					Boolean(DELETED_COUNT_ONE),
 				)) as UserFollowsRepository["unfollowUser"],
 		} as UserFollowsRepository;
 
@@ -98,7 +98,7 @@ describe("UserFollowsService", () => {
 				Promise.resolve()) as UserFollowsRepository["followUser"],
 			unfollowUser: (() =>
 				Promise.resolve(
-					DELETED_COUNT_ONE,
+					Boolean(DELETED_COUNT_ONE),
 				)) as UserFollowsRepository["unfollowUser"],
 		} as UserFollowsRepository;
 
@@ -127,7 +127,7 @@ describe("UserFollowsService", () => {
 				Promise.resolve()) as UserFollowsRepository["followUser"],
 			unfollowUser: (() =>
 				Promise.resolve(
-					DELETED_COUNT_NONE,
+					Boolean(DELETED_COUNT_NONE),
 				)) as UserFollowsRepository["unfollowUser"],
 		} as UserFollowsRepository;
 
@@ -151,7 +151,7 @@ describe("UserFollowsService", () => {
 				Promise.resolve()) as UserFollowsRepository["followUser"],
 			unfollowUser: (() =>
 				Promise.resolve(
-					DELETED_COUNT_ONE,
+					Boolean(DELETED_COUNT_ONE),
 				)) as UserFollowsRepository["unfollowUser"],
 		} as UserFollowsRepository;
 

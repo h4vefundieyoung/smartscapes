@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.19.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.19.0...v1.19.1) (2025-08-08)
+
+
+### Bug Fixes
+
+* **root:** fix database erDiagram ss-272 ([#273](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/273)) ([b4d379e](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/b4d379e3fa7daef3ba9b73f8d6a7ea50e3fa7eaa))
+
+## [1.19.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.18.1...v1.19.0) (2025-08-07)
+
+
+### Features
+
+* **frontend:** add floating sidebar ss-106 ([#214](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/214)) ([d576265](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/d57626569c8a05eb1b35fe56b90760304b4bef12))
+
 ## [1.18.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.18.0...v1.18.1) (2025-08-07)
 
 

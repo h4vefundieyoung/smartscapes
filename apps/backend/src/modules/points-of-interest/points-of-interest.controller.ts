@@ -43,12 +43,16 @@ import {
  *       required:
  *         - location
  *         - name
+ *         - description
  *       properties:
  *         location:
  *           $ref: '#/components/schemas/PointsOfInterestLocation'
  *         name:
  *           type: string
  *           example: "Central Park"
+ *         description:
+ *           type: string
+ *           example: "A large park in New York City"
  *
  *     PointsOfInterestResponseDto:
  *       type: object
@@ -56,6 +60,7 @@ import {
  *         - id
  *         - location
  *         - name
+ *         - description
  *       properties:
  *         id:
  *           type: number
@@ -65,7 +70,9 @@ import {
  *         name:
  *           type: string
  *           example: "Central Park"
- *
+ *         description:
+ *           type: string
+ *           example: "A large park in New York City"
  */
 
 class PointsOfInterestController extends BaseController {
@@ -269,11 +276,13 @@ class PointsOfInterestController extends BaseController {
 	 *                       location:
 	 *                         type: "Point"
 	 *                         coordinates: [30.5234, 50.4501]
+	 *                       description: "A large park in New York City"
 	 *                     - id: 2
 	 *                       name: "Glass Bridge"
 	 *                       location:
 	 *                         type: "Point"
 	 *                         coordinates: [30.5289, 50.4553]
+	 *                       description: "A modern architectural marvel in Kyiv"
 	 *               nearby_pois:
 	 *                 summary: Nearby points of interest
 	 *                 description: Response when location filters are provided
@@ -284,6 +293,7 @@ class PointsOfInterestController extends BaseController {
 	 *                       location:
 	 *                         type: "Point"
 	 *                         coordinates: [30.5234, 50.4501]
+	 *                       description: "A large park in New York City"
 	 */
 	public async findAll(
 		options: APIHandlerOptions<{

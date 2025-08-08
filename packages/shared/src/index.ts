@@ -35,6 +35,7 @@ export {
 	fileCreateValidationSchema,
 	type FileGetUploadUrlRequestDto,
 	fileGetUploadUrlValidationSchema,
+	FilesApiPath,
 	type FileUploadUrlResponseDto,
 } from "./modules/files/files.js";
 export {

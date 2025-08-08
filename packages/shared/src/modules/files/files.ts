@@ -1,3 +1,4 @@
+export { FilesApiPath } from "./libs/enums/enums.js";
 export {
 	type FileContentType,
 	type FileCreateRecordRequestDto,

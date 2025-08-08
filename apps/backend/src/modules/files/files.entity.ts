@@ -1,6 +1,6 @@
-import { type FileContentType } from "@smartscapes/shared";
-
 import { type Entity } from "~/libs/types/types.js";
+
+import { type FileContentType } from "./libs/types/types.js";
 
 class FilesEntity implements Entity {
 	private contentType: FileContentType;

@@ -1,9 +1,9 @@
-import { type FileContentType } from "@smartscapes/shared";
-
 import {
 	AbstractModel,
 	DatabaseTableName,
 } from "~/libs/modules/database/database.js";
+
+import { type FileContentType } from "./libs/types/types.js";
 
 class FilesModel extends AbstractModel {
 	public static override get tableName(): string {

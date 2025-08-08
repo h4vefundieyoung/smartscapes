@@ -10,8 +10,15 @@ import { type FilesService } from "~/modules/files/files.service.js";
 import {
 	type FileCreateRecordRequestDto,
 	type FileCreateRecordResponseDto,
+	type FileGetUploadUrlRequestDto,
+	type FileUploadUrlResponseDto,
 } from "~/modules/files/libs/types/types.js";
-import { fileCreateValidationSchema } from "~/modules/files/libs/validation-schemas/validation-sxhemas.js";
+import {
+	fileCreateValidationSchema,
+	fileGetUploadUrlValidationSchema,
+} from "~/modules/files/libs/validation-schemas/validation-sxhemas.js";
+
+import { FilesApiPath } from "./libs/enums/enums.js";
 
 class FilesController extends BaseController {
 	private filesService: FilesService;
@@ -28,6 +35,15 @@ class FilesController extends BaseController {
 				body: fileCreateValidationSchema,
 			},
 		});
+
+		this.addRoute({
+			handler: this.getUploadUrl.bind(this),
+			method: "POST",
+			path: FilesApiPath.UPLOAD_URL,
+			validation: {
+				body: fileGetUploadUrlValidationSchema,
+			},
+		});
 	}
 
 	public async createRecord(
@@ -41,6 +57,21 @@ class FilesController extends BaseController {
 		return {
 			payload: { data: file },
 			status: HTTPCode.CREATED,
+		};
+	}
+
+	public async getUploadUrl(
+		options: APIHandlerOptions<{
+			body: FileGetUploadUrlRequestDto;
+		}>,
+	): Promise<APIHandlerResponse<FileUploadUrlResponseDto>> {
+		const { body } = options;
+
+		const result = await this.filesService.getUploadUrl(body);
+
+		return {
+			payload: { data: result },
+			status: HTTPCode.OK,
 		};
 	}
 }

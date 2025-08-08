@@ -9,6 +9,10 @@ import { type SelectOption } from "~/libs/components/select/libs/types/types.js"
 import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppForm, useAppSelector } from "~/libs/hooks/hooks.js";
+import {
+	actions as poiActions,
+	pointOfInterestCreateValidationSchema,
+} from "~/modules/points-of-interest/points-of-interest.js";
 
 import { mockImages } from "../../libs/components/carousel/assets/mock-images/mock-images.js";
 import { Carousel } from "../../libs/components/carousel/carousel.js";
@@ -23,6 +27,12 @@ const Dashboard = (): React.JSX.Element => {
 	const authenticatedUser = useAppSelector(
 		({ auth }) => auth.authenticatedUser,
 	);
+
+	// DELETE
+	// eslint-disable-next-line no-console
+	console.log("poiActions", poiActions);
+	// eslint-disable-next-line no-console
+	console.log(pointOfInterestCreateValidationSchema);
 
 	const colorOptions: SelectOption<string>[] = [
 		{ label: "Red", value: "red" },

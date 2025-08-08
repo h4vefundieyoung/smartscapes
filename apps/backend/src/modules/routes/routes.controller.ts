@@ -240,6 +240,37 @@ class RoutesController extends BaseController {
 		};
 	}
 
+	/**
+	 * @swagger
+	 * /routes/search:
+	 *   get:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - Routes
+	 *     summary: Search routes by name
+	 *     description:
+	 *       Get all routes with names matching the query. Search is case-insensitive.
+	 *     parameters:
+	 *       - in: query
+	 *         name: name
+	 *         schema:
+	 *           type: string
+	 *           example: "landscape"
+	 *     responses:
+	 *       200:
+	 *         description: A list of routes with names matching the query.
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: array
+	 *                   items:
+	 *                     $ref: '#/components/schemas/Route'
+	 */
+
 	public async findByName(
 		options: APIHandlerOptions<{ query: { name: string } }>,
 	): Promise<APIHandlerResponse<RoutesResponseDto[]>> {

@@ -80,7 +80,7 @@ describe("RoutesController", () => {
 
 		const controller = new RoutesController(mockLogger, routesService);
 
-		const result = await controller.find({
+		const result = await controller.findById({
 			body: {},
 			params: { id: "1" },
 			query: {},

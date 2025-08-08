@@ -58,9 +58,14 @@ class RoutesController extends BaseController {
 			path: "/:id",
 		});
 		this.addRoute({
-			handler: this.find.bind(this),
+			handler: this.findById.bind(this),
 			method: "GET",
 			path: "/:id",
+		});
+		this.addRoute({
+			handler: this.findByName.bind(this),
+			method: "GET",
+			path: "/search",
 		});
 		this.addRoute({
 			handler: this.findAll.bind(this),
@@ -168,43 +173,6 @@ class RoutesController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /routes/{id}:
-	 *   get:
-	 *     security:
-	 *      - bearerAuth: []
-	 *     tags:
-	 *       - Routes
-	 *     summary: Get a route
-	 *     parameters:
-	 *       - in: path
-	 *         name: id
-	 *         required: true
-	 *         schema:
-	 *           type: string
-	 *     responses:
-	 *       200:
-	 *         description: Route was found succesfully
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               $ref: '#/components/schemas/Route'
-	 */
-
-	public async find(
-		options: APIHandlerOptions<{ params: { id: string } }>,
-	): Promise<APIHandlerResponse<RoutesResponseDto>> {
-		const id = Number(options.params.id);
-
-		const route = await this.routesService.findById(id);
-
-		return {
-			payload: { data: route },
-			status: HTTPCode.OK,
-		};
-	}
-
-	/**
-	 * @swagger
 	 * /routes:
 	 *   get:
 	 *     security:
@@ -233,6 +201,53 @@ class RoutesController extends BaseController {
 			payload: { data: items },
 			status: HTTPCode.OK,
 		};
+	}
+
+	/**
+	 * @swagger
+	 * /routes/{id}:
+	 *   get:
+	 *     security:
+	 *      - bearerAuth: []
+	 *     tags:
+	 *       - Routes
+	 *     summary: Get a route
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     responses:
+	 *       200:
+	 *         description: Route was found succesfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               $ref: '#/components/schemas/Route'
+	 */
+
+	public async findById(
+		options: APIHandlerOptions<{ params: { id: string } }>,
+	): Promise<APIHandlerResponse<RoutesResponseDto>> {
+		const id = Number(options.params.id);
+
+		const route = await this.routesService.findById(id);
+
+		return {
+			payload: { data: route },
+			status: HTTPCode.OK,
+		};
+	}
+
+	public async findByName(
+		options: APIHandlerOptions<{ query: { name: string } }>,
+	): Promise<APIHandlerResponse<RoutesResponseDto[]>> {
+		const { name } = options.query;
+
+		const { items } = await this.routesService.findByName(name);
+
+		return { payload: { data: items }, status: HTTPCode.OK };
 	}
 
 	/**

@@ -66,15 +66,11 @@ const patchAuthenticatedUser = createAsyncThunk<
 	AsyncThunkConfig
 >(`${sliceName}/patch`, async (payload, { extra, getState }) => {
 	const { authApi } = extra;
-	const state = getState() as {
-		auth: { authenticatedUser: null | { id: number } };
-	};
+	const state = getState();
 
-	if (!state.auth.authenticatedUser) {
-		throw new Error("User not authenticated");
-	}
+	const userId = state.auth.authenticatedUser?.id as number;
 
-	return await authApi.patch(state.auth.authenticatedUser.id, payload);
+	return await authApi.patch(userId, payload);
 });
 
 export { getAuthenticatedUser, patchAuthenticatedUser, signIn, signUp };

@@ -1,1 +1,1 @@
-export { GroupExceptionMessage, GroupKey } from "@smartscapes/shared";
+export { GroupKey } from "@smartscapes/shared";

@@ -3,7 +3,10 @@ import { type Service } from "~/libs/types/service.type.js";
 
 import { type GroupEntity } from "./group.entity.js";
 import { type GroupRepository } from "./group.repository.js";
-import { GroupError } from "./libs/exceptions/group-not-found.exception.js";
+import {
+	GroupError,
+	HTTPCode,
+} from "./libs/exceptions/group-not-found.exception.js";
 import {
 	GroupExceptionMessage,
 	type GroupResponseDto,
@@ -26,7 +29,10 @@ class GroupService implements Service<GroupResponseDto> {
 		const group = await this.groupRepository.find(id);
 
 		if (!group) {
-			throw new GroupError({ message: GroupExceptionMessage.GROUP_NOT_FOUND });
+			throw new GroupError({
+				message: GroupExceptionMessage.GROUP_NOT_FOUND,
+				status: HTTPCode.INTERNAL_SERVER_ERROR,
+			});
 		}
 
 		return group.toObject();
@@ -44,7 +50,10 @@ class GroupService implements Service<GroupResponseDto> {
 		const group = await this.groupRepository.findByKey(key);
 
 		if (!group) {
-			throw new GroupError({ message: GroupExceptionMessage.GROUP_NOT_FOUND });
+			throw new GroupError({
+				message: GroupExceptionMessage.GROUP_NOT_FOUND,
+				status: HTTPCode.INTERNAL_SERVER_ERROR,
+			});
 		}
 
 		return group.toObject();

@@ -36,8 +36,6 @@ const mockUser = {
 	lastName: "Doe",
 };
 
-const mockToken = "mock-token-value";
-
 const mockDelete: RoutesService["delete"] = () => {
 	return Promise.resolve(true);
 };
@@ -62,7 +60,6 @@ describe("RoutesController", () => {
 			},
 			params: {},
 			query: {},
-			token: mockToken,
 			user: mockUser,
 		});
 
@@ -87,7 +84,6 @@ describe("RoutesController", () => {
 			body: {},
 			params: { id: "1" },
 			query: {},
-			token: mockToken,
 			user: mockUser,
 		});
 
@@ -139,7 +135,6 @@ describe("RoutesController", () => {
 			},
 			params: { id: "1" },
 			query: {},
-			token: mockToken,
 			user: mockUser,
 		});
 
@@ -160,7 +155,6 @@ describe("RoutesController", () => {
 			body: {},
 			params: { id: "1" },
 			query: {},
-			token: mockToken,
 			user: mockUser,
 		});
 

@@ -1,4 +1,4 @@
-import { APIPath, AuthApiPath, UsersApiPath } from "~/libs/enums/enums.js";
+import { APIPath, AuthApiPath } from "~/libs/enums/enums.js";
 import { config } from "~/libs/modules/config/config.js";
 import { database } from "~/libs/modules/database/database.js";
 import { logger } from "~/libs/modules/logger/logger.js";
@@ -25,10 +25,6 @@ const apiV1 = new BaseServerApplicationApi(
 			{
 				method: "POST",
 				path: `${APIPath.AUTH}${AuthApiPath.SIGN_IN}`,
-			},
-			{
-				method: "GET",
-				path: `${APIPath.USERS}${UsersApiPath.ROOT}`,
 			},
 		],
 	},

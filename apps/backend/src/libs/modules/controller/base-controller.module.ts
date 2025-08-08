@@ -52,13 +52,12 @@ class BaseController implements Controller {
 	private mapRequest<HandlerOptions extends APIHandlerOptions>(
 		request: Parameters<ServerApplicationRouteParameters["handler"]>[0],
 	): HandlerOptions {
-		const { body, params, query, token, user } = request;
+		const { body, params, query, user } = request;
 
 		return {
 			body,
 			params,
 			query,
-			token,
 			user,
 		} as HandlerOptions;
 	}

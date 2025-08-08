@@ -1,8 +1,5 @@
 import { type encryption } from "~/libs/modules/encryption/libs/encryption.js";
-import {
-	type BaseToken,
-	tokenBlacklistService,
-} from "~/libs/modules/token/token.js";
+import { type BaseToken } from "~/libs/modules/token/token.js";
 import {
 	type UserService,
 	type UserSignInRequestDto,
@@ -33,24 +30,6 @@ class AuthService {
 		this.encryptionService = encryptionService;
 		this.tokenService = tokenService;
 		this.userService = userService;
-	}
-
-	public async logout(token: string): Promise<void> {
-		const payload = await this.tokenService.verify(token);
-
-		const expirationTimeSeconds = payload.exp;
-
-		if (!expirationTimeSeconds) {
-			throw new AuthError({
-				message: AuthExceptionMessage.TOKEN_MISS_EXP,
-			});
-		}
-
-		const MILLISECONDS_PER_SECONDS = 1000;
-
-		const expirationTimeMs = expirationTimeSeconds * MILLISECONDS_PER_SECONDS;
-
-		tokenBlacklistService.add(token, expirationTimeMs);
 	}
 
 	public async signIn(

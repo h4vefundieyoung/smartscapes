@@ -32,8 +32,6 @@ describe("ReviewController", () => {
 		userId: mockUser.id,
 	};
 
-	const mockToken = "mock-token-value";
-
 	it("findAll should return all reviews", async () => {
 		const reviews = [mockReview];
 
@@ -76,7 +74,6 @@ describe("ReviewController", () => {
 			},
 			params: {},
 			query: {},
-			token: mockToken,
 			user: mockUser,
 		});
 

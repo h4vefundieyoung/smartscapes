@@ -169,12 +169,6 @@ class AuthController extends BaseController {
 				body: userSignInValidationSchema,
 			},
 		});
-
-		this.addRoute({
-			handler: this.logout.bind(this),
-			method: "POST",
-			path: AuthApiPath.LOGOUT,
-		});
 	}
 
 	/**
@@ -210,36 +204,6 @@ class AuthController extends BaseController {
 		};
 	}
 
-	/**
-	 * @swagger
-	 * /auth/logout:
-	 *   post:
-	 *     security:
-	 *       - bearerAuth: []
-	 *     tags:
-	 *       - Auth
-	 *     summary: Log out a user
-	 *     description: Logs out the currently authenticated user by invalidating the token.
-	 *     responses:
-	 *       200:
-	 *         description: Successfully logged out
-	 *       401:
-	 *         description: Unauthorized - Invalid or missing token
-	 */
-	public async logout({
-		token,
-	}: APIHandlerOptions): Promise<APIHandlerResponse> {
-		if (!token) {
-			throw new AuthError();
-		}
-
-		await this.authService.logout(token);
-
-		return {
-			payload: null,
-			status: HTTPCode.OK,
-		};
-	}
 	/**
 	 * @swagger
 	 * /auth/sign-in:

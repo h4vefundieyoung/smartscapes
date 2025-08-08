@@ -24,8 +24,6 @@ describe("NotificationController", () => {
 		warn: () => {},
 	};
 
-	const mockToken = "mock-token-value";
-
 	const mockUser: UserAuthResponseDto = {
 		email: "example@example.com",
 		firstName: "John",
@@ -71,7 +69,6 @@ describe("NotificationController", () => {
 			body: dto,
 			params: {},
 			query: {},
-			token: mockToken,
 			user: mockUser,
 		});
 
@@ -113,7 +110,6 @@ describe("NotificationController", () => {
 			body: {},
 			params: {},
 			query: {},
-			token: mockToken,
 			user: mockUser,
 		});
 

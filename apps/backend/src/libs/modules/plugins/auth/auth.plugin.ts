@@ -1,17 +1,12 @@
 import { type FastifyInstance, type FastifyRequest } from "fastify";
 import fastifyPlugin from "fastify-plugin";
 
-import { tokenService } from "~/libs/modules/token/token.js";
 import { type HTTPMethod } from "~/libs/types/types.js";
-import { AuthExceptionMessage } from "~/modules/auth/libs/enums/enums.js";
 import { AuthError } from "~/modules/auth/libs/exceptions/exceptions.js";
 import { userService } from "~/modules/users/users.js";
 
-import {
-	checkIsWhiteRoute,
-	isTokenValid,
-	validateAuthHeader,
-} from "./libs/helpers/helpers.js";
+import { tokenService } from "../../token/token.js";
+import { checkIsWhiteRoute } from "./libs/helpers/helpers.js";
 
 type PluginOptions = {
 	whiteRoutes: WhiteRoute[];
@@ -41,29 +36,18 @@ const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {
 			throw new AuthError();
 		}
 
-		const token = validateAuthHeader(headers.authorization);
-		isTokenValid(token);
+		const [, token] = headers.authorization.split(" ");
+		const { userId } = await tokenService.verify<TokenPayload>(token as string);
+		const user = await userService.findById(userId);
 
-		try {
-			const { userId } = await tokenService.verify<TokenPayload>(token);
-			const user = await userService.findById(userId);
-
-			if (!user) {
-				throw new AuthError();
-			}
-
-			request.user = user;
-			request.token = token;
-		} catch (error) {
-			throw new AuthError({
-				cause: error,
-				message: AuthExceptionMessage.INVALID_TOKEN,
-			});
+		if (!user) {
+			throw new AuthError();
 		}
+
+		request.user = user;
 	};
 
 	app.decorateRequest("user", null);
-	app.decorateRequest("token", null);
 	app.addHook("onRequest", requestHandler);
 };
 

@@ -1,3 +1,4 @@
+import { GroupKey } from "@smartscapes/shared";
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 
@@ -13,6 +14,9 @@ import {
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
 
+import { GroupEntity } from "../groups/group.entity.js";
+import { PermissionEntity } from "../permission/permission.entity.js";
+
 describe("AuthService", () => {
 	const signUpRequestDto: UserSignUpRequestDto = {
 		confirmPassword: "Password123!",
@@ -22,18 +26,26 @@ describe("AuthService", () => {
 		password: "Password123!",
 	};
 
+	const mockPermission = PermissionEntity.initialize({
+		id: 1,
+		key: "read",
+		name: "Read",
+	});
+
+	const mockGroup = GroupEntity.initializeWithPermissions({
+		id: 2,
+		key: GroupKey.USERS,
+		name: "Users",
+		permissions: [mockPermission.toObject()],
+	});
+
 	it("signUp should create new user", async () => {
 		const mockToken = "mock token";
 
 		const mockUserServiceResponse: UserAuthResponseDto = {
 			email: signUpRequestDto.email,
 			firstName: signUpRequestDto.firstName,
-			group: {
-				id: 2,
-				key: "users",
-				name: "Users",
-				permissions: [{ id: 1, key: "READ", name: "Can read" }],
-			},
+			group: mockGroup.toObject(),
 			groupId: 2,
 			id: 1,
 			lastName: signUpRequestDto.lastName,
@@ -89,11 +101,6 @@ describe("AuthService", () => {
 	it("signIn should return token and user data when credentials are valid", async () => {
 		const mockToken = "mock token";
 
-		const group_mock = {
-			id: 2,
-			key: "users",
-		};
-
 		const signInRequestDto: UserSignInRequestDto = {
 			email: "test@example.com",
 			password: "Password123!",
@@ -101,15 +108,10 @@ describe("AuthService", () => {
 
 		const mockPasswordDetails = {
 			firstName: "John",
-			group: {
-				id: group_mock.id,
-				key: group_mock.key,
-				name: "Users",
-				permissions: [{ id: 1, key: "READ", name: "Can read" }],
-			},
-			groupId: group_mock.id,
+			group: mockGroup.toObject(),
+			groupId: mockGroup.toObject().id,
 			id: 1,
-			key: group_mock.key,
+			key: GroupKey.USERS,
 			lastName: "Doe",
 			passwordHash: "hashedPassword",
 			passwordSalt: "someSalt",
@@ -120,12 +122,7 @@ describe("AuthService", () => {
 			user: {
 				email: signInRequestDto.email,
 				firstName: mockPasswordDetails.firstName,
-				group: {
-					id: mockPasswordDetails.group.id,
-					key: mockPasswordDetails.group.key,
-					name: mockPasswordDetails.group.name,
-					permissions: [{ id: 1, key: "READ", name: "Can read" }],
-				},
+				group: mockGroup.toObject(),
 				groupId: 2,
 				id: mockPasswordDetails.id,
 				lastName: mockPasswordDetails.lastName,

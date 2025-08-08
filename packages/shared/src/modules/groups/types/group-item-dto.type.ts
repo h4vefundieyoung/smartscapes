@@ -1,10 +1,8 @@
 import { type PermissionItemDto } from "../../permission/types/types.js";
+import { type GroupResponseDto } from "./group-item-response-dto.type.js";
 
-type GroupItemDto = {
-	id: number;
-	key: string;
-	name: string;
+type GroupItemWithPermissionsDto = GroupResponseDto & {
 	permissions: PermissionItemDto[];
 };
 
-export { type GroupItemDto };
+export { type GroupItemWithPermissionsDto };

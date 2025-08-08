@@ -30,6 +30,7 @@ export {
 export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
 export {
 	GroupExceptionMessage,
+	type GroupItemWithPermissionsDto,
 	GroupKey,
 	type GroupResponseDto,
 } from "./modules/groups/groups.js";

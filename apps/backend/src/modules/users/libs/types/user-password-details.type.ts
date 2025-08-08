@@ -1,15 +1,8 @@
+import { type GroupItemWithPermissionsDto } from "@smartscapes/shared";
+
 type UserPasswordDetails = {
 	firstName: string;
-	group: {
-		id: number;
-		key: string;
-		name: string;
-		permissions: {
-			id: number;
-			key: string;
-			name: string;
-		}[];
-	};
+	group: GroupItemWithPermissionsDto;
 	groupId: number;
 	id: number;
 	lastName: string;

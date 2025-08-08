@@ -1,9 +1,9 @@
-import { type GroupItemDto } from "../../../groups/types/types.js";
+import { type GroupItemWithPermissionsDto } from "../../../groups/types/types.js";
 
 type UserAuthResponseDto = {
 	email: string;
 	firstName: string;
-	group: GroupItemDto;
+	group: GroupItemWithPermissionsDto;
 	groupId: number;
 	id: number;
 	lastName: string;

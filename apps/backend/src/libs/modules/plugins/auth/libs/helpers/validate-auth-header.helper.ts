@@ -1,7 +1,7 @@
 import { AuthExceptionMessage } from "~/modules/auth/libs/enums/enums.js";
 import { AuthError } from "~/modules/auth/libs/exceptions/exceptions.js";
 
-const validationAuthHeader = (authHeader: string | undefined): string => {
+const validateAuthHeader = (authHeader: string | undefined): string => {
 	if (!authHeader?.startsWith("Bearer ")) {
 		throw new AuthError({
 			message: AuthExceptionMessage.INVALID_HEADER,
@@ -19,4 +19,4 @@ const validationAuthHeader = (authHeader: string | undefined): string => {
 	return token;
 };
 
-export { validationAuthHeader };
+export { validateAuthHeader };

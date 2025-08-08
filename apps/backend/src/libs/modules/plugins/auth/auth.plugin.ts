@@ -10,7 +10,7 @@ import { userService } from "~/modules/users/users.js";
 import {
 	checkIsWhiteRoute,
 	isTokenValid,
-	validationAuthHeader,
+	validateAuthHeader,
 } from "./libs/helpers/helpers.js";
 
 type PluginOptions = {
@@ -41,7 +41,7 @@ const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {
 			throw new AuthError();
 		}
 
-		const token = validationAuthHeader(headers.authorization);
+		const token = validateAuthHeader(headers.authorization);
 		isTokenValid(token);
 
 		try {

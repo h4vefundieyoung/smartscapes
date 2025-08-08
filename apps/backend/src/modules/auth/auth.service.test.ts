@@ -2,7 +2,10 @@ import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 
 import { type BaseEncryption } from "~/libs/modules/encryption/libs/base-encryption.module.js";
-import { type BaseToken } from "~/libs/modules/token/token.js";
+import {
+	type BaseToken,
+	tokenBlacklistService,
+} from "~/libs/modules/token/token.js";
 import { AuthService } from "~/modules/auth/auth.service.js";
 import {
 	type UserGetByIdItemResponseDto,
@@ -149,5 +152,44 @@ describe("AuthService", () => {
 		const result = await authService.signIn(signInRequestDto);
 
 		assert.deepStrictEqual(result, expectedSignInResponse);
+	});
+
+	it("should add the token to the blacklist with the correct expiration time", async () => {
+		const mockToken = "valid-token-to-blacklist";
+		const mockExpirationTimeSeconds = 1_672_531_200;
+		const expectedExpirationTimeMs = 1_672_531_200_000;
+
+		const mockVerify = mock.fn(() =>
+			Promise.resolve({
+				exp: mockExpirationTimeSeconds,
+				userId: 1,
+			}),
+		) as unknown as BaseToken["verify"];
+
+		const mockAdd = mock.fn<typeof tokenBlacklistService.add>(() => {});
+
+		const mockTokenService = {
+			verify: mockVerify,
+		} as BaseToken;
+
+		const authService = new AuthService({
+			encryptionService: {} as BaseEncryption,
+			tokenService: mockTokenService,
+			userService: {} as UserService,
+		});
+
+		mock.method(tokenBlacklistService, "add", mockAdd);
+
+		await authService.logout(mockToken);
+
+		const callCount = 1;
+
+		assert.strictEqual(mockAdd.mock.callCount(), callCount);
+
+		const [addCall] = mockAdd.mock.calls;
+		const [addTokenArgument, addExpirationArgument] = addCall?.arguments ?? [];
+
+		assert.strictEqual(addTokenArgument, mockToken);
+		assert.strictEqual(addExpirationArgument, expectedExpirationTimeMs);
 	});
 });

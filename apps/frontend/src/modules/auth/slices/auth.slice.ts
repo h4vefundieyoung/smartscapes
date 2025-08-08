@@ -8,12 +8,14 @@ import { authPatch, getAuthenticatedUser, signIn, signUp } from "./actions.js";
 
 type State = {
 	authenticatedUser: null | UserAuthResponseDto;
+	dataPatchStatus: ValueOf<typeof DataStatus>;
 	dataStatus: ValueOf<typeof DataStatus>;
 	isInitialized: boolean;
 };
 
 const initialState: State = {
 	authenticatedUser: null,
+	dataPatchStatus: DataStatus.IDLE,
 	dataStatus: DataStatus.IDLE,
 	isInitialized: false,
 };
@@ -60,14 +62,14 @@ const { actions, name, reducer } = createSlice({
 
 		builder.addCase(authPatch.fulfilled, (state, action) => {
 			state.authenticatedUser = action.payload.data;
-			state.dataStatus = DataStatus.FULFILLED;
+			state.dataPatchStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(authPatch.pending, (state) => {
-			state.dataStatus = DataStatus.PENDING;
+			state.dataPatchStatus = DataStatus.PENDING;
 		});
 		builder.addCase(authPatch.rejected, (state) => {
 			state.authenticatedUser = null;
-			state.dataStatus = DataStatus.REJECTED;
+			state.dataPatchStatus = DataStatus.REJECTED;
 		});
 	},
 	initialState,

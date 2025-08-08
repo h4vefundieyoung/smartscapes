@@ -1,1 +1,1 @@
-export { PROFILE_TABS } from "./profile-tabs.js";
+export { PROFILE_TABS } from "./profile-tabs.constant.js";

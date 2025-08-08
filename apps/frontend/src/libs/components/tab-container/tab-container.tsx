@@ -1,11 +1,11 @@
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 
 import { useNavigationTab } from "./libs/hooks/hooks.js";
-import { type ProfileTab } from "./libs/types/types.js";
+import { type TabItem } from "./libs/types/types.js";
 import styles from "./styles.module.css";
 
 type TabContainerProperties = {
-	tabsData: ProfileTab[];
+	tabsData: TabItem[];
 };
 
 const TabContainer = ({
@@ -52,4 +52,4 @@ const TabContainer = ({
 };
 
 export { TabContainer };
-export { type ProfileTab } from "./libs/types/types.js";
+export { type TabItem } from "./libs/types/types.js";

@@ -38,10 +38,6 @@
 	border-radius: 15px;
 }
 
-.tab-content > [class*="loader"] {
-	margin: auto;
-}
-
 .first-tab-active .tab-content {
 	border-radius: 0 15px 15px;
 }
@@ -52,7 +48,7 @@
 	}
 
 	.tab-item {
-		padding: 6px;
+		padding: 8px;
 		font-size: var(--font-size-tiny);
 	}
 }

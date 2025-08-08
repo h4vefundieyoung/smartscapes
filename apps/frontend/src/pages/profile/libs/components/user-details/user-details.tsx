@@ -1,12 +1,11 @@
-import { Navigate } from "react-router";
-
-import { Avatar, Button, Loader } from "~/libs/components/components.js";
-import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
+import { Avatar, Loader } from "~/libs/components/components.js";
+import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
 	useCallback,
 } from "~/libs/hooks/hooks.js";
+import { type ValueOf } from "~/libs/types/types.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import {
 	type UserAuthPatchRequestDto,
@@ -18,55 +17,45 @@ import styles from "./styles.module.css";
 
 const UserDetails = (): null | React.JSX.Element => {
 	const dispatch = useAppDispatch();
-	const { authenticatedUser, dataStatus } = useAppSelector(
+	const { authenticatedUser, dataPatchStatus } = useAppSelector(
 		(state) => state.auth,
-	);
-	const isLoading = dataStatus === DataStatus.PENDING;
+	) as {
+		authenticatedUser: UserAuthResponseDto;
+		dataPatchStatus: ValueOf<typeof DataStatus>;
+	};
+	const isLoading = dataPatchStatus === DataStatus.PENDING;
 
 	const handleFormSubmit = useCallback(
 		(payload: UserAuthPatchRequestDto): void => {
-			if (authenticatedUser) {
-				void dispatch(
-					authActions.authPatch({
-						id: authenticatedUser.id.toString(),
-						payload,
-					}),
-				);
-			}
+			void dispatch(
+				authActions.authPatch({
+					id: authenticatedUser.id,
+					payload,
+				}),
+			);
 		},
 		[dispatch, authenticatedUser],
 	);
 
-	const handleUpdateAvatar = useCallback(() => {}, []);
-
-	const handleDeleteAvatar = useCallback(() => {}, []);
-
-	if (!authenticatedUser) {
-		return <Navigate to={AppRoute.SIGN_IN} />;
-	}
-
-	const user: UserAuthResponseDto & { avatarUrl?: null | string } = {
+	const user = {
 		...authenticatedUser,
 		avatarUrl: null,
 	};
 
 	if (isLoading) {
-		return <Loader />;
+		return (
+			<span className={styles["loader-container"]}>
+				<Loader />
+			</span>
+		);
 	}
 
 	return (
 		<div className={styles["user-details-container"]}>
 			<div className={styles["user-details-avatar"]}>
-				<Avatar
-					size={140}
-					user={user as UserAuthResponseDto & { avatarUrl?: string }}
-				/>
-				<div className={styles["user-details-button-container"]}>
-					<Button label="Upload Avatar" onClick={handleUpdateAvatar} />
-					<Button label="Delete Avatar" onClick={handleDeleteAvatar} />
-				</div>
+				<Avatar size={140} user={user} />
 			</div>
-			<ProfileForm onSubmit={handleFormSubmit} user={authenticatedUser} />
+			<ProfileForm onSubmit={handleFormSubmit} user={user} />
 		</div>
 	);
 };

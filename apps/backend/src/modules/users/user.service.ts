@@ -87,7 +87,7 @@ class UserService implements Service {
 
 		if (!item) {
 			throw new UserError({
-				message: UserExceptionMessage.INVALID_CREDENTIALS,
+				message: UserExceptionMessage.USER_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}

@@ -29,7 +29,7 @@ class AuthApi extends BaseHTTPApi {
 		APIResponse<UserAuthResponseDto>
 	> {
 		const response = await this.load<APIResponse<UserAuthResponseDto>>(
-			this.getFullEndpoint(AuthApiPath.AUTH_USER, {}),
+			this.getFullEndpoint(AuthApiPath.AUTHENTICATED_USER, {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,
@@ -41,11 +41,13 @@ class AuthApi extends BaseHTTPApi {
 	}
 
 	public async patch(
-		id: string,
+		id: number,
 		payload: UserAuthPatchRequestDto,
 	): Promise<APIResponse<UserGetByIdItemResponseDto>> {
 		const response = await this.load<APIResponse<UserGetByIdItemResponseDto>>(
-			this.getFullEndpoint(AuthApiPath.AUTH_USER + AuthApiPath.$ID, { id }),
+			this.getFullEndpoint(AuthApiPath.AUTHENTICATED_USER_$ID, {
+				id: id.toString(),
+			}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,

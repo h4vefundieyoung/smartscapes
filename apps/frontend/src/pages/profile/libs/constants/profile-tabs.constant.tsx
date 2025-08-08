@@ -1,10 +1,10 @@
-import { type ProfileTab } from "~/libs/components/tab-container/tab-container.js";
+import { type TabItem } from "~/libs/components/tab-container/tab-container.js";
 import {
 	MyReviews,
 	UserDetails,
 } from "~/pages/profile/libs/components/components.js";
 
-const PROFILE_TABS: ProfileTab[] = [
+const PROFILE_TABS: TabItem[] = [
 	{
 		element: <UserDetails />,
 		id: "user-details",

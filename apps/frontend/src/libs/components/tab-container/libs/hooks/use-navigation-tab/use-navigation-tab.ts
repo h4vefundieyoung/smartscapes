@@ -1,3 +1,4 @@
+import { EventListenerType } from "~/libs/enums/enums.js";
 import { useCallback, useEffect, useState } from "~/libs/hooks/hooks.js";
 
 const useNavigationTab = (
@@ -37,10 +38,13 @@ const useNavigationTab = (
 			setActiveTabId(getTabFromUrl());
 		};
 
-		globalThis.addEventListener("popstate", handlePopState);
+		globalThis.addEventListener(EventListenerType.POPSTATE, handlePopState);
 
 		return (): void => {
-			globalThis.removeEventListener("popstate", handlePopState);
+			globalThis.removeEventListener(
+				EventListenerType.POPSTATE,
+				handlePopState,
+			);
 		};
 	}, []);
 

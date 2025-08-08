@@ -1,9 +1,9 @@
 import { type ReactNode } from "react";
 
-type ProfileTab = {
+type TabItem = {
 	element: ReactNode;
 	id: string;
 	label: string;
 };
 
-export { type ProfileTab };
+export { type TabItem };

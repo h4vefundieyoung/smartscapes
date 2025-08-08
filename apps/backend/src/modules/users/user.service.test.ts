@@ -96,7 +96,7 @@ describe("UserService", () => {
 				});
 			},
 			(error: unknown) => {
-				assert.strictEqual((error as Error).message, "Invalid credentials");
+				assert.strictEqual((error as Error).message, "User not found");
 
 				return true;
 			},

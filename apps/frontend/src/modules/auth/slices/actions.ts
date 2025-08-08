@@ -62,7 +62,7 @@ const signIn = createAsyncThunk<
 
 const authPatch = createAsyncThunk<
 	APIResponse<UserGetByIdItemResponseDto>,
-	{ id: string; payload: UserAuthPatchRequestDto },
+	{ id: number; payload: UserAuthPatchRequestDto },
 	AsyncThunkConfig
 >(`${sliceName}/patch`, async ({ id, payload }, { extra }) => {
 	const { authApi } = extra;

@@ -7,7 +7,7 @@ const DEFAULT_AVATAR_SIZE = 32;
 
 type Properties = {
 	size?: number;
-	user: UserAuthResponseDto & { avatarUrl?: string };
+	user: UserAuthResponseDto & { avatarUrl?: null | string };
 };
 
 const Avatar = ({

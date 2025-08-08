@@ -81,6 +81,14 @@ class RoutesService implements Service {
 		return item.toObject();
 	}
 
+	public async findByName(
+		name: string,
+	): Promise<CollectionResult<RoutesResponseDto>> {
+		const items = await this.routesRepository.findByName(name);
+
+		return { items: items.map((item) => item.toObject()) };
+	}
+
 	public async patch(
 		id: number,
 		payload: RoutesRequestPatchDto,

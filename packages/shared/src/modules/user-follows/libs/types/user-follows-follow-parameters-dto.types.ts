@@ -1,5 +1,5 @@
-type UserFollowsFollowParametersDtoTypes = {
+type UserFollowsFollowParametersDto = {
 	userId: string;
 };
 
-export { type UserFollowsFollowParametersDtoTypes };
+export { type UserFollowsFollowParametersDto };

@@ -1,6 +1,6 @@
 export {
 	type UserAuthResponseDto,
-	type UserFollowsFollowParametersDtoTypes,
-	type UserFollowsFollowRequestDtoTypes,
-	type UserFollowsUnfollowParametersDtoTypes,
+	type UserFollowsFollowParametersDto,
+	type UserFollowsFollowRequestDto,
+	type UserFollowsUnfollowParametersDto,
 } from "@smartscapes/shared";

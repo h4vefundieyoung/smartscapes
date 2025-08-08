@@ -15,9 +15,9 @@ import { type UserFollowsService } from "~/modules/user-follows/user-follows.ser
 
 import {
 	type UserAuthResponseDto,
-	type UserFollowsFollowParametersDtoTypes,
-	type UserFollowsFollowRequestDtoTypes,
-	type UserFollowsUnfollowParametersDtoTypes,
+	type UserFollowsFollowParametersDto,
+	type UserFollowsFollowRequestDto,
+	type UserFollowsUnfollowParametersDto,
 } from "./libs/types/types.js";
 
 class UserFollowsController extends BaseController {
@@ -76,8 +76,8 @@ class UserFollowsController extends BaseController {
 
 	public async follow(
 		options: APIHandlerOptions<{
-			body: UserFollowsFollowRequestDtoTypes;
-			params: UserFollowsFollowParametersDtoTypes;
+			body: UserFollowsFollowRequestDto;
+			params: UserFollowsFollowParametersDto;
 		}>,
 	): Promise<APIHandlerResponse> {
 		const { body, params, user } = options;
@@ -132,7 +132,7 @@ class UserFollowsController extends BaseController {
 
 	public async unfollow(
 		options: APIHandlerOptions<{
-			params: UserFollowsUnfollowParametersDtoTypes;
+			params: UserFollowsUnfollowParametersDto;
 		}>,
 	): Promise<APIHandlerResponse> {
 		const { params, user } = options;

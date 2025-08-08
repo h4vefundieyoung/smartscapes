@@ -3,7 +3,7 @@ export {
 	UserFollowsExceptionMessage,
 } from "./libs/enums/enums.js";
 export {
-	type UserFollowsFollowParametersDtoTypes,
-	type UserFollowsFollowRequestDtoTypes,
-	type UserFollowsUnfollowParametersDtoTypes,
+	type UserFollowsFollowParametersDto,
+	type UserFollowsFollowRequestDto,
+	type UserFollowsUnfollowParametersDto,
 } from "./libs/types/types.js";

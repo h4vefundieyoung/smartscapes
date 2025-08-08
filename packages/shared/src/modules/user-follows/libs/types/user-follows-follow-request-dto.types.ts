@@ -1,5 +1,5 @@
-type UserFollowsFollowRequestDtoTypes = {
+type UserFollowsFollowRequestDto = {
 	followingId: number;
 };
 
-export { type UserFollowsFollowRequestDtoTypes };
+export { type UserFollowsFollowRequestDto };

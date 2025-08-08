@@ -1,6 +1,6 @@
-type UserFollowsUnfollowParametersDtoTypes = {
+type UserFollowsUnfollowParametersDto = {
 	id: string;
 	userId: string;
 };
 
-export { type UserFollowsUnfollowParametersDtoTypes };
+export { type UserFollowsUnfollowParametersDto };

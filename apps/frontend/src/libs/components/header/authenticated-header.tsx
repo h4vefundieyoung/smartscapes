@@ -42,17 +42,16 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 		[handleUserClick],
 	);
 
-	const handleLogout = useCallback(async () => {
+	const handleLogout = useCallback(() => {
 		setIsDropdownOpen(false);
 
-		try {
-			await dispatch(authActions.logout()).unwrap();
-			await navigate(AppRoute.ROOT);
-		} catch (error: unknown) {
-			throw new Error(
-				`Logout failed: ${error instanceof Error ? error.message : String(error)}`,
-			);
-		}
+		dispatch(authActions.logout())
+			.unwrap()
+			.then(() => navigate(AppRoute.ROOT))
+			.catch(() => navigate(AppRoute.SIGN_IN))
+			.catch(() => {
+				throw new Error("Navigation failed after logout.");
+			});
 	}, [dispatch, navigate]);
 
 	const handleClickOutside = useCallback((event: MouseEvent) => {

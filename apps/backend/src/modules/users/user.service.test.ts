@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import { GroupEntity } from "../groups/group.entity.js";
+import { type GroupService } from "../groups/group.service.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
 import { UserEntity } from "./user.entity.js";
 import { type UserRepository } from "./user.repository.js";
@@ -32,6 +33,10 @@ describe("UserService", () => {
 		passwordSalt: "salt",
 	});
 
+	const mockGroupService = {
+		findByKey: () => mockGroup.toObject(),
+	} as unknown as GroupService;
+
 	it("create should return new user", async () => {
 		const userEntity = UserEntity.initialize({
 			email: "test@example.com",
@@ -52,7 +57,7 @@ describe("UserService", () => {
 			findPasswordDetails: () => null,
 		} as unknown as UserRepository;
 
-		const userService = new UserService(userRepository);
+		const userService = new UserService(userRepository, mockGroupService);
 
 		const result = await userService.create({
 			confirmPassword: "Password",
@@ -95,7 +100,7 @@ describe("UserService", () => {
 			},
 		} as unknown as UserRepository;
 
-		const userService = new UserService(userRepository);
+		const userService = new UserService(userRepository, mockGroupService);
 
 		const result = await userService.findAll();
 

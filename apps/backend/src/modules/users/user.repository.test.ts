@@ -4,7 +4,6 @@ import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
 
 import { GroupEntity } from "../groups/group.entity.js";
-import { type GroupService } from "../groups/group.service.js";
 import { UserEntity } from "./user.entity.js";
 import { UserModel } from "./user.model.js";
 import { UserRepository } from "./user.repository.js";
@@ -30,10 +29,6 @@ describe("UserRepository", () => {
 		passwordSalt: "salt",
 	});
 
-	const mockGroupService = {
-		findByKey: () => mockGroup.toObject(),
-	} as unknown as GroupService;
-
 	beforeEach(() => {
 		const database = knex({ client: MockClient });
 
@@ -41,7 +36,7 @@ describe("UserRepository", () => {
 
 		UserModel.knex(database);
 
-		userRepository = new UserRepository(UserModel, mockGroupService);
+		userRepository = new UserRepository(UserModel);
 	});
 
 	afterEach(() => {

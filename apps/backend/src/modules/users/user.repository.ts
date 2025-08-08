@@ -4,31 +4,25 @@ import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
 
 import { GroupEntity } from "../groups/group.entity.js";
-import { type GroupService } from "../groups/group.service.js";
-import { GroupKey } from "../groups/libs/enums/enums.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
 
 class UserRepository implements Repository {
-	private groupService: GroupService;
 	private userModel: typeof UserModel;
 
-	public constructor(userModel: typeof UserModel, groupService: GroupService) {
+	public constructor(userModel: typeof UserModel) {
 		this.userModel = userModel;
-		this.groupService = groupService;
 	}
 
 	public async create(entity: UserEntity): Promise<UserEntity> {
-		const { email, firstName, lastName, passwordHash, passwordSalt } =
+		const { email, firstName, groupId, lastName, passwordHash, passwordSalt } =
 			entity.toNewObject();
-
-		const group = await this.groupService.findByKey(GroupKey.USERS);
 
 		const user = await this.userModel
 			.query()
 			.insert({
 				email,
 				firstName,
-				groupId: group.id,
+				groupId,
 				lastName,
 				passwordHash,
 				passwordSalt,

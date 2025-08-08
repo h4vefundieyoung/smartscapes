@@ -1,5 +1,6 @@
 import {
 	CommonExceptionMessage,
+	GroupKey,
 	type UserAuthResponseDto,
 	type UserGetByIdItemResponseDto,
 } from "@smartscapes/shared";
@@ -11,6 +12,7 @@ import { UserExceptionMessage } from "~/modules/users/libs/enums/enums.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserRepository } from "~/modules/users/user.repository.js";
 
+import { type GroupService } from "../groups/group.service.js";
 import { UserError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserPasswordDetails,
@@ -18,10 +20,15 @@ import {
 } from "./libs/types/types.js";
 
 class UserService implements Service {
+	private groupService: GroupService;
 	private userRepository: UserRepository;
 
-	public constructor(userRepository: UserRepository) {
+	public constructor(
+		userRepository: UserRepository,
+		groupService: GroupService,
+	) {
 		this.userRepository = userRepository;
+		this.groupService = groupService;
 	}
 
 	public async create(
@@ -38,10 +45,13 @@ class UserService implements Service {
 
 		const { encryptedData, salt } = await encryption.encrypt(payload.password);
 
+		const group = await this.groupService.findByKey(GroupKey.USERS);
+
 		const item = await this.userRepository.create(
 			UserEntity.initializeNew({
 				email: payload.email,
 				firstName: payload.firstName,
+				groupId: group.id,
 				lastName: payload.lastName,
 				passwordHash: encryptedData,
 				passwordSalt: salt,

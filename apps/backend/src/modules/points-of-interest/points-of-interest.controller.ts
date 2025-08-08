@@ -210,7 +210,7 @@ class PointsOfInterestController extends BaseController {
 	 *     description: |
 	 *       Get all points of interest or filter them by location.
 	 *
-	 *       **Without query parameters**: Returns all points of interest
+	 *       **With query parameters**: Returns all points of interest. Supports optional search by name.
 	 *
 	 *       **With location parameters**: Returns points of interest within specified radius
 	 *       from the given coordinates (latitude/longitude)

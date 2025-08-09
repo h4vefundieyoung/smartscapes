@@ -20,11 +20,8 @@ type Constructor = {
 };
 
 class AuthApi extends BaseHTTPApi {
-	private _storage: Storage;
-
 	public constructor({ baseUrl, http, storage }: Constructor) {
 		super({ baseUrl, http, path: APIPath.AUTH, storage });
-		this._storage = storage;
 	}
 	public async getAuthenticatedUser(): Promise<
 		APIResponse<UserAuthResponseDto>

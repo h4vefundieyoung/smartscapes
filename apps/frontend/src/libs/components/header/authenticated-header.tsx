@@ -1,21 +1,18 @@
 import { type JSX } from "react";
 
-import { AppRoute } from "~/libs/enums/enums.js";
-import { combineClassNames } from "~/libs/helpers/combine-class-names.helper.js";
+import { Avatar, Icon } from "~/libs/components/components.js";
+import { combineClassNames } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useCallback,
 	useEffect,
-	useNavigate,
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
 import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 
-import { Avatar } from "../components.js";
 import { UserDropdown } from "../user-dropdown/user-dropdown.js";
-import DropdownArrow from "./dropdown-arrow.svg?react";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -26,33 +23,15 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 	const dropdownReference = useRef<HTMLDivElement>(null);
 	const dispatch = useAppDispatch();
-	const navigate = useNavigate();
 
 	const handleUserClick = useCallback(() => {
 		setIsDropdownOpen((previous) => !previous);
 	}, []);
 
-	const handleKeyDown = useCallback(
-		(event: React.KeyboardEvent<HTMLDivElement>) => {
-			if (event.key === "Enter" || event.key === " ") {
-				event.preventDefault();
-				handleUserClick();
-			}
-		},
-		[handleUserClick],
-	);
-
 	const handleLogout = useCallback(() => {
 		setIsDropdownOpen(false);
-
-		dispatch(authActions.logout())
-			.unwrap()
-			.then(() => navigate(AppRoute.ROOT))
-			.catch(() => navigate(AppRoute.SIGN_IN))
-			.catch(() => {
-				throw new Error("Navigation failed after logout.");
-			});
-	}, [dispatch, navigate]);
+		void dispatch(authActions.logout());
+	}, [dispatch]);
 
 	const handleClickOutside = useCallback((event: MouseEvent) => {
 		if (
@@ -63,42 +42,30 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 		}
 	}, []);
 
-	const handleEscape = useCallback((event: KeyboardEvent) => {
-		if (event.key === "Escape") {
-			setIsDropdownOpen(false);
-		}
-	}, []);
-
 	useEffect(() => {
 		document.addEventListener("mousedown", handleClickOutside);
-		document.addEventListener("keydown", handleEscape);
 
 		return (): void => {
 			document.removeEventListener("mousedown", handleClickOutside);
-			document.removeEventListener("keydown", handleEscape);
 		};
-	}, [handleClickOutside, handleEscape]);
+	}, [handleClickOutside]);
 
 	return (
 		<div className={styles["user-profile-wrapper"]} ref={dropdownReference}>
-			<div
-				className={styles["user-info"]}
-				onClick={handleUserClick}
-				onKeyDown={handleKeyDown}
-				role="button"
-				tabIndex={0}
-			>
+			<button className={styles["user-info"]} onClick={handleUserClick}>
 				<Avatar user={user} />
 				<div className={styles["name"]}>
 					{user.firstName} {user.lastName}
 				</div>
-				<DropdownArrow
+				<span
 					className={combineClassNames(
 						styles["dropdown-arrow"],
 						isDropdownOpen && styles["open"],
 					)}
-				/>
-			</div>
+				>
+					<Icon height={20} name="dropdownArrow" width={20} />
+				</span>
+			</button>
 			{isDropdownOpen && <UserDropdown onLogout={handleLogout} />}
 		</div>
 	);

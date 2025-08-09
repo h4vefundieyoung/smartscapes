@@ -19,17 +19,16 @@ import { RoutesService } from "./routes.service.js";
 const EXISTING_ID = 1;
 const FIRST_POI_ID = 1;
 const SECOND_POI_ID = 2;
+const THIRD_POI_ID = 3;
+const FOURTH_POI_ID = 4;
 const NON_EXISTENT_ID = 999;
 const FIRST_COORDINATE = 30.5234;
 const SECOND_COORDINATE = 50.4501;
 const FIRST_VISIT_ORDER = 0;
 const SECOND_VISIT_ORDER = 1;
-const NUMS_MAP = {
-	"four": 4,
-	"one": 1,
-	"three": 3,
-	"two": 2,
-};
+const FIRST_ENTITY_ID = 1;
+const SECOND_ENTITY_ID = 2;
+const THIRD_ENTITY_ID = 3;
 
 const createMockMapboxApi = (): Partial<MapboxDirectionsApi> => {
 	return {
@@ -121,15 +120,15 @@ describe("RoutesService", () => {
 		});
 
 	it("Should build mapbox route", async () => {
-		const entitiesIds = [NUMS_MAP.one, NUMS_MAP.two];
+		const entitiesIds = [FIRST_ENTITY_ID, SECOND_ENTITY_ID];
 		const entities = [
 			{
-				id: NUMS_MAP.one,
-				location: { coordinates: [NUMS_MAP.one, NUMS_MAP.two] },
+				id: FIRST_ENTITY_ID,
+				location: { coordinates: [FIRST_POI_ID, SECOND_POI_ID] },
 			},
 			{
-				id: NUMS_MAP.two,
-				location: { coordinates: [NUMS_MAP.three, NUMS_MAP.four] },
+				id: SECOND_ENTITY_ID,
+				location: { coordinates: [THIRD_POI_ID, FOURTH_POI_ID] },
 			},
 		];
 		const getRoute = mock.fn(
@@ -155,30 +154,29 @@ describe("RoutesService", () => {
 			poiServiceMock,
 			mapboxApiMock,
 		);
-		const data = (await routeService.construct([
-			NUMS_MAP.one,
-			NUMS_MAP.two,
+		const constructedRoute = (await routeService.construct([
+			FIRST_POI_ID,
+			SECOND_POI_ID,
 		])) as unknown as [];
 
-		assert.equal(findAll.mock.callCount(), NUMS_MAP.one);
-		assert.equal(getRoute.mock.callCount(), NUMS_MAP.one);
-		assert.equal(Array.isArray(data), true);
-		assert.equal(data.length, entitiesIds.length);
+		const shouldBeCalledTimes = 1;
+
+		assert.equal(findAll.mock.callCount(), shouldBeCalledTimes);
+		assert.equal(getRoute.mock.callCount(), shouldBeCalledTimes);
+		assert.equal(Array.isArray(constructedRoute), true);
+		assert.equal(constructedRoute.length, entitiesIds.length);
 		assert.equal(
-			data.toString(),
-			entities
-				.slice(0, NUMS_MAP.two)
-				.map(({ location }) => location.coordinates)
-				.toString(),
+			constructedRoute.toString(),
+			entities.map(({ location }) => location.coordinates).toString(),
 		);
 	});
 
 	it("Should throw error for unexisting id", () => {
-		const entitiesIds = [NUMS_MAP.one, NUMS_MAP.two, NUMS_MAP.three];
+		const entitiesIds = [FIRST_ENTITY_ID, SECOND_ENTITY_ID, THIRD_ENTITY_ID];
 		const entities = [
 			{
-				id: NUMS_MAP.one,
-				location: { coordinates: [NUMS_MAP.one, NUMS_MAP.two] },
+				id: FIRST_ENTITY_ID,
+				location: { coordinates: [FIRST_POI_ID, SECOND_POI_ID] },
 			},
 		];
 		const findAll = mock.fn(

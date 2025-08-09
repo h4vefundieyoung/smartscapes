@@ -22,8 +22,8 @@ type EnvironmentSchema = {
 		SALT_ROUNDS: number;
 	};
 	MAPBOX: {
-		MAPBOX_ACCESS_TOKEN: string;
-		MAPBOX_URL: string;
+		ACCESS_TOKEN: string;
+		BASE_URL: string;
 	};
 };
 

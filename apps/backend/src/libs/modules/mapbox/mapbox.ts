@@ -5,9 +5,5 @@ import { MapboxDirectionsApi } from "./mapbox-directions-api.js";
 const mapboxDirectionsApi = new MapboxDirectionsApi({ config, http });
 
 export { mapboxDirectionsApi };
-export {
-	MapboxAPIGeometricsType,
-	MapboxAPIProfile,
-} from "./libs/enums/enums.js";
-export { type GetMapboxRouteResponseDto } from "./libs/types/types.js";
+export { MapboxAPIGeometric, MapboxAPIProfile } from "./libs/enums/enums.js";
 export { type MapboxDirectionsApi } from "./mapbox-directions-api.js";

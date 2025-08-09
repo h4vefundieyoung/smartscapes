@@ -5,11 +5,11 @@ import { type HTTP } from "~/libs/modules/http/http.js";
 import { type PointGeometry, type ValueOf } from "~/libs/types/types.js";
 
 import {
-	type MapboxAPIGeometricsType,
+	type MapboxAPIGeometric,
 	MapboxAPIPath,
 	type MapboxAPIProfile,
 } from "./libs/enums/enums.js";
-import { type GetMapboxRouteResponseDto } from "./libs/types/types.js";
+import { type MapboxConstructRouteResponseDto } from "./libs/types/types.js";
 
 type Constructor = {
 	config: Config;
@@ -21,18 +21,18 @@ class MapboxDirectionsApi extends BaseHTTPApi {
 
 	public constructor({ config, http }: Constructor) {
 		super({
-			baseUrl: config.ENV.MAPBOX.MAPBOX_URL,
+			baseUrl: config.ENV.MAPBOX.BASE_URL,
 			http,
 			path: MapboxAPIPath.DIRECTIONS,
 		});
-		this.accessToken = config.ENV.MAPBOX.MAPBOX_ACCESS_TOKEN;
+		this.accessToken = config.ENV.MAPBOX.ACCESS_TOKEN;
 	}
 
 	public async getRoute(
 		profile: ValueOf<typeof MapboxAPIProfile>,
 		coordinates: PointGeometry["coordinates"][],
-		geometricsType: ValueOf<typeof MapboxAPIGeometricsType>,
-	): Promise<GetMapboxRouteResponseDto> {
+		geometricsType: ValueOf<typeof MapboxAPIGeometric>,
+	): Promise<MapboxConstructRouteResponseDto> {
 		const query = {
 			access_token: this.accessToken,
 			alternatives: "false",
@@ -45,7 +45,7 @@ class MapboxDirectionsApi extends BaseHTTPApi {
 			.map((coordinate) => coordinate.join(","))
 			.join(";");
 
-		const response = await this.load<GetMapboxRouteResponseDto>(
+		const response = await this.load<MapboxConstructRouteResponseDto>(
 			this.getFullEndpoint(profile, "/", formattedCoordinates, {}),
 			{
 				contentType: ContentType.JSON,

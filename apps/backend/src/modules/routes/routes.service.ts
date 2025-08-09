@@ -1,7 +1,6 @@
 import { HTTPCode } from "~/libs/enums/enums.js";
 import {
-	type GetMapboxRouteResponseDto,
-	MapboxAPIGeometricsType,
+	MapboxAPIGeometric,
 	MapboxAPIProfile,
 	type MapboxDirectionsApi,
 } from "~/libs/modules/mapbox/mapbox.js";
@@ -13,6 +12,7 @@ import { RoutesError } from "./libs/exceptions/exceptions.js";
 import {
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
+	type RoutesResponseConstructDto,
 	type RoutesResponseDto,
 } from "./libs/types/types.js";
 import { RoutesEntity } from "./routes.entity.js";
@@ -35,7 +35,7 @@ class RoutesService implements Service {
 
 	public async construct(
 		pointsOfInterest: number[],
-	): Promise<GetMapboxRouteResponseDto> {
+	): Promise<RoutesResponseConstructDto> {
 		const { items } = await this.pointsOfInterestService.findAll({
 			ids: pointsOfInterest,
 		});
@@ -49,13 +49,19 @@ class RoutesService implements Service {
 
 		const coordinates = items.map(({ location }) => location.coordinates);
 
-		const responseData = await this.mapboxDirectionApi.getRoute(
+		const { routes, uuid } = await this.mapboxDirectionApi.getRoute(
 			MapboxAPIProfile.WALKING,
 			coordinates,
-			MapboxAPIGeometricsType.GEOJSON,
+			MapboxAPIGeometric.GEOJSON,
 		);
+		const [{ distance, duration, geometry }] = routes;
 
-		return responseData;
+		const serializedRoute: RoutesResponseConstructDto = {
+			internalId: uuid,
+			route: { distance, duration, geometry },
+		};
+
+		return serializedRoute;
 	}
 
 	public async create(

@@ -1,3 +1,5 @@
+import { type FastifyReply, type FastifyRequest } from "fastify";
+
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type ServerApplicationRouteParameters } from "~/libs/modules/server-application/server-application.js";
 
@@ -31,7 +33,15 @@ class BaseController implements Controller {
 			...options,
 			handler: (request, reply) => this.mapHandler(handler, request, reply),
 			path: fullPath,
-			preHandlers,
+			preHandlers: preHandlers.map((preHandler) => {
+				return (
+					{ body, params, query, user }: FastifyRequest,
+					_: FastifyReply,
+					done: () => void,
+				): void => {
+					preHandler({ body, params, query, user }, done);
+				};
+			}),
 		});
 	}
 

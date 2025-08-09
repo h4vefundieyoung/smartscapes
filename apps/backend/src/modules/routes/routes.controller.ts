@@ -9,14 +9,14 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { RouteApiPath } from "./libs/enums/enums.js";
 import {
-	type ConstructRouteRequestDto,
-	type GetMapboxRouteResponseDto,
+	type RoutesRequestConstructDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
+	type RoutesResponseConstructDto,
 	type RoutesResponseDto,
 } from "./libs/types/types.js";
 import {
-	constructRouteValidationSchema,
+	routesConstructValidationSchema,
 	routesCreateValidationSchema,
 	routesUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
@@ -139,7 +139,7 @@ class RoutesController extends BaseController {
 			path: RouteApiPath.CONSTRUCT,
 			preHandlers: [setRateLimit(constructRequestsPerMinute)],
 			validation: {
-				body: constructRouteValidationSchema,
+				body: routesConstructValidationSchema,
 			},
 		});
 
@@ -185,10 +185,7 @@ class RoutesController extends BaseController {
 	 *     tags:
 	 *       - Routes
 	 *     summary: Construct Mapbox route
-<<<<<<< HEAD
 	 *     requestBody:
-=======
->>>>>>> ca44f3a89cf40ca39dd4bf685cbad25ed274bf79
 	 *       required: true
 	 *       content:
 	 *         application/json:
@@ -216,8 +213,8 @@ class RoutesController extends BaseController {
 
 	public async constructRoute({
 		body: { pointsOfInterest },
-	}: APIHandlerOptions<{ body: ConstructRouteRequestDto }>): Promise<
-		APIHandlerResponse<GetMapboxRouteResponseDto>
+	}: APIHandlerOptions<{ body: RoutesRequestConstructDto }>): Promise<
+		APIHandlerResponse<RoutesResponseConstructDto>
 	> {
 		const data = await this.routesService.construct(pointsOfInterest);
 
@@ -232,6 +229,7 @@ class RoutesController extends BaseController {
 	 * /routes:
 	 *   post:
 	 *     security:
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Routes
 	 *     summary: Create a new route

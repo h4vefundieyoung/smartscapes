@@ -1,3 +1,3 @@
-export { MapboxAPIGeometricsType } from "./mapbox-geometrics-type.enum.js";
-export { MapboxAPIPath } from "./mapbox-paths.enum.js";
-export { MapboxAPIProfile } from "./mapbox-profiles.enum.js";
+export { MapboxAPIGeometric } from "./mapbox-geometric.enum.js";
+export { MapboxAPIPath } from "./mapbox-path.enum.js";
+export { MapboxAPIProfile } from "./mapbox-profile.enum.js";

@@ -1,5 +1,5 @@
 export {
-	constructRouteValidationSchema,
+	routesConstructValidationSchema,
 	routesCreateValidationSchema,
 	routesUpdateValidationSchema,
 } from "@smartscapes/shared";

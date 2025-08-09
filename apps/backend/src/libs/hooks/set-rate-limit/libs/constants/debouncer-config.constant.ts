@@ -1,0 +1,7 @@
+import { TIME_UNIT } from "@smartscapes/shared";
+
+const DEBOUNCER_CONFIG = {
+	RESET_TIME: TIME_UNIT.SECONDS_IN_MINUTE * TIME_UNIT.MILLISECONDS_IN_SECOND,
+};
+
+export { DEBOUNCER_CONFIG };

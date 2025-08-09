@@ -5,7 +5,6 @@ import {
 	useAppSelector,
 	useCallback,
 } from "~/libs/hooks/hooks.js";
-import { type ValueOf } from "~/libs/types/types.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import {
 	type UserAuthPatchRequestDto,
@@ -17,14 +16,13 @@ import styles from "./styles.module.css";
 
 const UserDetails = (): null | React.JSX.Element => {
 	const dispatch = useAppDispatch();
-	const { authenticatedUser, dataPatchStatus } = useAppSelector(
-		(state) => state.auth,
-	) as {
+	const { authenticatedUser } = useAppSelector((state) => state.auth) as {
 		authenticatedUser: UserAuthResponseDto;
-		dataPatchStatus: ValueOf<typeof DataStatus>;
 	};
 
-	const isLoading = dataPatchStatus === DataStatus.PENDING;
+	const isLoading = useAppSelector(
+		(state) => state.auth.authenticatedUserPatchStatus === DataStatus.PENDING,
+	);
 
 	const handleFormSubmit = useCallback(
 		(payload: UserAuthPatchRequestDto): void => {

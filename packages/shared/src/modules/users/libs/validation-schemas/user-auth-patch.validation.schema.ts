@@ -43,24 +43,4 @@ const authenticatedUserPatch = z
 		message: UserValidationMessage.FIRST_OR_LAST_NAME_REQUIRED,
 	});
 
-const createAuthenticatedUserPatchSchema = (originalData: {
-	firstName: string;
-	lastName: string;
-}): z.ZodType => {
-	return authenticatedUserPatch.refine(
-		(data): boolean => {
-			const hasChanges =
-				(Boolean(data.firstName) &&
-					data.firstName !== originalData.firstName) ||
-				(Boolean(data.lastName) && data.lastName !== originalData.lastName);
-
-			return hasChanges;
-		},
-		{
-			message: UserValidationMessage.NO_CHANGES,
-			path: ["firstName"],
-		},
-	);
-};
-
-export { authenticatedUserPatch, createAuthenticatedUserPatchSchema };
+export { authenticatedUserPatch };

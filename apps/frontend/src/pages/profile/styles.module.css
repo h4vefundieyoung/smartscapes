@@ -2,7 +2,7 @@
 	display: flex;
 	flex: 1;
 	flex-direction: column;
-	padding: 26px;
+	padding: 24px;
 	background-color: var(--color-fill-grey);
 }
 
@@ -12,10 +12,4 @@
 	font-size: var(--font-size-h3);
 	font-weight: var(--font-weight-semibold);
 	color: var(--color-text-strong);
-}
-
-@media (width <= 768px) {
-	.profile-container {
-		padding: 24px;
-	}
 }

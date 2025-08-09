@@ -11,7 +11,6 @@ export {
 } from "./libs/types/types.js";
 export {
 	authenticatedUserPatch as authenticatedUserPatchValidationSchema,
-	createAuthenticatedUserPatchSchema as createAuthenticatedUserPatchValidationSchema,
 	userSignIn as userSignInValidationSchema,
 	userSignUp as userSignUpValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";

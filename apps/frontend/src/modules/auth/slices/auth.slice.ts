@@ -13,14 +13,14 @@ import {
 
 type State = {
 	authenticatedUser: null | UserAuthResponseDto;
-	dataPatchStatus: ValueOf<typeof DataStatus>;
+	authenticatedUserPatchStatus: ValueOf<typeof DataStatus>;
 	dataStatus: ValueOf<typeof DataStatus>;
 	isInitialized: boolean;
 };
 
 const initialState: State = {
 	authenticatedUser: null,
-	dataPatchStatus: DataStatus.IDLE,
+	authenticatedUserPatchStatus: DataStatus.IDLE,
 	dataStatus: DataStatus.IDLE,
 	isInitialized: false,
 };
@@ -67,14 +67,14 @@ const { actions, name, reducer } = createSlice({
 
 		builder.addCase(patchAuthenticatedUser.fulfilled, (state, action) => {
 			state.authenticatedUser = action.payload.data;
-			state.dataPatchStatus = DataStatus.FULFILLED;
+			state.authenticatedUserPatchStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(patchAuthenticatedUser.pending, (state) => {
-			state.dataPatchStatus = DataStatus.PENDING;
+			state.authenticatedUserPatchStatus = DataStatus.PENDING;
 		});
 		builder.addCase(patchAuthenticatedUser.rejected, (state) => {
 			state.authenticatedUser = null;
-			state.dataPatchStatus = DataStatus.REJECTED;
+			state.authenticatedUserPatchStatus = DataStatus.REJECTED;
 		});
 	},
 	initialState,

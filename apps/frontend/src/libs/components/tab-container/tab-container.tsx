@@ -1,9 +1,10 @@
 import { combineClassNames } from "~/libs/helpers/helpers.js";
+import { useMemo } from "~/libs/hooks/hooks.js";
 
 import { type TabItem } from "./libs/types/types.js";
 import styles from "./styles.module.css";
 
-type TabContainerProperties = {
+type Properties = {
 	activeTabId: string;
 	onTabChange: (tabId: string) => void;
 	tabsData: TabItem[];
@@ -13,10 +14,11 @@ const TabContainer = ({
 	activeTabId,
 	onTabChange,
 	tabsData,
-}: TabContainerProperties): React.JSX.Element => {
-	const activeTabElement = tabsData.find(
-		(tab) => tab.id === activeTabId,
-	)?.element;
+}: Properties): React.JSX.Element => {
+	const activeTabElement = useMemo(
+		() => tabsData.find((tab) => tab.id === activeTabId)?.element,
+		[activeTabId, tabsData],
+	);
 
 	const handleTabClick = (tabId: string): (() => void) => {
 		return () => {

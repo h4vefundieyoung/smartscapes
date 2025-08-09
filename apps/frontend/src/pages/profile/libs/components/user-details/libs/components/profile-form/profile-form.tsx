@@ -1,7 +1,7 @@
 import { Button, Input } from "~/libs/components/components.js";
-import { useAppForm, useMemo } from "~/libs/hooks/hooks.js";
+import { useAppForm } from "~/libs/hooks/hooks.js";
 import {
-	createAuthenticatedUserPatchValidationSchema,
+	authenticatedUserPatchValidationSchema,
 	type UserAuthPatchRequestDto,
 	type UserAuthResponseDto,
 } from "~/modules/users/users.js";
@@ -15,13 +15,6 @@ type Properties = {
 
 const ProfileForm = ({ onSubmit, user }: Properties): React.JSX.Element => {
 	const { firstName, lastName } = user;
-
-	const authenticatedUserPatchValidationSchema = useMemo(() => {
-		return createAuthenticatedUserPatchValidationSchema({
-			firstName,
-			lastName,
-		});
-	}, [firstName, lastName]);
 
 	const { control, errors, handleSubmit } = useAppForm<UserAuthPatchRequestDto>(
 		{

@@ -7,15 +7,10 @@
 }
 
 .form-button {
-	width: 50%;
 	margin-top: 16px;
 }
 
 @media screen and (width <= 768px) {
-	.form-button {
-		width: 100%;
-	}
-
 	.form {
 		gap: 16px;
 	}

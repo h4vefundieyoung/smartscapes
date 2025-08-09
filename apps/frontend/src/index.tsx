@@ -16,6 +16,7 @@ import { NotFound } from "~/pages/not-found/not-found.jsx";
 
 import { Dashboard } from "./pages/dashboard/dashboard.js";
 import { Landing } from "./pages/landing/landing.jsx";
+import { Route } from "./pages/route/route.js";
 
 pwa.register();
 
@@ -41,6 +42,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 									</ProtectedRoute>
 								),
 								path: AppRoute.APP,
+							},
+							{
+								element: <Route />,
+								path: AppRoute.ROUTE_PAGE,
 							},
 						],
 						element: <App />,

@@ -1,0 +1,14 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+	padding: 48px 120px;
+}
+
+.label {
+	font-family: var(--font-family);
+	font-size: var(--font-size-h1);
+	font-weight: var(--font-weight-semibold);
+	line-height: 1.2;
+	color: var(--color-text-label);
+}

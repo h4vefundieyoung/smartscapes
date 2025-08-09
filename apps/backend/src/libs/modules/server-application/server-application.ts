@@ -26,6 +26,10 @@ const apiV1 = new BaseServerApplicationApi(
 				method: "POST",
 				path: `${APIPath.AUTH}${AuthApiPath.SIGN_IN}`,
 			},
+			{
+				method: "GET",
+				path: `${APIPath.ROUTES}/*`,
+			},
 		],
 	},
 	...authController.routes,

@@ -6,6 +6,7 @@ import { type ServerApplicationRouteParameters } from "~/libs/modules/server-app
 import {
 	type APIHandler,
 	type APIHandlerOptions,
+	type APIPreHandler,
 	type Controller,
 	type ControllerRouteParameters,
 } from "./libs/types/types.js";
@@ -33,15 +34,7 @@ class BaseController implements Controller {
 			...options,
 			handler: (request, reply) => this.mapHandler(handler, request, reply),
 			path: fullPath,
-			preHandlers: preHandlers.map((preHandler) => {
-				return (
-					{ body, params, query, user }: FastifyRequest,
-					_: FastifyReply,
-					done: () => void,
-				): void => {
-					preHandler({ body, params, query, user }, done);
-				};
-			}),
+			preHandlers: this.mapPreHandlers(preHandlers),
 		});
 	}
 
@@ -58,6 +51,24 @@ class BaseController implements Controller {
 		const { payload, status } = await handler(handlerOptions);
 
 		return await reply.status(status).send(payload);
+	}
+
+	private mapPreHandlers(
+		preHandlers: APIPreHandler[],
+	): ((
+		request: FastifyRequest,
+		reply: FastifyReply,
+		done: () => void,
+	) => void)[] {
+		return preHandlers.map((preHandler) => {
+			return (
+				{ body, params, query, user }: FastifyRequest,
+				_: FastifyReply,
+				done: () => void,
+			): void => {
+				preHandler({ body, params, query, user }, done);
+			};
+		});
 	}
 
 	private mapRequest<HandlerOptions extends APIHandlerOptions>(

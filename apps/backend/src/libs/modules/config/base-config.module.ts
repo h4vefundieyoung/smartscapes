@@ -97,7 +97,7 @@ class BaseConfig implements Config {
 				BASE_URL: {
 					default: null,
 					doc: "Mapbox URL",
-					env: "MAPBOX_URL",
+					env: "MAPBOX_BASE_URL",
 					format: String,
 				},
 			},

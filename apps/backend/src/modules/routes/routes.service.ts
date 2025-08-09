@@ -10,9 +10,9 @@ import { type PointsOfInterestService } from "../points-of-interest/points-of-in
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
 import {
+	type RouteConstructResponseDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
-	type RoutesResponseConstructDto,
 	type RoutesResponseDto,
 } from "./libs/types/types.js";
 import { RoutesEntity } from "./routes.entity.js";
@@ -35,7 +35,7 @@ class RoutesService implements Service {
 
 	public async construct(
 		pointsOfInterest: number[],
-	): Promise<RoutesResponseConstructDto> {
+	): Promise<RouteConstructResponseDto> {
 		const { items } = await this.pointsOfInterestService.findAll({
 			ids: pointsOfInterest,
 		});
@@ -49,19 +49,13 @@ class RoutesService implements Service {
 
 		const coordinates = items.map(({ location }) => location.coordinates);
 
-		const { routes, uuid } = await this.mapboxDirectionApi.getRoute(
+		const route = await this.mapboxDirectionApi.getRoute(
 			MapboxAPIProfile.WALKING,
 			coordinates,
 			MapboxAPIGeometric.GEOJSON,
 		);
-		const [{ distance, duration, geometry }] = routes;
 
-		const serializedRoute: RoutesResponseConstructDto = {
-			internalId: uuid,
-			route: { distance, duration, geometry },
-		};
-
-		return serializedRoute;
+		return route;
 	}
 
 	public async create(

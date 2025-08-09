@@ -1,1 +1,1 @@
-export { RequestLimitError } from "./request-limit.exception.js";
+export { RateLimitError } from "./request-limit.exception.js";

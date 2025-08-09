@@ -9,10 +9,10 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { RouteApiPath } from "./libs/enums/enums.js";
 import {
-	type RoutesRequestConstructDto,
+	type RouteConstructRequestDto,
+	type RouteConstructResponseDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
-	type RoutesResponseConstructDto,
 	type RoutesResponseDto,
 } from "./libs/types/types.js";
 import {
@@ -166,8 +166,8 @@ class RoutesController extends BaseController {
 
 	public async constructRoute({
 		body: { pointsOfInterest },
-	}: APIHandlerOptions<{ body: RoutesRequestConstructDto }>): Promise<
-		APIHandlerResponse<RoutesResponseConstructDto>
+	}: APIHandlerOptions<{ body: RouteConstructRequestDto }>): Promise<
+		APIHandlerResponse<RouteConstructResponseDto>
 	> {
 		const data = await this.routesService.construct(pointsOfInterest);
 

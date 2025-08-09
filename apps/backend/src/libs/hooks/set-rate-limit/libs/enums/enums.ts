@@ -1,1 +1,1 @@
-export { DebouncerErrorMessage } from "./debouncer-error-messages.enum.js";
+export { RateLimitErrorMessage } from "./rate-limit-error-message.enum.js";

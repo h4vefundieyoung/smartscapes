@@ -2,8 +2,8 @@ import { type APIPreHandler } from "~/libs/modules/controller/libs/types/types.j
 import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import { AuthError } from "~/modules/auth/libs/exceptions/unauthorized.exception.js";
 
-import { DEBOUNCER_CONFIG } from "./libs/constants/constants.js";
-import { RequestLimitError } from "./libs/exceptions/exceptions.js";
+import { RATE_LIMIT_TIME_PERIOD } from "./libs/constants/constants.js";
+import { RateLimitError } from "./libs/exceptions/exceptions.js";
 
 const REQUEST_NUMBER_INITIAL_VALUE = 0;
 const REQUEST_NUMBER_INCREMENT_VALUE = 1;
@@ -25,13 +25,13 @@ const setRateLimit = (requestsLimitPerMinute: number): APIPreHandler => {
 
 			setTimeout(() => {
 				userIdToRequestNumber.set(id, REQUEST_NUMBER_INITIAL_VALUE);
-			}, DEBOUNCER_CONFIG.RESET_TIME);
+			}, RATE_LIMIT_TIME_PERIOD);
 
 			return;
 		}
 
 		if (requestsNumber >= requestsLimitPerMinute) {
-			throw new RequestLimitError();
+			throw new RateLimitError();
 		}
 
 		userIdToRequestNumber.set(

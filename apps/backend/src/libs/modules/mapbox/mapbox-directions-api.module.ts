@@ -9,7 +9,11 @@ import {
 	MapboxAPIPath,
 	type MapboxAPIProfile,
 } from "./libs/enums/enums.js";
-import { type MapboxConstructRouteResponseDto } from "./libs/types/types.js";
+import {
+	type MapboxConstructRouteMappedData,
+	type MapboxConstructRouteOptions,
+	type MapboxConstructRouteResponseDto,
+} from "./libs/types/types.js";
 
 type Constructor = {
 	config: Config;
@@ -32,8 +36,8 @@ class MapboxDirectionsApi extends BaseHTTPApi {
 		profile: ValueOf<typeof MapboxAPIProfile>,
 		coordinates: PointGeometry["coordinates"][],
 		geometricsType: ValueOf<typeof MapboxAPIGeometric>,
-	): Promise<MapboxConstructRouteResponseDto> {
-		const query = {
+	): Promise<MapboxConstructRouteMappedData> {
+		const query: MapboxConstructRouteOptions = {
 			access_token: this.accessToken,
 			alternatives: "false",
 			geometries: geometricsType,
@@ -54,7 +58,14 @@ class MapboxDirectionsApi extends BaseHTTPApi {
 			},
 		);
 
-		return await response.json();
+		const { routes, uuid } = await response.json();
+		const [{ distance, duration, geometry }] = routes;
+		const constructedRouteMappedData: MapboxConstructRouteMappedData = {
+			internalId: uuid,
+			route: { distance, duration, geometry },
+		};
+
+		return constructedRouteMappedData;
 	}
 }
 

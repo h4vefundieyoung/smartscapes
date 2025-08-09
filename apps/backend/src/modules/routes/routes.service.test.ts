@@ -6,12 +6,12 @@ import {
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 
-import { type MapboxDirectionsApi } from "~/libs/modules/mapbox/mapbox-directions-api.js";
+import { type MapboxDirectionsApi } from "~/libs/modules/mapbox/mapbox-directions-api.module.js";
 import { type PointGeometry } from "~/libs/types/types.js";
 
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/routes-exception-message.enum.js";
-import { RoutesError } from "./libs/exceptions/routes.exception.js";
+import { RoutesError } from "./libs/exceptions/routes-error.exception.js";
 import { RoutesEntity } from "./routes.entity.js";
 import { type RoutesRepository } from "./routes.repository.js";
 import { RoutesService } from "./routes.service.js";

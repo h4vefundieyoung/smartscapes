@@ -85,12 +85,6 @@ import { AuthError } from "./libs/exceptions/unauthorized.exception.js";
  *     UserAuthPatchRequestDto:
  *       type: object
  *       properties:
- *         email:
- *           type: string
- *           minLength: 6
- *           maxLength: 64
- *           format: email
- *           example: user@example.com
  *         firstName:
  *           type: string
  *           minLength: 2
@@ -103,6 +97,23 @@ import { AuthError } from "./libs/exceptions/unauthorized.exception.js";
  *           maxLength: 64
  *           pattern: '^[a-zA-Z\\s]+$'
  *           example: Doe
+ *
+ *     UserAuthPatchResponseDto:
+ *        type: object
+ *        required:
+ *          - id
+ *          - firstName
+ *          - lastName
+ *        properties:
+ *          id:
+ *            type: integer
+ *            example: 1
+ *          firstName:
+ *            type: string
+ *            example: John
+ *          lastName:
+ *            type: string
+ *            example: Doe
  *
  *     UserAuthResponseDto:
  *       type: object
@@ -272,7 +283,7 @@ class AuthController extends BaseController {
 	 *               type: object
 	 *               properties:
 	 *                 data:
-	 *                   $ref: '#/components/schemas/UserAuthResponseDto'
+	 *                   $ref: '#/components/schemas/UserAuthPatchResponseDto'
 	 */
 	public async patch(
 		options: APIHandlerOptions<{

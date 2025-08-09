@@ -66,7 +66,6 @@ export {
 } from "./modules/routes/routes.js";
 export {
 	authenticatedUserPatchValidationSchema,
-	createAuthenticatedUserPatchValidationSchema,
 	type UserAuthPatchRequestDto,
 	type UserAuthPatchResponseDto,
 	type UserAuthResponseDto,

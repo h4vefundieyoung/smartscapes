@@ -1,7 +1,5 @@
-import { useContext } from "react";
-
+import { useMapContext } from "~/libs/components/components.js";
 import { type MapClient } from "~/libs/modules/map-client/map-client.module.js";
-import { useMapContext } from "~/libs/components/map-provider/map-provider.js";
 
 const useMapClient = (): MapClient => {
 	const client = useMapContext();

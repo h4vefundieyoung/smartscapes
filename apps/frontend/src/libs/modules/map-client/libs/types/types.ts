@@ -1,19 +1,38 @@
-import mapboxgl from "mapbox-gl";
 import { type PointGeometry } from "@smartscapes/shared";
+import { type default as mapboxgl } from "mapbox-gl";
+
+type AccessToken = MapOptions["accessToken"];
 
 type Constructor = {
-	token?: string;
+	token?: AccessToken;
+};
+
+type ControlPosition = mapboxgl.ControlPosition;
+
+type GeolocateControlOptions = mapboxgl.GeolocateControlOptions & {
+	autoTrigger?: boolean;
+	position?: ControlPosition;
+};
+
+type IControl = mapboxgl.IControl;
+
+type MapBoxGL = typeof mapboxgl;
+
+type MapBoxGLWithToken = MapBoxGL & {
+	accessToken: AccessToken;
 };
 
 type MapOptions = Omit<mapboxgl.MapOptions, "container">;
 
-type MarkerOptions = {
-	coordinates: PointGeometry["coordinates"];
-	color?: string;
-	scale?: number;
+type Marker = mapboxgl.Marker & {
+	id: string;
 };
 
-type ControlPosition = mapboxgl.ControlPosition;
+type MarkerOptions = {
+	color?: string;
+	coordinates: PointGeometry["coordinates"];
+	scale?: number;
+};
 
 type NavigationControlOptions = mapboxgl.NavigationControlOptions & {
 	position?: ControlPosition;
@@ -23,18 +42,16 @@ type ScaleControlOptions = mapboxgl.ScaleControlOptions & {
 	position?: ControlPosition;
 };
 
-type GeolocateControlOptions = mapboxgl.GeolocateControlOptions & {
-	autoTrigger?: boolean;
-	position?: ControlPosition;
-};
-
 export {
 	type Constructor,
-	type MapOptions,
-	type MarkerOptions,
 	type ControlPosition,
+	type GeolocateControlOptions,
+	type IControl,
+	type MapBoxGLWithToken,
+	type MapOptions,
+	type Marker,
+	type MarkerOptions,
 	type NavigationControlOptions,
 	type ScaleControlOptions,
-	type GeolocateControlOptions,
-	type PointGeometry,
 };
+export { type PointGeometry } from "@smartscapes/shared";

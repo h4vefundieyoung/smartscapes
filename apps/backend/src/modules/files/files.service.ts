@@ -1,5 +1,5 @@
+import { type AWSService } from "~/libs/modules/aws/base-aws.module.js";
 import { type Service } from "~/libs/types/types.js";
-import { type AWSService } from "~/modules/aws/aws.service.js";
 
 import { FilesEntity } from "./files.entity.js";
 import { type FilesRepository } from "./files.repository.js";
@@ -34,16 +34,19 @@ class FilesService implements Service {
 		return item.toObject();
 	}
 
+	public async getAll(): Promise<FileCreateRecordResponseDto[]> {
+		const items = await this.filesRepository.findAll();
+
+		return items.map((item) => item.toObject());
+	}
+
 	public async getUploadUrl(
 		payload: FileGetUploadUrlRequestDto,
 	): Promise<FileUploadUrlResponseDto> {
-		const { expiresIn, fields, fileKey, uploadUrl } =
-			await this.awsService.getUploadUrl(payload);
+		const { fields, uploadUrl } = await this.awsService.getUploadUrl(payload);
 
 		return {
-			expiresIn,
 			fields,
-			fileKey,
 			uploadUrl,
 		};
 	}

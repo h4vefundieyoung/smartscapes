@@ -1,3 +1,4 @@
+import { FileFolderName } from "@smartscapes/shared/src/modules/files/libs/enums/file-folder-name.enum.js";
 import { useCallback, useState } from "react";
 
 import {
@@ -56,16 +57,19 @@ const Dashboard = (): React.JSX.Element => {
 			setIsUploading(true);
 
 			try {
+				const { name, size, type } = file;
 				const responseURL = await filesApi.uploadFile(
 					{
-						fileName: file.name,
-						fileSize: file.size,
-						fileType: file.type as FileContentType,
+						folder: FileFolderName.AVATARS,
+						name,
+						size,
+						type: type as FileContentType,
 					},
 					file,
 				);
 
 				setUploadedImages((previous) => [...previous, responseURL]);
+				setIsUploading(false);
 
 				// eslint-disable-next-line no-console
 				console.log("File uploaded successfully!");

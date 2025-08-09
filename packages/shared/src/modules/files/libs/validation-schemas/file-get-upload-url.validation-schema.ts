@@ -1,17 +1,19 @@
 import { z } from "zod";
 
+import { FILE_SIZE_MB } from "../../../../libs/constants/constants.js";
 import {
 	FileContent,
+	FileFolderName,
 	FilesValidationMessage,
 	FilesValidationRule,
 } from "../enums/enums.js";
 import { type FileContentType } from "../types/types.js";
 
-const BYTES_IN_KB = 1024;
-const BYTES_IN_MB = BYTES_IN_KB * BYTES_IN_KB;
-
 const fileGetUploadUrl = z.strictObject({
-	fileName: z
+	folder: z.enum(Object.values(FileFolderName), {
+		message: FilesValidationMessage.INVALID_FOLDER_NAME,
+	}),
+	name: z
 		.string()
 		.min(FilesValidationRule.FILE_NAME_MIN_LENGTH, {
 			message: FilesValidationMessage.FILE_NAME_MINIMUM_LENGTH,
@@ -19,15 +21,15 @@ const fileGetUploadUrl = z.strictObject({
 		.max(FilesValidationRule.FILE_NAME_MAX_LENGTH, {
 			message: FilesValidationMessage.FILE_NAME_MAXIMUM_LENGTH,
 		}),
-	fileSize: z
+	size: z
 		.number()
 		.min(FilesValidationRule.FILE_SIZE_MIN_BYTES, {
 			message: FilesValidationMessage.FILE_SIZE_MIN_BYTES,
 		})
-		.max(FilesValidationRule.FILE_SIZE_MAX_MB * BYTES_IN_MB, {
+		.max(FilesValidationRule.FILE_SIZE_MAX_MB * FILE_SIZE_MB, {
 			message: FilesValidationMessage.FILE_SIZE_MAX_MB,
 		}),
-	fileType: z
+	type: z
 		.string()
 		.refine(
 			(type): type is FileContentType =>

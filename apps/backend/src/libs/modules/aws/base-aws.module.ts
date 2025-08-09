@@ -1,6 +1,7 @@
 import { S3Client } from "@aws-sdk/client-s3";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 
+import { FILE_SIZE_MB } from "~/libs/constants/constants.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import {
@@ -29,38 +30,28 @@ class AWSService {
 	public async getUploadUrl(
 		payload: FileGetUploadUrlRequestDto,
 	): Promise<FileUploadUrlResponseDto> {
-		const { fileName, fileType } = payload;
-
-		// eslint-disable-next-line no-console
-		console.log("Backend received fileType:", fileType);
-
-		const fileKey = this.generateFileKey(fileName);
-		const expiresIn = 300;
+		const MAX_FILE_SIZE_MB = 10;
+		const { folder, name, type } = payload;
+		const key = `${folder}/${name}`;
 
 		const { fields, url } = await createPresignedPost(this.s3Client, {
 			Bucket: this.bucketName,
-			Expires: expiresIn,
-			Key: fileKey,
+			Conditions: [
+				["content-length-range", 0, FILE_SIZE_MB * MAX_FILE_SIZE_MB],
+				["starts-with", "$Content-Type", "image/"],
+			],
+			Fields: {
+				"Content-Type": type,
+			},
+			Key: key,
 		});
 
-		// eslint-disable-next-line no-console
-		console.log("Backend generated fields:", fields);
-
-		this.logger.info(`Generated presigned URL for file: ${fileKey}`);
+		this.logger.info(`Generated presigned URL for file: ${name}`);
 
 		return {
-			expiresIn,
 			fields,
-			fileKey,
 			uploadUrl: url,
 		};
-	}
-
-	private generateFileKey(fileName: string): string {
-		const timestamp = String(Date.now());
-		const extension = String(fileName.split(".").pop());
-
-		return `uploads/${timestamp}-${extension}`;
 	}
 }
 

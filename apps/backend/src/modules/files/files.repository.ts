@@ -24,6 +24,12 @@ class FilesRepository implements Repository {
 
 		return FilesEntity.initialize(file);
 	}
+
+	public async findAll(): Promise<FilesEntity[]> {
+		const files = await this.filesModel.query().select("*");
+
+		return files.map((file) => FilesEntity.initialize(file));
+	}
 }
 
 export { FilesRepository };

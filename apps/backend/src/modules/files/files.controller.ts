@@ -16,7 +16,7 @@ import {
 import {
 	fileCreateValidationSchema,
 	fileGetUploadUrlValidationSchema,
-} from "~/modules/files/libs/validation-schemas/validation-sxhemas.js";
+} from "~/modules/files/libs/validation-schemas/validation-schemas.js";
 
 import { FilesApiPath } from "./libs/enums/enums.js";
 
@@ -28,7 +28,7 @@ class FilesController extends BaseController {
 		this.filesService = filesService;
 
 		this.addRoute({
-			handler: this.createRecord.bind(this),
+			handler: this.create.bind(this),
 			method: "POST",
 			path: FilesApiPath.ROOT,
 			validation: {
@@ -44,9 +44,15 @@ class FilesController extends BaseController {
 				body: fileGetUploadUrlValidationSchema,
 			},
 		});
+
+		this.addRoute({
+			handler: this.getAll.bind(this),
+			method: "GET",
+			path: FilesApiPath.ROOT,
+		});
 	}
 
-	public async createRecord(
+	public async create(
 		options: APIHandlerOptions<{
 			body: FileCreateRecordRequestDto;
 		}>,
@@ -60,6 +66,17 @@ class FilesController extends BaseController {
 		};
 	}
 
+	public async getAll(): Promise<
+		APIHandlerResponse<FileCreateRecordResponseDto[]>
+	> {
+		const result = await this.filesService.getAll();
+
+		return {
+			payload: { data: result },
+			status: HTTPCode.OK,
+		};
+	}
+
 	public async getUploadUrl(
 		options: APIHandlerOptions<{
 			body: FileGetUploadUrlRequestDto;
@@ -68,9 +85,6 @@ class FilesController extends BaseController {
 		const { body } = options;
 
 		const result = await this.filesService.getUploadUrl(body);
-
-		// eslint-disable-next-line no-console
-		console.log("Controller returning result:", result);
 
 		return {
 			payload: { data: result },

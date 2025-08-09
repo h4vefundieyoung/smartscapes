@@ -14,7 +14,7 @@ const fileCreate = z.strictObject({
 			(type): type is FileContentType =>
 				Object.values(FileContent).includes(type as FileContentType),
 			{
-				message: FilesValidationMessage.INVALID_CONTENT_TYPE,
+				message: FilesValidationMessage.INVALID_FILE_TYPE,
 			},
 		),
 	url: z.string().max(FilesValidationRule.URL_MAX_LENGTH, {

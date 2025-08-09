@@ -1,11 +1,16 @@
-import { APIPath, ContentType } from "~/libs/enums/enums.js";
+import { APIErrorType, APIPath, ContentType } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
-import { type HTTP } from "~/libs/modules/http/http.js";
+import {
+	type HTTP,
+	type HTTPCode,
+	HTTPError,
+} from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
-import { type APIResponse } from "~/libs/types/types.js";
+import { type APIResponse, type ValueOf } from "~/libs/types/types.js";
 
 import { FilesApiPath } from "./libs/enums/enums.js";
 import {
+	type FileContentType,
 	type FileCreateRecordRequestDto,
 	type FileCreateRecordResponseDto,
 	type FileGetUploadUrlRequestDto,
@@ -27,39 +32,30 @@ class FilesApi extends BaseHTTPApi {
 		payload: FileGetUploadUrlRequestDto,
 		file: File,
 	): Promise<string> {
-		const response = await this.getUploadUrl(payload);
+		const getUploadUrlResponse = await this.getUploadUrl(payload);
 
-		// eslint-disable-next-line no-console
-		console.log("Full response:", response);
+		const { fields, uploadUrl } = getUploadUrlResponse.data;
 
-		const { fields, fileKey, uploadUrl } = response.data;
+		await this.uploadFileToPresignedUrl(uploadUrl, fields, file);
 
-		// eslint-disable-next-line no-console
-		console.log("Fields from backend:", fields);
-
-		const uploadResponse = await this.uploadFileToPresignedUrl(
-			uploadUrl,
-			file,
-			fields,
-		);
-
-		// eslint-disable-next-line no-console
-		console.log(uploadResponse, "uploadFileToPresignedUrl");
-
-		if (!uploadResponse.ok) {
-			throw new Error("Upload failed with status ");
-		}
+		const fileName = fields["key"] as string;
 
 		const responseURL = await this.createRecord({
-			contentType: "image/jpeg",
-			url: `https://vk-ss-img.s3.eu-north-1.amazonaws.com/${String(fileKey)}`,
+			contentType: file.type as FileContentType,
+			url: `${uploadUrl}${fileName}`,
 		});
-
-		// eslint-disable-next-line no-console
-		console.log(responseURL, "createRecord");
 
 		return responseURL.data.url;
 	}
+
+	private addTimestampToFileName = (fileName: string): string => {
+		const dotIndex = fileName.lastIndexOf(".");
+		const name = fileName.slice(0, dotIndex);
+		const extension = fileName.slice(dotIndex);
+		const timestamp = String(Date.now());
+
+		return `${name}-${timestamp}${extension}`;
+	};
 
 	private async createRecord(
 		payload: FileCreateRecordRequestDto,
@@ -80,13 +76,18 @@ class FilesApi extends BaseHTTPApi {
 	private async getUploadUrl(
 		payload: FileGetUploadUrlRequestDto,
 	): Promise<APIResponse<FileUploadUrlResponseDto>> {
+		const updatedPayload = {
+			...payload,
+			name: this.addTimestampToFileName(payload.name),
+		};
+
 		const response = await this.load<APIResponse<FileUploadUrlResponseDto>>(
 			this.getFullEndpoint(FilesApiPath.UPLOAD_URL, {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,
 				method: "POST",
-				payload: JSON.stringify(payload),
+				payload: JSON.stringify(updatedPayload),
 			},
 		);
 
@@ -94,37 +95,30 @@ class FilesApi extends BaseHTTPApi {
 	}
 
 	private async uploadFileToPresignedUrl(
-		url: string,
-		file: File,
+		uploadUrl: string,
 		fields: Record<string, string>,
+		file: File,
 	): Promise<Response> {
-		// eslint-disable-next-line no-console
-		console.log("File type:", file.type);
-
 		const formData = new FormData();
 
 		for (const [key, value] of Object.entries(fields)) {
 			formData.append(key, value);
-			// eslint-disable-next-line no-console
-			console.log(`Adding field: ${key} = ${value}`);
 		}
 
 		formData.append("file", file);
 
-		const response = await fetch(url, {
+		const response = await fetch(uploadUrl, {
 			body: formData,
 			method: "POST",
 		});
 
 		if (!response.ok) {
-			const errorText = await response.text();
-
-			// eslint-disable-next-line no-console
-			console.error("Upload error details:", errorText);
-
-			throw new Error(
-				`Upload failed with status: ${String(response.status)} - ${errorText}`,
-			);
+			throw new HTTPError({
+				details: [],
+				message: "Failed to upload file",
+				status: response.status as ValueOf<typeof HTTPCode>,
+				type: APIErrorType.COMMON,
+			});
 		}
 
 		return response;

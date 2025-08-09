@@ -1,8 +1,3 @@
-type FileContentType =
-	| "image/gif"
-	| "image/jpeg"
-	| "image/jpg"
-	| "image/png"
-	| "image/webp";
+type FileContentType = "image/jpeg" | "image/jpg" | "image/png";
 
 export { type FileContentType };

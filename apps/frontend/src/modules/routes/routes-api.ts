@@ -18,8 +18,8 @@ class RoutesApi extends BaseHTTPApi {
 		super({ baseUrl, http, path: APIPath.ROUTES, storage });
 	}
 
-	public async getRoute(id: string): Promise<APIResponse<RoutesResponseDto[]>> {
-		const response = await this.load<APIResponse<RoutesResponseDto[]>>(
+	public async getRoute(id: string): Promise<APIResponse<RoutesResponseDto>> {
+		const response = await this.load<APIResponse<RoutesResponseDto>>(
 			this.getFullEndpoint(`${RoutesApiPath.ROOT}${id}`, {}),
 			{
 				hasAuth: false,

@@ -6,7 +6,7 @@ import { type RoutesResponseDto } from "~/modules/routes/routes.js";
 import { name as sliceName } from "./routes.slice.js";
 
 const getRoute = createAsyncThunk<
-	APIResponse<RoutesResponseDto[]>,
+	APIResponse<RoutesResponseDto>,
 	string,
 	AsyncThunkConfig
 >(`${sliceName}/get-id`, (id, { extra }) => {

@@ -10,9 +10,9 @@ import { type PointsOfInterestService } from "../points-of-interest/points-of-in
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
 import {
-	type RouteConstructResponseDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
+	type RoutesResponseConstructDto,
 	type RoutesResponseDto,
 } from "./libs/types/types.js";
 import { RoutesEntity } from "./routes.entity.js";
@@ -35,7 +35,7 @@ class RoutesService implements Service {
 
 	public async construct(
 		pointsOfInterest: number[],
-	): Promise<RouteConstructResponseDto> {
+	): Promise<RoutesResponseConstructDto> {
 		const { items } = await this.pointsOfInterestService.findAll({
 			ids: pointsOfInterest,
 		});

@@ -54,12 +54,12 @@ export {
 } from "./modules/route-categories/route-categories.js";
 export {
 	RouteApiPath,
-	type RouteConstructRequestDto,
-	type RouteConstructResponseDto,
 	routesConstructValidationSchema,
 	routesCreateValidationSchema,
+	type RoutesRequestConstructDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
+	type RoutesResponseConstructDto,
 	type RoutesResponseDto,
 	routesUpdateValidationSchema,
 } from "./modules/routes/routes.js";

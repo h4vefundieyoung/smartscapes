@@ -1,4 +1,4 @@
-import { TIME_UNIT } from "@smartscapes/shared";
+import { TIME_UNIT } from "~/libs/constants/constants.js";
 
 const RATE_LIMIT_TIME_PERIOD =
 	TIME_UNIT.SECONDS_IN_MINUTE * TIME_UNIT.MILLISECONDS_IN_SECOND;

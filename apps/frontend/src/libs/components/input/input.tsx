@@ -10,6 +10,7 @@ import { Icon } from "~/libs/components/icon/icon.js";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
 
+import { ToggleVisionButton } from "./libs/components/toggle-vision-button/toggle-vision-button.js";
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
@@ -36,16 +37,16 @@ const Input = <T extends FieldValues>({
 
 	const error = errors[name]?.message;
 	const hasError = Boolean(error);
-	const isPasswordButtonShown = type === "password" && field.value;
+	const isPasswordButtonShown =
+		(type === "password" && typeState === "password") ||
+		(typeState === "text" && field.value);
 
-	const onPassAppearanceToggle = useCallback((): void => {
+	const handlePasswordAppearanceToggle = useCallback((): void => {
 		const state: "password" | "text" =
 			typeState === "password" ? "text" : "password";
 
 		setTypeState(state);
 	}, [typeState, setTypeState]);
-	const toggleButtonIcon: "eye" | "eyeOff" =
-		typeState === "text" ? "eyeOff" : "eye";
 
 	return (
 		<label className={styles["label"]}>
@@ -69,20 +70,11 @@ const Input = <T extends FieldValues>({
 						{error as string}
 					</span>
 				)}
-				{isPasswordButtonShown && field.value && (
-					<button
-						className={styles["password-toggle-button"]}
-						onClick={onPassAppearanceToggle}
-						type="button"
-					>
-						<span className="visually-hidden">toggle password appearance</span>
-						<Icon
-							className={styles["password-toggle-button-icon"] || ""}
-							height={24}
-							name={toggleButtonIcon}
-							width={24}
-						/>
-					</button>
+				{isPasswordButtonShown && (
+					<ToggleVisionButton
+						onAppearanceToggle={handlePasswordAppearanceToggle}
+						type={typeState}
+					/>
 				)}
 			</span>
 		</label>

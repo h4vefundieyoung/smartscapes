@@ -72,30 +72,6 @@
 	display: none;
 }
 
-.password-toggle-button {
-	position: absolute;
-	top: 50%;
-	right: 2px;
-	z-index: 2;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 50px;
-	padding: 0;
-	cursor: pointer;
-	background-color: transparent;
-	border: none;
-	transform: translateY(-50%);
-}
-
-.password-toggle-button-icon {
-	stroke: var(--color-stroke-strong);
-}
-
-.password-toggle-button:hover .password-toggle-button-icon {
-	stroke: var(--color-fill-press);
-}
-
 @media (width <= 768px) {
 	.input {
 		padding: 8px 50px 8px 10px;

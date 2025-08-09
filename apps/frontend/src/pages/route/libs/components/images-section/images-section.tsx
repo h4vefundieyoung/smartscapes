@@ -11,13 +11,25 @@ const ImagesSection = ({ description }: Properties): React.JSX.Element => {
 	return (
 		<section className={styles["container"]}>
 			<div className={styles["primary-description-wrapper"]}>
-				<img alt="" className={styles["primary-image"]} src={image1} />
+				<img
+					alt="Main point of interest of the route"
+					className={styles["primary-image"]}
+					src={image1}
+				/>
 				<p className={styles["description"]}>{description}</p>
 			</div>
 
 			<div className={styles["secondary-images-wrapper"]}>
-				<img alt="" className={styles["secondary-image"]} src={image2} />
-				<img alt="" className={styles["secondary-image"]} src={image3} />
+				<img
+					alt="Secondary point of interest of the route"
+					className={styles["secondary-image"]}
+					src={image2}
+				/>
+				<img
+					alt="Secondary point of interest of the route"
+					className={styles["secondary-image"]}
+					src={image3}
+				/>
 			</div>
 		</section>
 	);

@@ -67,13 +67,13 @@ describe("UserFollowsRepository", () => {
 	it("unfollowUser should delete follow relation and return true", async () => {
 		databaseTracker.on.delete("user_follows").response(DELETED_COUNT_ONE);
 
-		const deletedCount = Boolean(
+		const isDeleted = Boolean(
 			await userFollowsRepository.unfollowUser(
 				TEST_FOLLOWER_ID,
 				TEST_FOLLOWING_ID,
 			),
 		);
-		assert.strictEqual(deletedCount, true);
+		assert.strictEqual(isDeleted, true);
 	});
 
 	it("unfollowUser should return false if no rows deleted", async () => {

@@ -1,1 +1,1 @@
-export { UserFollowsError } from "./user-follows.exceptions.js";
+export { UserFollowsError } from "./user-follows.exception.js";

@@ -1,5 +1,7 @@
 import { type UserFollowsModel } from "~/modules/user-follows/user-follows.model.js";
 
+const SELECTED_NUMBER = 1;
+
 class UserFollowsRepository {
 	private userFollowsModel: typeof UserFollowsModel;
 
@@ -13,6 +15,7 @@ class UserFollowsRepository {
 	): Promise<boolean> {
 		const relation = await this.userFollowsModel
 			.query()
+			.select(SELECTED_NUMBER)
 			.where({ followerId, followingId })
 			.first();
 

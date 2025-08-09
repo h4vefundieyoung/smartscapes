@@ -3,7 +3,7 @@ import { describe, it } from "node:test";
 
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { UserFollowsExceptionMessage } from "~/modules/user-follows/libs/enums/enums.js";
-import { UserFollowsError } from "~/modules/user-follows/libs/exceptions/user-follows.exceptions.js";
+import { UserFollowsError } from "~/modules/user-follows/libs/exceptions/user-follows.exception.js";
 import { type UserFollowsRepository } from "~/modules/user-follows/user-follows.repository.js";
 import { UserFollowsService } from "~/modules/user-follows/user-follows.service.js";
 

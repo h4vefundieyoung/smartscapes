@@ -30,7 +30,7 @@ class FilesController extends BaseController {
 		this.addRoute({
 			handler: this.createRecord.bind(this),
 			method: "POST",
-			path: "/",
+			path: FilesApiPath.ROOT,
 			validation: {
 				body: fileCreateValidationSchema,
 			},
@@ -68,6 +68,9 @@ class FilesController extends BaseController {
 		const { body } = options;
 
 		const result = await this.filesService.getUploadUrl(body);
+
+		// eslint-disable-next-line no-console
+		console.log("Controller returning result:", result);
 
 		return {
 			payload: { data: result },

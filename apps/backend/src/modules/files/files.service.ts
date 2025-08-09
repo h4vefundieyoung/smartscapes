@@ -1,5 +1,5 @@
 import { type Service } from "~/libs/types/types.js";
-import { type S3Service } from "~/modules/s3/s3.js";
+import { type AWSService } from "~/modules/aws/aws.service.js";
 
 import { FilesEntity } from "./files.entity.js";
 import { type FilesRepository } from "./files.repository.js";
@@ -11,12 +11,12 @@ import {
 } from "./libs/types/types.js";
 
 class FilesService implements Service {
+	private awsService: AWSService;
 	private filesRepository: FilesRepository;
-	private s3Service: S3Service;
 
-	public constructor(filesRepository: FilesRepository, s3Service: S3Service) {
+	public constructor(filesRepository: FilesRepository, awsService: AWSService) {
 		this.filesRepository = filesRepository;
-		this.s3Service = s3Service;
+		this.awsService = awsService;
 	}
 
 	public async create(
@@ -37,11 +37,12 @@ class FilesService implements Service {
 	public async getUploadUrl(
 		payload: FileGetUploadUrlRequestDto,
 	): Promise<FileUploadUrlResponseDto> {
-		const { expiresIn, fileKey, uploadUrl } =
-			await this.s3Service.getUploadUrl(payload);
+		const { expiresIn, fields, fileKey, uploadUrl } =
+			await this.awsService.getUploadUrl(payload);
 
 		return {
 			expiresIn,
+			fields,
 			fileKey,
 			uploadUrl,
 		};

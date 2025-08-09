@@ -1,5 +1,5 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { S3Client } from "@aws-sdk/client-s3";
+import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
@@ -8,7 +8,7 @@ import {
 	type FileUploadUrlResponseDto,
 } from "~/modules/files/files.js";
 
-class S3Service {
+class AWSService {
 	private bucketName: string;
 	private logger: Logger;
 	private s3Client: S3Client;
@@ -29,28 +29,30 @@ class S3Service {
 	public async getUploadUrl(
 		payload: FileGetUploadUrlRequestDto,
 	): Promise<FileUploadUrlResponseDto> {
-		const { fileName, fileSize, fileType } = payload;
+		const { fileName, fileType } = payload;
+
+		// eslint-disable-next-line no-console
+		console.log("Backend received fileType:", fileType);
 
 		const fileKey = this.generateFileKey(fileName);
-		const expiresIn = 3600;
+		const expiresIn = 300;
 
-		const command = new PutObjectCommand({
+		const { fields, url } = await createPresignedPost(this.s3Client, {
 			Bucket: this.bucketName,
-			ContentLength: fileSize,
-			ContentType: fileType,
+			Expires: expiresIn,
 			Key: fileKey,
 		});
 
-		const uploadUrl = await getSignedUrl(this.s3Client, command, {
-			expiresIn,
-		});
+		// eslint-disable-next-line no-console
+		console.log("Backend generated fields:", fields);
 
 		this.logger.info(`Generated presigned URL for file: ${fileKey}`);
 
 		return {
 			expiresIn,
+			fields,
 			fileKey,
-			uploadUrl,
+			uploadUrl: url,
 		};
 	}
 
@@ -62,4 +64,4 @@ class S3Service {
 	}
 }
 
-export { S3Service };
+export { AWSService };

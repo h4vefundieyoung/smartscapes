@@ -44,16 +44,12 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 								path: AppRoute.APP,
 							},
 							{
-								element: (
-									<ProtectedRoute>
-										<Explore />
-									</ProtectedRoute>
-								),
+								element: <Explore />,
 								path: AppRoute.EXPLORE,
 							},
 						],
 						element: <App />,
-						path: AppRoute.ROOT,
+						path: AppRoute.APP,
 					},
 					{
 						element: <Landing />,

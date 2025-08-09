@@ -13,45 +13,41 @@ const CONTROL_IDS = {
 	SCALE: "scale",
 } as const;
 
-const GEOLOCATE_TRIGGER_DELAY = 100;
+const GEOLOCATE_AUTO_TRIGGER_DELAY = 100;
 
-const KYIV_LONGITUDE = 30.5234;
-const KYIV_LATITUDE = 50.4501;
+const DEFAULT_LONGITUDE = 30.5234;
+const DEFAULT_LATITUDE = 50.4501;
 const DEFAULT_MAP_OPTIONS: Omit<MapOptions, "container"> = {
-	center: [KYIV_LONGITUDE, KYIV_LATITUDE],
+	center: [DEFAULT_LONGITUDE, DEFAULT_LATITUDE],
 	style: "mapbox://styles/mapbox/streets-v12",
 	zoom: 12,
 };
 
+const DEFAULT_MAP_CONTROLS_POSITION: Record<string, ControlPosition> = {
+	GEOLOCATE: "bottom-right",
+	NAVIGATION: "top-right",
+	SCALE: "bottom-left",
+};
+
 const DEFAULT_MARKER_OPTIONS: MarkerOptions = {
 	color: "hsl(162deg 91% 25% / 100%)",
-	coordinates: [KYIV_LONGITUDE, KYIV_LATITUDE],
+	coordinates: [DEFAULT_LONGITUDE, DEFAULT_LATITUDE],
 	scale: 1,
 };
 
-const DEFAULT_NAVIGATION_CONTROL_OPTIONS: NavigationControlOptions & {
-	position?: ControlPosition;
-} = {
-	position: "top-right",
+const DEFAULT_NAVIGATION_CONTROL_OPTIONS: NavigationControlOptions = {
 	showCompass: true,
 	showZoom: true,
 	visualizePitch: true,
 };
 
-const DEFAULT_SCALE_CONTROL_OPTIONS: ScaleControlOptions & {
-	position?: ControlPosition;
-} = {
+const DEFAULT_SCALE_CONTROL_OPTIONS: ScaleControlOptions = {
 	maxWidth: 80,
-	position: "bottom-left",
 	unit: "metric",
 };
 
-const DEFAULT_GEOLOCATE_CONTROL_OPTIONS: GeolocateControlOptions & {
-	autoTrigger?: boolean;
-	position?: ControlPosition;
-} = {
+const DEFAULT_GEOLOCATE_CONTROL_OPTIONS: GeolocateControlOptions = {
 	autoTrigger: false,
-	position: "bottom-right",
 	positionOptions: {
 		enableHighAccuracy: true,
 		maximumAge: 60_000,
@@ -62,12 +58,16 @@ const DEFAULT_GEOLOCATE_CONTROL_OPTIONS: GeolocateControlOptions & {
 	trackUserLocation: true,
 };
 
+const DEFAULT_ZOOM_LEVEL = 12;
+
 export {
 	CONTROL_IDS,
 	DEFAULT_GEOLOCATE_CONTROL_OPTIONS,
+	DEFAULT_MAP_CONTROLS_POSITION,
 	DEFAULT_MAP_OPTIONS,
 	DEFAULT_MARKER_OPTIONS,
 	DEFAULT_NAVIGATION_CONTROL_OPTIONS,
 	DEFAULT_SCALE_CONTROL_OPTIONS,
-	GEOLOCATE_TRIGGER_DELAY,
+	DEFAULT_ZOOM_LEVEL,
+	GEOLOCATE_AUTO_TRIGGER_DELAY,
 };

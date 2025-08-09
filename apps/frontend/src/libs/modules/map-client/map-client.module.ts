@@ -5,14 +5,15 @@ import { config } from "~/libs/modules/config/config.js";
 import {
 	CONTROL_IDS,
 	DEFAULT_GEOLOCATE_CONTROL_OPTIONS,
+	DEFAULT_MAP_CONTROLS_POSITION,
 	DEFAULT_MAP_OPTIONS,
 	DEFAULT_MARKER_OPTIONS,
 	DEFAULT_NAVIGATION_CONTROL_OPTIONS,
 	DEFAULT_SCALE_CONTROL_OPTIONS,
-	GEOLOCATE_TRIGGER_DELAY,
+	DEFAULT_ZOOM_LEVEL,
+	GEOLOCATE_AUTO_TRIGGER_DELAY,
 } from "./libs/constants/constants.js";
 import {
-	type Constructor,
 	type ControlPosition,
 	type GeolocateControlOptions,
 	type IControl,
@@ -29,18 +30,6 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 class MapClient {
 	private controls = new Map<string, IControl>();
-	private defaultGeolocateControlOptions: GeolocateControlOptions & {
-		autoTrigger?: boolean;
-		position?: ControlPosition;
-	};
-	private defaultMapOptions: Omit<MapOptions, "container">;
-	private defaultMarkerOptions: MarkerOptions;
-	private defaultNavigationControlOptions: NavigationControlOptions & {
-		position?: ControlPosition;
-	};
-	private defaultScaleControlOptions: ScaleControlOptions & {
-		position?: ControlPosition;
-	};
 	private map: mapboxgl.Map | null = null;
 	private markerClickHandler?: (
 		id: string,
@@ -48,17 +37,11 @@ class MapClient {
 	) => void;
 	private markers = new Map<string, Marker>();
 	private resizeObserver: null | ResizeObserver = null;
-	private shouldCenterOnUser: boolean = false;
+	private shouldCenterOnUser = false;
 
-	public constructor({ token }: Constructor = {}) {
+	public constructor() {
 		(mapboxgl as MapBoxGLWithToken).accessToken =
-			token || config.ENV.MAPBOX.ACCESS_TOKEN;
-
-		this.defaultMapOptions = DEFAULT_MAP_OPTIONS;
-		this.defaultMarkerOptions = DEFAULT_MARKER_OPTIONS;
-		this.defaultNavigationControlOptions = DEFAULT_NAVIGATION_CONTROL_OPTIONS;
-		this.defaultScaleControlOptions = DEFAULT_SCALE_CONTROL_OPTIONS;
-		this.defaultGeolocateControlOptions = DEFAULT_GEOLOCATE_CONTROL_OPTIONS;
+			config.ENV.MAPBOX.ACCESS_TOKEN;
 	}
 
 	public addAllMapControls(): void {
@@ -75,33 +58,25 @@ class MapClient {
 			return;
 		}
 
-		const mergedOptions = {
-			...this.defaultGeolocateControlOptions,
-			autoTrigger: this.shouldCenterOnUser,
+		const autoTrigger = this.shouldCenterOnUser;
+
+		const control = new mapboxgl.GeolocateControl({
+			...DEFAULT_GEOLOCATE_CONTROL_OPTIONS,
 			...options,
-		};
-
-		const {
-			autoTrigger,
-			position: finalPosition,
-			...controlOptions
-		} = mergedOptions;
-
-		const control = new mapboxgl.GeolocateControl(controlOptions);
+		});
 
 		this.addControl(
 			CONTROL_IDS.GEOLOCATE,
 			control,
-			(position || finalPosition) ?? "bottom-right",
+			(position ??
+				DEFAULT_MAP_CONTROLS_POSITION["GEOLOCATE"]) as ControlPosition,
 		);
 
 		if (autoTrigger) {
 			this.map.on("load", () => {
 				setTimeout(() => {
-					if (typeof control.trigger === "function") {
-						control.trigger();
-					}
-				}, GEOLOCATE_TRIGGER_DELAY);
+					control.trigger();
+				}, GEOLOCATE_AUTO_TRIGGER_DELAY);
 			});
 		}
 	}
@@ -116,7 +91,7 @@ class MapClient {
 		const { coordinates, ...markerOptions } = options;
 
 		const marker = new mapboxgl.Marker({
-			...this.defaultMarkerOptions,
+			...DEFAULT_MARKER_OPTIONS,
 			...markerOptions,
 		})
 			.setLngLat(coordinates)
@@ -127,8 +102,7 @@ class MapClient {
 		if (this.markerClickHandler) {
 			const element = marker.getElement();
 			element.style.cursor = "pointer";
-
-			element.addEventListener("click", (): void => {
+			element.addEventListener("click", () => {
 				const lngLat = marker.getLngLat();
 				this.markerClickHandler?.(id, [lngLat.lng, lngLat.lat]);
 			});
@@ -151,19 +125,16 @@ class MapClient {
 			return;
 		}
 
-		const mergedOptions = {
-			...this.defaultNavigationControlOptions,
+		const control = new mapboxgl.NavigationControl({
+			...DEFAULT_NAVIGATION_CONTROL_OPTIONS,
 			...options,
-		};
-
-		const { position: finalPosition, ...controlOptions } = mergedOptions;
-
-		const control = new mapboxgl.NavigationControl(controlOptions);
+		});
 
 		this.addControl(
 			CONTROL_IDS.NAVIGATION,
 			control,
-			(position || finalPosition) ?? "top-right",
+			(position ??
+				DEFAULT_MAP_CONTROLS_POSITION["NAVIGATION"]) as ControlPosition,
 		);
 	}
 
@@ -175,19 +146,15 @@ class MapClient {
 			return;
 		}
 
-		const mergedOptions = {
-			...this.defaultScaleControlOptions,
+		const control = new mapboxgl.ScaleControl({
+			...DEFAULT_SCALE_CONTROL_OPTIONS,
 			...options,
-		};
-
-		const { position: finalPosition, ...controlOptions } = mergedOptions;
-
-		const control = new mapboxgl.ScaleControl(controlOptions);
+		});
 
 		this.addControl(
 			CONTROL_IDS.SCALE,
 			control,
-			(position || finalPosition) ?? "bottom-left",
+			(position ?? DEFAULT_MAP_CONTROLS_POSITION["SCALE"]) as ControlPosition,
 		);
 	}
 
@@ -200,35 +167,39 @@ class MapClient {
 	}
 
 	public destroy(): void {
-		for (const marker of this.markers.values()) {
-			marker.remove();
-		}
-
-		this.markers.clear();
+		this.clearAllMarkers();
 
 		for (const control of this.controls.values()) {
-			if (this.map) {
-				this.map.removeControl(control);
-			}
+			this.map?.removeControl(control);
 		}
 
 		this.controls.clear();
 
-		if (this.resizeObserver) {
-			this.resizeObserver.disconnect();
-			this.resizeObserver = null;
-		}
+		this.resizeObserver?.disconnect();
+		this.resizeObserver = null;
 
 		this.map?.remove();
 		this.map = null;
 	}
 
 	public flyTo(center: [number, number], zoom?: number): void {
-		if (this.map) {
+		if (!this.map) {
+			return;
+		}
+
+		this.map.stop();
+
+		try {
+			this.map.stop();
 			this.map.flyTo({
 				center,
 				essential: true,
-				zoom: zoom ?? this.map.getZoom(),
+				zoom: zoom ?? DEFAULT_ZOOM_LEVEL,
+			});
+		} catch {
+			this.map.jumpTo({
+				center,
+				zoom: zoom ?? DEFAULT_ZOOM_LEVEL,
 			});
 		}
 	}
@@ -238,20 +209,15 @@ class MapClient {
 	}
 
 	public init(container: HTMLElement, options: MapOptions = {}): void {
-		const mapOptions = {
+		this.map = new mapboxgl.Map({
 			container,
-			...this.defaultMapOptions,
+			...DEFAULT_MAP_OPTIONS,
 			...options,
-		};
-
-		this.map = new mapboxgl.Map(mapOptions);
-
-		this.resizeObserver = new ResizeObserver(() => {
-			if (this.map) {
-				this.map.resize();
-			}
 		});
 
+		this.resizeObserver = new ResizeObserver(() => {
+			this.map?.resize();
+		});
 		this.resizeObserver.observe(container);
 
 		this.shouldCenterOnUser = !options.center;
@@ -267,15 +233,11 @@ class MapClient {
 	}
 
 	public resize(): void {
-		if (this.map) {
-			this.map.resize();
-		}
+		this.map?.resize();
 	}
 
 	public setCenter(center: [number, number]): void {
-		if (this.map) {
-			this.map.setCenter(center);
-		}
+		this.map?.setCenter(center);
 	}
 
 	public setMarkerClickHandler(
@@ -285,11 +247,12 @@ class MapClient {
 
 		for (const [id, marker] of this.markers) {
 			const element = marker.getElement();
-			element.style.cursor = "pointer";
 
-			element.addEventListener("click", (): void => {
-				const lngLat = marker.getLngLat();
-				handler(id, [lngLat.lng, lngLat.lat]);
+			element.style.cursor = "pointer";
+			element.addEventListener("click", () => {
+				const { lat, lng } = marker.getLngLat();
+
+				handler(id, [lng, lat]);
 			});
 		}
 	}
@@ -304,7 +267,6 @@ class MapClient {
 		}
 
 		this.removeControl(id);
-
 		this.map.addControl(control, position);
 		this.controls.set(id, control);
 	}

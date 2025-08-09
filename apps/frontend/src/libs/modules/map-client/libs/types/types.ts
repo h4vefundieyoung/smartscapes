@@ -3,10 +3,6 @@ import { type default as mapboxgl } from "mapbox-gl";
 
 type AccessToken = MapOptions["accessToken"];
 
-type Constructor = {
-	token?: AccessToken;
-};
-
 type ControlPosition = mapboxgl.ControlPosition;
 
 type GeolocateControlOptions = mapboxgl.GeolocateControlOptions & {
@@ -43,7 +39,6 @@ type ScaleControlOptions = mapboxgl.ScaleControlOptions & {
 };
 
 export {
-	type Constructor,
 	type ControlPosition,
 	type GeolocateControlOptions,
 	type IControl,

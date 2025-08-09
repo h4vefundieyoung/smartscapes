@@ -1,7 +1,6 @@
-import React, { createContext, useMemo } from "react";
+import React from "react";
 
-import { combineClassNames } from "~/libs/helpers/combine-class-names.helper.js";
-import { useContext, useEffect, useRef } from "~/libs/hooks/hooks.js";
+import { createContext, useEffect, useRef } from "~/libs/hooks/hooks.js";
 import {
 	MapClient,
 	type MapOptions,
@@ -12,77 +11,73 @@ import styles from "./styles.module.css";
 
 const MapContext = createContext<MapClient | null>(null);
 
-type MapProviderProperties = {
+type Properties = {
 	center?: [number, number];
 	children?: React.ReactNode;
-	className?: string;
-	markers?: Array<MarkerOptions & { id: string }>;
-	onMarkerClick?: (id: string, coordinates: [number, number]) => void;
+	markers?: (MarkerOptions & { id: string })[];
 };
 
 const MapProvider = ({
 	center,
 	children,
-	className,
 	markers = [],
-	onMarkerClick,
-}: MapProviderProperties): React.JSX.Element => {
-	const mapClientInstance = useMemo(() => new MapClient(), []);
+}: Properties): React.JSX.Element => {
+	const mapClientReference = useRef(new MapClient());
 	const containerReference = useRef<HTMLDivElement>(null);
-	const initializedReference = useRef<boolean>(false);
+	const initializedReference = useRef(false);
 
 	useEffect(() => {
-		const client = mapClientInstance;
+		const client = mapClientReference.current;
 		const container = containerReference.current;
 
 		if (!container || initializedReference.current) {
 			return;
 		}
 
-		const mapOptions: MapOptions = {};
-
-		if (center !== undefined) {
-			mapOptions.center = center;
-		}
-
+		const mapOptions: MapOptions = center ? { center } : {};
 		client.init(container, mapOptions);
-		client.addAllMapControls();
 		initializedReference.current = true;
 
 		return (): void => {
 			client.destroy();
 			initializedReference.current = false;
 		};
-	}, [mapClientInstance, center]);
+	}, [center]);
 
 	useEffect(() => {
-		const client = mapClientInstance;
+		const client = mapClientReference.current;
 
-		if (!initializedReference.current || !client.getMap() || !center) {
+		if (!initializedReference.current || !client.getMap()) {
 			return;
 		}
 
-		client.flyTo(center);
-	}, [center, mapClientInstance]);
+		client.addAllMapControls();
+	}, []);
 
 	useEffect(() => {
-		const client = mapClientInstance;
+		const client = mapClientReference.current;
 
-		if (!client.getMap()) {
+		if (!center) {
+			return;
+		}
+
+		client.setCenter(center);
+	}, [center]);
+
+	useEffect(() => {
+		const client = mapClientReference.current;
+
+		if (!initializedReference.current || !client.getMap()) {
 			return;
 		}
 
 		client.clearAllMarkers();
 		client.addMarkers(markers);
-
-		if (onMarkerClick) {
-			client.setMarkerClickHandler(onMarkerClick);
-		}
-	}, [markers, onMarkerClick, mapClientInstance]);
+	}, [markers]);
 
 	return (
-		<MapContext.Provider value={mapClientInstance}>
-			<div className={combineClassNames(styles["map-wrapper"], className)}>
+		<MapContext.Provider value={mapClientReference.current}>
+			<div className={styles["map-wrapper"]}>
 				<div className={styles["map"]} ref={containerReference} />
 				<div className={styles["map-overlays"]}>{children}</div>
 			</div>
@@ -90,6 +85,4 @@ const MapProvider = ({
 	);
 };
 
-const useMapContext = (): MapClient | null => useContext(MapContext);
-
-export { MapProvider, useMapContext };
+export { MapContext, MapProvider };

@@ -63,7 +63,7 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 						isDropdownOpen && styles["open"],
 					)}
 				>
-					<Icon height={20} name="dropdownArrow" width={20} />
+					<Icon height={24} name="dropdownArrow" width={24} />
 				</span>
 			</button>
 			{isDropdownOpen && <UserDropdown onLogout={handleLogout} />}

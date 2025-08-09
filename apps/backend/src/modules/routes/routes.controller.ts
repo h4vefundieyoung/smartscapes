@@ -37,18 +37,12 @@ import { type RoutesService } from "./routes.service.js";
  *     GetMapboxRouteResponseDto:
  *       type: object
  *       properties:
- *         code:
- *           type: string
  *         routes:
  *           type: array
  *           items:
  *             $ref: '#/components/schemas/MapboxRoute'
- *         uuid:
+ *         internalId:
  *           type: string
- *         waypoints:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/MapboxWaypoint'
  *
  *     MapboxRoute:
  *       type: object
@@ -66,47 +60,6 @@ import { type RoutesService } from "./routes.service.js";
  *                 $ref: '#/components/schemas/Coordinate'
  *             type:
  *               type: string
- *         legs:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/MapboxLegs'
- *         weight:
- *           type: number
- *         weight_name:
- *           type: string
- *
- *     MapboxLegs:
- *       type: object
- *       properties:
- *         admins:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               iso_3166_1:
- *                 type: string
- *               iso_3166_1_alpha3:
- *                 type: string
- *         distance:
- *           type: number
- *         duration:
- *           type: number
- *         summary:
- *           type: string
- *         weight:
- *           type: number
- *
- *     MapboxWaypoint:
- *       type: object
- *       properties:
- *         distance:
- *           type: number
- *         location:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/Coordinate'
- *         name:
- *           type: string
  *     Route:
  *       type: object
  *       properties:

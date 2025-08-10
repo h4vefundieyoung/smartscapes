@@ -60,6 +60,12 @@ class BaseConfig implements Config {
 					env: "AWS_ACCESS_KEY_ID",
 					format: String,
 				},
+				MAX_FILE_SIZE_MB: {
+					default: 10,
+					doc: "Max file size in MB",
+					env: "AWS_MAX_FILE_SIZE_MB",
+					format: Number,
+				},
 				REGION: {
 					default: null,
 					doc: "AWS Region",

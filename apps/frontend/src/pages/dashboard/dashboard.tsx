@@ -13,7 +13,6 @@ import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppForm, useAppSelector } from "~/libs/hooks/hooks.js";
 import { filesApi } from "~/modules/files/files.js";
-import { type FileContentType } from "~/modules/files/libs/types/types.js";
 
 import { mockImages } from "../../libs/components/carousel/assets/mock-images/mock-images.js";
 import { Carousel } from "../../libs/components/carousel/carousel.js";
@@ -57,18 +56,12 @@ const Dashboard = (): React.JSX.Element => {
 			setIsUploading(true);
 
 			try {
-				const { name, size, type } = file;
 				const responseURL = await filesApi.uploadFile(
-					{
-						folder: FileFolderName.AVATARS,
-						name,
-						size,
-						type: type as FileContentType,
-					},
+					FileFolderName.AVATARS,
 					file,
 				);
 
-				setUploadedImages((previous) => [...previous, responseURL]);
+				setUploadedImages((previous) => [...previous, responseURL.data.url]);
 				setIsUploading(false);
 
 				// eslint-disable-next-line no-console

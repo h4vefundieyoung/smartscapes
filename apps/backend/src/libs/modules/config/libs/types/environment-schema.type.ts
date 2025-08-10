@@ -14,6 +14,7 @@ type EnvironmentSchema = {
 	};
 	AWS: {
 		ACCESS_KEY_ID: string;
+		MAX_FILE_SIZE_MB: number;
 		REGION: string;
 		S3_BUCKET_NAME: string;
 		SECRET_ACCESS_KEY: string;

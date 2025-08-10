@@ -1,13 +1,7 @@
-import { S3Client } from "@aws-sdk/client-s3";
-import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
-import { FILE_SIZE_MB } from "~/libs/constants/constants.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import {
-	type FileGetUploadUrlRequestDto,
-	type FileUploadUrlResponseDto,
-} from "~/modules/files/files.js";
 
 class AWSService {
 	private bucketName: string;
@@ -27,31 +21,24 @@ class AWSService {
 		});
 	}
 
-	public async getUploadUrl(
-		payload: FileGetUploadUrlRequestDto,
-	): Promise<FileUploadUrlResponseDto> {
-		const MAX_FILE_SIZE_MB = 10;
-		const { folder, name, type } = payload;
-		const key = `${folder}/${name}`;
-
-		const { fields, url } = await createPresignedPost(this.s3Client, {
+	public async uploadFile(
+		buffer: Buffer,
+		key: string,
+		contentType: string,
+	): Promise<string> {
+		const command = new PutObjectCommand({
+			Body: buffer,
 			Bucket: this.bucketName,
-			Conditions: [
-				["content-length-range", 0, FILE_SIZE_MB * MAX_FILE_SIZE_MB],
-				["starts-with", "$Content-Type", "image/"],
-			],
-			Fields: {
-				"Content-Type": type,
-			},
+			ContentType: contentType,
 			Key: key,
 		});
 
-		this.logger.info(`Generated presigned URL for file: ${name}`);
+		await this.s3Client.send(command);
 
-		return {
-			fields,
-			uploadUrl: url,
-		};
+		const url = `https://${this.bucketName}.s3.amazonaws.com/${key}`;
+		this.logger.info(`File uploaded to S3: ${key}`);
+
+		return url;
 	}
 }
 

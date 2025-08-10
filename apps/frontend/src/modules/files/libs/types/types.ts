@@ -1,7 +1,5 @@
 export {
 	type FileContentType,
-	type FileCreateRecordRequestDto,
-	type FileCreateRecordResponseDto,
-	type FileGetUploadUrlRequestDto,
+	type FileUploadUrlRequestDto,
 	type FileUploadUrlResponseDto,
 } from "@smartscapes/shared";

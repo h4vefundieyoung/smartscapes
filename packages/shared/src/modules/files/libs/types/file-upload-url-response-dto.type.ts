@@ -1,6 +1,7 @@
 type FileUploadUrlResponseDto = {
-	fields: Record<string, string>;
-	uploadUrl: string;
+	contentType: string;
+	id: number;
+	url: string;
 };
 
 export { type FileUploadUrlResponseDto };

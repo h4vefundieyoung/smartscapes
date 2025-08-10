@@ -30,13 +30,9 @@ export {
 export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
 export {
 	type FileContentType,
-	type FileCreateRecordRequestDto,
-	type FileCreateRecordResponseDto,
-	fileCreateValidationSchema,
-	type FileGetUploadUrlRequestDto,
-	fileGetUploadUrlValidationSchema,
 	FilesApiPath,
 	type FileUploadUrlResponseDto,
+	fileUploadUrlValidationSchema,
 } from "./modules/files/files.js";
 export {
 	NotificationApiPath,

@@ -22,7 +22,7 @@ import {
 	type ValidationSchema,
 } from "~/libs/types/types.js";
 
-import { authPlugin } from "../plugins/plugins.js";
+import { authPlugin, multipartPlugin } from "../plugins/plugins.js";
 import {
 	type ServerApplication,
 	type ServerApplicationApi,
@@ -195,8 +195,10 @@ class BaseServerApplication implements ServerApplication {
 
 	private async initPlugins(): Promise<void> {
 		const whiteRoutes = this.apis.flatMap((api) => api.whiteRoutes);
+		const maxFileSizeMB = this.config.ENV.AWS.MAX_FILE_SIZE_MB;
 
 		await this.app.register(authPlugin, { whiteRoutes });
+		await this.app.register(multipartPlugin, { maxFileSizeMB });
 	}
 
 	private initRoutes(): void {

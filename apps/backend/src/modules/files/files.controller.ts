@@ -1,3 +1,8 @@
+import { type MultipartFile } from "@fastify/multipart";
+import {
+	type FileUploadUrlResponseDto,
+} from "@smartscapes/shared/src/modules/files/files.js";
+
 import { APIPath } from "~/libs/enums/enums.js";
 import {
 	type APIHandlerOptions,
@@ -7,16 +12,7 @@ import {
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type FilesService } from "~/modules/files/files.service.js";
-import {
-	type FileCreateRecordRequestDto,
-	type FileCreateRecordResponseDto,
-	type FileGetUploadUrlRequestDto,
-	type FileUploadUrlResponseDto,
-} from "~/modules/files/libs/types/types.js";
-import {
-	fileCreateValidationSchema,
-	fileGetUploadUrlValidationSchema,
-} from "~/modules/files/libs/validation-schemas/validation-schemas.js";
+import {} from "~/modules/files/libs/validation-schemas/validation-schemas.js";
 
 import { FilesApiPath } from "./libs/enums/enums.js";
 
@@ -28,21 +24,9 @@ class FilesController extends BaseController {
 		this.filesService = filesService;
 
 		this.addRoute({
-			handler: this.create.bind(this),
+			handler: this.uploadFile.bind(this),
 			method: "POST",
-			path: FilesApiPath.ROOT,
-			validation: {
-				body: fileCreateValidationSchema,
-			},
-		});
-
-		this.addRoute({
-			handler: this.getUploadUrl.bind(this),
-			method: "POST",
-			path: FilesApiPath.UPLOAD_URL,
-			validation: {
-				body: fileGetUploadUrlValidationSchema,
-			},
+			path: FilesApiPath.UPLOAD,
 		});
 
 		this.addRoute({
@@ -52,22 +36,8 @@ class FilesController extends BaseController {
 		});
 	}
 
-	public async create(
-		options: APIHandlerOptions<{
-			body: FileCreateRecordRequestDto;
-		}>,
-	): Promise<APIHandlerResponse<FileCreateRecordResponseDto>> {
-		const { body } = options;
-		const file = await this.filesService.create(body);
-
-		return {
-			payload: { data: file },
-			status: HTTPCode.CREATED,
-		};
-	}
-
 	public async getAll(): Promise<
-		APIHandlerResponse<FileCreateRecordResponseDto[]>
+		APIHandlerResponse<FileUploadUrlResponseDto[]>
 	> {
 		const result = await this.filesService.getAll();
 
@@ -77,18 +47,16 @@ class FilesController extends BaseController {
 		};
 	}
 
-	public async getUploadUrl(
+	public async uploadFile(
 		options: APIHandlerOptions<{
-			body: FileGetUploadUrlRequestDto;
+			body: MultipartFile;
 		}>,
 	): Promise<APIHandlerResponse<FileUploadUrlResponseDto>> {
-		const { body } = options;
-
-		const result = await this.filesService.getUploadUrl(body);
+		const result = await this.filesService.uploadFile(options.body);
 
 		return {
 			payload: { data: result },
-			status: HTTPCode.OK,
+			status: HTTPCode.CREATED,
 		};
 	}
 }

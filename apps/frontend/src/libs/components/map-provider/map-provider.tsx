@@ -15,12 +15,14 @@ type Properties = {
 	center?: [number, number];
 	children?: React.ReactNode;
 	markers?: (MarkerOptions & { id: string })[];
+	onMarkerClick?: (id: string, coordinates: [number, number]) => void;
 };
 
 const MapProvider = ({
 	center,
 	children,
 	markers = [],
+	onMarkerClick,
 }: Properties): React.JSX.Element => {
 	const mapClientReference = useRef(new MapClient());
 	const containerReference = useRef<HTMLDivElement>(null);
@@ -34,7 +36,14 @@ const MapProvider = ({
 			return;
 		}
 
-		const mapOptions: MapOptions = center ? { center } : {};
+		const mapOptions: MapOptions & {
+			onMarkerClick?: (id: string, coordinates: [number, number]) => void;
+		} = center ? { center } : {};
+
+		if (onMarkerClick) {
+			mapOptions.onMarkerClick = onMarkerClick;
+		}
+
 		client.init(container, mapOptions);
 		initializedReference.current = true;
 
@@ -42,16 +51,14 @@ const MapProvider = ({
 			client.destroy();
 			initializedReference.current = false;
 		};
-	}, [center]);
+	}, [center, onMarkerClick]);
 
 	useEffect(() => {
 		const client = mapClientReference.current;
 
-		if (!initializedReference.current || !client.getMap()) {
-			return;
-		}
-
-		client.addAllMapControls();
+		client.addNavigationControl();
+		client.addScaleControl();
+		client.addGeolocateControl();
 	}, []);
 
 	useEffect(() => {
@@ -66,10 +73,6 @@ const MapProvider = ({
 
 	useEffect(() => {
 		const client = mapClientReference.current;
-
-		if (!initializedReference.current || !client.getMap()) {
-			return;
-		}
 
 		client.clearAllMarkers();
 		client.addMarkers(markers);

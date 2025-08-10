@@ -31,10 +31,9 @@ import "mapbox-gl/dist/mapbox-gl.css";
 class MapClient {
 	private controls = new Map<string, IControl>();
 	private map: mapboxgl.Map | null = null;
-	private markerClickHandler?: (
-		id: string,
-		coordinates: PointGeometry["coordinates"],
-	) => void;
+	private markerClickHandler:
+		| ((id: string, coordinates: PointGeometry["coordinates"]) => void)
+		| undefined;
 	private markers = new Map<string, Marker>();
 	private resizeObserver: null | ResizeObserver = null;
 	private shouldCenterOnUser = false;
@@ -42,12 +41,6 @@ class MapClient {
 	public constructor() {
 		(mapboxgl as MapBoxGLWithToken).accessToken =
 			config.ENV.MAPBOX.ACCESS_TOKEN;
-	}
-
-	public addAllMapControls(): void {
-		this.addNavigationControl();
-		this.addScaleControl();
-		this.addGeolocateControl();
 	}
 
 	public addGeolocateControl(
@@ -79,36 +72,6 @@ class MapClient {
 				}, GEOLOCATE_AUTO_TRIGGER_DELAY);
 			});
 		}
-	}
-
-	public addMarker(id: string, options: MarkerOptions): void {
-		if (!this.map) {
-			return;
-		}
-
-		this.removeMarker(id);
-
-		const { coordinates, ...markerOptions } = options;
-
-		const marker = new mapboxgl.Marker({
-			...DEFAULT_MARKER_OPTIONS,
-			...markerOptions,
-		})
-			.setLngLat(coordinates)
-			.addTo(this.map);
-
-		(marker as Marker).id = id;
-
-		if (this.markerClickHandler) {
-			const element = marker.getElement();
-			element.style.cursor = "pointer";
-			element.addEventListener("click", () => {
-				const lngLat = marker.getLngLat();
-				this.markerClickHandler?.(id, [lngLat.lng, lngLat.lat]);
-			});
-		}
-
-		this.markers.set(id, marker as Marker);
 	}
 
 	public addMarkers(markers: Array<MarkerOptions & { id: string }>): void {
@@ -204,16 +167,19 @@ class MapClient {
 		}
 	}
 
-	public getMap(): mapboxgl.Map | null {
-		return this.map;
-	}
-
-	public init(container: HTMLElement, options: MapOptions = {}): void {
+	public init(
+		container: HTMLElement,
+		options: MapOptions & {
+			onMarkerClick?: (id: string, coordinates: [number, number]) => void;
+		} = {},
+	): void {
 		this.map = new mapboxgl.Map({
 			container,
 			...DEFAULT_MAP_OPTIONS,
 			...options,
 		});
+
+		this.markerClickHandler = options.onMarkerClick;
 
 		this.resizeObserver = new ResizeObserver(() => {
 			this.map?.resize();
@@ -223,38 +189,12 @@ class MapClient {
 		this.shouldCenterOnUser = !options.center;
 	}
 
-	public removeMarker(id: string): void {
-		const marker = this.markers.get(id);
-
-		if (marker) {
-			marker.remove();
-			this.markers.delete(id);
-		}
-	}
-
 	public resize(): void {
 		this.map?.resize();
 	}
 
 	public setCenter(center: [number, number]): void {
 		this.map?.setCenter(center);
-	}
-
-	public setMarkerClickHandler(
-		handler: (id: string, coordinates: PointGeometry["coordinates"]) => void,
-	): void {
-		this.markerClickHandler = handler;
-
-		for (const [id, marker] of this.markers) {
-			const element = marker.getElement();
-
-			element.style.cursor = "pointer";
-			element.addEventListener("click", () => {
-				const { lat, lng } = marker.getLngLat();
-
-				handler(id, [lng, lat]);
-			});
-		}
 	}
 
 	private addControl(
@@ -271,12 +211,51 @@ class MapClient {
 		this.controls.set(id, control);
 	}
 
+	private addMarker(id: string, options: MarkerOptions): void {
+		if (!this.map) {
+			return;
+		}
+
+		this.removeMarker(id);
+
+		const { coordinates, ...markerOptions } = options;
+
+		const marker = new mapboxgl.Marker({
+			...DEFAULT_MARKER_OPTIONS,
+			...markerOptions,
+		})
+			.setLngLat(coordinates)
+			.addTo(this.map);
+
+		(marker as Marker).id = id;
+
+		if (this.markerClickHandler) {
+			const element = marker.getElement();
+			element.style.cursor = "pointer";
+			element.addEventListener("click", () => {
+				const lngLat = marker.getLngLat();
+				this.markerClickHandler?.(id, [lngLat.lng, lngLat.lat]);
+			});
+		}
+
+		this.markers.set(id, marker as Marker);
+	}
+
 	private removeControl(id: string): void {
 		const control = this.controls.get(id);
 
 		if (control && this.map) {
 			this.map.removeControl(control);
 			this.controls.delete(id);
+		}
+	}
+
+	private removeMarker(id: string): void {
+		const marker = this.markers.get(id);
+
+		if (marker) {
+			marker.remove();
+			this.markers.delete(id);
 		}
 	}
 }

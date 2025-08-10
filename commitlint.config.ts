@@ -19,7 +19,6 @@ const config: UserConfig = {
 				...ProjectPrefix.SCOPE.COMMON,
 				...ProjectPrefix.SCOPE.APPS,
 				...ProjectPrefix.SCOPE.PACKAGES,
-				...ProjectPrefix.SCOPE.QA,
 			],
 		],
 	},

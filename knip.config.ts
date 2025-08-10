@@ -1,7 +1,7 @@
 import { type KnipConfig } from "knip";
 
 const config: KnipConfig = {
-	ignore: ["tests/**"],
+	ignoreBinaries: ["playwright"],
 	workspaces: {
 		".": {
 			entry: ["./dangerfile.ts"],
@@ -17,6 +17,10 @@ const config: KnipConfig = {
 			entry: ["build/index.js"],
 			ignore: ["src/**/**"],
 			includeEntryExports: true,
+		},
+		"tests": {
+			entry: ["tests/**/*.spec.ts"],
+			ignoreDependencies: ["ajv"],
 		},
 	},
 };

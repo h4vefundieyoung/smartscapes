@@ -7,20 +7,20 @@ import {
 	type UserSignUpResponseDto,
 } from "@smartscapes/shared";
 
-import { ApiControllers } from "../api/controllers/api-controllers.js";
+import { ApiController } from "../api/controllers/api-controller.js";
 import { authUserSchema } from "../api/schemas/auth-user-schema.js";
 import { loginSchema } from "../api/schemas/login-schema.js";
 import { signupSchema } from "../api/schemas/signup-schema.js";
 import { createRandomUser } from "../helpers/generate-data.js";
 import { expectToMatchSchema } from "../helpers/schema-validator.js";
 
-let api: ApiControllers;
+let api: ApiController;
 let accessToken: string;
 let userId: number;
 
 test.beforeAll("Register and login user", async () => {
-	let requestContext = await request.newContext();
-	api = new ApiControllers(requestContext);
+	const requestContext = await request.newContext();
+	api = new ApiController(requestContext);
 
 	const user = createRandomUser();
 	const registerResponse = await api.auth.register(user);

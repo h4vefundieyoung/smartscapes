@@ -2,14 +2,13 @@ import {
 	MAX_FIRSTNAME_LENGTH,
 	MAX_PASSWORD_LENGTH,
 	MIN_PASSWORD_LENGTH,
-	NUMBER_1,
 } from "../../../consts/validation-consts.js";
 import { generateId } from "../../../helpers/generate-data.js";
 
 const signupTestDataSet = [
 	{
 		expectedResponse: {
-			errorMessages: "First name is required.",
+			errorMessage: "First name is required.",
 			status: 422,
 		},
 		label: "Register with empty first name",
@@ -23,7 +22,7 @@ const signupTestDataSet = [
 	},
 	{
 		expectedResponse: {
-			errorMessages: "Last name is required.",
+			errorMessage: "Last name is required.",
 			status: 422,
 		},
 		label: "Register with empty last name",
@@ -37,7 +36,7 @@ const signupTestDataSet = [
 	},
 	{
 		expectedResponse: {
-			errorMessages: "Email is required.",
+			errorMessage: "Email is required.",
 			status: 422,
 		},
 		label: "Register with empty email",
@@ -51,7 +50,7 @@ const signupTestDataSet = [
 	},
 	{
 		expectedResponse: {
-			errorMessages: "Password is required.",
+			errorMessage: "Password is required.",
 			status: 422,
 		},
 		label: "Register with empty password",
@@ -65,7 +64,7 @@ const signupTestDataSet = [
 	},
 	{
 		expectedResponse: {
-			errorMessages: "Password is required.",
+			errorMessage: "Password is required.",
 			status: 422,
 		},
 		label: "Register with empty confirm password",
@@ -79,7 +78,7 @@ const signupTestDataSet = [
 	},
 	{
 		expectedResponse: {
-			errorMessages: "Email format is wrong.",
+			errorMessage: "Email format is wrong.",
 			status: 422,
 		},
 		label: "Register with invalid email format",
@@ -93,35 +92,35 @@ const signupTestDataSet = [
 	},
 	{
 		expectedResponse: {
-			errorMessages: "Password must be at least 6 characters long.",
+			errorMessage: "Password must be at least 6 characters long.",
 			status: 422,
 		},
 		label: "Register with short password (5 symbols)",
 		payload: {
-			confirmPassword: "A".repeat(MIN_PASSWORD_LENGTH - NUMBER_1),
+			confirmPassword: "A".repeat(MIN_PASSWORD_LENGTH - 1),
 			email: "test@example.com",
 			firstName: "John",
 			lastName: "Smith",
-			password: "A".repeat(MIN_PASSWORD_LENGTH - NUMBER_1),
+			password: "A".repeat(MIN_PASSWORD_LENGTH - 1),
 		},
 	},
 	{
 		expectedResponse: {
-			errorMessages: "Password must be at most 64 characters long.",
+			errorMessage: "Password must be at most 64 characters long.",
 			status: 422,
 		},
 		label: "Register with long password (65 symbols)",
 		payload: {
-			confirmPassword: "A".repeat(MAX_PASSWORD_LENGTH + NUMBER_1),
+			confirmPassword: "A".repeat(MAX_PASSWORD_LENGTH + 1),
 			email: "test@example.com",
 			firstName: "John",
 			lastName: "Smith",
-			password: "A".repeat(MAX_PASSWORD_LENGTH + NUMBER_1),
+			password: "A".repeat(MAX_PASSWORD_LENGTH + 1),
 		},
 	},
 	{
 		expectedResponse: {
-			errorMessages: "Passwords do not match.",
+			errorMessage: "Passwords do not match.",
 			status: 422,
 		},
 		label: "Register with mismatched confirm password",
@@ -135,7 +134,7 @@ const signupTestDataSet = [
 	},
 	{
 		expectedResponse: {
-			errorMessages: "First name is required.",
+			errorMessage: "First name is required.",
 			status: 422,
 		},
 		label: "Register with only spaces in first name",
@@ -149,7 +148,7 @@ const signupTestDataSet = [
 	},
 	{
 		expectedResponse: {
-			errorMessages: [],
+			errorMessage: "",
 			status: 201,
 		},
 		label: "Register with max length first name (64 symbols)",
@@ -163,21 +162,21 @@ const signupTestDataSet = [
 	},
 	{
 		expectedResponse: {
-			errorMessages: "First name must be at most 64 characters long",
+			errorMessage: "First name must be at most 64 characters long",
 			status: 422,
 		},
 		label: "Register with max length first name + 1 (65 symbols)",
 		payload: {
 			confirmPassword: "ValidPass123",
 			email: "test@example.com",
-			firstName: "A".repeat(MAX_FIRSTNAME_LENGTH + NUMBER_1),
+			firstName: "A".repeat(MAX_FIRSTNAME_LENGTH + 1),
 			lastName: "Smith",
 			password: "ValidPass123",
 		},
 	},
 	{
 		expectedResponse: {
-			errorMessages: "Last name must contain only Latin letters.",
+			errorMessage: "Last name must contain only Latin letters.",
 			status: 422,
 		},
 		label: "Register with non-latin characters in last name",
@@ -191,7 +190,7 @@ const signupTestDataSet = [
 	},
 	{
 		expectedResponse: {
-			errorMessages: "First name must contain only Latin letters.",
+			errorMessage: "First name must contain only Latin letters.",
 			status: 422,
 		},
 		label: "Register with non-latin characters in first name",
@@ -205,7 +204,7 @@ const signupTestDataSet = [
 	},
 	{
 		expectedResponse: {
-			errorMessages: [],
+			errorMessage: "",
 			status: 201,
 		},
 		label: "Register with valid data",

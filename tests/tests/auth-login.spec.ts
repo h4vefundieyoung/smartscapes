@@ -6,16 +6,16 @@ import {
 	type UserSignInResponseDto,
 } from "@smartscapes/shared";
 
-import { ApiControllers } from "../api/controllers/api-controllers.js";
+import { ApiController } from "../api/controllers/api-controller.js";
 import { loginSchema } from "../api/schemas/login-schema.js";
 import { loginTestDataSet } from "../api/test-data/auth/login-test-data.js";
 import { expectToMatchSchema } from "../helpers/schema-validator.js";
 
-let api: ApiControllers;
+let api: ApiController;
 
 test.beforeAll("Create API request context for tests", async () => {
-	let requestContext = await request.newContext();
-	api = new ApiControllers(requestContext);
+	const requestContext = await request.newContext();
+	api = new ApiController(requestContext);
 });
 
 test.describe("Check login", () => {

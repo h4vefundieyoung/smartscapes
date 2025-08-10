@@ -1,7 +1,6 @@
 import {
 	MAX_PASSWORD_LENGTH,
 	MIN_PASSWORD_LENGTH,
-	NUMBER_1,
 } from "../../../consts/validation-consts.js";
 
 const loginTestDataSet = [
@@ -65,7 +64,7 @@ const loginTestDataSet = [
 		label: "Login with short password (5 symbols)",
 		payload: {
 			email: "validuser@example.com",
-			password: "A".repeat(MIN_PASSWORD_LENGTH - NUMBER_1),
+			password: "A".repeat(MIN_PASSWORD_LENGTH - 1),
 		},
 	},
 	{
@@ -76,7 +75,7 @@ const loginTestDataSet = [
 		label: "Login with long password (65 symbols)",
 		payload: {
 			email: "validuser@example.com",
-			password: "A".repeat(MAX_PASSWORD_LENGTH + NUMBER_1),
+			password: "A".repeat(MAX_PASSWORD_LENGTH + 1),
 		},
 	},
 ];

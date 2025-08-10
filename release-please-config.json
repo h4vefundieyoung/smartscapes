@@ -13,6 +13,9 @@
 		},
 		"packages/shared": {
 			"release-type": "node"
+		},
+		"tests": {
+			"release-type": "node"
 		}
 	}
 }

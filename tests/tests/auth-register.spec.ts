@@ -6,16 +6,16 @@ import {
 	type UserSignInResponseDto,
 } from "@smartscapes/shared";
 
-import { ApiControllers } from "../api/controllers/api-controllers.js";
+import { ApiController } from "../api/controllers/api-controller.js";
 import { signupSchema } from "../api/schemas/signup-schema.js";
 import { signupTestDataSet } from "../api/test-data/auth/register-test-data.js";
 import { expectToMatchSchema } from "../helpers/schema-validator.js";
 
-let api: ApiControllers;
+let api: ApiController;
 
 test.beforeAll("Create context", async () => {
-	let requestContext = await request.newContext();
-	api = new ApiControllers(requestContext);
+	const requestContext = await request.newContext();
+	api = new ApiController(requestContext);
 });
 
 test.describe("Check register", () => {
@@ -32,7 +32,7 @@ test.describe("Check register", () => {
 			if (response.status() === HTTPCode.CREATED) {
 				expectToMatchSchema(responseBody, signupSchema);
 			} else {
-				expect(expectedResponse.errorMessages).toContain(
+				expect(expectedResponse.errorMessage).toContain(
 					(responseBody as APIErrorResponse).error.message,
 				);
 			}

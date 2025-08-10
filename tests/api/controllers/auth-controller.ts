@@ -1,5 +1,9 @@
 import { type APIRequestContext, type APIResponse } from "@playwright/test";
-import { AuthApiPath, type UserSignUpRequestDto } from "@smartscapes/shared";
+import {
+	AuthApiPath,
+	ContentType,
+	type UserSignUpRequestDto,
+} from "@smartscapes/shared";
 
 import { APIPath } from "../../consts/api-path.js";
 
@@ -20,6 +24,9 @@ class AuthController {
 				email,
 				password,
 			},
+			headers: {
+				contentType: ContentType.JSON,
+			},
 		});
 	}
 
@@ -28,6 +35,9 @@ class AuthController {
 	): Promise<APIResponse> {
 		return await this.request.post(`${APIPath.AUTH}${AuthApiPath.SIGN_UP}`, {
 			data: registerDto,
+			headers: {
+				contentType: ContentType.JSON,
+			},
 		});
 	}
 }

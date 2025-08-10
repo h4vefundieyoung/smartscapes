@@ -19,8 +19,9 @@
 		"lint:js": "npx  eslint . --max-warnings=0 --no-warn-ignored",
 		"lint:format": "npx prettier \"**/*.{js,ts,tsx,json,md,css,html}\" --check",
 		"lint:unused": "knip",
-		"test": "npm run test --workspaces --if-present",
-		"test:coverage": "npm run test:coverage --workspaces --if-present",
+		"test:e2e": "npx playwright test",
+		"test:unit": "npm run test --workspaces --if-present",
+		"test:unit:coverage": "npm run test:coverage --workspaces --if-present",
 		"format": "npx prettier \"**/*.{js,ts,tsx,json,md,css,html}\" --write",
 		"build": "npm run build:shared && npm run build:backend && npm run build:frontend && npm run build:prepare",
 		"build:shared": "npm run build -w packages/shared",
@@ -31,8 +32,7 @@
 		"git:hooks:precommit": "lint-staged --cwd .",
 		"git:hooks:commit": "npx @commitlint/cli --edit",
 		"prestart": "npm install --include=dev && npm run build",
-		"start": "cd apps/build/backend && npm run start",
-		"api:tests": "npx playwright test"
+		"start": "cd apps/build/backend && npm run start"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "19.8.1",

@@ -197,8 +197,9 @@ As we are already using js on both frontend and backend it would be useful to sh
 
 #### Testing
 
-- `npm run test` - Run unit tests
-- `npm run test:coverage` - Run unit tests and generate a coverage report
+- `npm run test:unit` - Run unit tests
+- `npm run test:unit:coverage` - Run unit tests and generate a coverage report
+- `npm run test:e2e` - Run e2e tests
 
 #### Database
 

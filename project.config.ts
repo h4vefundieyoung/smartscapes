@@ -16,7 +16,7 @@ const ProjectPrefix = {
 	ISSUE_PREFIXES: ["ss", "release"],
 	SCOPE: {
 		APPS: ["frontend", "backend"],
-		COMMON: ["root", "release"],
+		COMMON: ["root", "release", "e2e"],
 		PACKAGES: ["shared"],
 		QA: ["qa"],
 	},

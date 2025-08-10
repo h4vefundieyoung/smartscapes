@@ -13,7 +13,6 @@ import { type GroupService } from "../groups/group.service.js";
 import { GroupKey } from "../groups/libs/enums/enums.js";
 import { UserError } from "./libs/exceptions/exceptions.js";
 import {
-	CommonExceptionMessage,
 	type UserGetByIdItemResponseDto,
 	type UserPasswordDetails,
 	type UserSignUpRequestDto,
@@ -47,7 +46,7 @@ class UserService implements Service {
 
 		const group = await this.groupService.findByKey(GroupKey.USERS);
 
-		const item = await this.userRepository.create(
+		const user = await this.userRepository.create(
 			UserEntity.initializeNew({
 				email: payload.email,
 				firstName: payload.firstName,
@@ -58,23 +57,7 @@ class UserService implements Service {
 			}),
 		);
 
-		if (!item.toObject().id) {
-			throw new UserError({
-				message: CommonExceptionMessage.COMMON_EXCEPTION_MESSAGE,
-				status: HTTPCode.INTERNAL_SERVER_ERROR,
-			});
-		}
-
-		const newUser = await this.userRepository.findById(item.toObject().id);
-
-		if (!newUser) {
-			throw new UserError({
-				message: CommonExceptionMessage.COMMON_EXCEPTION_MESSAGE,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		return newUser.toObject() as UserAuthResponseDto;
+		return user.toObject() as UserAuthResponseDto;
 	}
 
 	public async findAll(): Promise<

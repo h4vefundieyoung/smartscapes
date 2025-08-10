@@ -29,30 +29,27 @@ class UserRepository implements Repository {
 				passwordSalt,
 			});
 
-			const user = await UserModel.query()
+			const user = (await UserModel.query()
 				.where("users.id", userId)
 				.withGraphJoined("group.permissions")
-				.first();
+				.first()) as UserModel;
 
-			if (!user) {
-				throw new Error("Error");
-			}
+			const group = user.group as NonNullable<typeof user.group>;
+			const permissions = user.group?.permissions as NonNullable<
+				typeof group.permissions
+			>;
 
 			return UserEntity.initialize({
 				email: user.email,
 				firstName: user.firstName,
-				group: user.group
-					? GroupEntity.initializeWithPermissions({
-							id: user.group.id,
-							key: user.group.key,
-							name: user.group.name,
-							permissions: user.group.permissions
-								? user.group.permissions.map((per) =>
-										PermissionEntity.initialize(per).toObject(),
-									)
-								: [],
-						}).toObject()
-					: null,
+				group: GroupEntity.initializeWithPermissions({
+					id: group.id,
+					key: group.key,
+					name: group.name,
+					permissions: permissions.map((per) =>
+						PermissionEntity.initialize(per).toObject(),
+					),
+				}).toObject(),
 				groupId: user.groupId,
 				id: user.id,
 				lastName: user.lastName,

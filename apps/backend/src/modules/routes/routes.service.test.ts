@@ -9,6 +9,7 @@ import { describe, it } from "node:test";
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/routes-exception-message.enum.js";
 import { RoutesError } from "./libs/exceptions/routes-error.exception.js";
+import { type RoutesFindAllOptions } from "./libs/types/type.js";
 import { RoutesEntity } from "./routes.entity.js";
 import { type RoutesRepository } from "./routes.repository.js";
 import { RoutesService } from "./routes.service.js";
@@ -79,7 +80,6 @@ describe("RoutesService", () => {
 		delete: () => Promise.resolve(true),
 		findAll: () => Promise.resolve([createMockEntity(mockRouteResponse)]),
 		findById: () => Promise.resolve(createMockEntity(mockRouteResponse)),
-		findByName: () => Promise.resolve([createMockEntity(mockRouteResponse)]),
 		patch: () =>
 			Promise.resolve(
 				createMockEntity({ ...mockRouteResponse, ...mockPatchPayload }),
@@ -147,7 +147,7 @@ describe("RoutesService", () => {
 		}, mockNotFoundError);
 	});
 
-	it("findAll should return all routes", async () => {
+	it("findAll should return all routes if options are not provided", async () => {
 		const mockRoutes = [createMockEntity(mockRouteResponse)];
 		const routesRepository = createMockRoutesRepository({
 			findAll: () => Promise.resolve(mockRoutes),
@@ -158,7 +158,7 @@ describe("RoutesService", () => {
 			pointsOfInterestService as PointsOfInterestService,
 		);
 
-		const result = await routesService.findAll();
+		const result = await routesService.findAll(null);
 
 		assert.deepStrictEqual(result, { items: [mockRouteResponse] });
 	});
@@ -173,39 +173,26 @@ describe("RoutesService", () => {
 			pointsOfInterestService as PointsOfInterestService,
 		);
 
-		const result = await routesService.findAll();
+		const result = await routesService.findAll(null);
 
 		assert.deepStrictEqual(result, { items: [] });
 	});
 
-	it("findByName should return response with routes that match search query", async () => {
+	it("findAll should return response with routes that match search query", async () => {
 		const routesRepository = createMockRoutesRepository();
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const routesService = new RoutesService(
 			routesRepository as RoutesRepository,
 			pointsOfInterestService as PointsOfInterestService,
 		);
-		const mockSearchQuery = mockCreatePayload.name.toLowerCase();
 
-		const result = await routesService.findByName(mockSearchQuery);
+		const mockOptions: RoutesFindAllOptions = {
+			name: mockCreatePayload.name.toLowerCase(),
+		};
+
+		const result = await routesService.findAll(mockOptions);
 
 		assert.deepStrictEqual(result, { items: [mockRouteResponse] });
-	});
-
-	it("findByName should return response with empty array if no routes found", async () => {
-		const routesRepository = createMockRoutesRepository({
-			findByName: () => Promise.resolve([]),
-		});
-		const pointsOfInterestService = createMockPointsOfInterestService();
-		const routesService = new RoutesService(
-			routesRepository as RoutesRepository,
-			pointsOfInterestService as PointsOfInterestService,
-		);
-		const mockSearchQuery = "nonexistent";
-
-		const result = await routesService.findByName(mockSearchQuery);
-
-		assert.deepStrictEqual(result, { items: [] });
 	});
 
 	it("patch should update existing route successfully", async () => {

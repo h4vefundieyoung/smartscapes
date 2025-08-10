@@ -93,7 +93,7 @@ describe("RoutesController", () => {
 		});
 	});
 
-	it("findAll should return all routes", async () => {
+	it("findAll should return all routes if query is not provided", async () => {
 		const mockFindAll: RoutesService["findAll"] = () => {
 			return Promise.resolve({ items: [mockRoute] });
 		};
@@ -104,7 +104,12 @@ describe("RoutesController", () => {
 
 		const controller = new RoutesController(mockLogger, routesService);
 
-		const result = await controller.findAll();
+		const result = await controller.findAll({
+			body: {},
+			params: {},
+			query: {},
+			user: mockUser,
+		});
 
 		assert.deepStrictEqual(result, {
 			payload: { data: [mockRoute] },
@@ -112,20 +117,20 @@ describe("RoutesController", () => {
 		});
 	});
 
-	it("findByName should return response with routes matching search query", async () => {
-		const mockFindByName: RoutesService["findByName"] = () => {
+	it("findAll should return response with routes matching search query", async () => {
+		const mockFindAll: RoutesService["findAll"] = () => {
 			return Promise.resolve({ items: [mockRoute] });
 		};
 
 		const routesService = {
-			findByName: mockFindByName,
+			findAll: mockFindAll,
 		} as RoutesService;
-
-		const mockSearchQuery = mockRoute.name.toLowerCase();
 
 		const controller = new RoutesController(mockLogger, routesService);
 
-		const result = await controller.findByName({
+		const mockSearchQuery = mockRoute.name.toLowerCase();
+
+		const result = await controller.findAll({
 			body: {},
 			params: {},
 			query: { name: mockSearchQuery },
@@ -138,17 +143,17 @@ describe("RoutesController", () => {
 		});
 	});
 
-	it("findByName should return response with empty array if no routes found", async () => {
+	it("findAll should return response with empty array if no routes found", async () => {
 		const routesService = {
-			findByName: (() =>
-				Promise.resolve({ items: [] })) as RoutesService["findByName"],
+			findAll: (() =>
+				Promise.resolve({ items: [] })) as RoutesService["findAll"],
 		} as RoutesService;
 
 		const mockSearchQuery = "nonexistent";
 
 		const controller = new RoutesController(mockLogger, routesService);
 
-		const result = await controller.findByName({
+		const result = await controller.findAll({
 			body: {},
 			params: {},
 			query: { name: mockSearchQuery },

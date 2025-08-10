@@ -64,6 +64,31 @@ describe("RoutesRepository", () => {
 		assert.strictEqual(result, null);
 	});
 
+	it("findByName should return routes matching search query", async () => {
+		const mockRouteEntity = RoutesEntity.initialize({ ...mockRoute, pois: [] });
+		const mockRouteObject = mockRouteEntity.toObject();
+
+		const mockSearchByNameQuery = mockRouteObject.name.toLowerCase();
+
+		databaseTracker.on
+			.select(DatabaseTableName.ROUTES)
+			.response([mockRouteObject]);
+
+		const result = await routesRepository.findByName(mockSearchByNameQuery);
+
+		assert.deepStrictEqual(result, [mockRouteEntity]);
+	});
+
+	it("findByName should return empty array if no routes found", async () => {
+		const mockSearchByNameQuery = "nonexistent";
+
+		databaseTracker.on.select(DatabaseTableName.ROUTES).response([]);
+
+		const result = await routesRepository.findByName(mockSearchByNameQuery);
+
+		assert.deepStrictEqual(result, []);
+	});
+
 	it("delete should return true when route deleted", async () => {
 		databaseTracker.on
 			.delete(DatabaseTableName.ROUTES_TO_POIS)

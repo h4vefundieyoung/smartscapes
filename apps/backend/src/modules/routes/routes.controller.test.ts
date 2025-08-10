@@ -112,6 +112,55 @@ describe("RoutesController", () => {
 		});
 	});
 
+	it("findByName should return response with routes matching search query", async () => {
+		const mockFindByName: RoutesService["findByName"] = () => {
+			return Promise.resolve({ items: [mockRoute] });
+		};
+
+		const routesService = {
+			findByName: mockFindByName,
+		} as RoutesService;
+
+		const mockSearchQuery = mockRoute.name.toLowerCase();
+
+		const controller = new RoutesController(mockLogger, routesService);
+
+		const result = await controller.findByName({
+			body: {},
+			params: {},
+			query: { name: mockSearchQuery },
+			user: mockUser,
+		});
+
+		assert.deepStrictEqual(result, {
+			payload: { data: [mockRoute] },
+			status: HTTPCode.OK,
+		});
+	});
+
+	it("findByName should return response with empty array if no routes found", async () => {
+		const routesService = {
+			findByName: (() =>
+				Promise.resolve({ items: [] })) as RoutesService["findByName"],
+		} as RoutesService;
+
+		const mockSearchQuery = "nonexistent";
+
+		const controller = new RoutesController(mockLogger, routesService);
+
+		const result = await controller.findByName({
+			body: {},
+			params: {},
+			query: { name: mockSearchQuery },
+			user: mockUser,
+		});
+
+		assert.deepStrictEqual(result, {
+			payload: { data: [] },
+			status: HTTPCode.OK,
+		});
+	});
+
 	it("update should return updated route", async () => {
 		const updatedRoute = {
 			...mockRoute,

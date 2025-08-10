@@ -1,14 +1,14 @@
-.hero-section {
+.section {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
 }
 
-.hero-section-container {
+.container {
 	display: flex;
 	flex-direction: column;
 	row-gap: 16px;
-	max-width: 1264px;
+	max-width: var(--landing-container-width);
 	padding: 96px 32px;
 	margin: 0 auto;
 	text-align: center;
@@ -18,7 +18,7 @@
 	margin: 0;
 	font-size: var(--font-size-display);
 	font-weight: var(--font-weight-bold);
-	line-height: 1.1429;
+	line-height: 1.1;
 	color: var(--color-text-strong);
 }
 
@@ -40,7 +40,7 @@
 }
 
 @media (width <= 768px) {
-	.hero-section-container {
-		padding: 50px 16px 30px;
+	.container {
+		padding: 48px 16px 32px;
 	}
 }

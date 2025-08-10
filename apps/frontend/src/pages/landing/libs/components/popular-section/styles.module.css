@@ -1,12 +1,12 @@
-.popular-section {
+.section {
 	width: 100%;
 }
 
-.popular-section-container {
+.container {
 	display: flex;
 	flex-direction: column;
 	gap: 32px;
-	max-width: 1264px;
+	max-width: var(--landing-container-width);
 	padding: 96px 32px;
 	margin: 0 auto;
 }
@@ -22,26 +22,19 @@
 	display: flex;
 	gap: 16px;
 	padding: 0;
+	padding-bottom: 20px;
 	margin: 0;
+	overflow-x: auto;
 }
 
 @media (width <= 991px) {
-	.popular-section-container {
-		padding: 68px 32px 96px;
-	}
-
-	.cards {
-		padding-bottom: 20px;
-		overflow-x: auto;
-	}
-
-	.cards > * {
-		flex: 0 0 auto;
+	.container {
+		padding: 64px 32px 96px;
 	}
 }
 
 @media (width <= 768px) {
-	.popular-section-container {
-		padding: 50px 16px 96px;
+	.container {
+		padding: 48px 16px 96px;
 	}
 }

@@ -3,16 +3,16 @@
 	border-bottom: 1px solid var(--color-stroke-weak);
 }
 
-.header-container {
+.container {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	max-width: 1264px;
+	max-width: var(--landing-container-width);
 	padding: 12px 32px;
 	margin: 0 auto;
 }
 
-.header-logo {
+.logo {
 	display: block;
 	margin: 0 auto;
 }
@@ -23,7 +23,7 @@
 }
 
 @media (width <= 768px) {
-	.header-container {
-		padding: 10px 16px;
+	.container {
+		padding: 8px 16px;
 	}
 }

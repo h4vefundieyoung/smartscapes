@@ -33,11 +33,11 @@ const Header = ({ actions, user }: Properties): JSX.Element => {
 
 	return (
 		<header className={styles["header"]}>
-			<div className={styles["header-container"]}>
+			<div className={styles["container"]}>
 				<Link to={AppRoute.ROOT}>
 					<img
 						alt="SmartScapes Logo"
-						className={styles["header-logo"]}
+						className={styles["logo"]}
 						height={24}
 						src={appLogo}
 						width={136}

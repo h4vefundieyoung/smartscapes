@@ -4,10 +4,13 @@ import styles from "./styles.module.css";
 
 const PopularSection = (): React.JSX.Element => {
 	return (
-		<section className={styles["popular-section"]}>
-			<div className={styles["popular-section-container"]}>
-				<p className={styles["title"]}>Popular routes</p>
+		<section className={styles["section"]}>
+			<div className={styles["container"]}>
+				<h2 className={styles["title"]}>Popular routes</h2>
 				<ul className={styles["cards"]}>
+					<RouteCard imageUrl={null} name="Kralovska obora" />
+					<RouteCard imageUrl={null} name="Kralovska obora" />
+					<RouteCard imageUrl={null} name="Kralovska obora" />
 					<RouteCard imageUrl={null} name="Kralovska obora" />
 					<RouteCard imageUrl={null} name="Kralovska obora" />
 					<RouteCard imageUrl={null} name="Kralovska obora" />

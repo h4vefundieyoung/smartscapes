@@ -1,5 +1,6 @@
 type IconName =
 	| "analytics"
+	| "close"
 	| "dashboard"
 	| "map"
 	| "message"

@@ -1,15 +1,23 @@
 .dialog {
-	position: relative;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	z-index: 1001;
 	width: min(744px, 92vw);
 	max-height: 90vh;
 	padding: 24px;
+	margin: 0;
 	overflow: auto;
+	transform: translate(-50%, -50%);
 	background: var(--color-base);
 	border: 1px solid var(--color-stroke-weak);
 	border-radius: 8px;
 }
 
-:global(dialog)::backdrop {
+.backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 1000;
 	background: var(--color-base-overlay);
 }
 

@@ -62,11 +62,12 @@ class BaseController implements Controller {
 	) => void)[] {
 		return preHandlers.map((preHandler) => {
 			return (
-				{ body, params, query, user }: FastifyRequest,
+				request: FastifyRequest,
 				_: FastifyReply,
 				done: () => void,
 			): void => {
-				preHandler({ body, params, query, user }, done);
+				const preHandlerOptions = this.mapRequest(request);
+				preHandler(preHandlerOptions, done);
 			};
 		});
 	}

@@ -1,6 +1,6 @@
 import { type LineStringGeometry } from "~/libs/types/types.js";
 
-type MapboxConstructRouteResponseDto = {
+type MapboxConstructRouteApiResponseDto = {
 	routes: [Route];
 	uuid: string;
 };
@@ -11,4 +11,4 @@ type Route = {
 	geometry: LineStringGeometry;
 };
 
-export { type MapboxConstructRouteResponseDto };
+export { type MapboxConstructRouteApiResponseDto };

@@ -1,6 +1,6 @@
 import { type LineStringGeometry } from "~/libs/types/types.js";
 
-type MapboxConstructRouteMappedData = {
+type MapboxConstructRouteResponseDto = {
 	internalId: string;
 	route: {
 		distance: number;
@@ -9,4 +9,4 @@ type MapboxConstructRouteMappedData = {
 	};
 };
 
-export { type MapboxConstructRouteMappedData };
+export { type MapboxConstructRouteResponseDto };

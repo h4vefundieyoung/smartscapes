@@ -10,7 +10,7 @@ import {
 	type MapboxAPIProfile,
 } from "./libs/enums/enums.js";
 import {
-	type MapboxConstructRouteMappedData,
+	type MapboxConstructRouteApiResponseDto,
 	type MapboxConstructRouteOptions,
 	type MapboxConstructRouteResponseDto,
 } from "./libs/types/types.js";
@@ -36,7 +36,7 @@ class MapboxDirectionsApi extends BaseHTTPApi {
 		profile: ValueOf<typeof MapboxAPIProfile>,
 		coordinates: PointGeometry["coordinates"][],
 		geometricsType: ValueOf<typeof MapboxAPIGeometric>,
-	): Promise<MapboxConstructRouteMappedData> {
+	): Promise<MapboxConstructRouteResponseDto> {
 		const query: MapboxConstructRouteOptions = {
 			access_token: this.accessToken,
 			alternatives: "false",
@@ -49,7 +49,7 @@ class MapboxDirectionsApi extends BaseHTTPApi {
 			.map((coordinate) => coordinate.join(","))
 			.join(";");
 
-		const response = await this.load<MapboxConstructRouteResponseDto>(
+		const response = await this.load<MapboxConstructRouteApiResponseDto>(
 			this.getFullEndpoint(profile, "/", formattedCoordinates, {}),
 			{
 				contentType: ContentType.JSON,
@@ -60,7 +60,7 @@ class MapboxDirectionsApi extends BaseHTTPApi {
 
 		const { routes, uuid } = await response.json();
 		const [{ distance, duration, geometry }] = routes;
-		const constructedRouteMappedData: MapboxConstructRouteMappedData = {
+		const constructedRouteMappedData: MapboxConstructRouteResponseDto = {
 			internalId: uuid,
 			route: { distance, duration, geometry },
 		};

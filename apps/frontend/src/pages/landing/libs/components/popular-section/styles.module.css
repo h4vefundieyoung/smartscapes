@@ -1,23 +1,47 @@
 .popular-section {
+	width: 100%;
+}
+
+.popular-section-container {
 	display: flex;
 	flex-direction: column;
 	gap: 32px;
-	width: 100%;
-	max-width: 1200px;
-	padding: 96px 0;
+	max-width: 1264px;
+	padding: 96px 32px;
 	margin: 0 auto;
 }
 
-.popular-section .title {
+.title {
 	margin: 0;
 	font-size: var(--font-size-h2);
 	font-weight: var(--font-weight-semibold);
 	line-height: 1.3;
 }
 
-.popular-section .cards {
+.cards {
 	display: flex;
 	gap: 16px;
 	padding: 0;
 	margin: 0;
+}
+
+@media (width <= 991px) {
+	.popular-section-container {
+		padding: 68px 32px 96px;
+	}
+
+	.cards {
+		padding-bottom: 20px;
+		overflow-x: auto;
+	}
+
+	.cards > * {
+		flex: 0 0 auto;
+	}
+}
+
+@media (width <= 768px) {
+	.popular-section-container {
+		padding: 50px 16px 96px;
+	}
 }

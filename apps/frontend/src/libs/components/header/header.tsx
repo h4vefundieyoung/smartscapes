@@ -39,16 +39,18 @@ const Header = ({ actions, user }: Properties): JSX.Element => {
 
 	return (
 		<header className={styles["header"]}>
-			<Link to={AppRoute.ROOT}>
-				<img
-					alt="SmartScapes Logo"
-					className={styles["header-logo"]}
-					height={24}
-					src={appLogo}
-					width={136}
-				/>
-			</Link>
-			{renderHeaderContent()}
+			<div className={styles["header-container"]}>
+				<Link to={AppRoute.ROOT}>
+					<img
+						alt="SmartScapes Logo"
+						className={styles["header-logo"]}
+						height={24}
+						src={appLogo}
+						width={136}
+					/>
+				</Link>
+				{renderHeaderContent()}
+			</div>
 		</header>
 	);
 };

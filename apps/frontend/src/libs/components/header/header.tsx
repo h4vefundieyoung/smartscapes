@@ -5,7 +5,7 @@ import { AppRoute } from "~/libs/enums/enums.js";
 import { type UserAuthResponseDto, type ValueOf } from "~/libs/types/types.js";
 
 import { Button, Link } from "../components.js";
-import { AuthenticatedHeader } from "./authenticated-header.js";
+import { AuthenticatedHeader } from "./libs/components/authenticated-header/authenticated-header.js";
 import styles from "./styles.module.css";
 
 type Properties = {

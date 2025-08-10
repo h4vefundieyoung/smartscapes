@@ -12,7 +12,7 @@ import {
 import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 
-import { UserDropdown } from "../user-dropdown/user-dropdown.js";
+import { UserDropdown } from "../../../../user-dropdown/user-dropdown.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -59,14 +59,22 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 				</div>
 				<span
 					className={combineClassNames(
-						styles["dropdown-arrow"],
+						styles["arrow-down"],
 						isDropdownOpen && styles["open"],
 					)}
 				>
-					<Icon height={24} name="dropdownArrow" width={24} />
+					<Icon height={24} name="arrowDown" width={24} />
 				</span>
 			</button>
-			{isDropdownOpen && <UserDropdown onLogout={handleLogout} />}
+
+			<div
+				className={combineClassNames(
+					styles["dropdown-container"],
+					!isDropdownOpen && styles["hidden"],
+				)}
+			>
+				<UserDropdown onLogout={handleLogout} />
+			</div>
 		</div>
 	);
 };

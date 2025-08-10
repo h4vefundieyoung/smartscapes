@@ -1,7 +1,7 @@
 type IconName =
 	| "analytics"
+	| "arrowDown"
 	| "dashboard"
-	| "dropdownArrow"
 	| "map"
 	| "message"
 	| "route"

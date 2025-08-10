@@ -8,8 +8,8 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import {
+	type AuthenticatedUserPatchRequestDto,
 	authenticatedUserPatchValidationSchema,
-	type UserAuthPatchRequestDto,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
 	userSignInValidationSchema,
@@ -82,7 +82,7 @@ import { AuthError } from "./libs/exceptions/unauthorized.exception.js";
  *           maxLength: 64
  *           example: strongP@ssw0rd
  *
- *     UserAuthPatchRequestDto:
+ *     AuthenticatedUserPatchRequestDto:
  *       type: object
  *       properties:
  *         firstName:
@@ -98,7 +98,7 @@ import { AuthError } from "./libs/exceptions/unauthorized.exception.js";
  *           pattern: '^[a-zA-Z\\s]+$'
  *           example: Doe
  *
- *     UserAuthPatchResponseDto:
+ *     AuthenticatedUserPatchResponseDto:
  *        type: object
  *        required:
  *          - id
@@ -273,7 +273,7 @@ class AuthController extends BaseController {
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             $ref: '#/components/schemas/UserAuthPatchRequestDto'
+	 *             $ref: '#/components/schemas/AuthenticatedUserPatchRequestDto'
 	 *     responses:
 	 *       200:
 	 *         description: User updated successfully
@@ -283,11 +283,11 @@ class AuthController extends BaseController {
 	 *               type: object
 	 *               properties:
 	 *                 data:
-	 *                   $ref: '#/components/schemas/UserAuthPatchResponseDto'
+	 *                   $ref: '#/components/schemas/AuthenticatedUserPatchResponseDto'
 	 */
 	public async patch(
 		options: APIHandlerOptions<{
-			body: UserAuthPatchRequestDto;
+			body: AuthenticatedUserPatchRequestDto;
 			params: {
 				id: string;
 			};

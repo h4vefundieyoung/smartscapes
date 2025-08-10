@@ -7,7 +7,7 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import {
-	type UserAuthPatchRequestDto,
+	type AuthenticatedUserPatchRequestDto,
 	type UserAuthResponseDto,
 } from "~/modules/users/users.js";
 
@@ -25,7 +25,7 @@ const UserDetails = (): null | React.JSX.Element => {
 	);
 
 	const handleFormSubmit = useCallback(
-		(payload: UserAuthPatchRequestDto): void => {
+		(payload: AuthenticatedUserPatchRequestDto): void => {
 			void dispatch(authActions.patchAuthenticatedUser(payload));
 		},
 		[dispatch],

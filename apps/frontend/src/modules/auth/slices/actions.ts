@@ -3,8 +3,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 import {
-	type UserAuthPatchRequestDto,
-	type UserAuthPatchResponseDto,
+	type AuthenticatedUserPatchRequestDto,
+	type AuthenticatedUserPatchResponseDto,
 	type UserAuthResponseDto,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
@@ -61,8 +61,8 @@ const signIn = createAsyncThunk<
 });
 
 const patchAuthenticatedUser = createAsyncThunk<
-	APIResponse<UserAuthPatchResponseDto>,
-	UserAuthPatchRequestDto,
+	APIResponse<AuthenticatedUserPatchResponseDto>,
+	AuthenticatedUserPatchRequestDto,
 	AsyncThunkConfig
 >(`${sliceName}/patch`, async (payload, { extra, getState }) => {
 	const { authApi } = extra;

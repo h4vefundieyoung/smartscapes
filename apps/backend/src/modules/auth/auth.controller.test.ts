@@ -5,8 +5,8 @@ import { type APIHandlerOptions } from "~/libs/modules/controller/controller.js"
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import {
-	type UserAuthPatchRequestDto,
-	type UserAuthPatchResponseDto,
+	type AuthenticatedUserPatchRequestDto,
+	type AuthenticatedUserPatchResponseDto,
 	type UserGetByIdItemResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
@@ -25,7 +25,7 @@ describe("AuthController", () => {
 		lastName: "Doe",
 	};
 
-	const mockPatchUser: UserAuthPatchResponseDto = {
+	const mockPatchUser: AuthenticatedUserPatchResponseDto = {
 		email: "test@example.com",
 		firstName: "Jane",
 		id: 1,
@@ -60,10 +60,10 @@ describe("AuthController", () => {
 			body: {
 				firstName: "Jane",
 				lastName: "Smith",
-			} as UserAuthPatchRequestDto,
+			} as AuthenticatedUserPatchRequestDto,
 			params: { id: "1" },
 		} as APIHandlerOptions<{
-			body: UserAuthPatchRequestDto;
+			body: AuthenticatedUserPatchRequestDto;
 			params: { id: string };
 		}>;
 

@@ -1,31 +1,30 @@
 import { Button, Input } from "~/libs/components/components.js";
 import { useAppForm } from "~/libs/hooks/hooks.js";
 import {
+	type AuthenticatedUserPatchRequestDto,
 	authenticatedUserPatchValidationSchema,
-	type UserAuthPatchRequestDto,
 	type UserAuthResponseDto,
 } from "~/modules/users/users.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
-	onSubmit: (data: UserAuthPatchRequestDto) => void;
+	onSubmit: (data: AuthenticatedUserPatchRequestDto) => void;
 	user: UserAuthResponseDto;
 };
 
 const ProfileForm = ({ onSubmit, user }: Properties): React.JSX.Element => {
 	const { firstName, lastName } = user;
 
-	const { control, errors, handleSubmit } = useAppForm<UserAuthPatchRequestDto>(
-		{
+	const { control, errors, handleSubmit } =
+		useAppForm<AuthenticatedUserPatchRequestDto>({
 			defaultValues: {
 				firstName,
 				lastName,
 			},
 			mode: "onChange",
 			validationSchema: authenticatedUserPatchValidationSchema,
-		},
-	);
+		});
 
 	return (
 		<form className={styles["form"]} onSubmit={handleSubmit(onSubmit)}>

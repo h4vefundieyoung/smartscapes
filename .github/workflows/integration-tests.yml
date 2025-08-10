@@ -26,7 +26,7 @@ jobs:
       - name: Set Up ENV
         run: |
           echo "NODE_ENV=$NODE_ENV" >> .env
-          echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" >> .env
+          echo "API_BASE_URL=${{ secrets.DEVELOPMENT_API_BASE_URL }}" >> .env
 
       - name: Checkout Source Code
         uses: actions/checkout@v4
@@ -44,17 +44,6 @@ jobs:
         id: extract-playwright-version
         run: echo "version=$(jq -r '.devDependencies[\"@playwright/test\"]' package.json)" >> $GITHUB_OUTPUT
 
-      - name: Cache Playwright
-        id: cache-playwright
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.extract-playwright-version.outputs.version }}
-
-      - name: Install Playwright Browsers
-        if: steps.cache-playwright.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
-
       - name: Build Shared Package
         run: npm run build:shared
 
@@ -66,5 +55,5 @@ jobs:
         if: ${{ !cancelled() }}
         with:
           name: api-test-report
-          path: test-report/
+          path: tests/test-report/
           retention-days: 30

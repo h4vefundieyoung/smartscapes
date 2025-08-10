@@ -9,7 +9,7 @@ class PointsOfInterestModel extends AbstractModel {
 		return DatabaseTableName.POINTS_OF_INTEREST;
 	}
 
-	public description!: string;
+	public description!: null | string;
 	public location!: PointGeometry;
 	public name!: string;
 }

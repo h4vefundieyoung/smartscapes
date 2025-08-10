@@ -12,12 +12,10 @@ const pointOfInterestUpdate = z
 	.strictObject({
 		description: z
 			.string()
-			.min(PointsOfInterestValidationRule.DESCRIPTION_MIN_LENGTH, {
-				message: PointsOfInterestValidationMessage.DESCRIPTION_MINIMUM_LENGTH,
-			})
 			.max(PointsOfInterestValidationRule.DESCRIPTION_MAX_LENGTH, {
 				message: PointsOfInterestValidationMessage.DESCRIPTION_MAXIMUM_LENGTH,
-			}),
+			})
+			.nullable(),
 		location: locationSchema.optional(),
 		name: z
 			.string()

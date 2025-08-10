@@ -1,5 +1,5 @@
 const PointsOfInterestApiPath = {
-	CREATE: "/create",
+	CREATE: "",
 } as const;
 
 export { PointsOfInterestApiPath };

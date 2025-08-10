@@ -7,11 +7,7 @@ import {
 import { locationSchema } from "./location.validation-schema.js";
 
 const pointOfInterestCreate = z.strictObject({
-	description: z
-		.string()
-		.min(PointsOfInterestValidationRule.DESCRIPTION_MIN_LENGTH, {
-			message: PointsOfInterestValidationMessage.DESCRIPTION_MINIMUM_LENGTH,
-		}),
+	description: z.string().nullable(),
 	location: locationSchema,
 	name: z
 		.string()

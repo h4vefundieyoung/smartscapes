@@ -6,7 +6,6 @@ const PointsOfInterestValidationMessage = {
 	COORDS_REQUIRED_WITH_RADIUS:
 		"Location coordinates are required when radius is provided.",
 	DESCRIPTION_MAXIMUM_LENGTH: `Description must be less than ${String(PointsOfInterestValidationRule.DESCRIPTION_MAX_LENGTH)} characters long.`,
-	DESCRIPTION_MINIMUM_LENGTH: `Description must be at least ${String(PointsOfInterestValidationRule.DESCRIPTION_MIN_LENGTH)} characters long.`,
 	INVALID_LOCATION_TYPE: "Location type must be 'Point'.",
 	LATITUDE_MAX: `Latitude must be less than ${String(PointsOfInterestValidationRule.LATITUDE_MAX)}.`,
 	LATITUDE_MIN: `Latitude must be greater than ${String(PointsOfInterestValidationRule.LATITUDE_MIN)}.`,

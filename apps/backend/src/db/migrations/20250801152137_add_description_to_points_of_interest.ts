@@ -10,7 +10,7 @@ function down(knex: Knex): Promise<void> {
 
 function up(knex: Knex): Promise<void> {
 	return knex.schema.alterTable(TABLE_NAME, (table) => {
-		table.string("description").notNullable();
+		table.string("description");
 	});
 }
 

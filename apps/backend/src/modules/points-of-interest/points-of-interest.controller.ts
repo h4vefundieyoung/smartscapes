@@ -43,7 +43,6 @@ import {
  *       required:
  *         - location
  *         - name
- *         - description
  *       properties:
  *         location:
  *           $ref: '#/components/schemas/PointsOfInterestLocation'
@@ -53,6 +52,7 @@ import {
  *         description:
  *           type: string
  *           example: "A large park in New York City"
+ *           nullable: true
  *
  *     PointsOfInterestResponseDto:
  *       type: object
@@ -73,6 +73,7 @@ import {
  *         description:
  *           type: string
  *           example: "A large park in New York City"
+ *           nullable: true
  */
 
 class PointsOfInterestController extends BaseController {

@@ -1,3 +1,5 @@
+import { transaction } from "objection";
+
 import { type Repository } from "~/libs/types/types.js";
 import { type UserPasswordDetails } from "~/modules/users/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
@@ -17,28 +19,46 @@ class UserRepository implements Repository {
 		const { email, firstName, groupId, lastName, passwordHash, passwordSalt } =
 			entity.toNewObject();
 
-		const user = await this.userModel
-			.query()
-			.insert({
+		return await transaction(this.userModel, async (UserModel) => {
+			const { id: userId } = await UserModel.query().insert({
 				email,
 				firstName,
 				groupId,
 				lastName,
 				passwordHash,
 				passwordSalt,
-			})
-			.returning("*")
-			.execute();
+			});
 
-		return UserEntity.initialize({
-			email: user.email,
-			firstName: user.firstName,
-			group: user.group ? GroupEntity.initialize(user.group).toObject() : null,
-			groupId: user.groupId,
-			id: user.id,
-			lastName: user.lastName,
-			passwordHash: user.passwordHash,
-			passwordSalt: user.passwordSalt,
+			const user = await UserModel.query()
+				.where("users.id", userId)
+				.withGraphJoined("group.permissions")
+				.first();
+
+			if (!user) {
+				throw new Error("Error");
+			}
+
+			return UserEntity.initialize({
+				email: user.email,
+				firstName: user.firstName,
+				group: user.group
+					? GroupEntity.initializeWithPermissions({
+							id: user.group.id,
+							key: user.group.key,
+							name: user.group.name,
+							permissions: user.group.permissions
+								? user.group.permissions.map((per) =>
+										PermissionEntity.initialize(per).toObject(),
+									)
+								: [],
+						}).toObject()
+					: null,
+				groupId: user.groupId,
+				id: user.id,
+				lastName: user.lastName,
+				passwordHash: user.passwordHash,
+				passwordSalt: user.passwordSalt,
+			});
 		});
 	}
 
@@ -51,21 +71,11 @@ class UserRepository implements Repository {
 				"lastName",
 				"users.group_id as groupId",
 				"email",
-				"groups.id",
-				"groups.key as groupKey",
-				"groups.name as groupName",
+				"group.id",
+				"group.key as groupKey",
+				"group.name as groupName",
 			])
-			.innerJoin("groups", "users.group_id", "groups.id")
-			.leftJoin(
-				"groups_to_permissions",
-				"groups.id",
-				"groups_to_permissions.group_id",
-			)
-			.leftJoin(
-				"permissions",
-				"groups_to_permissions.permission_id",
-				"permissions.id",
-			)
+			.withGraphJoined("group.permissions")
 			.execute();
 
 		return users.map((user) =>
@@ -73,7 +83,16 @@ class UserRepository implements Repository {
 				email: user.email,
 				firstName: user.firstName,
 				group: user.group
-					? GroupEntity.initialize(user.group).toObject()
+					? GroupEntity.initializeWithPermissions({
+							id: user.group.id,
+							key: user.group.key,
+							name: user.group.name,
+							permissions: user.group.permissions
+								? user.group.permissions.map((per) =>
+										PermissionEntity.initialize(per).toObject(),
+									)
+								: [],
+						}).toObject()
 					: null,
 				groupId: user.groupId,
 				id: user.id,

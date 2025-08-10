@@ -10,6 +10,7 @@ import { type CollectionResult, type Service } from "~/libs/types/types.js";
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
+import { type RoutesFindAllOptions } from "./libs/types/type.js";
 import { RoutesEntity } from "./routes.entity.js";
 import { type RoutesRepository } from "./routes.repository.js";
 
@@ -58,8 +59,10 @@ class RoutesService implements Service {
 		return isDeleted;
 	}
 
-	public async findAll(): Promise<CollectionResult<RoutesResponseDto>> {
-		const items = await this.routesRepository.findAll();
+	public async findAll(
+		options: null | RoutesFindAllOptions,
+	): Promise<CollectionResult<RoutesResponseDto>> {
+		const items = await this.routesRepository.findAll(options);
 
 		return {
 			items: items.map((item) => {
@@ -79,14 +82,6 @@ class RoutesService implements Service {
 		}
 
 		return item.toObject();
-	}
-
-	public async findByName(
-		name: string,
-	): Promise<CollectionResult<RoutesResponseDto>> {
-		const items = await this.routesRepository.findByName(name);
-
-		return { items: items.map((item) => item.toObject()) };
 	}
 
 	public async patch(

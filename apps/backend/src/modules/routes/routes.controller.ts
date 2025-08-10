@@ -11,6 +11,7 @@ import {
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
 	type RoutesResponseDto,
+	type RoutesSearchQuery,
 } from "./libs/types/type.js";
 import {
 	routesCreateValidationSchema,
@@ -61,11 +62,6 @@ class RoutesController extends BaseController {
 			handler: this.findById.bind(this),
 			method: "GET",
 			path: "/:id",
-		});
-		this.addRoute({
-			handler: this.findByName.bind(this),
-			method: "GET",
-			path: "/search",
 		});
 		this.addRoute({
 			handler: this.findAll.bind(this),
@@ -179,7 +175,19 @@ class RoutesController extends BaseController {
 	 *      - bearerAuth:  []
 	 *     tags:
 	 *       - Routes
-	 *     summary: Retrieve all routes
+	 *     summary: Retrieve all routes with optional search by name
+	 *     description: |
+	 *       Get all routes, or only those whose names match the search query.
+	 *
+	 *       **Without query parameters**: Returns all routes.
+	 *
+	 *       **With query `name` parameter**: Returns routes whose names match the search query. Search is case-insensitive.
+	 *     parameters:
+	 *       - in: query
+	 *         name: name
+	 *         schema:
+	 *           type: string
+	 *           example: "landscape"
 	 *     responses:
 	 *       200:
 	 *         description: A list of routes
@@ -194,8 +202,14 @@ class RoutesController extends BaseController {
 	 *                     $ref: '#/components/schemas/Route'
 	 * */
 
-	public async findAll(): Promise<APIHandlerResponse<RoutesResponseDto[]>> {
-		const { items } = await this.routesService.findAll();
+	public async findAll(
+		options: APIHandlerOptions<{
+			query?: RoutesSearchQuery;
+		}>,
+	): Promise<APIHandlerResponse<RoutesResponseDto[]>> {
+		const { query = null } = options;
+
+		const { items } = await this.routesService.findAll(query);
 
 		return {
 			payload: { data: items },
@@ -238,47 +252,6 @@ class RoutesController extends BaseController {
 			payload: { data: route },
 			status: HTTPCode.OK,
 		};
-	}
-
-	/**
-	 * @swagger
-	 * /routes/search:
-	 *   get:
-	 *     security:
-	 *       - bearerAuth: []
-	 *     tags:
-	 *       - Routes
-	 *     summary: Search routes by name
-	 *     description:
-	 *       Get all routes with names matching the query. Search is case-insensitive.
-	 *     parameters:
-	 *       - in: query
-	 *         name: name
-	 *         schema:
-	 *           type: string
-	 *           example: "landscape"
-	 *     responses:
-	 *       200:
-	 *         description: A list of routes with names matching the query.
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               type: object
-	 *               properties:
-	 *                 data:
-	 *                   type: array
-	 *                   items:
-	 *                     $ref: '#/components/schemas/Route'
-	 */
-
-	public async findByName(
-		options: APIHandlerOptions<{ query: { name: string } }>,
-	): Promise<APIHandlerResponse<RoutesResponseDto[]>> {
-		const { name } = options.query;
-
-		const { items } = await this.routesService.findByName(name);
-
-		return { payload: { data: items }, status: HTTPCode.OK };
 	}
 
 	/**

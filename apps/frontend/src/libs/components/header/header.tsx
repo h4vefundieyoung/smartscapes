@@ -35,6 +35,7 @@ const Header = ({ actions, user }: Properties): JSX.Element => {
 		<header className={styles["header"]}>
 			<div className={styles["container"]}>
 				<Link to={AppRoute.ROOT}>
+					<span className="visually-hidden">Go to landing</span>
 					<img
 						alt="SmartScapes Logo"
 						className={styles["logo"]}

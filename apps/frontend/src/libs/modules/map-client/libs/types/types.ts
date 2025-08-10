@@ -27,6 +27,7 @@ type Marker = mapboxgl.Marker & {
 type MarkerOptions = {
 	color?: string;
 	coordinates: PointGeometry["coordinates"];
+	id: string;
 	scale?: number;
 };
 

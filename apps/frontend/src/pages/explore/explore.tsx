@@ -6,8 +6,7 @@ import { useMapClient } from "~/libs/hooks/hooks.js";
 import { mockPOIs } from "./mock-pois.js";
 import styles from "./styles.module.css";
 
-// Dummy component to use useMapClient and silence unused export warning, delete it as soon as possible
-
+// TODO: Dummy component to use useMapClient and silence unused export warning, delete it as soon as possible
 const DummyMapClientUser = (): null => {
 	const mapClient = useMapClient();
 

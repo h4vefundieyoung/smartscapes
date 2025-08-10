@@ -55,11 +55,10 @@ const MapProvider = ({
 
 	useEffect(() => {
 		const client = mapClientReference.current;
-
 		client.addNavigationControl();
 		client.addScaleControl();
 		client.addGeolocateControl();
-	}, []);
+	}, [center]);
 
 	useEffect(() => {
 		const client = mapClientReference.current;

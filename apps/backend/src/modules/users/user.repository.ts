@@ -35,7 +35,7 @@ class UserRepository implements Repository {
 				.first()) as UserModel;
 
 			const group = user.group as NonNullable<typeof user.group>;
-			const permissions = user.group?.permissions as NonNullable<
+			const permissions = group.permissions as NonNullable<
 				typeof group.permissions
 			>;
 
@@ -46,8 +46,8 @@ class UserRepository implements Repository {
 					id: group.id,
 					key: group.key,
 					name: group.name,
-					permissions: permissions.map((per) =>
-						PermissionEntity.initialize(per).toObject(),
+					permissions: permissions.map((permission) =>
+						PermissionEntity.initialize(permission).toObject(),
 					),
 				}).toObject(),
 				groupId: user.groupId,
@@ -75,29 +75,30 @@ class UserRepository implements Repository {
 			.withGraphJoined("group.permissions")
 			.execute();
 
-		return users.map((user) =>
-			UserEntity.initialize({
+		return users.map((user) => {
+			const group = user.group as NonNullable<typeof user.group>;
+			const permissions = user.group?.permissions as NonNullable<
+				typeof group.permissions
+			>;
+
+			return UserEntity.initialize({
 				email: user.email,
 				firstName: user.firstName,
-				group: user.group
-					? GroupEntity.initializeWithPermissions({
-							id: user.group.id,
-							key: user.group.key,
-							name: user.group.name,
-							permissions: user.group.permissions
-								? user.group.permissions.map((per) =>
-										PermissionEntity.initialize(per).toObject(),
-									)
-								: [],
-						}).toObject()
-					: null,
+				group: GroupEntity.initializeWithPermissions({
+					id: group.id,
+					key: group.key,
+					name: group.name,
+					permissions: permissions.map((permission) =>
+						PermissionEntity.initialize(permission).toObject(),
+					),
+				}).toObject(),
 				groupId: user.groupId,
 				id: user.id,
 				lastName: user.lastName,
 				passwordHash: user.passwordHash,
 				passwordSalt: user.passwordSalt,
-			}),
-		);
+			});
+		});
 	}
 
 	public async findByEmail(email: string): Promise<null | UserEntity> {
@@ -111,21 +112,22 @@ class UserRepository implements Repository {
 			return null;
 		}
 
+		const group = user.group as NonNullable<typeof user.group>;
+		const permissions = user.group?.permissions as NonNullable<
+			typeof group.permissions
+		>;
+
 		return UserEntity.initialize({
 			email: user.email,
 			firstName: user.firstName,
-			group: user.group
-				? GroupEntity.initializeWithPermissions({
-						id: user.group.id,
-						key: user.group.key,
-						name: user.group.name,
-						permissions: user.group.permissions
-							? user.group.permissions.map((per) =>
-									PermissionEntity.initialize(per).toObject(),
-								)
-							: [],
-					}).toObject()
-				: null,
+			group: GroupEntity.initializeWithPermissions({
+				id: group.id,
+				key: group.key,
+				name: group.name,
+				permissions: permissions.map((permission) =>
+					PermissionEntity.initialize(permission).toObject(),
+				),
+			}).toObject(),
 			groupId: user.groupId,
 			id: user.id,
 			lastName: user.lastName,
@@ -135,31 +137,28 @@ class UserRepository implements Repository {
 	}
 
 	public async findById(id: number): Promise<null | UserEntity> {
-		const user = await this.userModel
+		const user = (await this.userModel
 			.query()
 			.findById(id)
 			.withGraphJoined("group.permissions")
-			.first();
+			.first()) as UserModel;
 
-		if (!user) {
-			return null;
-		}
+		const group = user.group as NonNullable<typeof user.group>;
+		const permissions = user.group?.permissions as NonNullable<
+			typeof group.permissions
+		>;
 
 		return UserEntity.initialize({
 			email: user.email,
 			firstName: user.firstName,
-			group: user.group
-				? GroupEntity.initializeWithPermissions({
-						id: user.group.id,
-						key: user.group.key,
-						name: user.group.name,
-						permissions: user.group.permissions
-							? user.group.permissions.map((per) =>
-									PermissionEntity.initialize(per).toObject(),
-								)
-							: [],
-					}).toObject()
-				: null,
+			group: GroupEntity.initializeWithPermissions({
+				id: group.id,
+				key: group.key,
+				name: group.name,
+				permissions: permissions.map((permission) =>
+					PermissionEntity.initialize(permission).toObject(),
+				),
+			}).toObject(),
 			groupId: user.groupId,
 			id: user.id,
 			lastName: user.lastName,
@@ -171,7 +170,7 @@ class UserRepository implements Repository {
 	public async findPasswordDetails(
 		email: string,
 	): Promise<null | UserPasswordDetails> {
-		const user = await this.userModel
+		const user = (await this.userModel
 			.query()
 			.select(
 				"users.id",
@@ -183,19 +182,20 @@ class UserRepository implements Repository {
 			)
 			.withGraphJoined("group.permissions")
 			.where("users.email", email)
-			.first();
+			.first()) as UserModel;
 
-		if (!user || !user.group || !user.group.permissions) {
-			return null;
-		}
+		const group = user.group as NonNullable<typeof user.group>;
+		const permissions = user.group?.permissions as NonNullable<
+			typeof group.permissions
+		>;
 
 		return {
 			firstName: user.firstName,
 			group: {
-				id: user.group.id,
-				key: user.group.key,
-				name: user.group.name,
-				permissions: user.group.permissions.map((permission) =>
+				id: group.id,
+				key: group.key,
+				name: group.name,
+				permissions: permissions.map((permission) =>
 					PermissionEntity.initialize({
 						id: permission.id,
 						key: permission.key,

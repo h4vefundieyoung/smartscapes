@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.12.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/shared-v1.11.0...shared-v1.12.0) (2025-08-07)
+
+
+### Features
+
+* **backend/shared:** add reviews module ss-75 ([#147](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/147)) ([435363e](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/435363e7ee382997fab923744e484ecc0efde238))
+
+## [1.11.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/shared-v1.10.0...shared-v1.11.0) (2025-08-07)
+
+
+### Features
+
+* **backend/shared:** add routes module ss-69 ([#104](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/104)) ([b419013](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/b419013fd741b365045a9e6f3d49c30a1885a6b7))
+* **frontend:** update buttons in header ss-186 ([#210](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/210)) ([e4f8d7f](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/e4f8d7ffe91ea72f18bc8932a086e4c7e1194f42))
+
+## [1.10.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/shared-v1.9.0...shared-v1.10.0) (2025-08-06)
+
+
+### Features
+
+* **backend:** search closest points to authenticated user ss-188 ([#198](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/198)) ([144e41c](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/144e41c87e7f4fbf313cac3fc2ac6c53464949e9))
+
+## [1.9.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/shared-v1.8.0...shared-v1.9.0) (2025-08-05)
+
+
+### Features
+
+* **shared/backend:** add notifications module ss-73 ([#131](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/131)) ([e2b4a15](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/e2b4a1514dd0a10f89a36d8bc3894c61444f168f))
+
 ## [1.8.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/shared-v1.7.1...shared-v1.8.0) (2025-08-04)
 
 

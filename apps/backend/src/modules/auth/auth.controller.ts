@@ -18,7 +18,7 @@ import {
 
 import { type AuthService } from "./auth.service.js";
 import { AuthApiPath } from "./libs/enums/enums.js";
-import { AuthError } from "./libs/exceptions/unauthorized.exception.js";
+import { AuthError } from "./libs/exceptions/auth.exception.js";
 
 /**
  * @swagger
@@ -112,7 +112,18 @@ import { AuthError } from "./libs/exceptions/unauthorized.exception.js";
  *           type: string
  *           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *         user:
- *           $ref: '#/components/schemas/UserAuthResponseDto'
+ *           type: object
+ *           required:
+ *             - id
+ *             - email
+ *           properties:
+ *             email:
+ *               type: string
+ *               format: email
+ *               example: user@example.com
+ *             id:
+ *               type: integer
+ *               example: 1
  *
  *     UserSignUpResponseDto:
  *       type: object
@@ -192,6 +203,7 @@ class AuthController extends BaseController {
 			status: HTTPCode.OK,
 		};
 	}
+
 	/**
 	 * @swagger
 	 * /auth/sign-in:
@@ -214,7 +226,7 @@ class AuthController extends BaseController {
 	 *               type: object
 	 *               properties:
 	 *                 data:
-	 *                   $ref: '#/components/schemas/UserAuthResponseDto'
+	 *                   $ref: '#/components/schemas/UserSignInResponseDto'
 	 */
 
 	public async signIn(

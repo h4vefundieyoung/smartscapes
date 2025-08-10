@@ -1,3 +1,4 @@
+export { METERS_IN_KM } from "./libs/constants/constants.js";
 export {
 	APIErrorType,
 	APIPath,
@@ -28,17 +29,48 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
 export {
+	NotificationApiPath,
+	type NotificationCreateRequestDto,
+	notificationCreateValidationSchema,
+	NotificationEntityType,
+	NotificationExceptionMessage,
+	type NotificationGetAllItemResponseDto,
+	NotificationType,
+} from "./modules/notifications/notifications.js";
+export {
 	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
+	type PointsOfInterestSearchQuery,
+	pointsOfInterestSearchQueryValidationSchema,
 } from "./modules/points-of-interest/points-of-interest.js";
+export {
+	type ReviewCreatePayload,
+	reviewCreateValidationSchema,
+	type ReviewGetByIdResponseDto,
+	type ReviewRequestDto,
+} from "./modules/reviews/reviews.js";
 export {
 	RouteCategoriesApiPath,
 	RouteCategoryExceptionMessage,
 	type RouteCategoryGetAllItemResponseDto,
 	type RouteCategoryRequestDto,
 } from "./modules/route-categories/route-categories.js";
+export {
+	routesCreateValidationSchema,
+	type RoutesRequestCreateDto,
+	type RoutesRequestPatchDto,
+	type RoutesResponseDto,
+	routesUpdateValidationSchema,
+} from "./modules/routes/routes.js";
+export {
+	UserFollowsApiPath,
+	UserFollowsExceptionMessage,
+	type UserFollowsParametersDto,
+	type UserFollowsRequestDto,
+	type UserUnfollowsParametersDto,
+} from "./modules/user-follows/user-follows.js";
 export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,

@@ -1,18 +1,28 @@
+import { isFulfilled } from "@reduxjs/toolkit";
+import { LocationType } from "@smartscapes/shared/src/libs/enums/location-type.enum.js";
+import React, { useCallback } from "react";
+
 import {
 	Button,
+	CreatePOIModal,
 	Header,
 	Loader,
 	Select,
 	Sidebar,
 } from "~/libs/components/components.js";
+import { type LocalPointsOfInterestRequestDto } from "~/libs/components/create-poi-modal/libs/types/types.js";
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
 import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import { useAppForm, useAppSelector } from "~/libs/hooks/hooks.js";
 import {
-	actions as poiActions,
-	pointOfInterestCreateValidationSchema,
-} from "~/modules/points-of-interest/points-of-interest.js";
+	useAppDispatch,
+	useAppForm,
+	useAppSelector,
+	useState,
+} from "~/libs/hooks/hooks.js";
+import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
+import { type PointsOfInterestRequestDto } from "~/modules/points-of-interest/libs/types/types.js";
+import { actions as poiActions } from "~/modules/points-of-interest/points-of-interest.js";
 
 import { mockImages } from "../../libs/components/carousel/assets/mock-images/mock-images.js";
 import { Carousel } from "../../libs/components/carousel/carousel.js";
@@ -23,16 +33,20 @@ type FormValues = {
 	singleColor: null | string;
 };
 
+type ModalPayload = {
+	description: null | string;
+	location: { coordinates: [string, string]; type: "Point" };
+	name: string;
+};
+
+const DEFAULT_LONGITUDE = 30.5234;
+const DEFAULT_LATITUDE = 50.4501;
+
 const Dashboard = (): React.JSX.Element => {
 	const authenticatedUser = useAppSelector(
 		({ auth }) => auth.authenticatedUser,
 	);
-
-	// DELETE
-	// eslint-disable-next-line no-console
-	console.log("poiActions", poiActions);
-	// eslint-disable-next-line no-console
-	console.log(pointOfInterestCreateValidationSchema);
+	const dispatch = useAppDispatch();
 
 	const colorOptions: SelectOption<string>[] = [
 		{ label: "Red", value: "red" },
@@ -41,11 +55,39 @@ const Dashboard = (): React.JSX.Element => {
 	];
 
 	const { control } = useAppForm<FormValues>({
-		defaultValues: {
-			multiColors: [],
-			singleColor: null,
-		},
+		defaultValues: { multiColors: [], singleColor: null },
 	});
+
+	const [isCreateOpen, setIsCreateOpen] = useState<boolean>(false);
+
+	const handleOpen = useCallback(() => {
+		setIsCreateOpen(true);
+	}, []);
+	const handleClose = useCallback(() => {
+		setIsCreateOpen(false);
+	}, []);
+	const handleSubmit = useCallback(
+		async (payload: ModalPayload) => {
+			const dto: LocalPointsOfInterestRequestDto = {
+				description: payload.description,
+				location: {
+					coordinates: payload.location.coordinates,
+					type: LocationType.POINT,
+				},
+				name: payload.name,
+			};
+
+			const result = await dispatch(
+				poiActions.create(dto as unknown as PointsOfInterestRequestDto),
+			);
+
+			if (isFulfilled(result)) {
+				toastNotifier.showSuccess("POI created");
+				setIsCreateOpen(false);
+			}
+		},
+		[dispatch],
+	);
 
 	return (
 		<div className={styles["container"]}>
@@ -79,6 +121,16 @@ const Dashboard = (): React.JSX.Element => {
 						options={colorOptions}
 					/>
 				</div>
+				<div className={styles["button-container"]}>
+					<Button label="Create new POI" onClick={handleOpen} type="button" />
+				</div>
+				<CreatePOIModal
+					defaultLatitude={DEFAULT_LATITUDE}
+					defaultLongitude={DEFAULT_LONGITUDE}
+					isOpen={isCreateOpen}
+					onClose={handleClose}
+					onSubmit={handleSubmit}
+				/>
 			</div>
 		</div>
 	);

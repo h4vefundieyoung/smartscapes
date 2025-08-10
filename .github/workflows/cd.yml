@@ -16,6 +16,10 @@ concurrency:
 
 jobs:
   release:
+    environment:
+      name: development
+      url: ${{ secrets.DEVELOPMENT_APP_URL }}
+
     permissions:
       contents: write
       pull-requests: write

@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.16.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.15.1...frontend-v1.16.0) (2025-08-07)
+
+
+### Features
+
+* **frontend:** add floating sidebar ss-106 ([#214](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/214)) ([d576265](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/d57626569c8a05eb1b35fe56b90760304b4bef12))
+
+## [1.15.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.15.0...frontend-v1.15.1) (2025-08-07)
+
+
+### Bug Fixes
+
+* **frontend:** app component waits for get-authicated-user dispatch ss-247 ([#252](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/252)) ([30cc3dc](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/30cc3dc068a407ca02389ed1724f0b853732ec71))
+
+## [1.15.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.14.0...frontend-v1.15.0) (2025-08-07)
+
+
+### Features
+
+* **frontend:** add styles to select ss-255 ([#257](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/257)) ([3a8be15](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/3a8be15b012417608f56dcc3024ddbc01fc92547))
+
+## [1.14.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.13.0...frontend-v1.14.0) (2025-08-07)
+
+
+### Features
+
+* **frontend:** update buttons in header ss-186 ([#210](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/210)) ([e4f8d7f](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/e4f8d7ffe91ea72f18bc8932a086e4c7e1194f42))
+
 ## [1.13.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.12.0...frontend-v1.13.0) (2025-08-06)
 
 

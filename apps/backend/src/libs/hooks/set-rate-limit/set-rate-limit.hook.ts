@@ -1,6 +1,6 @@
 import { type APIPreHandler } from "~/libs/modules/controller/libs/types/types.js";
 import { type UserAuthResponseDto } from "~/libs/types/types.js";
-import { AuthError } from "~/modules/auth/libs/exceptions/unauthorized.exception.js";
+import { AuthError } from "~/modules/auth/libs/exceptions/auth.exception.js";
 
 import { RATE_LIMIT_TIME_PERIOD } from "./libs/constants/constants.js";
 import { RateLimitError } from "./libs/exceptions/exceptions.js";

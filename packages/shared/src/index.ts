@@ -62,6 +62,7 @@ export {
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
 	type RoutesResponseDto,
+	type RoutesSearchQuery,
 	routesUpdateValidationSchema,
 } from "./modules/routes/routes.js";
 export {

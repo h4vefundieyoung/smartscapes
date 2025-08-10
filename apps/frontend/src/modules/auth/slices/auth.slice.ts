@@ -6,6 +6,7 @@ import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
 import {
 	getAuthenticatedUser,
+	logout,
 	patchAuthenticatedUser,
 	signIn,
 	signUp,
@@ -39,6 +40,11 @@ const { actions, name, reducer } = createSlice({
 			state.authenticatedUser = null;
 			state.dataStatus = DataStatus.REJECTED;
 			state.isInitialized = true;
+		});
+
+		builder.addCase(logout.fulfilled, (state) => {
+			state.authenticatedUser = null;
+			state.dataStatus = DataStatus.FULFILLED;
 		});
 
 		builder.addCase(signUp.fulfilled, (state, action) => {

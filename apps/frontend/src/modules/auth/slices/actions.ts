@@ -32,6 +32,15 @@ const getAuthenticatedUser = createAsyncThunk<
 	return user;
 });
 
+const logout = createAsyncThunk<null, undefined, AsyncThunkConfig>(
+	`${sliceName}/logout`,
+	async (_payload, { extra: { storage } }) => {
+		await storage.drop(StorageKey.TOKEN);
+
+		return null;
+	},
+);
+
 const signUp = createAsyncThunk<
 	APIResponse<UserSignUpResponseDto>,
 	UserSignUpRequestDto,
@@ -73,4 +82,4 @@ const patchAuthenticatedUser = createAsyncThunk<
 	return await authApi.patch(userId, payload);
 });
 
-export { getAuthenticatedUser, patchAuthenticatedUser, signIn, signUp };
+export { getAuthenticatedUser, logout, patchAuthenticatedUser, signIn, signUp };

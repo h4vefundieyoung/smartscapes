@@ -46,16 +46,16 @@ class UserFollowsController extends BaseController {
 	 *   post:
 	 *     tags:
 	 *       - Users
-	 *     summary: Follow a user
+	 *     summary: Follow another user
 	 *     security:
-	 * 	       - bearerAuth: []
+	 *       - bearerAuth: []
 	 *     parameters:
 	 *       - in: path
 	 *         name: userId
 	 *         required: true
 	 *         schema:
 	 *           type: integer
-	 *         description: ID of the user who is following
+	 *         description: ID of the authenticated user
 	 *     requestBody:
 	 *       required: true
 	 *       content:
@@ -69,9 +69,9 @@ class UserFollowsController extends BaseController {
 	 *                 example: 2
 	 *     responses:
 	 *       200:
-	 *         description: Successfully followed the user
+	 *         description: User followed successfully
 	 *       401:
-	 *         description: Unauthorized – userId does not match authorized user
+	 *         description: Unauthorized – ID does not match authenticated user
 	 */
 
 	public async follow(
@@ -109,25 +109,25 @@ class UserFollowsController extends BaseController {
 	 *       - Users
 	 *     summary: Unfollow a user
 	 *     security:
-	 * 	       - bearerAuth: []
+	 *       - bearerAuth: []
 	 *     parameters:
 	 *       - in: path
 	 *         name: userId
 	 *         required: true
 	 *         schema:
 	 *           type: integer
-	 *         description: ID of the user who wants to unfollow
+	 *         description: ID of the authenticated user
 	 *       - in: path
 	 *         name: id
 	 *         required: true
 	 *         schema:
 	 *           type: integer
-	 *         description: ID of the user to be unfollowed
+	 *         description: ID of the user to unfollow
 	 *     responses:
 	 *       200:
-	 *         description: Successfully unfollowed the user
+	 *         description: User unfollowed successfully
 	 *       401:
-	 *         description: Unauthorized – userId does not match authorized user
+	 *         description: Unauthorized – ID does not match authenticated user
 	 */
 
 	public async unfollow(

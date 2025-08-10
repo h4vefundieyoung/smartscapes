@@ -13,6 +13,7 @@ type Properties<TFieldValues extends FieldValues> = {
 	control: Control<TFieldValues, null>;
 	errors: FieldErrors<TFieldValues>;
 	label: string;
+	maxLength?: number;
 	name: FieldPath<TFieldValues>;
 	placeholder?: string;
 };
@@ -21,6 +22,7 @@ const TextArea = <TFieldValues extends FieldValues>({
 	control,
 	errors,
 	label,
+	maxLength,
 	name,
 	placeholder,
 }: Properties<TFieldValues>): React.JSX.Element => {
@@ -36,6 +38,7 @@ const TextArea = <TFieldValues extends FieldValues>({
 			<textarea
 				{...field}
 				className={styles["textarea"]}
+				maxLength={maxLength}
 				placeholder={placeholder}
 			/>
 			{fieldError?.message && (

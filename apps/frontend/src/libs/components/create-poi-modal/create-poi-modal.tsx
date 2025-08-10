@@ -86,6 +86,7 @@ const CreatePOIModal = ({
 						control={control}
 						errors={errors}
 						label="Description (optional)"
+						maxLength={99}
 						name="description"
 					/>
 				</div>

@@ -83,4 +83,4 @@ jobs:
         run: npm run build:shared
 
       - name: Test Code
-        run: npm run test
+        run: npm run test:unit

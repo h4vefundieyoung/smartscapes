@@ -11,7 +11,11 @@ type Properties = {
 	onClose: () => void;
 };
 
-const Modal = ({ children, isOpen, onClose }: Properties): React.JSX.Element => {
+const Modal = ({
+	children,
+	isOpen,
+	onClose,
+}: Properties): React.JSX.Element => {
 	const dialogReference = useRef<HTMLDialogElement>(null);
 
 	useEffect(() => {
@@ -23,8 +27,7 @@ const Modal = ({ children, isOpen, onClose }: Properties): React.JSX.Element => 
 
 		if (isOpen) {
 			dialog.show();
-		}
-		else {
+		} else {
 			dialog.close();
 		}
 	}, [isOpen]);
@@ -35,7 +38,9 @@ const Modal = ({ children, isOpen, onClose }: Properties): React.JSX.Element => 
 		}
 
 		const onKeyDown = (event: KeyboardEvent): void => {
-			if (event.key === "Escape") { onClose(); }
+			if (event.key === "Escape") {
+				onClose();
+			}
 		};
 
 		document.addEventListener("keydown", onKeyDown);

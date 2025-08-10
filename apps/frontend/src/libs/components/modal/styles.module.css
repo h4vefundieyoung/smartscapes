@@ -8,10 +8,10 @@
 	padding: 24px;
 	margin: 0;
 	overflow: auto;
-	transform: translate(-50%, -50%);
 	background: var(--color-base);
 	border: 1px solid var(--color-stroke-weak);
 	border-radius: 8px;
+	transform: translate(-50%, -50%);
 }
 
 .backdrop {

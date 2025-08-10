@@ -137,11 +137,15 @@ class UserRepository implements Repository {
 	}
 
 	public async findById(id: number): Promise<null | UserEntity> {
-		const user = (await this.userModel
+		const user = await this.userModel
 			.query()
 			.findById(id)
 			.withGraphJoined("group.permissions")
-			.first()) as UserModel;
+			.first();
+
+		if (!user) {
+			return null;
+		}
 
 		const group = user.group as NonNullable<typeof user.group>;
 		const permissions = user.group?.permissions as NonNullable<
@@ -191,18 +195,14 @@ class UserRepository implements Repository {
 
 		return {
 			firstName: user.firstName,
-			group: {
+			group: GroupEntity.initializeWithPermissions({
 				id: group.id,
 				key: group.key,
 				name: group.name,
 				permissions: permissions.map((permission) =>
-					PermissionEntity.initialize({
-						id: permission.id,
-						key: permission.key,
-						name: permission.name,
-					}).toObject(),
+					PermissionEntity.initialize(permission).toObject(),
 				),
-			},
+			}).toObject(),
 			groupId: user.groupId,
 			id: user.id,
 			lastName: user.lastName,

@@ -108,8 +108,12 @@ describe("UserRepository", () => {
 	it("patch should update user profile", async () => {
 		const updatedUser = {
 			...mockUser.toObject(),
-			firstName: "Jane",
-			lastName: "Smith",
+			"group:id": 2,
+			"group:key": "users",
+			"group:name": "Users",
+			"group:permissions:id": 1,
+			"group:permissions:key": "READ",
+			"group:permissions:name": "Can read",
 			passwordHash: "hash",
 			passwordSalt: "salt",
 		};
@@ -117,6 +121,8 @@ describe("UserRepository", () => {
 		const userEntity = UserEntity.initialize(updatedUser);
 
 		databaseTracker.on.update("users").response([updatedUser]);
+
+		databaseTracker.on.select("users").response([updatedUser]);
 
 		const result = await userRepository.patch(mockUser.toObject().id, {
 			firstName: "Jane",

@@ -227,38 +227,44 @@ class UserRepository implements Repository {
 	): Promise<null | UserEntity> {
 		const { firstName, lastName } = payload;
 
-		const [updatedRow] = await this.userModel
-			.query()
-			.patch({ firstName, lastName })
-			.where("id", "=", id)
-			.returning("*")
-			.execute();
+		return await transaction(this.userModel, async (UserModel) => {
+			const [updatedRow] = await UserModel.query()
+				.patch({ firstName, lastName })
+				.where("id", "=", id)
+				.returning("*")
+				.execute();
 
-		if (!updatedRow) {
-			return null;
-		}
+			if (!updatedRow) {
+				return null;
+			}
 
-		const group = updatedRow.group as NonNullable<typeof updatedRow.group>;
-		const permissions = updatedRow.group?.permissions as NonNullable<
-			typeof group.permissions
-		>;
+			const user = (await UserModel.query()
+				.where("users.id", updatedRow.id)
+				.withGraphJoined("group.permissions")
+				.first()) as UserModel;
 
-		return UserEntity.initialize({
-			email: updatedRow.email,
-			firstName: updatedRow.firstName,
-			group: GroupEntity.initializeWithPermissions({
-				id: group.id,
-				key: group.key,
-				name: group.name,
-				permissions: permissions.map((permission) =>
-					PermissionEntity.initialize(permission).toObject(),
-				),
-			}).toObject(),
-			groupId: updatedRow.groupId,
-			id: updatedRow.id,
-			lastName: updatedRow.lastName,
-			passwordHash: updatedRow.passwordHash,
-			passwordSalt: updatedRow.passwordSalt,
+			const group = user.group as NonNullable<typeof user.group>;
+			const permissions = group.permissions as NonNullable<
+				typeof group.permissions
+			>;
+
+			return UserEntity.initialize({
+				email: user.email,
+				firstName: user.firstName,
+				group: GroupEntity.initializeWithPermissions({
+					id: group.id,
+					key: group.key,
+					name: group.name,
+					permissions: permissions.map((permission) =>
+						PermissionEntity.initialize(permission).toObject(),
+					),
+				}).toObject(),
+				groupId: user.groupId,
+				id: user.id,
+				lastName: user.lastName,
+				passwordHash: user.passwordHash,
+				passwordSalt: user.passwordSalt,
+			});
 		});
 	}
 }

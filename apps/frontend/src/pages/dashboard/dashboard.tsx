@@ -1,5 +1,4 @@
 import { FileFolderName } from "@smartscapes/shared/src/modules/files/libs/enums/file-folder-name.enum.js";
-import { useCallback, useState } from "react";
 
 import {
 	Button,
@@ -11,10 +10,16 @@ import {
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
 import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import { useAppForm, useAppSelector } from "~/libs/hooks/hooks.js";
+import {
+	useAppForm,
+	useAppSelector,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from "~/libs/hooks/hooks.js";
 import { filesApi } from "~/modules/files/files.js";
 
-import { mockImages } from "../../libs/components/carousel/assets/mock-images/mock-images.js";
 import { Carousel } from "../../libs/components/carousel/carousel.js";
 import styles from "./styles.module.css";
 
@@ -23,11 +28,10 @@ type FormValues = {
 	singleColor: null | string;
 };
 
-const ONE = 1;
-
 const Dashboard = (): React.JSX.Element => {
 	const [uploadedImages, setUploadedImages] = useState<string[]>([]);
 	const [isUploading, setIsUploading] = useState<boolean>(false);
+	const fileInputReference = useRef<HTMLInputElement>(null);
 	const authenticatedUser = useAppSelector(
 		({ auth }) => auth.authenticatedUser,
 	);
@@ -56,16 +60,13 @@ const Dashboard = (): React.JSX.Element => {
 			setIsUploading(true);
 
 			try {
-				const responseURL = await filesApi.uploadFile(
-					FileFolderName.AVATARS,
+				const responseURL = await filesApi.uploadFile({
 					file,
-				);
+					folder: FileFolderName.AVATARS,
+				});
 
 				setUploadedImages((previous) => [...previous, responseURL.data.url]);
 				setIsUploading(false);
-
-				// eslint-disable-next-line no-console
-				console.log("File uploaded successfully!");
 			} catch (error) {
 				// eslint-disable-next-line no-console
 				console.error("Upload failed:", error);
@@ -75,6 +76,22 @@ const Dashboard = (): React.JSX.Element => {
 		},
 		[],
 	);
+
+	const handleButtonClick = useCallback(() => {
+		fileInputReference.current?.click();
+	}, []);
+
+	useEffect(() => {
+		filesApi
+			.getAllFiles()
+			.then((response) => {
+				setUploadedImages(response.data.map((file) => file.url));
+			})
+			.catch((error: unknown) => {
+				// eslint-disable-next-line no-console
+				console.error("Failed to load files:", error);
+			});
+	}, []);
 
 	return (
 		<div className={styles["container"]}>
@@ -87,11 +104,26 @@ const Dashboard = (): React.JSX.Element => {
 					<Sidebar navigationItemsGroups={NAVIGATION_ITEMS_GROUPS} />
 				</div>
 				<Loader />
-				<div className={styles["button-container"]}>
-					<Button label="Button for test" type="button" />
-				</div>
 				<div className={styles["carousel-container"]}>
-					<Carousel images={mockImages} />
+					<Carousel images={uploadedImages} />
+				</div>
+
+				<div className={styles["file-upload-container"]}>
+					<label style={{ display: "block", marginBottom: "10px" }}>
+						<Button
+							label={isUploading ? "Loading..." : "Select File"}
+							onClick={handleButtonClick}
+							type="button"
+						/>
+						<input
+							accept="image/*"
+							disabled={isUploading}
+							onChange={handleFileUpload}
+							ref={fileInputReference}
+							style={{ display: "none" }}
+							type="file"
+						/>
+					</label>
 				</div>
 				<div className={styles["select-container"]}>
 					<Select
@@ -107,41 +139,6 @@ const Dashboard = (): React.JSX.Element => {
 						name="multiColors"
 						options={colorOptions}
 					/>
-				</div>
-				<div
-					style={{ border: "1px solid #ccc", margin: "20px", padding: "20px" }}
-				>
-					<h3>File Upload Test</h3>
-					<input
-						accept="image/*"
-						disabled={isUploading}
-						onChange={handleFileUpload}
-						style={{ marginBottom: "10px" }}
-						type="file"
-					/>
-					{isUploading && <p>Uploading...</p>}
-					<div
-						style={{
-							display: "grid",
-							gap: "10px",
-							gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-							marginTop: "20px",
-						}}
-					>
-						{uploadedImages.map((imageUrl, index) => (
-							<div
-								key={index}
-								style={{ border: "1px solid #ddd", padding: "10px" }}
-							>
-								<img
-									alt={`Uploaded ${String(index + ONE)}`}
-									src={imageUrl}
-									style={{ height: "150px", objectFit: "cover", width: "100%" }}
-								/>
-								<p style={{ fontSize: "12px", marginTop: "5px" }}>{imageUrl}</p>
-							</div>
-						))}
-					</div>
 				</div>
 			</div>
 		</div>

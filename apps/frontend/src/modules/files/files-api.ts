@@ -5,7 +5,10 @@ import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
 
 import { FilesApiPath } from "./libs/enums/enums.js";
-import { type FileUploadUrlResponseDto } from "./libs/types/types.js";
+import {
+	type FileUploadRequestDto,
+	type FileUploadResponseDto,
+} from "./libs/types/types.js";
 
 type Constructor = {
 	baseUrl: string;
@@ -18,15 +21,27 @@ class FilesApi extends BaseHTTPApi {
 		super({ baseUrl, http, path: APIPath.FILES, storage });
 	}
 
+	public async getAllFiles(): Promise<APIResponse<FileUploadResponseDto[]>> {
+		const response = await this.load<APIResponse<FileUploadResponseDto[]>>(
+			this.getFullEndpoint(FilesApiPath.ROOT, {}),
+			{
+				hasAuth: true,
+				method: "GET",
+			},
+		);
+
+		return await response.json();
+	}
+
 	public async uploadFile(
-		folder: string,
-		file: File,
-	): Promise<APIResponse<FileUploadUrlResponseDto>> {
+		payload: FileUploadRequestDto<File>,
+	): Promise<APIResponse<FileUploadResponseDto>> {
+		const { file, folder } = payload;
 		const formData = new FormData();
 
 		formData.append("file", file);
 
-		const response = await this.load<APIResponse<FileUploadUrlResponseDto>>(
+		const response = await this.load<APIResponse<FileUploadResponseDto>>(
 			this.getFullEndpoint(FilesApiPath.UPLOAD, { folder }),
 			{
 				hasAuth: true,

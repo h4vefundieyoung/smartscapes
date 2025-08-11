@@ -1,6 +1,6 @@
 const FilesApiPath = {
 	ROOT: "/",
-	UPLOAD: "/upload",
+	UPLOAD: "/upload/:folder",
 } as const;
 
 export { FilesApiPath };

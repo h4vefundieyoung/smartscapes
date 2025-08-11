@@ -1,13 +1,14 @@
 import { type MultipartFile } from "@fastify/multipart";
 
-import { type AWSService } from "~/libs/modules/aws/base-aws.module.js";
+import { type AWSService } from "~/libs/modules/aws/aws.js";
 import { type Service } from "~/libs/types/types.js";
 
 import { FilesEntity } from "./files.entity.js";
 import { type FilesRepository } from "./files.repository.js";
 import {
 	type FileContentType,
-	type FileUploadUrlResponseDto,
+	type FileUploadRequestDto,
+	type FileUploadResponseDto,
 } from "./libs/types/types.js";
 
 class FilesService implements Service {
@@ -22,7 +23,7 @@ class FilesService implements Service {
 	public async create(payload: {
 		contentType: FileContentType;
 		url: string;
-	}): Promise<FileUploadUrlResponseDto> {
+	}): Promise<FileUploadResponseDto> {
 		const { contentType, url } = payload;
 
 		const item = await this.filesRepository.create(
@@ -35,19 +36,25 @@ class FilesService implements Service {
 		return item.toObject();
 	}
 
-	public async getAll(): Promise<FileUploadUrlResponseDto[]> {
+	public async getAll(): Promise<FileUploadResponseDto[]> {
 		const items = await this.filesRepository.findAll();
 
 		return items.map((item) => item.toObject());
 	}
 
 	public async uploadFile(
-		file: MultipartFile,
-	): Promise<FileUploadUrlResponseDto> {
+		payload: FileUploadRequestDto<MultipartFile>,
+	): Promise<FileUploadResponseDto> {
+		const { file, folder } = payload;
 		const { filename, mimetype } = file;
 		const buffer = await file.toBuffer();
+		const generatedFileName = this.generateFileName(folder, filename);
 
-		const url = await this.awsService.uploadFile(buffer, filename, mimetype);
+		const url = await this.awsService.uploadFile(
+			buffer,
+			generatedFileName,
+			mimetype,
+		);
 
 		const savedFile = await this.filesRepository.create(
 			FilesEntity.initializeNew({

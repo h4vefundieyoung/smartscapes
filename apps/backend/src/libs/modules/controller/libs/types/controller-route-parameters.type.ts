@@ -12,6 +12,7 @@ type ControllerRouteParameters<
 	path: string;
 	validation?: {
 		body?: ValidationSchema;
+		params?: ValidationSchema;
 		query?: ValidationSchema;
 	};
 };

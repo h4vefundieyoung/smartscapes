@@ -5,3 +5,4 @@ import { AWSService } from "./base-aws.module.js";
 const awsService = new AWSService(config, logger);
 
 export { awsService };
+export { type AWSService } from "./base-aws.module.js";

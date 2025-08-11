@@ -73,6 +73,9 @@ export {
 	type UserUnfollowsParametersDto,
 } from "./modules/user-follows/user-follows.js";
 export {
+	type AuthenticatedUserPatchRequestDto,
+	type AuthenticatedUserPatchResponseDto,
+	authenticatedUserPatchValidationSchema,
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetByIdItemResponseDto,

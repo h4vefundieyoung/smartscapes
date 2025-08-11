@@ -80,7 +80,7 @@ const config = ({ mode }: ConfigEnv): ReturnType<typeof defineConfig> => {
 				registerType: "autoUpdate",
 				workbox: {
 					globIgnores: ["**/node_modules/**/*", "sw.js", "workbox-*.js"],
-					globPatterns: ["**/*.{js,css,html,ico,png,svg,jpg,woff,woff2}"],
+					globPatterns: ["**/*.{js,css,html,ico,png,svg,jpg,woff2}"],
 					maximumFileSizeToCacheInBytes: MAX_FILE_CACHE_SIZE_MB * BYTES_IN_MB,
 				},
 			}),

@@ -1,13 +1,9 @@
-import mapboxGLLibrary from "mapbox-gl";
 import MapboxWorker from "mapbox-gl/dist/mapbox-gl-csp-worker.js?worker";
+import mapboxGLLibrary from "mapbox-gl/dist/mapbox-gl-csp.js";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-type MapboxGL = typeof mapboxGLLibrary & {
-	workerClass: typeof MapboxWorker;
-};
+const mapboxgl = mapboxGLLibrary;
 
-const mapboxgl = mapboxGLLibrary as MapboxGL;
-
-mapboxgl.workerClass = MapboxWorker;
+mapboxgl.workerClass = MapboxWorker as typeof mapboxGLLibrary.workerClass;
 
 export { mapboxgl };

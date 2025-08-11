@@ -4,8 +4,23 @@ import { describe, it } from "node:test";
 import { HTTPCode } from "~/libs/enums/enums.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
+import { GroupEntity } from "../groups/group.entity.js";
+import { PermissionEntity } from "../permission/permission.entity.js";
 import { RoutesController } from "./routes.controller.js";
 import { type RoutesService } from "./routes.service.js";
+
+const mockPermission = PermissionEntity.initialize({
+	id: 1,
+	key: "READ",
+	name: "Can read",
+});
+
+const mockGroup = GroupEntity.initializeWithPermissions({
+	id: 2,
+	key: "users",
+	name: "Users",
+	permissions: [mockPermission.toObject()],
+}).toObject();
 
 const mockDelete: RoutesService["delete"] = () => {
 	return Promise.resolve(true);
@@ -15,6 +30,8 @@ describe("Routes controller", () => {
 	const mockUser = {
 		email: "test@example.com",
 		firstName: "John",
+		group: mockGroup,
+		groupId: 2,
 		id: 1,
 		lastName: "Doe",
 	};

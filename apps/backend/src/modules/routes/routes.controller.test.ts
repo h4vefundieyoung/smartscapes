@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { HTTPCode } from "~/libs/modules/http/http.js";
+import { HTTPCode } from "~/libs/enums/enums.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { GroupEntity } from "../groups/group.entity.js";
@@ -9,32 +9,10 @@ import { PermissionEntity } from "../permission/permission.entity.js";
 import { RoutesController } from "./routes.controller.js";
 import { type RoutesService } from "./routes.service.js";
 
-const FIRST_POI_ID = 1;
-const SECOND_POI_ID = 2;
-const FIRST_VISIT_ORDER = 0;
-const SECOND_VISIT_ORDER = 1;
-
-const mockLogger: Logger = {
-	debug: () => {},
-	error: () => {},
-	info: () => {},
-	warn: () => {},
-};
-
-const mockRoute = {
-	description: "Test route description",
-	id: FIRST_POI_ID,
-	name: "Test Route",
-	pois: [
-		{ id: FIRST_POI_ID, visitOrder: FIRST_VISIT_ORDER },
-		{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
-	],
-};
-
 const mockPermission = PermissionEntity.initialize({
 	id: 1,
-	key: "read",
-	name: "Read",
+	key: "READ",
+	name: "Can read",
 });
 
 const mockGroup = GroupEntity.initializeWithPermissions({
@@ -42,22 +20,65 @@ const mockGroup = GroupEntity.initializeWithPermissions({
 	key: "users",
 	name: "Users",
 	permissions: [mockPermission.toObject()],
-});
-
-const mockUser = {
-	email: "test@example.com",
-	firstName: "John",
-	group: mockGroup.toObject(),
-	groupId: mockGroup.toObject().id,
-	id: 1,
-	lastName: "Doe",
-};
+}).toObject();
 
 const mockDelete: RoutesService["delete"] = () => {
 	return Promise.resolve(true);
 };
 
-describe("RoutesController", () => {
+describe("Routes controller", () => {
+	const mockUser = {
+		email: "test@example.com",
+		firstName: "John",
+		group: mockGroup,
+		groupId: 2,
+		id: 1,
+		lastName: "Doe",
+	};
+
+	const mockLogger: Logger = {
+		debug: () => {},
+		error: () => {},
+		info: () => {},
+		warn: () => {},
+	};
+
+	const FIRST_POI_ID = 1;
+	const SECOND_POI_ID = 2;
+	const FIRST_VISIT_ORDER = 0;
+	const SECOND_VISIT_ORDER = 1;
+
+	const mockRoute = {
+		description: "Test route description",
+		id: FIRST_POI_ID,
+		name: "Test Route",
+		pois: [
+			{ id: FIRST_POI_ID, visitOrder: FIRST_VISIT_ORDER },
+			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
+		],
+	};
+
+	it("Should return data with 200 status code", async () => {
+		const mockData = "mockData";
+		const constructRouteMockData = {
+			body: { pointsOfInterest: [] },
+			params: null,
+			query: null,
+			user: mockUser,
+		};
+		const routesServiceMock = {
+			construct: () => Promise.resolve(mockData),
+		} as unknown as RoutesService;
+		const controller = new RoutesController(mockLogger, routesServiceMock);
+
+		const { payload, status } = await controller.constructRoute(
+			constructRouteMockData,
+		);
+
+		assert.equal(status, HTTPCode.OK);
+		assert.equal(payload.data, mockData);
+	});
+
 	it("create should return created route", async () => {
 		const mockCreate: RoutesService["create"] = () => {
 			return Promise.resolve(mockRoute);

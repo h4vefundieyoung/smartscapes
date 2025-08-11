@@ -1,1 +1,1 @@
-export { METERS_IN_KM } from "@smartscapes/shared";
+export { METERS_IN_KM, TIME_UNIT } from "@smartscapes/shared";

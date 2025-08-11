@@ -15,6 +15,7 @@ import { Auth } from "~/pages/auth/auth.jsx";
 import { NotFound } from "~/pages/not-found/not-found.jsx";
 
 import { Dashboard } from "./pages/dashboard/dashboard.js";
+import { Explore } from "./pages/explore/explore.js";
 import { Landing } from "./pages/landing/landing.jsx";
 import { Profile } from "./pages/profile/profile.js";
 
@@ -42,6 +43,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 									</ProtectedRoute>
 								),
 								path: AppRoute.APP,
+							},
+							{
+								element: <Explore />,
+								path: AppRoute.EXPLORE,
 							},
 							{
 								element: (

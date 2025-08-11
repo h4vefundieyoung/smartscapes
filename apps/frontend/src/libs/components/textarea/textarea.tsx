@@ -5,44 +5,50 @@ import {
 	type FieldValues,
 } from "react-hook-form";
 
+import errorIcon from "~/assets/images/error.svg";
+import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 
-type Properties<TFieldValues extends FieldValues> = {
-	control: Control<TFieldValues, null>;
-	errors: FieldErrors<TFieldValues>;
+type Properties<T extends FieldValues> = {
+	control: Control<T, null>;
+	errors: FieldErrors<T>;
 	label: string;
-	maxLength?: number;
-	name: FieldPath<TFieldValues>;
+	name: FieldPath<T>;
 	placeholder?: string;
 };
 
-const TextArea = <TFieldValues extends FieldValues>({
+const TextArea = <T extends FieldValues>({
 	control,
 	errors,
 	label,
-	maxLength,
 	name,
-	placeholder,
-}: Properties<TFieldValues>): React.JSX.Element => {
+	placeholder = "",
+}: Properties<T>): React.JSX.Element => {
 	const { field } = useFormController({ control, name });
 
-	const fieldError = (
-		errors as unknown as Record<string, undefined | { message?: string }>
-	)[name];
+	const error = errors[name]?.message as string | undefined;
+	const hasError = Boolean(error);
 
 	return (
 		<label className={styles["label"]}>
-			<span className={styles["caption"]}>{label}</span>
+			<span className={styles["label-caption"]}>{label}</span>
 			<textarea
-				{...field}
-				className={styles["textarea"]}
-				maxLength={maxLength}
+				className={combineClassNames(
+					styles["textarea"],
+					hasError && styles["textarea-error"],
+				)}
+				name={field.name}
+				onChange={field.onChange}
 				placeholder={placeholder}
+				value={field.value ?? ""}
 			/>
-			{fieldError?.message && (
-				<span className={styles["error"]}>{String(fieldError.message)}</span>
+			{hasError && (
+				<span className={styles["error"]} id={`${String(name)}-error`}>
+					<img alt="error-icon" src={errorIcon} />
+					{error}
+				</span>
 			)}
 		</label>
 	);

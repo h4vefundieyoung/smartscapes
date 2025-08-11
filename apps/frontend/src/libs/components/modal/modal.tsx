@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useEffect, useRef } from "~/libs/hooks/hooks.js";
+import { useCallback, useEffect } from "~/libs/hooks/hooks.js";
 
 import { Icon } from "../components.js";
 import styles from "./styles.module.css";
@@ -16,25 +16,9 @@ const Modal = ({
 	isOpen,
 	onClose,
 }: Properties): React.JSX.Element => {
-	const dialogReference = useRef<HTMLDialogElement>(null);
-
-	useEffect(() => {
-		const dialog = dialogReference.current;
-
-		if (!dialog) {
-			return;
-		}
-
-		if (isOpen) {
-			dialog.show();
-		} else {
-			dialog.close();
-		}
-	}, [isOpen]);
-
-	useEffect(() => {
+	useEffect((): (() => void) => {
 		if (!isOpen) {
-			return;
+			return () => {};
 		}
 
 		const onKeyDown = (event: KeyboardEvent): void => {
@@ -50,21 +34,22 @@ const Modal = ({
 		};
 	}, [isOpen, onClose]);
 
+	const handleBackdropClick = useCallback((): void => {
+		onClose();
+	}, [onClose]);
+
+	if (!isOpen) {
+		return <></>;
+	}
+
 	return (
 		<>
-			{isOpen && (
-				<div
-					aria-hidden="true"
-					className={styles["backdrop"]}
-					onClick={onClose}
-				/>
-			)}
-
-			<dialog
-				className={styles["dialog"]}
-				onCancel={onClose}
-				ref={dialogReference}
-			>
+			<div
+				aria-hidden="true"
+				className={styles["backdrop"]}
+				onClick={handleBackdropClick}
+			/>
+			<div aria-modal="true" className={styles["dialog"]} role="dialog">
 				<button
 					aria-label="Close"
 					className={styles["closeButton"]}
@@ -74,7 +59,7 @@ const Modal = ({
 					<Icon height={24} name="close" width={24} />
 				</button>
 				{children}
-			</dialog>
+			</div>
 		</>
 	);
 };

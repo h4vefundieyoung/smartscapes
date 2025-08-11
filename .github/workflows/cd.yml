@@ -18,7 +18,7 @@ jobs:
   release:
     environment:
       name: development
-      url: ${{ secrets.DEVELOPMENT_APP_URL }}
+      url: https://smart-scapes.com/
 
     permissions:
       contents: write

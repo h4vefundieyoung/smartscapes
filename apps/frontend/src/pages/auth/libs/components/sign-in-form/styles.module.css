@@ -29,7 +29,6 @@
 
 @media (width <= 991px) {
 	.container {
-		max-width: none;
 		margin: 0;
 	}
 }

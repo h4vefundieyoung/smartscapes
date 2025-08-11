@@ -199,12 +199,15 @@ class RoutesController extends BaseController {
 	 *             properties:
 	 *               name:
 	 *                 type: string
+	 *                 example: Landscape alley
 	 *               description:
 	 *                 type: string
+	 *                 example: An alley with blooming flowers
 	 *               pois:
 	 *                 type: array
 	 *                 items:
 	 *                   type: number
+	 *                 example: [1, 2]
 	 *     responses:
 	 *       200:
 	 *         description: The created route
@@ -285,11 +288,15 @@ class RoutesController extends BaseController {
 	 *           type: string
 	 *     responses:
 	 *       200:
-	 *         description: Route was found succesfully
+	 *         description: Route was found successfully
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/Route'
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: object
+	 *                   $ref: '#/components/schemas/Route'
 	 */
 
 	public async find(
@@ -364,8 +371,10 @@ class RoutesController extends BaseController {
 	 *             properties:
 	 *               name:
 	 *                 type: string
+	 *                 example: Scenic walk
 	 *               description:
 	 *                 type: string
+	 *                 example: A calm stroll in countryside
 	 *     responses:
 	 *       200:
 	 *         description: Route updated successfully
@@ -375,16 +384,7 @@ class RoutesController extends BaseController {
 	 *               type: object
 	 *               properties:
 	 *                 data:
-	 *                   type: object
-	 *                   properties:
-	 *                     id:
-	 *                       type: number
-	 *                     name:
-	 *                       type: string
-	 *                       example: Landscape alley
-	 *                     description:
-	 *                       type: string
-	 *                       example: An alley with blooming flowers
+	 *                   $ref: '#/components/schemas/Route'
 	 */
 
 	public async patch(

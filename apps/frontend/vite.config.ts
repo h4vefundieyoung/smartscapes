@@ -66,13 +66,7 @@ const config = ({ mode }: ConfigEnv): ReturnType<typeof defineConfig> => {
 							type: "image/png",
 						},
 						{
-							purpose: "any",
-							sizes: "512x512",
-							src: "/assets/images/pwa-512x512.png",
-							type: "image/png",
-						},
-						{
-							purpose: "maskable",
+							purpose: "any maskable",
 							sizes: "512x512",
 							src: "/assets/images/pwa-512x512.png",
 							type: "image/png",

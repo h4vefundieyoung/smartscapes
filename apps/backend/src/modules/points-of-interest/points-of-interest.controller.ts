@@ -210,10 +210,12 @@ class PointsOfInterestController extends BaseController {
 	 *     description: |
 	 *       Get all points of interest or filter them by location.
 	 *
-	 *       **With query parameters**: Returns all points of interest. Supports optional search by name.
+	 *       **Without query parameters**: Returns all points of interest
 	 *
 	 *       **With location parameters**: Returns points of interest within specified radius
 	 *       from the given coordinates (latitude/longitude)
+	 *
+	 *       **With name parameter**: Returns all points of interest searched by name
 	 *     parameters:
 	 *       - in: query
 	 *         name: latitude
@@ -249,11 +251,10 @@ class PointsOfInterestController extends BaseController {
 	 *         name: name
 	 *         schema:
 	 *           type: string
-	 *           pattern: '^[A-Za-z0-9 ,\-]+$'
 	 *           example: "Park"
 	 *         description: |
 	 *           Full or partial name to search for.
-	 *           Allows letters, digits, spaces, commas, and hyphens.
+	 *           Must be between 3 and 255 characters.
 	 *           Case-insensitive search is supported.
 	 *     responses:
 	 *       200:

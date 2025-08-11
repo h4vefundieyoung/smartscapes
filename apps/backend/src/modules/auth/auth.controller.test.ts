@@ -1,3 +1,4 @@
+import { type GroupItemWithPermissionsDto } from "@smartscapes/shared";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
@@ -7,7 +8,7 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
 	type AuthenticatedUserPatchResponseDto,
-	type UserGetByIdItemResponseDto,
+	type UserAuthResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
@@ -18,9 +19,19 @@ import { type AuthService } from "./auth.service.js";
 describe("AuthController", () => {
 	const mockToken = "mock token";
 
-	const mockUser: UserGetByIdItemResponseDto = {
+	const mockUser: UserAuthResponseDto = {
 		email: "test@example.com",
 		firstName: "John",
+		group: {
+			id: 2,
+			key: "users",
+			name: "Users",
+			permissions: [
+				{ id: 1, key: "read", name: "Read Permission" },
+				{ id: 2, key: "write", name: "Write Permission" },
+			],
+		},
+		groupId: 2,
 		id: 1,
 		lastName: "Doe",
 	};
@@ -28,6 +39,16 @@ describe("AuthController", () => {
 	const mockPatchUser: AuthenticatedUserPatchResponseDto = {
 		email: "test@example.com",
 		firstName: "Jane",
+		group: {
+			id: 2,
+			key: "users",
+			name: "Users",
+			permissions: [
+				{ id: 1, key: "read", name: "Read Permission" },
+				{ id: 2, key: "write", name: "Write Permission" },
+			],
+		} as GroupItemWithPermissionsDto,
+		groupId: 2,
 		id: 1,
 		lastName: "Smith",
 	};
@@ -78,13 +99,13 @@ describe("AuthController", () => {
 	it("signUp should create and return token and new user", async () => {
 		const mockResponseData: UserSignUpResponseDto = {
 			token: mockToken,
-			user: {
-				...mockUser,
-			},
+			user: mockUser,
 		};
 
-		const mockSignUp: AuthService["signUp"] = () => {
-			return Promise.resolve(mockResponseData);
+		const mockSignUp: AuthService["signUp"] = async () => {
+			await Promise.resolve();
+
+			return mockResponseData;
 		};
 
 		const authService = {
@@ -109,9 +130,7 @@ describe("AuthController", () => {
 			payload: {
 				data: {
 					token: mockToken,
-					user: {
-						...mockUser,
-					},
+					user: { ...mockUser },
 				},
 			},
 			status: HTTPCode.CREATED,
@@ -127,7 +146,7 @@ describe("AuthController", () => {
 		};
 
 		const data = authController.getAuthenticatedUser(
-			mockRequest as APIHandlerOptions,
+			mockRequest as unknown as APIHandlerOptions,
 		);
 
 		assert.deepStrictEqual(data, {

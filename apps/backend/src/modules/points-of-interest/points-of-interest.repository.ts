@@ -68,7 +68,7 @@ class PointsOfInterestRepository implements Repository {
 				}
 
 				if (options?.name) {
-					builder.whereILike("name", `%${options.name}%`);
+					builder.whereILike("name", `%${options.name.trim()}%`);
 				}
 			})
 			.execute();
@@ -151,7 +151,7 @@ class PointsOfInterestRepository implements Repository {
 			.orderBy("distance", SortingOrder.ASC)
 			.modify((builder) => {
 				if (name) {
-					builder.whereILike("name", `%${name}%`);
+					builder.whereILike("name", `%${name.trim()}%`);
 				}
 			})
 			.execute();

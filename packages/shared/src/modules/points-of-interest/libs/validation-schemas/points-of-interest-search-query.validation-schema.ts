@@ -16,6 +16,7 @@ const pointsOfInterestSearchQuery = z
 		longitude: longitudeSchema.optional(),
 		name: z
 			.string()
+			.trim()
 			.min(
 				PointsOfInterestValidationRule.NAME_MIN_LENGTH,
 				PointsOfInterestValidationMessage.NAME_MINIMUM_LENGTH,

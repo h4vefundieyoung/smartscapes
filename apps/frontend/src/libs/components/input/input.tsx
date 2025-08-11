@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { type MouseEvent, useCallback } from "react";
 import {
 	type Control,
 	type FieldErrors,
@@ -9,16 +9,18 @@ import {
 import { Icon } from "~/libs/components/icon/icon.js";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
+import { type IconName } from "~/libs/types/icon-name.type.js";
 
-import { ToggleVisionButton } from "./libs/components/toggle-vision-button/toggle-vision-button.js";
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
 	autocomplete?: HTMLInputElement["autocomplete"];
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
+	icon?: IconName;
 	label: string;
 	name: FieldPath<T>;
+	onIconClick?: () => void;
 	placeholder?: string;
 	type?: "email" | "password" | "text";
 };
@@ -27,26 +29,28 @@ const Input = <T extends FieldValues>({
 	autocomplete = "on",
 	control,
 	errors,
+	icon,
 	label,
 	name,
+	onIconClick,
 	placeholder = "",
 	type = "text",
 }: Properties<T>): React.JSX.Element => {
-	const [typeState, setTypeState] = useState<Properties<never>["type"]>(type);
 	const { field } = useFormController({ control, name });
 
 	const error = errors[name]?.message;
 	const hasError = Boolean(error);
-	const isPasswordButtonShown =
-		(type === "password" && typeState === "password") ||
-		(typeState === "text" && field.value);
 
-	const handlePasswordAppearanceToggle = useCallback((): void => {
-		const state: "password" | "text" =
-			typeState === "password" ? "text" : "password";
+	const handleIconClick = useCallback(
+		(event: MouseEvent<HTMLButtonElement>) => {
+			event.preventDefault();
 
-		setTypeState(state);
-	}, [typeState, setTypeState]);
+			if (onIconClick) {
+				onIconClick();
+			}
+		},
+		[onIconClick],
+	);
 
 	return (
 		<label className={styles["label"]}>
@@ -61,7 +65,7 @@ const Input = <T extends FieldValues>({
 					name={field.name}
 					onChange={field.onChange}
 					placeholder={placeholder}
-					type={typeState}
+					type={type}
 					value={field.value}
 				/>
 				{hasError && (
@@ -70,11 +74,20 @@ const Input = <T extends FieldValues>({
 						{error as string}
 					</span>
 				)}
-				{isPasswordButtonShown && (
-					<ToggleVisionButton
-						onAppearanceToggle={handlePasswordAppearanceToggle}
-						type={typeState}
-					/>
+				{icon && (
+					<button
+						className={styles["input-button"]}
+						onMouseDown={handleIconClick}
+						type="button"
+					>
+						<span className="visually-hidden">input icon-button</span>
+						<Icon
+							className={styles["input-button-icon"] || ""}
+							height={24}
+							name={icon}
+							width={24}
+						/>
+					</button>
 				)}
 			</span>
 		</label>

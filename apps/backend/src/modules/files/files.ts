@@ -11,7 +11,4 @@ const filesService = new FilesService(filesRepository, awsService);
 const filesController = new FilesController(logger, filesService);
 
 export { filesController };
-export {
-	type FileGetUploadUrlRequestDto,
-	type FileUploadUrlResponseDto,
-} from "./libs/types/types.js";
+export { type FileUploadUrlResponseDto } from "./libs/types/types.js";

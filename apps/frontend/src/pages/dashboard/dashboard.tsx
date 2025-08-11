@@ -9,7 +9,7 @@ import {
 	Sidebar,
 } from "~/libs/components/components.js";
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
-import { NAVIGATION_ITEMS } from "~/libs/constants/constants.js";
+import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppForm, useAppSelector } from "~/libs/hooks/hooks.js";
 import { filesApi } from "~/modules/files/files.js";
@@ -84,7 +84,7 @@ const Dashboard = (): React.JSX.Element => {
 					user={authenticatedUser}
 				/>
 				<div className={styles["sidebar-container"]}>
-					<Sidebar navigationItems={NAVIGATION_ITEMS} />
+					<Sidebar navigationItemsGroups={NAVIGATION_ITEMS_GROUPS} />
 				</div>
 				<Loader />
 				<div className={styles["button-container"]}>

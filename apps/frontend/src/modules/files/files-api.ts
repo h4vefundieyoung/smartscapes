@@ -5,9 +5,7 @@ import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
 
 import { FilesApiPath } from "./libs/enums/enums.js";
-import {
-	type FileUploadUrlResponseDto,
-} from "./libs/types/types.js";
+import { type FileUploadUrlResponseDto } from "./libs/types/types.js";
 
 type Constructor = {
 	baseUrl: string;
@@ -24,13 +22,12 @@ class FilesApi extends BaseHTTPApi {
 		folder: string,
 		file: File,
 	): Promise<APIResponse<FileUploadUrlResponseDto>> {
-		const generateFile = this.generateFileName(folder, file.name);
 		const formData = new FormData();
 
-		formData.append("file", generateFile);
+		formData.append("file", file);
 
 		const response = await this.load<APIResponse<FileUploadUrlResponseDto>>(
-			this.getFullEndpoint(FilesApiPath.UPLOAD, {}),
+			this.getFullEndpoint(FilesApiPath.UPLOAD, { folder }),
 			{
 				hasAuth: true,
 				method: "POST",
@@ -40,15 +37,6 @@ class FilesApi extends BaseHTTPApi {
 
 		return await response.json();
 	}
-
-	private generateFileName = (folder: string, fileName: string): string => {
-		const dotIndex = fileName.lastIndexOf(".");
-		const name = fileName.slice(0, dotIndex);
-		const extension = fileName.slice(dotIndex);
-		const timestamp = String(Date.now());
-
-		return `${folder}/${name}-${timestamp}${extension}`;
-	};
 }
 
 export { FilesApi };

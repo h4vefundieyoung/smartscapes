@@ -58,6 +58,15 @@ class FilesService implements Service {
 
 		return savedFile.toObject();
 	}
+
+	private generateFileName = (folder: string, fileName: string): string => {
+		const dotIndex = fileName.lastIndexOf(".");
+		const name = fileName.slice(0, dotIndex);
+		const extension = fileName.slice(dotIndex);
+		const timestamp = String(Date.now());
+
+		return `${folder}/${name}-${timestamp}${extension}`;
+	};
 }
 
 export { FilesService };

@@ -21,13 +21,6 @@ const config = ({ mode }: ConfigEnv): ReturnType<typeof defineConfig> => {
 		build: {
 			cssMinify: "lightningcss",
 			outDir: "build",
-			rollupOptions: {
-				output: {
-					manualChunks: {
-						mapbox: ["mapbox-gl"],
-					},
-				},
-			},
 		},
 		css: {
 			lightningcss: {
@@ -49,7 +42,7 @@ const config = ({ mode }: ConfigEnv): ReturnType<typeof defineConfig> => {
 					enabled: true,
 					type: "module",
 				},
-				includeAssets: ["favicon.svg", "apple-touch-icon.png"],
+				includeManifestIcons: false,
 				manifest: {
 					background_color: "#ffffff",
 					description:
@@ -87,7 +80,7 @@ const config = ({ mode }: ConfigEnv): ReturnType<typeof defineConfig> => {
 				registerType: "autoUpdate",
 				workbox: {
 					globIgnores: ["**/node_modules/**/*", "sw.js", "workbox-*.js"],
-					globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
+					globPatterns: ["**/*.{js,css,html,ico,png,svg,jpg,woff,woff2}"],
 					maximumFileSizeToCacheInBytes: MAX_FILE_CACHE_SIZE_MB * BYTES_IN_MB,
 				},
 			}),
@@ -101,6 +94,14 @@ const config = ({ mode }: ConfigEnv): ReturnType<typeof defineConfig> => {
 			],
 		},
 		server: {
+			headers: {
+				"Content-Security-Policy": [
+					"img-src 'self' data: blob:",
+					"connect-src 'self' https://api.mapbox.com https://events.mapbox.com https://*.tiles.mapbox.com",
+					"worker-src 'self' blob:",
+					"child-src 'self' blob:",
+				].join("; "),
+			},
 			port: Number(VITE_APP_DEVELOPMENT_PORT),
 			proxy: {
 				[VITE_APP_API_ORIGIN_URL as string]: {

@@ -199,12 +199,15 @@ class RoutesController extends BaseController {
 	 *             properties:
 	 *               name:
 	 *                 type: string
+	 *                 example: Landscape alley
 	 *               description:
 	 *                 type: string
+	 *                 example: An alley with blooming flowers
 	 *               pois:
 	 *                 type: array
 	 *                 items:
 	 *                   type: number
+	 *                 example: [1, 2]
 	 *     responses:
 	 *       200:
 	 *         description: The created route

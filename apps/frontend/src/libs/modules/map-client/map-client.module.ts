@@ -16,27 +16,20 @@ import { MapControlId } from "./libs/enums/enums.js";
 import {
 	type ControlPosition,
 	type IControl,
-	type MapBoxGLWithToken,
+	type LngLatLike,
 	type MapOptions,
-	type Marker,
-	type MarkerOptions,
-	type PointGeometry,
 } from "./libs/types/types.js";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 
 class MapClient {
+	private accessToken: MapOptions["accessToken"];
 	private controls = new Map<string, IControl>();
 	private map: mapboxgl.Map | null = null;
-	private markerClickHandler:
-		| ((id: string, coordinates: PointGeometry["coordinates"]) => void)
-		| undefined;
-	private markers = new Map<string, Marker>();
 	private resizeObserver: null | ResizeObserver = null;
 
 	public constructor() {
-		(mapboxgl as MapBoxGLWithToken).accessToken =
-			config.ENV.MAPBOX.ACCESS_TOKEN;
+		this.accessToken = config.ENV.MAPBOX.ACCESS_TOKEN;
 	}
 
 	public addGeolocateControl(): void {
@@ -59,9 +52,9 @@ class MapClient {
 		});
 	}
 
-	public addMarkers(markers: MarkerOptions[]): void {
+	public addMarkers(markers: { coordinates: LngLatLike }[]): void {
 		for (const marker of markers) {
-			this.addMarker(marker.id, marker);
+			this.addMarker(marker.coordinates);
 		}
 	}
 
@@ -93,17 +86,7 @@ class MapClient {
 		);
 	}
 
-	public clearAllMarkers(): void {
-		for (const marker of this.markers.values()) {
-			marker.remove();
-		}
-
-		this.markers.clear();
-	}
-
 	public destroy(): void {
-		this.clearAllMarkers();
-
 		for (const control of this.controls.values()) {
 			this.map?.removeControl(control);
 		}
@@ -131,11 +114,15 @@ class MapClient {
 		});
 	}
 
-	public init(container: HTMLElement, options: MapOptions = {}): void {
+	public init(container: HTMLElement): void {
+		if (!this.accessToken) {
+			return;
+		}
+
 		this.map = new mapboxgl.Map({
+			accessToken: this.accessToken,
 			container,
 			...MAP_OPTIONS,
-			...options,
 		});
 
 		this.resizeObserver = new ResizeObserver(() => {
@@ -166,34 +153,12 @@ class MapClient {
 		this.controls.set(id, control);
 	}
 
-	private addMarker(id: string, options: MarkerOptions): void {
+	private addMarker(coordinates: LngLatLike): void {
 		if (!this.map) {
 			return;
 		}
 
-		this.removeMarker(id);
-
-		const { coordinates, ...markerOptions } = options;
-
-		const marker = new mapboxgl.Marker({
-			...MARKER_OPTIONS,
-			...markerOptions,
-		})
-			.setLngLat(coordinates)
-			.addTo(this.map);
-
-		(marker as Marker).id = id;
-
-		if (this.markerClickHandler) {
-			const element = marker.getElement();
-			element.style.cursor = "pointer";
-			element.addEventListener("click", () => {
-				const lngLat = marker.getLngLat();
-				this.markerClickHandler?.(id, [lngLat.lng, lngLat.lat]);
-			});
-		}
-
-		this.markers.set(id, marker as Marker);
+		new mapboxgl.Marker(MARKER_OPTIONS).setLngLat(coordinates).addTo(this.map);
 	}
 
 	private removeControl(id: string): void {
@@ -202,15 +167,6 @@ class MapClient {
 		if (control && this.map) {
 			this.map.removeControl(control);
 			this.controls.delete(id);
-		}
-	}
-
-	private removeMarker(id: string): void {
-		const marker = this.markers.get(id);
-
-		if (marker) {
-			marker.remove();
-			this.markers.delete(id);
 		}
 	}
 }

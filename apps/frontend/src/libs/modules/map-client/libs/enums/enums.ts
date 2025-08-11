@@ -1,1 +1,1 @@
-export { MapControlId } from "./control-ids.enum.js";
+export { MapControlId } from "./map-control-ids.enum.js";

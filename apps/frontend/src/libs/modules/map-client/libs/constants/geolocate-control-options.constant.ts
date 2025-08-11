@@ -1,7 +1,6 @@
 import { type GeolocateControlOptions } from "../types/types.js";
 
 const GEOLOCATE_CONTROL_OPTIONS: GeolocateControlOptions = {
-	autoTrigger: false,
 	positionOptions: {
 		enableHighAccuracy: true,
 		maximumAge: 60_000,

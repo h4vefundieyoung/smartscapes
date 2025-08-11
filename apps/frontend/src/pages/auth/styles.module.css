@@ -42,6 +42,7 @@
 
 	.left-panel {
 		flex-grow: 1;
+		max-width: 480px;
 		padding: 48px;
 		margin: clamp(60px, 10vh, 100px) 40px;
 		border-radius: 30px;
@@ -58,7 +59,7 @@
 
 @media (width <= 768px) {
 	.left-panel {
-		padding: 26px;
+		padding: 24px;
 		margin: clamp(40px, 10vh, 60px) 20px;
 	}
 

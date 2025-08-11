@@ -364,8 +364,10 @@ class RoutesController extends BaseController {
 	 *             properties:
 	 *               name:
 	 *                 type: string
+	 *                 example: Scenic walk
 	 *               description:
 	 *                 type: string
+	 *                 example: A calm stroll in countryside
 	 *     responses:
 	 *       200:
 	 *         description: Route updated successfully
@@ -375,16 +377,7 @@ class RoutesController extends BaseController {
 	 *               type: object
 	 *               properties:
 	 *                 data:
-	 *                   type: object
-	 *                   properties:
-	 *                     id:
-	 *                       type: number
-	 *                     name:
-	 *                       type: string
-	 *                       example: Landscape alley
-	 *                     description:
-	 *                       type: string
-	 *                       example: An alley with blooming flowers
+	 *                   $ref: '#/components/schemas/Route'
 	 */
 
 	public async patch(

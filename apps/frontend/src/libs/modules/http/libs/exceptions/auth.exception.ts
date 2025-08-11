@@ -16,22 +16,14 @@ type Constructor = {
 	type: ValueOf<typeof APIErrorType>;
 };
 
-const AUTH_ERROR_DEFAULT_NAME = "Unauthorized";
-
 class AuthError extends HTTPError {
+	public static readonly name = "Unauthorized";
 	public name: string;
 
-	public constructor({
-		cause,
-		details,
-		message,
-		name = AUTH_ERROR_DEFAULT_NAME,
-		status,
-		type,
-	}: Constructor) {
+	public constructor({ cause, details, message, status, type }: Constructor) {
 		super({ cause, details, message, status, type });
-		this.name = name;
+		this.name = AuthError.name;
 	}
 }
 
-export { AUTH_ERROR_DEFAULT_NAME, AuthError };
+export { AuthError };

@@ -1,5 +1,67 @@
 # Changelog
 
+## [1.19.3](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.19.2...frontend-v1.19.3) (2025-08-11)
+
+
+### Bug Fixes
+
+* **frontend:** increase cache file size ss-295 ([#315](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/315)) ([3049b21](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/3049b21c3ec55eacbdcea0f85017a6f15a859755))
+
+## [1.19.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.19.1...frontend-v1.19.2) (2025-08-11)
+
+
+### Bug Fixes
+
+* **frontend:** remove files from tsconfig on frontend ss-295 ([#313](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/313)) ([14ab113](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/14ab113120aeae9d558dd6b9f6ecc208a2b9f129))
+
+## [1.19.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.19.0...frontend-v1.19.1) (2025-08-11)
+
+
+### Bug Fixes
+
+* **frontend:** remove unused type definitions ss-295 ([#311](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/311)) ([6344220](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/634422078c9ba49ac024ae30c1da10b118c3e07f))
+
+## [1.19.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.18.2...frontend-v1.19.0) (2025-08-11)
+
+
+### Features
+
+* **backend/shared:** mapbox api integration ss-193 ([#223](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/223)) ([e7511ca](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/e7511cabbee2440584cb1b1d6efaa672293f33fb))
+
+
+### Bug Fixes
+
+* **frontend:** set headers for mapbox api ss-295 ([#309](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/309)) ([3e433b0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/3e433b01e74d8dbc1bccc7392b5ec874e5f9622e))
+
+## [1.18.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.18.1...frontend-v1.18.2) (2025-08-11)
+
+
+### Bug Fixes
+
+* **frontend:** use mapbox csp version ss-295 ([#305](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/305)) ([84c6ad7](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/84c6ad7722a825f9085f4b21a8b6a966cb3db1c0))
+
+## [1.18.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.18.0...frontend-v1.18.1) (2025-08-11)
+
+
+### Bug Fixes
+
+* **frontend:** use mapbox csp version to avoid worker csp errors ss-295 ([#302](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/302)) ([bc11616](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/bc1161672c089646a803f2c362f5a9d54e0680f8))
+
+## [1.18.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.17.0...frontend-v1.18.0) (2025-08-11)
+
+
+### Features
+
+* **frontend/backend/shared:** profile page ss-185 ([#218](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/218)) ([a63adc4](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/a63adc4fd0165cd92fc9bb4d96a5fc623686c7d4))
+* **frontend:** implement basic maps integration ss-116 ([#215](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/215)) ([ff60cc5](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/ff60cc510a380b999b857d27b609f91d70afc16c))
+
+## [1.17.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.16.0...frontend-v1.17.0) (2025-08-10)
+
+
+### Features
+
+* **backend/frontend:** add logout functionality ss-182 ([#249](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/249)) ([e3a03fb](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/e3a03fbdc47c9d509d5aef7eb6a77866e122338f))
+
 ## [1.16.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.15.1...frontend-v1.16.0) (2025-08-07)
 
 

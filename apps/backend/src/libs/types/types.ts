@@ -5,7 +5,9 @@ export { type Service } from "./service.type.js";
 export {
 	type APIErrorResponse,
 	type APIResponse,
+	type APIValidationErrorDetail,
 	type HTTPMethod,
+	type LineStringGeometry,
 	type PointGeometry,
 	type UserAuthResponseDto,
 	type ValidationSchema,

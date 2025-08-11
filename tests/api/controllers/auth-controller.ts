@@ -11,11 +11,14 @@ class AuthController {
 	public constructor(private request: APIRequestContext) {}
 
 	public async getAuthenticatedUser(accessToken: string): Promise<APIResponse> {
-		return await this.request.get(`${APIPath.AUTH}${AuthApiPath.AUTH_USER}`, {
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
+		return await this.request.get(
+			`${APIPath.AUTH}${AuthApiPath.AUTHENTICATED_USER}`,
+			{
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
 			},
-		});
+		);
 	}
 
 	public async login(email: string, password: string): Promise<APIResponse> {

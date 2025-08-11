@@ -1,4 +1,4 @@
-export { METERS_IN_KM } from "./libs/constants/constants.js";
+export { METERS_IN_KM, TIME_UNIT } from "./libs/constants/constants.js";
 export {
 	APIErrorType,
 	APIPath,
@@ -23,6 +23,7 @@ export {
 	type APIErrorResponse,
 	type APIResponse,
 	type APIValidationErrorDetail,
+	type LineStringGeometry,
 	type PointGeometry,
 	type ValidationSchema,
 	type ValueOf,
@@ -58,9 +59,13 @@ export {
 	type RouteCategoryRequestDto,
 } from "./modules/route-categories/route-categories.js";
 export {
+	RouteApiPath,
+	routesConstructValidationSchema,
 	routesCreateValidationSchema,
+	type RoutesRequestConstructDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
+	type RoutesResponseConstructDto,
 	type RoutesResponseDto,
 	routesUpdateValidationSchema,
 } from "./modules/routes/routes.js";
@@ -72,6 +77,9 @@ export {
 	type UserUnfollowsParametersDto,
 } from "./modules/user-follows/user-follows.js";
 export {
+	type AuthenticatedUserPatchRequestDto,
+	type AuthenticatedUserPatchResponseDto,
+	authenticatedUserPatchValidationSchema,
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetByIdItemResponseDto,

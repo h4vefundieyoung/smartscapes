@@ -108,4 +108,51 @@ describe("UserService", () => {
 			items: [mockUser.toObject()],
 		});
 	});
+
+	it("patch should update user profile", async () => {
+		const updatedUser = {
+			...mockUser.toObject(),
+			firstName: "Jane",
+			lastName: "Smith",
+			passwordHash: "hash",
+			passwordSalt: "salt",
+		};
+
+		const userEntity = UserEntity.initialize(updatedUser);
+
+		const userRepository = {
+			patch: (() => Promise.resolve(userEntity)) as UserRepository["patch"],
+		} as UserRepository;
+
+		const userService = new UserService(userRepository, mockGroupService);
+
+		const result = await userService.patch(mockUser.toObject().id, {
+			firstName: "Jane",
+			lastName: "Smith",
+		});
+
+		assert.deepStrictEqual(result, userEntity.toObject());
+	});
+
+	it("patch should throw error when user not found", async () => {
+		const userRepository = {
+			patch: (() => Promise.resolve(null)) as UserRepository["patch"],
+		} as UserRepository;
+
+		const userService = new UserService(userRepository, mockGroupService);
+
+		await assert.rejects(
+			async () => {
+				await userService.patch(mockUser.toObject().id, {
+					firstName: "Jane",
+					lastName: "Smith",
+				});
+			},
+			(error: unknown) => {
+				assert.strictEqual((error as Error).message, "User not found");
+
+				return true;
+			},
+		);
+	});
 });

@@ -1,7 +1,10 @@
 import { transaction } from "objection";
 
 import { type Repository } from "~/libs/types/types.js";
-import { type UserPasswordDetails } from "~/modules/users/libs/types/types.js";
+import {
+	type AuthenticatedUserPatchRequestDto,
+	type UserPasswordDetails,
+} from "~/modules/users/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
 
@@ -176,9 +179,11 @@ class UserRepository implements Repository {
 	): Promise<null | UserPasswordDetails> {
 		const user = await this.userModel
 			.query()
+			.where("email", email)
 			.select(
 				"users.id",
 				"users.first_name",
+				"users.email",
 				"users.last_name",
 				"users.password_hash as passwordHash",
 				"users.password_salt as passwordSalt",
@@ -198,6 +203,7 @@ class UserRepository implements Repository {
 		>;
 
 		return {
+			email: user.email,
 			firstName: user.firstName,
 			group: GroupEntity.initializeWithPermissions({
 				id: group.id,
@@ -213,6 +219,22 @@ class UserRepository implements Repository {
 			passwordHash: user.passwordHash,
 			passwordSalt: user.passwordSalt,
 		};
+	}
+
+	public async patch(
+		id: number,
+		payload: AuthenticatedUserPatchRequestDto,
+	): Promise<null | UserEntity> {
+		const { firstName, lastName } = payload;
+
+		const [updatedRow] = await this.userModel
+			.query()
+			.patch({ firstName, lastName })
+			.where("id", "=", id)
+			.returning("*")
+			.execute();
+
+		return updatedRow ? UserEntity.initializeNew(updatedRow) : null;
 	}
 }
 

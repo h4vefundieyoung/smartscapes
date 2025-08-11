@@ -12,6 +12,7 @@ import { UserRepository } from "./user.repository.js";
 describe("UserRepository", () => {
 	let userRepository: UserRepository;
 	let databaseTracker: Tracker;
+	const NON_EXISTENT_ID = 999;
 
 	const mockPermission = PermissionEntity.initialize({
 		id: 1,
@@ -102,5 +103,37 @@ describe("UserRepository", () => {
 		const result = await userRepository.findAll();
 
 		assert.deepStrictEqual(result, [testUser]);
+	});
+
+	it("patch should update user profile", async () => {
+		const updatedUser = {
+			...mockUser.toObject(),
+			firstName: "Jane",
+			lastName: "Smith",
+			passwordHash: "hash",
+			passwordSalt: "salt",
+		};
+
+		const userEntity = UserEntity.initialize(updatedUser);
+
+		databaseTracker.on.update("users").response([updatedUser]);
+
+		const result = await userRepository.patch(mockUser.toObject().id, {
+			firstName: "Jane",
+			lastName: "Smith",
+		});
+
+		assert.deepStrictEqual(result, userEntity);
+	});
+
+	it("patch should return null when user not found", async () => {
+		databaseTracker.on.update("users").response([]);
+
+		const result = await userRepository.patch(NON_EXISTENT_ID, {
+			firstName: "Jane",
+			lastName: "Smith",
+		});
+
+		assert.strictEqual(result, null);
 	});
 });

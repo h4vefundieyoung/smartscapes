@@ -16,6 +16,7 @@ import {
 import { GroupEntity } from "../groups/group.entity.js";
 import { GroupKey } from "../groups/libs/enums/enums.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
+import { type UserPasswordDetails } from "../users/libs/types/user-password-details.type.js";
 
 describe("AuthService", () => {
 	const signUpRequestDto: UserSignUpRequestDto = {
@@ -106,12 +107,12 @@ describe("AuthService", () => {
 			password: "Password123!",
 		};
 
-		const mockPasswordDetails = {
+		const mockPasswordDetails: UserPasswordDetails = {
+			email: signInRequestDto.email,
 			firstName: "John",
 			group: mockGroup.toObject(),
 			groupId: mockGroup.toObject().id,
 			id: 1,
-			key: GroupKey.USERS,
 			lastName: "Doe",
 			passwordHash: "hashedPassword",
 			passwordSalt: "someSalt",

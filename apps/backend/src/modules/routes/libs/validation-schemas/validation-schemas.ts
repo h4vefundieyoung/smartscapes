@@ -1,4 +1,5 @@
 export {
+	routesConstructValidationSchema,
 	routesCreateValidationSchema,
 	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,

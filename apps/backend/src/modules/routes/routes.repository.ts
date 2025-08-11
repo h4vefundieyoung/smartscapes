@@ -1,6 +1,6 @@
 import { type Repository } from "~/libs/types/types.js";
 
-import { type RoutesFindAllOptions } from "./libs/types/type.js";
+import { type RoutesFindAllOptions } from "./libs/types/types.js";
 import { RoutesEntity } from "./routes.entity.js";
 import { type RoutesModel } from "./routes.model.js";
 

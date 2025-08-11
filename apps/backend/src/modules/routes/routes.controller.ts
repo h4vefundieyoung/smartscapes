@@ -1,19 +1,23 @@
-import { APIPath } from "~/libs/enums/enums.js";
+import { APIPath, HTTPCode } from "~/libs/enums/enums.js";
+import { setRateLimit } from "~/libs/hooks/hooks.js";
 import {
 	type APIHandlerOptions,
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
-import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
+import { RouteApiPath } from "./libs/enums/enums.js";
 import {
+	type RoutesRequestConstructDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
+	type RoutesResponseConstructDto,
 	type RoutesResponseDto,
 	type RoutesSearchQuery,
-} from "./libs/types/type.js";
+} from "./libs/types/types.js";
 import {
+	routesConstructValidationSchema,
 	routesCreateValidationSchema,
 	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
@@ -24,6 +28,40 @@ import { type RoutesService } from "./routes.service.js";
  * @swagger
  * components:
  *   schemas:
+ *     Coordinate:
+ *       type: array
+ *       items:
+ *         type: number
+ *       minItems: 2
+ *       maxItems: 2
+ *       example: [30.5, 50.4]
+ *
+ *     GetMapboxRouteResponseDto:
+ *       type: object
+ *       properties:
+ *         routes:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/MapboxRoute'
+ *         internalId:
+ *           type: string
+ *
+ *     MapboxRoute:
+ *       type: object
+ *       properties:
+ *         distance:
+ *           type: number
+ *         duration:
+ *           type: number
+ *         geometry:
+ *           type: object
+ *           properties:
+ *             coordinates:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Coordinate'
+ *             type:
+ *               type: string
  *     Route:
  *       type: object
  *       properties:
@@ -46,7 +84,19 @@ class RoutesController extends BaseController {
 
 	public constructor(logger: Logger, routesService: RoutesService) {
 		super(logger, APIPath.ROUTES);
+
 		this.routesService = routesService;
+
+		const constructRequestsPerMinute = 5;
+		this.addRoute({
+			handler: this.constructRoute.bind(this),
+			method: "POST",
+			path: RouteApiPath.CONSTRUCT,
+			preHandlers: [setRateLimit(constructRequestsPerMinute)],
+			validation: {
+				body: routesConstructValidationSchema,
+			},
+		});
 
 		this.addRoute({
 			handler: this.create.bind(this),
@@ -54,22 +104,26 @@ class RoutesController extends BaseController {
 			path: "/",
 			validation: { body: routesCreateValidationSchema },
 		});
+
 		this.addRoute({
 			handler: this.delete.bind(this),
 			method: "DELETE",
 			path: "/:id",
 		});
+
 		this.addRoute({
 			handler: this.findById.bind(this),
 			method: "GET",
 			path: "/:id",
 		});
+
 		this.addRoute({
 			handler: this.findAll.bind(this),
 			method: "GET",
 			path: "/",
 			validation: { query: routesSearchQueryValidationSchema },
 		});
+
 		this.addRoute({
 			handler: this.patch.bind(this),
 			method: "PATCH",
@@ -80,10 +134,58 @@ class RoutesController extends BaseController {
 
 	/**
 	 * @swagger
+	 * /routes/construct:
+	 *   post:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - Routes
+	 *     summary: Construct Mapbox route
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             type: object
+	 *             required:
+	 *               - pointsOfInterest
+	 *             properties:
+	 *               pointsOfInterest:
+	 *                 type: array
+	 *                 items:
+	 *                   type: integer
+	 *                 example: [1, 2]
+	 *     responses:
+	 *       200:
+	 *         description: Mapbox service response
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/GetMapboxRouteResponseDto'
+	 */
+
+	public async constructRoute({
+		body: { pointsOfInterest },
+	}: APIHandlerOptions<{ body: RoutesRequestConstructDto }>): Promise<
+		APIHandlerResponse<RoutesResponseConstructDto>
+	> {
+		const data = await this.routesService.construct(pointsOfInterest);
+
+		return {
+			payload: { data },
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
 	 * /routes:
 	 *   post:
 	 *     security:
-	 *      - bearerAuth: []
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Routes
 	 *     summary: Create a new route
@@ -326,5 +428,4 @@ class RoutesController extends BaseController {
 		};
 	}
 }
-
 export { RoutesController };

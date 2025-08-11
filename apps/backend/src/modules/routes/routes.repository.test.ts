@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, it } from "node:test";
 
 import { DatabaseTableName } from "~/libs/modules/database/database.js";
 
-import { type RoutesFindAllOptions } from "./libs/types/type.js";
+import { type RoutesFindAllOptions } from "./libs/types/types.js";
 import { RoutesEntity } from "./routes.entity.js";
 import { RoutesModel } from "./routes.model.js";
 import { RoutesRepository } from "./routes.repository.js";

@@ -174,7 +174,7 @@ class UserRepository implements Repository {
 	public async findPasswordDetails(
 		email: string,
 	): Promise<null | UserPasswordDetails> {
-		const user = (await this.userModel
+		const user = await this.userModel
 			.query()
 			.select(
 				"users.id",
@@ -186,7 +186,11 @@ class UserRepository implements Repository {
 			)
 			.withGraphJoined("group.permissions")
 			.where("users.email", email)
-			.first()) as UserModel;
+			.first();
+
+		if (!user) {
+			return null;
+		}
 
 		const group = user.group as NonNullable<typeof user.group>;
 		const permissions = user.group?.permissions as NonNullable<

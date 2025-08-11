@@ -1,7 +1,7 @@
 import {
+	type RouteGetByIdResponseDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
-	type RoutesResponseDto,
 } from "@smartscapes/shared";
 
 import { HTTPCode } from "~/libs/modules/http/http.js";
@@ -27,7 +27,7 @@ class RoutesService implements Service {
 
 	public async create(
 		payload: RoutesRequestCreateDto,
-	): Promise<RoutesResponseDto> {
+	): Promise<RouteGetByIdResponseDto> {
 		await this.ensurePoisExist(payload.pois);
 
 		const formattedPayload = {
@@ -58,7 +58,7 @@ class RoutesService implements Service {
 		return isDeleted;
 	}
 
-	public async findAll(): Promise<CollectionResult<RoutesResponseDto>> {
+	public async findAll(): Promise<CollectionResult<RouteGetByIdResponseDto>> {
 		const items = await this.routesRepository.findAll();
 
 		return {
@@ -68,7 +68,7 @@ class RoutesService implements Service {
 		};
 	}
 
-	public async findById(id: number): Promise<RoutesResponseDto> {
+	public async findById(id: number): Promise<RouteGetByIdResponseDto> {
 		const item = await this.routesRepository.findById(id);
 
 		if (!item) {
@@ -84,7 +84,7 @@ class RoutesService implements Service {
 	public async patch(
 		id: number,
 		payload: RoutesRequestPatchDto,
-	): Promise<RoutesResponseDto> {
+	): Promise<RouteGetByIdResponseDto> {
 		const item = await this.routesRepository.patch(id, payload);
 
 		if (!item) {

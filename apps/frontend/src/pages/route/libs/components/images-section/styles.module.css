@@ -1,5 +1,7 @@
 .container {
-	display: flex;
+	display: grid;
+	grid-template-rows: auto auto;
+	grid-template-columns: 3fr 1fr;
 	gap: 16px;
 }
 
@@ -11,8 +13,8 @@
 }
 
 .primary-description-wrapper {
-	display: flex;
-	flex-direction: column;
+	display: grid;
+	grid-row: 1 / span 2;
 }
 
 .primary-image {
@@ -38,7 +40,7 @@
 }
 
 @media (width <= 768px) {
-	.secondary-images-wrapper {
-		display: none;
+	.container {
+		overflow: scroll hidden;
 	}
 }

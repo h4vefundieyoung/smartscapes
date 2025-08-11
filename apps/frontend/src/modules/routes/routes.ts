@@ -11,5 +11,4 @@ const routeApi = new RoutesApi({
 });
 
 export { routeApi };
-export { type RoutesResponseDto } from "./libs/types/types.js";
 export { actions, reducer } from "./slices/routes.js";

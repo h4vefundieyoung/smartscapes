@@ -1,4 +1,5 @@
 const RoutesApiPath = {
+	ID: "/:id",
 	ROOT: "/",
 } as const;
 

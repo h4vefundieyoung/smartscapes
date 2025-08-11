@@ -1,3 +1,5 @@
+import { RoutesApiPath } from "@smartscapes/shared";
+
 import { APIPath } from "~/libs/enums/enums.js";
 import {
 	type APIHandlerOptions,
@@ -8,9 +10,10 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import {
+	type RouteGetAllItemResponseDto,
+	type RouteGetByIdResponseDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
-	type RoutesResponseDto,
 } from "./libs/types/type.js";
 import {
 	routesCreateValidationSchema,
@@ -49,28 +52,28 @@ class RoutesController extends BaseController {
 		this.addRoute({
 			handler: this.create.bind(this),
 			method: "POST",
-			path: "/",
+			path: RoutesApiPath.ROOT,
 			validation: { body: routesCreateValidationSchema },
 		});
 		this.addRoute({
 			handler: this.delete.bind(this),
 			method: "DELETE",
-			path: "/:id",
+			path: RoutesApiPath.ID,
 		});
 		this.addRoute({
 			handler: this.find.bind(this),
 			method: "GET",
-			path: "/:id",
+			path: RoutesApiPath.ID,
 		});
 		this.addRoute({
 			handler: this.findAll.bind(this),
 			method: "GET",
-			path: "/",
+			path: RoutesApiPath.ROOT,
 		});
 		this.addRoute({
 			handler: this.patch.bind(this),
 			method: "PATCH",
-			path: "/:id",
+			path: RoutesApiPath.ID,
 			validation: { body: routesUpdateValidationSchema },
 		});
 	}
@@ -116,7 +119,7 @@ class RoutesController extends BaseController {
 		options: APIHandlerOptions<{
 			body: RoutesRequestCreateDto;
 		}>,
-	): Promise<APIHandlerResponse<RoutesResponseDto>> {
+	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
 		const { description, name, pois } = options.body;
 
 		const route = await this.routesService.create({ description, name, pois });
@@ -192,7 +195,7 @@ class RoutesController extends BaseController {
 
 	public async find(
 		options: APIHandlerOptions<{ params: { id: string } }>,
-	): Promise<APIHandlerResponse<RoutesResponseDto>> {
+	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
 		const id = Number(options.params.id);
 
 		const route = await this.routesService.findById(id);
@@ -226,7 +229,9 @@ class RoutesController extends BaseController {
 	 *                     $ref: '#/components/schemas/Route'
 	 * */
 
-	public async findAll(): Promise<APIHandlerResponse<RoutesResponseDto[]>> {
+	public async findAll(): Promise<
+		APIHandlerResponse<RouteGetAllItemResponseDto>
+	> {
 		const { items } = await this.routesService.findAll();
 
 		return {
@@ -290,7 +295,7 @@ class RoutesController extends BaseController {
 			body: RoutesRequestPatchDto;
 			params: { id: string };
 		}>,
-	): Promise<APIHandlerResponse<RoutesResponseDto>> {
+	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
 		const id = Number(options.params.id);
 		const { description, name } = options.body;
 

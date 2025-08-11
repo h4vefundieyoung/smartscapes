@@ -5,8 +5,8 @@ const AppRoute = {
 	EXPLORE: "/app/explore",
 	PROFILE: "/app/profile",
 	ROOT: "/",
-	ROUTE_PAGE: "/app/route/:id",
 	ROUTES: "/app/routes",
+	ROUTES_$ID: "/app/routes/:id",
 	SIGN_IN: "/app/sign-in",
 	SIGN_UP: "/app/sign-up",
 } as const;

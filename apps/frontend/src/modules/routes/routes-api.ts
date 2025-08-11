@@ -1,3 +1,5 @@
+import { type RouteGetByIdResponseDto } from "@smartscapes/shared";
+
 import { APIPath } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
@@ -5,7 +7,6 @@ import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
 
 import { RoutesApiPath } from "./libs/enums/enums.js";
-import { type RoutesResponseDto } from "./libs/types/types.js";
 
 type Constructor = {
 	baseUrl: string;
@@ -18,9 +19,11 @@ class RoutesApi extends BaseHTTPApi {
 		super({ baseUrl, http, path: APIPath.ROUTES, storage });
 	}
 
-	public async getRoute(id: string): Promise<APIResponse<RoutesResponseDto>> {
-		const response = await this.load<APIResponse<RoutesResponseDto>>(
-			this.getFullEndpoint(`${RoutesApiPath.ROOT}${id}`, {}),
+	public async getRouteById(
+		id: number,
+	): Promise<APIResponse<RouteGetByIdResponseDto>> {
+		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
+			this.getFullEndpoint(`${RoutesApiPath.ROOT}${id.toString()}`, {}),
 			{
 				hasAuth: false,
 				method: "GET",

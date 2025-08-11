@@ -6,9 +6,5 @@
 }
 
 .label {
-	font-family: var(--font-family);
-	font-size: var(--font-size-h1);
-	font-weight: var(--font-weight-semibold);
-	line-height: 1.2;
-	color: var(--color-text-label);
+	color: var(--color-text-strong);
 }

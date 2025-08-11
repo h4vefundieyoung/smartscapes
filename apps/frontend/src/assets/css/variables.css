@@ -1,6 +1,5 @@
 :root {
 	--color-base: hsl(0deg 0% 100%);
-	--color-black: hsl(0deg 0% 0%);
 	--color-background-base: hsl(0deg 0% 100% / 100%);
 	--color-brand-1000: hsl(162deg 91% 25% / 100%);
 	--color-brand-800: hsl(162deg 91% 25% / 80%);

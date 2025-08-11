@@ -1,9 +1,9 @@
-import { getRoute } from "./actions.js";
+import { getRouteById } from "./actions.js";
 import { actions } from "./routes.slice.js";
 
 const allActions = {
 	...actions,
-	getRoute,
+	getRouteById,
 };
 
 export { allActions as actions };

@@ -1,6 +1,7 @@
-import image1 from "./assets/1.png";
-import image2 from "./assets/2.png";
-import image3 from "./assets/3.png";
+import image1 from "~/assets/images/route-details/placeholder-image-1.png";
+import image2 from "~/assets/images/route-details/placeholder-image-2.png";
+import image3 from "~/assets/images/route-details/placeholder-image-3.png";
+
 import styles from "./styles.module.css";
 
 type Properties = {

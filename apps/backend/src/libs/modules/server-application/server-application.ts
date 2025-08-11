@@ -29,7 +29,11 @@ const apiV1 = new BaseServerApplicationApi(
 			},
 			{
 				method: "GET",
-				path: `${APIPath.ROUTES}/*`,
+				path: APIPath.ROUTES,
+			},
+			{
+				method: "GET",
+				path: APIPath.ROUTES_$ID,
 			},
 		],
 	},

@@ -36,7 +36,7 @@ class RoutesRepository implements Repository {
 					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
 				},
 			})
-			.select("routes.id", "routes.name", "routes.description");
+			.select("routes.id", "routes.name");
 
 		return routes.map((point) => RoutesEntity.initialize(point));
 	}

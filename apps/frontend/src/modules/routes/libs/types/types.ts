@@ -1,1 +1,1 @@
-export { type RoutesResponseDto } from "@smartscapes/shared";
+export { type RouteGetByIdResponseDto } from "@smartscapes/shared";

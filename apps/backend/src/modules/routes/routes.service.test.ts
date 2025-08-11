@@ -1,7 +1,7 @@
 import {
 	HTTPCode,
 	type PointsOfInterestResponseDto,
-	type RoutesResponseDto,
+	type RouteGetByIdResponseDto,
 } from "@smartscapes/shared";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
@@ -34,7 +34,7 @@ describe("RoutesService", () => {
 		pois: [FIRST_POI_ID, SECOND_POI_ID],
 	};
 
-	const mockRouteResponse: RoutesResponseDto = {
+	const mockRouteResponse: RouteGetByIdResponseDto = {
 		description: "Test route description",
 		id: EXISTING_ID,
 		name: "Test Route",
@@ -43,7 +43,6 @@ describe("RoutesService", () => {
 			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
 		],
 	};
-
 	const mockPoisFindAll: PointsOfInterestResponseDto[] = [
 		{
 			id: FIRST_POI_ID,
@@ -68,7 +67,7 @@ describe("RoutesService", () => {
 		name: "Updated Route",
 	};
 
-	const createMockEntity = (data: RoutesResponseDto): RoutesEntity => {
+	const createMockEntity = (data: RouteGetByIdResponseDto): RoutesEntity => {
 		return RoutesEntity.initialize(data);
 	};
 
@@ -147,9 +146,8 @@ describe("RoutesService", () => {
 	});
 
 	it("findAll should return all routes", async () => {
-		const mockRoutes = [createMockEntity(mockRouteResponse)];
 		const routesRepository = createMockRoutesRepository({
-			findAll: () => Promise.resolve(mockRoutes),
+			findAll: () => Promise.resolve([createMockEntity(mockRouteResponse)]),
 		});
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const routesService = new RoutesService(

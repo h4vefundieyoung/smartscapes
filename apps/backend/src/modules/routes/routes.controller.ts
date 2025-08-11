@@ -15,6 +15,7 @@ import {
 } from "./libs/types/type.js";
 import {
 	routesCreateValidationSchema,
+	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 import { type RoutesService } from "./routes.service.js";
@@ -67,6 +68,7 @@ class RoutesController extends BaseController {
 			handler: this.findAll.bind(this),
 			method: "GET",
 			path: "/",
+			validation: { query: routesSearchQueryValidationSchema },
 		});
 		this.addRoute({
 			handler: this.patch.bind(this),

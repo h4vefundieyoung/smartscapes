@@ -1,8 +1,8 @@
+export { type PointGeometry } from "@smartscapes/shared";
 export {
 	type ControlPosition,
 	type GeolocateControlOptions,
-	type IControl,
-	type LngLatLike,
+	type IControl as MapControl,
 	type MapOptions,
 	type MarkerOptions,
 	type NavigationControlOptions,

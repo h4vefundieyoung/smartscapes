@@ -15,16 +15,16 @@ import {
 import { MapControlId } from "./libs/enums/enums.js";
 import {
 	type ControlPosition,
-	type IControl,
-	type LngLatLike,
+	type MapControl,
 	type MapOptions,
+	type PointGeometry,
 } from "./libs/types/types.js";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 
 class MapClient {
 	private accessToken: MapOptions["accessToken"];
-	private controls = new Map<string, IControl>();
+	private controls = new Map<string, MapControl>();
 	private map: mapboxgl.Map | null = null;
 	private resizeObserver: null | ResizeObserver = null;
 
@@ -52,7 +52,9 @@ class MapClient {
 		});
 	}
 
-	public addMarkers(markers: { coordinates: LngLatLike }[]): void {
+	public addMarkers(
+		markers: { coordinates: PointGeometry["coordinates"] }[],
+	): void {
 		for (const marker of markers) {
 			this.addMarker(marker.coordinates);
 		}
@@ -141,7 +143,7 @@ class MapClient {
 
 	private addControl(
 		id: string,
-		control: mapboxgl.IControl,
+		control: MapControl,
 		position: ControlPosition,
 	): void {
 		if (!this.map) {
@@ -153,7 +155,7 @@ class MapClient {
 		this.controls.set(id, control);
 	}
 
-	private addMarker(coordinates: LngLatLike): void {
+	private addMarker(coordinates: PointGeometry["coordinates"]): void {
 		if (!this.map) {
 			return;
 		}

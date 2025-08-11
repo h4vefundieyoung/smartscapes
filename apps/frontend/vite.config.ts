@@ -101,10 +101,6 @@ const config = ({ mode }: ConfigEnv): ReturnType<typeof defineConfig> => {
 			],
 		},
 		server: {
-			headers: {
-				"Content-Security-Policy":
-					"worker-src 'self' blob:; script-src 'self' blob: https://api.mapbox.com;",
-			},
 			port: Number(VITE_APP_DEVELOPMENT_PORT),
 			proxy: {
 				[VITE_APP_API_ORIGIN_URL as string]: {

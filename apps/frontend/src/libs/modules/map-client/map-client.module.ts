@@ -1,5 +1,3 @@
-import mapboxgl from "mapbox-gl";
-
 import { config } from "~/libs/modules/config/config.js";
 
 import {
@@ -13,6 +11,7 @@ import {
 	ZOOM_LEVEL,
 } from "./libs/constants/constants.js";
 import { MapControlId } from "./libs/enums/enums.js";
+import { mapboxgl } from "./libs/modules/mapbox/mapbox.js";
 import {
 	type ControlPosition,
 	type MapControl,

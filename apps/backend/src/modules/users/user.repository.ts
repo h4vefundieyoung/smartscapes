@@ -234,7 +234,32 @@ class UserRepository implements Repository {
 			.returning("*")
 			.execute();
 
-		return updatedRow ? UserEntity.initializeNew(updatedRow) : null;
+		if (!updatedRow) {
+			return null;
+		}
+
+		const group = updatedRow.group as NonNullable<typeof updatedRow.group>;
+		const permissions = updatedRow.group?.permissions as NonNullable<
+			typeof group.permissions
+		>;
+
+		return UserEntity.initialize({
+			email: updatedRow.email,
+			firstName: updatedRow.firstName,
+			group: GroupEntity.initializeWithPermissions({
+				id: group.id,
+				key: group.key,
+				name: group.name,
+				permissions: permissions.map((permission) =>
+					PermissionEntity.initialize(permission).toObject(),
+				),
+			}).toObject(),
+			groupId: updatedRow.groupId,
+			id: updatedRow.id,
+			lastName: updatedRow.lastName,
+			passwordHash: updatedRow.passwordHash,
+			passwordSalt: updatedRow.passwordSalt,
+		});
 	}
 }
 

@@ -42,7 +42,7 @@ class RoutesRepository implements Repository {
 			.select("routes.id", "routes.name", "routes.description")
 			.modify((builder) => {
 				if (options?.name) {
-					builder.whereILike("name", `%${options.name}%`);
+					builder.whereILike("name", `%${options.name.trim()}%`);
 				}
 			});
 

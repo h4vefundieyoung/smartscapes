@@ -285,11 +285,15 @@ class RoutesController extends BaseController {
 	 *           type: string
 	 *     responses:
 	 *       200:
-	 *         description: Route was found succesfully
+	 *         description: Route was found successfully
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/Route'
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: object
+	 *                   $ref: '#/components/schemas/Route'
 	 */
 
 	public async find(

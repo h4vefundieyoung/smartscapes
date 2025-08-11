@@ -65,16 +65,6 @@ class UserRepository implements Repository {
 	public async findAll(): Promise<UserEntity[]> {
 		const users = await this.userModel
 			.query()
-			.select([
-				"users.id",
-				"firstName",
-				"lastName",
-				"users.group_id as groupId",
-				"email",
-				"group.id",
-				"group.key as groupKey",
-				"group.name as groupName",
-			])
 			.withGraphJoined("group.permissions")
 			.execute();
 

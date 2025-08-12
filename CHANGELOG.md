@@ -1,5 +1,59 @@
 # Changelog
 
+## [1.26.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.25.3...v1.26.0) (2025-08-11)
+
+
+### Features
+
+* **backend:** added group id for newly created users ss-113 ([#160](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/160)) ([0edf1e9](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/0edf1e98400fbeb995c9347fa436401c1e7c5dda))
+
+
+### Bug Fixes
+
+* **backend:** update routes patch endpoint documentation ss-276 ([#308](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/308)) ([a867101](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/a867101033bb6b6d3dac3f317cad7bb639483da1))
+* **backend:** update swagger documentation for routes get by id and post endpoints ss-277 ([#320](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/320)) ([46aa32f](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/46aa32ffc2863dea7039dd25679907833f5641d4))
+* **frontend:** use mapbox csp version ss-295 ([#321](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/321)) ([ea80103](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/ea80103fd510152826907430be923fc6d80104ff))
+
+## [1.25.3](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.25.2...v1.25.3) (2025-08-11)
+
+
+### Bug Fixes
+
+* **frontend:** increase cache file size ss-295 ([#315](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/315)) ([3049b21](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/3049b21c3ec55eacbdcea0f85017a6f15a859755))
+
+## [1.25.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.25.1...v1.25.2) (2025-08-11)
+
+
+### Bug Fixes
+
+* **frontend:** remove files from tsconfig on frontend ss-295 ([#313](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/313)) ([14ab113](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/14ab113120aeae9d558dd6b9f6ecc208a2b9f129))
+
+## [1.25.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.25.0...v1.25.1) (2025-08-11)
+
+
+### Bug Fixes
+
+* **frontend:** remove unused type definitions ss-295 ([#311](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/311)) ([6344220](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/634422078c9ba49ac024ae30c1da10b118c3e07f))
+
+## [1.25.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.24.1...v1.25.0) (2025-08-11)
+
+
+### Features
+
+* **backend/shared:** mapbox api integration ss-193 ([#223](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/223)) ([e7511ca](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/e7511cabbee2440584cb1b1d6efaa672293f33fb))
+
+
+### Bug Fixes
+
+* **frontend:** set headers for mapbox api ss-295 ([#309](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/309)) ([3e433b0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/3e433b01e74d8dbc1bccc7392b5ec874e5f9622e))
+
+## [1.24.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.24.0...v1.24.1) (2025-08-11)
+
+
+### Bug Fixes
+
+* **frontend:** use mapbox csp version ss-295 ([#305](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/305)) ([84c6ad7](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/84c6ad7722a825f9085f4b21a8b6a966cb3db1c0))
+
 ## [1.24.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.23.0...v1.24.0) (2025-08-11)
 
 

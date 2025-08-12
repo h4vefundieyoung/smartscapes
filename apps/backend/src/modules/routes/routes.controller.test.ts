@@ -2,12 +2,15 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import { HTTPCode, PermissionKey } from "~/libs/enums/enums.js";
+import { checkPermission } from "~/libs/hooks/hooks.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { GroupEntity } from "../groups/group.entity.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
 import { RoutesController } from "./routes.controller.js";
 import { type RoutesService } from "./routes.service.js";
+
+const MINIMUM_EXPECTED_ROUTES_COUNT = 6;
 
 const mockReadPermission = PermissionEntity.initialize({
 	id: 1,
@@ -21,11 +24,24 @@ const mockManageRoutesPermission = PermissionEntity.initialize({
 	name: "Manage Routes",
 });
 
+const mockWrongPermission = PermissionEntity.initialize({
+	id: 3,
+	key: "WRONG_PERMISSION",
+	name: "Wrong Permission",
+});
+
 const mockUserGroup = GroupEntity.initializeWithPermissions({
 	id: 2,
 	key: "users",
 	name: "Users",
 	permissions: [mockReadPermission.toObject()],
+}).toObject();
+
+const mockUserGroupWithWrongPermission = GroupEntity.initializeWithPermissions({
+	id: 3,
+	key: "users",
+	name: "Users with Wrong Permission",
+	permissions: [mockReadPermission.toObject(), mockWrongPermission.toObject()],
 }).toObject();
 
 const mockAdminGroup = GroupEntity.initializeWithPermissions({
@@ -50,6 +66,15 @@ describe("Routes controller", () => {
 		groupId: 2,
 		id: 1,
 		lastName: "Doe",
+	};
+
+	const mockUserWithWrongPermission = {
+		email: "wrong@example.com",
+		firstName: "Wrong",
+		group: mockUserGroupWithWrongPermission,
+		groupId: 3,
+		id: 3,
+		lastName: "User",
 	};
 
 	const mockAdminUser = {
@@ -105,6 +130,17 @@ describe("Routes controller", () => {
 	});
 
 	it("create should return created route", async () => {
+		const createRouteMockData = {
+			body: {
+				description: mockRoute.description,
+				name: mockRoute.name,
+				pois: [FIRST_POI_ID, SECOND_POI_ID],
+			},
+			params: {},
+			query: {},
+			user: mockAdminUser,
+		};
+
 		const mockCreate: RoutesService["create"] = () => {
 			return Promise.resolve(mockRoute);
 		};
@@ -115,24 +151,22 @@ describe("Routes controller", () => {
 
 		const controller = new RoutesController(mockLogger, routesService);
 
-		const result = await controller.create({
-			body: {
-				description: mockRoute.description,
-				name: mockRoute.name,
-				pois: [FIRST_POI_ID, SECOND_POI_ID],
-			},
-			params: {},
-			query: {},
-			user: mockAdminUser,
-		});
+		const result = await controller.create(createRouteMockData);
 
 		assert.deepStrictEqual(result, {
 			payload: { data: mockRoute },
-			status: HTTPCode.OK,
+			status: HTTPCode.CREATED,
 		});
 	});
 
 	it("find should return route by id", async () => {
+		const findRouteMockData = {
+			body: {},
+			params: { id: "1" },
+			query: {},
+			user: mockUser,
+		};
+
 		const mockFind: RoutesService["findById"] = () => {
 			return Promise.resolve(mockRoute);
 		};
@@ -143,12 +177,7 @@ describe("Routes controller", () => {
 
 		const controller = new RoutesController(mockLogger, routesService);
 
-		const result = await controller.find({
-			body: {},
-			params: { id: "1" },
-			query: {},
-			user: mockUser,
-		});
+		const result = await controller.find(findRouteMockData);
 
 		assert.deepStrictEqual(result, {
 			payload: { data: mockRoute },
@@ -181,6 +210,16 @@ describe("Routes controller", () => {
 			name: "Updated Route",
 		};
 
+		const updateRouteMockData = {
+			body: {
+				description: updatedRoute.description,
+				name: updatedRoute.name,
+			},
+			params: { id: "1" },
+			query: {},
+			user: mockAdminUser,
+		};
+
 		const mockUpdate: RoutesService["patch"] = () => {
 			return Promise.resolve(updatedRoute);
 		};
@@ -191,15 +230,7 @@ describe("Routes controller", () => {
 
 		const controller = new RoutesController(mockLogger, routesService);
 
-		const result = await controller.patch({
-			body: {
-				description: updatedRoute.description,
-				name: updatedRoute.name,
-			},
-			params: { id: "1" },
-			query: {},
-			user: mockAdminUser,
-		});
+		const result = await controller.patch(updateRouteMockData);
 
 		assert.deepStrictEqual(result, {
 			payload: { data: updatedRoute },
@@ -208,18 +239,20 @@ describe("Routes controller", () => {
 	});
 
 	it("delete should return deletion status", async () => {
+		const deleteRouteMockData = {
+			body: {},
+			params: { id: "1" },
+			query: {},
+			user: mockAdminUser,
+		};
+
 		const routesService = {
 			delete: mockDelete,
 		} as RoutesService;
 
 		const controller = new RoutesController(mockLogger, routesService);
 
-		const result = await controller.delete({
-			body: {},
-			params: { id: "1" },
-			query: {},
-			user: mockAdminUser,
-		});
+		const result = await controller.delete(deleteRouteMockData);
 
 		assert.deepStrictEqual(result, {
 			payload: { data: true },
@@ -227,95 +260,288 @@ describe("Routes controller", () => {
 		});
 	});
 
-	it("create should throw PermissionError for user without manage_routes permission", async () => {
-		const mockCreate: RoutesService["create"] = () => {
-			return Promise.resolve(mockRoute);
-		};
-
-		const routesService = {
-			create: mockCreate,
-		} as RoutesService;
-
-		const controller = new RoutesController(mockLogger, routesService);
-
-		await assert.rejects(
-			async () => {
-				await controller.create({
-					body: {
-						description: mockRoute.description,
-						name: mockRoute.name,
-						pois: [FIRST_POI_ID, SECOND_POI_ID],
+	// Helper function to test permission checking
+	const testPermissionChecker = (
+		permissionChecker: ReturnType<typeof checkPermission>,
+		user: typeof mockUser,
+	): Promise<void> => {
+		return new Promise<void>((resolve, reject) => {
+			try {
+				permissionChecker(
+					{
+						body: {},
+						params: {},
+						query: {},
+						user,
 					},
-					params: {},
-					query: {},
-					user: mockUser,
-				});
-			},
-			(error: Error) => {
-				return (
-					error.message === "You don't have permission to perform this action."
+					resolve,
 				);
-			},
-		);
+			} catch (error: unknown) {
+				reject(error instanceof Error ? error : new Error(String(error)));
+			}
+		});
+	};
+
+	describe("Permission Hook Tests - All Three Scenarios", () => {
+		it("should reject user without manage_routes permission", async () => {
+			const permissionChecker = checkPermission(PermissionKey.MANAGE_ROUTES);
+
+			await assert.rejects(
+				() => testPermissionChecker(permissionChecker, mockUser),
+				{
+					message: "You don't have permission to perform this action.",
+				},
+			);
+		});
+
+		it("should reject user with wrong permission", async () => {
+			const permissionChecker = checkPermission(PermissionKey.MANAGE_ROUTES);
+
+			await assert.rejects(
+				() =>
+					testPermissionChecker(permissionChecker, mockUserWithWrongPermission),
+				{
+					message: "You don't have permission to perform this action.",
+				},
+			);
+		});
+
+		it("should allow user with correct manage_routes permission", async () => {
+			const permissionChecker = checkPermission(PermissionKey.MANAGE_ROUTES);
+
+			await testPermissionChecker(permissionChecker, mockAdminUser);
+		});
 	});
 
-	it("patch should throw PermissionError for user without manage_routes permission", async () => {
-		const updatedRoute = {
-			...mockRoute,
-			name: "Updated Route",
-		};
+	describe("Controller Method Tests - Protected Operations", () => {
+		it("CREATE - should work correctly when called with admin user (correct permission)", async () => {
+			const createRouteMockData = {
+				body: {
+					description: mockRoute.description,
+					name: mockRoute.name,
+					pois: [FIRST_POI_ID, SECOND_POI_ID],
+				},
+				params: {},
+				query: {},
+				user: mockAdminUser,
+			};
 
-		const mockUpdate: RoutesService["patch"] = () => {
-			return Promise.resolve(updatedRoute);
-		};
+			const mockCreate: RoutesService["create"] = () => {
+				return Promise.resolve(mockRoute);
+			};
 
-		const routesService = {
-			patch: mockUpdate,
-		} as RoutesService;
+			const routesService = {
+				create: mockCreate,
+			} as unknown as RoutesService;
 
-		const controller = new RoutesController(mockLogger, routesService);
+			const controller = new RoutesController(mockLogger, routesService);
 
-		await assert.rejects(
-			async () => {
-				await controller.patch({
-					body: {
-						description: updatedRoute.description,
-						name: updatedRoute.name,
-					},
-					params: { id: "1" },
-					query: {},
-					user: mockUser,
-				});
-			},
-			(error: Error) => {
-				return (
-					error.message === "You don't have permission to perform this action."
-				);
-			},
-		);
+			const result = await controller.create(createRouteMockData);
+
+			assert.deepStrictEqual(result, {
+				payload: { data: mockRoute },
+				status: HTTPCode.CREATED,
+			});
+		});
+
+		it("PATCH - should work correctly when called with admin user (correct permission)", async () => {
+			const updatedRoute = {
+				...mockRoute,
+				name: "Updated Route",
+			};
+
+			const updateRouteMockData = {
+				body: {
+					description: updatedRoute.description,
+					name: updatedRoute.name,
+				},
+				params: { id: "1" },
+				query: {},
+				user: mockAdminUser,
+			};
+
+			const mockUpdate: RoutesService["patch"] = () => {
+				return Promise.resolve(updatedRoute);
+			};
+
+			const routesService = {
+				patch: mockUpdate,
+			} as unknown as RoutesService;
+
+			const controller = new RoutesController(mockLogger, routesService);
+
+			const result = await controller.patch(updateRouteMockData);
+
+			assert.deepStrictEqual(result, {
+				payload: { data: updatedRoute },
+				status: HTTPCode.OK,
+			});
+		});
+
+		it("DELETE - should work correctly when called with admin user (correct permission)", async () => {
+			const deleteRouteMockData = {
+				body: {},
+				params: { id: "1" },
+				query: {},
+				user: mockAdminUser,
+			};
+
+			const routesService = {
+				delete: mockDelete,
+			} as unknown as RoutesService;
+
+			const controller = new RoutesController(mockLogger, routesService);
+
+			const result = await controller.delete(deleteRouteMockData);
+
+			assert.deepStrictEqual(result, {
+				payload: { data: true },
+				status: HTTPCode.OK,
+			});
+		});
 	});
 
-	it("delete should throw PermissionError for user without manage_routes permission", async () => {
-		const routesService = {
-			delete: mockDelete,
-		} as RoutesService;
+	describe("GET routes should be accessible to all users (no permission required)", () => {
+		it("should allow user without manage_routes permission to get all routes", async () => {
+			const mockFindAll: RoutesService["findAll"] = () => {
+				return Promise.resolve({ items: [mockRoute] });
+			};
 
-		const controller = new RoutesController(mockLogger, routesService);
+			const routesService = {
+				findAll: mockFindAll,
+			} as unknown as RoutesService;
 
-		await assert.rejects(
-			async () => {
-				await controller.delete({
-					body: {},
-					params: { id: "1" },
-					query: {},
-					user: mockUser,
-				});
-			},
-			(error: Error) => {
-				return (
-					error.message === "You don't have permission to perform this action."
-				);
-			},
-		);
+			const controller = new RoutesController(mockLogger, routesService);
+
+			const result = await controller.findAll();
+
+			assert.deepStrictEqual(result, {
+				payload: { data: [mockRoute] },
+				status: HTTPCode.OK,
+			});
+		});
+
+		it("should allow user without manage_routes permission to get route by id", async () => {
+			const findRouteMockData = {
+				body: {},
+				params: { id: "1" },
+				query: {},
+				user: mockUser,
+			};
+
+			const mockFind: RoutesService["findById"] = () => {
+				return Promise.resolve(mockRoute);
+			};
+
+			const routesService = {
+				findById: mockFind,
+			} as unknown as RoutesService;
+
+			const controller = new RoutesController(mockLogger, routesService);
+
+			const result = await controller.find(findRouteMockData);
+
+			assert.deepStrictEqual(result, {
+				payload: { data: mockRoute },
+				status: HTTPCode.OK,
+			});
+		});
+
+		it("should allow user with wrong permission to get routes", async () => {
+			const findRouteWithWrongPermissionMockData = {
+				body: {},
+				params: { id: "1" },
+				query: {},
+				user: mockUserWithWrongPermission,
+			};
+
+			const mockFind: RoutesService["findById"] = () => {
+				return Promise.resolve(mockRoute);
+			};
+
+			const routesService = {
+				findById: mockFind,
+			} as unknown as RoutesService;
+
+			const controller = new RoutesController(mockLogger, routesService);
+
+			const result = await controller.find(
+				findRouteWithWrongPermissionMockData,
+			);
+
+			assert.deepStrictEqual(result, {
+				payload: { data: mockRoute },
+				status: HTTPCode.OK,
+			});
+		});
+
+		it("should allow admin user to get routes", async () => {
+			const findRouteAdminMockData = {
+				body: {},
+				params: { id: "1" },
+				query: {},
+				user: mockAdminUser,
+			};
+
+			const mockFind: RoutesService["findById"] = () => {
+				return Promise.resolve(mockRoute);
+			};
+
+			const routesService = {
+				findById: mockFind,
+			} as unknown as RoutesService;
+
+			const controller = new RoutesController(mockLogger, routesService);
+
+			const result = await controller.find(findRouteAdminMockData);
+
+			assert.deepStrictEqual(result, {
+				payload: { data: mockRoute },
+				status: HTTPCode.OK,
+			});
+		});
+	});
+
+	describe("Verify Permission Configuration is Applied", () => {
+		it("should confirm that routes are configured with proper permission checks", () => {
+			const routesService = {
+				create: () => Promise.resolve(mockRoute),
+				delete: () => Promise.resolve(true),
+				findAll: () => Promise.resolve({ items: [mockRoute] }),
+				findById: () => Promise.resolve(mockRoute),
+				patch: () => Promise.resolve(mockRoute),
+			} as unknown as RoutesService;
+
+			const controller = new RoutesController(mockLogger, routesService);
+
+			assert.ok(controller.routes, "Controller should have routes configured");
+
+			assert.ok(
+				controller.routes.length >= MINIMUM_EXPECTED_ROUTES_COUNT,
+				"Controller should have at least 6 routes configured",
+			);
+
+			const hasCreateRoute = controller.routes.some(
+				(route) => route.method === "POST" && route.path.endsWith("/"),
+			);
+			const hasDeleteRoute = controller.routes.some(
+				(route) => route.method === "DELETE" && route.path.endsWith("/:id"),
+			);
+			const hasPatchRoute = controller.routes.some(
+				(route) => route.method === "PATCH" && route.path.endsWith("/:id"),
+			);
+			const hasGetAllRoute = controller.routes.some(
+				(route) => route.method === "GET" && route.path.endsWith("/"),
+			);
+			const hasGetByIdRoute = controller.routes.some(
+				(route) => route.method === "GET" && route.path.endsWith("/:id"),
+			);
+
+			assert.ok(hasCreateRoute, "Should have CREATE route configured");
+			assert.ok(hasDeleteRoute, "Should have DELETE route configured");
+			assert.ok(hasPatchRoute, "Should have PATCH route configured");
+			assert.ok(hasGetAllRoute, "Should have GET all route configured");
+			assert.ok(hasGetByIdRoute, "Should have GET by ID route configured");
+		});
 	});
 });

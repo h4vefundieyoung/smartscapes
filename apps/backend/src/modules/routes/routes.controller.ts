@@ -188,7 +188,8 @@ class RoutesController extends BaseController {
 	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Routes
-	 *     summary: Create a new route
+	 *     summary: Create a new route (requires manage_routes permission)
+	 *     description: Creates a new route. Requires authentication and manage_routes permission.
 	 *     requestBody:
 	 *       required: true
 	 *       content:
@@ -212,12 +213,28 @@ class RoutesController extends BaseController {
 	 *                   type: number
 	 *                 example: [1, 2]
 	 *     responses:
-	 *       200:
+	 *       201:
 	 *         description: The created route
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/Route'
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/Route'
+	 *       401:
+	 *         description: Unauthorized - Authentication required
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: "Unauthorized access"
 	 *       403:
 	 *         description: Forbidden - User lacks manage_routes permission
 	 *         content:
@@ -244,7 +261,7 @@ class RoutesController extends BaseController {
 
 		return {
 			payload: { data: route },
-			status: HTTPCode.OK,
+			status: HTTPCode.CREATED,
 		};
 	}
 
@@ -256,7 +273,8 @@ class RoutesController extends BaseController {
 	 *      - bearerAuth: []
 	 *     tags:
 	 *       - Routes
-	 *     summary: Delete a route
+	 *     summary: Delete a route (requires manage_routes permission)
+	 *     description: Deletes an existing route. Requires authentication and manage_routes permission.
 	 *     parameters:
 	 *       - in: path
 	 *         name: id
@@ -273,6 +291,19 @@ class RoutesController extends BaseController {
 	 *               properties:
 	 *                 data:
 	 *                   type: boolean
+	 *       401:
+	 *         description: Unauthorized - Authentication required
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: "Unauthorized access"
 	 *       403:
 	 *         description: Forbidden - User lacks manage_routes permission
 	 *         content:
@@ -308,7 +339,8 @@ class RoutesController extends BaseController {
 	 *      - bearerAuth: []
 	 *     tags:
 	 *       - Routes
-	 *     summary: Get a route
+	 *     summary: Get a route by ID
+	 *     description: Retrieves a route by its ID. Requires authentication but no special permissions.
 	 *     parameters:
 	 *       - in: path
 	 *         name: id
@@ -326,6 +358,19 @@ class RoutesController extends BaseController {
 	 *                 data:
 	 *                   type: object
 	 *                   $ref: '#/components/schemas/Route'
+	 *       401:
+	 *         description: Unauthorized - Authentication required
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: "Unauthorized access"
 	 */
 
 	public async find(
@@ -350,6 +395,7 @@ class RoutesController extends BaseController {
 	 *     tags:
 	 *       - Routes
 	 *     summary: Retrieve all routes
+	 *     description: Retrieves a list of all routes. Requires authentication but no special permissions.
 	 *     responses:
 	 *       200:
 	 *         description: A list of routes
@@ -362,6 +408,19 @@ class RoutesController extends BaseController {
 	 *                   type: array
 	 *                   items:
 	 *                     $ref: '#/components/schemas/Route'
+	 *       401:
+	 *         description: Unauthorized - Authentication required
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: "Unauthorized access"
 	 * */
 
 	public async findAll(): Promise<APIHandlerResponse<RoutesResponseDto[]>> {

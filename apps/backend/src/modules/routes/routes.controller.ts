@@ -202,12 +202,15 @@ class RoutesController extends BaseController {
 	 *             properties:
 	 *               name:
 	 *                 type: string
+	 *                 example: Landscape alley
 	 *               description:
 	 *                 type: string
+	 *                 example: An alley with blooming flowers
 	 *               pois:
 	 *                 type: array
 	 *                 items:
 	 *                   type: number
+	 *                 example: [1, 2]
 	 *     responses:
 	 *       200:
 	 *         description: The created route
@@ -338,11 +341,15 @@ class RoutesController extends BaseController {
 	 *           type: string
 	 *     responses:
 	 *       200:
-	 *         description: Route was found succesfully
+	 *         description: Route was found successfully
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/Route'
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: object
+	 *                   $ref: '#/components/schemas/Route'
 	 */
 
 	public async findById(

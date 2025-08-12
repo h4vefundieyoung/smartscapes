@@ -72,7 +72,7 @@ const { actions, name, reducer } = createSlice({
 		});
 
 		builder.addCase(patchAuthenticatedUser.fulfilled, (state, action) => {
-			state.authenticatedUser = action.payload.data;
+			state.authenticatedUser = action.payload.data as UserAuthResponseDto;
 			state.authenticatedUserPatchStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(patchAuthenticatedUser.pending, (state) => {

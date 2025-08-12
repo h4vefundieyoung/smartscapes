@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.17.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.17.1...backend-v1.17.2) (2025-08-12)
+
+
+### Bug Fixes
+
+* **backend/frontend:** pass csp headers to helmet config ss-295 ([#332](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/332)) ([6f6bc10](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/6f6bc1065f6aae1a30cd7418377b015402f5a190))
+
+## [1.17.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.17.0...backend-v1.17.1) (2025-08-11)
+
+
+### Bug Fixes
+
+* **backend:** update follow route path in swagger to match code (ss-300) ([#301](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/301)) ([b120845](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/b12084513e543929ef76991094617f93083542be))
+* **backend:** update route validation schema handling ss-280 ([#317](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/317)) ([5d99172](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/5d991720aebb38a1a9bddfd5f67963a9331f2c3a))
+
+## [1.17.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.16.0...backend-v1.17.0) (2025-08-11)
+
+
+### Features
+
+* **backend:** added group id for newly created users ss-113 ([#160](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/160)) ([0edf1e9](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/0edf1e98400fbeb995c9347fa436401c1e7c5dda))
+
+
+### Bug Fixes
+
+* **backend:** update routes patch endpoint documentation ss-276 ([#308](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/308)) ([a867101](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/a867101033bb6b6d3dac3f317cad7bb639483da1))
+* **backend:** update swagger documentation for routes get by id and post endpoints ss-277 ([#320](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/320)) ([46aa32f](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/46aa32ffc2863dea7039dd25679907833f5641d4))
+
+## [1.16.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.15.0...backend-v1.16.0) (2025-08-11)
+
+
+### Features
+
+* **backend/shared:** mapbox api integration ss-193 ([#223](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/223)) ([e7511ca](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/e7511cabbee2440584cb1b1d6efaa672293f33fb))
+
 ## [1.15.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.14.0...backend-v1.15.0) (2025-08-11)
 
 

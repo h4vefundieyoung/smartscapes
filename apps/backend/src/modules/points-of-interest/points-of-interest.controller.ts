@@ -50,7 +50,7 @@ import {
  *           type: string
  *           example: "Central Park"
  *         description:
- *           type: string
+ *           type: string | null
  *           example: "A large park in New York City"
  *           nullable: true
  *
@@ -66,12 +66,25 @@ import {
  *           type: number
  *           example: 1
  *         location:
- *           $ref: '#/components/schemas/PointsOfInterestLocation'
+ *           type: object
+ *           required:
+ *             - coordinates
+ *             - type
+ *           properties:
+ *             coordinates:
+ *               type: array
+ *               items:
+ *                 type: number
+ *               example: [30.5234, 50.4501]
+ *             type:
+ *               type: string
+ *               enum: ["Point"]
+ *               example: "Point"
  *         name:
  *           type: string
  *           example: "Central Park"
  *         description:
- *           type: string
+ *           type: string | null
  *           example: "A large park in New York City"
  *           nullable: true
  */

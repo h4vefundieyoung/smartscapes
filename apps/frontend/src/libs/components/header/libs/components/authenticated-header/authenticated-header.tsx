@@ -63,7 +63,7 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 						isDropdownOpen && styles["open"],
 					)}
 				>
-					<Icon height={24} name="arrowDown" width={24} />
+					<Icon height={16} name="arrowDown" width={16} />
 				</span>
 			</button>
 

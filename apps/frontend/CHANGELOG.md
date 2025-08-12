@@ -1,5 +1,45 @@
 # Changelog
 
+## [1.20.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.20.1...frontend-v1.20.2) (2025-08-12)
+
+
+### Bug Fixes
+
+* **backend/frontend:** pass csp headers to helmet config ss-295 ([#332](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/332)) ([6f6bc10](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/6f6bc1065f6aae1a30cd7418377b015402f5a190))
+
+## [1.20.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.20.0...frontend-v1.20.1) (2025-08-11)
+
+
+### Bug Fixes
+
+* **frontend:** pass needed csp headers for mapbox and unify assets ss-295 ([#331](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/331)) ([d560de6](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/d560de6860df5a3b6e24a5ed90ea3c3d37683d24))
+
+## [1.20.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.19.3...frontend-v1.20.0) (2025-08-11)
+
+
+### Features
+
+* **backend:** added group id for newly created users ss-113 ([#160](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/160)) ([0edf1e9](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/0edf1e98400fbeb995c9347fa436401c1e7c5dda))
+
+
+### Bug Fixes
+
+* **frontend:** use mapbox csp version ss-295 ([#321](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/321)) ([ea80103](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/ea80103fd510152826907430be923fc6d80104ff))
+
+## [1.19.3](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.19.2...frontend-v1.19.3) (2025-08-11)
+
+
+### Bug Fixes
+
+* **frontend:** increase cache file size ss-295 ([#315](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/315)) ([3049b21](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/3049b21c3ec55eacbdcea0f85017a6f15a859755))
+
+## [1.19.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.19.1...frontend-v1.19.2) (2025-08-11)
+
+
+### Bug Fixes
+
+* **frontend:** remove files from tsconfig on frontend ss-295 ([#313](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/313)) ([14ab113](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/14ab113120aeae9d558dd6b9f6ecc208a2b9f129))
+
 ## [1.19.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.19.0...frontend-v1.19.1) (2025-08-11)
 
 

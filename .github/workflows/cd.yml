@@ -68,7 +68,7 @@ jobs:
           deployment_package: ./build.zip
 
   run-integration-tests:
-    needs: release
+    needs: deploy
 
     uses: ./.github/workflows/integration-tests.yml
 

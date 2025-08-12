@@ -21,6 +21,13 @@ const config = ({ mode }: ConfigEnv): ReturnType<typeof defineConfig> => {
 		build: {
 			cssMinify: "lightningcss",
 			outDir: "build",
+			rollupOptions: {
+				output: {
+					manualChunks: {
+						mapbox: ["mapbox-gl"],
+					},
+				},
+			},
 		},
 		css: {
 			lightningcss: {
@@ -94,14 +101,6 @@ const config = ({ mode }: ConfigEnv): ReturnType<typeof defineConfig> => {
 			],
 		},
 		server: {
-			headers: {
-				"Content-Security-Policy": [
-					"img-src 'self' data: blob:",
-					"connect-src 'self' https://api.mapbox.com https://events.mapbox.com https://*.tiles.mapbox.com",
-					"worker-src 'self' blob:",
-					"child-src 'self' blob:",
-				].join("; "),
-			},
 			port: Number(VITE_APP_DEVELOPMENT_PORT),
 			proxy: {
 				[VITE_APP_API_ORIGIN_URL as string]: {

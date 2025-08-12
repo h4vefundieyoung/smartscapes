@@ -1,1 +1,1 @@
-export { AWSError } from "./aws-exeption.js";
+export { AWSError } from "./aws.exeption.js";

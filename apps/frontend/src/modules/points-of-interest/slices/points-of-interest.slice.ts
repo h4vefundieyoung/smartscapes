@@ -7,12 +7,12 @@ import { type PointsOfInterestResponseDto } from "~/modules/points-of-interest/p
 import { create } from "./actions.js";
 
 type State = {
-	data: PointsOfInterestResponseDto[];
+	data: null | PointsOfInterestResponseDto;
 	dataStatus: ValueOf<typeof DataStatus>;
 };
 
 const initialState: State = {
-	data: [],
+	data: null,
 	dataStatus: DataStatus.IDLE,
 };
 
@@ -21,10 +21,8 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(create.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
 		});
-		builder.addCase(create.fulfilled, (state, action) => {
-			state.data = Array.isArray(action.payload.data)
-				? action.payload.data
-				: [action.payload.data];
+		builder.addCase(create.fulfilled, (state, { payload }) => {
+			state.data = payload.data;
 			state.dataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(create.rejected, (state) => {

@@ -1,5 +1,6 @@
 import React from "react";
 
+import { KeyboardKey } from "~/libs/enums/enums.js";
 import { useCallback, useEffect } from "~/libs/hooks/hooks.js";
 
 import { Icon } from "../components.js";
@@ -22,7 +23,7 @@ const Modal = ({
 		}
 
 		const onKeyDown = (event: KeyboardEvent): void => {
-			if (event.key === "Escape") {
+			if (event.key === KeyboardKey.ESCAPE) {
 				onClose();
 			}
 		};

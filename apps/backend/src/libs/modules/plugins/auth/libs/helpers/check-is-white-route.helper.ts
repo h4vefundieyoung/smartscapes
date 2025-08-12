@@ -28,18 +28,9 @@ const checkIsWhiteRoute = ({
 			return false;
 		}
 
-		const rootPathCritea = "/*";
-		const isRootPath = path.includes(rootPathCritea);
+		const matcher = pathToRegex(path);
 
-		if (!isRootPath) {
-			const reg = pathToRegex(path);
-
-			return Boolean(reg(url));
-		}
-
-		const rootPath = path.replace(rootPathCritea, "");
-
-		return url.startsWith(rootPath);
+		return Boolean(matcher(url));
 	});
 };
 

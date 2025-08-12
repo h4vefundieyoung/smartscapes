@@ -1,7 +1,6 @@
 .container {
 	display: grid;
-	grid-template-rows: auto auto;
-	grid-template-columns: 3fr 1fr;
+	grid-template-columns: 2fr 1fr;
 	gap: 16px;
 }
 
@@ -12,11 +11,6 @@
 	border-radius: 8px;
 }
 
-.primary-description-wrapper {
-	display: grid;
-	grid-row: 1 / span 2;
-}
-
 .primary-image {
 	height: 416px;
 }
@@ -25,15 +19,28 @@
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
-	min-width: 359px;
 }
 
 .secondary-image {
 	height: 200px;
 }
 
-@media (width <= 768px) {
+@media (width <= 1440px) {
 	.container {
-		overflow: scroll hidden;
+		display: flex;
+		overflow-x: auto;
+	}
+
+	.primary-description-wrapper,
+	.secondary-images-wrapper {
+		flex: 0 0 auto;
+	}
+
+	.secondary-images-wrapper {
+		flex-direction: row;
+	}
+
+	.secondary-image {
+		height: 416px;
 	}
 }

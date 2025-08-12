@@ -4,20 +4,15 @@ import image3 from "~/assets/images/route-details/placeholder-image-3.png";
 
 import styles from "./styles.module.css";
 
-type Properties = {
-	description: string;
-};
-
-const ImagesSection = ({ description }: Properties): React.JSX.Element => {
+const ImagesSection = (): React.JSX.Element => {
 	return (
 		<section className={styles["container"]}>
-			<div className={styles["primary-description-wrapper"]}>
+			<div className={styles["primary-wrapper"]}>
 				<img
 					alt="Main point of interest of the route"
 					className={styles["primary-image"]}
 					src={image1}
 				/>
-				<p className={styles["description"]}>{description}</p>
 			</div>
 
 			<div className={styles["secondary-images-wrapper"]}>

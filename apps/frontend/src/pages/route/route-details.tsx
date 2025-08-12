@@ -47,7 +47,8 @@ const RouteDetails = (): React.JSX.Element => {
 				/>
 				<div className={styles["container"]}>
 					<label className={styles["label"]}>{name}</label>
-					<ImagesSection description={description} />
+					<ImagesSection />
+					<p className={styles["description"]}>{description}</p>
 				</div>
 			</main>
 		);

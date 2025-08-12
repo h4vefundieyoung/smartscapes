@@ -6,8 +6,10 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import {
+	type AuthenticatedUserPatchRequestDto,
+	authenticatedUserPatchValidationSchema,
+	type UserAuthResponseDto,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
 	userSignInValidationSchema,
@@ -80,6 +82,39 @@ import { AuthError } from "./libs/exceptions/auth.exception.js";
  *           maxLength: 64
  *           example: strongP@ssw0rd
  *
+ *     AuthenticatedUserPatchRequestDto:
+ *       type: object
+ *       properties:
+ *         firstName:
+ *           type: string
+ *           minLength: 2
+ *           maxLength: 64
+ *           pattern: '^[a-zA-Z\\s]+$'
+ *           example: John
+ *         lastName:
+ *           type: string
+ *           minLength: 2
+ *           maxLength: 64
+ *           pattern: '^[a-zA-Z\\s]+$'
+ *           example: Doe
+ *
+ *     AuthenticatedUserPatchResponseDto:
+ *        type: object
+ *        required:
+ *          - id
+ *          - firstName
+ *          - lastName
+ *        properties:
+ *          id:
+ *            type: integer
+ *            example: 1
+ *          firstName:
+ *            type: string
+ *            example: John
+ *          lastName:
+ *            type: string
+ *            example: Doe
+ *
  *     UserAuthResponseDto:
  *       type: object
  *       required:
@@ -87,10 +122,14 @@ import { AuthError } from "./libs/exceptions/auth.exception.js";
  *         - email
  *         - firstName
  *         - lastName
+ *         - groupId
+ *         - group
+ *         - passwordHash
+ *         - passwordSalt
  *       properties:
  *         id:
  *           type: integer
- *           example: 1
+ *           example: 2
  *         email:
  *           type: string
  *           format: email
@@ -101,6 +140,46 @@ import { AuthError } from "./libs/exceptions/auth.exception.js";
  *         lastName:
  *           type: string
  *           example: Doe
+ *         groupId:
+ *           type: integer
+ *           example: 2
+ *         passwordHash:
+ *           type: string
+ *           example: "$2b$10$fMtQDVp3qhp1cCcsT2g6pu3NQRJvBxXbokwTCiGGXn1eABtE9Vtxy"
+ *         passwordSalt:
+ *           type: string
+ *           example: "$2b$10$fMtQDVp3qhp1cCcsT2g6pu"
+ *         group:
+ *           type: object
+ *           required:
+ *             - id
+ *             - key
+ *             - name
+ *             - permissions
+ *           properties:
+ *             id:
+ *               type: integer
+ *               example: 2
+ *             key:
+ *               type: string
+ *               example: users
+ *             name:
+ *               type: string
+ *               example: Users
+ *             permissions:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   key:
+ *                     type: string
+ *                     example: read
+ *                   name:
+ *                     type: string
+ *                     example: Read
  *
  *     UserSignInResponseDto:
  *       type: object
@@ -110,20 +189,64 @@ import { AuthError } from "./libs/exceptions/auth.exception.js";
  *       properties:
  *         token:
  *           type: string
- *           example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *           example: "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjIsImlhdCI6MTc1NDU3MDMwNiwiZXhwIjoxNzU0NjU2NzA2fQ.rNhA-qyuCbJYF-1G4RjI_LE3O_XosoCsJcDi6oQdPgg"
  *         user:
  *           type: object
  *           required:
  *             - id
  *             - email
+ *             - firstName
+ *             - lastName
+ *             - groupId
+ *             - group
  *           properties:
+ *             id:
+ *               type: integer
+ *               example: 2
  *             email:
  *               type: string
  *               format: email
- *               example: user@example.com
- *             id:
+ *               example: "user@example.com"
+ *             firstName:
+ *               type: string
+ *               example: "John"
+ *             lastName:
+ *               type: string
+ *               example: "Doe"
+ *             groupId:
  *               type: integer
- *               example: 1
+ *               example: 2
+ *             group:
+ *               type: object
+ *               required:
+ *                 - id
+ *                 - key
+ *                 - name
+ *                 - permissions
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   example: 2
+ *                 key:
+ *                   type: string
+ *                   example: "users"
+ *                 name:
+ *                   type: string
+ *                   example: "Users"
+ *                 permissions:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         example: 1
+ *                       key:
+ *                         type: string
+ *                         example: "read"
+ *                       name:
+ *                         type: string
+ *                         example: "Read"
  *
  *     UserSignUpResponseDto:
  *       type: object
@@ -158,7 +281,7 @@ class AuthController extends BaseController {
 		this.addRoute({
 			handler: this.getAuthenticatedUser.bind(this),
 			method: "GET",
-			path: AuthApiPath.AUTH_USER,
+			path: AuthApiPath.AUTHENTICATED_USER,
 		});
 
 		this.addRoute({
@@ -167,6 +290,15 @@ class AuthController extends BaseController {
 			path: AuthApiPath.SIGN_IN,
 			validation: {
 				body: userSignInValidationSchema,
+			},
+		});
+
+		this.addRoute({
+			handler: this.patch.bind(this),
+			method: "PATCH",
+			path: AuthApiPath.AUTHENTICATED_USER_$ID,
+			validation: {
+				body: authenticatedUserPatchValidationSchema,
 			},
 		});
 	}
@@ -200,6 +332,62 @@ class AuthController extends BaseController {
 
 		return {
 			payload: { data: user },
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /auth/authenticated-user/{id}:
+	 *   patch:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - Auth
+	 *     summary: Update user information
+	 *     description: |
+	 *       Update the authenticated user's information.
+	 *       Requires a valid JWT token in the Authorization header.
+	 *       Only the user can update their own information.
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *         description: User ID to update
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             $ref: '#/components/schemas/AuthenticatedUserPatchRequestDto'
+	 *     responses:
+	 *       200:
+	 *         description: User updated successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/AuthenticatedUserPatchResponseDto'
+	 */
+	public async patch(
+		options: APIHandlerOptions<{
+			body: AuthenticatedUserPatchRequestDto;
+			params: {
+				id: string;
+			};
+		}>,
+	): Promise<APIHandlerResponse<UserAuthResponseDto>> {
+		const { body, params } = options;
+		const id = Number(params.id);
+
+		const result = await this.authService.patch(id, body);
+
+		return {
+			payload: { data: result },
 			status: HTTPCode.OK,
 		};
 	}

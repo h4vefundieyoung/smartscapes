@@ -1,5 +1,8 @@
 export { type UserPasswordDetails } from "./user-password-details.type.js";
 export {
+	type AuthenticatedUserPatchRequestDto,
+	type AuthenticatedUserPatchResponseDto,
+	type UserAuthResponseDto,
 	type UserGetByIdItemResponseDto,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,

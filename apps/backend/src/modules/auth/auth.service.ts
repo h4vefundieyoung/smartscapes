@@ -1,6 +1,8 @@
 import { type encryption } from "~/libs/modules/encryption/libs/encryption.js";
 import { type BaseToken } from "~/libs/modules/token/token.js";
 import {
+	type AuthenticatedUserPatchRequestDto,
+	type AuthenticatedUserPatchResponseDto,
 	type UserService,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
@@ -30,6 +32,15 @@ class AuthService {
 		this.encryptionService = encryptionService;
 		this.tokenService = tokenService;
 		this.userService = userService;
+	}
+
+	public async patch(
+		id: number,
+		userRequestDto: AuthenticatedUserPatchRequestDto,
+	): Promise<AuthenticatedUserPatchResponseDto> {
+		const user = await this.userService.patch(id, userRequestDto);
+
+		return user;
 	}
 
 	public async signIn(
@@ -63,6 +74,8 @@ class AuthService {
 			user: {
 				email,
 				firstName: user.firstName,
+				group: user.group,
+				groupId: user.groupId,
 				id: user.id,
 				lastName: user.lastName,
 			},
@@ -73,9 +86,15 @@ class AuthService {
 		userRequestDto: UserSignUpRequestDto,
 	): Promise<UserSignUpResponseDto> {
 		const user = await this.userService.create(userRequestDto);
-		const token = await this.tokenService.create({ userId: user.id });
 
-		return { token, user };
+		const token = await this.tokenService.create({
+			userId: user.id,
+		});
+
+		return {
+			token,
+			user,
+		};
 	}
 }
 

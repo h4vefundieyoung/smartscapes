@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.16.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/shared-v1.15.0...shared-v1.16.0) (2025-08-11)
+
+
+### Features
+
+* **backend:** added group id for newly created users ss-113 ([#160](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/160)) ([0edf1e9](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/0edf1e98400fbeb995c9347fa436401c1e7c5dda))
+
+## [1.15.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/shared-v1.14.0...shared-v1.15.0) (2025-08-11)
+
+
+### Features
+
+* **backend/shared:** mapbox api integration ss-193 ([#223](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/223)) ([e7511ca](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/e7511cabbee2440584cb1b1d6efaa672293f33fb))
+
+## [1.14.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/shared-v1.13.0...shared-v1.14.0) (2025-08-11)
+
+
+### Features
+
+* **frontend/backend/shared:** profile page ss-185 ([#218](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/218)) ([a63adc4](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/a63adc4fd0165cd92fc9bb4d96a5fc623686c7d4))
+
+## [1.13.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/shared-v1.12.0...shared-v1.13.0) (2025-08-10)
+
+
+### Features
+
+* **backend/frontend:** add logout functionality ss-182 ([#249](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/249)) ([e3a03fb](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/e3a03fbdc47c9d509d5aef7eb6a77866e122338f))
+* **backend/shared:** add followers module ss-72 ([#136](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/136)) ([3b63b29](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/3b63b2952a6b4e62d7e46b91fe2825f2c307c509))
+
 ## [1.12.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/shared-v1.11.0...shared-v1.12.0) (2025-08-07)
 
 

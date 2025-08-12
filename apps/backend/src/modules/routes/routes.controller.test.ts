@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { HTTPCode } from "~/libs/enums/enums.js";
+import { HTTPCode, PermissionKey } from "~/libs/enums/enums.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { GroupEntity } from "../groups/group.entity.js";
@@ -9,17 +9,33 @@ import { PermissionEntity } from "../permission/permission.entity.js";
 import { RoutesController } from "./routes.controller.js";
 import { type RoutesService } from "./routes.service.js";
 
-const mockPermission = PermissionEntity.initialize({
+const mockReadPermission = PermissionEntity.initialize({
 	id: 1,
 	key: "READ",
 	name: "Can read",
 });
 
-const mockGroup = GroupEntity.initializeWithPermissions({
+const mockManageRoutesPermission = PermissionEntity.initialize({
+	id: 2,
+	key: PermissionKey.MANAGE_ROUTES,
+	name: "Manage Routes",
+});
+
+const mockUserGroup = GroupEntity.initializeWithPermissions({
 	id: 2,
 	key: "users",
 	name: "Users",
-	permissions: [mockPermission.toObject()],
+	permissions: [mockReadPermission.toObject()],
+}).toObject();
+
+const mockAdminGroup = GroupEntity.initializeWithPermissions({
+	id: 1,
+	key: "admins",
+	name: "Admins",
+	permissions: [
+		mockReadPermission.toObject(),
+		mockManageRoutesPermission.toObject(),
+	],
 }).toObject();
 
 const mockDelete: RoutesService["delete"] = () => {
@@ -30,10 +46,19 @@ describe("Routes controller", () => {
 	const mockUser = {
 		email: "test@example.com",
 		firstName: "John",
-		group: mockGroup,
+		group: mockUserGroup,
 		groupId: 2,
 		id: 1,
 		lastName: "Doe",
+	};
+
+	const mockAdminUser = {
+		email: "admin@example.com",
+		firstName: "Jane",
+		group: mockAdminGroup,
+		groupId: 1,
+		id: 2,
+		lastName: "Admin",
 	};
 
 	const mockLogger: Logger = {
@@ -98,7 +123,7 @@ describe("Routes controller", () => {
 			},
 			params: {},
 			query: {},
-			user: mockUser,
+			user: mockAdminUser,
 		});
 
 		assert.deepStrictEqual(result, {
@@ -173,7 +198,7 @@ describe("Routes controller", () => {
 			},
 			params: { id: "1" },
 			query: {},
-			user: mockUser,
+			user: mockAdminUser,
 		});
 
 		assert.deepStrictEqual(result, {
@@ -193,12 +218,104 @@ describe("Routes controller", () => {
 			body: {},
 			params: { id: "1" },
 			query: {},
-			user: mockUser,
+			user: mockAdminUser,
 		});
 
 		assert.deepStrictEqual(result, {
 			payload: { data: true },
 			status: HTTPCode.OK,
 		});
+	});
+
+	it("create should throw PermissionError for user without manage_routes permission", async () => {
+		const mockCreate: RoutesService["create"] = () => {
+			return Promise.resolve(mockRoute);
+		};
+
+		const routesService = {
+			create: mockCreate,
+		} as RoutesService;
+
+		const controller = new RoutesController(mockLogger, routesService);
+
+		await assert.rejects(
+			async () => {
+				await controller.create({
+					body: {
+						description: mockRoute.description,
+						name: mockRoute.name,
+						pois: [FIRST_POI_ID, SECOND_POI_ID],
+					},
+					params: {},
+					query: {},
+					user: mockUser,
+				});
+			},
+			(error: Error) => {
+				return (
+					error.message === "You don't have permission to perform this action."
+				);
+			},
+		);
+	});
+
+	it("patch should throw PermissionError for user without manage_routes permission", async () => {
+		const updatedRoute = {
+			...mockRoute,
+			name: "Updated Route",
+		};
+
+		const mockUpdate: RoutesService["patch"] = () => {
+			return Promise.resolve(updatedRoute);
+		};
+
+		const routesService = {
+			patch: mockUpdate,
+		} as RoutesService;
+
+		const controller = new RoutesController(mockLogger, routesService);
+
+		await assert.rejects(
+			async () => {
+				await controller.patch({
+					body: {
+						description: updatedRoute.description,
+						name: updatedRoute.name,
+					},
+					params: { id: "1" },
+					query: {},
+					user: mockUser,
+				});
+			},
+			(error: Error) => {
+				return (
+					error.message === "You don't have permission to perform this action."
+				);
+			},
+		);
+	});
+
+	it("delete should throw PermissionError for user without manage_routes permission", async () => {
+		const routesService = {
+			delete: mockDelete,
+		} as RoutesService;
+
+		const controller = new RoutesController(mockLogger, routesService);
+
+		await assert.rejects(
+			async () => {
+				await controller.delete({
+					body: {},
+					params: { id: "1" },
+					query: {},
+					user: mockUser,
+				});
+			},
+			(error: Error) => {
+				return (
+					error.message === "You don't have permission to perform this action."
+				);
+			},
+		);
 	});
 });

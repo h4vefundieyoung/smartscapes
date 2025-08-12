@@ -1,5 +1,5 @@
-import { APIPath, HTTPCode } from "~/libs/enums/enums.js";
-import { setRateLimit } from "~/libs/hooks/hooks.js";
+import { APIPath, HTTPCode, PermissionKey } from "~/libs/enums/enums.js";
+import { checkPermission, setRateLimit } from "~/libs/hooks/hooks.js";
 import {
 	type APIHandlerOptions,
 	type APIHandlerResponse,
@@ -100,6 +100,7 @@ class RoutesController extends BaseController {
 			handler: this.create.bind(this),
 			method: "POST",
 			path: "/",
+			preHandlers: [checkPermission(PermissionKey.MANAGE_ROUTES)],
 			validation: { body: routesCreateValidationSchema },
 		});
 
@@ -107,6 +108,7 @@ class RoutesController extends BaseController {
 			handler: this.delete.bind(this),
 			method: "DELETE",
 			path: "/:id",
+			preHandlers: [checkPermission(PermissionKey.MANAGE_ROUTES)],
 		});
 
 		this.addRoute({
@@ -125,6 +127,7 @@ class RoutesController extends BaseController {
 			handler: this.patch.bind(this),
 			method: "PATCH",
 			path: "/:id",
+			preHandlers: [checkPermission(PermissionKey.MANAGE_ROUTES)],
 			validation: { body: routesUpdateValidationSchema },
 		});
 	}
@@ -215,6 +218,19 @@ class RoutesController extends BaseController {
 	 *           application/json:
 	 *             schema:
 	 *               $ref: '#/components/schemas/Route'
+	 *       403:
+	 *         description: Forbidden - User lacks manage_routes permission
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: "You don't have permission to perform this action."
 	 */
 
 	public async create(
@@ -257,6 +273,19 @@ class RoutesController extends BaseController {
 	 *               properties:
 	 *                 data:
 	 *                   type: boolean
+	 *       403:
+	 *         description: Forbidden - User lacks manage_routes permission
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: "You don't have permission to perform this action."
 	 */
 
 	public async delete(
@@ -385,6 +414,19 @@ class RoutesController extends BaseController {
 	 *               properties:
 	 *                 data:
 	 *                   $ref: '#/components/schemas/Route'
+	 *       403:
+	 *         description: Forbidden - User lacks manage_routes permission
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: "You don't have permission to perform this action."
 	 */
 
 	public async patch(

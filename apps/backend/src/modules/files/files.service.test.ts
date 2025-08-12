@@ -6,10 +6,11 @@ import { type AWSService } from "~/libs/modules/aws/aws.js";
 import { FilesEntity } from "./files.entity.js";
 import { type FilesRepository } from "./files.repository.js";
 import { FilesService } from "./files.service.js";
+import { type FileContentType } from "./libs/types/types.js";
 
 describe("FilesService", () => {
 	const mockFile: Parameters<typeof FilesEntity.initialize>[0] = {
-		contentType: "image/jpg",
+		contentType: "image/jpg" as FileContentType,
 		createdAt: "2024-01-01T00:00:00Z",
 		id: 1,
 		updatedAt: "2024-01-01T00:00:00Z",
@@ -71,7 +72,7 @@ describe("FilesService", () => {
 		const result = await filesService.uploadFile({
 			file: {
 				filename: "test.jpg",
-				mimetype: "image/jpg",
+				mimetype: "image/jpg" as FileContentType,
 				toBuffer: () => Promise.resolve(Buffer.from("test")),
 			} as unknown as Parameters<typeof filesService.uploadFile>[0]["file"],
 			folder: "avatars",

@@ -1,7 +1,11 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 import { type Config } from "~/libs/modules/config/config.js";
+import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type FileContentType } from "~/modules/files/files.js";
+
+import { AWSError } from "./libs/exeptions/exeptions.js";
 
 class AWSService {
 	private bucketName: string;
@@ -24,21 +28,30 @@ class AWSService {
 	public async uploadFile(
 		buffer: Buffer,
 		key: string,
-		contentType: string,
+		contentType: FileContentType,
 	): Promise<string> {
-		const command = new PutObjectCommand({
-			Body: buffer,
-			Bucket: this.bucketName,
-			ContentType: contentType,
-			Key: key,
-		});
+		try {
+			const command = new PutObjectCommand({
+				Body: buffer,
+				Bucket: this.bucketName,
+				ContentType: contentType,
+				Key: key,
+			});
 
-		await this.s3Client.send(command);
+			await this.s3Client.send(command);
 
-		const url = `https://${this.bucketName}.s3.amazonaws.com/${key}`;
-		this.logger.info(`File uploaded to S3: ${key}`);
+			const url = `https://${this.bucketName}.s3.amazonaws.com/${key}`;
+			this.logger.info(`File uploaded to AWS S3: ${key}`);
 
-		return url;
+			return url;
+		} catch (error) {
+			const message = error instanceof Error ? error.message : String(error);
+
+			throw new AWSError({
+				message,
+				status: HTTPCode.INTERNAL_SERVER_ERROR,
+			});
+		}
 	}
 }
 

@@ -1,5 +1,7 @@
+import { type FileContentType } from "./file-content-type.type.js";
+
 type FileUploadResponseDto = {
-	contentType: string;
+	contentType: FileContentType;
 	id: number;
 	url: string;
 };

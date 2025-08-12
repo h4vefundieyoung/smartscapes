@@ -51,7 +51,7 @@ import { fileUploadFolderValidationSchema } from "./libs/validation-schemas/vali
  *
  *     FileContentType:
  *       type: string
- *       enum: [image/jpeg, image/png]
+ *       enum: [image/jpeg, image/jpg, image/png]
  *       description: Supported file content types
  *
  *     FileFolderName:

@@ -6,6 +6,7 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { FilesController } from "./files.controller.js";
 import { type FilesService } from "./files.service.js";
+import { type FileContentType } from "./libs/types/types.js";
 
 describe("FilesController", () => {
 	const mockLogger: Logger = {
@@ -16,7 +17,7 @@ describe("FilesController", () => {
 	};
 
 	const mockFile = {
-		contentType: "image/jpg",
+		contentType: "image/jpg" as FileContentType,
 		id: 1,
 		url: "https://example.com/file.jpg",
 	};

@@ -53,7 +53,7 @@ class FilesService implements Service {
 		const url = await this.awsService.uploadFile(
 			buffer,
 			generatedFileName,
-			mimetype,
+			mimetype as FileContentType,
 		);
 
 		const savedFile = await this.filesRepository.create(

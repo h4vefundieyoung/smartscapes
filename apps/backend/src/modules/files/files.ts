@@ -13,3 +13,4 @@ const filesController = new FilesController(logger, filesService);
 export { filesController };
 export { FileContent, FilesExceptionMessage } from "./libs/enums/enums.js";
 export { FilesError } from "./libs/exeptions/exeptions.js";
+export { type FileContentType } from "./libs/types/types.js";

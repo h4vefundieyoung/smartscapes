@@ -9,12 +9,12 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { RouteApiPath } from "./libs/enums/enums.js";
 import {
+	type RoutesFindAllOptions,
 	type RoutesRequestConstructDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
 	type RoutesResponseConstructDto,
 	type RoutesResponseDto,
-	type RoutesSearchQuery,
 } from "./libs/types/types.js";
 import {
 	routesConstructValidationSchema,
@@ -311,7 +311,7 @@ class RoutesController extends BaseController {
 
 	public async findAll(
 		options: APIHandlerOptions<{
-			query?: RoutesSearchQuery;
+			query?: RoutesFindAllOptions;
 		}>,
 	): Promise<APIHandlerResponse<RoutesResponseDto[]>> {
 		const { query = null } = options;

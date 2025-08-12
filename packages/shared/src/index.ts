@@ -68,12 +68,12 @@ export {
 	RouteApiPath,
 	routesConstructValidationSchema,
 	routesCreateValidationSchema,
+	type RoutesFindAllOptions,
 	type RoutesRequestConstructDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
 	type RoutesResponseConstructDto,
 	type RoutesResponseDto,
-	type RoutesSearchQuery,
 	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
 } from "./modules/routes/routes.js";

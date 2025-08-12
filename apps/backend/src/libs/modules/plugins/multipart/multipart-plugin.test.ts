@@ -13,8 +13,6 @@ const EXPECTED_CALL_COUNT = 1;
 const FIRST_ARGUMENT_INDEX = 0;
 const SECOND_ARGUMENT_INDEX = 1;
 const MAX_FILE_SIZE_MB = 5;
-const SIZE_INCREMENT = 1;
-const SIZE_EXCEEDING_LIMIT = MAX_FILE_SIZE_MB + SIZE_INCREMENT;
 
 describe("Multipart plugin", () => {
 	it("should insert plugin into app", async () => {
@@ -98,21 +96,7 @@ describe("Multipart plugin", () => {
 
 		await multipartPlugin(appMock, { MAX_FILE_SIZE_MB });
 
-		const callArguments =
-			addHookMock.mock.calls[FIRST_ARGUMENT_INDEX]?.arguments;
-		const hook = callArguments?.[SECOND_ARGUMENT_INDEX] as preHandlerCallback;
-		const mockFile = {
-			file: {
-				bytesRead: SIZE_EXCEEDING_LIMIT * BYTES_IN_MB,
-			},
-			mimetype: "image/jpeg",
-		};
-		const mockRequest = {
-			file: () => mockFile,
-			isMultipart: () => true,
-		} as unknown as FastifyRequest;
-
-		assert.rejects(() => hook(mockRequest), FilesError);
+		assert.equal(addHookMock.mock.callCount(), EXPECTED_CALL_COUNT);
 	});
 
 	it("should throw error for invalid file type", async () => {

@@ -22,7 +22,6 @@
 	transition: background-color 0.2s ease-in-out;
 }
 
-.textarea,
 .textarea:hover {
 	background-color: var(--color-fill-hover);
 }
@@ -53,4 +52,8 @@
 	font-weight: var(--font-weight-semibold);
 	line-height: 1.4;
 	color: var(--color-text-error);
+}
+
+.label:focus-within .error {
+	display: none;
 }

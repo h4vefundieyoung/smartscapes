@@ -45,7 +45,7 @@ const TextArea = <T extends FieldValues>({
 				value={field.value ?? ""}
 			/>
 			{hasError && (
-				<span className={styles["error"]} id={`${String(name)}-error`}>
+				<span className={styles["error"]}>
 					<img alt="error-icon" src={errorIcon} />
 					{error}
 				</span>

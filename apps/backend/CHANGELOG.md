@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.17.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.17.1...backend-v1.17.2) (2025-08-12)
+
+
+### Bug Fixes
+
+* **backend/frontend:** pass csp headers to helmet config ss-295 ([#332](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/332)) ([6f6bc10](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/6f6bc1065f6aae1a30cd7418377b015402f5a190))
+
+## [1.17.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.17.0...backend-v1.17.1) (2025-08-11)
+
+
+### Bug Fixes
+
+* **backend:** update follow route path in swagger to match code (ss-300) ([#301](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/301)) ([b120845](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/b12084513e543929ef76991094617f93083542be))
+* **backend:** update route validation schema handling ss-280 ([#317](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/317)) ([5d99172](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/5d991720aebb38a1a9bddfd5f67963a9331f2c3a))
+
 ## [1.17.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/backend-v1.16.0...backend-v1.17.0) (2025-08-11)
 
 

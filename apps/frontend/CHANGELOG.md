@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.20.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.20.1...frontend-v1.20.2) (2025-08-12)
+
+
+### Bug Fixes
+
+* **backend/frontend:** pass csp headers to helmet config ss-295 ([#332](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/332)) ([6f6bc10](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/6f6bc1065f6aae1a30cd7418377b015402f5a190))
+
+## [1.20.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.20.0...frontend-v1.20.1) (2025-08-11)
+
+
+### Bug Fixes
+
+* **frontend:** pass needed csp headers for mapbox and unify assets ss-295 ([#331](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/331)) ([d560de6](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/d560de6860df5a3b6e24a5ed90ea3c3d37683d24))
+
 ## [1.20.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/frontend-v1.19.3...frontend-v1.20.0) (2025-08-11)
 
 

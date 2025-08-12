@@ -195,10 +195,10 @@ class BaseServerApplication implements ServerApplication {
 
 	private async initPlugins(): Promise<void> {
 		const whiteRoutes = this.apis.flatMap((api) => api.whiteRoutes);
-		const maxFileSizeMB = this.config.ENV.AWS.MAX_FILE_SIZE_MB;
+		const { MAX_FILE_SIZE_MB } = this.config.ENV.AWS;
 
 		await this.app.register(authPlugin, { whiteRoutes });
-		await this.app.register(multipartPlugin, { maxFileSizeMB });
+		await this.app.register(multipartPlugin, { MAX_FILE_SIZE_MB });
 	}
 
 	private initRoutes(): void {

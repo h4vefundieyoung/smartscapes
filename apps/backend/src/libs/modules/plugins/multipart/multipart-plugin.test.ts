@@ -2,7 +2,7 @@ import { type FastifyInstance, type FastifyRequest } from "fastify";
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 
-import { FILE_SIZE_MB } from "~/libs/constants/constants.js";
+import { BYTES_IN_MB } from "~/libs/constants/constants.js";
 import { FilesError } from "~/modules/files/files.js";
 
 import { multipartPlugin } from "./multipart.plugin.js";
@@ -25,7 +25,7 @@ describe("Multipart plugin", () => {
 			register: registerMock,
 		} as unknown as FastifyInstance;
 
-		await multipartPlugin(appMock, { maxFileSizeMB: 10 });
+		await multipartPlugin(appMock, { MAX_FILE_SIZE_MB: 10 });
 
 		assert.equal(registerMock.mock.callCount(), EXPECTED_CALL_COUNT);
 		assert.equal(addHookMock.mock.callCount(), EXPECTED_CALL_COUNT);
@@ -38,7 +38,7 @@ describe("Multipart plugin", () => {
 			register: async () => {},
 		} as unknown as FastifyInstance;
 
-		await multipartPlugin(appMock, { maxFileSizeMB: 10 });
+		await multipartPlugin(appMock, { MAX_FILE_SIZE_MB: 10 });
 
 		const callArguments =
 			addHookMock.mock.calls[FIRST_ARGUMENT_INDEX]?.arguments;
@@ -56,7 +56,7 @@ describe("Multipart plugin", () => {
 			register: async () => {},
 		} as unknown as FastifyInstance;
 
-		await multipartPlugin(appMock, { maxFileSizeMB: 10 });
+		await multipartPlugin(appMock, { MAX_FILE_SIZE_MB: 10 });
 
 		const callArguments =
 			addHookMock.mock.calls[FIRST_ARGUMENT_INDEX]?.arguments;
@@ -76,7 +76,7 @@ describe("Multipart plugin", () => {
 			register: async () => {},
 		} as unknown as FastifyInstance;
 
-		await multipartPlugin(appMock, { maxFileSizeMB: 10 });
+		await multipartPlugin(appMock, { MAX_FILE_SIZE_MB: 10 });
 
 		const callArguments =
 			addHookMock.mock.calls[FIRST_ARGUMENT_INDEX]?.arguments;
@@ -96,14 +96,14 @@ describe("Multipart plugin", () => {
 			register: async () => {},
 		} as unknown as FastifyInstance;
 
-		await multipartPlugin(appMock, { maxFileSizeMB: MAX_FILE_SIZE_MB });
+		await multipartPlugin(appMock, { MAX_FILE_SIZE_MB });
 
 		const callArguments =
 			addHookMock.mock.calls[FIRST_ARGUMENT_INDEX]?.arguments;
 		const hook = callArguments?.[SECOND_ARGUMENT_INDEX] as preHandlerCallback;
 		const mockFile = {
 			file: {
-				bytesRead: SIZE_EXCEEDING_LIMIT * FILE_SIZE_MB,
+				bytesRead: SIZE_EXCEEDING_LIMIT * BYTES_IN_MB,
 			},
 			mimetype: "image/jpeg",
 		};
@@ -122,14 +122,14 @@ describe("Multipart plugin", () => {
 			register: async () => {},
 		} as unknown as FastifyInstance;
 
-		await multipartPlugin(appMock, { maxFileSizeMB: 10 });
+		await multipartPlugin(appMock, { MAX_FILE_SIZE_MB: 10 });
 
 		const callArguments =
 			addHookMock.mock.calls[FIRST_ARGUMENT_INDEX]?.arguments;
 		const hook = callArguments?.[SECOND_ARGUMENT_INDEX] as preHandlerCallback;
 		const mockFile = {
 			file: {
-				bytesRead: FILE_SIZE_MB,
+				bytesRead: BYTES_IN_MB,
 			},
 			mimetype: "application/exe",
 		};
@@ -148,14 +148,14 @@ describe("Multipart plugin", () => {
 			register: async () => {},
 		} as unknown as FastifyInstance;
 
-		await multipartPlugin(appMock, { maxFileSizeMB: 10 });
+		await multipartPlugin(appMock, { MAX_FILE_SIZE_MB: 10 });
 
 		const callArguments =
 			addHookMock.mock.calls[FIRST_ARGUMENT_INDEX]?.arguments;
 		const hook = callArguments?.[SECOND_ARGUMENT_INDEX] as preHandlerCallback;
 		const mockFile = {
 			file: {
-				bytesRead: FILE_SIZE_MB,
+				bytesRead: BYTES_IN_MB,
 			},
 			mimetype: "image/jpeg",
 		};

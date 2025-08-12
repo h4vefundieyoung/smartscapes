@@ -1,4 +1,4 @@
-export { FILE_SIZE_MB, METERS_IN_KM } from "./libs/constants/constants.js";
+export { BYTES_IN_MB, METERS_IN_KM } from "./libs/constants/constants.js";
 export {
 	APIErrorType,
 	APIPath,

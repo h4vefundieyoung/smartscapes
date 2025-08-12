@@ -1,3 +1,5 @@
+import { match as pathToRegex } from "path-to-regexp";
+
 import { type HTTPMethod } from "~/libs/types/types.js";
 
 import { type WhiteRoute } from "../../auth.plugin.js";
@@ -30,7 +32,9 @@ const checkIsWhiteRoute = ({
 		const isRootPath = path.includes(rootPathCritea);
 
 		if (!isRootPath) {
-			return url === path;
+			const reg = pathToRegex(path);
+
+			return Boolean(reg(url));
 		}
 
 		const rootPath = path.replace(rootPathCritea, "");

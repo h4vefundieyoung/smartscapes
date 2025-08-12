@@ -1,0 +1,38 @@
+.poi-container {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+	width: 100%;
+	padding: 32px;
+}
+
+.poi-header {
+	margin: 0;
+	font-size: var(--font-size-h1);
+	font-weight: var(--font-weight-semibold);
+	line-height: 3;
+	color: var(--color-text-header);
+}
+
+.poi-gallery {
+	display: flex;
+	column-gap: 16px;
+	justify-content: space-between;
+}
+
+.poi-sub-gallery {
+	display: flex;
+	flex-direction: column;
+	row-gap: 16px;
+	justify-content: space-between;
+	min-width: 30%;
+}
+
+.poi-route-image {
+	flex-grow: 1;
+}
+
+.poi-description {
+	font-size: var(--font-size-small);
+	line-height: 1.5;
+}

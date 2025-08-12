@@ -17,6 +17,9 @@ const config: KnipConfig = {
 			ignore: ["src/**/**"],
 			includeEntryExports: true,
 		},
+		"tests": {
+			entry: ["tests/**/*.spec.ts"],
+		},
 	},
 };
 

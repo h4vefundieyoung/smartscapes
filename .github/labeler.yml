@@ -24,6 +24,12 @@ frontend:
           - "apps/frontend/**/*"
           - "!apps/frontend/.env.example"
 
+tests:
+  - changed-files:
+      - all-globs-to-any-file:
+          - "tests/**/*"
+          - "!tests/.env.example"
+
 docs:
   - changed-files:
       - any-glob-to-any-file:
@@ -34,3 +40,4 @@ env:
       - any-glob-to-any-file:
           - "apps/backend/.env.example"
           - "apps/frontend/.env.example"
+          - "tests/.env.example"

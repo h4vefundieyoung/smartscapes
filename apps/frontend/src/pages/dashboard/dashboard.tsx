@@ -67,10 +67,7 @@ const Dashboard = (): React.JSX.Element => {
 
 				setUploadedImages((previous) => [...previous, responseURL.data.url]);
 				setIsUploading(false);
-			} catch (error) {
-				// eslint-disable-next-line no-console
-				console.error("Upload failed:", error);
-			} finally {
+			} catch {
 				setIsUploading(false);
 			}
 		},
@@ -82,15 +79,12 @@ const Dashboard = (): React.JSX.Element => {
 	}, []);
 
 	useEffect(() => {
-		filesApi
-			.getAllFiles()
-			.then((response) => {
-				setUploadedImages(response.data.map((file) => file.url));
-			})
-			.catch((error: unknown) => {
-				// eslint-disable-next-line no-console
-				console.error("Failed to load files:", error);
-			});
+		const loadFiles = async (): Promise<void> => {
+			const response = await filesApi.getAllFiles();
+			setUploadedImages(response.data.map((file) => file.url));
+		};
+
+		void loadFiles();
 	}, []);
 
 	return (

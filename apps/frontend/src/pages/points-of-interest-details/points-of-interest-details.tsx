@@ -34,7 +34,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 		} else {
 			void (async (): Promise<void> => {
 				try {
-					await navigate(AppRoute.SIGN_IN, { replace: true });
+					await navigate(AppRoute.NOT_FOUND, { replace: true });
 				} catch {
 					toastNotifier.showError(
 						CommonExceptionMessage.COMMON_EXCEPTION_MESSAGE,
@@ -58,8 +58,16 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 								src={mockImage1}
 							/>
 							<div className={styles["poi-sub-gallery"]}>
-								<img alt="point of interest" src={mockImage2} />
-								<img alt="point of interest" src={mockImage3} />
+								<img
+									alt="point of interest"
+									className={styles["poi-route-sub-image"]}
+									src={mockImage2}
+								/>
+								<img
+									alt="point of interest"
+									className={styles["poi-route-sub-image"]}
+									src={mockImage3}
+								/>
 							</div>
 						</div>
 						<p className={styles["poi-description"]}>

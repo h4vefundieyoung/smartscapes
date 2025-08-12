@@ -33,9 +33,9 @@ export {
 	type FileContentType,
 	FileFolderName,
 	FilesApiPath,
+	fileUploadFolderValidationSchema,
 	type FileUploadRequestDto,
 	type FileUploadResponseDto,
-	fileUploadUrlValidationSchema,
 } from "./modules/files/files.js";
 export {
 	NotificationApiPath,

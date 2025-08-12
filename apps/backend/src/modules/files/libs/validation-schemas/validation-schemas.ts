@@ -1,1 +1,1 @@
-export { fileUploadUrlValidationSchema } from "@smartscapes/shared";
+export { fileUploadFolderValidationSchema } from "@smartscapes/shared";

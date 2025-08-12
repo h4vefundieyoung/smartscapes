@@ -1,1 +1,1 @@
-export { fileUploadUrl } from "./file-upload-url.validation-schema.js";
+export { fileUploadFolder } from "./file-upload-folder.validation-schema.js";

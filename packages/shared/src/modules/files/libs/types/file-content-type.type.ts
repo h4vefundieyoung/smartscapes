@@ -1,3 +1,3 @@
-type FileContentType = "image/jpg" | "image/png";
+type FileContentType = "image/jpeg" | "image/jpg" | "image/png";
 
 export { type FileContentType };

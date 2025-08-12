@@ -8,4 +8,4 @@ export {
 	type FileUploadRequestDto,
 	type FileUploadResponseDto,
 } from "./libs/types/types.js";
-export { fileUploadUrl as fileUploadUrlValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
+export { fileUploadFolder as fileUploadFolderValidationSchema } from "./libs/validation-schemas/validation-schemas.js";

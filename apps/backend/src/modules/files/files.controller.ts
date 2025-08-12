@@ -13,7 +13,7 @@ import { type FilesService } from "~/modules/files/files.service.js";
 
 import { type FileFolderName, FilesApiPath } from "./libs/enums/enums.js";
 import { type FileUploadResponseDto } from "./libs/types/types.js";
-import { fileUploadUrlValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
+import { fileUploadFolderValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 
 /**
  * @swagger
@@ -72,7 +72,7 @@ class FilesController extends BaseController {
 			method: "POST",
 			path: FilesApiPath.UPLOAD,
 			validation: {
-				params: fileUploadUrlValidationSchema,
+				params: fileUploadFolderValidationSchema,
 			},
 		});
 

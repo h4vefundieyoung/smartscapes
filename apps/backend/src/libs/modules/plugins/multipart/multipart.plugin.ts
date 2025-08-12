@@ -18,7 +18,6 @@ const multipart = async (
 	app: FastifyInstance,
 	{ MAX_FILE_SIZE_MB }: PluginOptions,
 ): Promise<void> => {
-	const ALLOWED_FILE_TYPES = Object.values(FileContent) as readonly string[];
 	const MAX_FILE_SIZE_BYTES = BYTES_IN_MB * MAX_FILE_SIZE_MB;
 
 	await app.register(fastifyMultipart, {
@@ -26,50 +25,35 @@ const multipart = async (
 			files: 1,
 			fileSize: MAX_FILE_SIZE_BYTES,
 		},
+		throwFileSizeLimit: true,
 	});
 
 	const requestHandler = async (
 		request: FastifyRequest<{ Body: MultipartFile }>,
 	): Promise<void> => {
-		const file = request.isMultipart() ? await request.file() : null;
+		if (request.isMultipart()) {
+			const file = await request.file();
 
-		const IS_TOO_LARGE = file
-			? file.file.bytesRead > MAX_FILE_SIZE_BYTES
-			: false;
-		const IS_INVALID_TYPE = file
-			? !ALLOWED_FILE_TYPES.includes(file.mimetype)
-			: false;
-
-		switch (true) {
-			case !request.isMultipart(): {
-				break;
-			}
-
-			case !file: {
+			if (!file) {
 				throw new FilesError({
 					message: FilesExceptionMessage.FILE_REQUIRED,
 					status: HTTPCode.BAD_REQUEST,
 				});
 			}
 
-			case IS_TOO_LARGE: {
-				throw new FilesError({
-					message: FilesExceptionMessage.FILE_SIZE_EXCEEDS_LIMIT,
-					status: HTTPCode.UNPROCESSED_ENTITY,
-				});
-			}
+			const ALLOWED_FILE_TYPES = Object.values(
+				FileContent,
+			) as readonly string[];
+			const IS_INVALID_TYPE = !ALLOWED_FILE_TYPES.includes(file.mimetype);
 
-			case IS_INVALID_TYPE: {
+			if (IS_INVALID_TYPE) {
 				throw new FilesError({
 					message: FilesExceptionMessage.INVALID_FILE_TYPE,
 					status: HTTPCode.UNPROCESSED_ENTITY,
 				});
 			}
 
-			default: {
-				request.body = file;
-				break;
-			}
+			request.body = file;
 		}
 	};
 

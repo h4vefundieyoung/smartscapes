@@ -13,15 +13,28 @@
 
 .drawer {
 	z-index: 1;
-	width: max-content;
+	width: 74px;
 	height: 100%;
 	background-color: var(--color-background-base);
 	border-right: 1px solid var(--color-brand-50);
+	transition: width 0.3s ease;
+}
+
+.logo-wrapper {
+	opacity: 0;
+	transform: translateX(-10px);
+	transition:
+		opacity 0.3s ease,
+		transform 0.3s ease;
+}
+
+.drawer[data-open="true"] .logo-wrapper {
+	opacity: 1;
+	transform: translateX(0);
 }
 
 .drawer[data-open="true"] {
-	width: 100%;
-	max-width: 320px;
+	width: 320px;
 }
 
 .header {
@@ -109,18 +122,25 @@
 
 .group {
 	position: relative;
+	padding-top: 48px;
 }
 
 .shifted {
 	padding-top: 48px;
 }
 
-.drawer[data-open="true"] .group {
-	padding-top: 0;
-}
-
 .title {
 	padding: 12px 24px;
+	opacity: 0;
+	transform: translateX(-10px);
+	transition:
+		opacity 0.3s ease,
+		transform 0.3s ease;
+}
+
+.drawer[data-open="true"] .title {
+	opacity: 1;
+	transform: translateX(0);
 }
 
 .title-text {
@@ -148,4 +168,19 @@
 .backdrop {
 	flex: 1;
 	background-color: var(--color-stroke-strong);
+	transition:
+		width 0.5s ease-out,
+		background-color 0.5s ease;
+}
+
+.hidden {
+	position: absolute;
+	width: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	white-space: nowrap;
+	border: 0;
+	clip: rect(0 0 0 0);
+	clip-path: inset(100%);
 }

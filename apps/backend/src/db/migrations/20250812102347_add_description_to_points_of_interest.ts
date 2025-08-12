@@ -1,6 +1,7 @@
 import { type Knex } from "knex";
 
 const TABLE_NAME = "points_of_interest";
+const DESCRIPTION_LENGTH = 1000;
 
 function down(knex: Knex): Promise<void> {
 	return knex.schema.alterTable(TABLE_NAME, (table) => {
@@ -10,7 +11,7 @@ function down(knex: Knex): Promise<void> {
 
 function up(knex: Knex): Promise<void> {
 	return knex.schema.alterTable(TABLE_NAME, (table) => {
-		table.string("description");
+		table.string("description", DESCRIPTION_LENGTH).nullable();
 	});
 }
 

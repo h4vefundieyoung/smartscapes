@@ -5,24 +5,19 @@ import {
 	TextArea,
 } from "~/libs/components/components.js";
 import { useAppForm } from "~/libs/hooks/hooks.js";
-import { pointOfInterestCreateValidationSchema } from "~/modules/points-of-interest/points-of-interest.js";
-
 import {
-	type FormFields,
-	type LocalPointGeometry,
-} from "./libs/types/types.js";
+	pointOfInterestCreateValidationSchema,
+	type PointsOfInterestRequestDto,
+} from "~/modules/points-of-interest/points-of-interest.js";
+
 import styles from "./styles.module.css";
 
 type Properties = {
-	defaultLatitude: number;
-	defaultLongitude: number;
+	defaultLatitude: string;
+	defaultLongitude: string;
 	isOpen: boolean;
 	onClose: () => void;
-	onSubmit: (values: {
-		description: null | string;
-		location: LocalPointGeometry;
-		name: string;
-	}) => void;
+	onSubmit: (values: PointsOfInterestRequestDto) => void;
 };
 
 const CreatePOIModal = ({
@@ -32,32 +27,30 @@ const CreatePOIModal = ({
 	onClose,
 	onSubmit,
 }: Properties): React.JSX.Element => {
-	const { control, errors, handleSubmit } = useAppForm<FormFields>({
-		defaultValues: {
-			description: "",
-			location: {
-				coordinates: [defaultLongitude, defaultLatitude].map(String) as [
-					string,
-					string,
-				],
-				type: "Point",
+	const { control, errors, handleSubmit } =
+		useAppForm<PointsOfInterestRequestDto>({
+			defaultValues: {
+				description: "",
+				location: {
+					coordinates: [defaultLongitude, defaultLatitude],
+					type: "Point",
+				},
+				name: "",
 			},
-			name: "",
-		},
-		validationSchema: pointOfInterestCreateValidationSchema,
-	});
+			validationSchema: pointOfInterestCreateValidationSchema,
+		});
 
-	const handleFormSubmit = (values: FormFields): void => {
+	const handleFormSubmit = (values: PointsOfInterestRequestDto): void => {
 		onSubmit({
+			...values,
 			description: values.description || null,
 			location: {
+				...values.location,
 				coordinates: values.location.coordinates.map(String) as [
 					string,
 					string,
 				],
-				type: "Point",
 			},
-			name: values.name,
 		});
 	};
 
@@ -89,7 +82,6 @@ const CreatePOIModal = ({
 						name="description"
 					/>
 				</div>
-
 				<div className={styles["footer"]}>
 					<div className="button">
 						<Button label="Create" type="submit" />

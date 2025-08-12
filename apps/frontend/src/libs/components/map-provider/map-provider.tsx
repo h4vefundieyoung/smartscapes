@@ -1,7 +1,7 @@
-import { type PointGeometry } from "@smartscapes/shared";
 import React from "react";
 
 import { createContext, useEffect, useRef } from "~/libs/hooks/hooks.js";
+import { type PointGeometry } from "~/libs/modules/map-client/libs/types/types.js";
 import { MapClient } from "~/libs/modules/map-client/map-client.js";
 
 import styles from "./styles.module.css";

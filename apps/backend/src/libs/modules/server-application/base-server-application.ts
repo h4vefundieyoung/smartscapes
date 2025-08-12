@@ -23,6 +23,7 @@ import {
 } from "~/libs/types/types.js";
 
 import { authPlugin, multipartPlugin } from "../plugins/plugins.js";
+import { HELMET_CONFIG } from "./libs/constants/constants.js";
 import {
 	type ServerApplication,
 	type ServerApplicationApi,
@@ -97,6 +98,9 @@ class BaseServerApplication implements ServerApplication {
 				body: validation.body,
 				params: validation.params,
 				querystring: validation.query,
+				...(validation.body ? { body: validation.body } : {}),
+				...(validation.query ? { querystring: validation.query } : {}),
+				...(validation.params ? { params: validation.params } : {}),
 			};
 		}
 
@@ -191,7 +195,7 @@ class BaseServerApplication implements ServerApplication {
 
 		await this.app.register(fastifyCors);
 
-		await this.app.register(fastifyHelmet);
+		await this.app.register(fastifyHelmet, HELMET_CONFIG);
 	}
 
 	private async initPlugins(): Promise<void> {

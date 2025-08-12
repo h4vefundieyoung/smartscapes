@@ -119,6 +119,20 @@ class BaseConfig implements Config {
 					format: Number,
 				},
 			},
+			MAPBOX: {
+				ACCESS_TOKEN: {
+					default: null,
+					doc: "Mapbox api access token",
+					env: "MAPBOX_ACCESS_TOKEN",
+					format: String,
+				},
+				BASE_URL: {
+					default: null,
+					doc: "Mapbox URL",
+					env: "MAPBOX_BASE_URL",
+					format: String,
+				},
+			},
 		});
 	}
 

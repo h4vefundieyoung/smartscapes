@@ -1,5 +1,3 @@
-import { FileFolderName } from "@smartscapes/shared/src/modules/files/libs/enums/file-folder-name.enum.js";
-
 import {
 	Button,
 	Header,
@@ -19,6 +17,7 @@ import {
 	useState,
 } from "~/libs/hooks/hooks.js";
 import { filesApi } from "~/modules/files/files.js";
+import { FileFolderName } from "~/modules/files/libs/enums/enums.js";
 
 import { Carousel } from "../../libs/components/carousel/carousel.js";
 import styles from "./styles.module.css";

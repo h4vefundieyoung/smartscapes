@@ -26,6 +26,7 @@ describe("PointsOfInterestRepository", () => {
 		typeof PointsOfInterestEntity.initialize
 	>[0] = {
 		createdAt: "2024-01-01T00:00:00Z",
+		description: "test",
 		id: 1,
 		location: {
 			coordinates: TEST_COORDINATES,

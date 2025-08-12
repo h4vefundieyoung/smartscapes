@@ -10,6 +10,7 @@ const MINIMUM_FIELDS_TO_UPDATE = 1;
 
 const pointOfInterestUpdate = z
 	.strictObject({
+		description: z.string().nonempty(),
 		location: locationSchema.optional(),
 		name: z
 			.string()

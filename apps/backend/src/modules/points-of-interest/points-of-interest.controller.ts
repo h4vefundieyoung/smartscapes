@@ -43,12 +43,16 @@ import {
  *       required:
  *         - location
  *         - name
+ *         - description
  *       properties:
  *         location:
  *           $ref: '#/components/schemas/PointsOfInterestLocation'
  *         name:
  *           type: string
  *           example: "Central Park"
+ *         description:
+ *           type: string
+ *           example: "Central Park is an amazing place"
  *
  *     PointsOfInterestResponseDto:
  *       type: object
@@ -65,6 +69,9 @@ import {
  *         name:
  *           type: string
  *           example: "Central Park"
+ *         description:
+ *           type: string
+ *           example: "Central Park is an amazing place"
  *
  */
 
@@ -266,11 +273,13 @@ class PointsOfInterestController extends BaseController {
 	 *                   data:
 	 *                     - id: 1
 	 *                       name: "Central Park"
+	 *                       description: "CentralPark is an amazing place"
 	 *                       location:
 	 *                         type: "Point"
 	 *                         coordinates: [30.5234, 50.4501]
 	 *                     - id: 2
 	 *                       name: "Glass Bridge"
+	 *                       description: "Glass Bridge is an amazing place"
 	 *                       location:
 	 *                         type: "Point"
 	 *                         coordinates: [30.5289, 50.4553]

@@ -11,6 +11,7 @@ describe("PointsOfInterestEntity", () => {
 	it("should create new points of interest entity", () => {
 		const pointOfInterestData = {
 			createdAt: "2024-01-01T00:00:00Z",
+			description: "test",
 			id: 1,
 			location: {
 				coordinates: TEST_COORDINATES,
@@ -31,6 +32,7 @@ describe("PointsOfInterestEntity", () => {
 
 	it("should initialize new points of interest without id", () => {
 		const pointOfInterestData = {
+			description: "test",
 			location: {
 				coordinates: TEST_COORDINATES,
 				type: "Point" as const,

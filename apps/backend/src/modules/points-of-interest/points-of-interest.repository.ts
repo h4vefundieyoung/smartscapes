@@ -17,17 +17,19 @@ class PointsOfInterestRepository implements Repository {
 	public async create(
 		entity: PointsOfInterestEntity,
 	): Promise<PointsOfInterestEntity> {
-		const { location, name } = entity.toNewObject();
+		const { description, location, name } = entity.toNewObject();
 
 		const pointOfInterest = await this.pointsOfInterestModel
 			.query()
 			.insert({
+				description,
 				location,
 				name,
 			})
 			.returning([
 				"id",
 				"name",
+				"description",
 				"created_at",
 				"updated_at",
 				this.pointsOfInterestModel.raw(
@@ -56,6 +58,7 @@ class PointsOfInterestRepository implements Repository {
 			.select([
 				"id",
 				"name",
+				"description",
 				"created_at",
 				"updated_at",
 				this.pointsOfInterestModel.raw(
@@ -80,6 +83,7 @@ class PointsOfInterestRepository implements Repository {
 			.select([
 				"id",
 				"name",
+				"description",
 				"created_at",
 				"updated_at",
 				this.pointsOfInterestModel.raw(
@@ -104,6 +108,7 @@ class PointsOfInterestRepository implements Repository {
 			.select([
 				"id",
 				"name",
+				"description",
 				"created_at",
 				"updated_at",
 				this.pointsOfInterestModel.raw(
@@ -130,6 +135,7 @@ class PointsOfInterestRepository implements Repository {
 			.select([
 				"id",
 				"name",
+				"description",
 				"created_at",
 				"updated_at",
 				this.pointsOfInterestModel.raw(
@@ -156,11 +162,12 @@ class PointsOfInterestRepository implements Repository {
 		id: number,
 		entity: PointsOfInterestEntity,
 	): Promise<null | PointsOfInterestEntity> {
-		const { location, name } = entity.toNewObject();
+		const { description, location, name } = entity.toNewObject();
 
 		const [updatedPointOfInterest] = await this.pointsOfInterestModel
 			.query()
 			.patch({
+				description,
 				location,
 				name,
 			})
@@ -168,6 +175,7 @@ class PointsOfInterestRepository implements Repository {
 			.returning([
 				"id",
 				"name",
+				"description",
 				"created_at",
 				"updated_at",
 				this.pointsOfInterestModel.raw(

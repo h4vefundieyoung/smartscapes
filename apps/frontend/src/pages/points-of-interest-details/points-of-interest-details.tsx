@@ -62,7 +62,9 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 								<img alt="point of interest" src={mockImage3} />
 							</div>
 						</div>
-						<p className={styles["poi-description"]}>mockdata</p>
+						<p className={styles["poi-description"]}>
+							{poiDetails.description}
+						</p>
 					</>
 				)}
 			</main>

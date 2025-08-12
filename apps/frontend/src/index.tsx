@@ -18,7 +18,7 @@ import { Dashboard } from "./pages/dashboard/dashboard.js";
 import { Explore } from "./pages/explore/explore.js";
 import { Landing } from "./pages/landing/landing.jsx";
 import { Profile } from "./pages/profile/profile.js";
-import { Route } from "./pages/route/route-details.js";
+import { RouteDetails } from "./pages/route-description/route-details.js";
 
 pwa.register();
 
@@ -46,7 +46,7 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 								path: AppRoute.APP,
 							},
 							{
-								element: <Route />,
+								element: <RouteDetails />,
 								path: AppRoute.ROUTES_$ID,
 							},
 							{

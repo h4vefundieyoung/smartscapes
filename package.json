@@ -67,8 +67,5 @@
 	"simple-git-hooks": {
 		"pre-commit": "npm run lint:types && npm run git:hooks:precommit",
 		"commit-msg": "npm run git:hooks:commit"
-	},
-	"dependencies": {
-		"path-to-regexp": "8.2.0"
 	}
 }

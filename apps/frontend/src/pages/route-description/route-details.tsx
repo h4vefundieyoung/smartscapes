@@ -28,9 +28,9 @@ const RouteDetails = (): React.JSX.Element => {
 		void dispatch(routeActions.getRouteById(Number(id)));
 	}, [dispatch, id]);
 
-	const data = useAppSelector(({ routes }) => routes.data);
+	const data = useAppSelector(({ route }) => route.data);
 
-	const dataStatus = useAppSelector(({ routes }) => routes.dataStatus);
+	const dataStatus = useAppSelector(({ route }) => route.dataStatus);
 
 	if (dataStatus === DataStatus.REJECTED) {
 		return <NotFound />;
@@ -57,4 +57,4 @@ const RouteDetails = (): React.JSX.Element => {
 	return <Loader />;
 };
 
-export { RouteDetails as Route };
+export { RouteDetails };

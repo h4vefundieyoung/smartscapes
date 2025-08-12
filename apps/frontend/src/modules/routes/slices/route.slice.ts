@@ -30,7 +30,7 @@ const { actions, name, reducer } = createSlice({
 		});
 	},
 	initialState,
-	name: "routes",
+	name: "route",
 	reducers: {},
 });
 

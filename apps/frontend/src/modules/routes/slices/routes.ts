@@ -1,5 +1,5 @@
 import { getRouteById } from "./actions.js";
-import { actions } from "./routes.slice.js";
+import { actions } from "./route.slice.js";
 
 const allActions = {
 	...actions,
@@ -7,4 +7,4 @@ const allActions = {
 };
 
 export { allActions as actions };
-export { reducer } from "./routes.slice.js";
+export { reducer } from "./route.slice.js";

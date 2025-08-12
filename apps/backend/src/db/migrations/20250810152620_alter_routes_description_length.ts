@@ -12,14 +12,14 @@ async function down(knex: Knex): Promise<void> {
 			]),
 		});
 
-	await knex.schema.alterTable("routes", (t) => {
-		t.string("description", DEFAULT_DESCRIPTION_LENGTH).alter();
+	await knex.schema.alterTable("routes", (table) => {
+		table.string("description", DEFAULT_DESCRIPTION_LENGTH).alter();
 	});
 }
 
 async function up(knex: Knex): Promise<void> {
-	await knex.schema.alterTable("routes", (t) => {
-		t.string("description", DESCRIPTION_LENGTH).alter();
+	await knex.schema.alterTable("routes", (table) => {
+		table.string("description", DESCRIPTION_LENGTH).alter();
 	});
 }
 

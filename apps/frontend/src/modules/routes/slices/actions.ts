@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 
 import { type RouteGetByIdResponseDto } from "../libs/types/types.js";
-import { name as sliceName } from "./routes.slice.js";
+import { name as sliceName } from "./route.slice.js";
 
 const getRouteById = createAsyncThunk<
 	APIResponse<RouteGetByIdResponseDto>,

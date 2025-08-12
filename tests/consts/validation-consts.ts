@@ -2,10 +2,5 @@ const MAX_PASSWORD_LENGTH = 64;
 const MIN_PASSWORD_LENGTH = 6;
 
 const MAX_FIRSTNAME_LENGTH = 64;
-// TODO: uncomment when validation tests are implemented
-// const MIN_FIRSTNAME_LENGTH = 2;
-
-// const MAX_LASTNAME_LENGTH = 64;
-// const MIN_LASTNAME_LENGTH = 2;
 
 export { MAX_FIRSTNAME_LENGTH, MAX_PASSWORD_LENGTH, MIN_PASSWORD_LENGTH };

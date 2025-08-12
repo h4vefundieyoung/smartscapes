@@ -1,5 +1,11 @@
 .user-profile-wrapper {
 	position: relative;
+	border-radius: 8px;
+	transition: background 0.3s ease;
+}
+
+.user-profile-wrapper:hover {
+	background: var(--color-fill-weak);
 }
 
 .user-info {

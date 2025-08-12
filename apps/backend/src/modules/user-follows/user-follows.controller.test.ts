@@ -7,6 +7,8 @@ import { UserFollowsExceptionMessage } from "~/modules/user-follows/libs/enums/e
 import { UserFollowsError } from "~/modules/user-follows/libs/exceptions/user-follows.exception.js";
 import { type UserFollowsService } from "~/modules/user-follows/user-follows.service.js";
 
+import { GroupEntity } from "../groups/group.entity.js";
+import { PermissionEntity } from "../permission/permission.entity.js";
 import { UserFollowsController } from "./user-follows.controller.js";
 
 const createMockFollowServiceMethod = (
@@ -29,12 +31,27 @@ describe("UserFollowsController", () => {
 		warn: () => {},
 	};
 
+	const mockPermission = PermissionEntity.initialize({
+		id: 1,
+		key: "READ",
+		name: "Can read",
+	});
+
+	const mockGroup = GroupEntity.initializeWithPermissions({
+		id: 2,
+		key: "users",
+		name: "Users",
+		permissions: [mockPermission.toObject()],
+	}).toObject();
+
 	const TEST_FOLLOWER_ID = 42;
 	const TEST_FOLLOWING_ID = 31;
 
 	const mockAuthenticatedUser = {
 		email: "test@example.com",
 		firstName: "John",
+		group: mockGroup,
+		groupId: mockGroup.id,
 		id: TEST_FOLLOWER_ID,
 		lastName: "Doe",
 	};
@@ -42,6 +59,8 @@ describe("UserFollowsController", () => {
 	const mockAnotherUser = {
 		email: "another@example.com",
 		firstName: "Alice",
+		group: mockGroup,
+		groupId: mockGroup.id,
 		id: TEST_FOLLOWING_ID,
 		lastName: "Smith",
 	};

@@ -31,7 +31,7 @@
 		overflow-x: auto;
 	}
 
-	.primary-description-wrapper,
+	.primary-wrapper,
 	.secondary-images-wrapper {
 		flex: 0 0 auto;
 	}
@@ -42,5 +42,12 @@
 
 	.secondary-image {
 		height: 416px;
+	}
+}
+
+@media (width <= 768px) {
+	.secondary-image,
+	.primary-image {
+		height: 150px;
 	}
 }

@@ -18,13 +18,13 @@ jobs:
       NODE_ENV: test
 
     steps:
-      - name: Set Up ENV
-        run: |
-          echo "NODE_ENV=$NODE_ENV" >> .env
-          echo "API_BASE_URL=${{ secrets.DEVELOPMENT_API_BASE_URL }}" >> .env
-
       - name: Checkout Source Code
         uses: actions/checkout@v4
+
+      - name: Set Up ENV
+        run: |
+          echo "NODE_ENV=$NODE_ENV" >> tests/.env
+          echo "API_BASE_URL=${{ secrets.DEVELOPMENT_API_BASE_URL }}" >> tests/.env
 
       - name: Install NodeJS
         uses: actions/setup-node@v4

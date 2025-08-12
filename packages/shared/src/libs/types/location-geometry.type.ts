@@ -1,7 +1,7 @@
 import { type LocationType } from "../enums/enums.js";
 
 type PointGeometry = {
-	coordinates: [string, string];
+	coordinates: [number, number];
 	type: typeof LocationType.POINT;
 };
 

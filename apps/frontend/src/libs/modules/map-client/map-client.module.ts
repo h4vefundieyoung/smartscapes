@@ -159,11 +159,7 @@ class MapClient {
 			return;
 		}
 
-		const [lngRaw, latRaw] = coordinates;
-		const lng = Number(lngRaw);
-		const lat = Number(latRaw);
-
-		new mapboxgl.Marker(MARKER_OPTIONS).setLngLat([lng, lat]).addTo(this.map);
+		new mapboxgl.Marker(MARKER_OPTIONS).setLngLat(coordinates).addTo(this.map);
 	}
 
 	private removeControl(id: string): void {

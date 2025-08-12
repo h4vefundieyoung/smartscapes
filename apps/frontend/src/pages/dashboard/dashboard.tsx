@@ -1,4 +1,5 @@
 import { isFulfilled } from "@reduxjs/toolkit";
+import { LocationType } from "@smartscapes/shared/src/libs/enums/location-type.enum.js";
 import React, { useCallback } from "react";
 
 import {
@@ -9,6 +10,7 @@ import {
 	Select,
 	Sidebar,
 } from "~/libs/components/components.js";
+import { type LocalPointsOfInterestRequestDto } from "~/libs/components/create-poi-modal/libs/types/types.js";
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
 import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
@@ -31,8 +33,14 @@ type FormValues = {
 	singleColor: null | string;
 };
 
-const DEFAULT_LONGITUDE = "30.5234";
-const DEFAULT_LATITUDE = "50.4501";
+type ModalPayload = {
+	description: null | string;
+	location: { coordinates: [string, string]; type: "Point" };
+	name: string;
+};
+
+const DEFAULT_LONGITUDE = 30.5234;
+const DEFAULT_LATITUDE = 50.4501;
 
 const Dashboard = (): React.JSX.Element => {
 	const authenticatedUser = useAppSelector(
@@ -59,8 +67,19 @@ const Dashboard = (): React.JSX.Element => {
 		setIsCreateOpen(false);
 	}, []);
 	const handleSubmit = useCallback(
-		async (payload: PointsOfInterestRequestDto) => {
-			const result = await dispatch(poiActions.create(payload));
+		async (payload: ModalPayload) => {
+			const dto: LocalPointsOfInterestRequestDto = {
+				description: payload.description,
+				location: {
+					coordinates: payload.location.coordinates,
+					type: LocationType.POINT,
+				},
+				name: payload.name,
+			};
+
+			const result = await dispatch(
+				poiActions.create(dto as unknown as PointsOfInterestRequestDto),
+			);
 
 			if (isFulfilled(result)) {
 				toastNotifier.showSuccess("POI created");

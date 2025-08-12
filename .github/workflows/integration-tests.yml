@@ -1,11 +1,7 @@
 name: Integration Tests
 
 on:
-  workflow_run:
-    workflows:
-      - "Continuous Delivery"
-    types:
-      - completed
+  workflow_call:
 
   workflow_dispatch:
 
@@ -24,8 +20,8 @@ jobs:
     steps:
       - name: Set Up ENV
         run: |
-          echo "NODE_ENV=$NODE_ENV" >> tests/.env
-          echo "API_BASE_URL=${{ secrets.DEVELOPMENT_API_BASE_URL }}" >> tests/.env
+          echo "NODE_ENV=$NODE_ENV" >> .env
+          echo "API_BASE_URL=${{ secrets.DEVELOPMENT_API_BASE_URL }}" >> .env
 
       - name: Checkout Source Code
         uses: actions/checkout@v4

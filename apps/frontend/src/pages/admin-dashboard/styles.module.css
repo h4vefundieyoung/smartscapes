@@ -5,7 +5,7 @@
 
 .dashboard {
 	flex: 1;
-	padding: 48px 32px 0;
+	padding: 48px 32px;
 }
 
 .heading {
@@ -26,35 +26,4 @@
 	font-weight: 400;
 	line-height: 150%;
 	color: var(--color-text-weak);
-}
-
-table {
-	width: 100%;
-	text-align: left;
-	border: 2px solid var(--color-stroke-weak);
-}
-
-tbody,
-thead {
-	width: 100%;
-}
-
-th,
-td {
-	padding: 12px 24px;
-	font-size: 16px;
-	line-height: 150%;
-	border-bottom: 2px solid var(--color-stroke-weak);
-}
-
-th {
-	font-weight: 600;
-	color: var(--color-text-weak);
-	outline: none;
-	background: var(--color-fill-weak);
-}
-
-td {
-	font-weight: 400;
-	color: var(--color-text-strong);
 }

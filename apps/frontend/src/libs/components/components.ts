@@ -6,6 +6,8 @@ export { Icon } from "./icon/icon.js";
 export { Input } from "./input/input.js";
 export { Link } from "./link/link.js";
 export { Loader } from "./loader/loader.js";
+export { NumberInput } from "./number-input/number-input.js";
+export { Pagination } from "./pagination/pagination.js";
 export { ProtectedRoute } from "./protected-route/protected-route.js";
 export { RouteCard } from "./route-card/route-card.js";
 export { RouterProvider } from "./router-provider/router-provider.js";

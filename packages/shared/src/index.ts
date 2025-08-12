@@ -40,6 +40,10 @@ export {
 export {
 	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
+	pointsOfInterestPaginatedQueryValidationSchema,
+	type PointsOfInterestPaginatedRequestDto,
+	type PointsOfInterestPaginatedResponseDto,
+	type PointsOfInterestPaginationMeta,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 	type PointsOfInterestSearchQuery,

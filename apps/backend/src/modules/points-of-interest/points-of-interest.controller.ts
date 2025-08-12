@@ -9,6 +9,8 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type PointsOfInterestService } from "~/modules/points-of-interest/points-of-interest.service.js";
 
 import {
+	type PointsOfInterestPaginatedRequestDto,
+	type PointsOfInterestPaginatedResponseDto,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 	type PointsOfInterestSearchQuery,
@@ -16,6 +18,7 @@ import {
 import {
 	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
+	pointsOfInterestPaginatedQueryValidationSchema,
 	pointsOfInterestSearchQueryValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 
@@ -114,6 +117,15 @@ class PointsOfInterestController extends BaseController {
 			path: "/:id",
 			validation: {
 				body: pointOfInterestUpdateValidationSchema,
+			},
+		});
+
+		this.addRoute({
+			handler: this.findPaginated.bind(this),
+			method: "GET",
+			path: "/paginated",
+			validation: {
+				query: pointsOfInterestPaginatedQueryValidationSchema,
 			},
 		});
 	}
@@ -336,6 +348,29 @@ class PointsOfInterestController extends BaseController {
 
 		return {
 			payload: { data: pointOfInterest },
+			status: HTTPCode.OK,
+		};
+	}
+
+	public async findPaginated(
+		options: APIHandlerOptions<{
+			query: PointsOfInterestPaginatedRequestDto;
+		}>,
+	): Promise<APIHandlerResponse<PointsOfInterestPaginatedResponseDto>> {
+		const { query } = options;
+		const { limit, page, search } = query;
+
+		const defaultLimit = 10;
+		const defaultPage = 1;
+
+		const response = await this.pointsOfInterestService.findPaginated({
+			limit: Number(limit || defaultLimit),
+			page: Number(page || defaultPage),
+			search: search || "",
+		});
+
+		return {
+			payload: { data: response },
 			status: HTTPCode.OK,
 		};
 	}

@@ -2,8 +2,13 @@ export { RoutesApiPath } from "./libs/enums/enums.js";
 export {
 	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
+	type RoutesRequestConstructDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
+	type RoutesResponseConstructDto,
 } from "./libs/types/types.js";
-export { routesCreate as routesCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
-export { routesUpdate as routesUpdateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
+export {
+	routesConstruct as routesConstructValidationSchema,
+	routesCreate as routesCreateValidationSchema,
+	routesUpdate as routesUpdateValidationSchema,
+} from "./libs/validation-schemas/validation-schemas.js";

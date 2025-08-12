@@ -19,7 +19,6 @@ import {
 	type MapOptions,
 	type PointGeometry,
 } from "./libs/types/types.js";
-
 import "mapbox-gl/dist/mapbox-gl.css";
 
 class MapClient {

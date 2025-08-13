@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 
 import { type MapboxDirectionsApi } from "~/libs/modules/mapbox/mapbox-directions-api.module.js";
-import { type PointGeometry } from "~/libs/types/types.js";
+import { type Coordinates } from "~/libs/types/types.js";
 
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/routes-exception-message.enum.js";
@@ -132,9 +132,8 @@ describe("RoutesService", () => {
 				location: { coordinates: [THIRD_POI_ID, FOURTH_POI_ID] },
 			},
 		];
-		const getRoute = mock.fn(
-			(_: string, coords: PointGeometry["coordinates"][]) =>
-				Promise.resolve(coords),
+		const getRoute = mock.fn((_: string, coords: Coordinates[]) =>
+			Promise.resolve(coords),
 		);
 		const findAll = mock.fn(({ ids }: { ids: number[] }) => {
 			return Promise.resolve({

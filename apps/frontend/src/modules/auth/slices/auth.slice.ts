@@ -85,7 +85,11 @@ const { actions, name, reducer } = createSlice({
 	},
 	initialState,
 	name: "auth",
-	reducers: {},
+	reducers: {
+		clearPatchStatus(state) {
+			state.authenticatedUserPatchStatus = DataStatus.IDLE;
+		},
+	},
 });
 
 export { actions, name, reducer };

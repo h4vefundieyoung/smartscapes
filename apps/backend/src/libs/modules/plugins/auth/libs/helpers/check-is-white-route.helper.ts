@@ -1,7 +1,7 @@
 import { type HTTPMethod } from "~/libs/types/types.js";
 
 import { type WhiteRoute } from "../../auth.plugin.js";
-import { checkUrl } from "./common.helper.js";
+import { checkMatchUrlPattern } from "./common.helper.js";
 
 type CheckIsWhiteRouteParameters = {
 	method: HTTPMethod;
@@ -27,7 +27,7 @@ const checkIsWhiteRoute = ({
 			return false;
 		}
 
-		return checkUrl(path, url);
+		return checkMatchUrlPattern(path, url);
 	});
 };
 

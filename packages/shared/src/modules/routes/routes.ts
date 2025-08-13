@@ -1,7 +1,6 @@
 export { RouteApiPath } from "./libs/enums/enums.js";
 export {
 	type RoutesFindAllOptions,
-	type RoutesFindAllRequestDto,
 	type RoutesRequestConstructDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,

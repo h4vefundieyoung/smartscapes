@@ -1,6 +1,6 @@
 import { type Repository } from "~/libs/types/types.js";
 
-import { type RoutesFindAllRequestDto } from "./libs/types/types.js";
+import { type RoutesFindAllOptions } from "./libs/types/types.js";
 import { RoutesEntity } from "./routes.entity.js";
 import { type RoutesModel } from "./routes.model.js";
 
@@ -29,7 +29,7 @@ class RoutesRepository implements Repository {
 	}
 
 	public async findAll(
-		options: null | RoutesFindAllRequestDto,
+		options: null | RoutesFindAllOptions,
 	): Promise<RoutesEntity[]> {
 		const query = this.routesModel
 			.query()

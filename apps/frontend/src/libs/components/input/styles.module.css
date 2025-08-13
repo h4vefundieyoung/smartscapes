@@ -30,12 +30,16 @@
 .input {
 	position: relative;
 	width: 100%;
-	padding: 12px 50px 12px 12px;
+	padding: 12px 16px;
 	font-size: var(--font-size-small);
 	line-height: 1.5;
 	background-color: var(--color-background-base);
 	border-radius: 8px;
 	transition: background-color 0.2s ease-in-out;
+}
+
+.input-iconed {
+	padding-right: 50px;
 }
 
 .input,
@@ -82,26 +86,25 @@
 	}
 }
 
-.input-button {
+.icon-button {
 	position: absolute;
 	top: 50%;
 	right: 2px;
-	z-index: 2;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 50px;
-	padding: 0;
+	padding: 0 12px;
 	cursor: pointer;
 	background-color: transparent;
 	border: none;
+	border-radius: 8px;
 	transform: translateY(-50%);
 }
 
 .input-button-icon {
-	stroke: var(--color-stroke-strong);
+	color: var(--color-stroke-strong);
 }
 
-.input-button:hover .input-button-icon {
-	stroke: var(--color-fill-press);
+.input-button-icon:hover {
+	color: var(--color-fill-press);
 }

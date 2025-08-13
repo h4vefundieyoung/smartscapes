@@ -1,4 +1,4 @@
-import { type MouseEvent, useCallback } from "react";
+import { type MouseEvent } from "react";
 import {
 	type Control,
 	type FieldErrors,
@@ -8,8 +8,8 @@ import {
 
 import { Icon } from "~/libs/components/icon/icon.js";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
-import { useFormController } from "~/libs/hooks/hooks.js";
-import { type IconName } from "~/libs/types/icon-name.type.js";
+import { useCallback, useFormController } from "~/libs/hooks/hooks.js";
+import { type IconName } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
@@ -17,10 +17,13 @@ type Properties<T extends FieldValues> = {
 	autocomplete?: HTMLInputElement["autocomplete"];
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
-	icon?: IconName;
+	iconRight?: {
+		label?: string;
+		name: IconName;
+		onClick?: () => void;
+	};
 	label: string;
 	name: FieldPath<T>;
-	onIconClick?: () => void;
 	placeholder?: string;
 	type?: "email" | "password" | "text";
 };
@@ -29,10 +32,9 @@ const Input = <T extends FieldValues>({
 	autocomplete = "on",
 	control,
 	errors,
-	icon,
+	iconRight,
 	label,
 	name,
-	onIconClick,
 	placeholder = "",
 	type = "text",
 }: Properties<T>): React.JSX.Element => {
@@ -40,16 +42,20 @@ const Input = <T extends FieldValues>({
 
 	const error = errors[name]?.message;
 	const hasError = Boolean(error);
+	const isIconRightInteractive = Boolean(iconRight?.onClick);
 
 	const handleIconClick = useCallback(
 		(event: MouseEvent<HTMLButtonElement>) => {
 			event.preventDefault();
-
-			if (onIconClick) {
-				onIconClick();
-			}
+			iconRight?.onClick?.();
 		},
-		[onIconClick],
+		[iconRight],
+	);
+
+	const iconComponent = iconRight && (
+		<span className={styles["input-button-icon"]}>
+			<Icon height={24} name={iconRight.name} width={24} />
+		</span>
 	);
 
 	return (
@@ -61,6 +67,7 @@ const Input = <T extends FieldValues>({
 					className={combineClassNames(
 						styles["input"],
 						hasError && styles["input-error"],
+						iconRight && styles["input-iconed"],
 					)}
 					name={field.name}
 					onChange={field.onChange}
@@ -74,19 +81,17 @@ const Input = <T extends FieldValues>({
 						{error as string}
 					</span>
 				)}
-				{icon && (
+				{iconRight && !isIconRightInteractive && iconComponent}
+				{iconRight && isIconRightInteractive && (
 					<button
-						className={styles["input-button"]}
+						className={styles["icon-button"]}
 						onMouseDown={handleIconClick}
 						type="button"
 					>
-						<span className="visually-hidden">input icon-button</span>
-						<Icon
-							className={styles["input-button-icon"] || ""}
-							height={24}
-							name={icon}
-							width={24}
-						/>
+						<span className="visually-hidden">
+							{iconRight.label || "input icon-button"}
+						</span>
+						{iconComponent}
 					</button>
 				)}
 			</span>

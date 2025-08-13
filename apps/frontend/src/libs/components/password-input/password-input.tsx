@@ -1,10 +1,12 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import {
 	type Control,
 	type FieldErrors,
 	type FieldPath,
 	type FieldValues,
 } from "react-hook-form";
+
+import { useCallback } from "~/libs/hooks/hooks.js";
 
 import { Input } from "../components.js";
 
@@ -20,18 +22,17 @@ type Properties<T extends FieldValues> = {
 const PasswordInput = <T extends FieldValues>(
 	properties: Properties<T>,
 ): React.JSX.Element => {
-	const [isVisible, setVisibility] = useState<boolean>(false);
+	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const type: "password" | "text" = isVisible ? "text" : "password";
-	const icon: "eye" | "eyeOff" = isVisible ? "eyeOff" : "eye";
+	const iconName: "eye" | "eyeOff" = isVisible ? "eyeOff" : "eye";
 
 	const handleIconClick = useCallback(() => {
-		setVisibility(!isVisible);
-	}, [isVisible, setVisibility]);
+		setIsVisible(!isVisible);
+	}, [isVisible, setIsVisible]);
 
 	return (
 		<Input
-			icon={icon}
-			onIconClick={handleIconClick}
+			iconRight={{ name: iconName, onClick: handleIconClick }}
 			type={type}
 			{...properties}
 		/>

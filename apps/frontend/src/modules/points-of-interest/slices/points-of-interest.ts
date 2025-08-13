@@ -1,9 +1,9 @@
-import { loadById } from "./actions.js";
+import { getById } from "./actions.js";
 import { actions } from "./points-of-interest-details.slice.js";
 
 const allActions = {
 	...actions,
-	loadById,
+	getById,
 };
 
 export { allActions as actions };

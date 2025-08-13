@@ -47,7 +47,6 @@ describe("PointsOfInterestService", () => {
 		);
 
 		const result = await pointsOfInterestService.create({
-			description: mockPointOfInterest.description,
 			location: mockPointOfInterest.location,
 			name: mockPointOfInterest.name,
 		});
@@ -173,7 +172,6 @@ describe("PointsOfInterestService", () => {
 		);
 
 		const result = await pointsOfInterestService.patch(EXISTING_ID, {
-			description: updatedPointOfInterest.description,
 			location: updatedPointOfInterest.location,
 			name: updatedPointOfInterest.name,
 		});

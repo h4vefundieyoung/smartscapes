@@ -24,13 +24,10 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 	const { id } = useParams();
 	const formattedId = Number(id);
 	const isRejected = dataStatus === DataStatus.REJECTED;
-	const poiDetails = pointsOfInterestDetails.find(
-		({ id }) => id === formattedId,
-	);
 
 	useEffect(() => {
 		if (formattedId) {
-			void dispatch(actions.loadById(formattedId));
+			void dispatch(actions.getById(formattedId));
 		} else {
 			void (async (): Promise<void> => {
 				try {
@@ -48,9 +45,11 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 		<>
 			{isRejected && <Navigate replace to={AppRoute.NOT_FOUND} />}
 			<main className={styles["poi-container"]}>
-				{poiDetails && (
+				{pointsOfInterestDetails && (
 					<>
-						<h2 className={styles["poi-header"]}>{poiDetails.name}</h2>
+						<h2 className={styles["poi-header"]}>
+							{pointsOfInterestDetails.name}
+						</h2>
 						<div className={styles["poi-gallery"]}>
 							<img
 								alt="point of interest"
@@ -71,7 +70,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 							</div>
 						</div>
 						<p className={styles["poi-description"]}>
-							{poiDetails.description}
+							{pointsOfInterestDetails.description}
 						</p>
 					</>
 				)}

@@ -7,7 +7,7 @@ import {
 import { locationSchema } from "./location.validation-schema.js";
 
 const pointOfInterestCreate = z.strictObject({
-	description: z.string().nonempty(),
+	description: z.string().optional(),
 	location: locationSchema,
 	name: z
 		.string()

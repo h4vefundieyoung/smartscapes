@@ -51,7 +51,7 @@ import {
  *           type: string
  *           example: "Central Park"
  *         description:
- *           type: string
+ *           type: string | null
  *           example: "Central Park is an amazing place"
  *
  *     PointsOfInterestResponseDto:
@@ -70,7 +70,7 @@ import {
  *           type: string
  *           example: "Central Park"
  *         description:
- *           type: string
+ *           type: string | null
  *           example: "Central Park is an amazing place"
  *
  */

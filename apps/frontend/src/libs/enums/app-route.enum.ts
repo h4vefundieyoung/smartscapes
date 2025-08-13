@@ -5,6 +5,7 @@ const AppRoute = {
 	EXPLORE: "/app/explore",
 	NOT_FOUND: "/not-found",
 	POINTS_OF_INTEREST: "/app/points-of-interest",
+	POINTS_OF_INTEREST_DETAILS: "/app/points-of-interest/:id",
 	PROFILE: "/app/profile",
 	ROOT: "/",
 	ROUTES: "/app/routes",

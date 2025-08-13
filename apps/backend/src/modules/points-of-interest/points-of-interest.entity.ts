@@ -1,7 +1,7 @@
 import { type Entity, type PointGeometry } from "~/libs/types/types.js";
 
 class PointsOfInterestEntity implements Entity {
-	private description: string;
+	private description: null | string;
 	private id: null | number;
 	private location: PointGeometry;
 	private name: string;
@@ -12,7 +12,7 @@ class PointsOfInterestEntity implements Entity {
 		location,
 		name,
 	}: {
-		description: string;
+		description: null | string;
 		id: null | number;
 		location: PointGeometry;
 		name: string;
@@ -25,7 +25,7 @@ class PointsOfInterestEntity implements Entity {
 
 	public static initialize(data: {
 		createdAt: string;
-		description: string;
+		description: null | string;
 		id: number;
 		location: PointGeometry;
 		name: string;
@@ -44,7 +44,7 @@ class PointsOfInterestEntity implements Entity {
 		location,
 		name,
 	}: {
-		description: string;
+		description: null | string;
 		location: PointGeometry;
 		name: string;
 	}): PointsOfInterestEntity {
@@ -57,7 +57,7 @@ class PointsOfInterestEntity implements Entity {
 	}
 
 	public toNewObject(): {
-		description: string;
+		description: null | string;
 		location: PointGeometry;
 		name: string;
 	} {
@@ -69,7 +69,7 @@ class PointsOfInterestEntity implements Entity {
 	}
 
 	public toObject(): {
-		description: string;
+		description: null | string;
 		id: number;
 		location: PointGeometry;
 		name: string;

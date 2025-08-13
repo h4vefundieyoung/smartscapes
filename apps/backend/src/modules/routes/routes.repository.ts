@@ -69,6 +69,23 @@ class RoutesRepository implements Repository {
 		return RoutesEntity.initialize(route);
 	}
 
+	public async findByPoint(poiId: number): Promise<RoutesEntity[]> {
+		const routes = await this.routesModel
+			.query()
+			.joinRelated("pois")
+			.where("points_of_interest.id", poiId)
+			.withGraphFetched("pois(selectPoiIdOrder)")
+			.modifiers({
+				selectPoiIdOrder(builder) {
+					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
+				},
+			})
+			.select("routes.id", "routes.name", "routes.description")
+			.distinct();
+
+		return routes.map((route) => RoutesEntity.initialize(route));
+	}
+
 	public async patch(
 		id: number,
 		entity: Partial<RoutesEntity["toObject"]>,

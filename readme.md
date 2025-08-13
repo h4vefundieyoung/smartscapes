@@ -231,6 +231,7 @@ As we are already using js on both frontend and backend it would be useful to sh
 1. Copy and fill env files:
    - `apps/frontend/.env`
    - `apps/backend/.env`
+   - `tests/.env` (for integration tests)
 
    You should use `.env.example` files as a reference.
 
@@ -262,8 +263,9 @@ As we are already using js on both frontend and backend it would be useful to sh
 
 #### Testing
 
-- `npm run test` - Run unit tests
-- `npm run test:coverage` - Run unit tests and generate a coverage report
+- `npm run test:unit` - Run unit tests
+- `npm run test:unit:coverage` - Run unit tests and generate a coverage report
+- `npm run test:integration` - Run integration tests
 
 #### Database
 

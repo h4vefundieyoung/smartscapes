@@ -1,4 +1,8 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+	PutObjectCommand,
+	S3Client,
+	S3ServiceException,
+} from "@aws-sdk/client-s3";
 
 import { type Config } from "~/libs/modules/config/config.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
@@ -45,7 +49,9 @@ class AWSFileService {
 
 			return url;
 		} catch (error) {
-			const message = error instanceof Error ? error.message : String(error);
+			const message =
+				error instanceof S3ServiceException ? error.message : String(error);
+			this.logger.error(`Failed to upload file to AWS S3: ${message}`);
 
 			throw new AWSFileUploadError({
 				message,

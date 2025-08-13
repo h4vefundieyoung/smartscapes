@@ -314,7 +314,7 @@ class RoutesController extends BaseController {
 		options: APIHandlerOptions<{
 			query?: RoutesFindAllOptions;
 		}>,
-	): Promise<APIHandlerResponse<RouteGetAllItemResponseDto>> {
+	): Promise<APIHandlerResponse<RouteGetAllItemResponseDto[]>> {
 		const { query = null } = options;
 
 		const { items } = await this.routesService.findAll(query);

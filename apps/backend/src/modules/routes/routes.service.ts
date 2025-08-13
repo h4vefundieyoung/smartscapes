@@ -4,7 +4,7 @@ import {
 	MapboxAPIProfile,
 	type MapboxDirectionsApi,
 } from "~/libs/modules/mapbox/mapbox.js";
-import { type Service } from "~/libs/types/types.js";
+import { type CollectionResult, type Service } from "~/libs/types/types.js";
 
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
@@ -95,7 +95,7 @@ class RoutesService implements Service {
 
 	public async findAll(
 		options: null | RoutesFindAllOptions,
-	): Promise<{ items: RouteGetAllItemResponseDto }> {
+	): Promise<CollectionResult<RouteGetAllItemResponseDto>> {
 		const items = await this.routesRepository.findAll(options);
 
 		return {

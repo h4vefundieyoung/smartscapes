@@ -5,6 +5,6 @@ type RouteGetAllItemResponseDto = {
 		id: number;
 		visitOrder: number;
 	}[];
-}[];
+};
 
 export { type RouteGetAllItemResponseDto };

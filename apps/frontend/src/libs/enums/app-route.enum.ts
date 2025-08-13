@@ -3,9 +3,11 @@ const AppRoute = {
 	CATEGORIES: "/app/categories",
 	CONTENT: "/app/content",
 	EXPLORE: "/app/explore",
+	POINTS_OF_INTEREST_$ID: "/app/points-of-interest/:id",
 	PROFILE: "/app/profile",
 	ROOT: "/",
 	ROUTES: "/app/routes",
+	ROUTES_CONSTRUCT: "/app/routes/construct",
 	SIGN_IN: "/app/sign-in",
 	SIGN_UP: "/app/sign-up",
 } as const;

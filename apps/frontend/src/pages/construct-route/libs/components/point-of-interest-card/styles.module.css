@@ -1,0 +1,46 @@
+.container {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	padding: 16px 18px;
+	border: var(--color-stroke-weak) 1px solid;
+	border-radius: 8px;
+}
+
+.name {
+	font-weight: var(--font-weight-semibold);
+	line-height: 24px;
+}
+
+.left {
+	display: flex;
+	gap: 8px;
+}
+
+.icon {
+	color: var(--color-icon-neutral);
+}
+
+.icon:hover {
+	color: var(--color-text-strong);
+}
+
+.icon svg {
+	display: block;
+}
+
+.button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	color: var(--color-icon-neutral);
+	cursor: pointer;
+	background-color: transparent;
+	border: none;
+}
+
+.button:hover {
+	color: var(--color-text-strong);
+}

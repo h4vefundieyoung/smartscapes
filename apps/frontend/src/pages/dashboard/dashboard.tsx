@@ -100,7 +100,11 @@ const Dashboard = (): React.JSX.Element => {
 					/>
 				</div>
 				<div className={styles["button-container"]}>
-					<Button label="Create new POI" onClick={handleModalToggle} type="button" />
+					<Button
+						label="Create new POI"
+						onClick={handleModalToggle}
+						type="button"
+					/>
 				</div>
 				<CreatePOIModal
 					defaultLatitude={DEFAULT_LATITUDE}

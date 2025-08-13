@@ -1,32 +1,58 @@
 .section {
 	display: flex;
 	flex-direction: column;
-	gap: 96px;
 	width: 100%;
-	padding-top: 96px;
 }
 
-.section-title {
+.container {
+	display: flex;
+	flex-direction: column;
+	row-gap: 16px;
+	max-width: var(--landing-container-width);
+	padding: 96px 32px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.title {
 	margin: 0;
 	font-size: var(--font-size-display);
 	font-weight: var(--font-weight-bold);
+	line-height: 1.1;
 	color: var(--color-text-strong);
-	text-align: center;
 }
 
-.section-description {
+.description {
 	margin: 0;
 	font-size: var(--font-size-h4);
 	font-weight: var(--font-weight-regular);
+	line-height: 1.4;
 	color: var(--color-text-weak);
-	text-align: center;
 }
 
-.section-cover {
+.cover {
 	width: 100%;
 	aspect-ratio: 320 / 119;
 	background-image: url("../../../../../assets/images/landing-cover.jpg");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
+}
+
+@media (width <= 768px) {
+	.container {
+		padding: 48px 16px 32px;
+	}
+
+	.title {
+		font-size: var(--font-size-h1);
+	}
+
+	.description {
+		font-size: var(--font-size-small);
+	}
+
+	.cover {
+		aspect-ratio: 340 / 200;
+	}
 }

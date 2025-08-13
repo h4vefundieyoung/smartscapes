@@ -9,6 +9,7 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { RouteApiPath } from "./libs/enums/enums.js";
 import {
+	type RoutesFindAllOptions,
 	type RoutesRequestConstructDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
@@ -18,6 +19,7 @@ import {
 import {
 	routesConstructValidationSchema,
 	routesCreateValidationSchema,
+	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 import { type RoutesService } from "./routes.service.js";
@@ -112,7 +114,7 @@ class RoutesController extends BaseController {
 		});
 
 		this.addRoute({
-			handler: this.find.bind(this),
+			handler: this.findById.bind(this),
 			method: "GET",
 			path: "/:id",
 		});
@@ -121,6 +123,7 @@ class RoutesController extends BaseController {
 			handler: this.findAll.bind(this),
 			method: "GET",
 			path: "/",
+			validation: { query: routesSearchQueryValidationSchema },
 		});
 
 		this.addRoute({
@@ -333,6 +336,56 @@ class RoutesController extends BaseController {
 
 	/**
 	 * @swagger
+	 * /routes:
+	 *   get:
+	 *     security:
+	 *      - bearerAuth:  []
+	 *     tags:
+	 *       - Routes
+	 *     summary: Retrieve all routes with optional search by name
+	 *     description: |
+	 *       Get all routes, or only those whose names match the search query.
+	 *
+	 *       **Without query parameters**: Returns all routes.
+	 *
+	 *       **With query `name` parameter**: Returns routes whose names match the search query. Search is case-insensitive.
+	 *     parameters:
+	 *       - in: query
+	 *         name: name
+	 *         schema:
+	 *           type: string
+	 *           example: "landscape"
+	 *     responses:
+	 *       200:
+	 *         description: A list of routes
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: array
+	 *                   items:
+	 *                     $ref: '#/components/schemas/Route'
+	 * */
+
+	public async findAll(
+		options: APIHandlerOptions<{
+			query?: RoutesFindAllOptions;
+		}>,
+	): Promise<APIHandlerResponse<RoutesResponseDto[]>> {
+		const { query = null } = options;
+
+		const { items } = await this.routesService.findAll(query);
+
+		return {
+			payload: { data: items },
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
 	 * /routes/{id}:
 	 *   get:
 	 *     security:
@@ -373,7 +426,7 @@ class RoutesController extends BaseController {
 	 *                       example: "Unauthorized access"
 	 */
 
-	public async find(
+	public async findById(
 		options: APIHandlerOptions<{ params: { id: string } }>,
 	): Promise<APIHandlerResponse<RoutesResponseDto>> {
 		const id = Number(options.params.id);
@@ -382,52 +435,6 @@ class RoutesController extends BaseController {
 
 		return {
 			payload: { data: route },
-			status: HTTPCode.OK,
-		};
-	}
-
-	/**
-	 * @swagger
-	 * /routes:
-	 *   get:
-	 *     security:
-	 *      - bearerAuth:  []
-	 *     tags:
-	 *       - Routes
-	 *     summary: Retrieve all routes
-	 *     description: Retrieves a list of all routes. Requires authentication but no special permissions.
-	 *     responses:
-	 *       200:
-	 *         description: A list of routes
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               type: object
-	 *               properties:
-	 *                 data:
-	 *                   type: array
-	 *                   items:
-	 *                     $ref: '#/components/schemas/Route'
-	 *       401:
-	 *         description: Unauthorized - Authentication required
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               type: object
-	 *               properties:
-	 *                 error:
-	 *                   type: object
-	 *                   properties:
-	 *                     message:
-	 *                       type: string
-	 *                       example: "Unauthorized access"
-	 * */
-
-	public async findAll(): Promise<APIHandlerResponse<RoutesResponseDto[]>> {
-		const { items } = await this.routesService.findAll();
-
-		return {
-			payload: { data: items },
 			status: HTTPCode.OK,
 		};
 	}
@@ -473,6 +480,19 @@ class RoutesController extends BaseController {
 	 *               properties:
 	 *                 data:
 	 *                   $ref: '#/components/schemas/Route'
+	 *       401:
+	 *         description: Unauthorized - Authentication required
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: "Unauthorized access"
 	 *       403:
 	 *         description: Forbidden - User lacks manage_routes permission
 	 *         content:

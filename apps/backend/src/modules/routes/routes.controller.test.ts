@@ -177,7 +177,7 @@ describe("Routes controller", () => {
 
 		const controller = new RoutesController(mockLogger, routesService);
 
-		const result = await controller.find(findRouteMockData);
+		const result = await controller.findById(findRouteMockData);
 
 		assert.deepStrictEqual(result, {
 			payload: { data: mockRoute },
@@ -185,7 +185,7 @@ describe("Routes controller", () => {
 		});
 	});
 
-	it("findAll should return all routes", async () => {
+	it("findAll should return all routes if query is not provided", async () => {
 		const mockFindAll: RoutesService["findAll"] = () => {
 			return Promise.resolve({ items: [mockRoute] });
 		};
@@ -196,10 +196,64 @@ describe("Routes controller", () => {
 
 		const controller = new RoutesController(mockLogger, routesService);
 
-		const result = await controller.findAll();
+		const result = await controller.findAll({
+			body: {},
+			params: {},
+			query: {},
+			user: mockUser,
+		});
 
 		assert.deepStrictEqual(result, {
 			payload: { data: [mockRoute] },
+			status: HTTPCode.OK,
+		});
+	});
+
+	it("findAll should return response with routes matching search query", async () => {
+		const mockFindAll: RoutesService["findAll"] = () => {
+			return Promise.resolve({ items: [mockRoute] });
+		};
+
+		const routesService = {
+			findAll: mockFindAll,
+		} as RoutesService;
+
+		const controller = new RoutesController(mockLogger, routesService);
+
+		const mockSearchQuery = mockRoute.name.toLowerCase();
+
+		const result = await controller.findAll({
+			body: {},
+			params: {},
+			query: { name: mockSearchQuery },
+			user: mockUser,
+		});
+
+		assert.deepStrictEqual(result, {
+			payload: { data: [mockRoute] },
+			status: HTTPCode.OK,
+		});
+	});
+
+	it("findAll should return response with empty array if no routes found", async () => {
+		const routesService = {
+			findAll: (() =>
+				Promise.resolve({ items: [] })) as RoutesService["findAll"],
+		} as RoutesService;
+
+		const mockSearchQuery = "nonexistent";
+
+		const controller = new RoutesController(mockLogger, routesService);
+
+		const result = await controller.findAll({
+			body: {},
+			params: {},
+			query: { name: mockSearchQuery },
+			user: mockUser,
+		});
+
+		assert.deepStrictEqual(result, {
+			payload: { data: [] },
 			status: HTTPCode.OK,
 		});
 	});
@@ -260,7 +314,6 @@ describe("Routes controller", () => {
 		});
 	});
 
-	// Helper function to test permission checking
 	const testPermissionChecker = (
 		permissionChecker: ReturnType<typeof checkPermission>,
 		user: typeof mockUser,
@@ -413,7 +466,12 @@ describe("Routes controller", () => {
 
 			const controller = new RoutesController(mockLogger, routesService);
 
-			const result = await controller.findAll();
+			const result = await controller.findAll({
+				body: {},
+				params: {},
+				query: {},
+				user: mockUser,
+			});
 
 			assert.deepStrictEqual(result, {
 				payload: { data: [mockRoute] },
@@ -439,7 +497,7 @@ describe("Routes controller", () => {
 
 			const controller = new RoutesController(mockLogger, routesService);
 
-			const result = await controller.find(findRouteMockData);
+			const result = await controller.findById(findRouteMockData);
 
 			assert.deepStrictEqual(result, {
 				payload: { data: mockRoute },
@@ -465,7 +523,7 @@ describe("Routes controller", () => {
 
 			const controller = new RoutesController(mockLogger, routesService);
 
-			const result = await controller.find(
+			const result = await controller.findById(
 				findRouteWithWrongPermissionMockData,
 			);
 
@@ -493,7 +551,7 @@ describe("Routes controller", () => {
 
 			const controller = new RoutesController(mockLogger, routesService);
 
-			const result = await controller.find(findRouteAdminMockData);
+			const result = await controller.findById(findRouteAdminMockData);
 
 			assert.deepStrictEqual(result, {
 				payload: { data: mockRoute },

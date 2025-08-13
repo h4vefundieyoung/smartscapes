@@ -40,5 +40,7 @@
 	--font-weight-regular: 400;
 	--font-weight-semibold: 600;
 	--font-weight-bold: 700;
+	--width-sidebar-collapsed: 74px;
+	--width-sidebar-expanded: 320px;
 	--landing-container-width: 1264px;
 }

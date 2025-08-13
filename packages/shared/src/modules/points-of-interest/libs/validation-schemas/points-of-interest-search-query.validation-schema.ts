@@ -14,6 +14,18 @@ const pointsOfInterestSearchQuery = z
 	.object({
 		latitude: latitudeSchema.optional(),
 		longitude: longitudeSchema.optional(),
+		name: z
+			.string()
+			.trim()
+			.min(
+				PointsOfInterestValidationRule.NAME_MIN_LENGTH,
+				PointsOfInterestValidationMessage.NAME_MINIMUM_LENGTH,
+			)
+			.max(
+				PointsOfInterestValidationRule.NAME_MAX_LENGTH,
+				PointsOfInterestValidationMessage.NAME_MAXIMUM_LENGTH,
+			)
+			.optional(),
 		radius: z
 			.string()
 			.transform(parseToFloat)

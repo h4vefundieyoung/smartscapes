@@ -1,5 +1,5 @@
 import { APIPath, HTTPCode, PermissionKey } from "~/libs/enums/enums.js";
-import { checkPermission, setRateLimit } from "~/libs/hooks/hooks.js";
+import { checkHasPermission, setRateLimit } from "~/libs/hooks/hooks.js";
 import {
 	type APIHandlerOptions,
 	type APIHandlerResponse,
@@ -102,7 +102,7 @@ class RoutesController extends BaseController {
 			handler: this.create.bind(this),
 			method: "POST",
 			path: "/",
-			preHandlers: [checkPermission(PermissionKey.MANAGE_ROUTES)],
+			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 			validation: { body: routesCreateValidationSchema },
 		});
 
@@ -110,7 +110,7 @@ class RoutesController extends BaseController {
 			handler: this.delete.bind(this),
 			method: "DELETE",
 			path: "/:id",
-			preHandlers: [checkPermission(PermissionKey.MANAGE_ROUTES)],
+			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 		});
 
 		this.addRoute({
@@ -130,7 +130,7 @@ class RoutesController extends BaseController {
 			handler: this.patch.bind(this),
 			method: "PATCH",
 			path: "/:id",
-			preHandlers: [checkPermission(PermissionKey.MANAGE_ROUTES)],
+			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 			validation: { body: routesUpdateValidationSchema },
 		});
 	}

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import { HTTPCode, PermissionKey } from "~/libs/enums/enums.js";
-import { checkPermission } from "~/libs/hooks/hooks.js";
+import { checkHasPermission } from "~/libs/hooks/hooks.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { GroupEntity } from "../groups/group.entity.js";
@@ -315,7 +315,7 @@ describe("Routes controller", () => {
 	});
 
 	const testPermissionChecker = (
-		permissionChecker: ReturnType<typeof checkPermission>,
+		permissionChecker: ReturnType<typeof checkHasPermission>,
 		user: typeof mockUser,
 	): Promise<void> => {
 		return new Promise<void>((resolve, reject) => {
@@ -337,7 +337,7 @@ describe("Routes controller", () => {
 
 	describe("Permission Hook Tests - All Three Scenarios", () => {
 		it("should reject user without manage_routes permission", async () => {
-			const permissionChecker = checkPermission(PermissionKey.MANAGE_ROUTES);
+			const permissionChecker = checkHasPermission(PermissionKey.MANAGE_ROUTES);
 
 			await assert.rejects(
 				() => testPermissionChecker(permissionChecker, mockUser),
@@ -348,7 +348,7 @@ describe("Routes controller", () => {
 		});
 
 		it("should reject user with wrong permission", async () => {
-			const permissionChecker = checkPermission(PermissionKey.MANAGE_ROUTES);
+			const permissionChecker = checkHasPermission(PermissionKey.MANAGE_ROUTES);
 
 			await assert.rejects(
 				() =>
@@ -360,7 +360,7 @@ describe("Routes controller", () => {
 		});
 
 		it("should allow user with correct manage_routes permission", async () => {
-			const permissionChecker = checkPermission(PermissionKey.MANAGE_ROUTES);
+			const permissionChecker = checkHasPermission(PermissionKey.MANAGE_ROUTES);
 
 			await testPermissionChecker(permissionChecker, mockAdminUser);
 		});

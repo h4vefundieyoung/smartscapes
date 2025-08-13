@@ -408,6 +408,19 @@ class RoutesController extends BaseController {
 	 *                   $ref: '#/components/schemas/Route'
 	 */
 
+	public async findByPoint(
+		options: APIHandlerOptions<{ query: { poiId: number } }>,
+	): Promise<APIHandlerResponse<RoutesResponseDto[]>> {
+		const { poiId } = options.query;
+
+		const { items } = await this.routesService.findByPoint(poiId);
+
+		return {
+			payload: { data: items },
+			status: HTTPCode.OK,
+		};
+	}
+
 	public async patch(
 		options: APIHandlerOptions<{
 			body: RoutesRequestPatchDto;

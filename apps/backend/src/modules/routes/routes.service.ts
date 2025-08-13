@@ -1,4 +1,5 @@
 import {
+	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
@@ -11,7 +12,7 @@ import {
 	MapboxAPIProfile,
 	type MapboxDirectionsApi,
 } from "~/libs/modules/mapbox/mapbox.js";
-import { type CollectionResult, type Service } from "~/libs/types/types.js";
+import { type Service } from "~/libs/types/types.js";
 
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
@@ -92,12 +93,12 @@ class RoutesService implements Service {
 		return isDeleted;
 	}
 
-	public async findAll(): Promise<CollectionResult<RouteGetByIdResponseDto>> {
+	public async findAll(): Promise<{ items: RouteGetAllItemResponseDto }> {
 		const items = await this.routesRepository.findAll();
 
 		return {
 			items: items.map((item) => {
-				return item.toObject();
+				return item.toListObject();
 			}),
 		};
 	}

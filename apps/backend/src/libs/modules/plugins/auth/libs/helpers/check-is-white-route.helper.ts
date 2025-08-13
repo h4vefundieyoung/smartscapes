@@ -1,8 +1,7 @@
-import { match as pathToRegex } from "path-to-regexp";
-
 import { type HTTPMethod } from "~/libs/types/types.js";
 
 import { type WhiteRoute } from "../../auth.plugin.js";
+import { checkUrl } from "./common.helper.js";
 
 type CheckIsWhiteRouteParameters = {
 	method: HTTPMethod;
@@ -28,9 +27,7 @@ const checkIsWhiteRoute = ({
 			return false;
 		}
 
-		const matcher = pathToRegex(path);
-
-		return Boolean(matcher(url));
+		return checkUrl(path, url);
 	});
 };
 

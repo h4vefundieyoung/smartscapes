@@ -38,7 +38,7 @@ class RoutesRepository implements Repository {
 			})
 			.select("routes.id", "routes.name");
 
-		return routes.map((point) => RoutesEntity.initialize(point));
+		return routes.map((point) => RoutesEntity.initializeList(point));
 	}
 
 	public async findById(id: number): Promise<null | RoutesEntity> {

@@ -12,7 +12,7 @@ import {
 import { actions as routeActions } from "~/modules/routes/routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
-import { ImagesSection } from "./libs/components/images-section/images-section.js";
+import { ImageGallery } from "./libs/components/image-gallery/image-gallery.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
@@ -36,25 +36,25 @@ const RouteDetails = (): React.JSX.Element => {
 		return <NotFound />;
 	}
 
-	if (dataStatus === DataStatus.FULFILLED) {
-		const { description, name } = data as RouteGetByIdResponseDto;
-
-		return (
-			<main>
-				<Header
-					actions={[{ label: "Sign in", to: AppRoute.SIGN_IN }]}
-					user={authenticatedUser}
-				/>
-				<div className={styles["container"]}>
-					<label className={styles["label"]}>{name}</label>
-					<ImagesSection />
-					<p className={styles["description"]}>{description}</p>
-				</div>
-			</main>
-		);
+	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
+		return <Loader />;
 	}
 
-	return <Loader />;
+	const { description, name } = data as RouteGetByIdResponseDto;
+
+	return (
+		<main>
+			<Header
+				actions={[{ label: "Sign in", to: AppRoute.SIGN_IN }]}
+				user={authenticatedUser}
+			/>
+			<div className={styles["container"]}>
+				<h1 className={styles["label"]}>{name}</h1>
+				<ImageGallery />
+				<p className={styles["description"]}>{description}</p>
+			</div>
+		</main>
+	);
 };
 
 export { RouteDetails };

@@ -1,7 +1,7 @@
 import { type Entity } from "~/libs/types/types.js";
 
 class RoutesEntity implements Entity {
-	private description: string;
+	private description: null | string;
 	private id: null | number;
 	private name: string;
 	private pois: {
@@ -15,7 +15,7 @@ class RoutesEntity implements Entity {
 		name,
 		pois,
 	}: {
-		description: string;
+		description: null | string;
 		id: null | number;
 		name: string;
 		pois: {
@@ -46,6 +46,26 @@ class RoutesEntity implements Entity {
 		});
 	}
 
+	public static initializeList({
+		id,
+		name,
+		pois,
+	}: {
+		id: number;
+		name: string;
+		pois: {
+			id: number;
+			visitOrder: number;
+		}[];
+	}): RoutesEntity {
+		return new RoutesEntity({
+			description: null,
+			id,
+			name,
+			pois,
+		});
+	}
+
 	public static initializeNew({
 		description,
 		name,
@@ -66,6 +86,21 @@ class RoutesEntity implements Entity {
 		});
 	}
 
+	public toListObject(): {
+		id: number;
+		name: string;
+		pois: {
+			id: number;
+			visitOrder: number;
+		}[];
+	} {
+		return {
+			id: this.id as number,
+			name: this.name,
+			pois: this.pois,
+		};
+	}
+
 	public toNewObject(): {
 		description: string;
 		name: string;
@@ -75,7 +110,7 @@ class RoutesEntity implements Entity {
 		}[];
 	} {
 		return {
-			description: this.description,
+			description: this.description as string,
 			name: this.name,
 			pois: this.pois,
 		};
@@ -91,7 +126,7 @@ class RoutesEntity implements Entity {
 		}[];
 	} {
 		return {
-			description: this.description,
+			description: this.description as string,
 			id: this.id as number,
 			name: this.name,
 			pois: this.pois,

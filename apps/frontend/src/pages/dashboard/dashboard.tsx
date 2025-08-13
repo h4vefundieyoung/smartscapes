@@ -50,13 +50,13 @@ const Dashboard = (): React.JSX.Element => {
 		defaultValues: { multiColors: [], singleColor: null },
 	});
 
-	const [isCreateOpen, setIsCreateOpen] = useState<boolean>(false);
+	const [isCreatePOIOpen, setIsCreatePOIOpen] = useState<boolean>(false);
 
 	const handleOpen = useCallback(() => {
-		setIsCreateOpen(true);
+		setIsCreatePOIOpen(true);
 	}, []);
 	const handleClose = useCallback(() => {
-		setIsCreateOpen(false);
+		setIsCreatePOIOpen(false);
 	}, []);
 	const handleSubmit = useCallback(
 		async (payload: PointsOfInterestRequestDto) => {
@@ -64,7 +64,7 @@ const Dashboard = (): React.JSX.Element => {
 
 			if (isFulfilled(result)) {
 				toastNotifier.showSuccess("POI created");
-				setIsCreateOpen(false);
+				setIsCreatePOIOpen(false);
 			}
 		},
 		[dispatch],
@@ -108,7 +108,7 @@ const Dashboard = (): React.JSX.Element => {
 				<CreatePOIModal
 					defaultLatitude={DEFAULT_LATITUDE}
 					defaultLongitude={DEFAULT_LONGITUDE}
-					isOpen={isCreateOpen}
+					isOpen={isCreatePOIOpen}
 					onClose={handleClose}
 					onSubmit={handleSubmit}
 				/>

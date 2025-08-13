@@ -16,7 +16,7 @@ const Modal = ({
 	children,
 	isOpen,
 	onClose,
-}: Properties): React.JSX.Element => {
+}: Properties): null | React.JSX.Element => {
 	useEffect((): (() => void) => {
 		if (!isOpen) {
 			return () => {};
@@ -40,7 +40,7 @@ const Modal = ({
 	}, [onClose]);
 
 	if (!isOpen) {
-		return <></>;
+		return null;
 	}
 
 	return (

@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, it } from "node:test";
 
 import { DatabaseTableName } from "~/libs/modules/database/database.js";
 
+import { type RoutesFindAllOptions } from "./libs/types/types.js";
 import { RoutesEntity } from "./routes.entity.js";
 import { RoutesModel } from "./routes.model.js";
 import { RoutesRepository } from "./routes.repository.js";
@@ -62,6 +63,49 @@ describe("RoutesRepository", () => {
 		const result = await routesRepository.findById(NON_EXISTENT_ID);
 
 		assert.strictEqual(result, null);
+	});
+
+	it("findAll should return all routes if options are not provided", async () => {
+		const mockRouteEntity = RoutesEntity.initialize({
+			...mockRoute,
+			pois: [],
+		});
+		const mockRouteObject = mockRouteEntity.toObject();
+
+		databaseTracker.on
+			.select(DatabaseTableName.ROUTES)
+			.response([mockRouteObject]);
+
+		const result = await routesRepository.findAll(null);
+
+		assert.deepStrictEqual(result, [mockRouteEntity]);
+	});
+
+	it("findAll should return routes matching search query", async () => {
+		const mockRouteEntity = RoutesEntity.initialize({ ...mockRoute, pois: [] });
+		const mockRouteObject = mockRouteEntity.toObject();
+
+		const mockOptions: RoutesFindAllOptions = {
+			name: mockRouteObject.name.toLowerCase(),
+		};
+
+		databaseTracker.on
+			.select(DatabaseTableName.ROUTES)
+			.response([mockRouteObject]);
+
+		const result = await routesRepository.findAll(mockOptions);
+
+		assert.deepStrictEqual(result, [mockRouteEntity]);
+	});
+
+	it("findAll should return empty array if no routes found", async () => {
+		const mockOptions: RoutesFindAllOptions = { name: "nonexistent" };
+
+		databaseTracker.on.select(DatabaseTableName.ROUTES).response([]);
+
+		const result = await routesRepository.findAll(mockOptions);
+
+		assert.deepStrictEqual(result, []);
 	});
 
 	it("delete should return true when route deleted", async () => {

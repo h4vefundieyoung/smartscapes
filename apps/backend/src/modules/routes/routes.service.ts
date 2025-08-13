@@ -10,6 +10,7 @@ import { type PointsOfInterestService } from "../points-of-interest/points-of-in
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
 import {
+	type RoutesFindAllOptions,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
 	type RoutesResponseConstructDto,
@@ -91,8 +92,10 @@ class RoutesService implements Service {
 		return isDeleted;
 	}
 
-	public async findAll(): Promise<CollectionResult<RoutesResponseDto>> {
-		const items = await this.routesRepository.findAll();
+	public async findAll(
+		options: null | RoutesFindAllOptions,
+	): Promise<CollectionResult<RoutesResponseDto>> {
+		const items = await this.routesRepository.findAll(options);
 
 		return {
 			items: items.map((item) => {

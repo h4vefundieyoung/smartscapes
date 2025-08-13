@@ -1,7 +1,4 @@
 .header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
 	margin: 0 0 12px;
 }
 
@@ -17,15 +14,8 @@
 	gap: 16px;
 }
 
-.field {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-}
-
 .footer {
 	display: flex;
-	gap: 8px;
 	justify-content: flex-end;
 }
 

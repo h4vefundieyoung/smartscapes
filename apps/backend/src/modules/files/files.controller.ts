@@ -9,7 +9,7 @@ import {
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type ValueOf } from "~/libs/types/types.js";
-import { type FilesService } from "~/modules/files/files.service.js";
+import { type FileService } from "~/modules/files/files.service.js";
 
 import { type FileFolderName, FilesApiPath } from "./libs/enums/enums.js";
 import { type FileUploadResponseDto } from "./libs/types/types.js";
@@ -47,9 +47,9 @@ import { fileUploadFolderValidationSchema } from "./libs/validation-schemas/vali
  *           format: uri
  *           description: File URL
  *         contentType:
- *           $ref: '#/components/schemas/FileContentType'
+ *           $ref: '#/components/schemas/FileMimeType'
  *
- *     FileContentType:
+ *     FileMimeType:
  *       type: string
  *       enum: [image/jpeg, image/jpg, image/png]
  *       description: Supported file content types
@@ -61,11 +61,11 @@ import { fileUploadFolderValidationSchema } from "./libs/validation-schemas/vali
  */
 
 class FilesController extends BaseController {
-	private filesService: FilesService;
+	private fileService: FileService;
 
-	public constructor(logger: Logger, filesService: FilesService) {
+	public constructor(logger: Logger, fileService: FileService) {
 		super(logger, APIPath.FILES);
-		this.filesService = filesService;
+		this.fileService = fileService;
 
 		this.addRoute({
 			handler: this.uploadFile.bind(this),
@@ -106,7 +106,7 @@ class FilesController extends BaseController {
 	 *                     $ref: '#/components/schemas/FileUploadResponseDto'
 	 */
 	public async getAll(): Promise<APIHandlerResponse<FileUploadResponseDto[]>> {
-		const result = await this.filesService.getAll();
+		const result = await this.fileService.getAll();
 
 		return {
 			payload: { data: result },
@@ -164,7 +164,7 @@ class FilesController extends BaseController {
 
 		const file = options.body;
 
-		const result = await this.filesService.uploadFile({
+		const result = await this.fileService.uploadFile({
 			file,
 			folder,
 		});

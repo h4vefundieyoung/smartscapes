@@ -5,8 +5,8 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { FilesController } from "./files.controller.js";
-import { type FilesService } from "./files.service.js";
-import { type FileContentType } from "./libs/types/types.js";
+import { type FileService } from "./files.service.js";
+import { type FileMimeType } from "./libs/types/types.js";
 
 describe("FilesController", () => {
 	const mockLogger: Logger = {
@@ -17,7 +17,7 @@ describe("FilesController", () => {
 	};
 
 	const mockFile = {
-		contentType: "image/jpg" as FileContentType,
+		contentType: "image/jpg" as FileMimeType,
 		id: 1,
 		url: "https://example.com/file.jpg",
 	};
@@ -25,15 +25,15 @@ describe("FilesController", () => {
 	it("getAll should return all files", async () => {
 		const files = [mockFile];
 
-		const mockGetAll: FilesService["getAll"] = () => {
+		const mockGetAll: FileService["getAll"] = () => {
 			return Promise.resolve(files);
 		};
 
-		const filesService = {
+		const fileService = {
 			getAll: mockGetAll,
-		} as FilesService;
+		} as FileService;
 
-		const filesController = new FilesController(mockLogger, filesService);
+		const filesController = new FilesController(mockLogger, fileService);
 
 		const result = await filesController.getAll();
 
@@ -46,15 +46,15 @@ describe("FilesController", () => {
 	});
 
 	it("uploadFile should return uploaded file", async () => {
-		const mockUploadFile: FilesService["uploadFile"] = () => {
+		const mockUploadFile: FileService["uploadFile"] = () => {
 			return Promise.resolve(mockFile);
 		};
 
-		const filesService = {
+		const fileService = {
 			uploadFile: mockUploadFile,
-		} as FilesService;
+		} as FileService;
 
-		const filesController = new FilesController(mockLogger, filesService);
+		const filesController = new FilesController(mockLogger, fileService);
 
 		const result = await filesController.uploadFile({
 			body: {} as unknown as Parameters<

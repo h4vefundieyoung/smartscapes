@@ -5,7 +5,7 @@ import fastifyPlugin from "fastify-plugin";
 import { BYTES_IN_MB } from "~/libs/constants/constants.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import {
-	FileContent,
+	FileMime,
 	FilesError,
 	FilesExceptionMessage,
 } from "~/modules/files/files.js";
@@ -41,12 +41,10 @@ const multipart = async (
 				});
 			}
 
-			const ALLOWED_FILE_TYPES = Object.values(
-				FileContent,
-			) as readonly string[];
-			const IS_INVALID_TYPE = !ALLOWED_FILE_TYPES.includes(file.mimetype);
+			const ALLOWED_FILE_TYPES = Object.values(FileMime) as readonly string[];
+			const isInvalidType = !ALLOWED_FILE_TYPES.includes(file.mimetype);
 
-			if (IS_INVALID_TYPE) {
+			if (isInvalidType) {
 				throw new FilesError({
 					message: FilesExceptionMessage.INVALID_FILE_TYPE,
 					status: HTTPCode.UNPROCESSED_ENTITY,

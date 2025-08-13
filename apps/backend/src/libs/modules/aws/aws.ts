@@ -1,8 +1,8 @@
 import { config } from "../config/config.js";
 import { logger } from "../logger/logger.js";
-import { AWSService } from "./base-aws.module.js";
+import { AWSFileService } from "./base-aws-file.module.js";
 
-const awsService = new AWSService(config, logger);
+const awsFileService = new AWSFileService(config, logger);
 
-export { awsService };
-export { type AWSService } from "./base-aws.module.js";
+export { awsFileService };
+export { type AWSFileService } from "./base-aws-file.module.js";

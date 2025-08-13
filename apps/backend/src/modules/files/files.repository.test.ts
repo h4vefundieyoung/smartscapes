@@ -7,10 +7,10 @@ import { DatabaseTableName } from "~/libs/modules/database/database.js";
 
 import { FilesEntity } from "./files.entity.js";
 import { FilesModel } from "./files.model.js";
-import { FilesRepository } from "./files.repository.js";
+import { FileRepository } from "./files.repository.js";
 
-describe("FilesRepository", () => {
-	let filesRepository: FilesRepository;
+describe("FileRepository", () => {
+	let fileRepository: FileRepository;
 	let databaseTracker: Tracker;
 
 	const mockFile: Parameters<typeof FilesEntity.initialize>[0] = {
@@ -30,7 +30,7 @@ describe("FilesRepository", () => {
 
 		FilesModel.knex(database);
 
-		filesRepository = new FilesRepository(FilesModel);
+		fileRepository = new FileRepository(FilesModel);
 	});
 
 	afterEach(() => {
@@ -42,7 +42,7 @@ describe("FilesRepository", () => {
 
 		databaseTracker.on.insert(DatabaseTableName.FILES).response([fileEntity]);
 
-		const result = await filesRepository.create(fileEntity);
+		const result = await fileRepository.create(fileEntity);
 
 		assert.deepStrictEqual(result, fileEntity);
 	});
@@ -52,7 +52,7 @@ describe("FilesRepository", () => {
 
 		databaseTracker.on.select(DatabaseTableName.FILES).response(fileEntities);
 
-		const result = await filesRepository.findAll();
+		const result = await fileRepository.findAll();
 
 		assert.deepStrictEqual(result, fileEntities);
 	});

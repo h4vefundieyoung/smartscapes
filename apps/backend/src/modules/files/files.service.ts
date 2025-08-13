@@ -1,32 +1,35 @@
 import { type MultipartFile } from "@fastify/multipart";
 
-import { type AWSService } from "~/libs/modules/aws/aws.js";
+import { type AWSFileService } from "~/libs/modules/aws/aws.js";
 import { type Service } from "~/libs/types/types.js";
 
 import { FilesEntity } from "./files.entity.js";
-import { type FilesRepository } from "./files.repository.js";
+import { type FileRepository } from "./files.repository.js";
 import {
-	type FileContentType,
+	type FileMimeType,
 	type FileUploadRequestDto,
 	type FileUploadResponseDto,
 } from "./libs/types/types.js";
 
-class FilesService implements Service {
-	private awsService: AWSService;
-	private filesRepository: FilesRepository;
+class FileService implements Service {
+	private awsFileService: AWSFileService;
+	private fileRepository: FileRepository;
 
-	public constructor(filesRepository: FilesRepository, awsService: AWSService) {
-		this.filesRepository = filesRepository;
-		this.awsService = awsService;
+	public constructor(
+		fileRepository: FileRepository,
+		awsFileService: AWSFileService,
+	) {
+		this.fileRepository = fileRepository;
+		this.awsFileService = awsFileService;
 	}
 
 	public async create(payload: {
-		contentType: FileContentType;
+		contentType: FileMimeType;
 		url: string;
 	}): Promise<FileUploadResponseDto> {
 		const { contentType, url } = payload;
 
-		const item = await this.filesRepository.create(
+		const item = await this.fileRepository.create(
 			FilesEntity.initializeNew({
 				contentType,
 				url,
@@ -37,7 +40,7 @@ class FilesService implements Service {
 	}
 
 	public async getAll(): Promise<FileUploadResponseDto[]> {
-		const items = await this.filesRepository.findAll();
+		const items = await this.fileRepository.findAll();
 
 		return items.map((item) => item.toObject());
 	}
@@ -50,15 +53,15 @@ class FilesService implements Service {
 		const buffer = await file.toBuffer();
 		const generatedFileName = this.generateFileName(folder, filename);
 
-		const url = await this.awsService.uploadFile(
+		const url = await this.awsFileService.uploadFile(
 			buffer,
 			generatedFileName,
-			mimetype as FileContentType,
+			mimetype as FileMimeType,
 		);
 
-		const savedFile = await this.filesRepository.create(
+		const savedFile = await this.fileRepository.create(
 			FilesEntity.initializeNew({
-				contentType: mimetype as FileContentType,
+				contentType: mimetype as FileMimeType,
 				url,
 			}),
 		);
@@ -76,4 +79,4 @@ class FilesService implements Service {
 	};
 }
 
-export { FilesService };
+export { FileService };

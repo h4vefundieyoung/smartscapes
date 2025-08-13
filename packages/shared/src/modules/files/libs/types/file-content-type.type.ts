@@ -1,3 +1,3 @@
-type FileContentType = "image/jpeg" | "image/jpg" | "image/png";
+type FileMimeType = "image/jpeg" | "image/jpg" | "image/png";
 
-export { type FileContentType };
+export { type FileMimeType };

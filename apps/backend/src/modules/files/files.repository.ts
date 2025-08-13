@@ -5,7 +5,7 @@ import { type FilesModel } from "./files.model.js";
 
 const FILES_LIMIT = 10;
 
-class FilesRepository implements Repository {
+class FileRepository implements Repository {
 	private filesModel: typeof FilesModel;
 
 	public constructor(filesModel: typeof FilesModel) {
@@ -34,4 +34,4 @@ class FilesRepository implements Repository {
 	}
 }
 
-export { FilesRepository };
+export { FileRepository };

@@ -3,14 +3,14 @@ import {
 	DatabaseTableName,
 } from "~/libs/modules/database/database.js";
 
-import { type FileContentType } from "./libs/types/types.js";
+import { type FileMimeType } from "./libs/types/types.js";
 
 class FilesModel extends AbstractModel {
 	public static override get tableName(): string {
 		return DatabaseTableName.FILES;
 	}
 
-	public contentType!: FileContentType;
+	public contentType!: FileMimeType;
 	public url!: string;
 }
 

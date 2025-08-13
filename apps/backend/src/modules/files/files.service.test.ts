@@ -1,16 +1,16 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { type AWSService } from "~/libs/modules/aws/aws.js";
+import { type AWSFileService } from "~/libs/modules/aws/aws.js";
 
 import { FilesEntity } from "./files.entity.js";
-import { type FilesRepository } from "./files.repository.js";
-import { FilesService } from "./files.service.js";
-import { type FileContentType } from "./libs/types/types.js";
+import { type FileRepository } from "./files.repository.js";
+import { FileService } from "./files.service.js";
+import { type FileMimeType } from "./libs/types/types.js";
 
-describe("FilesService", () => {
+describe("FileService", () => {
 	const mockFile: Parameters<typeof FilesEntity.initialize>[0] = {
-		contentType: "image/jpg" as FileContentType,
+		contentType: "image/jpg" as FileMimeType,
 		createdAt: "2024-01-01T00:00:00Z",
 		id: 1,
 		updatedAt: "2024-01-01T00:00:00Z",
@@ -22,14 +22,14 @@ describe("FilesService", () => {
 	it("create should return new file", async () => {
 		const fileEntity = FilesEntity.initialize(mockFile);
 
-		const filesRepository = {
-			create: (() => Promise.resolve(fileEntity)) as FilesRepository["create"],
-		} as FilesRepository;
+		const fileRepository = {
+			create: (() => Promise.resolve(fileEntity)) as FileRepository["create"],
+		} as FileRepository;
 
-		const awsService = {} as AWSService;
-		const filesService = new FilesService(filesRepository, awsService);
+		const awsFileService = {} as AWSFileService;
+		const fileService = new FileService(fileRepository, awsFileService);
 
-		const result = await filesService.create({
+		const result = await fileService.create({
 			contentType: mockFile.contentType,
 			url: mockFile.url,
 		});
@@ -44,14 +44,14 @@ describe("FilesService", () => {
 	it("getAll should return all files", async () => {
 		const fileEntity = createMockEntity();
 
-		const filesRepository = {
+		const fileRepository = {
 			findAll: () => Promise.resolve([fileEntity]),
-		} as unknown as FilesRepository;
+		} as unknown as FileRepository;
 
-		const awsService = {} as AWSService;
-		const filesService = new FilesService(filesRepository, awsService);
+		const awsFileService = {} as AWSFileService;
+		const fileService = new FileService(fileRepository, awsFileService);
 
-		const result = await filesService.getAll();
+		const result = await fileService.getAll();
 
 		assert.deepStrictEqual(result, [fileEntity.toObject()]);
 	});
@@ -59,22 +59,22 @@ describe("FilesService", () => {
 	it("uploadFile should return uploaded file", async () => {
 		const fileEntity = createMockEntity();
 
-		const filesRepository = {
-			create: (() => Promise.resolve(fileEntity)) as FilesRepository["create"],
-		} as FilesRepository;
+		const fileRepository = {
+			create: (() => Promise.resolve(fileEntity)) as FileRepository["create"],
+		} as FileRepository;
 
-		const awsService = {
+		const awsFileService = {
 			uploadFile: () => Promise.resolve(mockFile.url),
-		} as unknown as AWSService;
+		} as unknown as AWSFileService;
 
-		const filesService = new FilesService(filesRepository, awsService);
+		const fileService = new FileService(fileRepository, awsFileService);
 
-		const result = await filesService.uploadFile({
+		const result = await fileService.uploadFile({
 			file: {
 				filename: "test.jpg",
-				mimetype: "image/jpg" as FileContentType,
+				mimetype: "image/jpg" as FileMimeType,
 				toBuffer: () => Promise.resolve(Buffer.from("test")),
-			} as unknown as Parameters<typeof filesService.uploadFile>[0]["file"],
+			} as unknown as Parameters<typeof fileService.uploadFile>[0]["file"],
 			folder: "avatars",
 		});
 

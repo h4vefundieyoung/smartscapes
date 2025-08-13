@@ -1,9 +1,9 @@
 import { type Entity } from "~/libs/types/types.js";
 
-import { type FileContentType } from "./libs/types/types.js";
+import { type FileMimeType } from "./libs/types/types.js";
 
 class FilesEntity implements Entity {
-	private contentType: FileContentType;
+	private contentType: FileMimeType;
 	private id: null | number;
 	private url: string;
 
@@ -12,7 +12,7 @@ class FilesEntity implements Entity {
 		id,
 		url,
 	}: {
-		contentType: FileContentType;
+		contentType: FileMimeType;
 		id: null | number;
 		url: string;
 	}) {
@@ -22,7 +22,7 @@ class FilesEntity implements Entity {
 	}
 
 	public static initialize(data: {
-		contentType: FileContentType;
+		contentType: FileMimeType;
 		createdAt: string;
 		id: number;
 		updatedAt: string;
@@ -39,7 +39,7 @@ class FilesEntity implements Entity {
 		contentType,
 		url,
 	}: {
-		contentType: FileContentType;
+		contentType: FileMimeType;
 		url: string;
 	}): FilesEntity {
 		return new FilesEntity({
@@ -50,7 +50,7 @@ class FilesEntity implements Entity {
 	}
 
 	public toNewObject(): {
-		contentType: FileContentType;
+		contentType: FileMimeType;
 		url: string;
 	} {
 		return {
@@ -60,7 +60,7 @@ class FilesEntity implements Entity {
 	}
 
 	public toObject(): {
-		contentType: FileContentType;
+		contentType: FileMimeType;
 		id: number;
 		url: string;
 	} {

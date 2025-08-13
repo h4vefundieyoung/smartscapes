@@ -7,13 +7,13 @@ import { type RouteGetByIdResponseDto } from "../libs/types/types.js";
 import { getRouteById } from "./actions.js";
 
 type State = {
-	data: null | RouteGetByIdResponseDto;
 	dataStatus: ValueOf<typeof DataStatus>;
+	route: null | RouteGetByIdResponseDto;
 };
 
 const initialState: State = {
-	data: null,
 	dataStatus: DataStatus.IDLE,
+	route: null,
 };
 
 const { actions, name, reducer } = createSlice({
@@ -22,7 +22,7 @@ const { actions, name, reducer } = createSlice({
 			state.dataStatus = DataStatus.PENDING;
 		});
 		builder.addCase(getRouteById.fulfilled, (state, action) => {
-			state.data = action.payload.data;
+			state.route = action.payload.data;
 			state.dataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(getRouteById.rejected, (state) => {

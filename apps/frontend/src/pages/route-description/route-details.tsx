@@ -28,7 +28,7 @@ const RouteDetails = (): React.JSX.Element => {
 		void dispatch(routeActions.getRouteById(Number(id)));
 	}, [dispatch, id]);
 
-	const data = useAppSelector(({ route }) => route.data);
+	const data = useAppSelector(({ route }) => route.route);
 
 	const dataStatus = useAppSelector(({ route }) => route.dataStatus);
 
@@ -43,17 +43,17 @@ const RouteDetails = (): React.JSX.Element => {
 	const { description, name } = data as RouteGetByIdResponseDto;
 
 	return (
-		<main>
+		<>
 			<Header
 				actions={[{ label: "Sign in", to: AppRoute.SIGN_IN }]}
 				user={authenticatedUser}
 			/>
-			<div className={styles["container"]}>
+			<main className={styles["container"]}>
 				<h1 className={styles["label"]}>{name}</h1>
 				<ImageGallery />
 				<p className={styles["description"]}>{description}</p>
-			</div>
-		</main>
+			</main>
+		</>
 	);
 };
 

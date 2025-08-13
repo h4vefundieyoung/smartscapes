@@ -18,6 +18,12 @@
 	border: none;
 }
 
+.name {
+	font-family: var(--font-family);
+	line-height: 150%;
+	color: var(--color-text-strong);
+}
+
 .arrow-down {
 	display: flex;
 	color: var(--color-fill-press);

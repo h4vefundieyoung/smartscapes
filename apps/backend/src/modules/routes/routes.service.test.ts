@@ -12,6 +12,7 @@ import { type PointGeometry } from "~/libs/types/types.js";
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/routes-exception-message.enum.js";
 import { RoutesError } from "./libs/exceptions/routes-error.exception.js";
+import { type RoutesFindAllOptions } from "./libs/types/types.js";
 import { RoutesEntity } from "./routes.entity.js";
 import { type RoutesRepository } from "./routes.repository.js";
 import { RoutesService } from "./routes.service.js";
@@ -256,7 +257,7 @@ describe("RoutesService", () => {
 		}, mockNotFoundError);
 	});
 
-	it("findAll should return all routes", async () => {
+	it("findAll should return all routes if options are not provided", async () => {
 		const mockRoutes = [createMockEntity(mockRouteResponse)];
 		const routesRepository = createMockRoutesRepository({
 			findAll: () => Promise.resolve(mockRoutes),
@@ -270,7 +271,7 @@ describe("RoutesService", () => {
 			mapBoxApiMock as MapboxDirectionsApi,
 		);
 
-		const result = await routesService.findAll();
+		const result = await routesService.findAll(null);
 
 		assert.deepStrictEqual(result, { items: [mockRouteResponse] });
 	});
@@ -288,9 +289,30 @@ describe("RoutesService", () => {
 			mapBoxApiMock as MapboxDirectionsApi,
 		);
 
-		const result = await routesService.findAll();
+		const result = await routesService.findAll(null);
 
 		assert.deepStrictEqual(result, { items: [] });
+	});
+
+	it("findAll should return response with routes that match search query", async () => {
+		const routesRepository = createMockRoutesRepository();
+
+		const mapBoxApiMock = createMockMapboxApi();
+
+		const pointsOfInterestService = createMockPointsOfInterestService();
+		const routesService = new RoutesService(
+			routesRepository as RoutesRepository,
+			pointsOfInterestService as PointsOfInterestService,
+			mapBoxApiMock as MapboxDirectionsApi,
+		);
+
+		const mockOptions: RoutesFindAllOptions = {
+			name: mockCreatePayload.name.toLowerCase(),
+		};
+
+		const result = await routesService.findAll(mockOptions);
+
+		assert.deepStrictEqual(result, { items: [mockRouteResponse] });
 	});
 
 	it("patch should update existing route successfully", async () => {

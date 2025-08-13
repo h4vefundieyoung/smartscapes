@@ -32,8 +32,8 @@ import {
  *         coordinates:
  *           type: array
  *           items:
- *             type: string
- *           example: ["30.5234", "50.4501"]
+ *             type: number
+ *           example: [30.5234, 50.4501]
  *         type:
  *           type: string
  *           example: "Point"

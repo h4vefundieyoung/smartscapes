@@ -6,6 +6,7 @@ import {
 	useAppDispatch,
 	useAppSelector,
 	useCallback,
+	useEffect,
 } from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import {
@@ -37,6 +38,13 @@ const UserDetails = (): null | React.JSX.Element => {
 		[dispatch],
 	);
 
+	useEffect(() => {
+		if (isFinished) {
+			toast.success("Profile updated");
+			dispatch(authActions.clearPatchStatus());
+		}
+	}, [isFinished, dispatch]);
+
 	const user = {
 		...authenticatedUser,
 		avatarUrl: null,
@@ -48,11 +56,6 @@ const UserDetails = (): null | React.JSX.Element => {
 				<Loader />
 			</span>
 		);
-	}
-
-	if (isFinished) {
-		toast.success("Profile updated");
-		dispatch(authActions.clearPatchStatus());
 	}
 
 	return (

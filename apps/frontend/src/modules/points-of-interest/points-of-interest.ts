@@ -11,4 +11,4 @@ const pointsOfInterestApi = new PointsOfInterestApi({
 });
 
 export { pointsOfInterestApi };
-export { reducer } from "./slices/points-of-interest.js";
+export { actions, reducer } from "./slices/points-of-interest.js";

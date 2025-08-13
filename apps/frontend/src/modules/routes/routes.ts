@@ -11,4 +11,4 @@ const routesApi = new RoutesApi({
 });
 
 export { routesApi };
-export { reducer } from "./slices/routes.js";
+export { actions, reducer } from "./slices/routes.js";

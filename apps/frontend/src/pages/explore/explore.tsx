@@ -1,6 +1,7 @@
 import React from "react";
 
 import { MapProvider } from "~/libs/components/components.js";
+import { ExploreRoutesBlock } from "~/libs/components/explore-routes-block/explore-routes-block.js";
 import { useMapClient } from "~/libs/hooks/hooks.js";
 
 import { mockPOIs } from "./mock-pois.js";
@@ -18,6 +19,9 @@ const DummyMapClientUser = (): null => {
 const Explore = (): React.JSX.Element => {
 	return (
 		<main className={styles["main"]}>
+			<div style={{ backgroundColor: "#ccc", padding: "1rem" }}>
+				<ExploreRoutesBlock />
+			</div>
 			<MapProvider markers={mockPOIs}>
 				<DummyMapClientUser />
 			</MapProvider>

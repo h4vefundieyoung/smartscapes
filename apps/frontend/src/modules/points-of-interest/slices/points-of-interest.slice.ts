@@ -17,7 +17,7 @@ const initialState: State = {
 };
 
 // TODO: add actions
-const { name, reducer } = createSlice({
+const { actions, name, reducer } = createSlice({
 	extraReducers(builder) {
 		builder.addCase(findAll.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
@@ -35,4 +35,4 @@ const { name, reducer } = createSlice({
 	reducers: {},
 });
 
-export { name, reducer };
+export { actions, name, reducer };

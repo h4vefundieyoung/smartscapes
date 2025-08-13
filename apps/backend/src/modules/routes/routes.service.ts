@@ -1,11 +1,3 @@
-import {
-	type RouteGetAllItemResponseDto,
-	type RouteGetByIdResponseDto,
-	type RoutesRequestCreateDto,
-	type RoutesRequestPatchDto,
-	type RoutesResponseConstructDto,
-} from "@smartscapes/shared";
-
 import { HTTPCode } from "~/libs/enums/enums.js";
 import {
 	MapboxAPIGeometric,
@@ -17,6 +9,14 @@ import { type Service } from "~/libs/types/types.js";
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
+import {
+	type RouteGetAllItemResponseDto,
+	type RouteGetByIdResponseDto,
+	type RoutesFindAllOptions,
+	type RoutesRequestCreateDto,
+	type RoutesRequestPatchDto,
+	type RoutesResponseConstructDto,
+} from "./libs/types/types.js";
 import { RoutesEntity } from "./routes.entity.js";
 import { type RoutesRepository } from "./routes.repository.js";
 
@@ -93,8 +93,10 @@ class RoutesService implements Service {
 		return isDeleted;
 	}
 
-	public async findAll(): Promise<{ items: RouteGetAllItemResponseDto }> {
-		const items = await this.routesRepository.findAll();
+	public async findAll(
+		options: null | RoutesFindAllOptions,
+	): Promise<{ items: RouteGetAllItemResponseDto }> {
+		const items = await this.routesRepository.findAll(options);
 
 		return {
 			items: items.map((item) => {

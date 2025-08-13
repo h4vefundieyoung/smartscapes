@@ -20,9 +20,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Lint Commits
-        uses: wagoid/commitlint-github-action@v6
-
       - name: Install NodeJS
         uses: actions/setup-node@v4
         with:
@@ -34,6 +31,9 @@ jobs:
 
       - name: Lint Code
         run: npm run lint
+
+      - name: Lint Commits
+        uses: wagoid/commitlint-github-action@v6
 
   build:
     name: Build Code
@@ -63,12 +63,12 @@ jobs:
       NODE_ENV: test
 
     steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
       - name: Set Up ENV
         run: |
           echo "NODE_ENV=$NODE_ENV" >> .env
-
-      - name: Checkout Source Code
-        uses: actions/checkout@v4
 
       - name: Install NodeJS
         uses: actions/setup-node@v4

@@ -1,5 +1,6 @@
 import { type Repository } from "~/libs/types/types.js";
 
+import { type RoutesFindAllOptions } from "./libs/types/types.js";
 import { RoutesEntity } from "./routes.entity.js";
 import { type RoutesModel } from "./routes.model.js";
 
@@ -27,7 +28,9 @@ class RoutesRepository implements Repository {
 		return Boolean(isDeleted);
 	}
 
-	public async findAll(): Promise<RoutesEntity[]> {
+	public async findAll(
+		options: null | RoutesFindAllOptions,
+	): Promise<RoutesEntity[]> {
 		const routes = await this.routesModel
 			.query()
 			.withGraphFetched("pois(selectPoiIdOrder)")
@@ -36,7 +39,12 @@ class RoutesRepository implements Repository {
 					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
 				},
 			})
-			.select("routes.id", "routes.name");
+			.select("routes.id", "routes.name")
+			.modify((builder) => {
+				if (options?.name) {
+					builder.whereILike("name", `%${options.name.trim()}%`);
+				}
+			});
 
 		return routes.map((point) => RoutesEntity.initializeList(point));
 	}

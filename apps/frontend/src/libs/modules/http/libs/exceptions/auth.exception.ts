@@ -1,5 +1,5 @@
 import { type APIErrorType } from "~/libs/enums/enums.js";
-import { type HTTPCode } from "~/libs/modules/http/http.js";
+import { ExceptionName, type HTTPCode } from "~/libs/modules/http/http.js";
 import {
 	type APIValidationErrorDetail,
 	type ValueOf,
@@ -17,12 +17,11 @@ type Constructor = {
 };
 
 class AuthError extends HTTPError {
-	public static readonly name = "Unauthorized";
 	public name: string;
 
 	public constructor({ cause, details, message, status, type }: Constructor) {
 		super({ cause, details, message, status, type });
-		this.name = AuthError.name;
+		this.name = ExceptionName.AUTHORIZATION_ERROR;
 	}
 }
 

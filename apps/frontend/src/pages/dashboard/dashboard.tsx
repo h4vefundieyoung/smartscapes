@@ -52,11 +52,8 @@ const Dashboard = (): React.JSX.Element => {
 
 	const [isCreatePOIOpen, setIsCreatePOIOpen] = useState<boolean>(false);
 
-	const handleOpen = useCallback(() => {
-		setIsCreatePOIOpen(true);
-	}, []);
-	const handleClose = useCallback(() => {
-		setIsCreatePOIOpen(false);
+	const handleModalToggle = useCallback(() => {
+		setIsCreatePOIOpen((previous) => !previous);
 	}, []);
 	const handleSubmit = useCallback(
 		async (payload: PointsOfInterestRequestDto) => {
@@ -103,13 +100,13 @@ const Dashboard = (): React.JSX.Element => {
 					/>
 				</div>
 				<div className={styles["button-container"]}>
-					<Button label="Create new POI" onClick={handleOpen} type="button" />
+					<Button label="Create new POI" onClick={handleModalToggle} type="button" />
 				</div>
 				<CreatePOIModal
 					defaultLatitude={DEFAULT_LATITUDE}
 					defaultLongitude={DEFAULT_LONGITUDE}
 					isOpen={isCreatePOIOpen}
-					onClose={handleClose}
+					onClose={handleModalToggle}
 					onSubmit={handleSubmit}
 				/>
 			</div>

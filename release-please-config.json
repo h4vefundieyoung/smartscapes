@@ -6,13 +6,25 @@
 			"include-component-in-tag": false
 		},
 		"apps/backend": {
-			"release-type": "node"
+			"release-type": "node",
+			"component": "@smartscapes/backend"
 		},
 		"apps/frontend": {
-			"release-type": "node"
+			"release-type": "node",
+			"component": "@smartscapes/frontend"
 		},
 		"packages/shared": {
-			"release-type": "node"
+			"release-type": "node",
+			"component": "@smartscapes/shared"
+		},
+		"tests": {
+			"release-type": "node",
+			"component": "@smartscapes/tests"
 		}
-	}
+	},
+	"plugins": [
+		{
+			"type": "node-workspace"
+		}
+	]
 }

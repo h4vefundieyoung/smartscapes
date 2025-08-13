@@ -50,28 +50,37 @@ erDiagram
     varchar key
   }
 
- groups_to_permissions {
-      int id PK
-      dateTime created_at
-      dateTime updated_at
-      int group_id FK
-      int permission_id FK
+  groups_to_permissions {
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    int group_id FK
+    int permission_id FK
   }
 
   permissions {
-      int id PK
-      dateTime created_at
-      dateTime updated_at
-      varchar name
-      varchar key
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    varchar name
+    varchar key
   }
 
-   points_of_interest {
+  points_of_interest {
     int id PK
     dateTime created_at
     dateTime updated_at
     varchar name
     geometry location
+  }
+
+
+  user_follows {
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    int follower_id FK
+    int following_id FK
   }
 
   reviews {
@@ -83,46 +92,49 @@ erDiagram
     int likes_count
     int route_id FK
     int poi_id FK
+  }
 
   route_categories {
-      int id PK
-      dateTime created_at
-      dateTime updated_at
-      varchar name
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    varchar name
   }
 
   routes {
-        int id PK
-        dateTime created_at
-        dateTime updated_at
-        varchar name
-        varchar description
-    }
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    varchar name
+    varchar description
+  }
 
   routes_to_pois {
-      int id PK
-      dateTime created_at
-      dateTime updated_at
-      int route_id FK
-      int poi_id FK
-      int visit_order
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    int route_id FK
+    int poi_id FK
+    int visit_order
   }
 
   notifications {
-      int id PK
-      timestamp created_at
-      timestamp updated_at
-      int user_id FK
-      enum notification_type
-      enum entity_type
-      int entity_id
-      text content
-      timestamp read_at
+    int id PK
+    timestamp created_at
+    timestamp updated_at
+    int user_id FK
+    enum notification_type
+    enum entity_type
+    int entity_id
+    text content
+    timestamp read_at
   }
 
   users }|--|| groups : group_id
   groups ||--|{ groups_to_permissions : group_id
   permissions ||--|{ groups_to_permissions : permission_id
+  users ||--|{ user_follows : follower_id
+  users ||--|{ user_follows : following_id
   points_of_interest }|--|{routes_to_pois:"poi_id"
   routes }|--|{routes_to_pois:"route_id"
   users ||--|{ reviews : user_id
@@ -211,6 +223,7 @@ As we are already using js on both frontend and backend it would be useful to sh
 1. Copy and fill env files:
    - `apps/frontend/.env`
    - `apps/backend/.env`
+   - `tests/.env` (for integration tests)
 
    You should use `.env.example` files as a reference.
 
@@ -242,8 +255,9 @@ As we are already using js on both frontend and backend it would be useful to sh
 
 #### Testing
 
-- `npm run test` - Run unit tests
-- `npm run test:coverage` - Run unit tests and generate a coverage report
+- `npm run test:unit` - Run unit tests
+- `npm run test:unit:coverage` - Run unit tests and generate a coverage report
+- `npm run test:integration` - Run integration tests
 
 #### Database
 

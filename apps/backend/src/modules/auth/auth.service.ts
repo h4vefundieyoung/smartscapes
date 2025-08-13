@@ -1,6 +1,8 @@
 import { type encryption } from "~/libs/modules/encryption/libs/encryption.js";
 import { type BaseToken } from "~/libs/modules/token/token.js";
 import {
+	type AuthenticatedUserPatchRequestDto,
+	type AuthenticatedUserPatchResponseDto,
 	type UserService,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
@@ -8,8 +10,8 @@ import {
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
 
-import { AuthorizationExceptionMessage } from "./libs/enums/enums.js";
-import { AuthorizationError } from "./libs/exceptions/auth.exception.js";
+import { AuthExceptionMessage } from "./libs/enums/enums.js";
+import { AuthError } from "./libs/exceptions/auth.exception.js";
 
 type Constructor = {
 	encryptionService: typeof encryption;
@@ -32,6 +34,15 @@ class AuthService {
 		this.userService = userService;
 	}
 
+	public async patch(
+		id: number,
+		userRequestDto: AuthenticatedUserPatchRequestDto,
+	): Promise<AuthenticatedUserPatchResponseDto> {
+		const user = await this.userService.patch(id, userRequestDto);
+
+		return user;
+	}
+
 	public async signIn(
 		userRequestDto: UserSignInRequestDto,
 	): Promise<UserSignInResponseDto> {
@@ -40,8 +51,8 @@ class AuthService {
 		const user = await this.userService.findPasswordDetails(email);
 
 		if (!user) {
-			throw new AuthorizationError({
-				message: AuthorizationExceptionMessage.INVALID_CREDENTIALS,
+			throw new AuthError({
+				message: AuthExceptionMessage.UNAUTHORIZED_REQUEST,
 			});
 		}
 
@@ -51,8 +62,8 @@ class AuthService {
 		);
 
 		if (!arePasswordsMatch) {
-			throw new AuthorizationError({
-				message: AuthorizationExceptionMessage.INVALID_CREDENTIALS,
+			throw new AuthError({
+				message: AuthExceptionMessage.INVALID_CREDENTIALS,
 			});
 		}
 
@@ -63,6 +74,8 @@ class AuthService {
 			user: {
 				email,
 				firstName: user.firstName,
+				group: user.group,
+				groupId: user.groupId,
 				id: user.id,
 				lastName: user.lastName,
 			},
@@ -73,9 +86,15 @@ class AuthService {
 		userRequestDto: UserSignUpRequestDto,
 	): Promise<UserSignUpResponseDto> {
 		const user = await this.userService.create(userRequestDto);
-		const token = await this.tokenService.create({ userId: user.id });
 
-		return { token, user };
+		const token = await this.tokenService.create({
+			userId: user.id,
+		});
+
+		return {
+			token,
+			user,
+		};
 	}
 }
 

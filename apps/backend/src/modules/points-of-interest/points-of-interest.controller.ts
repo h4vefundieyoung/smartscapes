@@ -6,10 +6,10 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type PaginationQuery } from "~/libs/types/types.js";
 import { type PointsOfInterestService } from "~/modules/points-of-interest/points-of-interest.service.js";
 
 import {
-	type PointsOfInterestPaginatedRequestDto,
 	type PointsOfInterestPaginatedResponseDto,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
@@ -354,7 +354,7 @@ class PointsOfInterestController extends BaseController {
 
 	public async findPaginated(
 		options: APIHandlerOptions<{
-			query: PointsOfInterestPaginatedRequestDto;
+			query: PaginationQuery;
 		}>,
 	): Promise<APIHandlerResponse<PointsOfInterestPaginatedResponseDto>> {
 		const { query } = options;
@@ -364,8 +364,8 @@ class PointsOfInterestController extends BaseController {
 		const defaultPage = 1;
 
 		const response = await this.pointsOfInterestService.findPaginated({
-			limit: Number(limit || defaultLimit),
-			page: Number(page || defaultPage),
+			limit: Number(limit) || defaultLimit,
+			page: Number(page) || defaultPage,
 			search: search || "",
 		});
 

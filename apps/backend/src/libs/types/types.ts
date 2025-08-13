@@ -7,6 +7,7 @@ export {
 	type APIErrorResponse,
 	type APIResponse,
 	type HTTPMethod,
+	type PaginationQuery,
 	type PointGeometry,
 	type UserAuthResponseDto,
 	type ValidationSchema,

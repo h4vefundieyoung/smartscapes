@@ -1,8 +1,8 @@
-import { type PointsOfInterestPaginationMeta } from "./points-of-interest-pagination-meta.type.js";
-import { type PointsOfInterestResponseDto } from "./points-of-interest-response-dto.type.js";
+import { type PointsOfInterestPaginatedSummary } from "./points-of-interest-paginated-summary-dto.type.js";
+import { type PointsOfInterestPaginationMeta } from "./points-of-interest-pagination-meta-dto.type.js";
 
 type PointsOfInterestPaginatedResponseDto = {
-	data: PointsOfInterestResponseDto[];
+	data: PointsOfInterestPaginatedSummary[];
 	meta: PointsOfInterestPaginationMeta;
 };
 

@@ -45,11 +45,11 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 							},
 							{
 								element: (
-									// <ProtectedRoute>
-									<AdminDashboard />
-									// </ProtectedRoute>
+									<ProtectedRoute>
+										<AdminDashboard />
+									</ProtectedRoute>
 								),
-								path: `${AppRoute.APP}/administrative-dashboard`,
+								path: AppRoute.ADMINISTRATIVE_DASHBOARD,
 							},
 						],
 						element: <App />,

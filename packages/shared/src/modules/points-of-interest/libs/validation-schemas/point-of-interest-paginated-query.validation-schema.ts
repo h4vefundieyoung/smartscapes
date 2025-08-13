@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 const pointsOfInterestPaginatedQuery = z.object({
-	limit: z.coerce.number().int().positive(),
-	page: z.coerce.number().int().positive(),
+	limit: z.string().trim().optional(),
+	page: z.string().trim().optional(),
 	search: z.string().trim().optional(),
 });
 

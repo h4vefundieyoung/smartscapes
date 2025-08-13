@@ -2,7 +2,7 @@ import { SortingOrder } from "~/libs/enums/enums.js";
 import { type EntityPagination, type Repository } from "~/libs/types/types.js";
 import {
 	type PointsOfInterestFindAllOptions,
-	type PointsOfInterestPaginatedRequestDto,
+	type PointsOfInterestPaginatedOptions,
 	type PointsOfInterestSearchQuery,
 } from "~/modules/points-of-interest/libs/types/type.js";
 import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
@@ -154,7 +154,7 @@ class PointsOfInterestRepository implements Repository {
 	}
 
 	public async findPaginated(
-		options: PointsOfInterestPaginatedRequestDto,
+		options: PointsOfInterestPaginatedOptions,
 	): Promise<EntityPagination<PointsOfInterestEntity>> {
 		const { limit, page, search } = options;
 
@@ -162,15 +162,7 @@ class PointsOfInterestRepository implements Repository {
 
 		const query = this.pointsOfInterestModel
 			.query()
-			.select([
-				"id",
-				"name",
-				"created_at",
-				"updated_at",
-				this.pointsOfInterestModel.raw(
-					"ST_AsGeoJSON(location)::json as location",
-				),
-			])
+			.select(["id", "name", "created_at"])
 			.modify((builder) => {
 				if (search) {
 					builder.where("name", "ilike", `%${search}%`);
@@ -185,7 +177,9 @@ class PointsOfInterestRepository implements Repository {
 			.execute();
 
 		return {
-			items: items.map((point) => PointsOfInterestEntity.initialize(point)),
+			items: items.map((point) =>
+				PointsOfInterestEntity.initializeSummary(point),
+			),
 			total,
 		};
 	}

@@ -13,15 +13,15 @@
 }
 
 .icon-button svg > path {
-	stroke: #004d36;
+	stroke: var(--color-brand-1000);
 }
 
 .icon-button:first-child:hover svg > path {
-	stroke: yellow;
+	stroke: var(--color-fill-press);
 }
 
 .icon-button:last-child:hover svg > path {
-	stroke: red;
+	stroke: var(--color-fill-press);
 }
 
 .actions-cell {

@@ -1,37 +1,65 @@
 import { type JSX } from "react";
 
 import { Button, NumberInput } from "~/libs/components/components.js";
+import { useCallback, type usePagination } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
-	page: number;
+	paginationSettings: ReturnType<typeof usePagination>;
 	totalItems: number;
 	totalPages: number;
 };
 
-const buttonActions = ["«", "‹", "›", "»"];
-
 const Pagination = ({
-	page,
+	paginationSettings,
 	totalItems,
 	totalPages,
 }: Properties): JSX.Element => {
+	const handleNextClick = useCallback(() => {
+		paginationSettings.goToNext(totalPages);
+	}, [paginationSettings, totalPages]);
+
+	const handleEndClick = useCallback(() => {
+		paginationSettings.goToEnd(totalPages);
+	}, [paginationSettings, totalPages]);
+
+	const handleSetLimit = useCallback(
+		(value: number) => {
+			paginationSettings.setLimit(value);
+		},
+		[paginationSettings],
+	);
+
 	return (
 		<div className={styles["pagination"]}>
 			<span>{totalItems} items total</span>
 			<div className={styles["controls"]}>
 				<div className={styles["page-size"]}>
 					<span>Rows per page:</span>
-					<NumberInput initialValue={10} max={20} min={1} />
+					<NumberInput
+						initialValue={paginationSettings.limit}
+						max={20}
+						min={1}
+						onChange={handleSetLimit}
+					/>
 				</div>
 				<span className={styles["page-status"]}>
-					Page {page} of {totalPages}
+					Page {paginationSettings.page} of {totalPages}
 				</span>
 				<div className={styles["buttons"]}>
-					{buttonActions.map((action) => (
-						<Button key={action} label={action} type="button" />
-					))}
+					<Button
+						label="«"
+						onClick={paginationSettings.goToStart}
+						type="button"
+					/>
+					<Button
+						label="‹"
+						onClick={paginationSettings.goToPrevious}
+						type="button"
+					/>
+					<Button label="›" onClick={handleNextClick} type="button" />
+					<Button label="»" onClick={handleEndClick} type="button" />
 				</div>
 			</div>
 		</div>

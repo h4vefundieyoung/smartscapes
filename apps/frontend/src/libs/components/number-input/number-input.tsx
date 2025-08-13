@@ -16,6 +16,7 @@ type Properties = {
 const INITIAL_VALUE = 10;
 const MAX_VALUE = 20;
 const MIN_VALUE = 1;
+const STEP_VALUE = 1;
 
 const NumberInput = ({
 	initialValue = INITIAL_VALUE,
@@ -25,54 +26,38 @@ const NumberInput = ({
 }: Properties): JSX.Element => {
 	const [value, setValue] = useState<number>(initialValue);
 
-	const handleIncrement = useCallback((): void => {
-		setValue((previousValue) => {
-			const newValue = Math.min(max, ++previousValue);
-
-			if (onChange) {
-				onChange(newValue);
-			}
-
-			return newValue;
-		});
-	}, [onChange, max]);
-
-	const handleDecrement = useCallback(() => {
-		setValue((previousValue) => {
-			const newValue = Math.max(min, --previousValue);
-
-			if (onChange) {
-				onChange(newValue);
-			}
-
-			return newValue;
-		});
-	}, [min, onChange]);
-
-	const handleInputChange = useCallback(
-		(event: React.ChangeEvent<HTMLInputElement>) => {
-			const inputValue = Number.parseInt(event.target.value, 10);
-
-			if (!Number.isNaN(inputValue) && inputValue >= min && inputValue <= max) {
-				setValue(inputValue);
-
-				if (onChange) {
-					onChange(inputValue);
-				}
-			} else if (Number.isNaN(inputValue)) {
-				setValue(min);
-
-				if (onChange) {
-					onChange(min);
-				}
-			}
-		},
-		[min, max, onChange],
-	);
-
 	useEffect(() => {
 		setValue(initialValue);
 	}, [initialValue]);
+
+	const updateValue = useCallback(
+		(newValue: number) => {
+			setValue(newValue);
+			onChange?.(newValue);
+		},
+		[onChange],
+	);
+
+	const handleIncrement = useCallback((): void => {
+		updateValue(Math.min(max, value + STEP_VALUE));
+	}, [value, max, updateValue]);
+
+	const handleDecrement = useCallback((): void => {
+		updateValue(Math.max(min, value - STEP_VALUE));
+	}, [value, min, updateValue]);
+
+	const handleInputChange = useCallback(
+		(event: React.ChangeEvent<HTMLInputElement>) => {
+			const inputValue = Number(event.target.value);
+
+			if (!Number.isNaN(inputValue) && inputValue >= min && inputValue <= max) {
+				updateValue(inputValue);
+			} else if (Number.isNaN(inputValue)) {
+				updateValue(min);
+			}
+		},
+		[min, max, updateValue],
+	);
 
 	return (
 		<div className={styles["container"]}>

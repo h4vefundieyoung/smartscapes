@@ -1,6 +1,7 @@
+export { PointsOfInterestApiPath } from "./libs/enums/enums.js";
 export {
-	type PointsOfInterestPaginatedRequestDto,
 	type PointsOfInterestPaginatedResponseDto,
+	type PointsOfInterestPaginatedSummary,
 	type PointsOfInterestPaginationMeta,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,

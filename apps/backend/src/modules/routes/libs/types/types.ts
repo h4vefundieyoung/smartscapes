@@ -1,5 +1,6 @@
 export {
 	type RoutesFindAllOptions,
+	type RoutesFindAllRequestDto,
 	type RoutesRequestConstructDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,

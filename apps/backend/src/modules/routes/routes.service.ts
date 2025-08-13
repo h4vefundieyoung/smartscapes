@@ -11,6 +11,7 @@ import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
 import {
 	type RoutesFindAllOptions,
+	type RoutesFindAllRequestDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
 	type RoutesResponseConstructDto,
@@ -95,12 +96,21 @@ class RoutesService implements Service {
 	public async findAll(
 		options: null | RoutesFindAllOptions,
 	): Promise<CollectionResult<RoutesResponseDto>> {
-		const items = await this.routesRepository.findAll(options);
+		let categories: string[] = [];
+
+		if (options?.categories) {
+			categories = options.categories.split(",").map((c: string) => c.trim());
+		}
+
+		const normalizedOptions: RoutesFindAllRequestDto = {
+			...options,
+			categories,
+		};
+
+		const items = await this.routesRepository.findAll(normalizedOptions);
 
 		return {
-			items: items.map((item) => {
-				return item.toObject();
-			}),
+			items: items.map((item) => item.toObject()),
 		};
 	}
 

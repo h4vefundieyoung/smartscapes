@@ -1,6 +1,6 @@
 import { type Repository } from "~/libs/types/types.js";
 
-import { type RoutesFindAllOptions } from "./libs/types/types.js";
+import { type RoutesFindAllRequestDto } from "./libs/types/types.js";
 import { RoutesEntity } from "./routes.entity.js";
 import { type RoutesModel } from "./routes.model.js";
 
@@ -29,24 +29,30 @@ class RoutesRepository implements Repository {
 	}
 
 	public async findAll(
-		options: null | RoutesFindAllOptions,
+		options: null | RoutesFindAllRequestDto,
 	): Promise<RoutesEntity[]> {
-		const routes = await this.routesModel
+		const query = this.routesModel
 			.query()
-			.withGraphFetched("pois(selectPoiIdOrder)")
-			.modifiers({
-				selectPoiIdOrder(builder) {
-					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
-				},
+			.withGraphFetched("pois")
+			.modifyGraph("pois", (builder) => {
+				builder.select("points_of_interest.id", "routes_to_pois.visit_order");
 			})
-			.select("routes.id", "routes.name", "routes.description")
-			.modify((builder) => {
-				if (options?.name) {
-					builder.whereILike("name", `%${options.name.trim()}%`);
-				}
-			});
+			.select("routes.id", "routes.name", "routes.description");
 
-		return routes.map((point) => RoutesEntity.initialize(point));
+		if (options?.name?.trim()) {
+			query.whereILike("routes.name", `%${options.name.trim()}%`);
+		}
+
+		if (options?.categories?.length) {
+			query
+				.joinRelated("categories")
+				.whereIn("categories.key", options.categories)
+				.groupBy("routes.id");
+		}
+
+		const routes = await query;
+
+		return routes.map((route) => RoutesEntity.initialize(route));
 	}
 
 	public async findById(id: number): Promise<null | RoutesEntity> {

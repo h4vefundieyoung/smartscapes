@@ -295,6 +295,12 @@ class RoutesController extends BaseController {
 	 *         schema:
 	 *           type: string
 	 *           example: "landscape"
+	 *       - in: query
+	 *         name: categories
+	 *         schema:
+	 *           type: string
+	 *           example: "entertaiment,history"
+	 *         description: Comma-separated category keys;
 	 *     responses:
 	 *       200:
 	 *         description: A list of routes

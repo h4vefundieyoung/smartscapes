@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, it } from "node:test";
 
 import { DatabaseTableName } from "~/libs/modules/database/database.js";
 
-import { type RoutesFindAllOptions } from "./libs/types/types.js";
+import { type RoutesFindAllRequestDto } from "./libs/types/types.js";
 import { RoutesEntity } from "./routes.entity.js";
 import { RoutesModel } from "./routes.model.js";
 import { RoutesRepository } from "./routes.repository.js";
@@ -85,7 +85,8 @@ describe("RoutesRepository", () => {
 		const mockRouteEntity = RoutesEntity.initialize({ ...mockRoute, pois: [] });
 		const mockRouteObject = mockRouteEntity.toObject();
 
-		const mockOptions: RoutesFindAllOptions = {
+		const mockOptions: RoutesFindAllRequestDto = {
+			categories: ["entertaiment", "history"],
 			name: mockRouteObject.name.toLowerCase(),
 		};
 
@@ -99,7 +100,7 @@ describe("RoutesRepository", () => {
 	});
 
 	it("findAll should return empty array if no routes found", async () => {
-		const mockOptions: RoutesFindAllOptions = { name: "nonexistent" };
+		const mockOptions: RoutesFindAllRequestDto = { name: "nonexistent" };
 
 		databaseTracker.on.select(DatabaseTableName.ROUTES).response([]);
 

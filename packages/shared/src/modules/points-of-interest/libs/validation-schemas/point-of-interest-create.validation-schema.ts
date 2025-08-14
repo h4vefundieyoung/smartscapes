@@ -6,22 +6,38 @@ import {
 } from "../enums/enums.js";
 import { locationSchema } from "./location.validation-schema.js";
 
-const pointOfInterestCreate = z.strictObject({
-	description: z
-		.string()
-		.max(PointsOfInterestValidationRule.DESCRIPTION_MAX_LENGTH, {
-			message: PointsOfInterestValidationMessage.DESCRIPTION_MAXIMUM_LENGTH,
-		})
-		.nullable(),
-	location: locationSchema,
-	name: z
-		.string()
-		.min(PointsOfInterestValidationRule.NAME_MIN_LENGTH, {
-			message: PointsOfInterestValidationMessage.NAME_MINIMUM_LENGTH,
-		})
-		.max(PointsOfInterestValidationRule.NAME_MAX_LENGTH, {
-			message: PointsOfInterestValidationMessage.NAME_MAXIMUM_LENGTH,
-		}),
-});
+const pointOfInterestCreate = z
+	.strictObject({
+		description: z
+			.string()
+			.max(PointsOfInterestValidationRule.DESCRIPTION_MAX_LENGTH, {
+				message: PointsOfInterestValidationMessage.DESCRIPTION_MAXIMUM_LENGTH,
+			})
+			.nullable()
+			.refine(
+				(value) =>
+					value === null ||
+					PointsOfInterestValidationRule.LATIN_REGEX.test(value),
+				{
+					message: PointsOfInterestValidationMessage.DESCRIPTION_LATIN_REGEX,
+				},
+			),
+		location: locationSchema.optional(),
+		name: z
+			.string()
+			.min(PointsOfInterestValidationRule.NAME_MIN_LENGTH, {
+				message: PointsOfInterestValidationMessage.NAME_MINIMUM_LENGTH,
+			})
+			.max(PointsOfInterestValidationRule.NAME_MAX_LENGTH, {
+				message: PointsOfInterestValidationMessage.NAME_MAXIMUM_LENGTH,
+			})
+			.regex(PointsOfInterestValidationRule.LATIN_REGEX, {
+				message: PointsOfInterestValidationMessage.NAME_LATIN_REGEX,
+			}),
+	})
+	.refine((data) => data.location !== undefined, {
+		message: PointsOfInterestValidationMessage.LOCATION_REQUIRED,
+		path: ["location"],
+	});
 
 export { pointOfInterestCreate };

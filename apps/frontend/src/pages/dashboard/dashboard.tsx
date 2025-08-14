@@ -30,9 +30,6 @@ type FormValues = {
 	singleColor: null | string;
 };
 
-const DEFAULT_LONGITUDE = 30.5234;
-const DEFAULT_LATITUDE = 50.4501;
-
 const Dashboard = (): React.JSX.Element => {
 	const authenticatedUser = useAppSelector(
 		({ auth }) => auth.authenticatedUser,
@@ -109,8 +106,6 @@ const Dashboard = (): React.JSX.Element => {
 					/>
 				</div>
 				<CreatePOIModal
-					defaultLatitude={DEFAULT_LATITUDE}
-					defaultLongitude={DEFAULT_LONGITUDE}
 					isOpen={isCreatePOIOpen}
 					onClose={handleModalToggle}
 					onSubmit={handleSubmit}

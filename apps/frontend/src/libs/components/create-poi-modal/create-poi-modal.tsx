@@ -1,54 +1,54 @@
+import React from "react";
+import { type FieldErrors } from "react-hook-form";
+
 import {
 	Button,
 	Input,
+	MapLocationField,
+	MapProvider,
 	Modal,
 	TextArea,
 } from "~/libs/components/components.js";
 import { useAppForm } from "~/libs/hooks/hooks.js";
+import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import {
 	pointOfInterestCreateValidationSchema,
 	type PointsOfInterestRequestDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
+import { DEFAULT_CREATE_POI_PAYLOAD } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	defaultLatitude: number;
-	defaultLongitude: number;
 	isOpen: boolean;
 	onClose: () => void;
-	onSubmit: (values: PointsOfInterestRequestDto) => void;
+	onSubmit: (payload: PointsOfInterestRequestDto) => void;
 };
 
 const CreatePOIModal = ({
-	defaultLatitude,
-	defaultLongitude,
 	isOpen,
 	onClose,
 	onSubmit,
 }: Properties): React.JSX.Element => {
-	const { control, errors, handleSubmit } =
+	const { control, errors, handleReset, handleSubmit } =
 		useAppForm<PointsOfInterestRequestDto>({
-			defaultValues: {
-				description: "",
-				location: {
-					coordinates: [defaultLongitude, defaultLatitude],
-					type: "Point",
-				},
-				name: "",
-			},
+			defaultValues: DEFAULT_CREATE_POI_PAYLOAD,
 			validationSchema: pointOfInterestCreateValidationSchema,
 		});
 
-	const handleFormSubmit = (values: PointsOfInterestRequestDto): void => {
-		onSubmit({
-			...values,
-			description: values.description || null,
-			location: {
-				...values.location,
-				coordinates: values.location.coordinates,
-			},
-		});
+	const handleFormSubmit = (payload: PointsOfInterestRequestDto): void => {
+		onSubmit(payload);
+		handleReset(DEFAULT_CREATE_POI_PAYLOAD);
+	};
+
+	const handleFormError = (
+		formErrors: FieldErrors<PointsOfInterestRequestDto>,
+	): void => {
+		for (const error of Object.values(formErrors)) {
+			if (error.message) {
+				toastNotifier.showError(error.message);
+			}
+		}
 	};
 
 	return (
@@ -58,7 +58,7 @@ const CreatePOIModal = ({
 			</div>
 			<form
 				className={styles["form"]}
-				onSubmit={handleSubmit(handleFormSubmit)}
+				onSubmit={handleSubmit(handleFormSubmit, handleFormError)}
 			>
 				<Input
 					autocomplete="name"
@@ -68,6 +68,14 @@ const CreatePOIModal = ({
 					name="name"
 					type="text"
 				/>
+				<div className={styles["map-field"]}>
+					<span className={styles["label-caption"]}>Location</span>
+					<div className={styles["map-section"]}>
+						<MapProvider>
+							<MapLocationField control={control} name="location" />
+						</MapProvider>
+					</div>
+				</div>
 				<TextArea
 					control={control}
 					errors={errors}

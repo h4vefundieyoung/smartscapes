@@ -46,8 +46,13 @@ export {
 } from "./modules/notifications/notifications.js";
 export { type PermissionItemDto } from "./modules/permission/types/types.js";
 export {
+	type PermissionItemDto,
+	PermissionKey,
+} from "./modules/permission/permission.js";
+export {
 	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
+	PointsOfInterestApiPath,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 	type PointsOfInterestSearchQuery,

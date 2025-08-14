@@ -38,7 +38,7 @@
 	transition: background-color 0.2s ease-in-out;
 }
 
-.input-iconed {
+.input-icon-space {
 	padding-right: 50px;
 }
 
@@ -76,17 +76,7 @@
 	display: none;
 }
 
-@media (width <= 768px) {
-	.input {
-		padding: 8px 50px 8px 10px;
-	}
-
-	.label-caption {
-		font-size: var(--font-size-tiny);
-	}
-}
-
-.icon-button {
+.icon-right {
 	position: absolute;
 	top: 50%;
 	right: 2px;
@@ -94,17 +84,25 @@
 	align-items: center;
 	justify-content: center;
 	padding: 0 12px;
-	cursor: pointer;
 	background-color: transparent;
-	border: none;
 	border-radius: 8px;
 	transform: translateY(-50%);
 }
 
-.input-button-icon {
-	color: var(--color-stroke-strong);
+.input:placeholder-shown {
+	padding-right: 16px;
 }
 
-.input-button-icon:hover {
-	color: var(--color-fill-press);
+.input:placeholder-shown ~ .icon-right {
+	display: none;
+}
+
+@media (width <= 768px) {
+	.input {
+		padding: 8px 12px;
+	}
+
+	.label-caption {
+		font-size: var(--font-size-tiny);
+	}
 }

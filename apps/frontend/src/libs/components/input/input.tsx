@@ -1,4 +1,3 @@
-import { type MouseEvent } from "react";
 import {
 	type Control,
 	type FieldErrors,
@@ -8,9 +7,13 @@ import {
 
 import { Icon } from "~/libs/components/icon/icon.js";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
-import { useCallback, useFormController } from "~/libs/hooks/hooks.js";
+import { useFormController } from "~/libs/hooks/hooks.js";
 import { type IconName } from "~/libs/types/types.js";
 
+import {
+	InteractiveIcon,
+	NonInteractiveIcon,
+} from "./libs/components/components.js";
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
@@ -42,21 +45,7 @@ const Input = <T extends FieldValues>({
 
 	const error = errors[name]?.message;
 	const hasError = Boolean(error);
-	const isIconRightInteractive = Boolean(iconRight?.onClick);
-
-	const handleIconClick = useCallback(
-		(event: MouseEvent<HTMLButtonElement>) => {
-			event.preventDefault();
-			iconRight?.onClick?.();
-		},
-		[iconRight],
-	);
-
-	const iconComponent = iconRight && (
-		<span className={styles["input-button-icon"]}>
-			<Icon height={24} name={iconRight.name} width={24} />
-		</span>
-	);
+	const isInteractiveIcon = Boolean(iconRight?.onClick);
 
 	return (
 		<label className={styles["label"]}>
@@ -67,7 +56,7 @@ const Input = <T extends FieldValues>({
 					className={combineClassNames(
 						styles["input"],
 						hasError && styles["input-error"],
-						iconRight && styles["input-iconed"],
+						iconRight && styles["input-icon-space"],
 					)}
 					name={field.name}
 					onChange={field.onChange}
@@ -81,19 +70,14 @@ const Input = <T extends FieldValues>({
 						{error as string}
 					</span>
 				)}
-				{iconRight && !isIconRightInteractive && iconComponent}
-				{iconRight && isIconRightInteractive && (
-					<button
-						className={styles["icon-button"]}
-						onMouseDown={handleIconClick}
-						type="button"
-					>
-						<span className="visually-hidden">
-							{iconRight.label || "input icon-button"}
-						</span>
-						{iconComponent}
-					</button>
-				)}
+				<span className={styles["icon-right"]}>
+					{iconRight &&
+						(isInteractiveIcon ? (
+							<InteractiveIcon {...iconRight} />
+						) : (
+							<NonInteractiveIcon {...iconRight} />
+						))}
+				</span>
 			</span>
 		</label>
 	);

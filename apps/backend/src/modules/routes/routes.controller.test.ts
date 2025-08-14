@@ -33,6 +33,7 @@ describe("Routes controller", () => {
 		group: mockGroup,
 		groupId: 2,
 		id: 1,
+		isVisibleProfile: true,
 		lastName: "Doe",
 	};
 

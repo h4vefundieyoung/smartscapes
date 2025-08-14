@@ -16,12 +16,14 @@ const ColumnName = {
 	UPDATED_AT: "updated_at",
 };
 
+const MAX_NAME_LENGTH = 32;
+
 async function down(knex: Knex): Promise<void> {
 	await knex.transaction(async (trx) => {
 		await trx.schema.alterTable(TableName.ROUTE_CATEGORIES, (table) => {
 			table.dropColumn(ColumnName.CATEGORY_ID);
 			table.dropColumn(ColumnName.ROUTE_ID);
-			table.string(ColumnName.NAME).unique().notNullable();
+			table.string(ColumnName.NAME).unique();
 		});
 
 		await trx.schema.dropTableIfExists(TableName.CATEGORIES);
@@ -40,8 +42,8 @@ async function up(knex: Knex): Promise<void> {
 				.timestamp(ColumnName.UPDATED_AT)
 				.notNullable()
 				.defaultTo(trx.fn.now());
-			table.string(ColumnName.KEY).unique().notNullable();
-			table.string(ColumnName.NAME).notNullable();
+			table.string(ColumnName.KEY, MAX_NAME_LENGTH).unique().notNullable();
+			table.string(ColumnName.NAME, MAX_NAME_LENGTH).notNullable();
 		});
 
 		await trx.schema.alterTable(TableName.ROUTE_CATEGORIES, (table) => {

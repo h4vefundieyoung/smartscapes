@@ -20,8 +20,8 @@ type FormValues = {
 };
 
 const Dashboard = (): React.JSX.Element => {
-	const authenticatedUser = useAppSelector(
-		({ auth }) => auth.authenticatedUser,
+	const { authenticatedUser, group, permissions } = useAppSelector(
+		({ auth }) => auth,
 	);
 
 	const colorOptions: SelectOption<string>[] = [
@@ -45,7 +45,11 @@ const Dashboard = (): React.JSX.Element => {
 					user={authenticatedUser}
 				/>
 				<div className={styles["sidebar-container"]}>
-					<Sidebar navigationItemsGroups={NAVIGATION_ITEMS_GROUPS} />
+					<Sidebar
+						navigationItemsGroups={NAVIGATION_ITEMS_GROUPS}
+						userGroup={group}
+						userPermissions={permissions}
+					/>
 				</div>
 				<Loader />
 				<div className={styles["button-container"]}>

@@ -107,6 +107,19 @@ erDiagram
     dateTime updated_at
     varchar name
     varchar description
+    decimal distance
+    int duration
+    geometry geometry
+  }
+
+  planned_routes {
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    int user_id FK
+    decimal distance
+    int duration
+    geometry geometry
   }
 
   routes_to_pois {
@@ -141,6 +154,7 @@ erDiagram
   routes ||--|{ reviews : route_id
   points_of_interest ||--|{ reviews : poi_id
   users ||--o{ notifications : user_id
+  users ||--|{ planned_routes : user_id
 ```
 
 ## 5. Architecture

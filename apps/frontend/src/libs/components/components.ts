@@ -18,4 +18,4 @@ export { TabContainer } from "./tab-container/tab-container.js";
 export { Table } from "./table/table.js";
 export { ToastContainer } from "./toast-container/toast-container.js";
 export { Provider as StoreProvider } from "react-redux";
-export { Outlet as RouterOutlet } from "react-router";
+export { NavLink, Outlet as RouterOutlet } from "react-router";

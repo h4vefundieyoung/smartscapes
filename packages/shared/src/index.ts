@@ -1,4 +1,4 @@
-export { METERS_IN_KM } from "./libs/constants/constants.js";
+export { METERS_IN_KM, TIME_UNIT } from "./libs/constants/constants.js";
 export {
 	APIErrorType,
 	APIPath,
@@ -24,11 +24,18 @@ export {
 	type APIResponse,
 	type APIValidationErrorDetail,
 	type PaginationQuery,
+	type LineStringGeometry,
 	type PointGeometry,
 	type ValidationSchema,
 	type ValueOf,
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
+export {
+	GroupExceptionMessage,
+	type GroupItemWithPermissionsDto,
+	GroupKey,
+	type GroupResponseDto,
+} from "./modules/groups/groups.js";
 export {
 	NotificationApiPath,
 	type NotificationCreateRequestDto,
@@ -64,10 +71,16 @@ export {
 	type RouteCategoryRequestDto,
 } from "./modules/route-categories/route-categories.js";
 export {
+	RouteApiPath,
+	routesConstructValidationSchema,
 	routesCreateValidationSchema,
+	type RoutesFindAllOptions,
+	type RoutesRequestConstructDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
+	type RoutesResponseConstructDto,
 	type RoutesResponseDto,
+	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
 } from "./modules/routes/routes.js";
 export {

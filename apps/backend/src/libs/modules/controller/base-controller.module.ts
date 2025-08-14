@@ -1,9 +1,12 @@
+import { type FastifyReply, type FastifyRequest } from "fastify";
+
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type ServerApplicationRouteParameters } from "~/libs/modules/server-application/server-application.js";
 
 import {
 	type APIHandler,
 	type APIHandlerOptions,
+	type APIPreHandler,
 	type Controller,
 	type ControllerRouteParameters,
 } from "./libs/types/types.js";
@@ -24,13 +27,14 @@ class BaseController implements Controller {
 	public addRoute<HandlerOptions extends APIHandlerOptions = APIHandlerOptions>(
 		options: ControllerRouteParameters<HandlerOptions>,
 	): void {
-		const { handler, path } = options;
+		const { handler, path, preHandlers = [] } = options;
 		const fullPath = this.apiUrl + path;
 
 		this.routes.push({
 			...options,
 			handler: (request, reply) => this.mapHandler(handler, request, reply),
 			path: fullPath,
+			preHandlers: this.mapPreHandlers(preHandlers),
 		});
 	}
 
@@ -47,6 +51,25 @@ class BaseController implements Controller {
 		const { payload, status } = await handler(handlerOptions);
 
 		return await reply.status(status).send(payload);
+	}
+
+	private mapPreHandlers(
+		preHandlers: APIPreHandler[],
+	): ((
+		request: FastifyRequest,
+		reply: FastifyReply,
+		done: () => void,
+	) => void)[] {
+		return preHandlers.map((preHandler) => {
+			return (
+				request: FastifyRequest,
+				_: FastifyReply,
+				done: () => void,
+			): void => {
+				const preHandlerOptions = this.mapRequest(request);
+				preHandler(preHandlerOptions, done);
+			};
+		});
 	}
 
 	private mapRequest<HandlerOptions extends APIHandlerOptions>(

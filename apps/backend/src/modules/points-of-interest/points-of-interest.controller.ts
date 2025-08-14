@@ -226,6 +226,8 @@ class PointsOfInterestController extends BaseController {
 	 *
 	 *       **With location parameters**: Returns points of interest within specified radius
 	 *       from the given coordinates (latitude/longitude)
+	 *
+	 *       **With name parameter**: Returns all points of interest searched by name
 	 *     parameters:
 	 *       - in: query
 	 *         name: latitude
@@ -257,6 +259,15 @@ class PointsOfInterestController extends BaseController {
 	 *           Search radius in kilometers.
 	 *           Default value is 5 km if not specified.
 	 *           Must be between 0.1 and 50 km.
+	 *       - in: query
+	 *         name: name
+	 *         schema:
+	 *           type: string
+	 *           example: "Park"
+	 *         description: |
+	 *           Full or partial name to search for.
+	 *           Must be between 3 and 255 characters.
+	 *           Case-insensitive search is supported.
 	 *     responses:
 	 *       200:
 	 *         description: Successfully retrieved points of interest

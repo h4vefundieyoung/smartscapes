@@ -60,7 +60,7 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 							{
 								element: (
 									<ProtectedRoute
-										protectedRoutePermissions={[PermissionKey.CREATE_ROUTES]}
+										protectedRoutePermissions={[PermissionKey.MANAGE_ROUTES]}
 									>
 										<Routes />
 									</ProtectedRoute>

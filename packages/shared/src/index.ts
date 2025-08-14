@@ -44,7 +44,6 @@ export {
 	type NotificationGetAllItemResponseDto,
 	NotificationType,
 } from "./modules/notifications/notifications.js";
-export { type PermissionItemDto } from "./modules/permission/types/types.js";
 export {
 	type PermissionItemDto,
 	PermissionKey,

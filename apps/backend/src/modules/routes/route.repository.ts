@@ -1,17 +1,17 @@
 import { type Repository } from "~/libs/types/types.js";
 
-import { type RoutesFindAllOptions } from "./libs/types/types.js";
-import { RoutesEntity } from "./routes.entity.js";
-import { type RoutesModel } from "./routes.model.js";
+import { type RouteFindAllOptions } from "./libs/types/types.js";
+import { RouteEntity } from "./route.entity.js";
+import { type RouteModel } from "./route.model.js";
 
-class RoutesRepository implements Repository {
-	private routesModel: typeof RoutesModel;
+class RouteRepository implements Repository {
+	private routesModel: typeof RouteModel;
 
-	public constructor(routesModel: typeof RoutesModel) {
+	public constructor(routesModel: typeof RouteModel) {
 		this.routesModel = routesModel;
 	}
 
-	public async create(entity: RoutesEntity): Promise<RoutesEntity> {
+	public async create(entity: RouteEntity): Promise<RouteEntity> {
 		const insertData = entity.toNewObject();
 
 		const result = await this.routesModel
@@ -19,7 +19,7 @@ class RoutesRepository implements Repository {
 			.insertGraph(insertData, { relate: ["pois"] })
 			.returning(["id", "name", "description"]);
 
-		return RoutesEntity.initialize(result);
+		return RouteEntity.initialize(result);
 	}
 
 	public async delete(id: number): Promise<boolean> {
@@ -29,8 +29,8 @@ class RoutesRepository implements Repository {
 	}
 
 	public async findAll(
-		options: null | RoutesFindAllOptions,
-	): Promise<RoutesEntity[]> {
+		options: null | RouteFindAllOptions,
+	): Promise<RouteEntity[]> {
 		const routes = await this.routesModel
 			.query()
 			.withGraphFetched("pois(selectPoiIdOrder)")
@@ -39,17 +39,17 @@ class RoutesRepository implements Repository {
 					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
 				},
 			})
-			.select("routes.id", "routes.name", "routes.description")
+			.select("routes.id", "routes.name")
 			.modify((builder) => {
 				if (options?.name) {
 					builder.whereILike("name", `%${options.name.trim()}%`);
 				}
 			});
 
-		return routes.map((point) => RoutesEntity.initialize(point));
+		return routes.map((point) => RouteEntity.initializeList(point));
 	}
 
-	public async findById(id: number): Promise<null | RoutesEntity> {
+	public async findById(id: number): Promise<null | RouteEntity> {
 		const route = await this.routesModel
 			.query()
 			.withGraphFetched("pois(selectPoiIdOrder)")
@@ -66,13 +66,13 @@ class RoutesRepository implements Repository {
 			return null;
 		}
 
-		return RoutesEntity.initialize(route);
+		return RouteEntity.initialize(route);
 	}
 
 	public async patch(
 		id: number,
-		entity: Partial<RoutesEntity["toObject"]>,
-	): Promise<null | RoutesEntity> {
+		entity: Partial<RouteEntity["toObject"]>,
+	): Promise<null | RouteEntity> {
 		const [updatedRoute] = await this.routesModel
 			.query()
 			.patch(entity)
@@ -86,8 +86,8 @@ class RoutesRepository implements Repository {
 			.returning(["id", "name", "description"])
 			.execute();
 
-		return updatedRoute ? RoutesEntity.initialize(updatedRoute) : null;
+		return updatedRoute ? RouteEntity.initialize(updatedRoute) : null;
 	}
 }
 
-export { RoutesRepository };
+export { RouteRepository };

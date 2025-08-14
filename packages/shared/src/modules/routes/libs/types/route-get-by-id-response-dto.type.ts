@@ -1,4 +1,4 @@
-type RoutesResponseDto = {
+type RouteGetByIdResponseDto = {
 	description: string;
 	id: number;
 	name: string;
@@ -8,4 +8,4 @@ type RoutesResponseDto = {
 	}[];
 };
 
-export { type RoutesResponseDto };
+export { type RouteGetByIdResponseDto };

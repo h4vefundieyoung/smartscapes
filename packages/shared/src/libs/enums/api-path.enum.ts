@@ -5,6 +5,7 @@ const APIPath = {
 	REVIEWS: "/reviews",
 	ROUTE_CATEGORIES: "/route-categories",
 	ROUTES: "/routes",
+	ROUTES_$ID: "/routes/:id",
 	USERS: "/users",
 } as const;
 

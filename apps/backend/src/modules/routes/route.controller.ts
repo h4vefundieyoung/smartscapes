@@ -7,14 +7,15 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
-import { RouteApiPath } from "./libs/enums/enums.js";
+import { RoutesApiPath } from "./libs/enums/enums.js";
 import {
-	type RoutesFindAllOptions,
-	type RoutesRequestConstructDto,
-	type RoutesRequestCreateDto,
-	type RoutesRequestPatchDto,
-	type RoutesResponseConstructDto,
-	type RoutesResponseDto,
+	type RouteConstructRequestDto,
+	type RouteConstructResponseDto,
+	type RouteCreateRequestDto,
+	type RouteFindAllOptions,
+	type RouteGetAllItemResponseDto,
+	type RouteGetByIdResponseDto,
+	type RoutePatchRequestDto,
 } from "./libs/types/types.js";
 import {
 	routesConstructValidationSchema,
@@ -22,7 +23,7 @@ import {
 	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
-import { type RoutesService } from "./routes.service.js";
+import { type RouteService } from "./route.service.js";
 
 /**
  * @swagger
@@ -79,10 +80,10 @@ import { type RoutesService } from "./routes.service.js";
  *
  */
 
-class RoutesController extends BaseController {
-	private routesService: RoutesService;
+class RouteController extends BaseController {
+	private routesService: RouteService;
 
-	public constructor(logger: Logger, routesService: RoutesService) {
+	public constructor(logger: Logger, routesService: RouteService) {
 		super(logger, APIPath.ROUTES);
 
 		this.routesService = routesService;
@@ -91,7 +92,7 @@ class RoutesController extends BaseController {
 		this.addRoute({
 			handler: this.constructRoute.bind(this),
 			method: "POST",
-			path: RouteApiPath.CONSTRUCT,
+			path: RoutesApiPath.CONSTRUCT,
 			preHandlers: [setRateLimit(constructRequestsPerMinute)],
 			validation: {
 				body: routesConstructValidationSchema,
@@ -101,7 +102,7 @@ class RoutesController extends BaseController {
 		this.addRoute({
 			handler: this.create.bind(this),
 			method: "POST",
-			path: "/",
+			path: RoutesApiPath.ROOT,
 			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 			validation: { body: routesCreateValidationSchema },
 		});
@@ -109,27 +110,27 @@ class RoutesController extends BaseController {
 		this.addRoute({
 			handler: this.delete.bind(this),
 			method: "DELETE",
-			path: "/:id",
+			path: RoutesApiPath.ID,
 			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 		});
 
 		this.addRoute({
 			handler: this.findById.bind(this),
 			method: "GET",
-			path: "/:id",
+			path: RoutesApiPath.ID,
 		});
 
 		this.addRoute({
 			handler: this.findAll.bind(this),
 			method: "GET",
-			path: "/",
+			path: RoutesApiPath.ROOT,
 			validation: { query: routesSearchQueryValidationSchema },
 		});
 
 		this.addRoute({
 			handler: this.patch.bind(this),
 			method: "PATCH",
-			path: "/:id",
+			path: RoutesApiPath.ID,
 			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 			validation: { body: routesUpdateValidationSchema },
 		});
@@ -172,8 +173,8 @@ class RoutesController extends BaseController {
 
 	public async constructRoute({
 		body: { pointsOfInterest },
-	}: APIHandlerOptions<{ body: RoutesRequestConstructDto }>): Promise<
-		APIHandlerResponse<RoutesResponseConstructDto>
+	}: APIHandlerOptions<{ body: RouteConstructRequestDto }>): Promise<
+		APIHandlerResponse<RouteConstructResponseDto>
 	> {
 		const data = await this.routesService.construct(pointsOfInterest);
 
@@ -255,9 +256,9 @@ class RoutesController extends BaseController {
 
 	public async create(
 		options: APIHandlerOptions<{
-			body: RoutesRequestCreateDto;
+			body: RouteCreateRequestDto;
 		}>,
-	): Promise<APIHandlerResponse<RoutesResponseDto>> {
+	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
 		const { description, name, pois } = options.body;
 
 		const route = await this.routesService.create({ description, name, pois });
@@ -371,9 +372,9 @@ class RoutesController extends BaseController {
 
 	public async findAll(
 		options: APIHandlerOptions<{
-			query?: RoutesFindAllOptions;
+			query?: RouteFindAllOptions;
 		}>,
-	): Promise<APIHandlerResponse<RoutesResponseDto[]>> {
+	): Promise<APIHandlerResponse<RouteGetAllItemResponseDto[]>> {
 		const { query = null } = options;
 
 		const { items } = await this.routesService.findAll(query);
@@ -428,7 +429,7 @@ class RoutesController extends BaseController {
 
 	public async findById(
 		options: APIHandlerOptions<{ params: { id: string } }>,
-	): Promise<APIHandlerResponse<RoutesResponseDto>> {
+	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
 		const id = Number(options.params.id);
 
 		const route = await this.routesService.findById(id);
@@ -510,10 +511,10 @@ class RoutesController extends BaseController {
 
 	public async patch(
 		options: APIHandlerOptions<{
-			body: RoutesRequestPatchDto;
+			body: RoutePatchRequestDto;
 			params: { id: string };
 		}>,
-	): Promise<APIHandlerResponse<RoutesResponseDto>> {
+	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
 		const id = Number(options.params.id);
 		const { description, name } = options.body;
 
@@ -528,4 +529,4 @@ class RoutesController extends BaseController {
 		};
 	}
 }
-export { RoutesController };
+export { RouteController };

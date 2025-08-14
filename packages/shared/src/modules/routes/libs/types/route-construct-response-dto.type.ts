@@ -1,6 +1,6 @@
 import { type LineStringGeometry } from "../../../../libs/types/types.js";
 
-type RoutesResponseConstructDto = {
+type RouteConstructResponseDto = {
 	internalId: string;
 	route: {
 		distance: number;
@@ -9,4 +9,4 @@ type RoutesResponseConstructDto = {
 	};
 };
 
-export { type RoutesResponseConstructDto };
+export { type RouteConstructResponseDto };

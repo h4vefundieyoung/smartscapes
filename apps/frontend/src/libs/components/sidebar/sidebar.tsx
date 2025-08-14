@@ -49,7 +49,7 @@ const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
 						<span className={styles["burger-icon"]} />
 					</button>
 
-					<div className={isOpen ? "" : "visually-hidden"}>
+					<div className={styles["logo-wrapper"]}>
 						<Link to={AppRoute.ROOT}>
 							<img
 								alt="SmartScapes"
@@ -74,7 +74,7 @@ const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
 								<div
 									className={combineClassNames(
 										styles["title"],
-										!isOpen && "visually-hidden",
+										!isOpen && "hidden",
 									)}
 								>
 									<span className={styles["title-text"]}>{name}</span>

@@ -36,7 +36,7 @@ class BaseServerApplicationApi implements ServerApplicationApi {
 
 		const swaggerRoute: WhiteRoute = {
 			method: "GET",
-			path: "/documentation/*",
+			path: "/documentation{/*tail}",
 		};
 
 		const apiRoutes = handlers.map((handler) => ({

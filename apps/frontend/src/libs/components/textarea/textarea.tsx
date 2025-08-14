@@ -5,10 +5,10 @@ import {
 	type FieldValues,
 } from "react-hook-form";
 
-import errorIcon from "~/assets/images/error.svg";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
 
+import { Icon } from "../components.js";
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
@@ -46,7 +46,7 @@ const TextArea = <T extends FieldValues>({
 			/>
 			{hasError && (
 				<span className={styles["error"]}>
-					<img alt="error-icon" src={errorIcon} />
+					<Icon height={24} name="error" width={24} />
 					{error}
 				</span>
 			)}

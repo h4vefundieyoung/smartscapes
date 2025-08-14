@@ -66,7 +66,7 @@ describe("RoutesRepository", () => {
 	});
 
 	it("findAll should return all routes if options are not provided", async () => {
-		const mockRouteEntity = RoutesEntity.initialize({
+		const mockRouteEntity = RoutesEntity.initializeList({
 			...mockRoute,
 			pois: [],
 		});
@@ -82,7 +82,10 @@ describe("RoutesRepository", () => {
 	});
 
 	it("findAll should return routes matching search query", async () => {
-		const mockRouteEntity = RoutesEntity.initialize({ ...mockRoute, pois: [] });
+		const mockRouteEntity = RoutesEntity.initializeList({
+			...mockRoute,
+			pois: [],
+		});
 		const mockRouteObject = mockRouteEntity.toObject();
 
 		const mockOptions: RoutesFindAllOptions = {

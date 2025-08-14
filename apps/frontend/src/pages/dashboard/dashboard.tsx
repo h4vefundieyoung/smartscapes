@@ -1,5 +1,8 @@
+import React, { useCallback } from "react";
+
 import {
 	Button,
+	CreatePOIModal,
 	Header,
 	Loader,
 	Select,
@@ -7,8 +10,16 @@ import {
 } from "~/libs/components/components.js";
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
 import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
-import { AppRoute } from "~/libs/enums/enums.js";
-import { useAppForm, useAppSelector } from "~/libs/hooks/hooks.js";
+import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
+import {
+	useAppDispatch,
+	useAppForm,
+	useAppSelector,
+	useEffect,
+	useState,
+} from "~/libs/hooks/hooks.js";
+import { type PointsOfInterestRequestDto } from "~/modules/points-of-interest/libs/types/types.js";
+import { actions as poiActions } from "~/modules/points-of-interest/points-of-interest.js";
 
 import { mockImages } from "../../libs/components/carousel/assets/mock-images/mock-images.js";
 import { Carousel } from "../../libs/components/carousel/carousel.js";
@@ -19,10 +30,14 @@ type FormValues = {
 	singleColor: null | string;
 };
 
+const DEFAULT_LONGITUDE = 30.5234;
+const DEFAULT_LATITUDE = 50.4501;
+
 const Dashboard = (): React.JSX.Element => {
 	const authenticatedUser = useAppSelector(
 		({ auth }) => auth.authenticatedUser,
 	);
+	const dispatch = useAppDispatch();
 
 	const colorOptions: SelectOption<string>[] = [
 		{ label: "Red", value: "red" },
@@ -31,11 +46,28 @@ const Dashboard = (): React.JSX.Element => {
 	];
 
 	const { control } = useAppForm<FormValues>({
-		defaultValues: {
-			multiColors: [],
-			singleColor: null,
-		},
+		defaultValues: { multiColors: [], singleColor: null },
 	});
+
+	const [isCreatePOIOpen, setIsCreatePOIOpen] = useState<boolean>(false);
+	const createStatus = useAppSelector(
+		(state) => state.pointsOfInterest.createStatus,
+	);
+	const handleModalToggle = useCallback(() => {
+		setIsCreatePOIOpen((previous) => !previous);
+	}, []);
+
+	const handleSubmit = useCallback(
+		(payload: PointsOfInterestRequestDto): void => {
+			void dispatch(poiActions.create(payload));
+		},
+		[dispatch],
+	);
+	useEffect(() => {
+		if (createStatus === DataStatus.FULFILLED) {
+			setIsCreatePOIOpen(false);
+		}
+	}, [createStatus]);
 
 	return (
 		<div className={styles["container"]}>
@@ -69,6 +101,20 @@ const Dashboard = (): React.JSX.Element => {
 						options={colorOptions}
 					/>
 				</div>
+				<div className={styles["button-container"]}>
+					<Button
+						label="Create new POI"
+						onClick={handleModalToggle}
+						type="button"
+					/>
+				</div>
+				<CreatePOIModal
+					defaultLatitude={DEFAULT_LATITUDE}
+					defaultLongitude={DEFAULT_LONGITUDE}
+					isOpen={isCreatePOIOpen}
+					onClose={handleModalToggle}
+					onSubmit={handleSubmit}
+				/>
 			</div>
 		</div>
 	);

@@ -71,6 +71,7 @@ describe("RoutesService", () => {
 
 	const mockPoisFindAll: PointsOfInterestResponseDto[] = [
 		{
+			description: "Description for POI 1",
 			id: FIRST_POI_ID,
 			location: {
 				coordinates: [FIRST_COORDINATE, SECOND_COORDINATE],
@@ -79,6 +80,7 @@ describe("RoutesService", () => {
 			name: "POI 1",
 		},
 		{
+			description: "Description for POI 2",
 			id: SECOND_POI_ID,
 			location: {
 				coordinates: [SECOND_COORDINATE, FIRST_COORDINATE],

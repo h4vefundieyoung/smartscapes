@@ -10,7 +10,7 @@ function down(knex: Knex): Promise<void> {
 
 function up(knex: Knex): Promise<void> {
 	return knex.schema.alterTable(TABLE_NAME, (table) => {
-		table.boolean("is_visible_profile").defaultTo(true).notNullable();
+		table.boolean("is_visible_profile").defaultTo(false).notNullable();
 	});
 }
 

@@ -52,7 +52,7 @@ const Input = <T extends FieldValues>({
 					className={combineClassNames(
 						styles["input"],
 						hasError && styles["input-error"],
-						iconRight && styles["input-icon-space"],
+						iconRight && styles["input-right-icon-space"],
 					)}
 					name={field.name}
 					onChange={field.onChange}

@@ -3,17 +3,27 @@ import { isRejected, type Middleware } from "@reduxjs/toolkit";
 import { CommonExceptionMessage } from "~/libs/enums/enums.js";
 import { ExceptionName } from "~/libs/modules/http/http.js";
 import { type ExtraArguments } from "~/libs/modules/store/libs/types/types.js";
-import { signIn } from "~/modules/auth/slices/actions.js";
+import { logout, signIn } from "~/modules/auth/slices/actions.js";
 
-const handleError = ({ toastNotifier }: ExtraArguments): Middleware => {
-	return () => {
+import { type store } from "../store.js";
+
+const handleError = ({
+	toastNotifier,
+}: ExtraArguments): Middleware<
+	unknown,
+	ReturnType<typeof store.instance.getState>,
+	typeof store.instance.dispatch
+> => {
+	return ({ dispatch }) => {
 		return (next) => (action) => {
 			if (isRejected(action)) {
 				if (
 					action.error.name === ExceptionName.AUTHORIZATION_ERROR &&
 					action.type !== signIn.rejected.type
 				) {
-					return;
+					void dispatch(logout());
+
+					return next(action);
 				}
 
 				toastNotifier.showError(

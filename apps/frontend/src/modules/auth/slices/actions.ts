@@ -74,12 +74,15 @@ const patchAuthenticatedUser = createAsyncThunk<
 	AuthenticatedUserPatchRequestDto,
 	AsyncThunkConfig
 >(`${sliceName}/patch`, async (payload, { extra, getState }) => {
-	const { authApi } = extra;
+	const { authApi, toastNotifier } = extra;
 	const state = getState();
 
 	const userId = state.auth.authenticatedUser?.id as number;
 
-	return await authApi.patch(userId, payload);
+	const response = await authApi.patch(userId, payload);
+	toastNotifier.showSuccess("Profile updated");
+
+	return response;
 });
 
 export { getAuthenticatedUser, logout, patchAuthenticatedUser, signIn, signUp };

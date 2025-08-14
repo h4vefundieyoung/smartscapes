@@ -22,12 +22,14 @@ const checkIsWhiteRoute = ({
 		return true;
 	}
 
+	const [urlWithoutQuery] = url.split("?");
+
 	return whiteRoutes.some(({ method: _method, path }) => {
 		if (_method !== method) {
 			return false;
 		}
 
-		return checkMatchUrlPattern(path, url);
+		return checkMatchUrlPattern(path, urlWithoutQuery as string);
 	});
 };
 

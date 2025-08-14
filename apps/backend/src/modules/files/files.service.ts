@@ -1,5 +1,6 @@
 import { type MultipartFile } from "@fastify/multipart";
 
+import { ContentType } from "~/libs/enums/enums.js";
 import { type AWSFileService } from "~/libs/modules/aws/aws.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service, type ValueOf } from "~/libs/types/types.js";
@@ -8,7 +9,6 @@ import { FilesEntity } from "./files.entity.js";
 import { type FileRepository } from "./files.repository.js";
 import {
 	type FileFolderName,
-	FileMime,
 	FilesExceptionMessage,
 } from "./libs/enums/enums.js";
 import { FilesError } from "./libs/exeptions/exeptions.js";
@@ -92,7 +92,11 @@ class FileService implements Service {
 	};
 
 	private validateMimeType = (mimeType: FileMimeType): boolean => {
-		const ALLOWED_FILE_TYPES = Object.values(FileMime) as readonly string[];
+		const ALLOWED_FILE_TYPES = [
+			ContentType.JPEG,
+			ContentType.JPG,
+			ContentType.PNG,
+		];
 		const isInvalidType = !ALLOWED_FILE_TYPES.includes(mimeType);
 
 		if (isInvalidType) {

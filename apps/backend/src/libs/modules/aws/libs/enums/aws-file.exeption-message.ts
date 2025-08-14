@@ -1,5 +1,5 @@
 const AwsExceptionMessage = {
-	FILE_DOWNLOADING_ERROR: "The problem occured while downloading the file",
+	FILE_UPLOADING_ERROR: "The problem occured while uploading the file",
 };
 
 export { AwsExceptionMessage };

@@ -1,4 +1,4 @@
-export { FileFolderName, FileMime, FilesApiPath } from "./libs/enums/enums.js";
+export { FileFolderName, FilesApiPath } from "./libs/enums/enums.js";
 export {
 	type FileMimeType,
 	type FileUploadRequestDto,

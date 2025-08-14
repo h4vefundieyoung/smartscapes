@@ -53,7 +53,6 @@ class AWSFileService {
 		} catch (error) {
 			if (error instanceof S3ServiceException) {
 				const s3Error = error;
-				const { message } = s3Error;
 
 				const httpStatusCode =
 					"httpStatusCode" in s3Error.$metadata
@@ -61,13 +60,13 @@ class AWSFileService {
 						: HTTPCode.BAD_REQUEST;
 
 				throw new AWSFileUploadError({
-					message,
+					message: AwsExceptionMessage.FILE_UPLOADING_ERROR,
 					status: httpStatusCode as ValueOf<typeof HTTPCode>,
 				});
 			}
 
 			throw new AWSFileUploadError({
-				message: AwsExceptionMessage.FILE_DOWNLOADING_ERROR,
+				message: AwsExceptionMessage.FILE_UPLOADING_ERROR,
 				status: HTTPCode.BAD_REQUEST,
 			});
 		}

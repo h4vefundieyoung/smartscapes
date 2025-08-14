@@ -35,7 +35,6 @@ export {
 export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
 export {
 	FileFolderName,
-	FileMime,
 	type FileMimeType,
 	FilesApiPath,
 	fileUploadFolderValidationSchema,

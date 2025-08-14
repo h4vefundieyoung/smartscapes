@@ -46,7 +46,7 @@ const ProfileForm = ({ onSubmit, user }: Properties): React.JSX.Element => {
 			<Checkbox
 				control={control}
 				errors={errors}
-				label="Profile visible"
+				label="Make profile visible"
 				name="isVisibleProfile"
 			/>
 			<Button label="Update profile" />

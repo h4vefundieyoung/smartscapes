@@ -32,7 +32,6 @@ const Checkbox = <T extends FieldValues>({
 
 	return (
 		<label className={styles["container"]}>
-			{label}
 			<input
 				autoComplete={autocomplete}
 				defaultChecked={field.value}
@@ -41,6 +40,7 @@ const Checkbox = <T extends FieldValues>({
 				type="checkbox"
 				value={field.value}
 			/>
+			{label}
 			{hasError && <FieldError description={error as string} />}
 		</label>
 	);

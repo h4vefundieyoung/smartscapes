@@ -70,14 +70,15 @@ const Input = <T extends FieldValues>({
 						{error as string}
 					</span>
 				)}
-				<span className={styles["icon-right"]}>
-					{iconRight &&
-						(isInteractiveIcon ? (
+				{iconRight && (
+					<span className={styles["icon-right"]}>
+						{isInteractiveIcon ? (
 							<InteractiveIcon {...iconRight} />
 						) : (
 							<NonInteractiveIcon {...iconRight} />
-						))}
-				</span>
+						)}
+					</span>
+				)}
 			</span>
 		</label>
 	);

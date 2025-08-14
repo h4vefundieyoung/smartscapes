@@ -44,6 +44,12 @@ class RoutesRepository implements Repository {
 				if (options?.name) {
 					builder.whereILike("name", `%${options.name.trim()}%`);
 				}
+
+				if (options?.poiId !== undefined) {
+					builder
+						.joinRelated("pois")
+						.where("points_of_interest.id", options.poiId);
+				}
 			});
 
 		return routes.map((point) => RoutesEntity.initialize(point));

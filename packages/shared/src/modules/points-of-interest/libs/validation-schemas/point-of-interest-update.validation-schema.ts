@@ -10,7 +10,12 @@ const MINIMUM_FIELDS_TO_UPDATE = 1;
 
 const pointOfInterestUpdate = z
 	.strictObject({
-		description: z.string().optional(),
+		description: z
+			.string()
+			.max(PointsOfInterestValidationRule.DESCRIPTION_MAX_LENGTH, {
+				message: PointsOfInterestValidationMessage.DESCRIPTION_MAXIMUM_LENGTH,
+			})
+			.nullable(),
 		location: locationSchema.optional(),
 		name: z
 			.string()

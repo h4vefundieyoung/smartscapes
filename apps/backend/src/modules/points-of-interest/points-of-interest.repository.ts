@@ -32,6 +32,7 @@ class PointsOfInterestRepository implements Repository {
 				"description",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -61,6 +62,7 @@ class PointsOfInterestRepository implements Repository {
 				"description",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -90,6 +92,7 @@ class PointsOfInterestRepository implements Repository {
 				"description",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -115,6 +118,7 @@ class PointsOfInterestRepository implements Repository {
 				"description",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -142,6 +146,7 @@ class PointsOfInterestRepository implements Repository {
 				"description",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -187,6 +192,7 @@ class PointsOfInterestRepository implements Repository {
 				"description",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),

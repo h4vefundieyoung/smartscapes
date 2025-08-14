@@ -45,6 +45,10 @@ export {
 	NotificationType,
 } from "./modules/notifications/notifications.js";
 export {
+	type PermissionItemDto,
+	PermissionKey,
+} from "./modules/permission/permission.js";
+export {
 	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
 	PointsOfInterestApiPath,
@@ -66,15 +70,16 @@ export {
 	type RouteCategoryRequestDto,
 } from "./modules/route-categories/route-categories.js";
 export {
-	RouteApiPath,
+	type RouteConstructRequestDto,
+	type RouteConstructResponseDto,
+	type RouteCreateRequestDto,
+	type RouteFindAllOptions,
+	type RouteGetAllItemResponseDto,
+	type RouteGetByIdResponseDto,
+	type RoutePatchRequestDto,
+	RoutesApiPath,
 	routesConstructValidationSchema,
 	routesCreateValidationSchema,
-	type RoutesFindAllOptions,
-	type RoutesRequestConstructDto,
-	type RoutesRequestCreateDto,
-	type RoutesRequestPatchDto,
-	type RoutesResponseConstructDto,
-	type RoutesResponseDto,
 	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
 } from "./modules/routes/routes.js";

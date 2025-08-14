@@ -16,7 +16,7 @@ describe("PointsOfInterestService", () => {
 		typeof PointsOfInterestEntity.initialize
 	>[0] = {
 		createdAt: "2024-01-01T00:00:00Z",
-		description: "test",
+		description: "Point Of Interest Test Description",
 		id: 1,
 		location: {
 			coordinates: TEST_COORDINATES,
@@ -47,6 +47,7 @@ describe("PointsOfInterestService", () => {
 		);
 
 		const result = await pointsOfInterestService.create({
+			description: mockPointOfInterest.description,
 			location: mockPointOfInterest.location,
 			name: mockPointOfInterest.name,
 		});
@@ -172,6 +173,7 @@ describe("PointsOfInterestService", () => {
 		);
 
 		const result = await pointsOfInterestService.patch(EXISTING_ID, {
+			description: updatedPointOfInterest.description,
 			location: updatedPointOfInterest.location,
 			name: updatedPointOfInterest.name,
 		});

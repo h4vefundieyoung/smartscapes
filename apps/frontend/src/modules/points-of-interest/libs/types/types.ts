@@ -1,1 +1,4 @@
-export { type PointsOfInterestResponseDto } from "@smartscapes/shared";
+export {
+	type PointsOfInterestRequestDto,
+	type PointsOfInterestResponseDto,
+} from "@smartscapes/shared";

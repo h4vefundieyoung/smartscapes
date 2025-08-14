@@ -11,7 +11,7 @@ describe("PointsOfInterestEntity", () => {
 	it("should create new points of interest entity", () => {
 		const pointOfInterestData = {
 			createdAt: "2024-01-01T00:00:00Z",
-			description: "test",
+			description: "Point Of Interest Test Description",
 			id: 1,
 			location: {
 				coordinates: TEST_COORDINATES,
@@ -27,12 +27,13 @@ describe("PointsOfInterestEntity", () => {
 
 		assert.strictEqual(result.id, pointOfInterestData.id);
 		assert.strictEqual(result.name, pointOfInterestData.name);
+		assert.strictEqual(result.description, pointOfInterestData.description);
 		assert.deepStrictEqual(result.location, pointOfInterestData.location);
 	});
 
 	it("should initialize new points of interest without id", () => {
 		const pointOfInterestData = {
-			description: "test",
+			description: "Point Of Interest Test Description",
 			location: {
 				coordinates: TEST_COORDINATES,
 				type: "Point" as const,
@@ -45,6 +46,7 @@ describe("PointsOfInterestEntity", () => {
 		const result = pointOfInterestEntity.toNewObject();
 
 		assert.strictEqual(result.name, pointOfInterestData.name);
+		assert.strictEqual(result.description, pointOfInterestData.description);
 		assert.deepStrictEqual(result.location, pointOfInterestData.location);
 	});
 });

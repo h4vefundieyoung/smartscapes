@@ -24,7 +24,7 @@ describe("PointsOfInterestController", () => {
 	};
 
 	const mockPointOfInterest = {
-		description: "test",
+		description: "Point Of Interest Test Description",
 		id: 1,
 		location: {
 			coordinates: TEST_COORDINATES,

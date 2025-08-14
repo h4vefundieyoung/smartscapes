@@ -19,6 +19,7 @@ import { Explore } from "./pages/explore/explore.js";
 import { Landing } from "./pages/landing/landing.jsx";
 import { PointsOfInterestDetails } from "./pages/points-of-interest-details/points-of-interest-details.js";
 import { Profile } from "./pages/profile/profile.js";
+import { RouteDetails } from "./pages/route-description/route-details.js";
 
 pwa.register();
 
@@ -48,6 +49,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 									</ProtectedRoute>
 								),
 								path: AppRoute.APP,
+							},
+							{
+								element: <RouteDetails />,
+								path: AppRoute.ROUTES_$ID,
 							},
 							{
 								element: <Explore />,

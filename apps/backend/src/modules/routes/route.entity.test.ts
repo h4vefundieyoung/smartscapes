@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { RoutesEntity } from "./routes.entity.js";
+import { RouteEntity } from "./route.entity.js";
 
-describe("RoutesEntity", () => {
+describe("RouteEntity", () => {
 	it("should create new routes entity", () => {
 		const routesData = {
 			description: "A test route description",
@@ -15,7 +15,7 @@ describe("RoutesEntity", () => {
 			],
 		};
 
-		const routesEntity = RoutesEntity.initialize(routesData);
+		const routesEntity = RouteEntity.initialize(routesData);
 		const result = routesEntity.toObject();
 
 		assert.strictEqual(result.id, routesData.id);
@@ -34,7 +34,7 @@ describe("RoutesEntity", () => {
 			],
 		};
 
-		const routesEntity = RoutesEntity.initializeNew(routesData);
+		const routesEntity = RouteEntity.initializeNew(routesData);
 		const result = routesEntity.toObject();
 
 		assert.strictEqual(result.name, routesData.name);

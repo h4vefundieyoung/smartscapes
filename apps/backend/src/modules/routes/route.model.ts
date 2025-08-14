@@ -4,7 +4,7 @@ import { DatabaseTableName } from "~/libs/modules/database/database.js";
 
 import { PointsOfInterestModel } from "../points-of-interest/points-of-interest.model.js";
 
-class RoutesModel extends Model {
+class RouteModel extends Model {
 	public static readonly relationMappings = {
 		pois: {
 			join: {
@@ -34,4 +34,4 @@ class RoutesModel extends Model {
 	}[];
 }
 
-export { RoutesModel };
+export { RouteModel };

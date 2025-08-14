@@ -37,13 +37,7 @@ const App = (): React.JSX.Element => {
 		);
 	}
 
-	return (
-		<div className={styles["container"]}>
-			<div className={styles["outlet-container"]}>
-				<RouterOutlet />
-			</div>
-		</div>
-	);
+	return <RouterOutlet />;
 };
 
 export { App };

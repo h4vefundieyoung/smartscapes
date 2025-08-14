@@ -17,7 +17,14 @@ class RoutesRepository implements Repository {
 		const result = await this.routesModel
 			.query()
 			.insertGraph(insertData, { relate: ["pois"] })
-			.returning(["id", "name", "description"]);
+			.returning([
+				"id",
+				"name",
+				"description",
+				"distance",
+				"duration",
+				"geometry",
+			]);
 
 		return RoutesEntity.initialize(result);
 	}

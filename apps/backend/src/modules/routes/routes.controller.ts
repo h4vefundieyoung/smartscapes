@@ -228,9 +228,14 @@ class RoutesController extends BaseController {
 			body: RoutesRequestCreateDto;
 		}>,
 	): Promise<APIHandlerResponse<RoutesResponseDto>> {
-		const { description, name, pois } = options.body;
+		const { description, name, plannedRouteId, pois } = options.body;
 
-		const route = await this.routesService.create({ description, name, pois });
+		const route = await this.routesService.create({
+			description,
+			name,
+			plannedRouteId,
+			pois,
+		});
 
 		return {
 			payload: { data: route },

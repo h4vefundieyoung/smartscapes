@@ -7,12 +7,12 @@ type Properties = {
 	name: IconName;
 };
 
-const NonInteractiveIcon = ({ name }: Properties): React.JSX.Element => {
+const StaticIcon = ({ name }: Properties): React.JSX.Element => {
 	return (
-		<span className={styles["non-interactive-icon"]}>
+		<span className={styles["static-icon"]}>
 			<Icon height={24} name={name} width={24} />
 		</span>
 	);
 };
 
-export { NonInteractiveIcon };
+export { StaticIcon };

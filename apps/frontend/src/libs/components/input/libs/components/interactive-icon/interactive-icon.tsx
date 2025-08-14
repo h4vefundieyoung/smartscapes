@@ -7,20 +7,20 @@ import { type IconName } from "~/libs/types/types.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	label?: string;
+	label: string;
 	name: IconName;
-	onClick?: () => void;
+	onClick: () => void;
 };
 
 const InteractiveIcon = ({
-	label = "input icon-button",
+	label,
 	name,
 	onClick,
 }: Properties): React.JSX.Element => {
 	const handleIconClick = useCallback(
 		(event: MouseEvent<HTMLButtonElement>) => {
 			event.preventDefault();
-			onClick?.();
+			onClick();
 		},
 		[onClick],
 	);

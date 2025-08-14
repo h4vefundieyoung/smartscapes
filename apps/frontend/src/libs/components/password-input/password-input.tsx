@@ -32,7 +32,11 @@ const PasswordInput = <T extends FieldValues>(
 
 	return (
 		<Input
-			iconRight={{ name: iconName, onClick: handleIconClick }}
+			iconRight={{
+				label: "Password",
+				name: iconName,
+				onClick: handleIconClick,
+			}}
 			placeholder="Password"
 			type={type}
 			{...properties}

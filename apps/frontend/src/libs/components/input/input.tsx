@@ -10,10 +10,7 @@ import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
 import { type IconName } from "~/libs/types/types.js";
 
-import {
-	InteractiveIcon,
-	NonInteractiveIcon,
-} from "./libs/components/components.js";
+import { InteractiveIcon, StaticIcon } from "./libs/components/components.js";
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
@@ -45,7 +42,6 @@ const Input = <T extends FieldValues>({
 
 	const error = errors[name]?.message;
 	const hasError = Boolean(error);
-	const isInteractiveIcon = Boolean(iconRight?.onClick);
 
 	return (
 		<label className={styles["label"]}>
@@ -72,10 +68,14 @@ const Input = <T extends FieldValues>({
 				)}
 				{iconRight && (
 					<span className={styles["icon-right"]}>
-						{isInteractiveIcon ? (
-							<InteractiveIcon {...iconRight} />
+						{iconRight.onClick && iconRight.label ? (
+							<InteractiveIcon
+								label={iconRight.label}
+								name={iconRight.name}
+								onClick={iconRight.onClick}
+							/>
 						) : (
-							<NonInteractiveIcon {...iconRight} />
+							<StaticIcon {...iconRight} />
 						)}
 					</span>
 				)}

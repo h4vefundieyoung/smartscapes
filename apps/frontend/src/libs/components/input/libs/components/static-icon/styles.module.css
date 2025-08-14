@@ -1,4 +1,4 @@
-.non-interactive-icon {
+.static-icon {
 	display: flex;
 	align-items: center;
 	color: var(--color-stroke-strong);

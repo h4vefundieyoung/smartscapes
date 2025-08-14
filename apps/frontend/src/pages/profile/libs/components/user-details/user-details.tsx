@@ -1,12 +1,9 @@
-import { toast } from "react-toastify";
-
 import { Avatar, Loader } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
 	useCallback,
-	useEffect,
 } from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import {
@@ -27,23 +24,12 @@ const UserDetails = (): null | React.JSX.Element => {
 		(state) => state.auth.authenticatedUserPatchStatus === DataStatus.PENDING,
 	);
 
-	let isFinished = useAppSelector(
-		(state) => state.auth.authenticatedUserPatchStatus === DataStatus.FULFILLED,
-	);
-
 	const handleFormSubmit = useCallback(
 		(payload: AuthenticatedUserPatchRequestDto): void => {
 			void dispatch(authActions.patchAuthenticatedUser(payload));
 		},
 		[dispatch],
 	);
-
-	useEffect(() => {
-		if (isFinished) {
-			toast.success("Profile updated");
-			dispatch(authActions.clearPatchStatus());
-		}
-	}, [isFinished, dispatch]);
 
 	const user = {
 		...authenticatedUser,

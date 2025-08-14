@@ -383,16 +383,9 @@ class RoutesController extends BaseController {
 			query?: RoutesFindAllOptions;
 		}>,
 	): Promise<APIHandlerResponse<RoutesResponseDto[]>> {
-		const parsedQuery = routesSearchQueryValidationSchema.parse(
-			options.query ?? {},
-		);
+		const { query = null } = options;
 
-		const normalizedQuery: RoutesFindAllOptions = {
-			categories: parsedQuery.categories ?? [],
-			name: parsedQuery.name,
-		};
-
-		const { items } = await this.routesService.findAll(normalizedQuery);
+		const { items } = await this.routesService.findAll(query);
 
 		return {
 			payload: { data: items },

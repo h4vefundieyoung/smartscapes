@@ -7,7 +7,9 @@ import {
 
 const categoryName = z
 	.string()
-	.regex(/^[a-zA-Z-]+$/)
+	.regex(/^[a-zA-Z-]+$/, {
+		message: RoutesValidationMessage.CATEGORY_INVALID_KEY,
+	})
 	.min(RoutesValidationRule.CATEGORY_MINIMUM_LENGTH, {
 		message: RoutesValidationMessage.CATEGORY_MINIMUM_LENGTH,
 	})
@@ -16,19 +18,7 @@ const categoryName = z
 	});
 
 const routesSearchQuery = z.object({
-	categories: z
-		.string()
-		.trim()
-		.transform((value) => (value ? value.split(",") : undefined))
-		.refine(
-			(categories) =>
-				categories === undefined ||
-				categories.every(
-					(category) => categoryName.safeParse(category).success,
-				),
-			{ message: RoutesValidationMessage.CATEGORY_INVALID_KEY },
-		)
-		.optional(),
+	categories: z.array(categoryName).optional(),
 	name: z
 		.string()
 		.trim()

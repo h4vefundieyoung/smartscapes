@@ -1,6 +1,6 @@
 type RoutesFindAllOptions = {
-	categories?: string[] | undefined;
-	name?: string | undefined;
+	categories?: string[];
+	name?: string;
 };
 
 export { type RoutesFindAllOptions };

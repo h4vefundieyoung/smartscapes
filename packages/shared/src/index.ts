@@ -45,6 +45,10 @@ export {
 	NotificationType,
 } from "./modules/notifications/notifications.js";
 export {
+	type PermissionItemDto,
+	PermissionKey,
+} from "./modules/permission/permission.js";
+export {
 	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
 	type PointsOfInterestRequestDto,

@@ -63,8 +63,12 @@ const ExploreRoutesBlock = (): React.JSX.Element => {
 				const routesPromises = [];
 
 				for (const poi of pois) {
-					routesPromises.push(dispatch(routesActions.findByPoint(poi.id)));
+					routesPromises.push(dispatch(routesActions.findByPoint(poi.id))); //TODO: update and check how does this function works on the backend, because in result i got wrong results
 				}
+
+				//TODO: findAll works correctly at the backend, but I need to check how the query is sents by frontend part
+				//TODO: examine how does findByPoint works
+				//TODO: update algorithm for sorting
 
 				const routesResults = await Promise.all(routesPromises);
 

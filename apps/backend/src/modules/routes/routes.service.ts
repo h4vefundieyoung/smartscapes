@@ -117,30 +117,6 @@ class RoutesService implements Service {
 		return item.toObject();
 	}
 
-	public async findByPoint(
-		poiId: number,
-	): Promise<CollectionResult<RoutesResponseDto>> {
-		if (!poiId) {
-			throw new RoutesError({
-				message: RoutesExceptionMessage.POI_NOT_FOUND,
-				status: HTTPCode.BAD_REQUEST,
-			});
-		}
-
-		const routes = await this.routesRepository.findByPoint(poiId);
-
-		if (routes.length === 0) {
-			throw new RoutesError({
-				message: RoutesExceptionMessage.ROUTE_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		return {
-			items: routes.map((route) => route.toObject()),
-		};
-	}
-
 	public async patch(
 		id: number,
 		payload: RoutesRequestPatchDto,

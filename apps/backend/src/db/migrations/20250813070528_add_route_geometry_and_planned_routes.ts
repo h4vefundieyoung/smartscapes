@@ -31,7 +31,9 @@ async function up(knex: Knex): Promise<void> {
 			table
 				.decimal(ColumnName.DISTANCE, DECIMAL_PRECISION, DECIMAL_SCALE)
 				.notNullable();
-			table.integer(ColumnName.DURATION).notNullable();
+			table
+				.decimal(ColumnName.DURATION, DECIMAL_PRECISION, DECIMAL_SCALE)
+				.notNullable();
 			table
 				.specificType(ColumnName.GEOMETRY, "geometry(LineString, 4326)")
 				.notNullable();
@@ -50,7 +52,9 @@ async function up(knex: Knex): Promise<void> {
 			table
 				.decimal(ColumnName.DISTANCE, DECIMAL_PRECISION, DECIMAL_SCALE)
 				.notNullable();
-			table.integer(ColumnName.DURATION).notNullable();
+			table
+				.decimal(ColumnName.DURATION, DECIMAL_PRECISION, DECIMAL_SCALE)
+				.notNullable();
 			table
 				.specificType(ColumnName.GEOMETRY, "geometry(LineString, 4326)")
 				.notNullable();

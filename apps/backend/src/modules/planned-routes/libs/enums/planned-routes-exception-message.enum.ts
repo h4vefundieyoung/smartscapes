@@ -4,4 +4,3 @@ const PlannedRoutesExceptionMessage = {
 } as const;
 
 export { PlannedRoutesExceptionMessage };
-

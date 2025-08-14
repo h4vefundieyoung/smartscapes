@@ -2,7 +2,7 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type RoutesResponseConstructDto } from "~/modules/routes/libs/types/types.js";
 
 import { PlannedRoutesExceptionMessage } from "./libs/enums/enums.js";
-import { PlannedRoutesError } from "./libs/exceptions/planned-routes-error.exception.js";
+import { PlannedRoutesError } from "./libs/exceptions/exceptions.js";
 import { type PlannedRoutesResponseDto } from "./libs/types/types.js";
 import { PlannedRoutesEntity } from "./planned-routes.entity.js";
 import { type PlannedRoutesRepository } from "./planned-routes.repository.js";

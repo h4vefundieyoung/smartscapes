@@ -6,6 +6,8 @@ import {
 } from "~/libs/modules/mapbox/mapbox.js";
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
 
+import { type PlannedRoutesResponseDto } from "../planned-routes/libs/types/planned-routes-response-dto.type.js";
+import { type PlannedRoutesService } from "../planned-routes/planned-routes.service.js";
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
@@ -13,30 +15,40 @@ import {
 	type RoutesFindAllOptions,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
-	type RoutesResponseConstructDto,
 	type RoutesResponseDto,
 } from "./libs/types/types.js";
 import { RoutesEntity } from "./routes.entity.js";
 import { type RoutesRepository } from "./routes.repository.js";
 
+type ConstructorParameters = {
+	mapboxDirectionsApi: MapboxDirectionsApi;
+	plannedRoutesService: PlannedRoutesService;
+	pointsOfInterestService: PointsOfInterestService;
+	routesRepository: RoutesRepository;
+};
+
 class RoutesService implements Service {
 	private mapboxDirectionApi: MapboxDirectionsApi;
+	private plannedRoutesService: PlannedRoutesService;
 	private pointsOfInterestService: PointsOfInterestService;
 	private routesRepository: RoutesRepository;
 
-	public constructor(
-		routesRepository: RoutesRepository,
-		pointsOfInterestService: PointsOfInterestService,
-		mapboxDirectionsApi: MapboxDirectionsApi,
-	) {
+	public constructor({
+		mapboxDirectionsApi,
+		plannedRoutesService,
+		pointsOfInterestService,
+		routesRepository,
+	}: ConstructorParameters) {
 		this.routesRepository = routesRepository;
 		this.pointsOfInterestService = pointsOfInterestService;
 		this.mapboxDirectionApi = mapboxDirectionsApi;
+		this.plannedRoutesService = plannedRoutesService;
 	}
 
 	public async construct(
 		pointsOfInterest: number[],
-	): Promise<RoutesResponseConstructDto> {
+		userId: string,
+	): Promise<PlannedRoutesResponseDto> {
 		const { items } = await this.pointsOfInterestService.findAll({
 			ids: pointsOfInterest,
 		});
@@ -56,7 +68,12 @@ class RoutesService implements Service {
 			MapboxAPIGeometric.GEOJSON,
 		);
 
-		return route;
+		const plannedRoute = await this.plannedRoutesService.create(
+			route,
+			Number(userId),
+		);
+
+		return plannedRoute;
 	}
 
 	public async create(

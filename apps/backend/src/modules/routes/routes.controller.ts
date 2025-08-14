@@ -7,13 +7,13 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
+import { type PlannedRoutesResponseDto } from "../planned-routes/planned-routes.js";
 import { RouteApiPath } from "./libs/enums/enums.js";
 import {
 	type RoutesFindAllOptions,
 	type RoutesRequestConstructDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
-	type RoutesResponseConstructDto,
 	type RoutesResponseDto,
 } from "./libs/types/types.js";
 import {
@@ -88,6 +88,7 @@ class RoutesController extends BaseController {
 		this.routesService = routesService;
 
 		const constructRequestsPerMinute = 5;
+
 		this.addRoute({
 			handler: this.constructRoute.bind(this),
 			method: "POST",
@@ -101,33 +102,33 @@ class RoutesController extends BaseController {
 		this.addRoute({
 			handler: this.create.bind(this),
 			method: "POST",
-			path: "/",
+			path: RouteApiPath.ROOT,
 			validation: { body: routesCreateValidationSchema },
 		});
 
 		this.addRoute({
 			handler: this.delete.bind(this),
 			method: "DELETE",
-			path: "/:id",
+			path: RouteApiPath.$ID,
 		});
 
 		this.addRoute({
 			handler: this.findById.bind(this),
 			method: "GET",
-			path: "/:id",
+			path: RouteApiPath.$ID,
 		});
 
 		this.addRoute({
 			handler: this.findAll.bind(this),
 			method: "GET",
-			path: "/",
+			path: RouteApiPath.ROOT,
 			validation: { query: routesSearchQueryValidationSchema },
 		});
 
 		this.addRoute({
 			handler: this.patch.bind(this),
 			method: "PATCH",
-			path: "/:id",
+			path: RouteApiPath.$ID,
 			validation: { body: routesUpdateValidationSchema },
 		});
 	}
@@ -169,10 +170,12 @@ class RoutesController extends BaseController {
 
 	public async constructRoute({
 		body: { pointsOfInterest },
-	}: APIHandlerOptions<{ body: RoutesRequestConstructDto }>): Promise<
-		APIHandlerResponse<RoutesResponseConstructDto>
-	> {
-		const data = await this.routesService.construct(pointsOfInterest);
+		params: { userId },
+	}: APIHandlerOptions<{
+		body: RoutesRequestConstructDto;
+		params: { userId: string };
+	}>): Promise<APIHandlerResponse<PlannedRoutesResponseDto>> {
+		const data = await this.routesService.construct(pointsOfInterest, userId);
 
 		return {
 			payload: { data },

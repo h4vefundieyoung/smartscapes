@@ -6,3 +6,4 @@ const plannedRoutesRepository = new PlannedRoutesRepository(PlannedRoutesModel);
 const plannedRoutesService = new PlannedRoutesService(plannedRoutesRepository);
 
 export { plannedRoutesService };
+export { type PlannedRoutesResponseDto } from "./libs/types/types.js";

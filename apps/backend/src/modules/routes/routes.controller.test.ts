@@ -62,7 +62,7 @@ describe("Routes controller", () => {
 		const mockData = "mockData";
 		const constructRouteMockData = {
 			body: { pointsOfInterest: [] },
-			params: null,
+			params: { userId: "1" },
 			query: null,
 			user: mockUser,
 		};

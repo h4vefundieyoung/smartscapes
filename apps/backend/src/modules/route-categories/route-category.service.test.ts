@@ -3,23 +3,21 @@ import { describe, it } from "node:test";
 
 import { HTTPCode } from "~/libs/modules/http/http.js";
 
+import { CategoryEntity } from "../categories/category.entity.js";
 import { RouteCategoryExceptionMessage } from "./libs/enums/enums.js";
 import { RouteCategoryError } from "./libs/exceptions/exceptions.js";
-import { RouteCategoryEntity } from "./route-category.entity.js";
 import { type RouteCategoryRepository } from "./route-category.repository.js";
 import { RouteCategoryService } from "./route-category.service.js";
 
 describe("RouteCategoryService", () => {
-	const mockRouteCategory: Parameters<
-		typeof RouteCategoryEntity.initialize
-	>[0] = {
+	const mockRouteCategory: Parameters<typeof CategoryEntity.initialize>[0] = {
 		id: 1,
+		key: "popular",
 		name: "Popular",
 	};
 
 	it("create should return new route category", async () => {
-		const routeCategoryEntity =
-			RouteCategoryEntity.initialize(mockRouteCategory);
+		const routeCategoryEntity = CategoryEntity.initialize(mockRouteCategory);
 
 		const routeCategoryRepository = {
 			create: (() =>
@@ -35,6 +33,7 @@ describe("RouteCategoryService", () => {
 		);
 
 		const result = await routeCategoryService.create({
+			key: mockRouteCategory.key,
 			name: mockRouteCategory.name,
 		});
 
@@ -42,8 +41,7 @@ describe("RouteCategoryService", () => {
 	});
 
 	it("create should throw exception if category with such name already exists", async () => {
-		const routeCategoryEntity =
-			RouteCategoryEntity.initialize(mockRouteCategory);
+		const routeCategoryEntity = CategoryEntity.initialize(mockRouteCategory);
 
 		const routeCategoryRepository = {
 			create: (() =>
@@ -62,6 +60,7 @@ describe("RouteCategoryService", () => {
 
 		try {
 			await routeCategoryService.create({
+				key: mockRouteCategory.key,
 				name: mockRouteCategory.name,
 			});
 			assert.fail("expected exception not thrown");
@@ -73,8 +72,7 @@ describe("RouteCategoryService", () => {
 	});
 
 	it("findAll should return all route categories", async () => {
-		const routeCategoryEntity =
-			RouteCategoryEntity.initialize(mockRouteCategory);
+		const routeCategoryEntity = CategoryEntity.initialize(mockRouteCategory);
 
 		const routeCategoryRepository = {
 			findAll: () => Promise.resolve([routeCategoryEntity]),
@@ -90,8 +88,7 @@ describe("RouteCategoryService", () => {
 	});
 
 	it("findByName should return route category with corresponding name", async () => {
-		const routeCategoryEntity =
-			RouteCategoryEntity.initialize(mockRouteCategory);
+		const routeCategoryEntity = CategoryEntity.initialize(mockRouteCategory);
 
 		const routeCategoryRepository = {
 			findByName: (() =>

@@ -65,9 +65,10 @@ export {
 } from "./modules/reviews/reviews.js";
 export {
 	RouteCategoriesApiPath,
+	type RouteCategoryCreateRequestDto,
+	routeCategoryCreateValidationSchema,
 	RouteCategoryExceptionMessage,
 	type RouteCategoryGetAllItemResponseDto,
-	type RouteCategoryRequestDto,
 } from "./modules/route-categories/route-categories.js";
 export {
 	RouteApiPath,

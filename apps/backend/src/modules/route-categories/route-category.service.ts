@@ -1,13 +1,13 @@
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
 
+import { CategoryEntity } from "../categories/category.entity.js";
 import { RouteCategoryExceptionMessage } from "./libs/enums/enums.js";
 import { RouteCategoryError } from "./libs/exceptions/exceptions.js";
 import {
+	type RouteCategoryCreateRequestDto,
 	type RouteCategoryGetAllItemResponseDto,
-	type RouteCategoryRequestDto,
 } from "./libs/types/types.js";
-import { RouteCategoryEntity } from "./route-category.entity.js";
 import { type RouteCategoryRepository } from "./route-category.repository.js";
 
 class RouteCategoryService implements Service {
@@ -18,9 +18,9 @@ class RouteCategoryService implements Service {
 	}
 
 	public async create(
-		payload: RouteCategoryRequestDto,
+		payload: RouteCategoryCreateRequestDto,
 	): Promise<RouteCategoryGetAllItemResponseDto> {
-		const { name } = payload;
+		const { key, name } = payload;
 
 		const existingRouteCategory =
 			await this.routeCategoryRepository.findByName(name);
@@ -33,7 +33,7 @@ class RouteCategoryService implements Service {
 		}
 
 		const item = await this.routeCategoryRepository.create(
-			RouteCategoryEntity.initializeNew({ name }),
+			CategoryEntity.initializeNew({ key, name }),
 		);
 
 		return item.toObject();

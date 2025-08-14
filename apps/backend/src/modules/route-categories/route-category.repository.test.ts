@@ -3,18 +3,17 @@ import { createTracker, MockClient, type Tracker } from "knex-mock-client";
 import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
 
-import { RouteCategoryEntity } from "./route-category.entity.js";
-import { RouteCategoryModel } from "./route-category.model.js";
+import { CategoryEntity } from "../categories/category.entity.js";
+import { CategoryModel } from "../categories/category.model.js";
 import { RouteCategoryRepository } from "./route-category.repository.js";
 
 describe("RouteCategoryRepository", () => {
 	let routeCategoryRepository: RouteCategoryRepository;
 	let databaseTracker: Tracker;
 
-	const mockRouteCategory: Parameters<
-		typeof RouteCategoryEntity.initialize
-	>[0] = {
+	const mockRouteCategory: Parameters<typeof CategoryEntity.initialize>[0] = {
 		id: 1,
+		key: "popular",
 		name: "Popular",
 	};
 
@@ -23,9 +22,9 @@ describe("RouteCategoryRepository", () => {
 
 		databaseTracker = createTracker(database);
 
-		RouteCategoryModel.knex(database);
+		CategoryModel.knex(database);
 
-		routeCategoryRepository = new RouteCategoryRepository(RouteCategoryModel);
+		routeCategoryRepository = new RouteCategoryRepository(CategoryModel);
 	});
 
 	afterEach(() => {
@@ -33,26 +32,21 @@ describe("RouteCategoryRepository", () => {
 	});
 
 	it("create should create and return new route category", async () => {
-		const routeCategoryEntity =
-			RouteCategoryEntity.initialize(mockRouteCategory);
+		const categoryEntity = CategoryEntity.initialize(mockRouteCategory);
 
-		databaseTracker.on
-			.insert("route_categories")
-			.response([routeCategoryEntity]);
+		databaseTracker.on.insert("categories").response([categoryEntity]);
 
-		const result = await routeCategoryRepository.create(routeCategoryEntity);
+		const result = await routeCategoryRepository.create(categoryEntity);
 
-		assert.deepStrictEqual(result, routeCategoryEntity);
+		assert.deepStrictEqual(result, categoryEntity);
 	});
 
 	it("findAll should return all route categories", async () => {
 		const routeCategoryEntities = [
-			RouteCategoryEntity.initialize(mockRouteCategory),
+			CategoryEntity.initialize(mockRouteCategory),
 		];
 
-		databaseTracker.on
-			.select("route_categories")
-			.response(routeCategoryEntities);
+		databaseTracker.on.select("categories").response(routeCategoryEntities);
 
 		const result = await routeCategoryRepository.findAll();
 
@@ -60,22 +54,19 @@ describe("RouteCategoryRepository", () => {
 	});
 
 	it("findByName should return route category entity by name", async () => {
-		const routeCategoryEntity =
-			RouteCategoryEntity.initialize(mockRouteCategory);
+		const categoryEntity = CategoryEntity.initialize(mockRouteCategory);
 
-		databaseTracker.on
-			.select("route_categories")
-			.response([routeCategoryEntity]);
+		databaseTracker.on.select("categories").response([categoryEntity]);
 
 		const result = await routeCategoryRepository.findByName(
 			mockRouteCategory.name,
 		);
 
-		assert.deepStrictEqual(result, routeCategoryEntity);
+		assert.deepStrictEqual(result, categoryEntity);
 	});
 
 	it("findByName should return null if no category found", async () => {
-		databaseTracker.on.select("route_categories").response([]);
+		databaseTracker.on.select("categories").response([]);
 
 		const result = await routeCategoryRepository.findByName("Non Existent");
 

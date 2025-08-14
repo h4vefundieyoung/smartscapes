@@ -10,15 +10,16 @@ import { type RouteCategoryService } from "~/modules/route-categories/route-cate
 
 import { RouteCategoriesApiPath } from "./libs/enums/enums.js";
 import {
+	type RouteCategoryCreateRequestDto,
 	type RouteCategoryGetAllItemResponseDto,
-	type RouteCategoryRequestDto,
 } from "./libs/types/types.js";
+import { routeCategoryCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 
 /**
  * @swagger
  * components:
  *    schemas:
- *     RouteCategoryRequestDto:
+ *     RouteCategoryCreateRequestDto:
  *       type: object
  *       required:
  *         - name
@@ -51,6 +52,9 @@ class RouteCategoryController extends BaseController {
 			handler: this.create.bind(this),
 			method: "POST",
 			path: RouteCategoriesApiPath.ROOT,
+			validation: {
+				body: routeCategoryCreateValidationSchema,
+			},
 		});
 
 		this.addRoute({
@@ -74,7 +78,7 @@ class RouteCategoryController extends BaseController {
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             $ref: '#/components/schemas/RouteCategoryRequestDto'
+	 *             $ref: '#/components/schemas/RouteCategoryCreateRequestDto'
 	 *     responses:
 	 *       201:
 	 *         description: New route category object
@@ -107,7 +111,7 @@ class RouteCategoryController extends BaseController {
 
 	public async create(
 		options: APIHandlerOptions<{
-			body: RouteCategoryRequestDto;
+			body: RouteCategoryCreateRequestDto;
 		}>,
 	): Promise<APIHandlerResponse<RouteCategoryGetAllItemResponseDto>> {
 		const { body } = options;

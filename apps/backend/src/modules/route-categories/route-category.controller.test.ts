@@ -4,11 +4,9 @@ import { describe, it } from "node:test";
 
 import { type APIHandlerOptions } from "~/libs/modules/controller/controller.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import {
-	type RouteCategoryGetAllItemResponseDto,
-	type RouteCategoryRequestDto,
-} from "~/modules/route-categories/route-categories.js";
+import { type RouteCategoryGetAllItemResponseDto } from "~/modules/route-categories/route-categories.js";
 
+import { type RouteCategoryCreateRequestDto } from "./libs/types/types.js";
 import { RouteCategoryController } from "./route-category.controller.js";
 import { type RouteCategoryService } from "./route-category.service.js";
 
@@ -40,7 +38,7 @@ describe("RouteCategoryController", () => {
 			body: {
 				name: mockRouteCategory.name,
 			},
-		} as APIHandlerOptions<{ body: RouteCategoryRequestDto }>;
+		} as APIHandlerOptions<{ body: RouteCategoryCreateRequestDto }>;
 
 		const result = await routeCategoryController.create(requestOptions);
 

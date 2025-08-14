@@ -27,6 +27,7 @@
 	--color-icon-error: hsl(0deg 56% 50% / 80%);
 	--color-shadow-weak: hsl(0deg 0% 0% / 3.9%);
 	--color-shadow-strong: hsl(0deg 0% 0% / 7.8%);
+	--color-base-overlay: hsl(0deg 0% 0% / 80%);
 	--font-family: "Inter", sans-serif;
 	--font-size-display: 3.5rem;
 	--font-size-h1: 2.5rem;
@@ -39,5 +40,7 @@
 	--font-weight-regular: 400;
 	--font-weight-semibold: 600;
 	--font-weight-bold: 700;
+	--width-sidebar-collapsed: 74px;
+	--width-sidebar-expanded: 320px;
 	--landing-container-width: 1264px;
 }

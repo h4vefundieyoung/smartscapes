@@ -7,8 +7,10 @@ import {
 import { type Config } from "~/libs/modules/config/config.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type ValueOf } from "~/libs/types/types.js";
 import { type FileMimeType } from "~/modules/files/files.js";
 
+import { AwsExceptionMessage } from "./libs/enums/enums.js";
 import { AWSFileUploadError } from "./libs/exeptions/exeptions.js";
 
 class AWSFileService {
@@ -49,13 +51,24 @@ class AWSFileService {
 
 			return url;
 		} catch (error) {
-			const message =
-				error instanceof S3ServiceException ? error.message : String(error);
-			this.logger.error(`Failed to upload file to AWS S3: ${message}`);
+			if (error instanceof S3ServiceException) {
+				const s3Error = error;
+				const { message } = s3Error;
+
+				const httpStatusCode =
+					"httpStatusCode" in s3Error.$metadata
+						? s3Error.$metadata.httpStatusCode
+						: HTTPCode.BAD_REQUEST;
+
+				throw new AWSFileUploadError({
+					message,
+					status: httpStatusCode as ValueOf<typeof HTTPCode>,
+				});
+			}
 
 			throw new AWSFileUploadError({
-				message,
-				status: HTTPCode.INTERNAL_SERVER_ERROR,
+				message: AwsExceptionMessage.FILE_DOWNLOADING_ERROR,
+				status: HTTPCode.BAD_REQUEST,
 			});
 		}
 	}

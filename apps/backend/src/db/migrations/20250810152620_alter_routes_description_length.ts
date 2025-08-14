@@ -1,6 +1,6 @@
 import { type Knex } from "knex";
 
-const DESCRIPTION_LENGTH = 2000;
+const DESCRIPTION_LENGTH = 8000;
 const DEFAULT_DESCRIPTION_LENGTH = 255;
 
 async function down(knex: Knex): Promise<void> {

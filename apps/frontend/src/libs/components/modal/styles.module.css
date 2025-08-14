@@ -1,0 +1,81 @@
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100vw;
+	height: 100vh;
+	background-color: var(--color-stroke-strong);
+}
+
+.modal {
+	position: relative;
+	min-width: 300px;
+	max-width: 90vw;
+	max-height: 90vh;
+	overflow-y: auto;
+	background-color: var(--color-background-base);
+	border-radius: 12px;
+	box-shadow:
+		0 4px 8px -2px var(--color-shadow-weak),
+		0 2px 4px -2px var(--color-shadow-strong);
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20px;
+	border-bottom: 1px solid var(--color-stroke-weak);
+}
+
+.title {
+	margin: 0;
+	font-size: var(--font-size-h4);
+	font-weight: var(--font-weight-semibold);
+	color: var(--color-text-strong);
+}
+
+.close-button {
+	width: 32px;
+	min-width: 32px;
+	height: 32px;
+	padding: 0;
+	font-size: 24px;
+	font-weight: var(--font-weight-bold);
+	line-height: 1;
+	color: var(--color-text-weak);
+	cursor: pointer;
+	background: none;
+	border: none;
+	border-radius: 4px;
+	transition: all 0.2s ease;
+}
+
+.close-button:hover {
+	color: var(--color-text-strong);
+	background-color: var(--color-fill-hover);
+}
+
+.content {
+	padding: 20px;
+}
+
+@media (width <= 768px) {
+	.modal {
+		max-width: calc(100vw - 32px);
+		margin: 16px;
+	}
+
+	.header,
+	.content {
+		padding: 16px;
+	}
+
+	.title {
+		font-size: var(--font-size-small);
+	}
+}

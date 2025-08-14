@@ -8,10 +8,11 @@ import {
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
 import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import { useAppForm, useAppSelector } from "~/libs/hooks/hooks.js";
+import { useAppForm, useAppSelector, useModal } from "~/libs/hooks/hooks.js";
 
 import { mockImages } from "../../libs/components/carousel/assets/mock-images/mock-images.js";
 import { Carousel } from "../../libs/components/carousel/carousel.js";
+import { CreateRouteForm } from "~/libs/components/components.js";
 import styles from "./styles.module.css";
 
 type FormValues = {
@@ -23,6 +24,12 @@ const Dashboard = (): React.JSX.Element => {
 	const authenticatedUser = useAppSelector(
 		({ auth }) => auth.authenticatedUser,
 	);
+
+	const { openModal, ModalComponent } = useModal({
+		component: CreateRouteForm,
+		title: "Create Route",
+		modalName: "create-route",
+	});
 
 	const colorOptions: SelectOption<string>[] = [
 		{ label: "Red", value: "red" },
@@ -49,7 +56,7 @@ const Dashboard = (): React.JSX.Element => {
 				</div>
 				<Loader />
 				<div className={styles["button-container"]}>
-					<Button label="Button for test" type="button" />
+					<Button label="Create Route" onClick={openModal} type="button" />
 				</div>
 				<div className={styles["carousel-container"]}>
 					<Carousel images={mockImages} />
@@ -70,6 +77,7 @@ const Dashboard = (): React.JSX.Element => {
 					/>
 				</div>
 			</div>
+			<ModalComponent />
 		</div>
 	);
 };

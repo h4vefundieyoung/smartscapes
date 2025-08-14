@@ -1,4 +1,3 @@
-import { isFulfilled } from "@reduxjs/toolkit";
 import React, { useCallback } from "react";
 
 import {
@@ -11,14 +10,14 @@ import {
 } from "~/libs/components/components.js";
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
 import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
-import { AppRoute } from "~/libs/enums/enums.js";
+import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppForm,
 	useAppSelector,
+	useEffect,
 	useState,
 } from "~/libs/hooks/hooks.js";
-import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { type PointsOfInterestRequestDto } from "~/modules/points-of-interest/libs/types/types.js";
 import { actions as poiActions } from "~/modules/points-of-interest/points-of-interest.js";
 
@@ -51,21 +50,24 @@ const Dashboard = (): React.JSX.Element => {
 	});
 
 	const [isCreatePOIOpen, setIsCreatePOIOpen] = useState<boolean>(false);
-
+	const createStatus = useAppSelector(
+		(state) => state.pointsOfInterest.createStatus,
+	);
 	const handleModalToggle = useCallback(() => {
 		setIsCreatePOIOpen((previous) => !previous);
 	}, []);
-	const handleSubmit = useCallback(
-		async (payload: PointsOfInterestRequestDto) => {
-			const result = await dispatch(poiActions.create(payload));
 
-			if (isFulfilled(result)) {
-				toastNotifier.showSuccess("POI created");
-				setIsCreatePOIOpen(false);
-			}
+	const handleSubmit = useCallback(
+		(payload: PointsOfInterestRequestDto): void => {
+			void dispatch(poiActions.create(payload));
 		},
 		[dispatch],
 	);
+	useEffect(() => {
+		if (createStatus === DataStatus.FULFILLED) {
+			setIsCreatePOIOpen(false);
+		}
+	}, [createStatus]);
 
 	return (
 		<div className={styles["container"]}>

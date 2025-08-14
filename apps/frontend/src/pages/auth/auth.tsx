@@ -2,7 +2,7 @@ import { Navigate } from "react-router";
 
 import logo from "~/assets/images/logo.svg";
 import { Link } from "~/libs/components/components.js";
-import { AppRoute } from "~/libs/enums/enums.js";
+import { AppRoute, GroupKey } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -22,9 +22,7 @@ const Auth = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const { pathname } = useLocation();
 
-	const authenticatedUser = useAppSelector(
-		({ auth }) => auth.authenticatedUser,
-	);
+	const { authenticatedUser, userGroup } = useAppSelector(({ auth }) => auth);
 	const hasUser = Boolean(authenticatedUser);
 
 	const handleSignInSubmit = useCallback(
@@ -59,7 +57,11 @@ const Auth = (): React.JSX.Element => {
 	);
 
 	if (hasUser) {
-		return <Navigate to={AppRoute.APP} />;
+		return userGroup?.key === GroupKey.ADMINS ? (
+			<Navigate replace to={AppRoute.ROUTES} />
+		) : (
+			<Navigate replace to={AppRoute.EXPLORE} />
+		);
 	}
 
 	return (

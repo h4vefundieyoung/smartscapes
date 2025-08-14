@@ -1,4 +1,5 @@
-import { type GroupKey, type ValueOf } from "~/libs/types/types.js";
+import { type GroupKey } from "~/libs/enums/enums.js";
+import { type ValueOf } from "~/libs/types/types.js";
 
 import { type NavigationItem } from "./navigation-item.type.js";
 

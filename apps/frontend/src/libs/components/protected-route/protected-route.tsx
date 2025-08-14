@@ -16,9 +16,14 @@ const ProtectedRoute = ({
 	children,
 	protectedRoutePermissions,
 }: Properties): React.JSX.Element => {
-	const { authenticatedUser, permissions } = useAppSelector(({ auth }) => auth);
+	const { authenticatedUser, userPermissions } = useAppSelector(
+		({ auth }) => auth,
+	);
 
-	const hasPermission = checkPermission(protectedRoutePermissions, permissions);
+	const hasPermission = checkPermission(
+		protectedRoutePermissions,
+		userPermissions,
+	);
 
 	if (!authenticatedUser) {
 		return <Navigate replace to={AppRoute.SIGN_IN} />;

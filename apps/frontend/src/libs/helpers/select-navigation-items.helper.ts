@@ -1,4 +1,5 @@
-import { GroupKey, type NavigationItemsGroup } from "~/libs/types/types.js";
+import { GroupKey } from "~/libs/enums/enums.js";
+import { type NavigationItemsGroup } from "~/libs/types/types.js";
 import {
 	type GroupResponseDto,
 	type PermissionItemDto,

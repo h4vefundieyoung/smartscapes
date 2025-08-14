@@ -9,4 +9,5 @@ export {
 	AppEnvironment,
 	CommonExceptionMessage,
 	ContentType,
+	GroupKey,
 } from "@smartscapes/shared";

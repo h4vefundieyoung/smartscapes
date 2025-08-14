@@ -1,5 +1,5 @@
-import { AppRoute, PermissionKey } from "~/libs/enums/enums.js";
-import { GroupKey, type NavigationItemsGroup } from "~/libs/types/types.js";
+import { AppRoute, GroupKey, PermissionKey } from "~/libs/enums/enums.js";
+import { type NavigationItemsGroup } from "~/libs/types/types.js";
 
 const NAVIGATION_ITEMS_GROUPS: NavigationItemsGroup[] = [
 	{

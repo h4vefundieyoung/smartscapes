@@ -5,7 +5,7 @@ import {
 	RoutesValidationRule,
 } from "../enums/enums.js";
 
-const categoryName = z
+const categoryKey = z
 	.string()
 	.regex(/^[a-zA-Z-]+$/, {
 		message: RoutesValidationMessage.CATEGORY_INVALID_KEY,
@@ -18,7 +18,7 @@ const categoryName = z
 	});
 
 const routesSearchQuery = z.object({
-	categories: z.array(categoryName).optional(),
+	categories: z.array(categoryKey).optional(),
 	name: z
 		.string()
 		.trim()

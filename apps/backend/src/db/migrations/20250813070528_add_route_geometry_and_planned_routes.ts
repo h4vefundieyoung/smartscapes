@@ -7,7 +7,7 @@ const ColumnName = {
 	DISTANCE: "distance",
 	DURATION: "duration",
 	GEOMETRY: "geometry",
-	USER_ID: "user_id",
+	USER_ID: "userId",
 } as const;
 
 const DECIMAL_PRECISION = 10;

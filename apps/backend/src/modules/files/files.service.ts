@@ -1,13 +1,19 @@
 import { type MultipartFile } from "@fastify/multipart";
 
 import { type AWSFileService } from "~/libs/modules/aws/aws.js";
-import { type Service } from "~/libs/types/types.js";
+import { HTTPCode } from "~/libs/modules/http/http.js";
+import { type Service, type ValueOf } from "~/libs/types/types.js";
 
 import { FilesEntity } from "./files.entity.js";
 import { type FileRepository } from "./files.repository.js";
 import {
+	type FileFolderName,
+	FileMime,
+	FilesExceptionMessage,
+} from "./libs/enums/enums.js";
+import { FilesError } from "./libs/exeptions/exeptions.js";
+import {
 	type FileMimeType,
-	type FileUploadRequestDto,
 	type FileUploadResponseDto,
 } from "./libs/types/types.js";
 
@@ -45,11 +51,15 @@ class FileService implements Service {
 		return items.map((item) => item.toObject());
 	}
 
-	public async uploadFile(
-		payload: FileUploadRequestDto<MultipartFile>,
-	): Promise<FileUploadResponseDto> {
+	public async uploadFile(payload: {
+		file: MultipartFile;
+		folder: ValueOf<typeof FileFolderName>;
+	}): Promise<FileUploadResponseDto> {
 		const { file, folder } = payload;
 		const { filename, mimetype } = file;
+
+		this.validateMimeType(mimetype as FileMimeType);
+
 		const buffer = await file.toBuffer();
 		const generatedFileName = this.generateFileName(folder, filename);
 
@@ -69,13 +79,30 @@ class FileService implements Service {
 		return savedFile.toObject();
 	}
 
-	private generateFileName = (folder: string, fileName: string): string => {
+	private generateFileName = (
+		folder: ValueOf<typeof FileFolderName>,
+		fileName: string,
+	): string => {
 		const dotIndex = fileName.lastIndexOf(".");
 		const name = fileName.slice(0, dotIndex);
 		const extension = fileName.slice(dotIndex);
 		const timestamp = String(Date.now());
 
 		return `${folder}/${name}-${timestamp}${extension}`;
+	};
+
+	private validateMimeType = (mimeType: FileMimeType): boolean => {
+		const ALLOWED_FILE_TYPES = Object.values(FileMime) as readonly string[];
+		const isInvalidType = !ALLOWED_FILE_TYPES.includes(mimeType);
+
+		if (isInvalidType) {
+			throw new FilesError({
+				message: FilesExceptionMessage.INVALID_FILE_TYPE,
+				status: HTTPCode.UNPROCESSED_ENTITY,
+			});
+		}
+
+		return true;
 	};
 }
 

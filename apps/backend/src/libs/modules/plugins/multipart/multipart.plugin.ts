@@ -1,14 +1,8 @@
-import fastifyMultipart, { type MultipartFile } from "@fastify/multipart";
-import { type FastifyInstance, type FastifyRequest } from "fastify";
+import fastifyMultipart from "@fastify/multipart";
+import { type FastifyInstance } from "fastify";
 import fastifyPlugin from "fastify-plugin";
 
 import { BYTES_IN_MB } from "~/libs/constants/constants.js";
-import { HTTPCode } from "~/libs/modules/http/http.js";
-import {
-	FileMime,
-	FilesError,
-	FilesExceptionMessage,
-} from "~/modules/files/files.js";
 
 type PluginOptions = {
 	MAX_FILE_SIZE_MB: number;
@@ -21,41 +15,13 @@ const multipart = async (
 	const MAX_FILE_SIZE_BYTES = BYTES_IN_MB * MAX_FILE_SIZE_MB;
 
 	await app.register(fastifyMultipart, {
+		attachFieldsToBody: true,
 		limits: {
 			files: 1,
 			fileSize: MAX_FILE_SIZE_BYTES,
 		},
 		throwFileSizeLimit: true,
 	});
-
-	const requestHandler = async (
-		request: FastifyRequest<{ Body: MultipartFile }>,
-	): Promise<void> => {
-		if (request.isMultipart()) {
-			const file = await request.file();
-
-			if (!file) {
-				throw new FilesError({
-					message: FilesExceptionMessage.FILE_REQUIRED,
-					status: HTTPCode.BAD_REQUEST,
-				});
-			}
-
-			const ALLOWED_FILE_TYPES = Object.values(FileMime) as readonly string[];
-			const isInvalidType = !ALLOWED_FILE_TYPES.includes(file.mimetype);
-
-			if (isInvalidType) {
-				throw new FilesError({
-					message: FilesExceptionMessage.INVALID_FILE_TYPE,
-					status: HTTPCode.UNPROCESSED_ENTITY,
-				});
-			}
-
-			request.body = file;
-		}
-	};
-
-	app.addHook("preHandler", requestHandler);
 };
 
 const multipartPlugin = fastifyPlugin(multipart);

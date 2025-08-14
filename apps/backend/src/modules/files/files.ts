@@ -11,6 +11,5 @@ const fileService = new FileService(fileRepository, awsFileService);
 const filesController = new FilesController(logger, fileService);
 
 export { filesController };
-export { FileMime, FilesExceptionMessage } from "./libs/enums/enums.js";
 export { FilesError } from "./libs/exeptions/exeptions.js";
 export { type FileMimeType } from "./libs/types/types.js";

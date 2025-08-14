@@ -156,13 +156,12 @@ class FilesController extends BaseController {
 	 */
 	public async uploadFile(
 		options: APIHandlerOptions<{
-			body: MultipartFile;
+			body: { file: MultipartFile };
 			params: { folder: ValueOf<typeof FileFolderName> };
 		}>,
 	): Promise<APIHandlerResponse<FileUploadResponseDto>> {
 		const { folder } = options.params;
-
-		const file = options.body;
+		const { file } = options.body;
 
 		const result = await this.fileService.uploadFile({
 			file,

@@ -34,7 +34,7 @@ class FilesApi extends BaseHTTPApi {
 	}
 
 	public async uploadFile(
-		payload: FileUploadRequestDto<File>,
+		payload: FileUploadRequestDto,
 	): Promise<APIResponse<FileUploadResponseDto>> {
 		const { file, folder } = payload;
 		const formData = new FormData();

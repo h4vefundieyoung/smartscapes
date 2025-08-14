@@ -19,7 +19,7 @@ const DummyMapClientUser = (): null => {
 const Explore = (): React.JSX.Element => {
 	return (
 		<main className={styles["main"]}>
-			<div style={{ backgroundColor: "#ccc", padding: "1rem" }}>
+			<div className={styles["routes-block-container"]}>
 				<ExploreRoutesBlock />
 			</div>
 			<MapProvider markers={mockPOIs}>

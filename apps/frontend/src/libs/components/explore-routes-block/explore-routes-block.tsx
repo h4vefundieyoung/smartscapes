@@ -9,6 +9,7 @@ import { actions as routesActions } from "~/modules/routes/routes.js";
 
 import { sortRouteByDistance } from "./libs/helpers/helpers.js";
 import { type RouteItem } from "./libs/types/types.js";
+import styles from "./styles.module.css";
 
 // TODO: collect all poi id and create backend api that will accept multiple poi and returns all routes at once
 
@@ -127,11 +128,12 @@ const ExploreRoutesBlock = (): React.JSX.Element => {
 	}
 
 	return (
-		<div style={{ maxHeight: "400px", overflowY: "auto" }}>
+		<div className={styles["explore-routes-container"]}>
+			<h3 className={styles["explore-routes-title"]}>Explore routes</h3>
 			{routes.length === 0 && <div>No routes found nearby.</div>}
-			<ul>
+			<ul className={styles["explore-routes-list"]}>
 				{routes.map((route) => (
-					<li key={route.id}>
+					<li className={styles["explore-routes-item"]} key={route.id}>
 						<strong>{route.name}</strong>
 						<p>{route.description}</p>
 					</li>

@@ -2,7 +2,7 @@ import { RoutesValidationRule } from "./routes-validation-rule.enum.js";
 
 const RoutesValidationMessage = {
 	CATEGORY_INVALID_KEY:
-		"Category input key string wrong format, only latin letters without spaces",
+		"Category key must contain only Latin letters without spaces.",
 	CATEGORY_MAXIMUM_LENGTH: `Category more than ${String(RoutesValidationRule.CATEGORY_MAXIMUM_LENGTH)} characters.`,
 	CATEGORY_MINIMUM_LENGTH: `Category less than ${String(RoutesValidationRule.CATEGORY_MINIMUM_LENGTH)} characters.`,
 	DESCRIPTION_MAXIMUM_LENGTH: `Description more than ${String(RoutesValidationRule.NAME_MAXIMUM_LENGTH)} characters.`,

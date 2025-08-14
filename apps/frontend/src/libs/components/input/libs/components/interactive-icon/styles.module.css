@@ -1,0 +1,10 @@
+.interactive-icon {
+	color: var(--color-stroke-strong);
+	cursor: pointer;
+	background-color: transparent;
+	border: none;
+}
+
+.interactive-icon:hover {
+	color: var(--color-fill-press);
+}

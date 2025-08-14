@@ -9,6 +9,7 @@ export { Link } from "./link/link.js";
 export { Loader } from "./loader/loader.js";
 export { MapContext, MapProvider } from "./map-provider/map-provider.js";
 export { Modal } from "./modal/modal.js";
+export { PasswordInput } from "./password-input/password-input.js";
 export { ProtectedRoute } from "./protected-route/protected-route.js";
 export { RouteCard } from "./route-card/route-card.js";
 export { RouterProvider } from "./router-provider/router-provider.js";

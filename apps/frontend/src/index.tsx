@@ -32,7 +32,7 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 						children: [
 							{
 								element: <PointsOfInterestDetails />,
-								path: AppRoute.POINTS_OF_INTEREST_DETAILS,
+								path: AppRoute.POINTS_OF_INTEREST_$ID,
 							},
 							{
 								element: <Auth />,

@@ -18,7 +18,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	gap: 16px;
-	justify-content: space-between;
+	justify-content: space-around;
 }
 
 .poi-sub-gallery {
@@ -30,7 +30,7 @@
 }
 
 .poi-route-image {
-	max-width: 100%;
+	max-width: 65%;
 }
 
 .poi-route-image,
@@ -45,7 +45,23 @@
 }
 
 @media (width <= 1300px) {
+	.poi-route-image {
+		max-width: 100%;
+	}
+
+	.poi-route-sub-image {
+		max-width: 45%;
+	}
+
 	.poi-sub-gallery {
 		flex-direction: row;
+		justify-content: center;
+		width: 100%;
+	}
+}
+
+@media (width <= 640px) {
+	.poi-header {
+		line-height: 1;
 	}
 }

@@ -19,7 +19,7 @@ const filesConfig: Linter.Config = {
 };
 
 const ignoresConfig: Linter.Config = {
-	ignores: ["apps", "packages", "scripts", "dangerfile.ts"],
+	ignores: ["apps", "packages", "tests", "dangerfile.ts"],
 };
 
 const jsConfig: Linter.Config = {
@@ -237,6 +237,7 @@ const overridesConfigs: Linter.Config[] = [
 			"lint-staged.config.js",
 			"eslint.config.ts",
 			"packages.d.ts",
+			"playwright.config.ts",
 		],
 		rules: {
 			"import/no-default-export": ["off"],
@@ -252,6 +253,7 @@ const overridesConfigs: Linter.Config[] = [
 		files: ["**/*.test.ts"],
 		rules: {
 			"@typescript-eslint/no-floating-promises": ["off"],
+			"@typescript-eslint/no-magic-numbers": ["off"],
 		},
 	},
 ];

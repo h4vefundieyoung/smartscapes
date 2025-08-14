@@ -3,7 +3,7 @@ import { ReviewEntity } from "~/modules/reviews/review.entity.js";
 import { type ReviewRepository } from "~/modules/reviews/review.repository.js";
 
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
-import { type RoutesService } from "../routes/routes.service.js";
+import { type RouteService } from "../routes/route.service.js";
 import {
 	type ReviewCreatePayload,
 	type ReviewGetByIdResponseDto,
@@ -12,12 +12,12 @@ import {
 class ReviewService implements Service {
 	private pointsOfInterestService: PointsOfInterestService;
 	private reviewRepository: ReviewRepository;
-	private routesService: RoutesService;
+	private routesService: RouteService;
 
 	public constructor(
 		reviewRepository: ReviewRepository,
 		pointsOfInterestService: PointsOfInterestService,
-		routesService: RoutesService,
+		routesService: RouteService,
 	) {
 		this.pointsOfInterestService = pointsOfInterestService;
 		this.reviewRepository = reviewRepository;

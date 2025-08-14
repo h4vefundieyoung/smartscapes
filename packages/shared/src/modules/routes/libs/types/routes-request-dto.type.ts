@@ -1,7 +1,7 @@
-type RoutesRequestCreateDto = {
+type RouteCreateRequestDto = {
 	description: string;
 	name: string;
 	pois: number[];
 };
 
-export { type RoutesRequestCreateDto };
+export { type RouteCreateRequestDto };

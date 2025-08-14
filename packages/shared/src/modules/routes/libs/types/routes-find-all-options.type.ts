@@ -1,5 +1,5 @@
-type RoutesFindAllOptions = {
+type RouteFindAllOptions = {
 	name?: string;
 };
 
-export { type RoutesFindAllOptions };
+export { type RouteFindAllOptions };

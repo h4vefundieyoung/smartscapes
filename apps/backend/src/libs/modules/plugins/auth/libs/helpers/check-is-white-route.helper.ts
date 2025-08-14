@@ -1,7 +1,7 @@
 import { type HTTPMethod } from "~/libs/types/types.js";
 
 import { type WhiteRoute } from "../../auth.plugin.js";
-import { checkMatchUrlPattern } from "./common.helper.js";
+import { checkMatchUrlPattern } from "./check-match-url-pattern.helper.js";
 
 type CheckIsWhiteRouteParameters = {
 	method: HTTPMethod;

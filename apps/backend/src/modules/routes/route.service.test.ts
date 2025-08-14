@@ -13,10 +13,10 @@ import { type PointGeometry } from "~/libs/types/types.js";
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/routes-exception-message.enum.js";
 import { RoutesError } from "./libs/exceptions/routes-error.exception.js";
-import { type RoutesFindAllOptions } from "./libs/types/types.js";
-import { RoutesEntity } from "./routes.entity.js";
-import { type RoutesRepository } from "./routes.repository.js";
-import { RoutesService } from "./routes.service.js";
+import { type RouteFindAllOptions } from "./libs/types/types.js";
+import { RouteEntity } from "./route.entity.js";
+import { type RouteRepository } from "./route.repository.js";
+import { RouteService } from "./route.service.js";
 
 const EXISTING_ID = 1;
 const FIRST_POI_ID = 1;
@@ -38,7 +38,7 @@ const createMockMapboxApi = (): Partial<MapboxDirectionsApi> => {
 	};
 };
 
-describe("RoutesService", () => {
+describe("RouteService", () => {
 	const mockNotFoundError = new RoutesError({
 		message: RoutesExceptionMessage.ROUTE_NOT_FOUND,
 		status: HTTPCode.NOT_FOUND,
@@ -95,19 +95,19 @@ describe("RoutesService", () => {
 		name: "Updated Route",
 	};
 
-	const createMockIdEntity = (data: RouteGetByIdResponseDto): RoutesEntity => {
-		return RoutesEntity.initialize(data);
+	const createMockIdEntity = (data: RouteGetByIdResponseDto): RouteEntity => {
+		return RouteEntity.initialize(data);
 	};
 
 	const createMockAllItemEntity = (
 		data: RouteGetAllItemResponseDto,
-	): RoutesEntity => {
-		return RoutesEntity.initializeList(data);
+	): RouteEntity => {
+		return RouteEntity.initializeList(data);
 	};
 
 	const createMockRoutesRepository = (
 		overrides = {},
-	): Partial<RoutesRepository> => ({
+	): Partial<RouteRepository> => ({
 		create: () => Promise.resolve(createMockIdEntity(mockRouteIdResponse)),
 		delete: () => Promise.resolve(true),
 		findAll: () =>
@@ -168,8 +168,8 @@ describe("RoutesService", () => {
 		const mapboxApiMock = {
 			getRoute,
 		} as unknown as MapboxDirectionsApi;
-		const mockRepository = {} as RoutesRepository;
-		const routeService = new RoutesService(
+		const mockRepository = {} as RouteRepository;
+		const routeService = new RouteService(
 			mockRepository,
 			poiServiceMock,
 			mapboxApiMock,
@@ -211,8 +211,8 @@ describe("RoutesService", () => {
 		} as unknown as PointsOfInterestService;
 
 		const mapboxApiMock = createMockMapboxApi() as MapboxDirectionsApi;
-		const repository = createMockRoutesRepository() as RoutesRepository;
-		const routeService = new RoutesService(
+		const repository = createMockRoutesRepository() as RouteRepository;
+		const routeService = new RouteService(
 			repository,
 			poiServiceMock,
 			mapboxApiMock,
@@ -229,8 +229,8 @@ describe("RoutesService", () => {
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const mapBoxApiMock = createMockMapboxApi();
 
-		const routesService = new RoutesService(
-			routesRepository as RoutesRepository,
+		const routesService = new RouteService(
+			routesRepository as RouteRepository,
 			pointsOfInterestService as PointsOfInterestService,
 			mapBoxApiMock as MapboxDirectionsApi,
 		);
@@ -245,8 +245,8 @@ describe("RoutesService", () => {
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const mapBoxApiMock = createMockMapboxApi();
 
-		const routesService = new RoutesService(
-			routesRepository as RoutesRepository,
+		const routesService = new RouteService(
+			routesRepository as RouteRepository,
 			pointsOfInterestService as PointsOfInterestService,
 			mapBoxApiMock as MapboxDirectionsApi,
 		);
@@ -263,8 +263,8 @@ describe("RoutesService", () => {
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const mapBoxApiMock = createMockMapboxApi();
 
-		const routesService = new RoutesService(
-			routesRepository as RoutesRepository,
+		const routesService = new RouteService(
+			routesRepository as RouteRepository,
 			pointsOfInterestService as PointsOfInterestService,
 			mapBoxApiMock as MapboxDirectionsApi,
 		);
@@ -282,8 +282,8 @@ describe("RoutesService", () => {
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const mapBoxApiMock = createMockMapboxApi();
 
-		const routesService = new RoutesService(
-			routesRepository as RoutesRepository,
+		const routesService = new RouteService(
+			routesRepository as RouteRepository,
 			pointsOfInterestService as PointsOfInterestService,
 			mapBoxApiMock as MapboxDirectionsApi,
 		);
@@ -300,8 +300,8 @@ describe("RoutesService", () => {
 		const mapBoxApiMock = createMockMapboxApi();
 
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const routesService = new RoutesService(
-			routesRepository as RoutesRepository,
+		const routesService = new RouteService(
+			routesRepository as RouteRepository,
 			pointsOfInterestService as PointsOfInterestService,
 			mapBoxApiMock as MapboxDirectionsApi,
 		);
@@ -317,13 +317,13 @@ describe("RoutesService", () => {
 		const mapBoxApiMock = createMockMapboxApi();
 
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const routesService = new RoutesService(
-			routesRepository as RoutesRepository,
+		const routesService = new RouteService(
+			routesRepository as RouteRepository,
 			pointsOfInterestService as PointsOfInterestService,
 			mapBoxApiMock as MapboxDirectionsApi,
 		);
 
-		const mockOptions: RoutesFindAllOptions = {
+		const mockOptions: RouteFindAllOptions = {
 			name: mockCreatePayload.name.toLowerCase(),
 		};
 
@@ -340,8 +340,8 @@ describe("RoutesService", () => {
 		});
 
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const routesService = new RoutesService(
-			routesRepository as RoutesRepository,
+		const routesService = new RouteService(
+			routesRepository as RouteRepository,
 			pointsOfInterestService as PointsOfInterestService,
 			mapBoxApiMock as MapboxDirectionsApi,
 		);
@@ -358,8 +358,8 @@ describe("RoutesService", () => {
 		const mapBoxApiMock = createMockMapboxApi();
 		const pointsOfInterestService = createMockPointsOfInterestService();
 
-		const routesService = new RoutesService(
-			routesRepository as RoutesRepository,
+		const routesService = new RouteService(
+			routesRepository as RouteRepository,
 			pointsOfInterestService as PointsOfInterestService,
 			mapBoxApiMock as MapboxDirectionsApi,
 		);
@@ -373,8 +373,8 @@ describe("RoutesService", () => {
 		const routesRepository = createMockRoutesRepository();
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const mapBoxApiMock = createMockMapboxApi();
-		const routesService = new RoutesService(
-			routesRepository as RoutesRepository,
+		const routesService = new RouteService(
+			routesRepository as RouteRepository,
 			pointsOfInterestService as PointsOfInterestService,
 			mapBoxApiMock as MapboxDirectionsApi,
 		);
@@ -390,8 +390,8 @@ describe("RoutesService", () => {
 		});
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const mapBoxApiMock = createMockMapboxApi();
-		const routesService = new RoutesService(
-			routesRepository as RoutesRepository,
+		const routesService = new RouteService(
+			routesRepository as RouteRepository,
 			pointsOfInterestService as PointsOfInterestService,
 			mapBoxApiMock as MapboxDirectionsApi,
 		);
@@ -405,8 +405,8 @@ describe("RoutesService", () => {
 		const routesRepository = createMockRoutesRepository();
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const mapBoxApiMock = createMockMapboxApi();
-		const routesService = new RoutesService(
-			routesRepository as RoutesRepository,
+		const routesService = new RouteService(
+			routesRepository as RouteRepository,
 			pointsOfInterestService as PointsOfInterestService,
 			mapBoxApiMock as MapboxDirectionsApi,
 		);
@@ -423,8 +423,8 @@ describe("RoutesService", () => {
 			...createMockPointsOfInterestService(),
 			findAll: (): unknown => Promise.resolve({ items: [mockPoisFindAll[0]] }),
 		};
-		const routesService = new RoutesService(
-			routesRepository as RoutesRepository,
+		const routesService = new RouteService(
+			routesRepository as RouteRepository,
 			pointsOfInterestService as unknown as PointsOfInterestService,
 			mapBoxApiMock as MapboxDirectionsApi,
 		);

@@ -1,4 +1,4 @@
-import { type FileMimeType } from "./file-content-type.type.js";
+import { type FileMimeType } from "./file-mime-type.type.js";
 
 type FileUploadResponseDto = {
 	contentType: FileMimeType;

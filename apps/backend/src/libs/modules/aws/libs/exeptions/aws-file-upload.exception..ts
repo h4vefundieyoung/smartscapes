@@ -1,4 +1,4 @@
-import { HTTPError } from "@smartscapes/shared";
+import { HTTPError } from "~/libs/modules/http/http.js";
 
 class AWSFileUploadError extends HTTPError {}
 

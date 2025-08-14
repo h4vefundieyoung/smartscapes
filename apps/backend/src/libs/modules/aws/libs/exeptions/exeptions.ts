@@ -1,1 +1,1 @@
-export { AWSFileUploadError } from "./aws-file.exeption.js";
+export { AWSFileUploadError } from "./aws-file-upload.exception..js";

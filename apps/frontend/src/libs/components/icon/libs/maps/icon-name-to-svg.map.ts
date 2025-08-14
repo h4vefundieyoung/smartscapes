@@ -1,5 +1,6 @@
 import Analytics from "~/assets/images/icons/analytics.svg?react";
 import ArrowDown from "~/assets/images/icons/arrow-down.svg?react";
+import Close from "~/assets/images/icons/close.svg?react";
 import Dashboard from "~/assets/images/icons/dashboard.svg?react";
 import Error from "~/assets/images/icons/error.svg?react";
 import EyeOff from "~/assets/images/icons/eye-off.svg?react";
@@ -17,6 +18,7 @@ const iconNameToSvg: Record<
 > = {
 	analytics: Analytics,
 	arrowDown: ArrowDown,
+	close: Close,
 	dashboard: Dashboard,
 	error: Error,
 	eye: Eye,

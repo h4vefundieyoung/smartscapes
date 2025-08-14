@@ -2,14 +2,16 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
-
 import {
+	type AuthenticatedUserPatchRequestDto,
+	type AuthenticatedUserPatchResponseDto,
 	type UserAuthResponseDto,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
 	type UserSignUpRequestDto,
 	type UserSignUpResponseDto,
-} from "../libs/types/types.js";
+} from "~/modules/users/users.js";
+
 import { name as sliceName } from "./auth.slice.js";
 
 const getAuthenticatedUser = createAsyncThunk<
@@ -67,4 +69,20 @@ const signIn = createAsyncThunk<
 	return user;
 });
 
-export { getAuthenticatedUser, logout, signIn, signUp };
+const patchAuthenticatedUser = createAsyncThunk<
+	APIResponse<AuthenticatedUserPatchResponseDto>,
+	AuthenticatedUserPatchRequestDto,
+	AsyncThunkConfig
+>(`${sliceName}/patch`, async (payload, { extra, getState }) => {
+	const { authApi, toastNotifier } = extra;
+	const state = getState();
+
+	const userId = state.auth.authenticatedUser?.id as number;
+
+	const response = await authApi.patch(userId, payload);
+	toastNotifier.showSuccess("Profile updated");
+
+	return response;
+});
+
+export { getAuthenticatedUser, logout, patchAuthenticatedUser, signIn, signUp };

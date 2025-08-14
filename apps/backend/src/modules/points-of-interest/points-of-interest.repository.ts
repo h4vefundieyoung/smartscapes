@@ -17,11 +17,12 @@ class PointsOfInterestRepository implements Repository {
 	public async create(
 		entity: PointsOfInterestEntity,
 	): Promise<PointsOfInterestEntity> {
-		const { location, name } = entity.toNewObject();
+		const { description, location, name } = entity.toNewObject();
 
 		const pointOfInterest = await this.pointsOfInterestModel
 			.query()
 			.insert({
+				description,
 				location,
 				name,
 			})
@@ -30,6 +31,7 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -58,6 +60,7 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -65,6 +68,10 @@ class PointsOfInterestRepository implements Repository {
 			.modify((builder) => {
 				if (options?.ids) {
 					builder.whereIn("id", options.ids);
+				}
+
+				if (options?.name) {
+					builder.whereILike("name", `%${options.name.trim()}%`);
 				}
 			})
 			.execute();
@@ -82,6 +89,7 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -106,6 +114,7 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -123,7 +132,7 @@ class PointsOfInterestRepository implements Repository {
 	public async findNearby(
 		normalizedQuery: PointsOfInterestSearchQuery,
 	): Promise<PointsOfInterestEntity[]> {
-		const { latitude, longitude, radius } = normalizedQuery;
+		const { latitude, longitude, name, radius } = normalizedQuery;
 
 		const pointsOfInterest = await this.pointsOfInterestModel
 			.query()
@@ -132,6 +141,7 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -145,6 +155,11 @@ class PointsOfInterestRepository implements Repository {
 				[longitude, latitude, radius],
 			)
 			.orderBy("distance", SortingOrder.ASC)
+			.modify((builder) => {
+				if (name) {
+					builder.whereILike("name", `%${name.trim()}%`);
+				}
+			})
 			.execute();
 
 		return pointsOfInterest
@@ -156,11 +171,12 @@ class PointsOfInterestRepository implements Repository {
 		id: number,
 		entity: PointsOfInterestEntity,
 	): Promise<null | PointsOfInterestEntity> {
-		const { location, name } = entity.toNewObject();
+		const { description, location, name } = entity.toNewObject();
 
 		const [updatedPointOfInterest] = await this.pointsOfInterestModel
 			.query()
 			.patch({
+				description,
 				location,
 				name,
 			})
@@ -170,6 +186,7 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),

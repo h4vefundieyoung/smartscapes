@@ -36,3 +36,7 @@ pwa-dist/
 # Service worker cache
 sw-cache/
 workbox-cache/
+
+# Tests
+test-report/
+test-results/

@@ -1,4 +1,4 @@
-export { METERS_IN_KM } from "./libs/constants/constants.js";
+export { METERS_IN_KM, TIME_UNIT } from "./libs/constants/constants.js";
 export {
 	APIErrorType,
 	APIPath,
@@ -23,11 +23,18 @@ export {
 	type APIErrorResponse,
 	type APIResponse,
 	type APIValidationErrorDetail,
+	type LineStringGeometry,
 	type PointGeometry,
 	type ValidationSchema,
 	type ValueOf,
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
+export {
+	GroupExceptionMessage,
+	type GroupItemWithPermissionsDto,
+	GroupKey,
+	type GroupResponseDto,
+} from "./modules/groups/groups.js";
 export {
 	NotificationApiPath,
 	type NotificationCreateRequestDto,
@@ -38,8 +45,13 @@ export {
 	NotificationType,
 } from "./modules/notifications/notifications.js";
 export {
+	type PermissionItemDto,
+	PermissionKey,
+} from "./modules/permission/permission.js";
+export {
 	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
+	PointsOfInterestApiPath,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 	type PointsOfInterestSearchQuery,
@@ -58,10 +70,16 @@ export {
 	type RouteCategoryRequestDto,
 } from "./modules/route-categories/route-categories.js";
 export {
+	RouteApiPath,
+	routesConstructValidationSchema,
 	routesCreateValidationSchema,
+	type RoutesFindAllOptions,
+	type RoutesRequestConstructDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
+	type RoutesResponseConstructDto,
 	type RoutesResponseDto,
+	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
 } from "./modules/routes/routes.js";
 export {
@@ -72,6 +90,9 @@ export {
 	type UserUnfollowsParametersDto,
 } from "./modules/user-follows/user-follows.js";
 export {
+	type AuthenticatedUserPatchRequestDto,
+	type AuthenticatedUserPatchResponseDto,
+	authenticatedUserPatchValidationSchema,
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetByIdItemResponseDto,

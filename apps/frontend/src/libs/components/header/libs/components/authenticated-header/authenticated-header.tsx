@@ -9,8 +9,8 @@ import {
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
-import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
+import { type UserAuthResponseDto } from "~/modules/users/libs/types/types.js";
 
 import { UserDropdown } from "../../../../user-dropdown/user-dropdown.js";
 import styles from "./styles.module.css";
@@ -63,7 +63,7 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 						isDropdownOpen && styles["open"],
 					)}
 				>
-					<Icon height={24} name="arrowDown" width={24} />
+					<Icon height={16} name="arrowDown" width={16} />
 				</span>
 			</button>
 

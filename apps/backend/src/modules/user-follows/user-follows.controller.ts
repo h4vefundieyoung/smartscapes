@@ -42,7 +42,7 @@ class UserFollowsController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /users/{userId}/follow:
+	 * /users/{userId}/followers:
 	 *   post:
 	 *     tags:
 	 *       - Users
@@ -103,7 +103,7 @@ class UserFollowsController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /users/{userId}/unfollow/{id}:
+	 * /users/{userId}/followers/{id}:
 	 *   delete:
 	 *     tags:
 	 *       - Users

@@ -37,7 +37,22 @@ jobs:
           manifest-file: .release-please-manifest.json
           config-file: release-please-config.json
 
-      - name: Prepare deployment pkg
+  deploy:
+    needs: release
+    if: needs.release.outputs.release_created == 'true'
+
+    environment:
+      name: development
+      url: https://smart-scapes.com/
+
+    name: Deploy
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Prepare Deployment Package
         run: |
           zip -r build.zip . -x .github
 
@@ -51,3 +66,10 @@ jobs:
           environment_name: ${{ env.EBS_ENVIRONMENT_NAME }}
           version_label: ${{ github.sha }}
           deployment_package: ./build.zip
+
+  run-integration-tests:
+    needs: deploy
+
+    uses: ./.github/workflows/integration-tests.yml
+
+    name: Run Integration Tests

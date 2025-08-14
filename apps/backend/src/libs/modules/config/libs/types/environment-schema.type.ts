@@ -21,6 +21,10 @@ type EnvironmentSchema = {
 	ENCRYPTION: {
 		SALT_ROUNDS: number;
 	};
+	MAPBOX: {
+		ACCESS_TOKEN: string;
+		BASE_URL: string;
+	};
 };
 
 export { type EnvironmentSchema };

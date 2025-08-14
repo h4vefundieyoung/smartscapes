@@ -1,6 +1,7 @@
 type IconName =
 	| "analytics"
 	| "arrowDown"
+	| "close"
 	| "dashboard"
 	| "error"
 	| "eye"

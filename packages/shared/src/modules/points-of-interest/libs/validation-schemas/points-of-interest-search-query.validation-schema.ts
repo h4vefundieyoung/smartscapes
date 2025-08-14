@@ -5,15 +5,55 @@ import {
 	PointsOfInterestValidationMessage,
 	PointsOfInterestValidationRule,
 } from "../enums/enums.js";
-import {
-	latitudeSchema,
-	longitudeSchema,
-} from "./longitude-latitude.validation-schema.js";
 
 const pointsOfInterestSearchQuery = z
 	.object({
-		latitude: latitudeSchema.optional(),
-		longitude: longitudeSchema.optional(),
+		latitude: z
+			.string()
+			.trim()
+			.transform(parseToFloat)
+			.pipe(
+				z
+					.number()
+					.min(
+						PointsOfInterestValidationRule.LATITUDE_MIN,
+						PointsOfInterestValidationMessage.LATITUDE_MIN,
+					)
+					.max(
+						PointsOfInterestValidationRule.LATITUDE_MAX,
+						PointsOfInterestValidationMessage.LATITUDE_MAX,
+					),
+			)
+			.optional(),
+		longitude: z
+			.string()
+			.trim()
+			.transform(parseToFloat)
+			.pipe(
+				z
+					.number()
+					.min(
+						PointsOfInterestValidationRule.LONGITUDE_MIN,
+						PointsOfInterestValidationMessage.LONGITUDE_MIN,
+					)
+					.max(
+						PointsOfInterestValidationRule.LONGITUDE_MAX,
+						PointsOfInterestValidationMessage.LONGITUDE_MAX,
+					),
+			)
+			.optional(),
+		name: z
+			.string()
+			.trim()
+			.min(
+				PointsOfInterestValidationRule.NAME_MIN_LENGTH,
+				PointsOfInterestValidationMessage.NAME_MINIMUM_LENGTH,
+			)
+			.max(
+				PointsOfInterestValidationRule.NAME_MAX_LENGTH,
+				PointsOfInterestValidationMessage.NAME_MAXIMUM_LENGTH,
+			)
+			.optional(),
 		radius: z
 			.string()
 			.transform(parseToFloat)

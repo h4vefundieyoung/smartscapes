@@ -1,19 +1,25 @@
-import { APIPath } from "~/libs/enums/enums.js";
+import { APIPath, HTTPCode, PermissionKey } from "~/libs/enums/enums.js";
+import { checkHasPermission, setRateLimit } from "~/libs/hooks/hooks.js";
 import {
 	type APIHandlerOptions,
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
-import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
+import { RouteApiPath } from "./libs/enums/enums.js";
 import {
+	type RoutesFindAllOptions,
+	type RoutesRequestConstructDto,
 	type RoutesRequestCreateDto,
 	type RoutesRequestPatchDto,
+	type RoutesResponseConstructDto,
 	type RoutesResponseDto,
-} from "./libs/types/type.js";
+} from "./libs/types/types.js";
 import {
+	routesConstructValidationSchema,
 	routesCreateValidationSchema,
+	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 import { type RoutesService } from "./routes.service.js";
@@ -22,6 +28,40 @@ import { type RoutesService } from "./routes.service.js";
  * @swagger
  * components:
  *   schemas:
+ *     Coordinate:
+ *       type: array
+ *       items:
+ *         type: number
+ *       minItems: 2
+ *       maxItems: 2
+ *       example: [30.5, 50.4]
+ *
+ *     GetMapboxRouteResponseDto:
+ *       type: object
+ *       properties:
+ *         routes:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/MapboxRoute'
+ *         internalId:
+ *           type: string
+ *
+ *     MapboxRoute:
+ *       type: object
+ *       properties:
+ *         distance:
+ *           type: number
+ *         duration:
+ *           type: number
+ *         geometry:
+ *           type: object
+ *           properties:
+ *             coordinates:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Coordinate'
+ *             type:
+ *               type: string
  *     Route:
  *       type: object
  *       properties:
@@ -44,35 +84,103 @@ class RoutesController extends BaseController {
 
 	public constructor(logger: Logger, routesService: RoutesService) {
 		super(logger, APIPath.ROUTES);
+
 		this.routesService = routesService;
+
+		const constructRequestsPerMinute = 5;
+		this.addRoute({
+			handler: this.constructRoute.bind(this),
+			method: "POST",
+			path: RouteApiPath.CONSTRUCT,
+			preHandlers: [setRateLimit(constructRequestsPerMinute)],
+			validation: {
+				body: routesConstructValidationSchema,
+			},
+		});
 
 		this.addRoute({
 			handler: this.create.bind(this),
 			method: "POST",
 			path: "/",
+			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 			validation: { body: routesCreateValidationSchema },
 		});
+
 		this.addRoute({
 			handler: this.delete.bind(this),
 			method: "DELETE",
 			path: "/:id",
+			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 		});
+
 		this.addRoute({
-			handler: this.find.bind(this),
+			handler: this.findById.bind(this),
 			method: "GET",
 			path: "/:id",
 		});
+
 		this.addRoute({
 			handler: this.findAll.bind(this),
 			method: "GET",
 			path: "/",
+			validation: { query: routesSearchQueryValidationSchema },
 		});
+
 		this.addRoute({
 			handler: this.patch.bind(this),
 			method: "PATCH",
 			path: "/:id",
+			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 			validation: { body: routesUpdateValidationSchema },
 		});
+	}
+
+	/**
+	 * @swagger
+	 * /routes/construct:
+	 *   post:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - Routes
+	 *     summary: Construct Mapbox route
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             type: object
+	 *             required:
+	 *               - pointsOfInterest
+	 *             properties:
+	 *               pointsOfInterest:
+	 *                 type: array
+	 *                 items:
+	 *                   type: integer
+	 *                 example: [1, 2]
+	 *     responses:
+	 *       200:
+	 *         description: Mapbox service response
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/GetMapboxRouteResponseDto'
+	 */
+
+	public async constructRoute({
+		body: { pointsOfInterest },
+	}: APIHandlerOptions<{ body: RoutesRequestConstructDto }>): Promise<
+		APIHandlerResponse<RoutesResponseConstructDto>
+	> {
+		const data = await this.routesService.construct(pointsOfInterest);
+
+		return {
+			payload: { data },
+			status: HTTPCode.OK,
+		};
 	}
 
 	/**
@@ -80,10 +188,11 @@ class RoutesController extends BaseController {
 	 * /routes:
 	 *   post:
 	 *     security:
-	 *      - bearerAuth: []
+	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Routes
-	 *     summary: Create a new route
+	 *     summary: Create a new route (requires manage_routes permission)
+	 *     description: Creates a new route. Requires authentication and manage_routes permission.
 	 *     requestBody:
 	 *       required: true
 	 *       content:
@@ -97,19 +206,51 @@ class RoutesController extends BaseController {
 	 *             properties:
 	 *               name:
 	 *                 type: string
+	 *                 example: Landscape alley
 	 *               description:
 	 *                 type: string
+	 *                 example: An alley with blooming flowers
 	 *               pois:
 	 *                 type: array
 	 *                 items:
 	 *                   type: number
+	 *                 example: [1, 2]
 	 *     responses:
-	 *       200:
+	 *       201:
 	 *         description: The created route
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/Route'
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/Route'
+	 *       401:
+	 *         description: Unauthorized - Authentication required
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: "Unauthorized access"
+	 *       403:
+	 *         description: Forbidden - User lacks manage_routes permission
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: "You don't have permission to perform this action."
 	 */
 
 	public async create(
@@ -123,7 +264,7 @@ class RoutesController extends BaseController {
 
 		return {
 			payload: { data: route },
-			status: HTTPCode.OK,
+			status: HTTPCode.CREATED,
 		};
 	}
 
@@ -135,7 +276,8 @@ class RoutesController extends BaseController {
 	 *      - bearerAuth: []
 	 *     tags:
 	 *       - Routes
-	 *     summary: Delete a route
+	 *     summary: Delete a route (requires manage_routes permission)
+	 *     description: Deletes an existing route. Requires authentication and manage_routes permission.
 	 *     parameters:
 	 *       - in: path
 	 *         name: id
@@ -152,6 +294,32 @@ class RoutesController extends BaseController {
 	 *               properties:
 	 *                 data:
 	 *                   type: boolean
+	 *       401:
+	 *         description: Unauthorized - Authentication required
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: "Unauthorized access"
+	 *       403:
+	 *         description: Forbidden - User lacks manage_routes permission
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: "You don't have permission to perform this action."
 	 */
 
 	public async delete(
@@ -168,50 +336,25 @@ class RoutesController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /routes/{id}:
-	 *   get:
-	 *     security:
-	 *      - bearerAuth: []
-	 *     tags:
-	 *       - Routes
-	 *     summary: Get a route
-	 *     parameters:
-	 *       - in: path
-	 *         name: id
-	 *         required: true
-	 *         schema:
-	 *           type: string
-	 *     responses:
-	 *       200:
-	 *         description: Route was found succesfully
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               $ref: '#/components/schemas/Route'
-	 */
-
-	public async find(
-		options: APIHandlerOptions<{ params: { id: string } }>,
-	): Promise<APIHandlerResponse<RoutesResponseDto>> {
-		const id = Number(options.params.id);
-
-		const route = await this.routesService.findById(id);
-
-		return {
-			payload: { data: route },
-			status: HTTPCode.OK,
-		};
-	}
-
-	/**
-	 * @swagger
 	 * /routes:
 	 *   get:
 	 *     security:
 	 *      - bearerAuth:  []
 	 *     tags:
 	 *       - Routes
-	 *     summary: Retrieve all routes
+	 *     summary: Retrieve all routes with optional search by name
+	 *     description: |
+	 *       Get all routes, or only those whose names match the search query.
+	 *
+	 *       **Without query parameters**: Returns all routes.
+	 *
+	 *       **With query `name` parameter**: Returns routes whose names match the search query. Search is case-insensitive.
+	 *     parameters:
+	 *       - in: query
+	 *         name: name
+	 *         schema:
+	 *           type: string
+	 *           example: "landscape"
 	 *     responses:
 	 *       200:
 	 *         description: A list of routes
@@ -226,11 +369,72 @@ class RoutesController extends BaseController {
 	 *                     $ref: '#/components/schemas/Route'
 	 * */
 
-	public async findAll(): Promise<APIHandlerResponse<RoutesResponseDto[]>> {
-		const { items } = await this.routesService.findAll();
+	public async findAll(
+		options: APIHandlerOptions<{
+			query?: RoutesFindAllOptions;
+		}>,
+	): Promise<APIHandlerResponse<RoutesResponseDto[]>> {
+		const { query = null } = options;
+
+		const { items } = await this.routesService.findAll(query);
 
 		return {
 			payload: { data: items },
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /routes/{id}:
+	 *   get:
+	 *     security:
+	 *      - bearerAuth: []
+	 *     tags:
+	 *       - Routes
+	 *     summary: Get a route by ID
+	 *     description: Retrieves a route by its ID. Requires authentication but no special permissions.
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     responses:
+	 *       200:
+	 *         description: Route was found successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: object
+	 *                   $ref: '#/components/schemas/Route'
+	 *       401:
+	 *         description: Unauthorized - Authentication required
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: "Unauthorized access"
+	 */
+
+	public async findById(
+		options: APIHandlerOptions<{ params: { id: string } }>,
+	): Promise<APIHandlerResponse<RoutesResponseDto>> {
+		const id = Number(options.params.id);
+
+		const route = await this.routesService.findById(id);
+
+		return {
+			payload: { data: route },
 			status: HTTPCode.OK,
 		};
 	}
@@ -262,8 +466,10 @@ class RoutesController extends BaseController {
 	 *             properties:
 	 *               name:
 	 *                 type: string
+	 *                 example: Scenic walk
 	 *               description:
 	 *                 type: string
+	 *                 example: A calm stroll in countryside
 	 *     responses:
 	 *       200:
 	 *         description: Route updated successfully
@@ -273,16 +479,33 @@ class RoutesController extends BaseController {
 	 *               type: object
 	 *               properties:
 	 *                 data:
+	 *                   $ref: '#/components/schemas/Route'
+	 *       401:
+	 *         description: Unauthorized - Authentication required
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
 	 *                   type: object
 	 *                   properties:
-	 *                     id:
-	 *                       type: number
-	 *                     name:
+	 *                     message:
 	 *                       type: string
-	 *                       example: Landscape alley
-	 *                     description:
+	 *                       example: "Unauthorized access"
+	 *       403:
+	 *         description: Forbidden - User lacks manage_routes permission
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
 	 *                       type: string
-	 *                       example: An alley with blooming flowers
+	 *                       example: "You don't have permission to perform this action."
 	 */
 
 	public async patch(
@@ -305,5 +528,4 @@ class RoutesController extends BaseController {
 		};
 	}
 }
-
 export { RoutesController };

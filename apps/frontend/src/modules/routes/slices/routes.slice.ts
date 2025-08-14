@@ -4,15 +4,17 @@ import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
 import { type RoutesResponseDto } from "../libs/types/types.js";
-import { findByPoint } from "./actions.js";
+import { findAll } from "./actions.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
+	error: null | string;
 	routes: RoutesResponseDto[];
 };
 
 const initialState: State = {
 	dataStatus: DataStatus.IDLE,
+	error: null,
 	routes: [],
 };
 
@@ -20,15 +22,17 @@ const initialState: State = {
 
 const { actions, name, reducer } = createSlice({
 	extraReducers(builder) {
-		builder.addCase(findByPoint.pending, (state) => {
+		builder.addCase(findAll.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
+			state.error = null;
 		});
-		builder.addCase(findByPoint.fulfilled, (state, action) => {
+		builder.addCase(findAll.fulfilled, (state, action) => {
 			state.routes = action.payload.data;
 			state.dataStatus = DataStatus.FULFILLED;
 		});
-		builder.addCase(findByPoint.rejected, (state) => {
+		builder.addCase(findAll.rejected, (state, action) => {
 			state.dataStatus = DataStatus.REJECTED;
+			state.error = action.error.message ?? "Failed to fetch routes.";
 		});
 	},
 	initialState,

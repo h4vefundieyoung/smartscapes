@@ -24,18 +24,27 @@ class PointsOfInterestApi extends BaseHTTPApi {
 	public async findAll(
 		query?: PointsOfInterestSearchQuery,
 	): Promise<APIResponse<PointsOfInterestResponseDto[]>> {
-		const queryParameters: Record<string, string> = Object.fromEntries(
-			Object.entries(query ?? {}).map(([key, value]) => [key, String(value)]),
-		);
+		const queryParameters: Record<string, string> = {};
 
-		const url = this.getFullEndpoint(
-			PointsOfInterestApiPath.ROOT,
-			queryParameters,
-		);
+		if (typeof query?.latitude === "number") {
+			queryParameters["latitude"] = query.latitude.toString();
+		}
+
+		if (typeof query?.longitude === "number") {
+			queryParameters["longitude"] = query.longitude.toString();
+		}
+
+		if (typeof query?.radius === "number") {
+			queryParameters["radius"] = query.radius.toString();
+		}
+
+		if (typeof query?.name === "string") {
+			queryParameters["name"] = query.name;
+		}
 
 		const response = await this.load<
 			APIResponse<PointsOfInterestResponseDto[]>
-		>(url, {
+		>(this.getFullEndpoint(PointsOfInterestApiPath.ROOT, queryParameters), {
 			contentType: ContentType.JSON,
 			hasAuth: true,
 			method: "GET",

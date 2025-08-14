@@ -16,7 +16,6 @@ const initialState: State = {
 	pointsOfInterest: [],
 };
 
-// TODO: add actions
 const { actions, name, reducer } = createSlice({
 	extraReducers(builder) {
 		builder.addCase(findAll.pending, (state) => {

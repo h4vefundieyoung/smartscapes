@@ -12,7 +12,7 @@ const findAll = createAsyncThunk<
 	APIResponse<PointsOfInterestResponseDto[]>,
 	PointsOfInterestSearchQuery | undefined,
 	AsyncThunkConfig
->(`${sliceName}/findAll`, async (query, { extra }) => {
+>(`${sliceName}/find-all`, async (query, { extra }) => {
 	const { pointsOfInterestApi } = extra;
 
 	return await pointsOfInterestApi.findAll(query);

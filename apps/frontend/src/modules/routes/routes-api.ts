@@ -5,7 +5,10 @@ import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
 
 import { RouteApiPath } from "./libs/enums/enums.js";
-import { type RoutesResponseDto } from "./libs/types/types.js";
+import {
+	type RoutesFindAllOptions,
+	type RoutesResponseDto,
+} from "./libs/types/types.js";
 
 type Constructor = {
 	baseUrl: string;
@@ -18,11 +21,21 @@ class RoutesApi extends BaseHTTPApi {
 		super({ baseUrl, http, path: APIPath.ROUTES, storage });
 	}
 
-	public async findByPoint(
-		poiId: number,
+	public async findAll(
+		query?: RoutesFindAllOptions,
 	): Promise<APIResponse<RoutesResponseDto[]>> {
+		const queryParameters: Record<string, string> = {};
+
+		if (query?.name) {
+			queryParameters["name"] = query.name;
+		}
+
+		if (typeof query?.poiId === "number") {
+			queryParameters["poiId"] = query.poiId.toString();
+		}
+
 		const response = await this.load<APIResponse<RoutesResponseDto[]>>(
-			this.getFullEndpoint(RouteApiPath.ROOT, { poiId: poiId.toString() }),
+			this.getFullEndpoint(RouteApiPath.ROOT, queryParameters),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,

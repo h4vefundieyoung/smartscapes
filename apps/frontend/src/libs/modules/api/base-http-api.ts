@@ -1,5 +1,4 @@
 import { APIErrorType } from "~/libs/enums/enums.js";
-import { configureString } from "~/libs/helpers/helpers.js";
 import {
 	type HTTP,
 	type HTTPCode,
@@ -68,15 +67,29 @@ class BaseHTTPApi implements HTTPApi {
 		...parameters: [...string[], T]
 	): string {
 		const copiedParameters = [...parameters];
-
 		const options = copiedParameters.pop() as T;
 
-		return configureString(
+		let path = [
 			this.baseUrl,
 			this.path,
 			...(copiedParameters as string[]),
-			options,
-		);
+		].join("");
+
+		const queryParameters: Record<string, string> = {};
+
+		for (const [key, value] of Object.entries(options)) {
+			const dynamicPathKey = `:${key}`;
+
+			if (path.includes(dynamicPathKey)) {
+				path = path.replace(dynamicPathKey, encodeURIComponent(value));
+			} else {
+				queryParameters[key] = value;
+			}
+		}
+
+		const queryString = new URLSearchParams(queryParameters).toString();
+
+		return queryString ? `${path}?${queryString}` : path;
 	}
 
 	private async checkResponse<T>(

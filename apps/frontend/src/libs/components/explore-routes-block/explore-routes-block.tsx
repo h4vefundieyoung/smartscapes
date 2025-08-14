@@ -21,7 +21,7 @@ const getCurrentUserPosition = (): Promise<[number, number]> => {
 		// eslint-disable-next-line sonarjs/no-intrusive-permissions
 		navigator.geolocation.getCurrentPosition(
 			(position) => {
-				resolve([position.coords.longitude, position.coords.latitude]);
+				resolve([position.coords.latitude, position.coords.longitude]);
 			},
 			(error) => {
 				reject(new Error(`Failed to get position: ${error.message}`));
@@ -37,9 +37,9 @@ const ExploreRoutesBlock = (): React.JSX.Element => {
 	const [error, setError] = useState<null | string>(null);
 
 	useEffect(() => {
-		const fetchroutes = async (): Promise<void> => {
+		const fetchData = async (): Promise<void> => {
 			try {
-				const [longitude, latitude] = await getCurrentUserPosition();
+				const [latitude, longitude] = await getCurrentUserPosition();
 
 				const poiAction = await dispatch(
 					pointsOfInterestActions.findAll({
@@ -51,6 +51,13 @@ const ExploreRoutesBlock = (): React.JSX.Element => {
 				const poiResult = unwrapResult(poiAction);
 				const pois: PointsOfInterestResponseDto[] = poiResult.data;
 
+				if (pois.length === 0) {
+					setRoutes([]);
+					setLoading(false);
+
+					return;
+				}
+
 				const poiMap = new Map<number, { lat: number; lon: number }>();
 
 				for (const poi of pois) {
@@ -60,11 +67,9 @@ const ExploreRoutesBlock = (): React.JSX.Element => {
 					});
 				}
 
-				const routesPromises = [];
-
-				for (const poi of pois) {
-					routesPromises.push(dispatch(routesActions.findByPoint(poi.id))); //TODO: update and check how does this function works on the backend, because in result i got wrong results
-				}
+				const routesPromises = pois.map((poi) =>
+					dispatch(routesActions.findAll({ poiId: poi.id })),
+				);
 
 				//TODO: findAll works correctly at the backend, but I need to check how the query is sents by frontend part
 				//TODO: examine how does findByPoint works
@@ -110,7 +115,7 @@ const ExploreRoutesBlock = (): React.JSX.Element => {
 			}
 		};
 
-		void fetchroutes();
+		void fetchData();
 	}, [dispatch]);
 
 	if (loading) {

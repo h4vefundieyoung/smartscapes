@@ -2,17 +2,20 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 
-import { type RoutesResponseDto } from "../libs/types/types.js";
+import {
+	type RoutesFindAllOptions,
+	type RoutesResponseDto,
+} from "../libs/types/types.js";
 import { name as sliceName } from "./routes.slice.js";
 
-const findByPoint = createAsyncThunk<
+const findAll = createAsyncThunk<
 	APIResponse<RoutesResponseDto[]>,
-	number,
+	RoutesFindAllOptions | undefined,
 	AsyncThunkConfig
->(`${sliceName}/find-by-point`, async (poiId, { extra }) => {
+>(`${sliceName}/find-all`, async (options, { extra }) => {
 	const { routesApi } = extra;
 
-	return await routesApi.findByPoint(poiId);
+	return await routesApi.findAll(options);
 });
 
-export { findByPoint };
+export { findAll };

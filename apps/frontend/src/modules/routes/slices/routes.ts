@@ -1,9 +1,9 @@
-import { findByPoint } from "./actions.js";
+import { findAll } from "./actions.js";
 import { actions } from "./routes.slice.js";
 
 const allActions = {
 	...actions,
-	findByPoint,
+	findAll,
 };
 
 export { allActions as actions };

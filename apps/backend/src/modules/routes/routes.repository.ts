@@ -46,9 +46,7 @@ class RoutesRepository implements Repository {
 				}
 
 				if (options?.poiId !== undefined) {
-					builder
-						.joinRelated("pois")
-						.where("points_of_interest.id", options.poiId);
+					builder.joinRelated("pois").where("pois.id", options.poiId);
 				}
 			});
 

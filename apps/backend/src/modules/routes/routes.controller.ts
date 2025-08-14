@@ -289,12 +289,19 @@ class RoutesController extends BaseController {
 	 *       **Without query parameters**: Returns all routes.
 	 *
 	 *       **With query `name` parameter**: Returns routes whose names match the search query. Search is case-insensitive.
+	 *
+	 *       **With query `poiId` parameter**: Returns routes which contains points of interest match the search query id.
 	 *     parameters:
 	 *       - in: query
 	 *         name: name
 	 *         schema:
 	 *           type: string
 	 *           example: "landscape"
+	 *       - in: query
+	 *         name: poiId
+	 *         schema:
+	 *           type: integer
+	 *           example: 1
 	 *     responses:
 	 *       200:
 	 *         description: A list of routes

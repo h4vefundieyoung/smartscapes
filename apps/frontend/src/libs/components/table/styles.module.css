@@ -13,6 +13,8 @@
 	width: 100%;
 	margin-bottom: 16px;
 	text-align: left;
+	table-layout: fixed;
+	border-collapse: collapse;
 	border: 2px solid var(--color-stroke-weak);
 }
 
@@ -23,24 +25,28 @@
 
 .th,
 .td {
-	padding: 12px 24px;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	font-size: 16px;
 	line-height: 150%;
+	white-space: nowrap;
 	border-bottom: 2px solid var(--color-stroke-weak);
 }
 
-.tbody .tr:last-child td {
+.td {
+	padding: 4px 24px;
+	font-weight: 400;
+	color: var(--color-text-strong);
+}
+
+.tbody .tr:last-child .td {
 	border-bottom: none;
 }
 
 .th {
+	padding: 12px 24px;
 	font-weight: 600;
 	color: var(--color-text-weak);
 	outline: none;
 	background: var(--color-fill-weak);
-}
-
-.td {
-	font-weight: 400;
-	color: var(--color-text-strong);
 }

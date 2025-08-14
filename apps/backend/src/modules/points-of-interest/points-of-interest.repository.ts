@@ -8,6 +8,8 @@ import {
 import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
 import { type PointsOfInterestModel } from "~/modules/points-of-interest/points-of-interest.model.js";
 
+const PAGE_NUMBER_OFFSET = 1;
+
 class PointsOfInterestRepository implements Repository {
 	private pointsOfInterestModel: typeof PointsOfInterestModel;
 
@@ -166,8 +168,6 @@ class PointsOfInterestRepository implements Repository {
 		options: PointsOfInterestPaginatedOptions,
 	): Promise<EntityPagination<PointsOfInterestEntity>> {
 		const { limit, page, search } = options;
-
-		const PAGE_NUMBER_OFFSET = 1;
 
 		const query = this.pointsOfInterestModel
 			.query()

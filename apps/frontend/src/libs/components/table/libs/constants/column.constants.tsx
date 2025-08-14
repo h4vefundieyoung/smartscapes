@@ -11,14 +11,20 @@ const createColumns = (
 	{
 		accessorKey: "id",
 		header: "Id",
+		maxSize: 100,
+		minSize: 50,
+		size: 66,
 	},
 	{
 		accessorKey: "name",
 		header: "Name",
+		minSize: 150,
+		size: 491,
 	},
 	{
 		accessorKey: "createdAt",
 		header: "Created at",
+		size: 355,
 	},
 	{
 		cell: ({ row }) => (
@@ -26,6 +32,7 @@ const createColumns = (
 		),
 		header: "Actions",
 		id: "actions",
+		size: 144,
 	},
 ];
 

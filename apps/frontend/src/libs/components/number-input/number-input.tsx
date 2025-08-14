@@ -1,62 +1,49 @@
 import { type JSX } from "react";
 
-import { useCallback, useEffect, useState } from "~/libs/hooks/hooks.js";
+import { Icon } from "~/libs/components/components.js";
+import { useCallback } from "~/libs/hooks/hooks.js";
 
-import ArrowDown from "./assets/arrow-down.svg?react";
-import ArrowUp from "./assets/arrow-up.svg?react";
 import styles from "./styles.module.css";
 
 type Properties = {
-	initialValue?: number;
-	max?: number;
-	min?: number;
+	max: number;
+	min: number;
 	onChange?: (value: number) => void;
+	value: number;
 };
 
-const INITIAL_VALUE = 10;
-const MAX_VALUE = 20;
-const MIN_VALUE = 1;
 const STEP_VALUE = 1;
 
 const NumberInput = ({
-	initialValue = INITIAL_VALUE,
-	max = MAX_VALUE,
-	min = MIN_VALUE,
+	max,
+	min,
 	onChange,
+	value,
 }: Properties): JSX.Element => {
-	const [value, setValue] = useState<number>(initialValue);
-
-	useEffect(() => {
-		setValue(initialValue);
-	}, [initialValue]);
-
-	const updateValue = useCallback(
-		(newValue: number) => {
-			setValue(newValue);
-			onChange?.(newValue);
-		},
-		[onChange],
-	);
-
 	const handleIncrement = useCallback((): void => {
-		updateValue(Math.min(max, value + STEP_VALUE));
-	}, [value, max, updateValue]);
+		const newValue = Math.min(max, (value || min) + STEP_VALUE);
+		onChange?.(newValue);
+	}, [max, min, onChange, value]);
 
 	const handleDecrement = useCallback((): void => {
-		updateValue(Math.max(min, value - STEP_VALUE));
-	}, [value, min, updateValue]);
+		const newValue = Math.max(min, (value || min) - STEP_VALUE);
+		onChange?.(newValue);
+	}, [min, onChange, value]);
 
 	const handleInputChange = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
 			const inputValue = Number(event.target.value);
+			const isNotNumber = Number.isNaN(inputValue);
+			const isMoreThanMin = inputValue >= min;
+			const isLessThanMax = inputValue <= max;
 
-			if (!Number.isNaN(inputValue) && inputValue >= min && inputValue <= max) {
-				updateValue(inputValue);
-			} else if (Number.isNaN(inputValue)) {
-				updateValue(min);
+			if (!isNotNumber && isMoreThanMin && isLessThanMax) {
+				onChange?.(inputValue);
+			} else if (isNotNumber) {
+				onChange?.(min);
 			}
 		},
-		[min, max, updateValue],
+		[max, min, onChange],
 	);
 
 	return (
@@ -73,19 +60,21 @@ const NumberInput = ({
 				<div className={styles["buttons"]}>
 					<button
 						className={styles["button"]}
-						disabled={value >= max}
+						disabled={(value || min) >= max}
 						onClick={handleIncrement}
 						type="button"
 					>
-						<ArrowUp />
+						<Icon height={8} name="caretUp" width={8} />
+						<span className="visually-hidden">Increase value</span>
 					</button>
 					<button
 						className={styles["button"]}
-						disabled={value <= min}
+						disabled={(value || min) <= min}
 						onClick={handleDecrement}
 						type="button"
 					>
-						<ArrowDown />
+						<Icon height={8} name="caretDown" width={8} />
+						<span className="visually-hidden">Increase value</span>
 					</button>
 				</div>
 			</div>

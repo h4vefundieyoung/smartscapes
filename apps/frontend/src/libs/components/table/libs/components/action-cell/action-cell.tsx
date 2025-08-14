@@ -1,9 +1,8 @@
 import { memo } from "react";
 
+import { Icon } from "~/libs/components/components.js";
 import { useCallback } from "~/libs/hooks/hooks.js";
 
-import Edit from "../../../assets/edit.svg?react";
-import Trash from "../../../assets/trash.svg?react";
 import styles from "./styles.module.css";
 
 type ActionCellProperties = {
@@ -29,7 +28,8 @@ const ActionCell = memo(({ id, onDelete, onEdit }: ActionCellProperties) => {
 				onClick={handleEditClick}
 				type="button"
 			>
-				<Edit />
+				<Icon height={24} name="edit" width={24} />
+				<span className="visually-hidden">Edit</span>
 			</button>
 			<button
 				aria-label="Delete"
@@ -37,7 +37,8 @@ const ActionCell = memo(({ id, onDelete, onEdit }: ActionCellProperties) => {
 				onClick={handleDeleteClick}
 				type="button"
 			>
-				<Trash />
+				<Icon height={24} name="trash" width={24} />
+				<span className="visually-hidden">Delete</span>
 			</button>
 		</div>
 	);

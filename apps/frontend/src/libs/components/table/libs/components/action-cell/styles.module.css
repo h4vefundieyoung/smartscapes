@@ -12,16 +12,16 @@
 		color 0.2s ease;
 }
 
-.icon-button svg > path {
-	stroke: var(--color-brand-1000);
+.icon-button .icon {
+	color: var(--color-brand-1000);
 }
 
-.icon-button:first-child:hover svg > path {
-	stroke: var(--color-fill-press);
+.icon-button:first-child:hover .icon {
+	color: var(--color-fill-press);
 }
 
-.icon-button:last-child:hover svg > path {
-	stroke: var(--color-fill-press);
+.icon-button:last-child:hover .icon {
+	color: var(--color-fill-press);
 }
 
 .actions-cell {

@@ -71,6 +71,9 @@ import {
  *
  */
 
+const DEFAULT_LIMIT = 10;
+const DEFAULT_PAGE = 1;
+
 class PointsOfInterestController extends BaseController {
 	private pointsOfInterestService: PointsOfInterestService;
 
@@ -371,12 +374,9 @@ class PointsOfInterestController extends BaseController {
 		const { query } = options;
 		const { limit, page, search } = query;
 
-		const defaultLimit = 10;
-		const defaultPage = 1;
-
 		const response = await this.pointsOfInterestService.findPaginated({
-			limit: Number(limit) || defaultLimit,
-			page: Number(page) || defaultPage,
+			limit: Number(limit) || DEFAULT_LIMIT,
+			page: Number(page) || DEFAULT_PAGE,
 			search: search || "",
 		});
 

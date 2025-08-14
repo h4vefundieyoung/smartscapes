@@ -1,4 +1,4 @@
-const PaginationActions = {
+const PaginationAction = {
 	GO_TO_END: "GO_TO_END",
 	GO_TO_START: "GO_TO_START",
 	NEXT: "NEXT",
@@ -7,4 +7,4 @@ const PaginationActions = {
 	SET_NAME: "SET_NAME",
 } as const;
 
-export { PaginationActions };
+export { PaginationAction };

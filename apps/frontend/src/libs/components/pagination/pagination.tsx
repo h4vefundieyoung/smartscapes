@@ -38,10 +38,10 @@ const Pagination = ({
 				<div className={styles["page-size"]}>
 					<span>Rows per page:</span>
 					<NumberInput
-						initialValue={paginationSettings.limit}
-						max={20}
+						max={totalItems}
 						min={1}
 						onChange={handleSetLimit}
+						value={paginationSettings.limit}
 					/>
 				</div>
 				<span className={styles["page-status"]}>

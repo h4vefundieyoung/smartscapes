@@ -1,6 +1,6 @@
 import { type AsyncThunk, type UnknownAction } from "@reduxjs/toolkit";
 
-import { PaginationActions } from "~/libs/enums/enums.js";
+import { PaginationAction } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useCallback,
@@ -9,9 +9,9 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { type PaginationQuery, type ValueOf } from "~/libs/types/types.js";
 
-type PaginationAction = {
+type Action = {
 	payload?: number | string;
-	type: ValueOf<typeof PaginationActions>;
+	type: ValueOf<typeof PaginationAction>;
 };
 
 type PaginationState = {
@@ -40,32 +40,32 @@ const initialState: PaginationState = {
 
 const paginationReducer = (
 	state: PaginationState,
-	action: PaginationAction,
+	action: Action,
 ): PaginationState => {
 	switch (action.type) {
-		case PaginationActions.GO_TO_END: {
+		case PaginationAction.GO_TO_END: {
 			return { ...state, page: action.payload as number };
 		}
 
-		case PaginationActions.GO_TO_START: {
+		case PaginationAction.GO_TO_START: {
 			return { ...state, page: 1 };
 		}
 
-		case PaginationActions.NEXT: {
+		case PaginationAction.NEXT: {
 			return {
 				...state,
 				page: Math.min(state.page + PAGE_STEP, action.payload as number),
 			};
 		}
 
-		case PaginationActions.PREVIOUS: {
+		case PaginationAction.PREVIOUS: {
 			return {
 				...state,
 				page: Math.max(state.page - PAGE_STEP, START_PAGE_NUMBER),
 			};
 		}
 
-		case PaginationActions.SET_LIMIT: {
+		case PaginationAction.SET_LIMIT: {
 			return {
 				...state,
 				limit: action.payload as number,
@@ -73,7 +73,7 @@ const paginationReducer = (
 			};
 		}
 
-		case PaginationActions.SET_NAME: {
+		case PaginationAction.SET_NAME: {
 			return {
 				...state,
 				name: action.payload as string,
@@ -94,22 +94,22 @@ const usePagination = <Result, ThunkCfg extends object = object>(
 	const dispatch = useAppDispatch();
 
 	const goToStart = useCallback((): void => {
-		localDispatch({ type: PaginationActions.GO_TO_START });
+		localDispatch({ type: PaginationAction.GO_TO_START });
 	}, []);
 	const goToEnd = useCallback((totalPages: number): void => {
-		localDispatch({ payload: totalPages, type: PaginationActions.GO_TO_END });
+		localDispatch({ payload: totalPages, type: PaginationAction.GO_TO_END });
 	}, []);
 	const goToNext = useCallback((totalPages: number): void => {
-		localDispatch({ payload: totalPages, type: PaginationActions.NEXT });
+		localDispatch({ payload: totalPages, type: PaginationAction.NEXT });
 	}, []);
 	const goToPrevious = useCallback((): void => {
-		localDispatch({ type: PaginationActions.PREVIOUS });
+		localDispatch({ type: PaginationAction.PREVIOUS });
 	}, []);
 	const setLimit = useCallback((newLimit: number | string): void => {
-		localDispatch({ payload: newLimit, type: PaginationActions.SET_LIMIT });
+		localDispatch({ payload: newLimit, type: PaginationAction.SET_LIMIT });
 	}, []);
 	const setName = useCallback((newName: string): void => {
-		localDispatch({ payload: newName, type: PaginationActions.SET_NAME });
+		localDispatch({ payload: newName, type: PaginationAction.SET_NAME });
 	}, []);
 
 	useEffect(() => {

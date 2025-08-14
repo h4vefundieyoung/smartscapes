@@ -27,10 +27,11 @@ class PointsOfInterestService implements Service {
 	): Promise<PointsOfInterestResponseDto> {
 		await this.ensureNameIsUnique(payload.name);
 
-		const { location, name } = payload;
+		const { description, location, name } = payload;
 
 		const item = await this.pointsOfInterestRepository.create(
 			PointsOfInterestEntity.initializeNew({
+				description,
 				location,
 				name,
 			}),
@@ -125,13 +126,14 @@ class PointsOfInterestService implements Service {
 		id: number,
 		payload: PointsOfInterestRequestDto,
 	): Promise<PointsOfInterestResponseDto> {
-		const { location, name } = payload;
+		const { description, location, name } = payload;
 
 		await this.ensureNameIsUnique(name);
 
 		const item = await this.pointsOfInterestRepository.patch(
 			id,
 			PointsOfInterestEntity.initializeNew({
+				description,
 				location,
 				name,
 			}),

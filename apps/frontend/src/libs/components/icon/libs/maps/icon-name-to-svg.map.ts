@@ -2,8 +2,12 @@ import Analytics from "~/assets/images/icons/analytics.svg?react";
 import ArrowDown from "~/assets/images/icons/arrow-down.svg?react";
 import CaretDown from "~/assets/images/icons/caret-down.svg?react";
 import CaretUp from "~/assets/images/icons/caret-up.svg?react";
+import Close from "~/assets/images/icons/close.svg?react";
 import Dashboard from "~/assets/images/icons/dashboard.svg?react";
 import Edit from "~/assets/images/icons/edit.svg?react";
+import Error from "~/assets/images/icons/error.svg?react";
+import EyeOff from "~/assets/images/icons/eye-off.svg?react";
+import Eye from "~/assets/images/icons/eye.svg?react";
 import Map from "~/assets/images/icons/map.svg?react";
 import Message from "~/assets/images/icons/message.svg?react";
 import Route from "~/assets/images/icons/route.svg?react";
@@ -20,8 +24,12 @@ const iconNameToSvg: Record<
 	arrowDown: ArrowDown,
 	caretDown: CaretDown,
 	caretUp: CaretUp,
+	close: Close,
 	dashboard: Dashboard,
 	edit: Edit,
+	error: Error,
+	eye: Eye,
+	eyeOff: EyeOff,
 	map: Map,
 	message: Message,
 	route: Route,

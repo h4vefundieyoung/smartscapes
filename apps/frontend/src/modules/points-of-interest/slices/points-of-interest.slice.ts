@@ -11,14 +11,16 @@ import {
 import { create, findPaginated } from "./actions.js";
 
 type State = {
-	data: PointsOfInterestResponseDto[];
+	createStatus: ValueOf<typeof DataStatus>;
+	data: null | PointsOfInterestResponseDto;
 	dataStatus: ValueOf<typeof DataStatus>;
 	meta: PointsOfInterestPaginationMeta;
 	summary: PointsOfInterestPaginatedSummary[];
 };
 
 const initialState: State = {
-	data: [],
+	createStatus: DataStatus.IDLE,
+	data: null,
 	dataStatus: DataStatus.IDLE,
 	meta: {
 		currentPage: 1,
@@ -32,16 +34,14 @@ const initialState: State = {
 const { actions, name, reducer } = createSlice({
 	extraReducers(builder) {
 		builder.addCase(create.pending, (state) => {
-			state.dataStatus = DataStatus.PENDING;
+			state.createStatus = DataStatus.PENDING;
 		});
-		builder.addCase(create.fulfilled, (state, action) => {
-			state.data = Array.isArray(action.payload.data)
-				? action.payload.data
-				: [action.payload.data];
-			state.dataStatus = DataStatus.FULFILLED;
+		builder.addCase(create.fulfilled, (state, { payload }) => {
+			state.data = payload.data;
+			state.createStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(create.rejected, (state) => {
-			state.dataStatus = DataStatus.REJECTED;
+			state.createStatus = DataStatus.REJECTED;
 		});
 
 		builder.addCase(findPaginated.pending, (state) => {

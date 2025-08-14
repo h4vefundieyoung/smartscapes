@@ -20,11 +20,12 @@ class PointsOfInterestRepository implements Repository {
 	public async create(
 		entity: PointsOfInterestEntity,
 	): Promise<PointsOfInterestEntity> {
-		const { location, name } = entity.toNewObject();
+		const { description, location, name } = entity.toNewObject();
 
 		const pointOfInterest = await this.pointsOfInterestModel
 			.query()
 			.insert({
+				description,
 				location,
 				name,
 			})
@@ -33,6 +34,7 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -61,6 +63,7 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -89,6 +92,7 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -113,6 +117,7 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -139,6 +144,7 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -197,11 +203,12 @@ class PointsOfInterestRepository implements Repository {
 		id: number,
 		entity: PointsOfInterestEntity,
 	): Promise<null | PointsOfInterestEntity> {
-		const { location, name } = entity.toNewObject();
+		const { description, location, name } = entity.toNewObject();
 
 		const [updatedPointOfInterest] = await this.pointsOfInterestModel
 			.query()
 			.patch({
+				description,
 				location,
 				name,
 			})
@@ -211,6 +218,7 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),

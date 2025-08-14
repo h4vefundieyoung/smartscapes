@@ -18,4 +18,5 @@ export {
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 } from "./libs/types/types.js";
+export { pointOfInterestCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 export { actions, reducer } from "./slices/points-of-interest.js";

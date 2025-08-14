@@ -18,9 +18,10 @@ const create = createAsyncThunk<
 	PointsOfInterestRequestDto,
 	AsyncThunkConfig
 >(`${sliceName}/create`, async (payload, { extra }) => {
-	const { pointOfInterestApi } = extra;
+	const { pointOfInterestApi, toastNotifier } = extra;
 
 	const pointOfInterest = await pointOfInterestApi.create(payload);
+	toastNotifier.showSuccess("Point of interest created successfully");
 
 	return pointOfInterest;
 });

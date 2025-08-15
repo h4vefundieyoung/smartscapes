@@ -5,23 +5,19 @@ class PlannedRoutesEntity implements Entity {
 	private duration: number;
 	private geometry: LineStringGeometry;
 	private id: null | number;
-	private userId: number;
 
 	private constructor({
 		distance,
 		duration,
 		geometry,
 		id,
-		userId,
 	}: {
 		distance: number;
 		duration: number;
 		geometry: LineStringGeometry;
 		id: null | number;
-		userId: number;
 	}) {
 		this.id = id;
-		this.userId = userId;
 		this.distance = distance;
 		this.duration = duration;
 		this.geometry = geometry;
@@ -32,14 +28,12 @@ class PlannedRoutesEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
-		userId: number;
 	}): PlannedRoutesEntity {
 		return new PlannedRoutesEntity({
 			distance: data.distance,
 			duration: data.duration,
 			geometry: data.geometry,
 			id: data.id,
-			userId: data.userId,
 		});
 	}
 
@@ -47,19 +41,16 @@ class PlannedRoutesEntity implements Entity {
 		distance,
 		duration,
 		geometry,
-		userId,
 	}: {
 		distance: number;
 		duration: number;
 		geometry: LineStringGeometry;
-		userId: number;
 	}): PlannedRoutesEntity {
 		return new PlannedRoutesEntity({
 			distance,
 			duration,
 			geometry,
 			id: null,
-			userId,
 		});
 	}
 
@@ -67,13 +58,11 @@ class PlannedRoutesEntity implements Entity {
 		distance: number;
 		duration: number;
 		geometry: LineStringGeometry;
-		userId: number;
 	} {
 		return {
 			distance: this.distance,
 			duration: this.duration,
 			geometry: this.geometry,
-			userId: this.userId,
 		};
 	}
 
@@ -82,14 +71,12 @@ class PlannedRoutesEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
-		userId: number;
 	} {
 		return {
 			distance: this.distance,
 			duration: this.duration,
 			geometry: this.geometry,
 			id: this.id as number,
-			userId: this.userId,
 		};
 	}
 }

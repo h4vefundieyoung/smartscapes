@@ -3,7 +3,7 @@ type RouteCreateRequestDto = {
 	name: string;
 	plannedRouteId: number;
 	pois: number[];
-	userId: string;
+	userId: number;
 };
 
 export { type RouteCreateRequestDto };

@@ -1,6 +1,6 @@
 const RouteApiPath = {
 	$ID: "/:id",
-	CONSTRUCT: "/construct/:userId",
+	CONSTRUCT: "/construct",
 	ROOT: "/",
 } as const;
 

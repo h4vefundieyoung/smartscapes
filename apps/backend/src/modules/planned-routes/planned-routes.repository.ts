@@ -13,7 +13,7 @@ class PlannedRoutesRepository implements Repository {
 	public async create(
 		entity: PlannedRoutesEntity,
 	): Promise<PlannedRoutesEntity> {
-		const { distance, duration, geometry, userId } = entity.toNewObject();
+		const { distance, duration, geometry } = entity.toNewObject();
 
 		const result = await this.plannedRoutesModel
 			.query()
@@ -21,11 +21,9 @@ class PlannedRoutesRepository implements Repository {
 				distance,
 				duration,
 				geometry,
-				userId,
 			})
 			.returning([
 				"id",
-				"userId",
 				"distance",
 				"duration",
 				this.plannedRoutesModel.raw("ST_AsGeoJSON(geometry)::json as geometry"),
@@ -48,7 +46,6 @@ class PlannedRoutesRepository implements Repository {
 			.query()
 			.select([
 				"id",
-				"userId",
 				"distance",
 				"duration",
 				this.plannedRoutesModel.raw("ST_AsGeoJSON(geometry)::json as geometry"),
@@ -61,21 +58,6 @@ class PlannedRoutesRepository implements Repository {
 		}
 
 		return PlannedRoutesEntity.initialize(plannedRoute);
-	}
-
-	public async findByUserId(userId: number): Promise<PlannedRoutesEntity[]> {
-		const plannedRoutes = await this.plannedRoutesModel
-			.query()
-			.select([
-				"id",
-				"userId",
-				"distance",
-				"duration",
-				this.plannedRoutesModel.raw("ST_AsGeoJSON(geometry)::json as geometry"),
-			])
-			.where("userId", userId);
-
-		return plannedRoutes.map((route) => PlannedRoutesEntity.initialize(route));
 	}
 }
 

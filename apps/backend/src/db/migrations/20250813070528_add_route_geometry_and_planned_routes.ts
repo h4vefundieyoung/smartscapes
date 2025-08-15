@@ -37,18 +37,19 @@ async function up(knex: Knex): Promise<void> {
 			table
 				.specificType(ColumnName.GEOMETRY, "geometry(LineString, 4326)")
 				.notNullable();
-		});
-
-		await trx.schema.createTable(PLANNED_ROUTES_TABLE, (table) => {
-			table.increments("id").primary();
-			table.timestamp("created_at").notNullable().defaultTo(knex.fn.now());
-			table.timestamp("updated_at").notNullable().defaultTo(knex.fn.now());
 			table
 				.integer(ColumnName.USER_ID)
 				.notNullable()
 				.references("id")
 				.inTable("users")
 				.onDelete("CASCADE");
+		});
+
+		await trx.schema.createTable(PLANNED_ROUTES_TABLE, (table) => {
+			table.increments("id").primary();
+			table.timestamp("created_at").notNullable().defaultTo(knex.fn.now());
+			table.timestamp("updated_at").notNullable().defaultTo(knex.fn.now());
+
 			table
 				.decimal(ColumnName.DISTANCE, DECIMAL_PRECISION, DECIMAL_SCALE)
 				.notNullable();

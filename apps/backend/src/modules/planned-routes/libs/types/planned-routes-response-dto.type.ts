@@ -5,7 +5,6 @@ type PlannedRoutesResponseDto = {
 	duration: number;
 	geometry: LineStringGeometry;
 	id: number;
-	userId: number;
 };
 
 export { type PlannedRoutesResponseDto };

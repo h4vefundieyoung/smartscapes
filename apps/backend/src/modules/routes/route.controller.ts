@@ -174,12 +174,10 @@ class RouteController extends BaseController {
 
 	public async constructRoute({
 		body: { pointsOfInterest },
-		params: { userId },
 	}: APIHandlerOptions<{
 		body: RouteConstructRequestDto;
-		params: { userId: string };
 	}>): Promise<APIHandlerResponse<PlannedRoutesResponseDto>> {
-		const data = await this.routeService.construct(pointsOfInterest, userId);
+		const data = await this.routeService.construct(pointsOfInterest);
 
 		return {
 			payload: { data },
@@ -262,15 +260,7 @@ class RouteController extends BaseController {
 			body: RouteCreateRequestDto;
 		}>,
 	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
-		const { description, name, plannedRouteId, pois, userId } = options.body;
-
-		const route = await this.routeService.create({
-			description,
-			name,
-			plannedRouteId,
-			pois,
-			userId,
-		});
+		const route = await this.routeService.create(options.body);
 
 		return {
 			payload: { data: route },

@@ -23,7 +23,8 @@ class RouteRepository implements Repository {
 				"description",
 				"distance",
 				"duration",
-				"geometry",
+				this.routesModel.raw("ST_AsGeoJSON(geometry)::json as geometry"),
+				"userId",
 			]);
 
 		return RouteEntity.initialize(result);
@@ -46,7 +47,15 @@ class RouteRepository implements Repository {
 					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
 				},
 			})
-			.select("routes.id", "routes.name")
+			.select([
+				"routes.id",
+				"routes.name",
+				"routes.description",
+				"routes.distance",
+				"routes.duration",
+				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
+				"routes.user_id",
+			])
 			.modify((builder) => {
 				if (options?.name) {
 					builder.whereILike("name", `%${options.name.trim()}%`);
@@ -65,7 +74,15 @@ class RouteRepository implements Repository {
 					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
 				},
 			})
-			.select("routes.id", "routes.name", "routes.description")
+			.select([
+				"routes.id",
+				"routes.name",
+				"routes.description",
+				"routes.distance",
+				"routes.duration",
+				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
+				"routes.user_id",
+			])
 			.where("routes.id", id)
 			.first();
 
@@ -90,7 +107,15 @@ class RouteRepository implements Repository {
 				},
 			})
 			.where({ id })
-			.returning(["id", "name", "description"])
+			.returning([
+				"id",
+				"name",
+				"description",
+				"distance",
+				"duration",
+				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
+				"routes.user_id",
+			])
 			.execute();
 
 		return updatedRoute ? RouteEntity.initialize(updatedRoute) : null;

@@ -12,7 +12,6 @@ import { type PointsOfInterestService } from "../points-of-interest/points-of-in
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
 import {
-	type RouteConstructResponseDto,
 	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
 	type RouteGetAllItemResponseDto,
@@ -49,7 +48,6 @@ class RouteService implements Service {
 
 	public async construct(
 		pointsOfInterest: number[],
-		userId: string,
 	): Promise<PlannedRoutesResponseDto> {
 		const { items } = await this.pointsOfInterestService.findAll({
 			ids: pointsOfInterest,
@@ -70,10 +68,7 @@ class RouteService implements Service {
 			MapboxAPIGeometric.GEOJSON,
 		);
 
-		const plannedRoute = await this.plannedRouteService.create(
-			route,
-			Number(userId),
-		);
+		const plannedRoute = await this.plannedRouteService.create(route);
 
 		return plannedRoute;
 	}
@@ -101,9 +96,9 @@ class RouteService implements Service {
 			...plannedRoute,
 		});
 
-		await this.plannedRouteService.delete(plannedRouteId);
-
 		const route = await this.routesRepository.create(routeEntity);
+
+		await this.plannedRouteService.delete(plannedRouteId);
 
 		return route.toObject();
 	}

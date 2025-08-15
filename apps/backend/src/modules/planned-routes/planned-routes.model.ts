@@ -12,7 +12,6 @@ class PlannedRoutesModel extends Model {
 	public duration!: number;
 	public geometry!: LineStringGeometry;
 	public id!: number;
-	public userId!: number;
 }
 
 export { PlannedRoutesModel };

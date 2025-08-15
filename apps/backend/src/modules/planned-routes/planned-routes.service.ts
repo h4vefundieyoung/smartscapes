@@ -1,5 +1,5 @@
 import { HTTPCode } from "~/libs/modules/http/http.js";
-import { type RoutesResponseConstructDto } from "~/modules/routes/libs/types/types.js";
+import { type MapboxConstructRouteResponseDto } from "~/libs/modules/mapbox/libs/types/types.js";
 
 import { PlannedRoutesExceptionMessage } from "./libs/enums/enums.js";
 import { PlannedRoutesError } from "./libs/exceptions/exceptions.js";
@@ -15,8 +15,7 @@ class PlannedRouteService {
 	}
 
 	public async create(
-		payload: RoutesResponseConstructDto,
-		userId: number,
+		payload: MapboxConstructRouteResponseDto,
 	): Promise<PlannedRoutesResponseDto> {
 		const { distance, duration, geometry } = payload.route;
 
@@ -24,7 +23,6 @@ class PlannedRouteService {
 			distance,
 			duration,
 			geometry,
-			userId,
 		});
 
 		const plannedRoute =

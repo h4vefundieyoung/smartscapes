@@ -46,7 +46,7 @@ class RoutesRepository implements Repository {
 		if (options?.categories?.length) {
 			query
 				.joinRelated("categories")
-				.whereIn("categories.key", options.categories)
+				.whereIn("categories.key", options.categories as string[])
 				.groupBy("routes.id");
 		}
 

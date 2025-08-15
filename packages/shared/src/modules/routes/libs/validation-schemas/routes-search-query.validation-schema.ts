@@ -18,7 +18,15 @@ const categoryKey = z
 	});
 
 const routesSearchQuery = z.object({
-	categories: z.array(categoryKey).optional(),
+	categories: z
+		.preprocess((value) => {
+			if (value === undefined || value === null) {
+				return;
+			}
+
+			return Array.isArray(value) ? (value as string[]) : [value];
+		}, z.array(categoryKey))
+		.optional(),
 	name: z
 		.string()
 		.trim()
@@ -30,5 +38,4 @@ const routesSearchQuery = z.object({
 		})
 		.optional(),
 });
-
 export { routesSearchQuery };

@@ -23,12 +23,12 @@
 	background-color: var(--color-fill-press);
 }
 
-.button:focus {
+.button:focus-visible {
 	outline: none;
 	background-color: var(--color-fill-press);
 }
 
-.button:focus::after {
+.button:focus-visible::after {
 	position: absolute;
 	inset: -4px;
 	content: "";

@@ -1,6 +1,7 @@
-import { ONE } from "../constants/constants.js";
 import { type RouteItem } from "../types/types.js";
 import { getDistance } from "./get-distance.helper.js";
+
+const ONE = 1;
 
 function sortRouteByDistance(
 	routes: RouteItem[],

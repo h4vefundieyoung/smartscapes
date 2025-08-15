@@ -1,10 +1,8 @@
-import {
-	DEGREE_TO_RAD,
-	EARTH_RADIUS_KM,
-	HALF,
-	ONE,
-	TWO,
-} from "../constants/constants.js";
+import { DEGREE_TO_RAD, EARTH_RADIUS_KM } from "../constants/constants.js";
+
+const HALF = 0.5;
+const ONE = 1;
+const TWO = 2;
 
 function getDistance(
 	pointA: [number, number],

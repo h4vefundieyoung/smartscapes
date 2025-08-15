@@ -2,20 +2,15 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import React from "react";
 
 import { useAppDispatch, useEffect, useState } from "~/libs/hooks/hooks.js";
-import { type PointsOfInterestResponseDto } from "~/modules/points-of-interest/libs/types/types.js";
-import { actions as pointsOfInterestActions } from "~/modules/points-of-interest/points-of-interest.js";
 import { type RoutesResponseDto } from "~/modules/routes/libs/types/types.js";
 import { actions as routesActions } from "~/modules/routes/routes.js";
 
 import { RouteCard } from "../components.js";
-import {
-	DEFAULT_RADIUS,
-	ONE,
-	START_VISIT_ORDER,
-} from "./libs/constants/constants.js";
-import { sortRouteByDistance } from "./libs/helpers/helpers.js";
+import { getPOIsNearby, sortRouteByDistance } from "./libs/helpers/helpers.js";
 import { type RouteItem } from "./libs/types/types.js";
 import styles from "./styles.module.css";
+
+const ONE = 1;
 
 // TODO: collect all poi id and create backend api that will accept multiple poi and returns all routes at once
 
@@ -42,17 +37,9 @@ const ExploreRoutesBlock = (): React.JSX.Element => {
 	useEffect(() => {
 		const fetchData = async (): Promise<void> => {
 			try {
-				const [latitude, longitude] = await getCurrentUserPosition();
+				const userCoordinates = await getCurrentUserPosition();
 
-				const poiAction = await dispatch(
-					pointsOfInterestActions.findAll({
-						latitude,
-						longitude,
-						radius: DEFAULT_RADIUS,
-					}),
-				);
-				const poiResult = unwrapResult(poiAction);
-				const pois: PointsOfInterestResponseDto[] = poiResult.data;
+				const pois = await getPOIsNearby(dispatch, ...userCoordinates);
 
 				if (pois.length === 0) {
 					setRoutes([]);
@@ -87,9 +74,7 @@ const ExploreRoutesBlock = (): React.JSX.Element => {
 					const { data }: { data: RoutesResponseDto[] } = response;
 
 					for (const route of data) {
-						const startPOI = route.pois.find(
-							(p) => p.visitOrder === START_VISIT_ORDER,
-						);
+						const startPOI = route.pois.find((p) => p.visitOrder === 0);
 						const coords = startPOI ? (poiMap.get(startPOI.id) ?? null) : null;
 						allRoutes.push({ ...route, startingPOICoords: coords });
 					}
@@ -103,7 +88,7 @@ const ExploreRoutesBlock = (): React.JSX.Element => {
 
 				const uniqueRoutes = sortRouteByDistance(
 					[...uniqueRoutesMap.values()],
-					[latitude, longitude],
+					[...userCoordinates],
 				);
 
 				setRoutes(uniqueRoutes);
@@ -122,17 +107,19 @@ const ExploreRoutesBlock = (): React.JSX.Element => {
 	}, [dispatch]);
 
 	if (loading) {
-		return <div>Loading routes...</div>;
+		return <div className={styles["loading"]}>Loading routes...</div>;
 	}
 
 	if (error) {
-		return <div>Error: {error}</div>;
+		return <div className={styles["error"]}>Error: {error}</div>;
 	}
 
 	return (
 		<div className={styles["container"]}>
 			<h3 className={styles["title"]}>Explore routes</h3>
-			{routes.length === 0 && <div>No routes found nearby.</div>}
+			{routes.length === 0 && (
+				<div className={styles["not-found"]}>No routes found nearby.</div>
+			)}
 			<ul className={styles["list"]}>
 				{routes.map((route) => (
 					<RouteCard imageUrl={null} key={route.id} name={route.name} />

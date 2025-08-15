@@ -1,13 +1,3 @@
-.container {
-	display: flex;
-	flex-grow: 1;
-}
-
-.outlet-container {
-	display: flex;
-	flex-grow: 1;
-}
-
 .loader-container {
 	position: absolute;
 	top: 50%;

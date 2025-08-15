@@ -1,36 +1,19 @@
 import smartScapesLogo from "~/assets/images/logo.svg";
 import { Link } from "~/libs/components/components.js";
 import { AppRoute, KeyboardKey } from "~/libs/enums/enums.js";
-import {
-	combineClassNames,
-	getPermittedNavigationItems,
-} from "~/libs/helpers/helpers.js";
-import {
-	useCallback,
-	useEffect,
-	useMemo,
-	useState,
-} from "~/libs/hooks/hooks.js";
+import { combineClassNames } from "~/libs/helpers/helpers.js";
+import { useCallback, useEffect, useState } from "~/libs/hooks/hooks.js";
 import { type NavigationItemsGroup } from "~/libs/types/types.js";
-import { type PermissionItemDto } from "~/modules/users/libs/types/types.js";
 
 import { SidebarItem } from "./libs/components/components.js";
 import styles from "./styles.module.css";
 
 type Properties = {
 	navigationItemsGroups: NavigationItemsGroup[];
-	userPermissions: PermissionItemDto[];
 };
 
-const Sidebar = ({
-	navigationItemsGroups,
-	userPermissions,
-}: Properties): React.JSX.Element => {
+const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
-
-	const permittedNavigationItems = useMemo(() => {
-		return getPermittedNavigationItems(navigationItemsGroups, userPermissions);
-	}, [navigationItemsGroups, userPermissions]);
 
 	const handleClick = useCallback((): void => {
 		setIsOpen((previous) => !previous);
@@ -79,7 +62,7 @@ const Sidebar = ({
 					</div>
 				</div>
 				<div className={styles["sidebar"]}>
-					{permittedNavigationItems.map(({ hasLabel, items, name }) => (
+					{navigationItemsGroups.map(({ hasLabel, items, name }) => (
 						<div
 							className={combineClassNames(
 								styles["group"],

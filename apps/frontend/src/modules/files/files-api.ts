@@ -16,7 +16,7 @@ type Constructor = {
 	storage: Storage;
 };
 
-class FilesApi extends BaseHTTPApi {
+class FileApi extends BaseHTTPApi {
 	public constructor({ baseUrl, http, storage }: Constructor) {
 		super({ baseUrl, http, path: APIPath.FILES, storage });
 	}
@@ -54,4 +54,4 @@ class FilesApi extends BaseHTTPApi {
 	}
 }
 
-export { FilesApi };
+export { FileApi };

@@ -18,7 +18,7 @@ import {
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
-import { filesApi } from "~/modules/files/files.js";
+import { fileApi } from "~/modules/files/files.js";
 import { FileFolderName } from "~/modules/files/libs/enums/enums.js";
 import { type PointsOfInterestRequestDto } from "~/modules/points-of-interest/libs/types/types.js";
 import { actions as poiActions } from "~/modules/points-of-interest/points-of-interest.js";
@@ -64,7 +64,7 @@ const Dashboard = (): React.JSX.Element => {
 			setIsUploading(true);
 
 			try {
-				const responseURL = await filesApi.uploadFile({
+				const responseURL = await fileApi.uploadFile({
 					file,
 					folder: FileFolderName.AVATARS,
 				});
@@ -84,7 +84,7 @@ const Dashboard = (): React.JSX.Element => {
 
 	useEffect(() => {
 		const loadFiles = async (): Promise<void> => {
-			const response = await filesApi.getAllFiles();
+			const response = await fileApi.getAllFiles();
 			setUploadedImages(response.data.map((file) => file.url));
 		};
 

@@ -3,13 +3,13 @@ import { describe, it } from "node:test";
 
 import { type AWSFileService } from "~/libs/modules/aws/aws.js";
 
-import { FilesEntity } from "./files.entity.js";
+import { FileEntity } from "./files.entity.js";
 import { type FileRepository } from "./files.repository.js";
 import { FileService } from "./files.service.js";
 import { type FileMimeType } from "./libs/types/types.js";
 
 describe("FileService", () => {
-	const mockFile: Parameters<typeof FilesEntity.initialize>[0] = {
+	const mockFile: Parameters<typeof FileEntity.initialize>[0] = {
 		contentType: "image/jpg" as FileMimeType,
 		createdAt: "2024-01-01T00:00:00Z",
 		id: 1,
@@ -17,10 +17,10 @@ describe("FileService", () => {
 		url: "https://example.com/file.jpg",
 	};
 
-	const createMockEntity = (): FilesEntity => FilesEntity.initialize(mockFile);
+	const createMockEntity = (): FileEntity => FileEntity.initialize(mockFile);
 
 	it("create should return new file", async () => {
-		const fileEntity = FilesEntity.initialize(mockFile);
+		const fileEntity = FileEntity.initialize(mockFile);
 
 		const fileRepository = {
 			create: (() => Promise.resolve(fileEntity)) as FileRepository["create"],

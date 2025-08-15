@@ -5,15 +5,15 @@ import { afterEach, beforeEach, describe, it } from "node:test";
 
 import { DatabaseTableName } from "~/libs/modules/database/database.js";
 
-import { FilesEntity } from "./files.entity.js";
-import { FilesModel } from "./files.model.js";
+import { FileEntity } from "./files.entity.js";
+import { FileModel } from "./files.model.js";
 import { FileRepository } from "./files.repository.js";
 
 describe("FileRepository", () => {
 	let fileRepository: FileRepository;
 	let databaseTracker: Tracker;
 
-	const mockFile: Parameters<typeof FilesEntity.initialize>[0] = {
+	const mockFile: Parameters<typeof FileEntity.initialize>[0] = {
 		contentType: "image/jpg",
 		createdAt: "2024-01-01T00:00:00Z",
 		id: 1,
@@ -21,16 +21,16 @@ describe("FileRepository", () => {
 		url: "https://example.com/file.jpg",
 	};
 
-	const createMockEntity = (): FilesEntity => FilesEntity.initialize(mockFile);
+	const createMockEntity = (): FileEntity => FileEntity.initialize(mockFile);
 
 	beforeEach(() => {
 		const database = knex({ client: MockClient });
 
 		databaseTracker = createTracker(database);
 
-		FilesModel.knex(database);
+		FileModel.knex(database);
 
-		fileRepository = new FileRepository(FilesModel);
+		fileRepository = new FileRepository(FileModel);
 	});
 
 	afterEach(() => {

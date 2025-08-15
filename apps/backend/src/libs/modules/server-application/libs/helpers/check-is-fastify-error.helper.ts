@@ -1,4 +1,4 @@
-const isFastifyError = (error: unknown): boolean => {
+const checkIsFastifyError = (error: unknown): boolean => {
 	return (
 		typeof error === "object" &&
 		error !== null &&
@@ -9,4 +9,4 @@ const isFastifyError = (error: unknown): boolean => {
 	);
 };
 
-export { isFastifyError };
+export { checkIsFastifyError };

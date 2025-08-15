@@ -1,1 +1,1 @@
-export { isFastifyError } from "./is-fastify-error.helper.js";
+export { checkIsFastifyError } from "./check-is-fastify-error.helper.js";

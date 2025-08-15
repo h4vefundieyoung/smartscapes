@@ -2,7 +2,7 @@ import { type Entity } from "~/libs/types/types.js";
 
 import { type FileMimeType } from "./libs/types/types.js";
 
-class FilesEntity implements Entity {
+class FileEntity implements Entity {
 	private contentType: FileMimeType;
 	private id: null | number;
 	private url: string;
@@ -27,8 +27,8 @@ class FilesEntity implements Entity {
 		id: number;
 		updatedAt: string;
 		url: string;
-	}): FilesEntity {
-		return new FilesEntity({
+	}): FileEntity {
+		return new FileEntity({
 			contentType: data.contentType,
 			id: data.id,
 			url: data.url,
@@ -41,8 +41,8 @@ class FilesEntity implements Entity {
 	}: {
 		contentType: FileMimeType;
 		url: string;
-	}): FilesEntity {
-		return new FilesEntity({
+	}): FileEntity {
+		return new FileEntity({
 			contentType,
 			id: null,
 			url,
@@ -72,4 +72,4 @@ class FilesEntity implements Entity {
 	}
 }
 
-export { FilesEntity };
+export { FileEntity };

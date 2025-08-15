@@ -5,7 +5,7 @@ import {
 
 import { type FileMimeType } from "./libs/types/types.js";
 
-class FilesModel extends AbstractModel {
+class FileModel extends AbstractModel {
 	public static override get tableName(): string {
 		return DatabaseTableName.FILES;
 	}
@@ -14,4 +14,4 @@ class FilesModel extends AbstractModel {
 	public url!: string;
 }
 
-export { FilesModel };
+export { FileModel };

@@ -24,7 +24,7 @@ import {
 
 import { authPlugin, multipartPlugin } from "../plugins/plugins.js";
 import { HELMET_CONFIG } from "./libs/constants/constants.js";
-import { isFastifyError } from "./libs/helpers/helpers.js";
+import { checkIsFastifyError } from "./libs/helpers/helpers.js";
 import {
 	type ServerApplication,
 	type ServerApplicationApi,
@@ -172,7 +172,7 @@ class BaseServerApplication implements ServerApplication {
 					return reply.status(error.status).send(response);
 				}
 
-				if (isFastifyError(error)) {
+				if (checkIsFastifyError(error)) {
 					const { message, statusCode = HTTPCode.UNPROCESSED_ENTITY } = error;
 
 					this.logger.error(

@@ -5,11 +5,11 @@ import { type AWSFileService } from "~/libs/modules/aws/aws.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Service, type ValueOf } from "~/libs/types/types.js";
 
-import { FilesEntity } from "./files.entity.js";
+import { FileEntity } from "./files.entity.js";
 import { type FileRepository } from "./files.repository.js";
 import {
+	FileExceptionMessage,
 	type FileFolderName,
-	FilesExceptionMessage,
 } from "./libs/enums/enums.js";
 import { FilesError } from "./libs/exeptions/exeptions.js";
 import {
@@ -36,7 +36,7 @@ class FileService implements Service {
 		const { contentType, url } = payload;
 
 		const item = await this.fileRepository.create(
-			FilesEntity.initializeNew({
+			FileEntity.initializeNew({
 				contentType,
 				url,
 			}),
@@ -70,7 +70,7 @@ class FileService implements Service {
 		);
 
 		const savedFile = await this.fileRepository.create(
-			FilesEntity.initializeNew({
+			FileEntity.initializeNew({
 				contentType: mimetype as FileMimeType,
 				url,
 			}),
@@ -101,7 +101,7 @@ class FileService implements Service {
 
 		if (isInvalidType) {
 			throw new FilesError({
-				message: FilesExceptionMessage.INVALID_FILE_TYPE,
+				message: FileExceptionMessage.INVALID_FILE_TYPE,
 				status: HTTPCode.UNPROCESSED_ENTITY,
 			});
 		}

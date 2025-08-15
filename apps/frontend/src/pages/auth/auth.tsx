@@ -24,8 +24,8 @@ const Auth = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const { pathname } = useLocation();
 
-	const { authenticatedUser, userGroup, userPermissions } = useAppSelector(
-		({ auth }) => auth,
+	const authenticatedUser = useAppSelector(
+		({ auth }) => auth.authenticatedUser,
 	);
 	const hasUser = Boolean(authenticatedUser);
 
@@ -61,13 +61,16 @@ const Auth = (): React.JSX.Element => {
 	);
 
 	const userNavGroup = NAVIGATION_ITEMS_GROUPS.find(
-		(g) => g.groupKey === userGroup?.key,
+		(g) => g.groupKey === authenticatedUser?.group.key,
 	);
 
 	if (hasUser) {
 		const navigationItemHref =
-			userNavGroup && userGroup?.key === GroupKey.ADMINS
-				? getFirstNavigationItems(userNavGroup, userPermissions)?.href
+			userNavGroup && authenticatedUser?.group.key === GroupKey.ADMINS
+				? getFirstNavigationItems(
+						userNavGroup,
+						authenticatedUser.group.permissions,
+					)?.href
 				: undefined;
 
 		return <Navigate replace to={navigationItemHref ?? AppRoute.EXPLORE} />;

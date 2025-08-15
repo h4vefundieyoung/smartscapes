@@ -5,10 +5,6 @@ import { type ValueOf } from "~/libs/types/types.js";
 import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
 import {
-	type GroupResponseDto,
-	type PermissionItemDto,
-} from "../libs/types/types.js";
-import {
 	getAuthenticatedUser,
 	logout,
 	patchAuthenticatedUser,
@@ -21,8 +17,6 @@ type State = {
 	authenticatedUserPatchStatus: ValueOf<typeof DataStatus>;
 	dataStatus: ValueOf<typeof DataStatus>;
 	isInitialized: boolean;
-	userGroup: GroupResponseDto | null;
-	userPermissions: PermissionItemDto[];
 };
 
 const initialState: State = {
@@ -30,21 +24,14 @@ const initialState: State = {
 	authenticatedUserPatchStatus: DataStatus.IDLE,
 	dataStatus: DataStatus.IDLE,
 	isInitialized: false,
-	userGroup: null,
-	userPermissions: [],
 };
 
 const { actions, name, reducer } = createSlice({
 	extraReducers(builder) {
 		builder.addCase(getAuthenticatedUser.fulfilled, (state, action) => {
-			const user = action.payload?.data ?? null;
-			const group = user?.group ?? null;
-			const permissions = group?.permissions ?? [];
-			state.authenticatedUser = user;
+			state.authenticatedUser = action.payload ? action.payload.data : null;
 			state.dataStatus = DataStatus.FULFILLED;
 			state.isInitialized = true;
-			state.userGroup = group;
-			state.userPermissions = permissions;
 		});
 		builder.addCase(getAuthenticatedUser.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
@@ -53,22 +40,16 @@ const { actions, name, reducer } = createSlice({
 			state.authenticatedUser = null;
 			state.dataStatus = DataStatus.REJECTED;
 			state.isInitialized = true;
-			state.userGroup = null;
-			state.userPermissions = [];
 		});
 
 		builder.addCase(logout.fulfilled, (state) => {
 			state.authenticatedUser = null;
 			state.dataStatus = DataStatus.FULFILLED;
-			state.userGroup = null;
-			state.userPermissions = [];
 		});
 
 		builder.addCase(signUp.fulfilled, (state, action) => {
 			state.authenticatedUser = action.payload.data.user;
 			state.dataStatus = DataStatus.FULFILLED;
-			state.userGroup = action.payload.data.user.group;
-			state.userPermissions = action.payload.data.user.group.permissions;
 		});
 		builder.addCase(signUp.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
@@ -76,8 +57,6 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(signUp.rejected, (state) => {
 			state.authenticatedUser = null;
 			state.dataStatus = DataStatus.REJECTED;
-			state.userGroup = null;
-			state.userPermissions = [];
 		});
 
 		builder.addCase(signIn.pending, (state) => {
@@ -86,14 +65,10 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(signIn.fulfilled, (state, action) => {
 			state.authenticatedUser = action.payload.data.user;
 			state.dataStatus = DataStatus.FULFILLED;
-			state.userGroup = action.payload.data.user.group;
-			state.userPermissions = action.payload.data.user.group.permissions;
 		});
 		builder.addCase(signIn.rejected, (state) => {
 			state.authenticatedUser = null;
 			state.dataStatus = DataStatus.REJECTED;
-			state.userGroup = null;
-			state.userPermissions = [];
 		});
 
 		builder.addCase(patchAuthenticatedUser.fulfilled, (state, action) => {

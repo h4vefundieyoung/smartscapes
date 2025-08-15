@@ -6,8 +6,6 @@ import { type PermissionItemDto } from "~/modules/auth/libs/types/types.js";
 
 import { checkPermission } from "./helpers.js";
 
-const FIRST_ITEM = 0;
-
 const getFirstNavigationItems = (
 	itemsGroup: NavigationItemsGroup,
 	userItemPermissions: PermissionItemDto[] = [],
@@ -15,9 +13,9 @@ const getFirstNavigationItems = (
 	return (
 		itemsGroup.items.find(
 			({ userPermissions = [] }) =>
-				userPermissions.length > FIRST_ITEM &&
+				userPermissions.length > 0 &&
 				checkPermission(userPermissions, userItemPermissions),
-		) ?? itemsGroup.items[FIRST_ITEM]
+		) ?? itemsGroup.items[0]
 	);
 };
 

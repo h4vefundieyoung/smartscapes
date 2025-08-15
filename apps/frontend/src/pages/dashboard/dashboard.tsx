@@ -34,8 +34,8 @@ const DEFAULT_LONGITUDE = 30.5234;
 const DEFAULT_LATITUDE = 50.4501;
 
 const Dashboard = (): React.JSX.Element => {
-	const { authenticatedUser, userGroup, userPermissions } = useAppSelector(
-		({ auth }) => auth,
+	const authenticatedUser = useAppSelector(
+		({ auth }) => auth.authenticatedUser,
 	);
 	const dispatch = useAppDispatch();
 
@@ -79,8 +79,8 @@ const Dashboard = (): React.JSX.Element => {
 				<div className={styles["sidebar-container"]}>
 					<Sidebar
 						navigationItemsGroups={NAVIGATION_ITEMS_GROUPS}
-						userGroup={userGroup}
-						userPermissions={userPermissions}
+						userGroup={authenticatedUser?.group ?? null}
+						userPermissions={authenticatedUser?.group.permissions ?? []}
 					/>
 				</div>
 				<Loader />

@@ -8,8 +8,8 @@ const checkPermission = (
 		return true;
 	}
 
-	return requiredPermissions.some((rp) =>
-		userPermissions.some((up) => up.key === rp),
+	return requiredPermissions.some((permission) =>
+		userPermissions.some((userPermission) => userPermission.key === permission),
 	);
 };
 

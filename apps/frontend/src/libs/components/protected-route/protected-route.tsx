@@ -9,20 +9,20 @@ import { NotFound } from "~/pages/not-found/not-found.js";
 
 type Properties = {
 	children: React.JSX.Element;
-	protectedRoutePermissions?: ValueOf<typeof PermissionKey>[];
+	routePermissions?: ValueOf<typeof PermissionKey>[];
 };
 
 const ProtectedRoute = ({
 	children,
-	protectedRoutePermissions,
+	routePermissions,
 }: Properties): React.JSX.Element => {
-	const { authenticatedUser, userPermissions } = useAppSelector(
-		({ auth }) => auth,
+	const authenticatedUser = useAppSelector(
+		({ auth }) => auth.authenticatedUser,
 	);
 
 	const hasPermission = checkPermission(
-		protectedRoutePermissions,
-		userPermissions,
+		routePermissions,
+		authenticatedUser?.group.permissions ?? [],
 	);
 
 	if (!authenticatedUser) {

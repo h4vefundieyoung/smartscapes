@@ -15,15 +15,7 @@ const pointOfInterestUpdate = z
 			.max(PointsOfInterestValidationRule.DESCRIPTION_MAX_LENGTH, {
 				message: PointsOfInterestValidationMessage.DESCRIPTION_MAXIMUM_LENGTH,
 			})
-			.nullable()
-			.refine(
-				(value) =>
-					value === null ||
-					PointsOfInterestValidationRule.LATIN_REGEX.test(value),
-				{
-					message: PointsOfInterestValidationMessage.DESCRIPTION_LATIN_REGEX,
-				},
-			),
+			.nullable(),
 		location: locationSchema.optional(),
 		name: z
 			.string()
@@ -32,9 +24,6 @@ const pointOfInterestUpdate = z
 			})
 			.max(PointsOfInterestValidationRule.NAME_MAX_LENGTH, {
 				message: PointsOfInterestValidationMessage.NAME_MAXIMUM_LENGTH,
-			})
-			.regex(PointsOfInterestValidationRule.LATIN_REGEX, {
-				message: PointsOfInterestValidationMessage.NAME_LATIN_REGEX,
 			})
 			.optional(),
 	})

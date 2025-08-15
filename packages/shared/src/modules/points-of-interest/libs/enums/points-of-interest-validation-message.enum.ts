@@ -5,8 +5,6 @@ const PointsOfInterestValidationMessage = {
 		"Both latitude and longitude must be provided together.",
 	COORDS_REQUIRED_WITH_RADIUS:
 		"Location coordinates are required when radius is provided.",
-	DESCRIPTION_LATIN_REGEX:
-		"Description must contain only Latin letters, numbers, and basic symbols.",
 	DESCRIPTION_MAXIMUM_LENGTH: `Description must be less than ${String(PointsOfInterestValidationRule.DESCRIPTION_MAX_LENGTH)} characters long.`,
 	INVALID_LOCATION_TYPE: "Location type must be 'Point'.",
 	LATITUDE_MAX: `Latitude must be less than ${String(PointsOfInterestValidationRule.LATITUDE_MAX)}.`,
@@ -14,8 +12,6 @@ const PointsOfInterestValidationMessage = {
 	LOCATION_REQUIRED: "Location is required",
 	LONGITUDE_MAX: `Longitude must be less than ${String(PointsOfInterestValidationRule.LONGITUDE_MAX)}.`,
 	LONGITUDE_MIN: `Longitude must be greater than ${String(PointsOfInterestValidationRule.LONGITUDE_MIN)}.`,
-	NAME_LATIN_REGEX:
-		"Name must contain only Latin letters, numbers, and basic symbols.",
 	NAME_MAXIMUM_LENGTH: `Name must be less than ${String(PointsOfInterestValidationRule.NAME_MAX_LENGTH)} characters long.`,
 	NAME_MINIMUM_LENGTH: `Name must be at least ${String(PointsOfInterestValidationRule.NAME_MIN_LENGTH)} characters long.`,
 	RADIUS_MAX_KM: `Radius must be less than ${String(PointsOfInterestValidationRule.RADIUS_MAX_KM)} kilometers.`,

@@ -1,6 +1,5 @@
 const PointsOfInterestValidationRule = {
 	DESCRIPTION_MAX_LENGTH: 8000,
-	LATIN_REGEX: /^[A-Za-z0-9\s.,%&'"$()@-]+$/,
 	LATITUDE_MAX: 90,
 	LATITUDE_MIN: -90,
 	LONGITUDE_MAX: 180,

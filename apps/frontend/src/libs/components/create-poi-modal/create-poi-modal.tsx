@@ -1,16 +1,16 @@
 import React from "react";
-import { type FieldErrors } from "react-hook-form";
 
 import {
 	Button,
+	Icon,
 	Input,
 	MapLocationField,
 	MapProvider,
 	Modal,
 	TextArea,
 } from "~/libs/components/components.js";
+import { combineClassNames } from "~/libs/helpers/combine-class-names.helper.js";
 import { useAppForm } from "~/libs/hooks/hooks.js";
-import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import {
 	pointOfInterestCreateValidationSchema,
 	type PointsOfInterestRequestDto,
@@ -41,16 +41,6 @@ const CreatePOIModal = ({
 		handleReset(DEFAULT_CREATE_POI_PAYLOAD);
 	};
 
-	const handleFormError = (
-		formErrors: FieldErrors<PointsOfInterestRequestDto>,
-	): void => {
-		for (const error of Object.values(formErrors)) {
-			if (error.message) {
-				toastNotifier.showError(error.message);
-			}
-		}
-	};
-
 	return (
 		<Modal isOpen={isOpen} onClose={onClose}>
 			<div className={styles["header"]}>
@@ -58,7 +48,7 @@ const CreatePOIModal = ({
 			</div>
 			<form
 				className={styles["form"]}
-				onSubmit={handleSubmit(handleFormSubmit, handleFormError)}
+				onSubmit={handleSubmit(handleFormSubmit)}
 			>
 				<Input
 					autocomplete="name"
@@ -70,11 +60,22 @@ const CreatePOIModal = ({
 				/>
 				<div className={styles["map-field"]}>
 					<span className={styles["label-caption"]}>Location</span>
-					<div className={styles["map-section"]}>
+					<div
+						className={combineClassNames(
+							styles["map-section"],
+							errors.location && styles["map-section-error"],
+						)}
+					>
 						<MapProvider>
 							<MapLocationField control={control} name="location" />
 						</MapProvider>
 					</div>
+					{errors.location?.message && (
+						<span className={styles["error"]}>
+							<Icon height={24} name="error" width={24} />
+							{errors.location.message}
+						</span>
+					)}
 				</div>
 				<TextArea
 					control={control}

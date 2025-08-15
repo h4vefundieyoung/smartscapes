@@ -1,0 +1,3 @@
+const DEFAULT_RADIUS = 50;
+
+export { DEFAULT_RADIUS };

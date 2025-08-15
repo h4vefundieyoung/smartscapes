@@ -1,0 +1,3 @@
+const START_VISIT_ORDER = 0;
+
+export { START_VISIT_ORDER };

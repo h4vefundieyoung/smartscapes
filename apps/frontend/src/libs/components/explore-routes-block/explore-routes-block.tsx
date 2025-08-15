@@ -8,15 +8,16 @@ import { type RoutesResponseDto } from "~/modules/routes/libs/types/types.js";
 import { actions as routesActions } from "~/modules/routes/routes.js";
 
 import { RouteCard } from "../components.js";
+import {
+	DEFAULT_RADIUS,
+	ONE,
+	START_VISIT_ORDER,
+} from "./libs/constants/constants.js";
 import { sortRouteByDistance } from "./libs/helpers/helpers.js";
 import { type RouteItem } from "./libs/types/types.js";
 import styles from "./styles.module.css";
 
 // TODO: collect all poi id and create backend api that will accept multiple poi and returns all routes at once
-
-const ONE = 1;
-const DEFAULT_RADIUS = 50;
-const START_VISIT_ORDER = 0;
 
 const getCurrentUserPosition = (): Promise<[number, number]> => {
 	return new Promise((resolve, reject) => {

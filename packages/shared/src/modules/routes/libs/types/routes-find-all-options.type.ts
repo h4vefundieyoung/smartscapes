@@ -1,6 +1,6 @@
 type RoutesFindAllOptions = {
 	name?: string;
-	poiId?: number;
+	poiIds?: number | number[];
 };
 
 export { type RoutesFindAllOptions };

@@ -24,14 +24,14 @@ class RoutesApi extends BaseHTTPApi {
 	public async findAll(
 		query?: RoutesFindAllOptions,
 	): Promise<APIResponse<RoutesResponseDto[]>> {
-		const queryParameters: Record<string, string> = {};
+		const queryParameters: Record<string, string | string[]> = {};
 
 		if (query?.name) {
-			queryParameters["name"] = query.name;
+			queryParameters["name"] = [query.name];
 		}
 
-		if (typeof query?.poiId === "number") {
-			queryParameters["poiId"] = query.poiId.toString();
+		if (Array.isArray(query?.poiIds)) {
+			queryParameters["poiIds"] = query.poiIds.map((id) => id.toString());
 		}
 
 		const response = await this.load<APIResponse<RoutesResponseDto[]>>(

@@ -8,14 +8,14 @@ import { actions as routesActions } from "~/modules/routes/routes.js";
 const getRoutesForPOIs = async (
 	dispatch: ReturnType<typeof useAppDispatch>,
 	pois: PointsOfInterestResponseDto[],
-): Promise<RoutesResponseDto[][]> => {
-	const promises = pois.map((poi) =>
-		dispatch(routesActions.findAll({ poiId: poi.id })),
-	);
+): Promise<RoutesResponseDto[]> => {
+	const poiIds = pois.map((poi) => poi.id);
 
-	const results = await Promise.all(promises);
+	const action = await dispatch(routesActions.findAll({ poiIds }));
 
-	return results.map((action) => unwrapResult(action).data);
+	const result = unwrapResult(action);
+
+	return result.data;
 };
 
 export { getRoutesForPOIs };

@@ -45,8 +45,16 @@ class RoutesRepository implements Repository {
 					builder.whereILike("name", `%${options.name.trim()}%`);
 				}
 
-				if (options?.poiId !== undefined) {
-					builder.joinRelated("pois").where("pois.id", options.poiId);
+				let poiIds: number[] = [];
+
+				if (options?.poiIds) {
+					poiIds = Array.isArray(options.poiIds)
+						? options.poiIds
+						: [options.poiIds];
+				}
+
+				if (poiIds.length > 0) {
+					builder.joinRelated("pois").whereIn("pois.id", poiIds);
 				}
 			});
 

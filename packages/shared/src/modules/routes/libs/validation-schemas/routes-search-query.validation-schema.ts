@@ -16,7 +16,7 @@ const routesSearchQuery = z.object({
 			message: RoutesValidationMessage.NAME_MAXIMUM_LENGTH,
 		})
 		.optional(),
-	poiId: z.coerce.number().int().positive().optional(),
+	poiIds: z.array(z.coerce.number().int().positive()).optional(),
 });
 
 export { routesSearchQuery };

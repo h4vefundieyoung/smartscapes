@@ -7,7 +7,7 @@ import { sortRouteByDistance } from "./helpers.js";
 const ONE = 1;
 
 const mapAndSortRoutes = (
-	routesData: RoutesResponseDto[][],
+	routesData: RoutesResponseDto[],
 	pois: PointsOfInterestResponseDto[],
 	userCoordinates: [number, number],
 ): RouteItem[] => {
@@ -22,12 +22,10 @@ const mapAndSortRoutes = (
 
 	const allRoutes: RouteItem[] = [];
 
-	for (const routeGroup of routesData) {
-		for (const route of routeGroup) {
-			const startPOI = route.pois.find((point) => point.visitOrder === 0);
-			const coordinates = startPOI ? (poiMap.get(startPOI.id) ?? null) : null;
-			allRoutes.push({ ...route, startingPOICoordinates: coordinates });
-		}
+	for (const route of routesData) {
+		const startPOI = route.pois.find((point) => point.visitOrder === 0);
+		const coordinates = startPOI ? (poiMap.get(startPOI.id) ?? null) : null;
+		allRoutes.push({ ...route, startingPOICoordinates: coordinates });
 	}
 
 	const uniqueRoutesMap = new Map<number, RouteItem>();

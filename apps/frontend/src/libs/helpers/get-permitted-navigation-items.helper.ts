@@ -3,7 +3,7 @@ import { type PermissionItemDto } from "~/modules/users/libs/types/types.js";
 
 import { checkPermission } from "./helpers.js";
 
-const selectNavigationItems = (
+const getPermittedNavigationItems = (
 	navigationGroups: NavigationItemsGroup[],
 	userPermissions: PermissionItemDto[],
 ): NavigationItemsGroup[] => {
@@ -11,10 +11,10 @@ const selectNavigationItems = (
 		.map((group) => ({
 			...group,
 			items: group.items.filter((item) =>
-				checkPermission(item.userPermissions, userPermissions),
+				checkPermission(item.pagePermissions, userPermissions),
 			),
 		}))
 		.filter((group) => group.items.length > 0);
 };
 
-export { selectNavigationItems };
+export { getPermittedNavigationItems };

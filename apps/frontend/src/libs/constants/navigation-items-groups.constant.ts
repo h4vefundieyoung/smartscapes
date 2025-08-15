@@ -9,7 +9,7 @@ const NAVIGATION_ITEMS_GROUPS: NavigationItemsGroup[] = [
 				href: AppRoute.ROUTES,
 				icon: "route",
 				label: "Manage routes",
-				userPermissions: [PermissionKey.MANAGE_ROUTES],
+				pagePermissions: [PermissionKey.MANAGE_ROUTES],
 			},
 			{
 				href: AppRoute.CATEGORIES,

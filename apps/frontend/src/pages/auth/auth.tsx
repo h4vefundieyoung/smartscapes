@@ -2,8 +2,7 @@ import { Navigate } from "react-router";
 
 import logo from "~/assets/images/logo.svg";
 import { Link } from "~/libs/components/components.js";
-import { AppRoute, GroupKey, PermissionKey } from "~/libs/enums/enums.js";
-import { checkPermission } from "~/libs/helpers/helpers.js";
+import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -60,19 +59,7 @@ const Auth = (): React.JSX.Element => {
 	);
 
 	if (hasUser) {
-		const isAdminWithManageRoutes =
-			authenticatedUser?.group.key === GroupKey.ADMINS &&
-			checkPermission(
-				[PermissionKey.MANAGE_ROUTES],
-				authenticatedUser.group.permissions,
-			);
-
-		return (
-			<Navigate
-				replace
-				to={isAdminWithManageRoutes ? AppRoute.ROUTES : AppRoute.APP}
-			/>
-		);
+		return <Navigate replace to={AppRoute.APP} />;
 	}
 
 	return (

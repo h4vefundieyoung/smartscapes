@@ -3,7 +3,7 @@ import { Link } from "~/libs/components/components.js";
 import { AppRoute, KeyboardKey } from "~/libs/enums/enums.js";
 import {
 	combineClassNames,
-	selectNavigationItems,
+	getPermittedNavigationItems,
 } from "~/libs/helpers/helpers.js";
 import {
 	useCallback,
@@ -28,8 +28,8 @@ const Sidebar = ({
 }: Properties): React.JSX.Element => {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
-	const selectedNavigationItems = useMemo(() => {
-		return selectNavigationItems(navigationItemsGroups, userPermissions);
+	const permittedNavigationItems = useMemo(() => {
+		return getPermittedNavigationItems(navigationItemsGroups, userPermissions);
 	}, [navigationItemsGroups, userPermissions]);
 
 	const handleClick = useCallback((): void => {
@@ -79,7 +79,7 @@ const Sidebar = ({
 					</div>
 				</div>
 				<div className={styles["sidebar"]}>
-					{selectedNavigationItems.map(({ hasLabel, items, name }) => (
+					{permittedNavigationItems.map(({ hasLabel, items, name }) => (
 						<div
 							className={combineClassNames(
 								styles["group"],

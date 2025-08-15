@@ -6,7 +6,7 @@ type NavigationItem = {
 	icon: IconName;
 	isLabelHidden?: boolean;
 	label: string;
-	userPermissions?: ValueOf<typeof PermissionKey>[];
+	pagePermissions?: ValueOf<typeof PermissionKey>[];
 };
 
 export { type NavigationItem };

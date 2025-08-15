@@ -18,6 +18,8 @@ import {
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
+import { HTTPError } from "~/libs/modules/http/http.js";
+import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { fileApi } from "~/modules/files/files.js";
 import { FileFolderName } from "~/modules/files/libs/enums/enums.js";
 import { type PointsOfInterestRequestDto } from "~/modules/points-of-interest/libs/types/types.js";
@@ -71,8 +73,13 @@ const Dashboard = (): React.JSX.Element => {
 
 				setUploadedImages((previous) => [...previous, responseURL.data.url]);
 				setIsUploading(false);
-			} catch {
+
+				toastNotifier.showSuccess("File uploaded successfully");
+			} catch (error: unknown) {
 				setIsUploading(false);
+				toastNotifier.showError(
+					error instanceof HTTPError ? error.message : "Uploading file failed",
+				);
 			}
 		},
 		[],

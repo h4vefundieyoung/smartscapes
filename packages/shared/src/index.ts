@@ -72,14 +72,14 @@ export {
 } from "./modules/route-categories/route-categories.js";
 export {
 	RouteApiPath,
+	type RouteFindAllOptions,
+	type RouteRequestConstructDto,
+	type RouteRequestCreateDto,
+	type RouteRequestPatchDto,
+	type RouteResponseConstructDto,
+	type RouteResponseDto,
 	routesConstructValidationSchema,
 	routesCreateValidationSchema,
-	type RoutesFindAllOptions,
-	type RoutesRequestConstructDto,
-	type RoutesRequestCreateDto,
-	type RoutesRequestPatchDto,
-	type RoutesResponseConstructDto,
-	type RoutesResponseDto,
 	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
 } from "./modules/routes/routes.js";

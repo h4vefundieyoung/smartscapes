@@ -1,4 +1,4 @@
-import { RoutesValidationRule } from "./routes-validation-rule.enum.js";
+import { RoutesValidationRule } from "./route-validation-rule.enum.js";
 
 const RoutesValidationMessage = {
 	CATEGORY_INVALID_KEY:

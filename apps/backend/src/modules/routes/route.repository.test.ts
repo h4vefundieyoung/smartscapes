@@ -5,18 +5,18 @@ import { afterEach, beforeEach, describe, it } from "node:test";
 
 import { DatabaseTableName } from "~/libs/modules/database/database.js";
 
-import { type RoutesFindAllOptions } from "./libs/types/types.js";
-import { RoutesEntity } from "./routes.entity.js";
-import { RoutesModel } from "./routes.model.js";
-import { RoutesRepository } from "./routes.repository.js";
+import { type RouteFindAllOptions } from "./libs/types/types.js";
+import { RouteEntity } from "./route.entity.js";
+import { RouteModel } from "./route.model.js";
+import { RouteRepository } from "./route.repository.js";
 
 const EXISTING_ID = 1;
 const NON_EXISTENT_ID = 999;
 const DELETED_COUNT = 1;
 const NOT_DELETED_COUNT = 0;
 
-describe("RoutesRepository", () => {
-	let routesRepository: RoutesRepository;
+describe("RouteRepository", () => {
+	let routesRepository: RouteRepository;
 	let databaseTracker: Tracker;
 
 	const mockRoute = {
@@ -25,8 +25,8 @@ describe("RoutesRepository", () => {
 		name: "Test Route",
 	};
 
-	const createMockRouteEntity = (): RoutesEntity =>
-		RoutesEntity.initialize({
+	const createMockRouteEntity = (): RouteEntity =>
+		RouteEntity.initialize({
 			...mockRoute,
 			pois: [{ id: 1, visitOrder: 1 }],
 		});
@@ -36,9 +36,9 @@ describe("RoutesRepository", () => {
 
 		databaseTracker = createTracker(database);
 
-		RoutesModel.knex(database);
+		RouteModel.knex(database);
 
-		routesRepository = new RoutesRepository(RoutesModel);
+		routesRepository = new RouteRepository(RouteModel);
 	});
 
 	afterEach(() => {
@@ -66,7 +66,7 @@ describe("RoutesRepository", () => {
 	});
 
 	it("findAll should return all routes if options are not provided", async () => {
-		const mockRouteEntity = RoutesEntity.initialize({
+		const mockRouteEntity = RouteEntity.initialize({
 			...mockRoute,
 			pois: [],
 		});
@@ -82,10 +82,10 @@ describe("RoutesRepository", () => {
 	});
 
 	it("findAll should return routes matching search query", async () => {
-		const mockRouteEntity = RoutesEntity.initialize({ ...mockRoute, pois: [] });
+		const mockRouteEntity = RouteEntity.initialize({ ...mockRoute, pois: [] });
 		const mockRouteObject = mockRouteEntity.toObject();
 
-		const mockOptions: RoutesFindAllOptions = {
+		const mockOptions: RouteFindAllOptions = {
 			categories: ["entertaiment", "history"],
 			name: mockRouteObject.name.toLowerCase(),
 		};
@@ -100,7 +100,7 @@ describe("RoutesRepository", () => {
 	});
 
 	it("findAll should return empty array if no routes found", async () => {
-		const mockOptions: RoutesFindAllOptions = { name: "nonexistent" };
+		const mockOptions: RouteFindAllOptions = { name: "nonexistent" };
 
 		databaseTracker.on.select(DatabaseTableName.ROUTES).response([]);
 

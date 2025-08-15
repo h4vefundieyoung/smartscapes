@@ -1,6 +1,6 @@
-export { type RoutesFindAllOptions } from "./routes-find-all-options.type.js";
-export { type RoutesRequestConstructDto } from "./routes-request-construct-dto.type.js";
-export { type RoutesRequestCreateDto } from "./routes-request-dto.type.js";
-export { type RoutesRequestPatchDto } from "./routes-request-update.dto.js";
-export { type RoutesResponseConstructDto } from "./routes-response-construct-dto.type.js";
-export { type RoutesResponseDto } from "./routes-response-dto.type.js";
+export { type RouteFindAllOptions } from "./route-find-all-options.type.js";
+export { type RouteRequestConstructDto } from "./route-request-construct-dto.type.js";
+export { type RouteRequestCreateDto } from "./route-request-dto.type.js";
+export { type RouteRequestPatchDto } from "./route-request-update.dto.js";
+export { type RouteResponseConstructDto } from "./route-response-construct-dto.type.js";
+export { type RouteResponseDto } from "./route-response-dto.type.js";

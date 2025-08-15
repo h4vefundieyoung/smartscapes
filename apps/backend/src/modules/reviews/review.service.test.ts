@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
-import { type RoutesService } from "../routes/routes.service.js";
+import { type RouteService } from "../routes/route.service.js";
 import { ReviewEntity } from "./review.entity.js";
 import { type ReviewRepository } from "./review.repository.js";
 import { ReviewService } from "./review.service.js";
@@ -29,7 +29,7 @@ const createMockPointsOfInterestService =
 			}),
 	});
 
-const createMockRoutesService = (): Partial<RoutesService> => ({
+const createMockRouteService = (): Partial<RouteService> => ({
 	findById: (id: number) =>
 		Promise.resolve({
 			createdAt: new Date().toISOString(),
@@ -65,7 +65,7 @@ describe("ReviewService", () => {
 	it("create should return new review", async () => {
 		const reviewEntity = ReviewEntity.initialize(mockReview);
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const routesService = createMockRoutesService();
+		const routesService = createMockRouteService();
 
 		const reviewRepository = {
 			create: (() =>
@@ -76,7 +76,7 @@ describe("ReviewService", () => {
 		const reviewService = new ReviewService(
 			reviewRepository,
 			pointsOfInterestService as PointsOfInterestService,
-			routesService as RoutesService,
+			routesService as RouteService,
 		);
 
 		const result = await reviewService.create({
@@ -106,7 +106,7 @@ describe("ReviewService", () => {
 		const reviewService = new ReviewService(
 			reviewRepository,
 			createMockPointsOfInterestService() as PointsOfInterestService,
-			createMockRoutesService() as RoutesService,
+			createMockRouteService() as RouteService,
 		);
 
 		const result = await reviewService.findAll();

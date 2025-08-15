@@ -10,22 +10,22 @@ import { type PointsOfInterestService } from "../points-of-interest/points-of-in
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
 import {
-	type RoutesFindAllOptions,
-	type RoutesRequestCreateDto,
-	type RoutesRequestPatchDto,
-	type RoutesResponseConstructDto,
-	type RoutesResponseDto,
+	type RouteFindAllOptions,
+	type RouteRequestCreateDto,
+	type RouteRequestPatchDto,
+	type RouteResponseConstructDto,
+	type RouteResponseDto,
 } from "./libs/types/types.js";
-import { RoutesEntity } from "./routes.entity.js";
-import { type RoutesRepository } from "./routes.repository.js";
+import { RouteEntity } from "./route.entity.js";
+import { type RouteRepository } from "./route.repository.js";
 
-class RoutesService implements Service {
+class RouteService implements Service {
 	private mapboxDirectionApi: MapboxDirectionsApi;
 	private pointsOfInterestService: PointsOfInterestService;
-	private routesRepository: RoutesRepository;
+	private routesRepository: RouteRepository;
 
 	public constructor(
-		routesRepository: RoutesRepository,
+		routesRepository: RouteRepository,
 		pointsOfInterestService: PointsOfInterestService,
 		mapboxDirectionsApi: MapboxDirectionsApi,
 	) {
@@ -36,7 +36,7 @@ class RoutesService implements Service {
 
 	public async construct(
 		pointsOfInterest: number[],
-	): Promise<RoutesResponseConstructDto> {
+	): Promise<RouteResponseConstructDto> {
 		const { items } = await this.pointsOfInterestService.findAll({
 			ids: pointsOfInterest,
 		});
@@ -60,8 +60,8 @@ class RoutesService implements Service {
 	}
 
 	public async create(
-		payload: RoutesRequestCreateDto,
-	): Promise<RoutesResponseDto> {
+		payload: RouteRequestCreateDto,
+	): Promise<RouteResponseDto> {
 		await this.ensurePoisExist(payload.pois);
 
 		const formattedPayload = {
@@ -72,7 +72,7 @@ class RoutesService implements Service {
 			})),
 		};
 
-		const routeEntity = RoutesEntity.initializeNew(formattedPayload);
+		const routeEntity = RouteEntity.initializeNew(formattedPayload);
 
 		const route = await this.routesRepository.create(routeEntity);
 
@@ -93,8 +93,8 @@ class RoutesService implements Service {
 	}
 
 	public async findAll(
-		options: null | RoutesFindAllOptions,
-	): Promise<CollectionResult<RoutesResponseDto>> {
+		options: null | RouteFindAllOptions,
+	): Promise<CollectionResult<RouteResponseDto>> {
 		if (options?.categories) {
 			options.categories = Array.isArray(options.categories)
 				? options.categories
@@ -107,7 +107,7 @@ class RoutesService implements Service {
 			items: items.map((item) => item.toObject()),
 		};
 	}
-	public async findById(id: number): Promise<RoutesResponseDto> {
+	public async findById(id: number): Promise<RouteResponseDto> {
 		const item = await this.routesRepository.findById(id);
 
 		if (!item) {
@@ -122,8 +122,8 @@ class RoutesService implements Service {
 
 	public async patch(
 		id: number,
-		payload: RoutesRequestPatchDto,
-	): Promise<RoutesResponseDto> {
+		payload: RouteRequestPatchDto,
+	): Promise<RouteResponseDto> {
 		const item = await this.routesRepository.patch(id, payload);
 
 		if (!item) {
@@ -150,4 +150,4 @@ class RoutesService implements Service {
 	}
 }
 
-export { RoutesService };
+export { RouteService };

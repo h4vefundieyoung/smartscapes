@@ -9,12 +9,12 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { RouteApiPath } from "./libs/enums/enums.js";
 import {
-	type RoutesFindAllOptions,
-	type RoutesRequestConstructDto,
-	type RoutesRequestCreateDto,
-	type RoutesRequestPatchDto,
-	type RoutesResponseConstructDto,
-	type RoutesResponseDto,
+	type RouteFindAllOptions,
+	type RouteRequestConstructDto,
+	type RouteRequestCreateDto,
+	type RouteRequestPatchDto,
+	type RouteResponseConstructDto,
+	type RouteResponseDto,
 } from "./libs/types/types.js";
 import {
 	routesConstructValidationSchema,
@@ -22,7 +22,7 @@ import {
 	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
-import { type RoutesService } from "./routes.service.js";
+import { type RouteService } from "./route.service.js";
 
 /**
  * @swagger
@@ -79,10 +79,10 @@ import { type RoutesService } from "./routes.service.js";
  *
  */
 
-class RoutesController extends BaseController {
-	private routesService: RoutesService;
+class RouteController extends BaseController {
+	private routesService: RouteService;
 
-	public constructor(logger: Logger, routesService: RoutesService) {
+	public constructor(logger: Logger, routesService: RouteService) {
 		super(logger, APIPath.ROUTES);
 
 		this.routesService = routesService;
@@ -142,7 +142,7 @@ class RoutesController extends BaseController {
 	 *     security:
 	 *       - bearerAuth: []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Construct Mapbox route
 	 *     requestBody:
 	 *       required: true
@@ -172,8 +172,8 @@ class RoutesController extends BaseController {
 
 	public async constructRoute({
 		body: { pointsOfInterest },
-	}: APIHandlerOptions<{ body: RoutesRequestConstructDto }>): Promise<
-		APIHandlerResponse<RoutesResponseConstructDto>
+	}: APIHandlerOptions<{ body: RouteRequestConstructDto }>): Promise<
+		APIHandlerResponse<RouteResponseConstructDto>
 	> {
 		const data = await this.routesService.construct(pointsOfInterest);
 
@@ -190,7 +190,7 @@ class RoutesController extends BaseController {
 	 *     security:
 	 *       - bearerAuth: []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Create a new route (requires manage_routes permission)
 	 *     description: Creates a new route. Requires authentication and manage_routes permission.
 	 *     requestBody:
@@ -255,9 +255,9 @@ class RoutesController extends BaseController {
 
 	public async create(
 		options: APIHandlerOptions<{
-			body: RoutesRequestCreateDto;
+			body: RouteRequestCreateDto;
 		}>,
-	): Promise<APIHandlerResponse<RoutesResponseDto>> {
+	): Promise<APIHandlerResponse<RouteResponseDto>> {
 		const { description, name, pois } = options.body;
 
 		const route = await this.routesService.create({ description, name, pois });
@@ -275,7 +275,7 @@ class RoutesController extends BaseController {
 	 *     security:
 	 *      - bearerAuth: []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Delete a route (requires manage_routes permission)
 	 *     description: Deletes an existing route. Requires authentication and manage_routes permission.
 	 *     parameters:
@@ -341,7 +341,7 @@ class RoutesController extends BaseController {
 	 *     security:
 	 *      - bearerAuth:  []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Retrieve all routes with optional search by name
 	 *     description: |
 	 *       Get all routes, or only those whose names match the search query.
@@ -380,9 +380,9 @@ class RoutesController extends BaseController {
 
 	public async findAll(
 		options: APIHandlerOptions<{
-			query?: RoutesFindAllOptions;
+			query?: RouteFindAllOptions;
 		}>,
-	): Promise<APIHandlerResponse<RoutesResponseDto[]>> {
+	): Promise<APIHandlerResponse<RouteResponseDto[]>> {
 		const { query = null } = options;
 
 		const { items } = await this.routesService.findAll(query);
@@ -400,7 +400,7 @@ class RoutesController extends BaseController {
 	 *     security:
 	 *      - bearerAuth: []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Get a route by ID
 	 *     description: Retrieves a route by its ID. Requires authentication but no special permissions.
 	 *     parameters:
@@ -437,7 +437,7 @@ class RoutesController extends BaseController {
 
 	public async findById(
 		options: APIHandlerOptions<{ params: { id: string } }>,
-	): Promise<APIHandlerResponse<RoutesResponseDto>> {
+	): Promise<APIHandlerResponse<RouteResponseDto>> {
 		const id = Number(options.params.id);
 
 		const route = await this.routesService.findById(id);
@@ -455,7 +455,7 @@ class RoutesController extends BaseController {
 	 *     security:
 	 *      - bearerAuth: []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Update a route
 	 *     parameters:
 	 *       - in: path
@@ -519,10 +519,10 @@ class RoutesController extends BaseController {
 
 	public async patch(
 		options: APIHandlerOptions<{
-			body: RoutesRequestPatchDto;
+			body: RouteRequestPatchDto;
 			params: { id: string };
 		}>,
-	): Promise<APIHandlerResponse<RoutesResponseDto>> {
+	): Promise<APIHandlerResponse<RouteResponseDto>> {
 		const id = Number(options.params.id);
 		const { description, name } = options.body;
 
@@ -537,4 +537,4 @@ class RoutesController extends BaseController {
 		};
 	}
 }
-export { RoutesController };
+export { RouteController };

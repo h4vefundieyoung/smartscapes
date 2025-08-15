@@ -7,7 +7,7 @@ import { type PlannedRoutesResponseDto } from "./libs/types/types.js";
 import { PlannedRoutesEntity } from "./planned-routes.entity.js";
 import { type PlannedRoutesRepository } from "./planned-routes.repository.js";
 
-class PlannedRoutesService {
+class PlannedRouteService {
 	private plannedRoutesRepository: PlannedRoutesRepository;
 
 	public constructor(plannedRoutesRepository: PlannedRoutesRepository) {
@@ -53,4 +53,4 @@ class PlannedRoutesService {
 	}
 }
 
-export { PlannedRoutesService };
+export { PlannedRouteService };

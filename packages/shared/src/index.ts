@@ -1,4 +1,8 @@
-export { METERS_IN_KM, TIME_UNIT } from "./libs/constants/constants.js";
+export {
+	BYTES_IN_MB,
+	METERS_IN_KM,
+	TIME_UNIT,
+} from "./libs/constants/constants.js";
 export {
 	APIErrorType,
 	APIPath,
@@ -31,6 +35,14 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
 export {
+	FileFolderName,
+	type FileMimeType,
+	FilesApiPath,
+	fileUploadFolderValidationSchema,
+	type FileUploadRequestDto,
+	type FileUploadResponseDto,
+} from "./modules/files/files.js";
+export {
 	GroupExceptionMessage,
 	type GroupItemWithPermissionsDto,
 	GroupKey,
@@ -46,8 +58,13 @@ export {
 	NotificationType,
 } from "./modules/notifications/notifications.js";
 export {
+	type PermissionItemDto,
+	PermissionKey,
+} from "./modules/permission/permission.js";
+export {
 	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
+	PointsOfInterestApiPath,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 	type PointsOfInterestSearchQuery,
@@ -67,14 +84,15 @@ export {
 } from "./modules/route-categories/route-categories.js";
 export {
 	RouteApiPath,
+	type RouteConstructRequestDto,
+	type RouteConstructResponseDto,
+	type RouteCreateRequestDto,
+	type RouteFindAllOptions,
+	type RouteGetAllItemResponseDto,
+	type RouteGetByIdResponseDto,
+	type RoutePatchRequestDto,
 	routesConstructValidationSchema,
 	routesCreateValidationSchema,
-	type RoutesFindAllOptions,
-	type RoutesRequestConstructDto,
-	type RoutesRequestCreateDto,
-	type RoutesRequestPatchDto,
-	type RoutesResponseConstructDto,
-	type RoutesResponseDto,
 	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
 } from "./modules/routes/routes.js";

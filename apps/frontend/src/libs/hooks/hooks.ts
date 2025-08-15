@@ -13,4 +13,4 @@ export {
 	useState,
 } from "react";
 export { useController as useFormController } from "react-hook-form";
-export { useLocation, useSearchParams } from "react-router";
+export { useLocation, useParams, useSearchParams } from "react-router";

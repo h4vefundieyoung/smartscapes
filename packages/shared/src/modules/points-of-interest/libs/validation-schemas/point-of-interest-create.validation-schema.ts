@@ -7,6 +7,12 @@ import {
 import { locationSchema } from "./location.validation-schema.js";
 
 const pointOfInterestCreate = z.strictObject({
+	description: z
+		.string()
+		.max(PointsOfInterestValidationRule.DESCRIPTION_MAX_LENGTH, {
+			message: PointsOfInterestValidationMessage.DESCRIPTION_MAXIMUM_LENGTH,
+		})
+		.nullable(),
 	location: locationSchema,
 	name: z
 		.string()

@@ -3,7 +3,7 @@ import { ReviewEntity } from "~/modules/reviews/review.entity.js";
 import { type ReviewRepository } from "~/modules/reviews/review.repository.js";
 
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
-import { type RoutesService } from "../routes/routes.service.js";
+import { type RouteService } from "../routes/route.service.js";
 import {
 	type ReviewCreatePayload,
 	type ReviewGetByIdResponseDto,
@@ -12,16 +12,16 @@ import {
 class ReviewService implements Service {
 	private pointsOfInterestService: PointsOfInterestService;
 	private reviewRepository: ReviewRepository;
-	private routesService: RoutesService;
+	private routeService: RouteService;
 
 	public constructor(
 		reviewRepository: ReviewRepository,
 		pointsOfInterestService: PointsOfInterestService,
-		routesService: RoutesService,
+		routeService: RouteService,
 	) {
 		this.pointsOfInterestService = pointsOfInterestService;
 		this.reviewRepository = reviewRepository;
-		this.routesService = routesService;
+		this.routeService = routeService;
 	}
 
 	public async create(
@@ -61,7 +61,7 @@ class ReviewService implements Service {
 	}
 
 	private async ensureRouteExists(id: number): Promise<void> {
-		await this.routesService.findById(id);
+		await this.routeService.findById(id);
 	}
 }
 

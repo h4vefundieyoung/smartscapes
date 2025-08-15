@@ -30,7 +30,7 @@ type SelectOption = {
 const ConstructRoute = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const pointsOfInterest = useAppSelector(
-		(state) => state.pointsOfInterest.data,
+		(state) => state.pointsOfInterest.dataAll,
 	);
 	const [selectedPois, setSelectedPois] = useState<
 		PointsOfInterestResponseDto[]

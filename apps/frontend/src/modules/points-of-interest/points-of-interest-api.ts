@@ -1,10 +1,12 @@
-import { APIPath } from "~/libs/enums/enums.js";
-import { BaseHTTPApi } from "~/libs/modules/api/base-http-api.js";
+import { APIPath, ContentType } from "~/libs/enums/enums.js";
+import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
 
+import { PointsOfInterestApiPath } from "./libs/enums/enums.js";
 import {
+	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 	type PointsOfInterestSearchQuery,
 } from "./libs/types/types.js";
@@ -18,6 +20,22 @@ type Constructor = {
 class PointOfInterestApi extends BaseHTTPApi {
 	public constructor({ baseUrl, http, storage }: Constructor) {
 		super({ baseUrl, http, path: APIPath.POINTS_OF_INTEREST, storage });
+	}
+
+	public async create(
+		payload: PointsOfInterestRequestDto,
+	): Promise<APIResponse<PointsOfInterestResponseDto>> {
+		const response = await this.load(
+			this.getFullEndpoint(PointsOfInterestApiPath.ROOT, {}),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "POST",
+				payload: JSON.stringify(payload),
+			},
+		);
+
+		return (await response.json()) as APIResponse<PointsOfInterestResponseDto>;
 	}
 
 	public async getAll(

@@ -1,6 +1,10 @@
 import Analytics from "~/assets/images/icons/analytics.svg?react";
 import ArrowDown from "~/assets/images/icons/arrow-down.svg?react";
+import Close from "~/assets/images/icons/close.svg?react";
 import Dashboard from "~/assets/images/icons/dashboard.svg?react";
+import Error from "~/assets/images/icons/error.svg?react";
+import EyeOff from "~/assets/images/icons/eye-off.svg?react";
+import Eye from "~/assets/images/icons/eye.svg?react";
 import Link from "~/assets/images/icons/link.svg?react";
 import Map from "~/assets/images/icons/map.svg?react";
 import Message from "~/assets/images/icons/message.svg?react";
@@ -16,7 +20,11 @@ const iconNameToSvg: Record<
 > = {
 	analytics: Analytics,
 	arrowDown: ArrowDown,
+	close: Close,
 	dashboard: Dashboard,
+	error: Error,
+	eye: Eye,
+	eyeOff: EyeOff,
 	link: Link,
 	map: Map,
 	message: Message,

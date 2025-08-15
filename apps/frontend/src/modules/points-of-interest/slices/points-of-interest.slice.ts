@@ -4,35 +4,48 @@ import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 import { type PointsOfInterestResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 
-import { loadAll } from "./actions.js";
+import { create, loadAll } from "./actions.js";
 
 type State = {
-	data: PointsOfInterestResponseDto[];
+	createStatus: ValueOf<typeof DataStatus>;
+	data: null | PointsOfInterestResponseDto;
+	dataAll: PointsOfInterestResponseDto[];
 	dataStatus: ValueOf<typeof DataStatus>;
 };
 
 const initialState: State = {
-	data: [],
+	createStatus: DataStatus.IDLE,
+	data: null,
+	dataAll: [],
 	dataStatus: DataStatus.IDLE,
 };
 
 const { actions, name, reducer } = createSlice({
-	extraReducers: (builder) => {
-		builder
-			.addCase(loadAll.fulfilled, (state, action) => {
-				state.data = action.payload.data;
-				state.dataStatus = DataStatus.FULFILLED;
-			})
-			.addCase(loadAll.pending, (state) => {
-				state.dataStatus = DataStatus.PENDING;
-			})
-			.addCase(loadAll.rejected, (state) => {
-				state.dataStatus = DataStatus.REJECTED;
-				state.data = [];
-			});
+	extraReducers(builder) {
+		builder.addCase(create.pending, (state) => {
+			state.createStatus = DataStatus.PENDING;
+		});
+		builder.addCase(create.fulfilled, (state, { payload }) => {
+			state.data = payload.data;
+			state.createStatus = DataStatus.FULFILLED;
+		});
+		builder.addCase(create.rejected, (state) => {
+			state.createStatus = DataStatus.REJECTED;
+		});
+		builder.addCase(loadAll.fulfilled, (state, { payload }) => {
+			state.dataAll = payload.data;
+			state.dataStatus = DataStatus.FULFILLED;
+		});
+		builder.addCase(loadAll.pending, (state) => {
+			state.dataStatus = DataStatus.PENDING;
+		});
+		builder.addCase(loadAll.rejected, (state) => {
+			state.dataStatus = DataStatus.REJECTED;
+			state.dataAll = [];
+		});
 	},
 	initialState,
-	name: "Points of interest",
+	name: "points-of-interest",
 	reducers: {},
 });
 

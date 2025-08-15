@@ -12,7 +12,9 @@ const pointOfInterestApi = new PointOfInterestApi({
 
 export { pointOfInterestApi };
 export {
+	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 	type PointsOfInterestSearchQuery,
 } from "./libs/types/types.js";
+export { pointOfInterestCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 export { actions, reducer } from "./slices/points-of-interest.js";

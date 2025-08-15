@@ -1,5 +1,67 @@
 # Changelog
 
+## [1.26.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.25.1...@smartscapes/frontend-v1.26.0) (2025-08-15)
+
+
+### Features
+
+* **frontend:** image upload ss-220 ([#346](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/346)) ([81afeda](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/81afeda8da1919b71d1c0074d8f01850dc8c2a3c))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.20.0 to 1.21.0
+
+## [1.25.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.25.0...@smartscapes/frontend-v1.25.1) (2025-08-15)
+
+
+### Bug Fixes
+
+* **frontend:** fix map not displaying and adjust layout ss-295 ([#384](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/384)) ([3ed5f30](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/3ed5f30f9e75ff7160f728d914fa7e39b212b86c))
+
+## [1.25.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.24.0...@smartscapes/frontend-v1.25.0) (2025-08-14)
+
+
+### Features
+
+* **frontend/backend:** routes detail page ss-268 ([#283](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/283)) ([47176a4](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/47176a4bff35af04c6e77cf9b1a14b032cd77a45))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.19.0 to 1.20.0
+
+## [1.24.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.23.0...@smartscapes/frontend-v1.24.0) (2025-08-14)
+
+
+### Features
+
+* **frontend:** implement password visibility toggler ss-184 ([#265](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/265)) ([9931771](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/993177149cf980735a57f888eb4b79f64a35e112))
+* **frontend:** toast notification on updating pofile ss-339 ([#363](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/363)) ([b1649cc](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/b1649ccd4de593392c5921762205e2c4b2ea4939))
+
+## [1.23.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.22.1...@smartscapes/frontend-v1.23.0) (2025-08-14)
+
+
+### Features
+
+* **frontend:** create poi frontend flow ss-244 ([#299](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/299)) ([160c469](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/160c469471538772b6d8c847bfb1e87554d182cf))
+
+
+### Bug Fixes
+
+* **frontend/backend:** fix expired token removal ss-367 ([#372](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/372)) ([892e77b](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/892e77b7a636710d99fe6b909ddc1000747951e7))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.18.0 to 1.19.0
+
 ## [1.22.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.22.0...@smartscapes/frontend-v1.22.1) (2025-08-13)
 
 

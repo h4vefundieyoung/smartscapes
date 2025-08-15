@@ -71,6 +71,7 @@ describe("FileService", () => {
 
 		const result = await fileService.uploadFile({
 			file: {
+				file: { truncated: false },
 				filename: "test.jpg",
 				mimetype: "image/jpg" as FileMimeType,
 				toBuffer: () => Promise.resolve(Buffer.from("test")),

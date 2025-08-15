@@ -12,6 +12,13 @@ type EnvironmentSchema = {
 		JWT_SECRET: string;
 		TOKEN_EXPIRATION: string;
 	};
+	AWS: {
+		ACCESS_KEY_ID: string;
+		MAX_FILE_SIZE_MB: number;
+		REGION: string;
+		S3_BUCKET_NAME: string;
+		SECRET_ACCESS_KEY: string;
+	};
 	DB: {
 		CONNECTION_STRING: string;
 		DIALECT: string;

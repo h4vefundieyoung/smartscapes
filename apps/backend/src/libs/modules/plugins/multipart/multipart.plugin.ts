@@ -20,7 +20,7 @@ const multipart = async (
 			files: 1,
 			fileSize: MAX_FILE_SIZE_BYTES,
 		},
-		throwFileSizeLimit: true,
+		throwFileSizeLimit: false,
 	});
 };
 

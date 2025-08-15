@@ -59,6 +59,7 @@ class FileService implements Service {
 		const { filename, mimetype } = file;
 
 		this.validateMimeType(mimetype as FileMimeType);
+		this.validateFileSize(file);
 
 		const buffer = await file.toBuffer();
 		const generatedFileName = this.generateFileName(folder, filename);
@@ -89,6 +90,17 @@ class FileService implements Service {
 		const timestamp = String(Date.now());
 
 		return `${folder}/${name}-${timestamp}${extension}`;
+	};
+
+	private validateFileSize = (file: MultipartFile): void => {
+		const isFileSizeExceedsLimit = file.file.truncated;
+
+		if (isFileSizeExceedsLimit) {
+			throw new FilesError({
+				message: FileExceptionMessage.FILE_SIZE_EXCEEDS_LIMIT,
+				status: HTTPCode.UNPROCESSED_ENTITY,
+			});
+		}
 	};
 
 	private validateMimeType = (mimeType: FileMimeType): boolean => {

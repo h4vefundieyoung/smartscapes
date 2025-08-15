@@ -7,6 +7,7 @@ import { actions as pointsOfInterestActions } from "~/modules/points-of-interest
 import { type RoutesResponseDto } from "~/modules/routes/libs/types/types.js";
 import { actions as routesActions } from "~/modules/routes/routes.js";
 
+import { RouteCard } from "../components.js";
 import { sortRouteByDistance } from "./libs/helpers/helpers.js";
 import { type RouteItem } from "./libs/types/types.js";
 import styles from "./styles.module.css";
@@ -128,15 +129,12 @@ const ExploreRoutesBlock = (): React.JSX.Element => {
 	}
 
 	return (
-		<div className={styles["explore-routes-container"]}>
-			<h3 className={styles["explore-routes-title"]}>Explore routes</h3>
+		<div className={styles["container"]}>
+			<h3 className={styles["title"]}>Explore routes</h3>
 			{routes.length === 0 && <div>No routes found nearby.</div>}
-			<ul className={styles["explore-routes-list"]}>
+			<ul className={styles["list"]}>
 				{routes.map((route) => (
-					<li className={styles["explore-routes-item"]} key={route.id}>
-						<strong>{route.name}</strong>
-						<p>{route.description}</p>
-					</li>
+					<RouteCard imageUrl={null} key={route.id} name={route.name} />
 				))}
 			</ul>
 		</div>

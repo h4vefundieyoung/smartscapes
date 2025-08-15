@@ -2,14 +2,11 @@ import React from "react";
 
 import {
 	Button,
-	Icon,
 	Input,
 	MapLocationField,
-	MapProvider,
 	Modal,
 	TextArea,
 } from "~/libs/components/components.js";
-import { combineClassNames } from "~/libs/helpers/combine-class-names.helper.js";
 import { useAppForm } from "~/libs/hooks/hooks.js";
 import {
 	pointOfInterestCreateValidationSchema,
@@ -58,25 +55,11 @@ const CreatePOIModal = ({
 					name="name"
 					type="text"
 				/>
-				<div className={styles["map-field"]}>
-					<span className={styles["label-caption"]}>Location</span>
-					<div
-						className={combineClassNames(
-							styles["map-section"],
-							errors.location && styles["map-section-error"],
-						)}
-					>
-						<MapProvider>
-							<MapLocationField control={control} name="location" />
-						</MapProvider>
-					</div>
-					{errors.location?.message && (
-						<span className={styles["error"]}>
-							<Icon height={24} name="error" width={24} />
-							{errors.location.message}
-						</span>
-					)}
-				</div>
+				<MapLocationField
+					control={control}
+					errorMessage={errors.location?.message as string}
+					name="location"
+				/>
 				<TextArea
 					control={control}
 					errors={errors}

@@ -3,7 +3,8 @@ import { LocationType } from "@smartscapes/shared/src/libs/enums/location-type.e
 import React from "react";
 import { type Control } from "react-hook-form";
 
-import { MapContext } from "~/libs/components/map-provider/map-provider.js";
+import { Icon, MapContext, MapProvider } from "~/libs/components/components.js";
+import { combineClassNames } from "~/libs/helpers/combine-class-names.helper.js";
 import {
 	useContext,
 	useEffect,
@@ -15,10 +16,18 @@ import styles from "./styles.module.css";
 
 type Properties = {
 	control: Control<PointsOfInterestRequestDto>;
+	errorMessage?: string;
+	label?: string;
 	name: "location";
 };
 
-const MapLocationField = ({ control, name }: Properties): React.JSX.Element => {
+const MapLocationLogic = ({
+	control,
+	name,
+}: {
+	control: Control<PointsOfInterestRequestDto>;
+	name: "location";
+}): null => {
 	const { field } = useFormController<PointsOfInterestRequestDto>({
 		control,
 		name,
@@ -57,7 +66,36 @@ const MapLocationField = ({ control, name }: Properties): React.JSX.Element => {
 		return cleanup;
 	}, [mapClient, field]);
 
-	return <div className={styles["wrapper"]} />;
+	return null;
+};
+
+const MapLocationField = ({
+	control,
+	errorMessage,
+	label = "Location",
+	name,
+}: Properties): React.JSX.Element => {
+	return (
+		<div className={styles["map-field"]}>
+			<span className={styles["label-caption"]}>{label}</span>
+			<div
+				className={combineClassNames(
+					styles["map-section"],
+					errorMessage && styles["map-section-error"],
+				)}
+			>
+				<MapProvider>
+					<MapLocationLogic control={control} name={name} />
+				</MapProvider>
+			</div>
+			{errorMessage && (
+				<span className={styles["error"]}>
+					<Icon height={24} name="error" width={24} />
+					{errorMessage}
+				</span>
+			)}
+		</div>
+	);
 };
 
 export { MapLocationField };

@@ -7,14 +7,15 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
-import { RouteApiPath } from "./libs/enums/enums.js";
+import { RoutesApiPath } from "./libs/enums/enums.js";
 import {
+	type RouteConstructRequestDto,
+	type RouteConstructResponseDto,
+	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
-	type RouteRequestConstructDto,
-	type RouteRequestCreateDto,
-	type RouteRequestPatchDto,
-	type RouteResponseConstructDto,
-	type RouteResponseDto,
+	type RouteGetAllItemResponseDto,
+	type RouteGetByIdResponseDto,
+	type RoutePatchRequestDto,
 } from "./libs/types/types.js";
 import {
 	routesConstructValidationSchema,
@@ -91,7 +92,7 @@ class RouteController extends BaseController {
 		this.addRoute({
 			handler: this.constructRoute.bind(this),
 			method: "POST",
-			path: RouteApiPath.CONSTRUCT,
+			path: RoutesApiPath.CONSTRUCT,
 			preHandlers: [setRateLimit(constructRequestsPerMinute)],
 			validation: {
 				body: routesConstructValidationSchema,
@@ -101,7 +102,7 @@ class RouteController extends BaseController {
 		this.addRoute({
 			handler: this.create.bind(this),
 			method: "POST",
-			path: "/",
+			path: RoutesApiPath.ROOT,
 			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 			validation: { body: routesCreateValidationSchema },
 		});
@@ -109,27 +110,27 @@ class RouteController extends BaseController {
 		this.addRoute({
 			handler: this.delete.bind(this),
 			method: "DELETE",
-			path: "/:id",
+			path: RoutesApiPath.ID,
 			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 		});
 
 		this.addRoute({
 			handler: this.findById.bind(this),
 			method: "GET",
-			path: "/:id",
+			path: RoutesApiPath.ID,
 		});
 
 		this.addRoute({
 			handler: this.findAll.bind(this),
 			method: "GET",
-			path: "/",
+			path: RoutesApiPath.ROOT,
 			validation: { query: routesSearchQueryValidationSchema },
 		});
 
 		this.addRoute({
 			handler: this.patch.bind(this),
 			method: "PATCH",
-			path: "/:id",
+			path: RoutesApiPath.ID,
 			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 			validation: { body: routesUpdateValidationSchema },
 		});
@@ -172,8 +173,8 @@ class RouteController extends BaseController {
 
 	public async constructRoute({
 		body: { pointsOfInterest },
-	}: APIHandlerOptions<{ body: RouteRequestConstructDto }>): Promise<
-		APIHandlerResponse<RouteResponseConstructDto>
+	}: APIHandlerOptions<{ body: RouteConstructRequestDto }>): Promise<
+		APIHandlerResponse<RouteConstructResponseDto>
 	> {
 		const data = await this.routesService.construct(pointsOfInterest);
 
@@ -255,9 +256,9 @@ class RouteController extends BaseController {
 
 	public async create(
 		options: APIHandlerOptions<{
-			body: RouteRequestCreateDto;
+			body: RouteCreateRequestDto;
 		}>,
-	): Promise<APIHandlerResponse<RouteResponseDto>> {
+	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
 		const { description, name, pois } = options.body;
 
 		const route = await this.routesService.create({ description, name, pois });
@@ -382,7 +383,7 @@ class RouteController extends BaseController {
 		options: APIHandlerOptions<{
 			query?: RouteFindAllOptions;
 		}>,
-	): Promise<APIHandlerResponse<RouteResponseDto[]>> {
+	): Promise<APIHandlerResponse<RouteGetAllItemResponseDto[]>> {
 		const { query = null } = options;
 
 		const { items } = await this.routesService.findAll(query);
@@ -437,7 +438,7 @@ class RouteController extends BaseController {
 
 	public async findById(
 		options: APIHandlerOptions<{ params: { id: string } }>,
-	): Promise<APIHandlerResponse<RouteResponseDto>> {
+	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
 		const id = Number(options.params.id);
 
 		const route = await this.routesService.findById(id);
@@ -519,10 +520,10 @@ class RouteController extends BaseController {
 
 	public async patch(
 		options: APIHandlerOptions<{
-			body: RouteRequestPatchDto;
+			body: RoutePatchRequestDto;
 			params: { id: string };
 		}>,
-	): Promise<APIHandlerResponse<RouteResponseDto>> {
+	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
 		const id = Number(options.params.id);
 		const { description, name } = options.body;
 

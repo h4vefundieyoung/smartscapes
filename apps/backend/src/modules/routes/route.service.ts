@@ -10,11 +10,12 @@ import { type PointsOfInterestService } from "../points-of-interest/points-of-in
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
 import {
+	type RouteConstructResponseDto,
+	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
-	type RouteRequestCreateDto,
-	type RouteRequestPatchDto,
-	type RouteResponseConstructDto,
-	type RouteResponseDto,
+	type RouteGetAllItemResponseDto,
+	type RouteGetByIdResponseDto,
+	type RoutePatchRequestDto,
 } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
 import { type RouteRepository } from "./route.repository.js";
@@ -36,7 +37,7 @@ class RouteService implements Service {
 
 	public async construct(
 		pointsOfInterest: number[],
-	): Promise<RouteResponseConstructDto> {
+	): Promise<RouteConstructResponseDto> {
 		const { items } = await this.pointsOfInterestService.findAll({
 			ids: pointsOfInterest,
 		});
@@ -60,8 +61,8 @@ class RouteService implements Service {
 	}
 
 	public async create(
-		payload: RouteRequestCreateDto,
-	): Promise<RouteResponseDto> {
+		payload: RouteCreateRequestDto,
+	): Promise<RouteGetByIdResponseDto> {
 		await this.ensurePoisExist(payload.pois);
 
 		const formattedPayload = {
@@ -94,7 +95,7 @@ class RouteService implements Service {
 
 	public async findAll(
 		options: null | RouteFindAllOptions,
-	): Promise<CollectionResult<RouteResponseDto>> {
+	): Promise<CollectionResult<RouteGetAllItemResponseDto>> {
 		if (options?.categories) {
 			options.categories = Array.isArray(options.categories)
 				? options.categories
@@ -107,7 +108,8 @@ class RouteService implements Service {
 			items: items.map((item) => item.toObject()),
 		};
 	}
-	public async findById(id: number): Promise<RouteResponseDto> {
+
+	public async findById(id: number): Promise<RouteGetByIdResponseDto> {
 		const item = await this.routesRepository.findById(id);
 
 		if (!item) {
@@ -122,8 +124,8 @@ class RouteService implements Service {
 
 	public async patch(
 		id: number,
-		payload: RouteRequestPatchDto,
-	): Promise<RouteResponseDto> {
+		payload: RoutePatchRequestDto,
+	): Promise<RouteGetByIdResponseDto> {
 		const item = await this.routesRepository.patch(id, payload);
 
 		if (!item) {

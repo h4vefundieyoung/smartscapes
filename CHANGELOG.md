@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.32.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.31.1...v1.32.0) (2025-08-15)
+
+
+### Features
+
+* **frontend:** image upload ss-220 ([#346](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/346)) ([81afeda](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/81afeda8da1919b71d1c0074d8f01850dc8c2a3c))
+
+
+### Bug Fixes
+
+* **backend:** ignore query in check-is-white-route ss-337 ([#381](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/381)) ([11c6515](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/11c6515c6f27e24acc16a75b1d1f3d1ddbcabbcb))
+
+## [1.31.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.31.0...v1.31.1) (2025-08-15)
+
+
+### Bug Fixes
+
+* **frontend:** fix map not displaying and adjust layout ss-295 ([#384](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/384)) ([3ed5f30](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/3ed5f30f9e75ff7160f728d914fa7e39b212b86c))
+
+## [1.31.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.30.0...v1.31.0) (2025-08-14)
+
+
+### Features
+
+* **frontend/backend:** routes detail page ss-268 ([#283](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/283)) ([47176a4](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/47176a4bff35af04c6e77cf9b1a14b032cd77a45))
+
 ## [1.30.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.29.0...v1.30.0) (2025-08-14)
 
 

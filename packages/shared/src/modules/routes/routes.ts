@@ -1,11 +1,15 @@
-export { RouteApiPath } from "./libs/enums/enums.js";
+export { RoutesApiPath } from "./libs/enums/enums.js";
 export {
+	type RouteConstructRequestDto,
+	type RouteConstructResponseDto,
+	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
+	type RouteGetAllItemResponseDto,
+	type RouteGetByIdResponseDto,
+	type RoutePatchRequestDto,
 	type RouteRequestConstructDto,
 	type RouteRequestCreateDto,
 	type RouteRequestPatchDto,
-	type RouteResponseConstructDto,
-	type RouteResponseDto,
 } from "./libs/types/types.js";
 export {
 	routesConstruct as routesConstructValidationSchema,

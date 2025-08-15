@@ -29,7 +29,7 @@ const createMockPointsOfInterestService =
 			}),
 	});
 
-const createMockRouteService = (): Partial<RouteService> => ({
+const createMockRoutesService = (): Partial<RouteService> => ({
 	findById: (id: number) =>
 		Promise.resolve({
 			createdAt: new Date().toISOString(),
@@ -65,7 +65,7 @@ describe("ReviewService", () => {
 	it("create should return new review", async () => {
 		const reviewEntity = ReviewEntity.initialize(mockReview);
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const routesService = createMockRouteService();
+		const routesService = createMockRoutesService();
 
 		const reviewRepository = {
 			create: (() =>
@@ -106,7 +106,7 @@ describe("ReviewService", () => {
 		const reviewService = new ReviewService(
 			reviewRepository,
 			createMockPointsOfInterestService() as PointsOfInterestService,
-			createMockRouteService() as RouteService,
+			createMockRoutesService() as RouteService,
 		);
 
 		const result = await reviewService.findAll();

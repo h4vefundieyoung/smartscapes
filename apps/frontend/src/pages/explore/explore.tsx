@@ -18,9 +18,11 @@ const DummyMapClientUser = (): null => {
 const Explore = (): React.JSX.Element => {
 	return (
 		<main className={styles["main"]}>
-			<MapProvider markers={mockPOIs}>
-				<DummyMapClientUser />
-			</MapProvider>
+			<div className={styles["container"]}>
+				<MapProvider markers={mockPOIs}>
+					<DummyMapClientUser />
+				</MapProvider>
+			</div>
 		</main>
 	);
 };

@@ -1,7 +1,8 @@
 import {
 	HTTPCode,
 	type PointsOfInterestResponseDto,
-	type RouteResponseDto,
+	type RouteGetAllItemResponseDto,
+	type RouteGetByIdResponseDto,
 } from "@smartscapes/shared";
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
@@ -49,8 +50,17 @@ describe("RouteService", () => {
 		pois: [FIRST_POI_ID, SECOND_POI_ID],
 	};
 
-	const mockRouteResponse: RouteResponseDto = {
+	const mockRouteIdResponse: RouteGetByIdResponseDto = {
 		description: "Test route description",
+		id: EXISTING_ID,
+		name: "Test Route",
+		pois: [
+			{ id: FIRST_POI_ID, visitOrder: FIRST_VISIT_ORDER },
+			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
+		],
+	};
+
+	const mockRouteAllItemResponse: RouteGetAllItemResponseDto = {
 		id: EXISTING_ID,
 		name: "Test Route",
 		pois: [
@@ -85,20 +95,27 @@ describe("RouteService", () => {
 		name: "Updated Route",
 	};
 
-	const createMockEntity = (data: RouteResponseDto): RouteEntity => {
+	const createMockIdEntity = (data: RouteGetByIdResponseDto): RouteEntity => {
 		return RouteEntity.initialize(data);
+	};
+
+	const createMockAllItemEntity = (
+		data: RouteGetAllItemResponseDto,
+	): RouteEntity => {
+		return RouteEntity.initializeList(data);
 	};
 
 	const createMockRouteRepository = (
 		overrides = {},
 	): Partial<RouteRepository> => ({
-		create: () => Promise.resolve(createMockEntity(mockRouteResponse)),
+		create: () => Promise.resolve(createMockIdEntity(mockRouteIdResponse)),
 		delete: () => Promise.resolve(true),
-		findAll: () => Promise.resolve([createMockEntity(mockRouteResponse)]),
-		findById: () => Promise.resolve(createMockEntity(mockRouteResponse)),
+		findAll: () =>
+			Promise.resolve([createMockAllItemEntity(mockRouteAllItemResponse)]),
+		findById: () => Promise.resolve(createMockIdEntity(mockRouteIdResponse)),
 		patch: () =>
 			Promise.resolve(
-				createMockEntity({ ...mockRouteResponse, ...mockPatchPayload }),
+				createMockIdEntity({ ...mockRouteIdResponse, ...mockPatchPayload }),
 			),
 		...overrides,
 	});
@@ -220,7 +237,7 @@ describe("RouteService", () => {
 
 		const result = await routesService.create(mockCreatePayload);
 
-		assert.deepStrictEqual(result, mockRouteResponse);
+		assert.deepStrictEqual(result, mockRouteIdResponse);
 	});
 
 	it("findById should return route when it exists", async () => {
@@ -236,7 +253,7 @@ describe("RouteService", () => {
 
 		const result = await routesService.findById(EXISTING_ID);
 
-		assert.deepStrictEqual(result, mockRouteResponse);
+		assert.deepStrictEqual(result, mockRouteIdResponse);
 	});
 
 	it("findById should throw an error when route does not exist", async () => {
@@ -258,9 +275,9 @@ describe("RouteService", () => {
 	});
 
 	it("findAll should return all routes if options are not provided", async () => {
-		const mockRoute = [createMockEntity(mockRouteResponse)];
 		const routesRepository = createMockRouteRepository({
-			findAll: () => Promise.resolve(mockRoute),
+			findAll: () =>
+				Promise.resolve([createMockAllItemEntity(mockRouteAllItemResponse)]),
 		});
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const mapBoxApiMock = createMockMapboxApi();
@@ -273,7 +290,7 @@ describe("RouteService", () => {
 
 		const result = await routesService.findAll(null);
 
-		assert.deepStrictEqual(result, { items: [mockRouteResponse] });
+		assert.deepStrictEqual(result, { items: [mockRouteAllItemResponse] });
 	});
 
 	it("findAll should return empty array when no routes exist", async () => {
@@ -312,14 +329,14 @@ describe("RouteService", () => {
 
 		const result = await routesService.findAll(mockOptions);
 
-		assert.deepStrictEqual(result, { items: [mockRouteResponse] });
+		assert.deepStrictEqual(result, { items: [mockRouteAllItemResponse] });
 	});
 
 	it("patch should update existing route successfully", async () => {
-		const updatedRoute = { ...mockRouteResponse, ...mockPatchPayload };
+		const updatedRoute = { ...mockRouteIdResponse, ...mockPatchPayload };
 		const mapBoxApiMock = createMockMapboxApi();
 		const routesRepository = createMockRouteRepository({
-			patch: () => Promise.resolve(createMockEntity(updatedRoute)),
+			patch: () => Promise.resolve(createMockIdEntity(updatedRoute)),
 		});
 
 		const pointsOfInterestService = createMockPointsOfInterestService();
@@ -396,7 +413,7 @@ describe("RouteService", () => {
 
 		const result = await routesService.create(mockCreatePayload);
 
-		assert.deepStrictEqual(result, mockRouteResponse);
+		assert.deepStrictEqual(result, mockRouteIdResponse);
 	});
 
 	it("ensurePoisExist should throw error when POI does not exist", async () => {

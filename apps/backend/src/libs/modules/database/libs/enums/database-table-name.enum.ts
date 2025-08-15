@@ -1,5 +1,6 @@
 const DatabaseTableName = {
 	CATEGORIES: "categories",
+	FILES: "files",
 	GROUPS: "groups",
 	GROUPS_TO_PERMISSIONS: "groups_to_permissions",
 	MIGRATIONS: "migrations",

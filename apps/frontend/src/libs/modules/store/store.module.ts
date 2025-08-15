@@ -14,6 +14,7 @@ import {
 	pointOfInterestApi,
 	reducer as pointsOfInterestReducer,
 } from "~/modules/points-of-interest/points-of-interest.js";
+import { routeApi, reducer as routeReducer } from "~/modules/routes/routes.js";
 import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
 
 import { type ExtraArguments, type RootReducer } from "./libs/types/types.js";
@@ -32,6 +33,7 @@ class Store {
 		return {
 			authApi,
 			pointOfInterestApi,
+			routeApi,
 			storage,
 			toastNotifier,
 			userApi,
@@ -51,6 +53,7 @@ class Store {
 			reducer: {
 				auth: authReducer,
 				pointsOfInterest: pointsOfInterestReducer,
+				route: routeReducer,
 				users: usersReducer,
 			},
 		});

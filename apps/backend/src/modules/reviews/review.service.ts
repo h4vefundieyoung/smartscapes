@@ -12,16 +12,16 @@ import {
 class ReviewService implements Service {
 	private pointsOfInterestService: PointsOfInterestService;
 	private reviewRepository: ReviewRepository;
-	private routeService: RouteService;
+	private routesService: RouteService;
 
 	public constructor(
 		reviewRepository: ReviewRepository,
 		pointsOfInterestService: PointsOfInterestService,
-		routeService: RouteService,
+		routesService: RouteService,
 	) {
 		this.pointsOfInterestService = pointsOfInterestService;
 		this.reviewRepository = reviewRepository;
-		this.routeService = routeService;
+		this.routesService = routesService;
 	}
 
 	public async create(
@@ -61,7 +61,7 @@ class ReviewService implements Service {
 	}
 
 	private async ensureRouteExists(id: number): Promise<void> {
-		await this.routeService.findById(id);
+		await this.routesService.findById(id);
 	}
 }
 

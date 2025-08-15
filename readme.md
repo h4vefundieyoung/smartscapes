@@ -138,6 +138,14 @@ erDiagram
     timestamp read_at
   }
 
+  files {
+    id integer [primary key]
+    created_at timestamp
+    updated_at timestamp
+    url varchar
+    content_type varchar
+  }
+
   users }|--|| groups : group_id
   groups ||--|{ groups_to_permissions : group_id
   permissions ||--|{ groups_to_permissions : permission_id

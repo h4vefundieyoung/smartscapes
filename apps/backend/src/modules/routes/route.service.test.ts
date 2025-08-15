@@ -289,7 +289,6 @@ describe("RouteService", () => {
 		);
 
 		const result = await routesService.findAll(null);
-
 		assert.deepStrictEqual(result, { items: [mockRouteAllItemResponse] });
 	});
 

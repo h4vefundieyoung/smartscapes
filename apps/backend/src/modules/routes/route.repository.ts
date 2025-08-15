@@ -52,7 +52,7 @@ class RouteRepository implements Repository {
 
 		const routes = await query;
 
-		return routes.map((route) => RouteEntity.initialize(route));
+		return routes.map((route) => RouteEntity.initializeList(route));
 	}
 
 	public async findById(id: number): Promise<null | RouteEntity> {

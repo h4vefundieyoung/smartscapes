@@ -105,7 +105,7 @@ class RouteService implements Service {
 		const items = await this.routesRepository.findAll(options);
 
 		return {
-			items: items.map((item) => item.toObject()),
+			items: items.map((item) => item.toListObject()),
 		};
 	}
 

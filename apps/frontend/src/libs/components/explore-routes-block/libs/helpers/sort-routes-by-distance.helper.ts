@@ -8,21 +8,21 @@ function sortRouteByDistance(
 	referencePoint: [number, number],
 ): RouteItem[] {
 	return [...routes].sort((a, b) => {
-		if (!a.startingPOICoords) {
+		if (!a.startingPOICoordinates) {
 			return ONE;
 		}
 
-		if (!b.startingPOICoords) {
+		if (!b.startingPOICoordinates) {
 			return -ONE;
 		}
 
 		const distanceA = getDistance(referencePoint, [
-			a.startingPOICoords.lat,
-			a.startingPOICoords.lon,
+			a.startingPOICoordinates.latitude,
+			a.startingPOICoordinates.longitude,
 		]);
 		const distanceB = getDistance(referencePoint, [
-			b.startingPOICoords.lat,
-			b.startingPOICoords.lon,
+			b.startingPOICoordinates.latitude,
+			b.startingPOICoordinates.longitude,
 		]);
 
 		return distanceA - distanceB;

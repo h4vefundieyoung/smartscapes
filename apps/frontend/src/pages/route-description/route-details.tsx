@@ -1,18 +1,18 @@
-import { type RouteGetByIdResponseDto } from "@smartscapes/shared";
-import { useParams } from "react-router";
-
 import { Header, Loader } from "~/libs/components/components.js";
-import { AppRoute } from "~/libs/enums/app-route.enum.js";
-import { DataStatus } from "~/libs/enums/data-status.enum.js";
+import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
 	useEffect,
+	useParams,
 } from "~/libs/hooks/hooks.js";
-import { actions as routeActions } from "~/modules/routes/routes.js";
+import {
+	actions as routeActions,
+	type RouteGetByIdResponseDto,
+} from "~/modules/routes/routes.js";
+import { NotFound } from "~/pages/not-found/not-found.jsx";
 
-import { NotFound } from "../not-found/not-found.js";
-import { ImageGallery } from "./libs/components/image-gallery/image-gallery.js";
+import { ImageGallery } from "./libs/components/components.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
@@ -28,7 +28,7 @@ const RouteDetails = (): React.JSX.Element => {
 		void dispatch(routeActions.getRouteById(Number(id)));
 	}, [dispatch, id]);
 
-	const data = useAppSelector(({ route }) => route.route);
+	const route = useAppSelector(({ route }) => route.route);
 
 	const dataStatus = useAppSelector(({ route }) => route.dataStatus);
 
@@ -40,7 +40,7 @@ const RouteDetails = (): React.JSX.Element => {
 		return <Loader />;
 	}
 
-	const { description, name } = data as RouteGetByIdResponseDto;
+	const { description, name } = route as RouteGetByIdResponseDto;
 
 	return (
 		<>

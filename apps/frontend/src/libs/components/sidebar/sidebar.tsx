@@ -12,34 +12,25 @@ import {
 	useState,
 } from "~/libs/hooks/hooks.js";
 import { type NavigationItemsGroup } from "~/libs/types/types.js";
-import {
-	type GroupResponseDto,
-	type PermissionItemDto,
-} from "~/modules/auth/libs/types/types.js";
+import { type PermissionItemDto } from "~/modules/users/libs/types/types.js";
 
 import { SidebarItem } from "./libs/components/components.js";
 import styles from "./styles.module.css";
 
 type Properties = {
 	navigationItemsGroups: NavigationItemsGroup[];
-	userGroup: GroupResponseDto | null;
 	userPermissions: PermissionItemDto[];
 };
 
 const Sidebar = ({
 	navigationItemsGroups,
-	userGroup,
 	userPermissions,
 }: Properties): React.JSX.Element => {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
 	const selectedNavigationItems = useMemo(() => {
-		return selectNavigationItems(
-			navigationItemsGroups,
-			userGroup,
-			userPermissions,
-		);
-	}, [navigationItemsGroups, userGroup, userPermissions]);
+		return selectNavigationItems(navigationItemsGroups, userPermissions);
+	}, [navigationItemsGroups, userPermissions]);
 
 	const handleClick = useCallback((): void => {
 		setIsOpen((previous) => !previous);

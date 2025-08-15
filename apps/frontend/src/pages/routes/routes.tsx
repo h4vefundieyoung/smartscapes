@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 const Routes = (): React.JSX.Element => {
 	return (
 		<main className={styles["main"]}>
-			<div>Routes Page</div>
+			Routes Page
 			<Button label="Back to app" to={AppRoute.APP} />
 		</main>
 	);

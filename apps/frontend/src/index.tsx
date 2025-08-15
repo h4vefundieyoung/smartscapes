@@ -14,7 +14,6 @@ import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
 import { NotFound } from "~/pages/not-found/not-found.jsx";
 
-import { Categories } from "./pages/categories/categories.js";
 import { Dashboard } from "./pages/dashboard/dashboard.js";
 import { Explore } from "./pages/explore/explore.js";
 import { Landing } from "./pages/landing/landing.jsx";
@@ -72,14 +71,6 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 									</ProtectedRoute>
 								),
 								path: AppRoute.ROUTES,
-							},
-							{
-								element: (
-									<ProtectedRoute>
-										<Categories />
-									</ProtectedRoute>
-								),
-								path: AppRoute.CATEGORIES,
 							},
 						],
 						element: <App />,

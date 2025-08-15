@@ -1,4 +1,4 @@
-import { type PermissionItemDto } from "~/modules/auth/libs/types/types.js";
+import { type PermissionItemDto } from "~/modules/users/libs/types/types.js";
 
 const checkPermission = (
 	requiredPermissions: string[] | undefined,

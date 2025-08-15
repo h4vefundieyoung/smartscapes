@@ -79,7 +79,6 @@ const Dashboard = (): React.JSX.Element => {
 				<div className={styles["sidebar-container"]}>
 					<Sidebar
 						navigationItemsGroups={NAVIGATION_ITEMS_GROUPS}
-						userGroup={authenticatedUser?.group ?? null}
 						userPermissions={authenticatedUser?.group.permissions ?? []}
 					/>
 				</div>

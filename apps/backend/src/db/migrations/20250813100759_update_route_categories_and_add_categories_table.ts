@@ -16,7 +16,7 @@ const ColumnName = {
 	UPDATED_AT: "updated_at",
 };
 
-const MAX_NAME_LENGTH = 32;
+const MAX_NAME_LENGTH = 100;
 
 async function down(knex: Knex): Promise<void> {
 	await knex.transaction(async (trx) => {

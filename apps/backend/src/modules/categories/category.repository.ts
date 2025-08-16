@@ -1,19 +1,19 @@
 import { type Repository } from "~/libs/types/types.js";
 
-import { CategoryEntity } from "../categories/category.entity.js";
-import { type CategoryModel } from "../categories/category.model.js";
+import { CategoryEntity } from "./category.entity.js";
+import { type CategoryModel } from "./category.model.js";
 
-class RouteCategoryRepository implements Repository {
-	private routeCategoryModel: typeof CategoryModel;
+class CategoryRepository implements Repository {
+	private categoryModel: typeof CategoryModel;
 
-	public constructor(routeCategoryModel: typeof CategoryModel) {
-		this.routeCategoryModel = routeCategoryModel;
+	public constructor(categoryModel: typeof CategoryModel) {
+		this.categoryModel = categoryModel;
 	}
 
 	public async create(entity: CategoryEntity): Promise<CategoryEntity> {
 		const { key, name } = entity.toNewObject();
 
-		const routeCategory = await this.routeCategoryModel
+		const routeCategory = await this.categoryModel
 			.query()
 			.insert({ key, name })
 			.returning("*")
@@ -23,10 +23,7 @@ class RouteCategoryRepository implements Repository {
 	}
 
 	public async findAll(): Promise<CategoryEntity[]> {
-		const routeCategories = await this.routeCategoryModel
-			.query()
-			.debug()
-			.execute();
+		const routeCategories = await this.categoryModel.query().execute();
 
 		return routeCategories.map((routeCategory) =>
 			CategoryEntity.initialize(routeCategory),
@@ -34,7 +31,7 @@ class RouteCategoryRepository implements Repository {
 	}
 
 	public async findByName(name: string): Promise<CategoryEntity | null> {
-		const routeCategory = await this.routeCategoryModel
+		const routeCategory = await this.categoryModel
 			.query()
 			.whereRaw("LOWER(name) LIKE ?", [`%${name.toLowerCase()}%`])
 			.first()
@@ -44,4 +41,4 @@ class RouteCategoryRepository implements Repository {
 	}
 }
 
-export { RouteCategoryRepository };
+export { CategoryRepository };

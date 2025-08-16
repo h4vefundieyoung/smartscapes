@@ -4,13 +4,13 @@ import { describe, it } from "node:test";
 
 import { type APIHandlerOptions } from "~/libs/modules/controller/controller.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import { type RouteCategoryGetAllItemResponseDto } from "~/modules/route-categories/route-categories.js";
+import { type CategoryGetAllItemResponseDto } from "~/modules/categories/categories.js";
 
-import { type RouteCategoryCreateRequestDto } from "./libs/types/types.js";
-import { RouteCategoryController } from "./route-category.controller.js";
-import { type RouteCategoryService } from "./route-category.service.js";
+import { CategoryController } from "./category.controller.js";
+import { type CategoryService } from "./category.service.js";
+import { type CategoryCreateRequestDto } from "./libs/types/types.js";
 
-describe("RouteCategoryController", () => {
+describe("CategoryController", () => {
 	const mockLogger: Logger = {
 		debug: () => {},
 		error: () => {},
@@ -18,7 +18,7 @@ describe("RouteCategoryController", () => {
 		warn: () => {},
 	};
 
-	const mockRouteCategory: RouteCategoryGetAllItemResponseDto = {
+	const mockCategory: CategoryGetAllItemResponseDto = {
 		id: 1,
 		name: "Popular",
 	};
@@ -26,24 +26,24 @@ describe("RouteCategoryController", () => {
 	it("create should create and return new route category", async () => {
 		const routeCategoryService = {
 			create: (() =>
-				Promise.resolve(mockRouteCategory)) as RouteCategoryService["create"],
-		} as RouteCategoryService;
+				Promise.resolve(mockCategory)) as CategoryService["create"],
+		} as CategoryService;
 
-		const routeCategoryController = new RouteCategoryController(
+		const routeCategoryController = new CategoryController(
 			mockLogger,
 			routeCategoryService,
 		);
 
 		const requestOptions = {
 			body: {
-				name: mockRouteCategory.name,
+				name: mockCategory.name,
 			},
-		} as APIHandlerOptions<{ body: RouteCategoryCreateRequestDto }>;
+		} as APIHandlerOptions<{ body: CategoryCreateRequestDto }>;
 
 		const result = await routeCategoryController.create(requestOptions);
 
 		assert.deepStrictEqual(result, {
-			payload: { data: mockRouteCategory },
+			payload: { data: mockCategory },
 			status: HTTPCode.CREATED,
 		});
 	});
@@ -52,11 +52,11 @@ describe("RouteCategoryController", () => {
 		const routeCategoryService = {
 			findAll: (() =>
 				Promise.resolve({
-					items: [mockRouteCategory],
-				})) as RouteCategoryService["findAll"],
-		} as RouteCategoryService;
+					items: [mockCategory],
+				})) as CategoryService["findAll"],
+		} as CategoryService;
 
-		const routeCategoryController = new RouteCategoryController(
+		const routeCategoryController = new CategoryController(
 			mockLogger,
 			routeCategoryService,
 		);
@@ -64,7 +64,7 @@ describe("RouteCategoryController", () => {
 		const result = await routeCategoryController.findAll();
 
 		assert.deepStrictEqual(result, {
-			payload: { data: [mockRouteCategory] },
+			payload: { data: [mockCategory] },
 			status: HTTPCode.OK,
 		});
 	});

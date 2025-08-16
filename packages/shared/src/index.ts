@@ -34,6 +34,13 @@ export {
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
 export {
+	CategoriesApiPath,
+	type CategoryCreateRequestDto,
+	categoryCreateValidationSchema,
+	CategoryExceptionMessage,
+	type CategoryGetAllItemResponseDto,
+} from "./modules/categories/categories.js";
+export {
 	FileFolderName,
 	type FileMimeType,
 	FilesApiPath,
@@ -75,13 +82,6 @@ export {
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
 } from "./modules/reviews/reviews.js";
-export {
-	RouteCategoriesApiPath,
-	type RouteCategoryCreateRequestDto,
-	routeCategoryCreateValidationSchema,
-	RouteCategoryExceptionMessage,
-	type RouteCategoryGetAllItemResponseDto,
-} from "./modules/route-categories/route-categories.js";
 export {
 	type RouteConstructRequestDto,
 	type RouteConstructResponseDto,

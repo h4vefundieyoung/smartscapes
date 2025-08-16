@@ -6,20 +6,20 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import { type RouteCategoryService } from "~/modules/route-categories/route-category.service.js";
+import { type CategoryService } from "~/modules/categories/category.service.js";
 
-import { RouteCategoriesApiPath } from "./libs/enums/enums.js";
+import { CategoriesApiPath } from "./libs/enums/enums.js";
 import {
-	type RouteCategoryCreateRequestDto,
-	type RouteCategoryGetAllItemResponseDto,
+	type CategoryCreateRequestDto,
+	type CategoryGetAllItemResponseDto,
 } from "./libs/types/types.js";
-import { routeCategoryCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
+import { categoryCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 
 /**
  * @swagger
  * components:
  *    schemas:
- *     RouteCategoryCreateRequestDto:
+ *     CategoryCreateRequestDto:
  *       type: object
  *       required:
  *         - name
@@ -38,29 +38,26 @@ import { routeCategoryCreateValidationSchema } from "./libs/validation-schemas/v
  *           example: Popular
  */
 
-class RouteCategoryController extends BaseController {
-	private routeCategoryService: RouteCategoryService;
+class CategoryController extends BaseController {
+	private categoryService: CategoryService;
 
-	public constructor(
-		logger: Logger,
-		routeCategoryService: RouteCategoryService,
-	) {
+	public constructor(logger: Logger, categoryService: CategoryService) {
 		super(logger, APIPath.ROUTE_CATEGORIES);
-		this.routeCategoryService = routeCategoryService;
+		this.categoryService = categoryService;
 
 		this.addRoute({
 			handler: this.create.bind(this),
 			method: "POST",
-			path: RouteCategoriesApiPath.ROOT,
+			path: CategoriesApiPath.ROOT,
 			validation: {
-				body: routeCategoryCreateValidationSchema,
+				body: categoryCreateValidationSchema,
 			},
 		});
 
 		this.addRoute({
 			handler: this.findAll.bind(this),
 			method: "GET",
-			path: RouteCategoriesApiPath.ROOT,
+			path: CategoriesApiPath.ROOT,
 		});
 	}
 
@@ -78,7 +75,7 @@ class RouteCategoryController extends BaseController {
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             $ref: '#/components/schemas/RouteCategoryCreateRequestDto'
+	 *             $ref: '#/components/schemas/CategoryCreateRequestDto'
 	 *     responses:
 	 *       201:
 	 *         description: New route category object
@@ -111,12 +108,12 @@ class RouteCategoryController extends BaseController {
 
 	public async create(
 		options: APIHandlerOptions<{
-			body: RouteCategoryCreateRequestDto;
+			body: CategoryCreateRequestDto;
 		}>,
-	): Promise<APIHandlerResponse<RouteCategoryGetAllItemResponseDto>> {
+	): Promise<APIHandlerResponse<CategoryGetAllItemResponseDto>> {
 		const { body } = options;
 
-		const item = await this.routeCategoryService.create(body);
+		const item = await this.categoryService.create(body);
 
 		return {
 			payload: { data: item },
@@ -148,9 +145,9 @@ class RouteCategoryController extends BaseController {
 	 */
 
 	public async findAll(): Promise<
-		APIHandlerResponse<RouteCategoryGetAllItemResponseDto[]>
+		APIHandlerResponse<CategoryGetAllItemResponseDto[]>
 	> {
-		const { items } = await this.routeCategoryService.findAll();
+		const { items } = await this.categoryService.findAll();
 
 		return {
 			payload: { data: items },
@@ -159,4 +156,4 @@ class RouteCategoryController extends BaseController {
 	}
 }
 
-export { RouteCategoryController };
+export { CategoryController };

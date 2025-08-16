@@ -3,7 +3,7 @@ import { describe, it } from "node:test";
 
 import { CategoryEntity } from "./category.entity.js";
 
-describe("RouteCategoryEntity", () => {
+describe("CategoryEntity", () => {
 	it("should create new route category entity", () => {
 		const categoryData = {
 			id: 1,

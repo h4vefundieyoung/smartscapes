@@ -1,7 +1,10 @@
 import { type RouteGetByIdResponseDto } from "@smartscapes/shared";
 import { useParams } from "react-router";
 
-import { Header, Loader } from "~/libs/components/components.js";
+import image1 from "~/assets/images/route-details/placeholder-image-1.png";
+import image2 from "~/assets/images/route-details/placeholder-image-2.png";
+import image3 from "~/assets/images/route-details/placeholder-image-3.png";
+import { Header, ImageGallery, Loader } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/app-route.enum.js";
 import { DataStatus } from "~/libs/enums/data-status.enum.js";
 import {
@@ -12,7 +15,6 @@ import {
 import { actions as routeActions } from "~/modules/routes/routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
-import { ImageGallery } from "./libs/components/image-gallery/image-gallery.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
@@ -50,7 +52,7 @@ const RouteDetails = (): React.JSX.Element => {
 			/>
 			<main className={styles["container"]}>
 				<h1 className={styles["label"]}>{name}</h1>
-				<ImageGallery />
+				<ImageGallery mainImage={image1} subImages={[image2, image3]} />
 				<p className={styles["description"]}>{description}</p>
 			</main>
 		</>

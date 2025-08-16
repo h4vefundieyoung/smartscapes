@@ -51,7 +51,7 @@ import {
  *           type: string
  *           example: "Central Park"
  *         description:
- *           type: string
+ *           type: string | null
  *           nullable: true
  *           example: "A large park in New York City"
  *
@@ -85,7 +85,7 @@ import {
  *           type: string
  *           example: "Central Park"
  *         description:
- *           type: string
+ *           type: string | null
  *           nullable: true
  *           example: "A large park in New York City"
  */

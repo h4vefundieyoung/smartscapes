@@ -3,9 +3,9 @@ import { Model } from "objection";
 import { DatabaseTableName } from "~/libs/modules/database/database.js";
 import { type LineStringGeometry } from "~/libs/types/types.js";
 
-class PlannedRoutesModel extends Model {
+class PlannedPathModel extends Model {
 	public static override get tableName(): string {
-		return DatabaseTableName.PLANNED_ROUTES;
+		return DatabaseTableName.PLANNED_PATHS;
 	}
 
 	public distance!: number;
@@ -14,4 +14,4 @@ class PlannedRoutesModel extends Model {
 	public id!: number;
 }
 
-export { PlannedRoutesModel };
+export { PlannedPathModel };

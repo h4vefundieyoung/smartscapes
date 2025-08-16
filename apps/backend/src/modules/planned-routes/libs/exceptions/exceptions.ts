@@ -1,1 +1,1 @@
-export { PlannedRoutesError } from "./planned-routes-error.exception.js";
+export { PlannedPathError } from "./planned-path-error.exception.js";

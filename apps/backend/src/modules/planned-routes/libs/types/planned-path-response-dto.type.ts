@@ -1,10 +1,10 @@
 import { type LineStringGeometry } from "~/libs/types/types.js";
 
-type PlannedRoutesResponseDto = {
+type PlannedPathResponseDto = {
 	distance: number;
 	duration: number;
 	geometry: LineStringGeometry;
 	id: number;
 };
 
-export { type PlannedRoutesResponseDto };
+export { type PlannedPathResponseDto };

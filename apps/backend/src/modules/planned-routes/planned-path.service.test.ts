@@ -7,12 +7,12 @@ import {
 	type LineStringGeometry,
 } from "~/libs/types/types.js";
 
-import { PlannedRoutesExceptionMessage } from "./libs/enums/enums.js";
-import { type PlannedRoutesEntity } from "./planned-routes.entity.js";
-import { type PlannedRoutesRepository } from "./planned-routes.repository.js";
-import { PlannedRouteService } from "./planned-routes.service.js";
+import { PlannedPathExceptionMessage } from "./libs/enums/enums.js";
+import { type PlannedPathEntity } from "./planned-path.entity.js";
+import { type PlannedPathRepository } from "./planned-path.repository.js";
+import { PlannedPathervice } from "./planned-path.service.js";
 
-describe("PlannedRouteService", () => {
+describe("PlannedPathervice", () => {
 	const geometry: LineStringGeometry = {
 		coordinates: [
 			[30.5234, 50.4501],
@@ -31,13 +31,13 @@ describe("PlannedRouteService", () => {
 	};
 
 	it("create should persist planned route and return dto", async () => {
-		const repo: PlannedRoutesRepository = {
-			create: mock.fn((entity: PlannedRoutesEntity) => entity),
+		const repo: PlannedPathRepository = {
+			create: mock.fn((entity: PlannedPathEntity) => entity),
 			delete: mock.fn(),
 			findById: mock.fn(),
-		} as unknown as PlannedRoutesRepository;
+		} as unknown as PlannedPathRepository;
 
-		const service = new PlannedRouteService(repo);
+		const service = new PlannedPathervice(repo);
 
 		const result = await service.create(mapboxResponse);
 
@@ -50,20 +50,20 @@ describe("PlannedRouteService", () => {
 	});
 
 	it("findById should throw when not found", async () => {
-		const repo: PlannedRoutesRepository = {
+		const repo: PlannedPathRepository = {
 			create: mock.fn(),
 			delete: mock.fn(),
 			findById: mock.fn(() => null),
-		} as unknown as PlannedRoutesRepository;
+		} as unknown as PlannedPathRepository;
 
-		const service = new PlannedRouteService(repo);
+		const service = new PlannedPathervice(repo);
 
 		await assert.rejects(
 			async () => {
 				await service.findById(999);
 			},
 			{
-				message: PlannedRoutesExceptionMessage.PLANNED_ROUTE_NOT_FOUND,
+				message: PlannedPathExceptionMessage.PLANNED_ROUTE_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			},
 		);

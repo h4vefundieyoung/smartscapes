@@ -1,1 +1,1 @@
-export { type PlannedRoutesResponseDto } from "./planned-routes-response-dto.type.js";
+export { type PlannedPathResponseDto } from "./planned-path-response-dto.type.js";

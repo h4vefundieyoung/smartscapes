@@ -24,7 +24,7 @@ class RouteRepository implements Repository {
 				"distance",
 				"duration",
 				this.routesModel.raw("ST_AsGeoJSON(geometry)::json as geometry"),
-				"userId",
+				"user_id",
 			]);
 
 		return RouteEntity.initialize(result);

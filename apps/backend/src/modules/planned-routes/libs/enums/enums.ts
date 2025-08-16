@@ -1,1 +1,1 @@
-export { PlannedRoutesExceptionMessage } from "./planned-routes-exception-message.enum.js";
+export { PlannedPathExceptionMessage } from "./planned-path-exception-message.enum.js";

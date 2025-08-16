@@ -6,8 +6,8 @@ import {
 } from "~/libs/modules/mapbox/mapbox.js";
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
 
-import { type PlannedRoutesResponseDto } from "../planned-routes/libs/types/planned-routes-response-dto.type.js";
-import { type PlannedRouteService } from "../planned-routes/planned-routes.service.js";
+import { type PlannedPathResponseDto } from "../planned-routes/libs/types/planned-path-response-dto.type.js";
+import { type PlannedPathervice } from "../planned-routes/planned-path.service.js";
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
@@ -23,32 +23,32 @@ import { type RouteRepository } from "./route.repository.js";
 
 type ConstructorParameters = {
 	mapboxDirectionsApi: MapboxDirectionsApi;
-	plannedRouteService: PlannedRouteService;
+	plannedPathervice: PlannedPathervice;
 	pointsOfInterestService: PointsOfInterestService;
 	routesRepository: RouteRepository;
 };
 
 class RouteService implements Service {
 	private mapboxDirectionApi: MapboxDirectionsApi;
-	private plannedRouteService: PlannedRouteService;
+	private plannedPathervice: PlannedPathervice;
 	private pointsOfInterestService: PointsOfInterestService;
 	private routesRepository: RouteRepository;
 
 	public constructor({
 		mapboxDirectionsApi,
-		plannedRouteService,
+		plannedPathervice,
 		pointsOfInterestService,
 		routesRepository,
 	}: ConstructorParameters) {
 		this.routesRepository = routesRepository;
 		this.pointsOfInterestService = pointsOfInterestService;
 		this.mapboxDirectionApi = mapboxDirectionsApi;
-		this.plannedRouteService = plannedRouteService;
+		this.plannedPathervice = plannedPathervice;
 	}
 
 	public async construct(
 		pointsOfInterest: number[],
-	): Promise<PlannedRoutesResponseDto> {
+	): Promise<PlannedPathResponseDto> {
 		const { items } = await this.pointsOfInterestService.findAll({
 			ids: pointsOfInterest,
 		});
@@ -68,7 +68,7 @@ class RouteService implements Service {
 			MapboxAPIGeometric.GEOJSON,
 		);
 
-		const plannedRoute = await this.plannedRouteService.create(route);
+		const plannedRoute = await this.plannedPathervice.create(route);
 
 		return plannedRoute;
 	}
@@ -88,8 +88,7 @@ class RouteService implements Service {
 
 		const { plannedRouteId } = formattedPayload;
 
-		const plannedRoute =
-			await this.plannedRouteService.findById(plannedRouteId);
+		const plannedRoute = await this.plannedPathervice.findById(plannedRouteId);
 
 		const routeEntity = RouteEntity.initializeNew({
 			...formattedPayload,
@@ -98,7 +97,7 @@ class RouteService implements Service {
 
 		const route = await this.routesRepository.create(routeEntity);
 
-		await this.plannedRouteService.delete(plannedRouteId);
+		await this.plannedPathervice.delete(plannedRouteId);
 
 		return route.toObject();
 	}

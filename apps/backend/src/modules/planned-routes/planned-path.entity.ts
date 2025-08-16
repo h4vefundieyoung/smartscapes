@@ -1,6 +1,6 @@
 import { type Entity, type LineStringGeometry } from "~/libs/types/types.js";
 
-class PlannedRoutesEntity implements Entity {
+class PlannedPathEntity implements Entity {
 	private distance: number;
 	private duration: number;
 	private geometry: LineStringGeometry;
@@ -28,8 +28,8 @@ class PlannedRoutesEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
-	}): PlannedRoutesEntity {
-		return new PlannedRoutesEntity({
+	}): PlannedPathEntity {
+		return new PlannedPathEntity({
 			distance: data.distance,
 			duration: data.duration,
 			geometry: data.geometry,
@@ -45,8 +45,8 @@ class PlannedRoutesEntity implements Entity {
 		distance: number;
 		duration: number;
 		geometry: LineStringGeometry;
-	}): PlannedRoutesEntity {
-		return new PlannedRoutesEntity({
+	}): PlannedPathEntity {
+		return new PlannedPathEntity({
 			distance,
 			duration,
 			geometry,
@@ -81,4 +81,4 @@ class PlannedRoutesEntity implements Entity {
 	}
 }
 
-export { PlannedRoutesEntity };
+export { PlannedPathEntity };

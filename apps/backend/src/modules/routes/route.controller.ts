@@ -7,7 +7,7 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
-import { type PlannedRoutesResponseDto } from "../planned-routes/planned-routes.js";
+import { type PlannedPathResponseDto } from "../planned-routes/planned-paths.js";
 import { RouteApiPath } from "./libs/enums/enums.js";
 import {
 	type RouteConstructRequestDto,
@@ -108,7 +108,7 @@ import { type RouteService } from "./route.service.js";
  *         userId:
  *           type: number
  *
- *     PlannedRoute:
+ *     PlannedPath:
  *       type: object
  *       properties:
  *         id:
@@ -205,21 +205,21 @@ class RouteController extends BaseController {
 	 *                 example: [4, 1, 3]
 	 *     responses:
 	 *       200:
-	 *         description: Planned route created for further publishing
+	 *         description: Planned path created for further publishing
 	 *         content:
 	 *           application/json:
 	 *             schema:
 	 *               type: object
 	 *               properties:
 	 *                 data:
-	 *                   $ref: '#/components/schemas/PlannedRoute'
+	 *                   $ref: '#/components/schemas/PlannedPath'
 	 */
 
 	public async constructRoute({
 		body: { pointsOfInterest },
 	}: APIHandlerOptions<{
 		body: RouteConstructRequestDto;
-	}>): Promise<APIHandlerResponse<PlannedRoutesResponseDto>> {
+	}>): Promise<APIHandlerResponse<PlannedPathResponseDto>> {
 		const data = await this.routeService.construct(pointsOfInterest);
 
 		return {
@@ -248,7 +248,7 @@ class RouteController extends BaseController {
 	 *               - name
 	 *               - description
 	 *               - pois
-	 *               - plannedRouteId
+	 *               - plannedPathId
 	 *               - userId
 	 *             properties:
 	 *               name:
@@ -262,7 +262,7 @@ class RouteController extends BaseController {
 	 *                 items:
 	 *                   type: number
 	 *                 example: [4, 1, 3]
-	 *               plannedRouteId:
+	 *               plannedPathId:
 	 *                 type: number
 	 *                 example: 2
 	 *               userId:

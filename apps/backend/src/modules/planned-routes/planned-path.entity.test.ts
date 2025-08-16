@@ -6,9 +6,9 @@ import {
 	type LineStringGeometry,
 } from "~/libs/types/types.js";
 
-import { PlannedRoutesEntity } from "./planned-routes.entity.js";
+import { PlannedPathEntity } from "./planned-path.entity.js";
 
-describe("PlannedRoutesEntity", () => {
+describe("PlannedPathEntity", () => {
 	const geometry: LineStringGeometry = {
 		coordinates: [
 			[30.5234, 50.4501],
@@ -29,7 +29,7 @@ describe("PlannedRoutesEntity", () => {
 			id: 1,
 		};
 
-		const entity = PlannedRoutesEntity.initialize(dataWithId);
+		const entity = PlannedPathEntity.initialize(dataWithId);
 		const result = entity.toObject();
 
 		assert.equal(result.id, dataWithId.id);
@@ -39,7 +39,7 @@ describe("PlannedRoutesEntity", () => {
 	});
 
 	it("should initialize new planned route without id", () => {
-		const entity = PlannedRoutesEntity.initializeNew(dataWithoutId);
+		const entity = PlannedPathEntity.initializeNew(dataWithoutId);
 		const result = entity.toObject();
 
 		assert.equal(result.distance, dataWithoutId.distance);

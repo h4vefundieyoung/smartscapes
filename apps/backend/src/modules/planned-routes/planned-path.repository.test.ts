@@ -9,12 +9,12 @@ import {
 	type LineStringGeometry,
 } from "~/libs/types/types.js";
 
-import { PlannedRoutesEntity } from "./planned-routes.entity.js";
-import { PlannedRoutesModel } from "./planned-routes.model.js";
-import { PlannedRoutesRepository } from "./planned-routes.repository.js";
+import { PlannedPathEntity } from "./planned-path.entity.js";
+import { PlannedPathModel } from "./planned-path.model.js";
+import { PlannedPathRepository } from "./planned-path.repository.js";
 
-describe("PlannedRoutesRepository", () => {
-	let repository: PlannedRoutesRepository;
+describe("PlannedPathRepository", () => {
+	let repository: PlannedPathRepository;
 	let tracker: Tracker;
 
 	const geometry: LineStringGeometry = {
@@ -35,8 +35,8 @@ describe("PlannedRoutesRepository", () => {
 	beforeEach(() => {
 		const database = knex({ client: MockClient });
 		tracker = createTracker(database);
-		PlannedRoutesModel.knex(database);
-		repository = new PlannedRoutesRepository(PlannedRoutesModel);
+		PlannedPathModel.knex(database);
+		repository = new PlannedPathRepository(PlannedPathModel);
 	});
 
 	afterEach(() => {
@@ -44,13 +44,13 @@ describe("PlannedRoutesRepository", () => {
 	});
 
 	it("create should insert and return planned route", async () => {
-		const entity = PlannedRoutesEntity.initialize(existing);
+		const entity = PlannedPathEntity.initialize(existing);
 		const object = entity.toObject();
 
-		tracker.on.insert(DatabaseTableName.PLANNED_ROUTES).response([object]);
+		tracker.on.insert(DatabaseTableName.PLANNED_PATHS).response([object]);
 
 		const created = await repository.create(
-			PlannedRoutesEntity.initializeNew({
+			PlannedPathEntity.initializeNew({
 				distance: existing.distance,
 				duration: existing.duration,
 				geometry: existing.geometry,
@@ -61,7 +61,7 @@ describe("PlannedRoutesRepository", () => {
 	});
 
 	it("findById should return item when exists", async () => {
-		tracker.on.select(DatabaseTableName.PLANNED_ROUTES).response([existing]);
+		tracker.on.select(DatabaseTableName.PLANNED_PATHS).response([existing]);
 
 		const found = await repository.findById(existing.id);
 
@@ -69,7 +69,7 @@ describe("PlannedRoutesRepository", () => {
 	});
 
 	it("findById should return null when not found", async () => {
-		tracker.on.select(DatabaseTableName.PLANNED_ROUTES).response([]);
+		tracker.on.select(DatabaseTableName.PLANNED_PATHS).response([]);
 
 		const found = await repository.findById(999);
 
@@ -77,7 +77,7 @@ describe("PlannedRoutesRepository", () => {
 	});
 
 	it("delete should return true on success", async () => {
-		tracker.on.delete(DatabaseTableName.PLANNED_ROUTES).response(1);
+		tracker.on.delete(DatabaseTableName.PLANNED_PATHS).response(1);
 
 		const isDeleted = await repository.delete(existing.id);
 
@@ -85,7 +85,7 @@ describe("PlannedRoutesRepository", () => {
 	});
 
 	it("delete should return false on miss", async () => {
-		tracker.on.delete(DatabaseTableName.PLANNED_ROUTES).response(0);
+		tracker.on.delete(DatabaseTableName.PLANNED_PATHS).response(0);
 
 		const isDeleted = await repository.delete(999);
 

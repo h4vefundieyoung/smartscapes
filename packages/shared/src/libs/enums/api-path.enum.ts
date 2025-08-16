@@ -1,5 +1,6 @@
 const APIPath = {
 	AUTH: "/auth",
+	FILES: "/files",
 	NOTIFICATIONS: "/notifications",
 	POINTS_OF_INTEREST: "/points-of-interest",
 	REVIEWS: "/reviews",

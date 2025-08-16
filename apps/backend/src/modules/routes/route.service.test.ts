@@ -1,20 +1,25 @@
-import {
-	HTTPCode,
-	type PointsOfInterestResponseDto,
-	type RouteGetAllItemResponseDto,
-	type RouteGetByIdResponseDto,
-} from "@smartscapes/shared";
 import assert from "node:assert/strict";
 import { describe, it, mock } from "node:test";
 
-import { type MapboxDirectionsApi } from "~/libs/modules/mapbox/mapbox-directions-api.module.js";
-import { type Coordinates } from "~/libs/types/types.js";
+import { HTTPCode } from "~/libs/modules/http/http.js";
+import { type MapboxDirectionsApi } from "~/libs/modules/mapbox/mapbox.js";
+import {
+	type Coordinates,
+	type LineStringGeometry,
+} from "~/libs/types/types.js";
 
-import { type PlannedRouteService } from "../planned-routes/planned-routes.service.js";
-import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
-import { RoutesExceptionMessage } from "./libs/enums/routes-exception-message.enum.js";
-import { RoutesError } from "./libs/exceptions/routes-error.exception.js";
-import { type RouteFindAllOptions } from "./libs/types/types.js";
+import { type PlannedRouteService } from "../planned-routes/planned-routes.js";
+import {
+	type PointsOfInterestResponseDto,
+	type PointsOfInterestService,
+} from "../points-of-interest/points-of-interest.js";
+import { RoutesExceptionMessage } from "./libs/enums/enums.js";
+import { RoutesError } from "./libs/exceptions/exceptions.js";
+import {
+	type RouteFindAllOptions,
+	type RouteGetAllItemResponseDto,
+	type RouteGetByIdResponseDto,
+} from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
 import { type RouteRepository } from "./route.repository.js";
 import { RouteService } from "./route.service.js";
@@ -22,8 +27,6 @@ import { RouteService } from "./route.service.js";
 const EXISTING_ID = 1;
 const FIRST_POI_ID = 1;
 const SECOND_POI_ID = 2;
-const THIRD_POI_ID = 3;
-const FOURTH_POI_ID = 4;
 const NON_EXISTENT_ID = 999;
 const FIRST_COORDINATE = 30.5234;
 const SECOND_COORDINATE = 50.4501;
@@ -31,12 +34,28 @@ const FIRST_VISIT_ORDER = 0;
 const SECOND_VISIT_ORDER = 1;
 const FIRST_ENTITY_ID = 1;
 const SECOND_ENTITY_ID = 2;
-const THIRD_ENTITY_ID = 3;
 
-const createMockMapboxApi = (): Partial<MapboxDirectionsApi> => {
-	return {
-		getRoute: () => ({}) as ReturnType<MapboxDirectionsApi["getRoute"]>,
-	};
+const geometry: LineStringGeometry = {
+	coordinates: [
+		[FIRST_COORDINATE, SECOND_COORDINATE],
+		[SECOND_COORDINATE, FIRST_COORDINATE],
+	] as Coordinates[],
+	type: "LineString",
+};
+
+const createMockMapboxApi = (): {
+	api: MapboxDirectionsApi;
+	getRoute: ReturnType<typeof mock.fn>;
+} => {
+	const getRoute = mock.fn(() =>
+		Promise.resolve({
+			internalId: "id",
+			pointsOfInterest: [FIRST_POI_ID, SECOND_POI_ID],
+			route: { distance: 1, duration: 1, geometry },
+		}),
+	);
+
+	return { api: { getRoute } as unknown as MapboxDirectionsApi, getRoute };
 };
 
 describe("RouteService", () => {
@@ -48,26 +67,36 @@ describe("RouteService", () => {
 	const mockCreatePayload = {
 		description: "Test route description",
 		name: "Test Route",
+		plannedRouteId: 10,
 		pois: [FIRST_POI_ID, SECOND_POI_ID],
+		userId: 5,
 	};
 
 	const mockRouteIdResponse: RouteGetByIdResponseDto = {
 		description: "Test route description",
+		distance: 12.3,
+		duration: 45.6,
+		geometry,
 		id: EXISTING_ID,
 		name: "Test Route",
 		pois: [
 			{ id: FIRST_POI_ID, visitOrder: FIRST_VISIT_ORDER },
 			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
 		],
+		userId: 5,
 	};
 
 	const mockRouteAllItemResponse: RouteGetAllItemResponseDto = {
+		distance: 12.3,
+		duration: 45.6,
+		geometry,
 		id: EXISTING_ID,
 		name: "Test Route",
 		pois: [
 			{ id: FIRST_POI_ID, visitOrder: FIRST_VISIT_ORDER },
 			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
 		],
+		userId: 5,
 	};
 
 	const mockPoisFindAll: PointsOfInterestResponseDto[] = [
@@ -140,76 +169,89 @@ describe("RouteService", () => {
 				}),
 		});
 
+	const createMockPlannedRouteService = (): PlannedRouteService =>
+		({
+			create: () =>
+				Promise.resolve({
+					distance: 1,
+					duration: 1,
+					geometry,
+					id: 99,
+					pois: [FIRST_POI_ID, SECOND_POI_ID],
+				}),
+			delete: () => Promise.resolve(true),
+			findById: () =>
+				Promise.resolve({
+					distance: 12.3,
+					duration: 45.6,
+					geometry,
+					id: 10,
+					pois: [FIRST_POI_ID, SECOND_POI_ID],
+				}),
+		}) as unknown as PlannedRouteService;
+
 	it("Should build mapbox route", async () => {
-		const entities = [
-			{
-				id: FIRST_ENTITY_ID,
-				location: { coordinates: [FIRST_POI_ID, SECOND_POI_ID] },
-			},
-			{
-				id: SECOND_ENTITY_ID,
-				location: { coordinates: [THIRD_POI_ID, FOURTH_POI_ID] },
-			},
-		];
-		const getRoute = mock.fn((_: string, coords: Coordinates[]) =>
-			Promise.resolve(coords),
+		const findAll = mock.fn(({ ids }: { ids: number[] }) =>
+			Promise.resolve({
+				items: mockPoisFindAll.filter(({ id }) => ids.includes(id)),
+			}),
 		);
-		const findAll = mock.fn(({ ids }: { ids: number[] }) => {
-			return Promise.resolve({
-				items: entities.filter(({ id }) => ids.includes(id)),
-			});
+		const poiServiceMock: PointsOfInterestService = {
+			findAll,
+			findById: mock.fn(),
+		} as unknown as PointsOfInterestService;
+
+		const { api: mapboxApiMock, getRoute } = createMockMapboxApi();
+		const routesRepository = createMockRoutesRepository();
+		const plannedRouteService = createMockPlannedRouteService();
+		const service = new RouteService({
+			mapboxDirectionsApi: mapboxApiMock,
+			plannedRouteService,
+			pointsOfInterestService: poiServiceMock,
+			routesRepository: routesRepository as RouteRepository,
 		});
 
-		const poiServiceMock = {
-			findAll,
-		} as unknown as PointsOfInterestService;
+		const result = await service.construct([FIRST_ENTITY_ID, SECOND_ENTITY_ID]);
 
-		const mapboxApiMock = {
-			getRoute,
-		} as unknown as MapboxDirectionsApi;
-		const mockRepository = {} as RouteRepository;
-		const routeService = new RouteService(
-			mockRepository,
-			poiServiceMock,
-			mapboxApiMock,
-		);
-
-		const shouldBeCalledTimes = 1;
-
-		assert.equal(findAll.mock.callCount(), shouldBeCalledTimes);
-		assert.equal(getRoute.mock.callCount(), shouldBeCalledTimes);
-		assert.equal(typeof constructedRoute, "object");
+		assert.equal(findAll.mock.callCount(), 1);
+		assert.equal(getRoute.mock.callCount(), 1);
+		assert.equal(typeof result, "object");
 	});
 
-	it("Should throw error for unexisting id", () => {
-		const entitiesIds = [FIRST_ENTITY_ID, SECOND_ENTITY_ID, THIRD_ENTITY_ID];
-		const entities = [
-			{
-				id: FIRST_ENTITY_ID,
-				location: { coordinates: [FIRST_POI_ID, SECOND_POI_ID] },
-			},
-		];
-		const findAll = mock.fn(
-			async ({ ids }: { ids: number[] }) =>
-				await Promise.resolve({
-					items: entities.filter(({ id }) => ids.includes(id)),
+	it("Should throw error for unexisting id", async () => {
+		const poiServiceMock: PointsOfInterestService = {
+			findAll: ({ ids }: { ids: number[] }) =>
+				Promise.resolve({
+					items: [
+						{
+							id: FIRST_ENTITY_ID,
+							location: {
+								coordinates: [FIRST_POI_ID, SECOND_POI_ID],
+								type: "Point",
+							},
+						} as unknown as PointsOfInterestResponseDto,
+					].filter(({ id }) => ids.includes(id)),
 				}),
-		);
-
-		const poiServiceMock = {
-			findAll,
+			findById: mock.fn(),
 		} as unknown as PointsOfInterestService;
 
-		const mapboxApiMock = createMockMapboxApi() as MapboxDirectionsApi;
-		const repository = createMockRoutesRepository() as RouteRepository;
-		const routeService = new RouteService(
-			repository,
-			poiServiceMock,
-			mapboxApiMock,
-		);
+		const { api: mapboxApiMock } = createMockMapboxApi();
+		const routesRepository = createMockRoutesRepository();
+		const plannedRouteService = createMockPlannedRouteService();
+		const service = new RouteService({
+			mapboxDirectionsApi: mapboxApiMock,
+			plannedRouteService,
+			pointsOfInterestService: poiServiceMock,
+			routesRepository: routesRepository as RouteRepository,
+		});
 
-		assert.rejects(
-			async () => await routeService.construct(entitiesIds, "1"),
+		await assert.rejects(
+			async () =>
+				await service.construct([
+					FIRST_ENTITY_ID,
+					SECOND_ENTITY_ID,
+					SECOND_ENTITY_ID + 1,
+				]),
 			RoutesError,
 		);
 	});
@@ -217,15 +259,16 @@ describe("RouteService", () => {
 	it("create should return new route", async () => {
 		const routesRepository = createMockRoutesRepository();
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const mapBoxApiMock = createMockMapboxApi();
-		const plannedRouteServiceMock =
-			createMockPlannedRouteService() as PlannedRouteService;
+		const { api: mapBoxApiMock } = createMockMapboxApi();
+		const plannedRouteService = createMockPlannedRouteService();
 
-		const routeService = new RouteService(
-			routesRepository as RouteRepository,
-			pointsOfInterestService as PointsOfInterestService,
-			mapBoxApiMock as MapboxDirectionsApi,
-		);
+		const routeService = new RouteService({
+			mapboxDirectionsApi: mapBoxApiMock,
+			plannedRouteService,
+			pointsOfInterestService:
+				pointsOfInterestService as PointsOfInterestService,
+			routesRepository: routesRepository as RouteRepository,
+		});
 
 		const result = await routeService.create(mockCreatePayload);
 
@@ -235,15 +278,16 @@ describe("RouteService", () => {
 	it("findById should return route when it exists", async () => {
 		const routesRepository = createMockRoutesRepository();
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const mapBoxApiMock = createMockMapboxApi();
-		const plannedRouteServiceMock =
-			createMockPlannedRouteService() as PlannedRouteService;
+		const { api: mapBoxApiMock } = createMockMapboxApi();
+		const plannedRouteService = createMockPlannedRouteService();
 
-		const routeService = new RouteService(
-			routesRepository as RouteRepository,
-			pointsOfInterestService as PointsOfInterestService,
-			mapBoxApiMock as MapboxDirectionsApi,
-		);
+		const routeService = new RouteService({
+			mapboxDirectionsApi: mapBoxApiMock,
+			plannedRouteService,
+			pointsOfInterestService:
+				pointsOfInterestService as PointsOfInterestService,
+			routesRepository: routesRepository as RouteRepository,
+		});
 
 		const result = await routeService.findById(EXISTING_ID);
 
@@ -255,15 +299,16 @@ describe("RouteService", () => {
 			findById: () => Promise.resolve(null),
 		});
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const mapBoxApiMock = createMockMapboxApi();
-		const plannedRouteServiceMock =
-			createMockPlannedRouteService() as PlannedRouteService;
+		const { api: mapBoxApiMock } = createMockMapboxApi();
+		const plannedRouteService = createMockPlannedRouteService();
 
-		const routeService = new RouteService(
-			routesRepository as RouteRepository,
-			pointsOfInterestService as PointsOfInterestService,
-			mapBoxApiMock as MapboxDirectionsApi,
-		);
+		const routeService = new RouteService({
+			mapboxDirectionsApi: mapBoxApiMock,
+			plannedRouteService,
+			pointsOfInterestService:
+				pointsOfInterestService as PointsOfInterestService,
+			routesRepository: routesRepository as RouteRepository,
+		});
 
 		await assert.rejects(async () => {
 			await routeService.findById(NON_EXISTENT_ID);
@@ -276,15 +321,16 @@ describe("RouteService", () => {
 				Promise.resolve([createMockAllItemEntity(mockRouteAllItemResponse)]),
 		});
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const mapBoxApiMock = createMockMapboxApi();
-		const plannedRouteServiceMock =
-			createMockPlannedRouteService() as PlannedRouteService;
+		const { api: mapBoxApiMock } = createMockMapboxApi();
+		const plannedRouteService = createMockPlannedRouteService();
 
-		const routeService = new RouteService(
-			routesRepository as RouteRepository,
-			pointsOfInterestService as PointsOfInterestService,
-			mapBoxApiMock as MapboxDirectionsApi,
-		);
+		const routeService = new RouteService({
+			mapboxDirectionsApi: mapBoxApiMock,
+			plannedRouteService,
+			pointsOfInterestService:
+				pointsOfInterestService as PointsOfInterestService,
+			routesRepository: routesRepository as RouteRepository,
+		});
 
 		const result = await routeService.findAll(null);
 
@@ -295,13 +341,16 @@ describe("RouteService", () => {
 		const routesRepository = createMockRoutesRepository({
 			findAll: () => Promise.resolve([]),
 		});
-		const mapBoxApiMock = createMockMapboxApi();
+		const { api: mapBoxApiMock } = createMockMapboxApi();
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const routeService = new RouteService(
-			routesRepository as RouteRepository,
-			pointsOfInterestService as PointsOfInterestService,
-			mapBoxApiMock as MapboxDirectionsApi,
-		);
+		const plannedRouteService = createMockPlannedRouteService();
+		const routeService = new RouteService({
+			mapboxDirectionsApi: mapBoxApiMock,
+			plannedRouteService,
+			pointsOfInterestService:
+				pointsOfInterestService as PointsOfInterestService,
+			routesRepository: routesRepository as RouteRepository,
+		});
 
 		const result = await routeService.findAll(null);
 
@@ -310,13 +359,16 @@ describe("RouteService", () => {
 
 	it("findAll should return response with routes that match search query", async () => {
 		const routesRepository = createMockRoutesRepository();
-		const mapBoxApiMock = createMockMapboxApi();
+		const { api: mapBoxApiMock } = createMockMapboxApi();
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const routeService = new RouteService(
-			routesRepository as RouteRepository,
-			pointsOfInterestService as PointsOfInterestService,
-			mapBoxApiMock as MapboxDirectionsApi,
-		);
+		const plannedRouteService = createMockPlannedRouteService();
+		const routeService = new RouteService({
+			mapboxDirectionsApi: mapBoxApiMock,
+			plannedRouteService,
+			pointsOfInterestService:
+				pointsOfInterestService as PointsOfInterestService,
+			routesRepository: routesRepository as RouteRepository,
+		});
 
 		const mockOptions: RouteFindAllOptions = {
 			name: mockCreatePayload.name.toLowerCase(),
@@ -329,16 +381,19 @@ describe("RouteService", () => {
 
 	it("patch should update existing route successfully", async () => {
 		const updatedRoute = { ...mockRouteIdResponse, ...mockPatchPayload };
-		const mapBoxApiMock = createMockMapboxApi();
+		const { api: mapBoxApiMock } = createMockMapboxApi();
 		const routesRepository = createMockRoutesRepository({
 			patch: () => Promise.resolve(createMockIdEntity(updatedRoute)),
 		});
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const routeService = new RouteService(
-			routesRepository as RouteRepository,
-			pointsOfInterestService as PointsOfInterestService,
-			mapBoxApiMock as MapboxDirectionsApi,
-		);
+		const plannedRouteService = createMockPlannedRouteService();
+		const routeService = new RouteService({
+			mapboxDirectionsApi: mapBoxApiMock,
+			plannedRouteService,
+			pointsOfInterestService:
+				pointsOfInterestService as PointsOfInterestService,
+			routesRepository: routesRepository as RouteRepository,
+		});
 
 		const result = await routeService.patch(EXISTING_ID, mockPatchPayload);
 
@@ -349,16 +404,17 @@ describe("RouteService", () => {
 		const routesRepository = createMockRoutesRepository({
 			patch: () => Promise.resolve(null),
 		});
-		const mapBoxApiMock = createMockMapboxApi();
+		const { api: mapBoxApiMock } = createMockMapboxApi();
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const plannedRouteServiceMock =
-			createMockPlannedRouteService() as PlannedRouteService;
+		const plannedRouteService = createMockPlannedRouteService();
 
-		const routeService = new RouteService(
-			routesRepository as RouteRepository,
-			pointsOfInterestService as PointsOfInterestService,
-			mapBoxApiMock as MapboxDirectionsApi,
-		);
+		const routeService = new RouteService({
+			mapboxDirectionsApi: mapBoxApiMock,
+			plannedRouteService,
+			pointsOfInterestService:
+				pointsOfInterestService as PointsOfInterestService,
+			routesRepository: routesRepository as RouteRepository,
+		});
 
 		await assert.rejects(async () => {
 			await routeService.patch(NON_EXISTENT_ID, mockPatchPayload);
@@ -368,12 +424,15 @@ describe("RouteService", () => {
 	it("delete should delete existing route successfully", async () => {
 		const routesRepository = createMockRoutesRepository();
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const mapBoxApiMock = createMockMapboxApi();
-		const routeService = new RouteService(
-			routesRepository as RouteRepository,
-			pointsOfInterestService as PointsOfInterestService,
-			mapBoxApiMock as MapboxDirectionsApi,
-		);
+		const { api: mapBoxApiMock } = createMockMapboxApi();
+		const plannedRouteService = createMockPlannedRouteService();
+		const routeService = new RouteService({
+			mapboxDirectionsApi: mapBoxApiMock,
+			plannedRouteService,
+			pointsOfInterestService:
+				pointsOfInterestService as PointsOfInterestService,
+			routesRepository: routesRepository as RouteRepository,
+		});
 
 		const result = await routeService.delete(EXISTING_ID);
 
@@ -385,12 +444,15 @@ describe("RouteService", () => {
 			delete: () => Promise.resolve(false),
 		});
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const mapBoxApiMock = createMockMapboxApi();
-		const routeService = new RouteService(
-			routesRepository as RouteRepository,
-			pointsOfInterestService as PointsOfInterestService,
-			mapBoxApiMock as MapboxDirectionsApi,
-		);
+		const { api: mapBoxApiMock } = createMockMapboxApi();
+		const plannedRouteService = createMockPlannedRouteService();
+		const routeService = new RouteService({
+			mapboxDirectionsApi: mapBoxApiMock,
+			plannedRouteService,
+			pointsOfInterestService:
+				pointsOfInterestService as PointsOfInterestService,
+			routesRepository: routesRepository as RouteRepository,
+		});
 
 		await assert.rejects(async () => {
 			await routeService.delete(NON_EXISTENT_ID);
@@ -400,12 +462,15 @@ describe("RouteService", () => {
 	it("ensurePoisExist should validate all POIs exist before creating route", async () => {
 		const routesRepository = createMockRoutesRepository();
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const mapBoxApiMock = createMockMapboxApi();
-		const routeService = new RouteService(
-			routesRepository as RouteRepository,
-			pointsOfInterestService as PointsOfInterestService,
-			mapBoxApiMock as MapboxDirectionsApi,
-		);
+		const { api: mapBoxApiMock } = createMockMapboxApi();
+		const plannedRouteService = createMockPlannedRouteService();
+		const routeService = new RouteService({
+			mapboxDirectionsApi: mapBoxApiMock,
+			plannedRouteService,
+			pointsOfInterestService:
+				pointsOfInterestService as PointsOfInterestService,
+			routesRepository: routesRepository as RouteRepository,
+		});
 
 		const result = await routeService.create(mockCreatePayload);
 
@@ -414,16 +479,19 @@ describe("RouteService", () => {
 
 	it("ensurePoisExist should throw error when POI does not exist", async () => {
 		const routesRepository = createMockRoutesRepository();
-		const mapBoxApiMock = createMockMapboxApi();
-		const pointsOfInterestService = {
-			...createMockPointsOfInterestService(),
-			findAll: (): unknown => Promise.resolve({ items: [mockPoisFindAll[0]] }),
-		};
-		const routeService = new RouteService(
-			routesRepository as RouteRepository,
-			pointsOfInterestService as unknown as PointsOfInterestService,
-			mapBoxApiMock as MapboxDirectionsApi,
-		);
+		const { api: mapBoxApiMock } = createMockMapboxApi();
+		const basePoiService = createMockPointsOfInterestService();
+		const pointsOfInterestService: PointsOfInterestService = {
+			findAll: () => Promise.resolve({ items: [mockPoisFindAll[0]] }),
+			findById: (id: number) => basePoiService.findById?.(id),
+		} as unknown as PointsOfInterestService;
+		const plannedRouteService = createMockPlannedRouteService();
+		const routeService = new RouteService({
+			mapboxDirectionsApi: mapBoxApiMock,
+			plannedRouteService,
+			pointsOfInterestService,
+			routesRepository: routesRepository as RouteRepository,
+		});
 
 		await assert.rejects(
 			async () => {

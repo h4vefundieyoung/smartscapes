@@ -1,4 +1,5 @@
 import { APIErrorType } from "~/libs/enums/enums.js";
+import { configureString } from "~/libs/helpers/helpers.js";
 import {
 	type HTTP,
 	type HTTPCode,
@@ -13,7 +14,6 @@ import {
 	type GetHeadersOptions,
 	type HTTPApi,
 	type HTTPApiOptions,
-	type QueryValue,
 } from "./libs/types/types.js";
 
 type Constructor = {
@@ -64,49 +64,19 @@ class BaseHTTPApi implements HTTPApi {
 		return await this.checkResponse<T>(response);
 	}
 
-	protected getFullEndpoint<T extends Record<string, QueryValue>>(
+	protected getFullEndpoint<T extends Record<string, string>>(
 		...parameters: [...string[], T]
 	): string {
 		const copiedParameters = [...parameters];
+
 		const options = copiedParameters.pop() as T;
 
-		let path = this.buildPath(copiedParameters as string[]);
-		const queryParameters = new URLSearchParams();
-
-		for (const [key, value] of Object.entries(options)) {
-			const dynamicPathKey = `:${key}`;
-
-			if (path.includes(dynamicPathKey)) {
-				path = this.replaceDynamicPath(path, dynamicPathKey, value);
-				continue;
-			}
-
-			this.addQueryParameters(queryParameters, key, value);
-		}
-
-		const queryString = queryParameters.toString();
-
-		return queryString ? `${path}?${queryString}` : path;
-	}
-
-	private addQueryParameters(
-		queryParameters: URLSearchParams,
-		key: string,
-		value: string | string[] | undefined,
-	): void {
-		if (value !== undefined) {
-			if (Array.isArray(value)) {
-				for (const v of value) {
-					queryParameters.append(key, String(v));
-				}
-			} else {
-				queryParameters.append(key, String(value));
-			}
-		}
-	}
-
-	private buildPath(copiedParameters: string[]): string {
-		return [this.baseUrl, this.path, ...copiedParameters].join("");
+		return configureString(
+			this.baseUrl,
+			this.path,
+			...(copiedParameters as string[]),
+			options,
+		);
 	}
 
 	private async checkResponse<T>(
@@ -165,22 +135,6 @@ class BaseHTTPApi implements HTTPApi {
 			status: response.status as ValueOf<typeof HTTPCode>,
 			type: errorPayload.type,
 		});
-	}
-
-	private replaceDynamicPath(
-		path: string,
-		dynamicPathKey: string,
-		value: string | string[] | undefined,
-	): string {
-		if (value !== undefined) {
-			const replacement = Array.isArray(value) ? value[0] : value;
-
-			if (replacement !== undefined) {
-				path = path.replace(dynamicPathKey, encodeURIComponent(replacement));
-			}
-		}
-
-		return path;
 	}
 }
 

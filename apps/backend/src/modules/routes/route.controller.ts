@@ -196,9 +196,9 @@ class RouteController extends BaseController {
 	 *           schema:
 	 *             type: object
 	 *             required:
-	 *               - pointsOfInterest
+	 *               - poiIds
 	 *             properties:
-	 *               pointsOfInterest:
+	 *               poiIds:
 	 *                 type: array
 	 *                 items:
 	 *                   type: integer
@@ -216,11 +216,11 @@ class RouteController extends BaseController {
 	 */
 
 	public async constructRoute({
-		body: { pointsOfInterest },
+		body: { poiIds },
 	}: APIHandlerOptions<{
 		body: RouteConstructRequestDto;
 	}>): Promise<APIHandlerResponse<PlannedPathResponseDto>> {
-		const data = await this.routeService.construct(pointsOfInterest);
+		const data = await this.routeService.construct(poiIds);
 
 		return {
 			payload: { data },
@@ -247,7 +247,7 @@ class RouteController extends BaseController {
 	 *             required:
 	 *               - name
 	 *               - description
-	 *               - pois
+	 *               - poiIds
 	 *               - plannedPathId
 	 *               - userId
 	 *             properties:
@@ -257,7 +257,7 @@ class RouteController extends BaseController {
 	 *               description:
 	 *                 type: string
 	 *                 example: An alley with blooming flowers
-	 *               pois:
+	 *               poiIds:
 	 *                 type: array
 	 *                 items:
 	 *                   type: number

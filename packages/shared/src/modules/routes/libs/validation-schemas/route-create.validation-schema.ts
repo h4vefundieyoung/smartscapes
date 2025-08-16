@@ -27,7 +27,7 @@ const routesCreate = z.strictObject({
 	plannedPathId: z.number({
 		message: RoutesValidationMessage.PLANNED_ROUTE_INVALID_TYPE,
 	}),
-	pois: z
+	poiIds: z
 		.array(z.number().int().positive())
 		.min(RoutesValidationRule.ROUTES_MINIMUM_COUNT, {
 			message: RoutesValidationMessage.ROUTES_MINIMUM_COUNT,

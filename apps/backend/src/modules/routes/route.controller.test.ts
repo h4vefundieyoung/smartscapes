@@ -131,7 +131,7 @@ describe("Routes controller", () => {
 	it("Should return data with 200 status code", async () => {
 		const mockData = "mockData";
 		const constructRouteMockData = {
-			body: { pointsOfInterest: [] },
+			body: { poiIds: [] },
 			params: null,
 			query: null,
 			user: mockUser,
@@ -155,7 +155,7 @@ describe("Routes controller", () => {
 				description: mockRoute.description,
 				name: mockRoute.name,
 				plannedPathId: 1,
-				pois: [FIRST_POI_ID, SECOND_POI_ID],
+				poiIds: [FIRST_POI_ID, SECOND_POI_ID],
 				userId: mockAdminUser.id,
 			},
 			params: {},
@@ -397,7 +397,7 @@ describe("Routes controller", () => {
 					description: mockRoute.description,
 					name: mockRoute.name,
 					plannedPathId: 1,
-					pois: [FIRST_POI_ID, SECOND_POI_ID],
+					poiIds: [FIRST_POI_ID, SECOND_POI_ID],
 					userId: mockAdminUser.id,
 				},
 				params: {},

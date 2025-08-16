@@ -2,7 +2,7 @@ type RouteCreateRequestDto = {
 	description: string;
 	name: string;
 	plannedPathId: number;
-	pois: number[];
+	poiIds: number[];
 	userId: number;
 };
 

@@ -50,7 +50,7 @@ const createMockMapboxApi = (): {
 	const getRoute = mock.fn(() =>
 		Promise.resolve({
 			internalId: "id",
-			pointsOfInterest: [FIRST_POI_ID, SECOND_POI_ID],
+			poiIds: [FIRST_POI_ID, SECOND_POI_ID],
 			route: { distance: 1, duration: 1, geometry },
 		}),
 	);
@@ -68,7 +68,7 @@ describe("RouteService", () => {
 		description: "Test route description",
 		name: "Test Route",
 		plannedPathId: 10,
-		pois: [FIRST_POI_ID, SECOND_POI_ID],
+		poiIds: [FIRST_POI_ID, SECOND_POI_ID],
 		userId: 5,
 	};
 

@@ -46,14 +46,12 @@ class RouteService implements Service {
 		this.plannedPathservice = plannedPathservice;
 	}
 
-	public async construct(
-		pointsOfInterest: number[],
-	): Promise<PlannedPathResponseDto> {
+	public async construct(poiIds: number[]): Promise<PlannedPathResponseDto> {
 		const { items } = await this.pointsOfInterestService.findAll({
-			ids: pointsOfInterest,
+			ids: poiIds,
 		});
 
-		if (items.length !== pointsOfInterest.length) {
+		if (items.length !== poiIds.length) {
 			throw new RoutesError({
 				message: RoutesExceptionMessage.POI_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
@@ -76,11 +74,11 @@ class RouteService implements Service {
 	public async create(
 		payload: RouteCreateRequestDto,
 	): Promise<RouteGetByIdResponseDto> {
-		await this.ensurePoisExist(payload.pois);
+		await this.ensurePoisExist(payload.poiIds);
 
 		const formattedPayload = {
 			...payload,
-			pois: payload.pois.map((id, index) => ({
+			pois: payload.poiIds.map((id, index) => ({
 				id,
 				visitOrder: index,
 			})),

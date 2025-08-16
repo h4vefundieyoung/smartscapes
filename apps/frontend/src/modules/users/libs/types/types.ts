@@ -1,7 +1,6 @@
 export {
 	type AuthenticatedUserPatchRequestDto,
 	type AuthenticatedUserPatchResponseDto,
-	type GroupResponseDto,
 	type PermissionItemDto,
 	type UserAuthResponseDto,
 	type UserGetByIdItemResponseDto,

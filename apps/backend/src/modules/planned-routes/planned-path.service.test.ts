@@ -10,9 +10,9 @@ import {
 import { PlannedPathExceptionMessage } from "./libs/enums/enums.js";
 import { type PlannedPathEntity } from "./planned-path.entity.js";
 import { type PlannedPathRepository } from "./planned-path.repository.js";
-import { PlannedPathservice } from "./planned-path.service.js";
+import { PlannedPathService } from "./planned-path.service.js";
 
-describe("PlannedPathservice", () => {
+describe("PlannedPathService", () => {
 	const geometry: LineStringGeometry = {
 		coordinates: [
 			[30.5234, 50.4501],
@@ -37,7 +37,7 @@ describe("PlannedPathservice", () => {
 			findById: mock.fn(),
 		} as unknown as PlannedPathRepository;
 
-		const service = new PlannedPathservice(repo);
+		const service = new PlannedPathService(repo);
 
 		const result = await service.create(mapboxResponse);
 
@@ -56,7 +56,7 @@ describe("PlannedPathservice", () => {
 			findById: mock.fn(() => null),
 		} as unknown as PlannedPathRepository;
 
-		const service = new PlannedPathservice(repo);
+		const service = new PlannedPathService(repo);
 
 		await assert.rejects(
 			async () => {

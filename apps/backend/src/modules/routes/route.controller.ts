@@ -85,8 +85,10 @@ import { type RouteService } from "./route.service.js";
  *       properties:
  *         id:
  *           type: number
+ *           example: 1
  *         name:
  *           type: string
+ *           example: "Landscape alley"
  *         distance:
  *           type: number
  *           example: 36310.805

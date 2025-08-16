@@ -118,7 +118,7 @@ erDiagram
     dateTime updated_at
     int user_id FK
     decimal distance
-    int duration
+    decimal duration
     geometry geometry
   }
 

@@ -1,10 +1,10 @@
 import { PlannedPathModel } from "./planned-path.model.js";
 import { PlannedPathRepository } from "./planned-path.repository.js";
-import { PlannedPathservice } from "./planned-path.service.js";
+import { PlannedPathService } from "./planned-path.service.js";
 
 const plannedPathRepository = new PlannedPathRepository(PlannedPathModel);
-const plannedPathservice = new PlannedPathservice(plannedPathRepository);
+const plannedPathService = new PlannedPathService(plannedPathRepository);
 
-export { plannedPathservice };
+export { plannedPathService };
 export { type PlannedPathResponseDto } from "./libs/types/types.js";
-export { PlannedPathservice } from "./planned-path.service.js";
+export { PlannedPathService } from "./planned-path.service.js";

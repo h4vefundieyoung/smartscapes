@@ -7,7 +7,7 @@ import { type PlannedPathResponseDto } from "./libs/types/types.js";
 import { PlannedPathEntity } from "./planned-path.entity.js";
 import { type PlannedPathRepository } from "./planned-path.repository.js";
 
-class PlannedPathservice {
+class PlannedPathService {
 	private plannedPathRepository: PlannedPathRepository;
 
 	public constructor(plannedPathRepository: PlannedPathRepository) {
@@ -51,4 +51,4 @@ class PlannedPathservice {
 	}
 }
 
-export { PlannedPathservice };
+export { PlannedPathService };

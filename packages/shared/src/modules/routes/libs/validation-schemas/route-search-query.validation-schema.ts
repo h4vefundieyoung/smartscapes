@@ -19,13 +19,8 @@ const categoryKey = z
 
 const routesSearchQuery = z.object({
 	categories: z
-		.preprocess((value) => {
-			if (value === undefined || value === null) {
-				return;
-			}
-
-			return Array.isArray(value) ? (value as string[]) : [value];
-		}, z.array(categoryKey))
+		.union([categoryKey, z.array(categoryKey)])
+		.transform((value) => (Array.isArray(value) ? value : [value]))
 		.optional(),
 	name: z
 		.string()

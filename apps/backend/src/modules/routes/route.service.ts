@@ -86,9 +86,9 @@ class RouteService implements Service {
 			})),
 		};
 
-		const { plannedRouteId } = formattedPayload;
+		const { plannedPathId } = formattedPayload;
 
-		const plannedRoute = await this.plannedPathservice.findById(plannedRouteId);
+		const plannedRoute = await this.plannedPathservice.findById(plannedPathId);
 
 		const routeEntity = RouteEntity.initializeNew({
 			...formattedPayload,
@@ -97,7 +97,7 @@ class RouteService implements Service {
 
 		const route = await this.routesRepository.create(routeEntity);
 
-		await this.plannedPathservice.delete(plannedRouteId);
+		await this.plannedPathservice.delete(plannedPathId);
 
 		return route.toObject();
 	}

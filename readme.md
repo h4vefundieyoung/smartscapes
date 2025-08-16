@@ -162,7 +162,6 @@ erDiagram
   routes ||--|{ reviews : route_id
   points_of_interest ||--|{ reviews : poi_id
   users ||--o{ notifications : user_id
-  users ||--|{ planned_paths : user_id
 ```
 
 ## 5. Architecture

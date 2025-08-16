@@ -1,7 +1,7 @@
 type RouteCreateRequestDto = {
 	description: string;
 	name: string;
-	plannedRouteId: number;
+	plannedPathId: number;
 	pois: number[];
 	userId: number;
 };

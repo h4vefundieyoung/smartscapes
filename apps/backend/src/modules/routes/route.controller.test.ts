@@ -154,7 +154,7 @@ describe("Routes controller", () => {
 			body: {
 				description: mockRoute.description,
 				name: mockRoute.name,
-				plannedRouteId: 1,
+				plannedPathId: 1,
 				pois: [FIRST_POI_ID, SECOND_POI_ID],
 				userId: mockAdminUser.id,
 			},
@@ -396,7 +396,7 @@ describe("Routes controller", () => {
 				body: {
 					description: mockRoute.description,
 					name: mockRoute.name,
-					plannedRouteId: 1,
+					plannedPathId: 1,
 					pois: [FIRST_POI_ID, SECOND_POI_ID],
 					userId: mockAdminUser.id,
 				},

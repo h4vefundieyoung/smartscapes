@@ -67,7 +67,7 @@ describe("RouteService", () => {
 	const mockCreatePayload = {
 		description: "Test route description",
 		name: "Test Route",
-		plannedRouteId: 10,
+		plannedPathId: 10,
 		pois: [FIRST_POI_ID, SECOND_POI_ID],
 		userId: 5,
 	};

@@ -4,7 +4,7 @@ import { Navigate, useParams } from "react-router";
 import image1 from "~/assets/images/route-details/placeholder-image-1.png";
 import image2 from "~/assets/images/route-details/placeholder-image-2.png";
 import image3 from "~/assets/images/route-details/placeholder-image-3.png";
-import { ImageGallery } from "~/libs/components/components.js";
+import { ImageGallery, Loader } from "~/libs/components/components.js";
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
 import { useAppDispatch, useAppSelector } from "~/libs/hooks/hooks.js";
 import { actions } from "~/modules/points-of-interest/points-of-interest.js";
@@ -18,14 +18,22 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 	);
 	const { id } = useParams();
 	const isRejected = dataStatus === DataStatus.REJECTED;
+	const isLoading = dataStatus === DataStatus.PENDING;
 
 	useEffect(() => {
 		void dispatch(actions.getById(Number(id)));
 	}, [dispatch, id]);
 
+	if (isRejected) {
+		return <Navigate replace to={AppRoute.NOT_FOUND} />;
+	}
+
+	if (isLoading) {
+		return <Loader />;
+	}
+
 	return (
 		<>
-			{isRejected && <Navigate replace to={AppRoute.NOT_FOUND} />}
 			<main className={styles["container"]}>
 				{pointsOfInterestDetails && (
 					<>

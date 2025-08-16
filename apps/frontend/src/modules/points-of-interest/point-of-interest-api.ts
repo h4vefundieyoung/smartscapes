@@ -5,10 +5,7 @@ import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
 
 import { PointsOfInterestApiPath } from "./libs/enums/enums.js";
-import {
-	type PointsOfInterestResponseDto,
-	type PointsOfInterestSearchQuery,
-} from "./libs/types/types.js";
+import { type PointsOfInterestResponseDto } from "./libs/types/types.js";
 
 type Constructor = {
 	baseUrl: string;
@@ -21,34 +18,17 @@ class PointsOfInterestApi extends BaseHTTPApi {
 		super({ baseUrl, http, path: APIPath.POINTS_OF_INTEREST, storage });
 	}
 
-	public async findAll(
-		query?: PointsOfInterestSearchQuery,
-	): Promise<APIResponse<PointsOfInterestResponseDto[]>> {
-		const queryParameters: Record<string, string> = {};
-
-		if (typeof query?.latitude === "number") {
-			queryParameters["latitude"] = query.latitude.toString();
-		}
-
-		if (typeof query?.longitude === "number") {
-			queryParameters["longitude"] = query.longitude.toString();
-		}
-
-		if (typeof query?.radius === "number") {
-			queryParameters["radius"] = query.radius.toString();
-		}
-
-		if (typeof query?.name === "string") {
-			queryParameters["name"] = query.name;
-		}
-
-		const response = await this.load<
-			APIResponse<PointsOfInterestResponseDto[]>
-		>(this.getFullEndpoint(PointsOfInterestApiPath.ROOT, queryParameters), {
-			contentType: ContentType.JSON,
-			hasAuth: true,
-			method: "GET",
-		});
+	public async getById(
+		id: number,
+	): Promise<APIResponse<PointsOfInterestResponseDto>> {
+		const response = await this.load<APIResponse<PointsOfInterestResponseDto>>(
+			this.getFullEndpoint(PointsOfInterestApiPath.ROOT, String(id), {}),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "GET",
+			},
+		);
 
 		return await response.json();
 	}

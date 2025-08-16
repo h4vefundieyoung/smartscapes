@@ -1,9 +1,9 @@
-import { findAll } from "./actions.js";
+import { getById } from "./actions.js";
 import { actions } from "./points-of-interest.slice.js";
 
 const allActions = {
 	...actions,
-	findAll,
+	getById,
 };
 
 export { allActions as actions };

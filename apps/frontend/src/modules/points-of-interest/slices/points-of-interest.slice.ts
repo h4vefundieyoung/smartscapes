@@ -4,28 +4,28 @@ import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
 import { type PointsOfInterestResponseDto } from "../libs/types/types.js";
-import { findAll } from "./actions.js";
+import { getById } from "./actions.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
-	pointsOfInterest: PointsOfInterestResponseDto[];
+	pointsOfInterest: null | PointsOfInterestResponseDto;
 };
 
 const initialState: State = {
 	dataStatus: DataStatus.IDLE,
-	pointsOfInterest: [],
+	pointsOfInterest: null,
 };
 
 const { actions, name, reducer } = createSlice({
 	extraReducers(builder) {
-		builder.addCase(findAll.pending, (state) => {
+		builder.addCase(getById.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
 		});
-		builder.addCase(findAll.fulfilled, (state, action) => {
-			state.pointsOfInterest = action.payload.data;
+		builder.addCase(getById.fulfilled, (state, action) => {
 			state.dataStatus = DataStatus.FULFILLED;
+			state.pointsOfInterest = action.payload.data;
 		});
-		builder.addCase(findAll.rejected, (state) => {
+		builder.addCase(getById.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
 		});
 	},

@@ -2,20 +2,17 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 
-import {
-	type PointsOfInterestResponseDto,
-	type PointsOfInterestSearchQuery,
-} from "../libs/types/types.js";
+import { type PointsOfInterestResponseDto } from "../libs/types/types.js";
 import { name as sliceName } from "./points-of-interest.slice.js";
 
-const findAll = createAsyncThunk<
-	APIResponse<PointsOfInterestResponseDto[]>,
-	PointsOfInterestSearchQuery | undefined,
+const getById = createAsyncThunk<
+	APIResponse<PointsOfInterestResponseDto>,
+	number,
 	AsyncThunkConfig
->(`${sliceName}/find-all`, async (query, { extra }) => {
+>(`${sliceName}/find-by-id`, async (id, { extra }) => {
 	const { pointsOfInterestApi } = extra;
 
-	return await pointsOfInterestApi.findAll(query);
+	return await pointsOfInterestApi.getById(id);
 });
 
-export { findAll };
+export { getById };

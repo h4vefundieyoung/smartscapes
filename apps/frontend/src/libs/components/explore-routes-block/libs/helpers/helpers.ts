@@ -1,4 +1,4 @@
-export { getPOIsNearby } from "./get-pois-nearby.helper.js";
+export { getDistance } from "./get-distance.helper.js";
+export { getPOICoordinates } from "./get-poi-coordinates.helper.js";
 export { getRoutesForPOIs } from "./get-routes-for-pois.helper.js";
-export { mapAndSortRoutes } from "./map-and-sort-routes.helper.js";
-export { sortRouteByDistance } from "./sort-routes-by-distance.helper.js";
+export { getSortedRoutes } from "./get-sorted-routes.helper.js";

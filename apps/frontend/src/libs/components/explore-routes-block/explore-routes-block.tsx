@@ -1,14 +1,10 @@
 import React from "react";
 
 import { useAppDispatch, useEffect, useState } from "~/libs/hooks/hooks.js";
+import { type RoutesResponseDto } from "~/modules/routes/libs/types/types.js";
 
 import { RouteCard } from "../components.js";
-import {
-	getPOIsNearby,
-	getRoutesForPOIs,
-	mapAndSortRoutes,
-} from "./libs/helpers/helpers.js";
-import { type RouteItem } from "./libs/types/types.js";
+import { getSortedRoutes } from "./libs/helpers/helpers.js";
 import styles from "./styles.module.css";
 
 // TODO: collect all poi id and create backend api that will accept multiple poi and returns all routes at once
@@ -29,7 +25,7 @@ const getCurrentUserPosition = (): Promise<[number, number]> => {
 
 const ExploreRoutesBlock = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
-	const [routes, setRoutes] = useState<RouteItem[]>([]);
+	const [routes, setRoutes] = useState<RoutesResponseDto[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<null | string>(null);
 
@@ -37,23 +33,7 @@ const ExploreRoutesBlock = (): React.JSX.Element => {
 		const fetchData = async (): Promise<void> => {
 			try {
 				const userCoordinates = await getCurrentUserPosition();
-
-				const pois = await getPOIsNearby(dispatch, ...userCoordinates);
-
-				if (pois.length === 0) {
-					setRoutes([]);
-					setLoading(false);
-
-					return;
-				}
-
-				const allRoutes = await getRoutesForPOIs(dispatch, pois);
-				const sortedRoutes = mapAndSortRoutes(allRoutes, pois, userCoordinates);
-
-				//TODO: findAll works correctly at the backend, but I need to check how the query is sents by frontend part
-				//TODO: examine how does findByPoint works
-				//TODO: update algorithm for sorting
-
+				const sortedRoutes = await getSortedRoutes(dispatch, userCoordinates);
 				setRoutes(sortedRoutes);
 			} catch (error: unknown) {
 				if (error instanceof Error) {

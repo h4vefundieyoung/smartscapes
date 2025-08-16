@@ -228,11 +228,9 @@ class UserRepository implements Repository {
 		id: number,
 		payload: AuthenticatedUserPatchRequestDto,
 	): Promise<null | UserEntity> {
-		const { firstName, isVisibleProfile, lastName } = payload;
-
 		return await transaction(this.userModel, async (UserModel) => {
 			const [updatedRow] = await UserModel.query()
-				.patch({ firstName, isVisibleProfile, lastName })
+				.patch(payload)
 				.where("id", "=", id)
 				.returning("*")
 				.execute();

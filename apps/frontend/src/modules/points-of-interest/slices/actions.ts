@@ -25,7 +25,7 @@ const getById = createAsyncThunk<
 	APIResponse<PointsOfInterestResponseDto>,
 	number,
 	AsyncThunkConfig
->(`${sliceName}/find-by-id`, async (id, { extra }) => {
+>(`${sliceName}/get-by-id`, async (id, { extra }) => {
 	const { pointOfInterestApi } = extra;
 
 	return await pointOfInterestApi.getById(id);

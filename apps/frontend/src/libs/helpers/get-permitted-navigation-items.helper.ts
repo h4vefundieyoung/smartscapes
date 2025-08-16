@@ -16,7 +16,7 @@ const getPermittedNavigationItems = (
 		.map((group) => ({
 			...group,
 			items: group.items.filter((item) =>
-				checkHasPermission(item.pagePermissions, userPermissions),
+				checkHasPermission(item.pagePermissions ?? [], userPermissions),
 			),
 		}))
 		.filter((group, index) => {

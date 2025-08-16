@@ -1,10 +1,10 @@
 import { type PermissionItemDto } from "~/modules/users/libs/types/types.js";
 
 const checkHasPermission = (
-	requiredPermissions: string[] | undefined,
+	requiredPermissions: string[],
 	userPermissions: PermissionItemDto[],
 ): boolean => {
-	if (!requiredPermissions?.length) {
+	if (requiredPermissions.length === 0) {
 		return true;
 	}
 

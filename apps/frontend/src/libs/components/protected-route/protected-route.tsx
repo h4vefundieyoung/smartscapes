@@ -21,7 +21,7 @@ const ProtectedRoute = ({
 	);
 
 	const hasPermission = checkHasPermission(
-		routePermissions,
+		routePermissions ?? [],
 		authenticatedUser?.group.permissions ?? [],
 	);
 

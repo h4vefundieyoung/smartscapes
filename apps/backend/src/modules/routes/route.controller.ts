@@ -37,32 +37,17 @@ import { type RouteService } from "./route.service.js";
  *       maxItems: 2
  *       example: [30.5, 50.4]
  *
- *     GetMapboxRouteResponseDto:
+ *     GeometryLineString:
  *       type: object
  *       properties:
- *         routes:
+ *         coordinates:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/MapboxRoute'
- *         internalId:
+ *             $ref: '#/components/schemas/Coordinate'
+ *         type:
  *           type: string
+ *           example: LineString
  *
- *     MapboxRoute:
- *       type: object
- *       properties:
- *         distance:
- *           type: number
- *         duration:
- *           type: number
- *         geometry:
- *           type: object
- *           properties:
- *             coordinates:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Coordinate'
- *             type:
- *               type: string
  *     Route:
  *       type: object
  *       properties:
@@ -74,10 +59,68 @@ import { type RouteService } from "./route.service.js";
  *         description:
  *           type: string
  *           example: An alley with blooming flowers
+ *         distance:
+ *           type: number
+ *           example: 36310.805
+ *         duration:
+ *           type: number
+ *           example: 25940.671
+ *         geometry:
+ *           $ref: '#/components/schemas/GeometryLineString'
  *         pois:
- *           type: object
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: number
+ *               visitOrder:
+ *                 type: number
  *           example: [{id: 1, visitOrder: 0}, {id: 2, visitOrder: 1}]
+ *         userId:
+ *           type: number
  *
+ *     RouteListItem:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *         name:
+ *           type: string
+ *         distance:
+ *           type: number
+ *           example: 36310.805
+ *
+ *         duration:
+ *           type: number
+ *           example: 25940.671
+ *         geometry:
+ *           $ref: '#/components/schemas/GeometryLineString'
+ *         pois:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: number
+ *               visitOrder:
+ *                 type: number
+ *         userId:
+ *           type: number
+ *
+ *     PlannedRoute:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *         distance:
+ *           type: number
+ *           example: 36310.805
+ *         duration:
+ *           type: number
+ *           example: 25940.671
+ *         geometry:
+ *           $ref: '#/components/schemas/GeometryLineString'
  */
 
 class RouteController extends BaseController {
@@ -159,17 +202,17 @@ class RouteController extends BaseController {
 	 *                 type: array
 	 *                 items:
 	 *                   type: integer
-	 *                 example: [1, 2]
+	 *                 example: [4, 1, 3]
 	 *     responses:
 	 *       200:
-	 *         description: Mapbox service response
+	 *         description: Planned route created for further publishing
 	 *         content:
 	 *           application/json:
 	 *             schema:
 	 *               type: object
 	 *               properties:
 	 *                 data:
-	 *                   $ref: '#/components/schemas/GetMapboxRouteResponseDto'
+	 *                   $ref: '#/components/schemas/PlannedRoute'
 	 */
 
 	public async constructRoute({
@@ -205,6 +248,8 @@ class RouteController extends BaseController {
 	 *               - name
 	 *               - description
 	 *               - pois
+	 *               - plannedRouteId
+	 *               - userId
 	 *             properties:
 	 *               name:
 	 *                 type: string
@@ -216,7 +261,13 @@ class RouteController extends BaseController {
 	 *                 type: array
 	 *                 items:
 	 *                   type: number
-	 *                 example: [1, 2]
+	 *                 example: [4, 1, 3]
+	 *               plannedRouteId:
+	 *                 type: number
+	 *                 example: 2
+	 *               userId:
+	 *                 type: number
+	 *                 example: 1
 	 *     responses:
 	 *       201:
 	 *         description: The created route
@@ -366,7 +417,7 @@ class RouteController extends BaseController {
 	 *                 data:
 	 *                   type: array
 	 *                   items:
-	 *                     $ref: '#/components/schemas/Route'
+	 *                     $ref: '#/components/schemas/RouteListItem'
 	 * */
 
 	public async findAll(

@@ -1,6 +1,6 @@
 import { type PermissionItemDto } from "~/modules/users/libs/types/types.js";
 
-const checkPermission = (
+const checkHasPermission = (
 	requiredPermissions: string[] | undefined,
 	userPermissions: PermissionItemDto[],
 ): boolean => {
@@ -13,4 +13,4 @@ const checkPermission = (
 	);
 };
 
-export { checkPermission };
+export { checkHasPermission };

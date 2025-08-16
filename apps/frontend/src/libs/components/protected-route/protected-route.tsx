@@ -2,7 +2,7 @@ import { Navigate } from "react-router";
 
 import { AppRoute } from "~/libs/enums/app-route.enum.js";
 import { type PermissionKey } from "~/libs/enums/enums.js";
-import { checkPermission } from "~/libs/helpers/helpers.js";
+import { checkHasPermission } from "~/libs/helpers/helpers.js";
 import { useAppSelector } from "~/libs/hooks/hooks.js";
 import { type ValueOf } from "~/libs/types/types.js";
 import { NotFound } from "~/pages/not-found/not-found.js";
@@ -20,7 +20,7 @@ const ProtectedRoute = ({
 		({ auth }) => auth.authenticatedUser,
 	);
 
-	const hasPermission = checkPermission(
+	const hasPermission = checkHasPermission(
 		routePermissions,
 		authenticatedUser?.group.permissions ?? [],
 	);

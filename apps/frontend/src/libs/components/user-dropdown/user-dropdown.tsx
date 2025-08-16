@@ -18,7 +18,7 @@ const UserDropdown = ({
 		<div className={styles["user-dropdown"]}>
 			<ul className={styles["dropdown-list"]}>
 				{dropdownMenuItems.map((item, index) => (
-					<li key={index}>
+					<li className={styles["list-item"]} key={index}>
 						<Link to={item.href}>{item.label}</Link>
 					</li>
 				))}

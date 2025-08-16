@@ -6,7 +6,7 @@ import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
 
-import { RouteApiPath } from "./libs/enums/enums.js";
+import { RoutesApiPath } from "./libs/enums/enums.js";
 
 type Constructor = {
 	baseUrl: string;
@@ -23,7 +23,7 @@ class RoutesApi extends BaseHTTPApi {
 		id: number,
 	): Promise<APIResponse<RouteGetByIdResponseDto>> {
 		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
-			this.getFullEndpoint(`${RouteApiPath.ROOT}${id.toString()}`, {}),
+			this.getFullEndpoint(`${RoutesApiPath.ROOT}${id.toString()}`, {}),
 			{
 				hasAuth: false,
 				method: "GET",

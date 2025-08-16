@@ -8,7 +8,7 @@ import {
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { type PlannedPathResponseDto } from "../planned-routes/planned-paths.js";
-import { RouteApiPath } from "./libs/enums/enums.js";
+import { RoutesApiPath } from "./libs/enums/enums.js";
 import {
 	type RouteConstructRequestDto,
 	type RouteCreateRequestDto,
@@ -136,7 +136,7 @@ class RouteController extends BaseController {
 		this.addRoute({
 			handler: this.constructRoute.bind(this),
 			method: "POST",
-			path: RouteApiPath.CONSTRUCT,
+			path: RoutesApiPath.CONSTRUCT,
 			preHandlers: [setRateLimit(constructRequestsPerMinute)],
 			validation: {
 				body: routesConstructValidationSchema,
@@ -146,7 +146,7 @@ class RouteController extends BaseController {
 		this.addRoute({
 			handler: this.create.bind(this),
 			method: "POST",
-			path: RouteApiPath.ROOT,
+			path: RoutesApiPath.ROOT,
 			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 			validation: { body: routesCreateValidationSchema },
 		});
@@ -154,27 +154,27 @@ class RouteController extends BaseController {
 		this.addRoute({
 			handler: this.delete.bind(this),
 			method: "DELETE",
-			path: RouteApiPath.$ID,
+			path: RoutesApiPath.$ID,
 			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 		});
 
 		this.addRoute({
 			handler: this.findById.bind(this),
 			method: "GET",
-			path: RouteApiPath.$ID,
+			path: RoutesApiPath.$ID,
 		});
 
 		this.addRoute({
 			handler: this.findAll.bind(this),
 			method: "GET",
-			path: RouteApiPath.ROOT,
+			path: RoutesApiPath.ROOT,
 			validation: { query: routesSearchQueryValidationSchema },
 		});
 
 		this.addRoute({
 			handler: this.patch.bind(this),
 			method: "PATCH",
-			path: RouteApiPath.$ID,
+			path: RoutesApiPath.$ID,
 			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 			validation: { body: routesUpdateValidationSchema },
 		});

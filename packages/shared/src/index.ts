@@ -83,7 +83,6 @@ export {
 	type RouteCategoryRequestDto,
 } from "./modules/route-categories/route-categories.js";
 export {
-	RouteApiPath,
 	type RouteConstructRequestDto,
 	type RouteConstructResponseDto,
 	type RouteCreateRequestDto,
@@ -91,6 +90,7 @@ export {
 	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
+	RoutesApiPath,
 	routesConstructValidationSchema,
 	routesCreateValidationSchema,
 	routesSearchQueryValidationSchema,

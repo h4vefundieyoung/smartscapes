@@ -1,4 +1,4 @@
-export { RouteApiPath } from "./libs/enums/enums.js";
+export { RoutesApiPath } from "./libs/enums/enums.js";
 export {
 	type RouteConstructRequestDto,
 	type RouteConstructResponseDto,

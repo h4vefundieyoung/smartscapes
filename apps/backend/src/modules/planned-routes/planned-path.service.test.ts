@@ -10,9 +10,9 @@ import {
 import { PlannedPathExceptionMessage } from "./libs/enums/enums.js";
 import { type PlannedPathEntity } from "./planned-path.entity.js";
 import { type PlannedPathRepository } from "./planned-path.repository.js";
-import { PlannedPathervice } from "./planned-path.service.js";
+import { PlannedPathservice } from "./planned-path.service.js";
 
-describe("PlannedPathervice", () => {
+describe("PlannedPathservice", () => {
 	const geometry: LineStringGeometry = {
 		coordinates: [
 			[30.5234, 50.4501],
@@ -37,7 +37,7 @@ describe("PlannedPathervice", () => {
 			findById: mock.fn(),
 		} as unknown as PlannedPathRepository;
 
-		const service = new PlannedPathervice(repo);
+		const service = new PlannedPathservice(repo);
 
 		const result = await service.create(mapboxResponse);
 
@@ -56,14 +56,14 @@ describe("PlannedPathervice", () => {
 			findById: mock.fn(() => null),
 		} as unknown as PlannedPathRepository;
 
-		const service = new PlannedPathervice(repo);
+		const service = new PlannedPathservice(repo);
 
 		await assert.rejects(
 			async () => {
 				await service.findById(999);
 			},
 			{
-				message: PlannedPathExceptionMessage.PLANNED_ROUTE_NOT_FOUND,
+				message: PlannedPathExceptionMessage.PLANNED_PATH_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			},
 		);

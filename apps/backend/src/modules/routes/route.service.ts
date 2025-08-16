@@ -7,7 +7,7 @@ import {
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
 
 import { type PlannedPathResponseDto } from "../planned-routes/libs/types/planned-path-response-dto.type.js";
-import { type PlannedPathervice } from "../planned-routes/planned-path.service.js";
+import { type PlannedPathservice } from "../planned-routes/planned-path.service.js";
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
@@ -23,27 +23,27 @@ import { type RouteRepository } from "./route.repository.js";
 
 type ConstructorParameters = {
 	mapboxDirectionsApi: MapboxDirectionsApi;
-	plannedPathervice: PlannedPathervice;
+	plannedPathservice: PlannedPathservice;
 	pointsOfInterestService: PointsOfInterestService;
 	routesRepository: RouteRepository;
 };
 
 class RouteService implements Service {
 	private mapboxDirectionApi: MapboxDirectionsApi;
-	private plannedPathervice: PlannedPathervice;
+	private plannedPathservice: PlannedPathservice;
 	private pointsOfInterestService: PointsOfInterestService;
 	private routesRepository: RouteRepository;
 
 	public constructor({
 		mapboxDirectionsApi,
-		plannedPathervice,
+		plannedPathservice,
 		pointsOfInterestService,
 		routesRepository,
 	}: ConstructorParameters) {
 		this.routesRepository = routesRepository;
 		this.pointsOfInterestService = pointsOfInterestService;
 		this.mapboxDirectionApi = mapboxDirectionsApi;
-		this.plannedPathervice = plannedPathervice;
+		this.plannedPathservice = plannedPathservice;
 	}
 
 	public async construct(
@@ -68,7 +68,7 @@ class RouteService implements Service {
 			MapboxAPIGeometric.GEOJSON,
 		);
 
-		const plannedRoute = await this.plannedPathervice.create(route);
+		const plannedRoute = await this.plannedPathservice.create(route);
 
 		return plannedRoute;
 	}
@@ -88,7 +88,7 @@ class RouteService implements Service {
 
 		const { plannedRouteId } = formattedPayload;
 
-		const plannedRoute = await this.plannedPathervice.findById(plannedRouteId);
+		const plannedRoute = await this.plannedPathservice.findById(plannedRouteId);
 
 		const routeEntity = RouteEntity.initializeNew({
 			...formattedPayload,
@@ -97,7 +97,7 @@ class RouteService implements Service {
 
 		const route = await this.routesRepository.create(routeEntity);
 
-		await this.plannedPathervice.delete(plannedRouteId);
+		await this.plannedPathservice.delete(plannedRouteId);
 
 		return route.toObject();
 	}

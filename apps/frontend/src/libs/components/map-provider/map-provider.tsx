@@ -1,5 +1,3 @@
-import React from "react";
-
 import { createContext, useEffect, useRef } from "~/libs/hooks/hooks.js";
 import { MapClient } from "~/libs/modules/map-client/map-client.js";
 import { type Coordinates } from "~/libs/types/types.js";

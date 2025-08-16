@@ -7,7 +7,7 @@ import { type PlannedPathResponseDto } from "./libs/types/types.js";
 import { PlannedPathEntity } from "./planned-path.entity.js";
 import { type PlannedPathRepository } from "./planned-path.repository.js";
 
-class PlannedPathervice {
+class PlannedPathservice {
 	private plannedPathRepository: PlannedPathRepository;
 
 	public constructor(plannedPathRepository: PlannedPathRepository) {
@@ -42,7 +42,7 @@ class PlannedPathervice {
 
 		if (!plannedRoute) {
 			throw new PlannedPathError({
-				message: PlannedPathExceptionMessage.PLANNED_ROUTE_NOT_FOUND,
+				message: PlannedPathExceptionMessage.PLANNED_PATH_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
@@ -51,4 +51,4 @@ class PlannedPathervice {
 	}
 }
 
-export { PlannedPathervice };
+export { PlannedPathservice };

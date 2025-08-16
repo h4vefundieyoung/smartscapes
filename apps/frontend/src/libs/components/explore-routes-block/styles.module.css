@@ -28,3 +28,7 @@
 	scrollbar-width: none;
 	scroll-behavior: smooth;
 }
+
+.error {
+	color: var(--color-text-error);
+}

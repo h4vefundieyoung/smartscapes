@@ -20,14 +20,14 @@ const ProtectedRoute = ({
 		({ auth }) => auth.authenticatedUser,
 	);
 
-	const hasPermission = checkHasPermission(
-		routePermissions ?? [],
-		authenticatedUser?.group.permissions ?? [],
-	);
-
 	if (!authenticatedUser) {
 		return <Navigate replace to={AppRoute.SIGN_IN} />;
 	}
+
+	const hasPermission = checkHasPermission(
+		routePermissions ?? [],
+		authenticatedUser.group.permissions,
+	);
 
 	if (!hasPermission) {
 		return <NotFound />;

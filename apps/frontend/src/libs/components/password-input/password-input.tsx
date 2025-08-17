@@ -16,7 +16,6 @@ type Properties<T extends FieldValues> = {
 	errors: FieldErrors<T>;
 	label: string;
 	name: FieldPath<T>;
-	placeholder?: string;
 };
 
 const PasswordInput = <T extends FieldValues>(
@@ -37,7 +36,6 @@ const PasswordInput = <T extends FieldValues>(
 				name: iconName,
 				onClick: handleIconClick,
 			}}
-			placeholder="Password"
 			type={type}
 			{...properties}
 		/>

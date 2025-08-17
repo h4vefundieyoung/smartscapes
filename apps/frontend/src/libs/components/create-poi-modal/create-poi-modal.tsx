@@ -4,7 +4,7 @@ import {
 	Modal,
 	TextArea,
 } from "~/libs/components/components.js";
-import { useAppForm } from "~/libs/hooks/hooks.js";
+import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
 	pointOfInterestCreateValidationSchema,
 	type PointsOfInterestRequestDto,
@@ -27,7 +27,7 @@ const CreatePOIModal = ({
 	onClose,
 	onSubmit,
 }: Properties): React.JSX.Element => {
-	const { control, errors, handleSubmit } =
+	const { control, errors, handleReset, handleSubmit } =
 		useAppForm<PointsOfInterestRequestDto>({
 			defaultValues: {
 				description: "",
@@ -49,10 +49,16 @@ const CreatePOIModal = ({
 				coordinates: values.location.coordinates,
 			},
 		});
+		handleReset();
 	};
 
+	const handleClose = useCallback((): void => {
+		handleReset();
+		onClose();
+	}, [handleReset, onClose]);
+
 	return (
-		<Modal isOpen={isOpen} onClose={onClose}>
+		<Modal isOpen={isOpen} onClose={handleClose}>
 			<div className={styles["header"]}>
 				<h3 className={styles["title"]}>Create new POI</h3>
 			</div>

@@ -27,6 +27,8 @@ const setRateLimit = (requestsLimitPerMinute: number): APIPreHandler => {
 				userIdToRequestNumber.set(id, REQUEST_NUMBER_INITIAL_VALUE);
 			}, RATE_LIMIT_TIME_PERIOD);
 
+			done();
+
 			return;
 		}
 

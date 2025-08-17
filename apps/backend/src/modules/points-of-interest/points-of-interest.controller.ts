@@ -32,8 +32,8 @@ import {
  *         coordinates:
  *           type: array
  *           items:
- *             type: string
- *           example: ["30.5234", "50.4501"]
+ *             type: number
+ *           example: [30.5234, 50.4501]
  *         type:
  *           type: string
  *           example: "Point"
@@ -49,6 +49,10 @@ import {
  *         name:
  *           type: string
  *           example: "Central Park"
+ *         description:
+ *           type: string | null
+ *           example: "A large park in New York City"
+ *           nullable: true
  *
  *     PointsOfInterestResponseDto:
  *       type: object
@@ -56,16 +60,33 @@ import {
  *         - id
  *         - location
  *         - name
+ *         - description
  *       properties:
  *         id:
  *           type: number
  *           example: 1
  *         location:
- *           $ref: '#/components/schemas/PointsOfInterestLocation'
+ *           type: object
+ *           required:
+ *             - coordinates
+ *             - type
+ *           properties:
+ *             coordinates:
+ *               type: array
+ *               items:
+ *                 type: number
+ *               example: [30.5234, 50.4501]
+ *             type:
+ *               type: string
+ *               enum: ["Point"]
+ *               example: "Point"
  *         name:
  *           type: string
  *           example: "Central Park"
- *
+ *         description:
+ *           type: string | null
+ *           example: "A large park in New York City"
+ *           nullable: true
  */
 
 class PointsOfInterestController extends BaseController {
@@ -280,11 +301,13 @@ class PointsOfInterestController extends BaseController {
 	 *                       location:
 	 *                         type: "Point"
 	 *                         coordinates: [30.5234, 50.4501]
+	 *                       description: "A large park in New York City"
 	 *                     - id: 2
 	 *                       name: "Glass Bridge"
 	 *                       location:
 	 *                         type: "Point"
 	 *                         coordinates: [30.5289, 50.4553]
+	 *                       description: "A modern architectural marvel in Kyiv"
 	 *               nearby_pois:
 	 *                 summary: Nearby points of interest
 	 *                 description: Response when location filters are provided
@@ -295,6 +318,7 @@ class PointsOfInterestController extends BaseController {
 	 *                       location:
 	 *                         type: "Point"
 	 *                         coordinates: [30.5234, 50.4501]
+	 *                       description: "A large park in New York City"
 	 */
 	public async findAll(
 		options: APIHandlerOptions<{

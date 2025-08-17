@@ -1,5 +1,58 @@
 # Changelog
 
+## [1.22.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.21.0...@smartscapes/backend-v1.22.0) (2025-08-15)
+
+
+### Features
+
+* **frontend:** image upload ss-220 ([#346](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/346)) ([81afeda](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/81afeda8da1919b71d1c0074d8f01850dc8c2a3c))
+
+
+### Bug Fixes
+
+* **backend:** ignore query in check-is-white-route ss-337 ([#381](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/381)) ([11c6515](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/11c6515c6f27e24acc16a75b1d1f3d1ddbcabbcb))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.20.0 to 1.21.0
+
+## [1.21.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.20.0...@smartscapes/backend-v1.21.0) (2025-08-14)
+
+
+### Features
+
+* **frontend/backend:** routes detail page ss-268 ([#283](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/283)) ([47176a4](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/47176a4bff35af04c6e77cf9b1a14b032cd77a45))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.19.0 to 1.20.0
+
+## [1.20.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.19.0...@smartscapes/backend-v1.20.0) (2025-08-14)
+
+
+### Features
+
+* **backend:** cover routes managment operations with permission ss-237 ([#358](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/358)) ([4dbeaa1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/4dbeaa1333caa6018a26dab72758da136eeb922f))
+* **frontend:** create poi frontend flow ss-244 ([#299](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/299)) ([160c469](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/160c469471538772b6d8c847bfb1e87554d182cf))
+
+
+### Bug Fixes
+
+* **frontend/backend:** fix expired token removal ss-367 ([#372](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/372)) ([892e77b](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/892e77b7a636710d99fe6b909ddc1000747951e7))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.18.0 to 1.19.0
+
 ## [1.19.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.18.0...@smartscapes/backend-v1.19.0) (2025-08-13)
 
 

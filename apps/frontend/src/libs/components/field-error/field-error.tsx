@@ -1,5 +1,4 @@
-import errorIcon from "~/assets/images/error.svg";
-
+import { Icon } from "../components.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -9,7 +8,7 @@ type Properties = {
 const FieldError = ({ description }: Properties): React.JSX.Element => {
 	return (
 		<span className={styles["error"]}>
-			<img alt="error-icon" src={errorIcon} />
+			<Icon height={24} name="error" width={24} />
 			{description}
 		</span>
 	);

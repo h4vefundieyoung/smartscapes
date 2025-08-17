@@ -10,6 +10,11 @@ import { type Config } from "~/libs/modules/config/config.js";
 import { storage } from "~/libs/modules/storage/storage.js";
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { authApi, reducer as authReducer } from "~/modules/auth/auth.js";
+import {
+	pointOfInterestApi,
+	reducer as pointsOfInterestReducer,
+} from "~/modules/points-of-interest/points-of-interest.js";
+import { routeApi, reducer as routeReducer } from "~/modules/routes/routes.js";
 import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
 
 import { type ExtraArguments, type RootReducer } from "./libs/types/types.js";
@@ -27,6 +32,8 @@ class Store {
 	public get extraArguments(): ExtraArguments {
 		return {
 			authApi,
+			pointOfInterestApi,
+			routeApi,
 			storage,
 			toastNotifier,
 			userApi,
@@ -45,6 +52,8 @@ class Store {
 			},
 			reducer: {
 				auth: authReducer,
+				pointsOfInterest: pointsOfInterestReducer,
+				route: routeReducer,
 				users: usersReducer,
 			},
 		});

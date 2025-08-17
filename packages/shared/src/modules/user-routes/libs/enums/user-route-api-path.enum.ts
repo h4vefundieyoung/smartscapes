@@ -1,6 +1,6 @@
 const UserRouteApiPath = {
-	BASE: "/user-routes",
-	GET_BY_ID: "/:id",
+	FINISH: "/:id/finish",
+	ROOT: "/",
 } as const;
 
 export { UserRouteApiPath };

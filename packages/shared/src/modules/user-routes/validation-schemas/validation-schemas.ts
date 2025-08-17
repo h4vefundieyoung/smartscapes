@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-const userRouteValidationSchemas = {
+const userRouteValidationSchema = {
 	routeId: z.object({
 		routeId: z.number().positive(),
 	}),
 };
 
-export { userRouteValidationSchemas };
+export { userRouteValidationSchema };

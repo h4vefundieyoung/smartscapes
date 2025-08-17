@@ -12,6 +12,7 @@ const DatabaseTableName = {
 	ROUTES: "routes",
 	ROUTES_TO_POIS: "routes_to_pois",
 	USER_FOLLOWS: "user_follows",
+	USER_ROUTES: "user_routes",
 	USERS: "users",
 } as const;
 

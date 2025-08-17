@@ -1,33 +1,41 @@
 import { Loader, RouterOutlet } from "~/libs/components/components.js";
+import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
+import { getPermittedNavigationItems } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
+	useAppEntryRedirect,
 	useAppSelector,
 	useEffect,
-	useLocation,
+	useMemo,
 } from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
-import { actions as userActions } from "~/modules/users/users.js";
 
 import styles from "./styles.module.css";
 
 const App = (): React.JSX.Element => {
-	const { pathname } = useLocation();
 	const dispatch = useAppDispatch();
+	const isInitialized = useAppSelector(({ app }) => app.isInitialized);
+	const authenticatedUser = useAppSelector(
+		({ auth }) => auth.authenticatedUser,
+	);
 
-	const isRoot = pathname === AppRoute.APP;
-
-	useEffect(() => {
-		if (isRoot) {
-			void dispatch(userActions.loadAll());
-		}
-	}, [isRoot, dispatch]);
+	const permittedNavigationGroups = useMemo(() => {
+		return getPermittedNavigationItems(
+			Boolean(authenticatedUser),
+			NAVIGATION_ITEMS_GROUPS,
+			authenticatedUser?.group.permissions ?? [],
+		);
+	}, [authenticatedUser]);
 
 	useEffect(() => {
 		void dispatch(authActions.getAuthenticatedUser());
 	}, [dispatch]);
 
-	const isInitialized = useAppSelector(({ auth }) => auth.isInitialized);
+	useAppEntryRedirect({
+		entryRoute: AppRoute.APP,
+		navigationGroups: permittedNavigationGroups,
+	});
 
 	if (!isInitialized) {
 		return (

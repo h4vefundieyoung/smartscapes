@@ -16,7 +16,7 @@ const initialState: State = {
 	dataStatus: DataStatus.IDLE,
 };
 
-const { actions, name, reducer } = createSlice({
+const { name, reducer } = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(loadAll.fulfilled, (state, action) => {
@@ -36,4 +36,4 @@ const { actions, name, reducer } = createSlice({
 	reducers: {},
 });
 
-export { actions, name, reducer };
+export { name, reducer };

@@ -11,16 +11,6 @@ const NAVIGATION_ITEMS_GROUPS: NavigationItemsGroup[] = [
 				label: "Manage routes",
 				pagePermissions: [PermissionKey.MANAGE_ROUTES],
 			},
-			{
-				href: AppRoute.CATEGORIES,
-				icon: "tag",
-				label: "Manage categories",
-			},
-			{
-				href: AppRoute.CONTENT,
-				icon: "message",
-				label: "Content moderation",
-			},
 		],
 		name: "Administration",
 	},
@@ -28,13 +18,14 @@ const NAVIGATION_ITEMS_GROUPS: NavigationItemsGroup[] = [
 		hasLabel: false,
 		items: [
 			{
-				href: AppRoute.APP,
+				href: AppRoute.DASHBOARD,
 				icon: "dashboard",
 				label: "Dashboard",
 			},
 			{
 				href: AppRoute.EXPLORE,
 				icon: "map",
+				isPagePublic: true,
 				label: "Explore",
 			},
 			{

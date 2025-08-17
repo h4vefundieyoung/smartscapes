@@ -10,7 +10,7 @@ const pointOfInterestCreate = z.strictObject({
 	description: z
 		.string()
 		.trim()
-		.regex(/^[a-zA-Z0-9-_ ]+$/, {
+		.regex(/^[a-zA-Z0-9\s.,/\\!@#$%^&*()_\-+=:;"'?]+$/, {
 			message: PointsOfInterestValidationMessage.DESCRIPTION_INVALID,
 		})
 		.max(PointsOfInterestValidationRule.DESCRIPTION_MAX_LENGTH, {
@@ -20,7 +20,7 @@ const pointOfInterestCreate = z.strictObject({
 	location: locationSchema,
 	name: z
 		.string()
-		.regex(/^[a-zA-Z0-9-_ ]+$/, {
+		.regex(/^[a-zA-Z0-9\s.,/\\!@#$%^&*()_\-+=:;"'?]+$/, {
 			message: PointsOfInterestValidationMessage.NAME_INVALID,
 		})
 		.min(PointsOfInterestValidationRule.NAME_MIN_LENGTH, {

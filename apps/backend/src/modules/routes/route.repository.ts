@@ -1,5 +1,7 @@
 //
 
+import { type Knex } from "knex";
+
 import { type Repository } from "~/libs/types/types.js";
 
 import { type PlannedPathModel } from "../planned-routes/planned-path.model.js";
@@ -21,35 +23,27 @@ class RouteRepository implements Repository {
 
 	public async create(payload: {
 		entity: RouteEntity;
-		plannedPathId: number;
+		transaction: Knex.Transaction;
 	}): Promise<RouteEntity> {
-		const { entity, plannedPathId } = payload;
+		const { entity, transaction } = payload;
+
 		const insertData = entity.toNewObject();
 
-		const created = await this.routesModel.knex().transaction(async (trx) => {
-			await trx.raw("select set_config(?, ?, true)", [
-				"app.planned_path_id",
-				String(plannedPathId),
+		const RoutesModelTransaction = this.routesModel.bindKnex(transaction);
+
+		const result = await RoutesModelTransaction.query()
+			.insertGraph(insertData, { relate: ["pois"] })
+			.returning([
+				"id",
+				"name",
+				"description",
+				RoutesModelTransaction.raw("to_json(distance)::json as distance"),
+				RoutesModelTransaction.raw("to_json(duration)::json as duration"),
+				RoutesModelTransaction.raw("ST_AsGeoJSON(geometry)::json as geometry"),
+				"user_id",
 			]);
 
-			const RoutesModelTrx = this.routesModel.bindKnex(trx);
-
-			const result = await RoutesModelTrx.query()
-				.insertGraph(insertData, { relate: ["pois"] })
-				.returning([
-					"id",
-					"name",
-					"description",
-					RoutesModelTrx.raw("to_json(distance)::json as distance"),
-					RoutesModelTrx.raw("to_json(duration)::json as duration"),
-					RoutesModelTrx.raw("ST_AsGeoJSON(geometry)::json as geometry"),
-					"user_id",
-				]);
-
-			return result;
-		});
-
-		return RouteEntity.initialize(created);
+		return RouteEntity.initialize(result);
 	}
 
 	public async delete(id: number): Promise<boolean> {

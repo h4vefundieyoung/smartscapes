@@ -1,5 +1,6 @@
+import { type Knex } from "knex";
 import assert from "node:assert/strict";
-import { describe, it, mock } from "node:test";
+import { afterEach, beforeEach, describe, it, mock } from "node:test";
 
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type MapboxDirectionsApi } from "~/libs/modules/mapbox/mapbox.js";
@@ -21,6 +22,7 @@ import {
 	type RouteGetByIdResponseDto,
 } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
+import { RouteModel } from "./route.model.js";
 import { type RouteRepository } from "./route.repository.js";
 import { RouteService } from "./route.service.js";
 
@@ -59,6 +61,30 @@ const createMockMapboxApi = (): {
 };
 
 describe("RouteService", () => {
+	let originalKnexGetter: typeof RouteModel.knex;
+
+	beforeEach(() => {
+		originalKnexGetter = RouteModel.knex.bind(RouteModel);
+
+		(RouteModel as unknown as { knex: () => Knex }).knex = (): Knex => {
+			const knexStub = {
+				transaction: async <T>(
+					handler: (trx: Knex.Transaction) => Promise<T>,
+				): Promise<T> => {
+					const fakeTrx = {} as Knex.Transaction;
+
+					return await handler(fakeTrx);
+				},
+			} as unknown as Knex;
+
+			return knexStub;
+		};
+	});
+
+	afterEach(() => {
+		(RouteModel as unknown as { knex: typeof RouteModel.knex }).knex =
+			originalKnexGetter;
+	});
 	const mockNotFoundError = new RoutesError({
 		message: RoutesExceptionMessage.ROUTE_NOT_FOUND,
 		status: HTTPCode.NOT_FOUND,

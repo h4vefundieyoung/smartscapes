@@ -72,16 +72,19 @@ describe("RouteRepository", () => {
 		const routeEntity = createMockRouteEntity();
 		const routeObject = routeEntity.toObject();
 
-		databaseTracker.on.any("select set_config(?, ?, true)").response([]);
 		databaseTracker.on.insert(DatabaseTableName.ROUTES).response([routeObject]);
 		databaseTracker.on.insert(DatabaseTableName.ROUTES_TO_POIS).response([]);
 
-		const result = await routesRepository.create({
-			entity: routeEntity,
-			plannedPathId: 1,
+		const result = await RouteModel.knex().transaction(async (trx) => {
+			const created = await routesRepository.create({
+				entity: routeEntity,
+				transaction: trx,
+			});
+
+			return created;
 		});
 
-		assert.deepStrictEqual(structuredClone(result), routeObject);
+		assert.deepStrictEqual(result.toObject(), routeObject);
 	});
 
 	it("find should return null when route not found", async () => {

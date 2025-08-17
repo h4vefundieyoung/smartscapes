@@ -15,13 +15,6 @@ const DECIMAL_SCALE = 3;
 
 async function down(knex: Knex): Promise<void> {
 	await knex.transaction(async (trx) => {
-		await trx.schema.raw(
-			`DROP TRIGGER IF EXISTS trg_delete_planned_path_on_route_insert ON ${ROUTES_TABLE};`,
-		);
-		await trx.schema.raw(
-			"DROP FUNCTION IF EXISTS delete_planned_path_on_route_insert();",
-		);
-
 		await trx.schema.dropTableIfExists(PLANNED_PATHS_TABLE);
 
 		await trx.schema.alterTable(ROUTES_TABLE, (table) => {
@@ -67,27 +60,6 @@ async function up(knex: Knex): Promise<void> {
 				.specificType(ColumnName.GEOMETRY, "geometry(LineString, 4326)")
 				.notNullable();
 		});
-
-		await trx.schema.raw(`
-			CREATE OR REPLACE FUNCTION delete_planned_path_on_route_insert()
-			RETURNS trigger AS $$
-			DECLARE
-				v_planned_id INT := NULLIF(current_setting('app.planned_path_id', true), '')::INT;
-			BEGIN
-				IF v_planned_id IS NOT NULL THEN
-					DELETE FROM ${PLANNED_PATHS_TABLE} WHERE id = v_planned_id;
-				END IF;
-				RETURN NEW;
-			END;
-			$$ LANGUAGE plpgsql;
-		`);
-
-		await trx.schema.raw(`
-			CREATE TRIGGER trg_delete_planned_path_on_route_insert
-			AFTER INSERT ON ${ROUTES_TABLE}
-			FOR EACH STATEMENT
-			EXECUTE FUNCTION delete_planned_path_on_route_insert();
-		`);
 	});
 }
 

@@ -1,3 +1,5 @@
+import { type Knex } from "knex";
+
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type MapboxConstructRouteResponseDto } from "~/libs/modules/mapbox/libs/types/types.js";
 
@@ -29,6 +31,20 @@ class PlannedPathService {
 			await this.plannedPathRepository.create(plannedRouteEntity);
 
 		return plannedRoute.toObject();
+	}
+
+	public async delete(payload: {
+		id: number;
+		transaction: Knex.Transaction;
+	}): Promise<boolean> {
+		const { id, transaction } = payload;
+
+		const isDeleted = await this.plannedPathRepository.deleteWithTransaction({
+			id,
+			transaction,
+		});
+
+		return isDeleted;
 	}
 
 	public async findById(id: number): Promise<PlannedPathResponseDto> {

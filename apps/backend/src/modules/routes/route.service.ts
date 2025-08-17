@@ -1,3 +1,5 @@
+import { type Knex } from "knex";
+
 import { HTTPCode } from "~/libs/enums/enums.js";
 import {
 	MapboxAPIGeometric,
@@ -19,6 +21,7 @@ import {
 	type RoutePatchRequestDto,
 } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
+import { RouteModel } from "./route.model.js";
 import { type RouteRepository } from "./route.repository.js";
 
 type ConstructorParameters = {
@@ -93,10 +96,21 @@ class RouteService implements Service {
 			...plannedRoute,
 		});
 
-		const route = await this.routesRepository.create({
-			entity: routeEntity,
-			plannedPathId,
-		});
+		const route = await RouteModel.knex().transaction(
+			async (transaction: Knex.Transaction) => {
+				const created = await this.routesRepository.create({
+					entity: routeEntity,
+					transaction,
+				});
+
+				await this.plannedPathService.delete({
+					id: plannedPathId,
+					transaction,
+				});
+
+				return created;
+			},
+		);
 
 		return route.toObject();
 	}

@@ -12,8 +12,8 @@ import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { authApi, reducer as authReducer } from "~/modules/auth/auth.js";
 import {
 	pointOfInterestApi,
-	pointOfInterestReducer,
-	pointsOfInterestDetailsReducer,
+	pointOfInterestDetailsReducer,
+	pointsOfInterestReducer,
 } from "~/modules/points-of-interest/points-of-interest.js";
 import { routeApi, reducer as routeReducer } from "~/modules/routes/routes.js";
 import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
@@ -53,8 +53,8 @@ class Store {
 			},
 			reducer: {
 				auth: authReducer,
-				pointsOfInterest: pointOfInterestReducer,
-				pointsOfInterestDetails: pointsOfInterestDetailsReducer,
+				pointOfInterestDetails: pointOfInterestDetailsReducer,
+				pointsOfInterest: pointsOfInterestReducer,
 				route: routeReducer,
 				users: usersReducer,
 			},

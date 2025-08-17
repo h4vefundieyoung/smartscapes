@@ -18,6 +18,6 @@ export { pointOfInterestApi };
 export { pointOfInterestCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 export {
 	actions,
-	pointOfInterestReducer,
-	pointsOfInterestDetailsReducer,
+	pointOfInterestDetailsReducer,
+	pointsOfInterestReducer,
 } from "./slices/points-of-interest.js";

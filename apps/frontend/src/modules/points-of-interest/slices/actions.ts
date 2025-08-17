@@ -6,14 +6,14 @@ import {
 	type PointsOfInterestResponseDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
-import { name as poiDetailssliceName } from "./points-of-interest-details.slice.js";
+import { name as poiDetailsSliceName } from "./points-of-interest-details.slice.js";
 import { name as poiSliceName } from "./points-of-interest.slice.js";
 
 const getById = createAsyncThunk<
 	APIResponse<PointsOfInterestResponseDto>,
 	number,
 	AsyncThunkConfig
->(`${poiDetailssliceName}/load-by-id`, (id, { extra }) => {
+>(`${poiDetailsSliceName}/load-by-id`, (id, { extra }) => {
 	const { pointOfInterestApi } = extra;
 
 	return pointOfInterestApi.getById(id);

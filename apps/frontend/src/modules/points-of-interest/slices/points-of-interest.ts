@@ -10,5 +10,5 @@ const allActions = {
 };
 
 export { allActions as actions };
-export { reducer as pointsOfInterestDetailsReducer } from "./points-of-interest-details.slice.js";
-export { reducer as pointOfInterestReducer } from "./points-of-interest.slice.js";
+export { reducer as pointOfInterestDetailsReducer } from "./points-of-interest-details.slice.js";
+export { reducer as pointsOfInterestReducer } from "./points-of-interest.slice.js";

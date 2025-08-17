@@ -30,7 +30,7 @@ const { actions, name, reducer } = createSlice({
 		});
 	},
 	initialState,
-	name: "Points of interest",
+	name: "point-of-interest-details",
 	reducers: {},
 });
 

@@ -1,22 +1,20 @@
 import styles from "./styles.module.css";
 
 type Properties = {
-	mainImage: string;
-	subImages: [string, string];
+	images: string[];
 };
 
-const ImageGallery = ({
-	mainImage,
-	subImages: [subImage, _subImage],
-}: Properties): React.JSX.Element => {
-	return (
-		<section className={styles["container"]}>
-			<img alt="main" className={styles["image"]} src={mainImage} />
+const ImageGallery = ({ images }: Properties): React.JSX.Element => {
+	const imageList = images.map((url, index) => (
+		<img
+			alt="point of interest picutre"
+			className={styles["image"]}
+			key={index}
+			src={url}
+		/>
+	));
 
-			<img alt="sub" className={styles["image"]} src={subImage} />
-			<img alt="sub" className={styles["image"]} src={_subImage} />
-		</section>
-	);
+	return <section className={styles["container"]}>{imageList}</section>;
 };
 
 export { ImageGallery };

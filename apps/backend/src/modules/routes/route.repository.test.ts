@@ -72,6 +72,7 @@ describe("RouteRepository", () => {
 		const routeEntity = createMockRouteEntity();
 		const routeObject = routeEntity.toObject();
 
+		databaseTracker.on.any("select set_config(?, ?, true)").response([]);
 		databaseTracker.on.insert(DatabaseTableName.ROUTES).response([routeObject]);
 		databaseTracker.on.insert(DatabaseTableName.ROUTES_TO_POIS).response([]);
 

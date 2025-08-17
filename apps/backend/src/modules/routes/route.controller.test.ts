@@ -18,49 +18,33 @@ import {
 import { RouteController } from "./route.controller.js";
 import { type RouteService } from "./route.service.js";
 
-const MINIMUM_EXPECTED_ROUTES_COUNT = 6;
-
-const mockReadPermission = PermissionEntity.initialize({
+const mockPermission = PermissionEntity.initialize({
 	id: 1,
 	key: "READ",
 	name: "Can read",
 });
 
-const mockManageRoutesPermission = PermissionEntity.initialize({
-	id: 2,
-	key: PermissionKey.MANAGE_ROUTES,
-	name: "Manage Routes",
-});
-
-const mockWrongPermission = PermissionEntity.initialize({
-	id: 3,
-	key: "WRONG_PERMISSION",
-	name: "Wrong Permission",
-});
-
-const mockUserGroup = GroupEntity.initializeWithPermissions({
+const mockGroup = GroupEntity.initializeWithPermissions({
 	id: 2,
 	key: "users",
 	name: "Users",
-	permissions: [mockReadPermission.toObject()],
+	permissions: [mockPermission.toObject()],
 }).toObject();
 
-const mockUserGroupWithWrongPermission = GroupEntity.initializeWithPermissions({
+const mockManageRoutesPermission = PermissionEntity.initialize({
 	id: 3,
-	key: "users",
-	name: "Users with Wrong Permission",
-	permissions: [mockReadPermission.toObject(), mockWrongPermission.toObject()],
-}).toObject();
+	key: PermissionKey.MANAGE_ROUTES,
+	name: "Manage routes",
+});
 
 const mockAdminGroup = GroupEntity.initializeWithPermissions({
-	id: 1,
+	id: 3,
 	key: "admins",
 	name: "Admins",
-	permissions: [
-		mockReadPermission.toObject(),
-		mockManageRoutesPermission.toObject(),
-	],
+	permissions: [mockManageRoutesPermission.toObject()],
 }).toObject();
+
+const MINIMUM_EXPECTED_ROUTES_COUNT = 6;
 
 const mockDelete: RouteService["delete"] = () => {
 	return Promise.resolve(true);
@@ -70,28 +54,11 @@ describe("Routes controller", () => {
 	const mockUser = {
 		email: "test@example.com",
 		firstName: "John",
-		group: mockUserGroup,
+		group: mockGroup,
 		groupId: 2,
 		id: 1,
+		isVisibleProfile: true,
 		lastName: "Doe",
-	};
-
-	const mockUserWithWrongPermission = {
-		email: "wrong@example.com",
-		firstName: "Wrong",
-		group: mockUserGroupWithWrongPermission,
-		groupId: 3,
-		id: 3,
-		lastName: "User",
-	};
-
-	const mockAdminUser = {
-		email: "admin@example.com",
-		firstName: "Jane",
-		group: mockAdminGroup,
-		groupId: 1,
-		id: 2,
-		lastName: "Admin",
 	};
 
 	const mockLogger: Logger = {
@@ -126,6 +93,20 @@ describe("Routes controller", () => {
 			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
 		],
 		userId: 10,
+	};
+
+	const mockAdminUser = {
+		email: "admin@example.com",
+		firstName: "Alice",
+		group: mockAdminGroup,
+		groupId: 3,
+		id: 2,
+		isVisibleProfile: true,
+		lastName: "Admin",
+	};
+
+	const mockUserWithWrongPermission = {
+		...mockUser,
 	};
 
 	it("Should return data with 200 status code", async () => {

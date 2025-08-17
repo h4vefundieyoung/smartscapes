@@ -9,6 +9,7 @@ import {
 	type LineStringGeometry,
 } from "~/libs/types/types.js";
 
+import { PlannedPathModel } from "../planned-routes/planned-path.model.js";
 import { type RouteFindAllOptions } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
 import { RouteModel } from "./route.model.js";
@@ -60,7 +61,7 @@ describe("RouteRepository", () => {
 
 		RouteModel.knex(database);
 
-		routesRepository = new RouteRepository(RouteModel);
+		routesRepository = new RouteRepository(RouteModel, PlannedPathModel);
 	});
 
 	afterEach(() => {
@@ -74,7 +75,10 @@ describe("RouteRepository", () => {
 		databaseTracker.on.insert(DatabaseTableName.ROUTES).response([routeObject]);
 		databaseTracker.on.insert(DatabaseTableName.ROUTES_TO_POIS).response([]);
 
-		const result = await routesRepository.create(routeEntity);
+		const result = await routesRepository.create({
+			entity: routeEntity,
+			plannedPathId: 1,
+		});
 
 		assert.deepStrictEqual(structuredClone(result), routeObject);
 	});

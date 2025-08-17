@@ -93,9 +93,10 @@ class RouteService implements Service {
 			...plannedRoute,
 		});
 
-		const route = await this.routesRepository.create(routeEntity);
-
-		await this.plannedPathService.delete(plannedPathId);
+		const route = await this.routesRepository.create({
+			entity: routeEntity,
+			plannedPathId,
+		});
 
 		return route.toObject();
 	}

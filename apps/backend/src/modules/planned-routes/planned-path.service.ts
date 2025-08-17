@@ -31,12 +31,6 @@ class PlannedPathService {
 		return plannedRoute.toObject();
 	}
 
-	public async delete(id: number): Promise<boolean> {
-		const isDeleted = await this.plannedPathRepository.delete(id);
-
-		return isDeleted;
-	}
-
 	public async findById(id: number): Promise<PlannedPathResponseDto> {
 		const plannedRoute = await this.plannedPathRepository.findById(id);
 

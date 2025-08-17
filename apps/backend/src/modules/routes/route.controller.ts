@@ -6,8 +6,8 @@ import {
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type PlannedPathResponseDto } from "~/modules/planned-routes/libs/types/types.js";
 
-import { type PlannedPathResponseDto } from "../planned-routes/planned-paths.js";
 import { RoutesApiPath } from "./libs/enums/enums.js";
 import {
 	type RouteConstructRequestDto,

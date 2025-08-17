@@ -1,33 +1,55 @@
+//
+
 import { type Repository } from "~/libs/types/types.js";
 
+import { type PlannedPathModel } from "../planned-routes/planned-path.model.js";
 import { type RouteFindAllOptions } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
 import { type RouteModel } from "./route.model.js";
 
 class RouteRepository implements Repository {
+	private plannedPathModel: typeof PlannedPathModel;
 	private routesModel: typeof RouteModel;
 
-	public constructor(routesModel: typeof RouteModel) {
+	public constructor(
+		routesModel: typeof RouteModel,
+		plannedPathModel: typeof PlannedPathModel,
+	) {
+		this.plannedPathModel = plannedPathModel;
 		this.routesModel = routesModel;
 	}
 
-	public async create(entity: RouteEntity): Promise<RouteEntity> {
+	public async create(payload: {
+		entity: RouteEntity;
+		plannedPathId: number;
+	}): Promise<RouteEntity> {
+		const { entity, plannedPathId } = payload;
 		const insertData = entity.toNewObject();
 
-		const result = await this.routesModel
-			.query()
-			.insertGraph(insertData, { relate: ["pois"] })
-			.returning([
-				"id",
-				"name",
-				"description",
-				"distance",
-				"duration",
-				this.routesModel.raw("ST_AsGeoJSON(geometry)::json as geometry"),
-				"user_id",
+		const created = await this.routesModel.knex().transaction(async (trx) => {
+			await trx.raw("select set_config(?, ?, true)", [
+				"app.planned_path_id",
+				String(plannedPathId),
 			]);
 
-		return RouteEntity.initialize(result);
+			const RoutesModelTrx = this.routesModel.bindKnex(trx);
+
+			const result = await RoutesModelTrx.query()
+				.insertGraph(insertData, { relate: ["pois"] })
+				.returning([
+					"id",
+					"name",
+					"description",
+					RoutesModelTrx.raw("to_json(distance)::json as distance"),
+					RoutesModelTrx.raw("to_json(duration)::json as duration"),
+					RoutesModelTrx.raw("ST_AsGeoJSON(geometry)::json as geometry"),
+					"user_id",
+				]);
+
+			return result;
+		});
+
+		return RouteEntity.initialize(created);
 	}
 
 	public async delete(id: number): Promise<boolean> {
@@ -51,8 +73,8 @@ class RouteRepository implements Repository {
 				"routes.id",
 				"routes.name",
 				"routes.description",
-				"routes.distance",
-				"routes.duration",
+				this.routesModel.raw("to_json(distance)::json as distance"),
+				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
 				"routes.user_id",
 			])
@@ -78,8 +100,8 @@ class RouteRepository implements Repository {
 				"routes.id",
 				"routes.name",
 				"routes.description",
-				"routes.distance",
-				"routes.duration",
+				this.routesModel.raw("to_json(distance)::json as distance"),
+				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
 				"routes.user_id",
 			])
@@ -111,8 +133,8 @@ class RouteRepository implements Repository {
 				"id",
 				"name",
 				"description",
-				"distance",
-				"duration",
+				this.routesModel.raw("to_json(distance)::json as distance"),
+				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
 				"routes.user_id",
 			])

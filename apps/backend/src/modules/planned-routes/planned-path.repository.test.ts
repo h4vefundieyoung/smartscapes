@@ -75,20 +75,4 @@ describe("PlannedPathRepository", () => {
 
 		assert.equal(found, null);
 	});
-
-	it("delete should return true on success", async () => {
-		tracker.on.delete(DatabaseTableName.PLANNED_PATHS).response(1);
-
-		const isDeleted = await repository.delete(existing.id);
-
-		assert.equal(isDeleted, true);
-	});
-
-	it("delete should return false on miss", async () => {
-		tracker.on.delete(DatabaseTableName.PLANNED_PATHS).response(0);
-
-		const isDeleted = await repository.delete(999);
-
-		assert.equal(isDeleted, false);
-	});
 });

@@ -6,5 +6,4 @@ const plannedPathRepository = new PlannedPathRepository(PlannedPathModel);
 const plannedPathService = new PlannedPathService(plannedPathRepository);
 
 export { plannedPathService };
-export { type PlannedPathResponseDto } from "./libs/types/types.js";
 export { PlannedPathService } from "./planned-path.service.js";

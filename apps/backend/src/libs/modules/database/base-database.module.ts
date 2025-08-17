@@ -1,6 +1,5 @@
 import knex, { type Knex } from "knex";
 import { knexSnakeCaseMappers, Model } from "objection";
-import { types as pgTypes } from "pg";
 
 import { AppEnvironment } from "~/libs/enums/enums.js";
 import { type Config } from "~/libs/modules/config/config.js";
@@ -49,20 +48,12 @@ class BaseDatabase implements Database {
 	public constructor(config: Config, logger: Logger) {
 		this.appConfig = config;
 		this.logger = logger;
-		this.configurePgTypeParsers();
 	}
 
 	public connect(): ReturnType<Database["connect"]> {
 		this.logger.info("Establishing DB connection...");
 
 		Model.knex(knex.default(this.environmentConfig));
-	}
-
-	private configurePgTypeParsers(): void {
-		const NUMERIC_OID = 1700;
-		pgTypes.setTypeParser(NUMERIC_OID, (value: string) =>
-			Number.parseFloat(value),
-		);
 	}
 }
 

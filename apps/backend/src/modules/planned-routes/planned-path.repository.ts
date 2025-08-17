@@ -22,21 +22,12 @@ class PlannedPathRepository implements Repository {
 			})
 			.returning([
 				"id",
-				"distance",
-				"duration",
+				this.plannedPathModel.raw("to_json(distance)::json as distance"),
+				this.plannedPathModel.raw("to_json(duration)::json as duration"),
 				this.plannedPathModel.raw("ST_AsGeoJSON(geometry)::json as geometry"),
 			]);
 
 		return PlannedPathEntity.initialize(result);
-	}
-
-	public async delete(id: number): Promise<boolean> {
-		const isDeleted = await this.plannedPathModel
-			.query()
-			.deleteById(id)
-			.execute();
-
-		return Boolean(isDeleted);
 	}
 
 	public async findById(id: number): Promise<null | PlannedPathEntity> {
@@ -44,8 +35,8 @@ class PlannedPathRepository implements Repository {
 			.query()
 			.select([
 				"id",
-				"distance",
-				"duration",
+				this.plannedPathModel.raw("to_json(distance)::json as distance"),
+				this.plannedPathModel.raw("to_json(duration)::json as duration"),
 				this.plannedPathModel.raw("ST_AsGeoJSON(geometry)::json as geometry"),
 			])
 			.findById(id)

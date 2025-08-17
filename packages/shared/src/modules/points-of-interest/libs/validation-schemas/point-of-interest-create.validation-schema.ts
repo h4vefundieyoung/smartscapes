@@ -9,6 +9,10 @@ import { locationSchema } from "./location.validation-schema.js";
 const pointOfInterestCreate = z.strictObject({
 	description: z
 		.string()
+		.trim()
+		.regex(/^[a-zA-Z0-9-_ ]+$/, {
+			message: PointsOfInterestValidationMessage.DESCRIPTION_INVALID,
+		})
 		.max(PointsOfInterestValidationRule.DESCRIPTION_MAX_LENGTH, {
 			message: PointsOfInterestValidationMessage.DESCRIPTION_MAXIMUM_LENGTH,
 		})
@@ -16,6 +20,9 @@ const pointOfInterestCreate = z.strictObject({
 	location: locationSchema,
 	name: z
 		.string()
+		.regex(/^[a-zA-Z0-9-_ ]+$/, {
+			message: PointsOfInterestValidationMessage.NAME_INVALID,
+		})
 		.min(PointsOfInterestValidationRule.NAME_MIN_LENGTH, {
 			message: PointsOfInterestValidationMessage.NAME_MINIMUM_LENGTH,
 		})

@@ -30,7 +30,7 @@ const CreatePOIModal = ({
 	const { control, errors, handleReset, handleSubmit } =
 		useAppForm<PointsOfInterestRequestDto>({
 			defaultValues: {
-				description: "",
+				description: null,
 				location: {
 					coordinates: [defaultLongitude, defaultLatitude],
 					type: "Point",

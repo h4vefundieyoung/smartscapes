@@ -5,6 +5,7 @@ import { CategoryEntity } from "./category.entity.js";
 import { type CategoryRepository } from "./category.repository.js";
 import { CategoryExceptionMessage } from "./libs/enums/enums.js";
 import { RouteCategoryError } from "./libs/exceptions/exceptions.js";
+import { stringToCamelCase } from "./libs/helpers/helpers.js";
 import {
 	type CategoryCreateRequestDto,
 	type CategoryGetAllItemResponseDto,
@@ -20,7 +21,9 @@ class CategoryService implements Service {
 	public async create(
 		payload: CategoryCreateRequestDto,
 	): Promise<CategoryGetAllItemResponseDto> {
-		const { key, name } = payload;
+		const { name } = payload;
+
+		const key = stringToCamelCase(name);
 
 		const existingRouteCategory =
 			await this.categoryRepository.findByName(name);

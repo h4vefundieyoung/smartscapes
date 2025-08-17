@@ -39,7 +39,7 @@ class RouteRepository implements Repository {
 			})
 			.select("routes.id", "routes.name", "routes.description");
 
-		if (options?.name?.trim()) {
+		if (options?.name) {
 			query.whereILike("routes.name", `%${options.name.trim()}%`);
 		}
 

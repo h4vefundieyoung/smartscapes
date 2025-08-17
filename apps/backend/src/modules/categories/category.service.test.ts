@@ -29,7 +29,6 @@ describe("CategoryService", () => {
 		const routeCategoryService = new CategoryService(routeCategoryRepository);
 
 		const result = await routeCategoryService.create({
-			key: mockRouteCategory.key,
 			name: mockRouteCategory.name,
 		});
 
@@ -52,7 +51,6 @@ describe("CategoryService", () => {
 
 		try {
 			await routeCategoryService.create({
-				key: mockRouteCategory.key,
 				name: mockRouteCategory.name,
 			});
 			assert.fail("expected exception not thrown");

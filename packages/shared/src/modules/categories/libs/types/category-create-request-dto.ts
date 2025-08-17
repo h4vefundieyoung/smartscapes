@@ -1,5 +1,4 @@
 type CategoryCreateRequestDto = {
-	key: string;
 	name: string;
 };
 

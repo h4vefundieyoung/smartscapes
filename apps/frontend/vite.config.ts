@@ -34,7 +34,7 @@ const config = ({ mode }: ConfigEnv): ReturnType<typeof defineConfig> => {
 		VITE_APP_PROXY_SERVER_URL,
 	} = loadEnv(mode, process.cwd());
 
-	const API_PATTERN = new RegExp(`^${VITE_APP_API_ORIGIN_URL as string}/`);
+	const API_PATTERN = new RegExp(VITE_APP_API_ORIGIN_URL as string);
 
 	return defineConfig({
 		build: {

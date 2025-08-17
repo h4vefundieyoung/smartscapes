@@ -9,12 +9,14 @@ import {
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
 import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
+import { getPermittedNavigationItems } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppForm,
 	useAppSelector,
 	useCallback,
 	useEffect,
+	useMemo,
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
@@ -118,6 +120,15 @@ const Dashboard = (): React.JSX.Element => {
 		}
 	}, [createStatus]);
 
+	const userPermissions = authenticatedUser?.group.permissions;
+
+	const permittedNavigationItems = useMemo(() => {
+		return getPermittedNavigationItems(
+			NAVIGATION_ITEMS_GROUPS,
+			userPermissions ?? [],
+		);
+	}, [userPermissions]);
+
 	return (
 		<div className={styles["container"]}>
 			<div className={styles["components-container"]}>
@@ -126,7 +137,7 @@ const Dashboard = (): React.JSX.Element => {
 					user={authenticatedUser}
 				/>
 				<div className={styles["sidebar-container"]}>
-					<Sidebar navigationItemsGroups={NAVIGATION_ITEMS_GROUPS} />
+					<Sidebar navigationItemsGroups={permittedNavigationItems} />
 				</div>
 				<Loader />
 				<div className={styles["carousel-container"]}>

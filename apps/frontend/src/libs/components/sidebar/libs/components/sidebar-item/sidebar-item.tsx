@@ -5,12 +5,17 @@ import { type NavigationItem } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
+type Properties = NavigationItem & {
+	onClick: () => void;
+};
+
 const SidebarItem = ({
 	href,
 	icon,
 	isLabelHidden,
 	label,
-}: NavigationItem): React.JSX.Element => {
+	onClick,
+}: Properties): React.JSX.Element => {
 	const linkClassName = useCallback(
 		({ isActive }: { isActive: boolean }): string => {
 			return combineClassNames(
@@ -23,7 +28,7 @@ const SidebarItem = ({
 
 	return (
 		<li className={styles["item"]}>
-			<NavLink className={linkClassName} to={href}>
+			<NavLink className={linkClassName} onClick={onClick} to={href}>
 				<span className={styles["icon"]}>
 					<Icon height={24} name={icon} width={24} />
 				</span>

@@ -28,6 +28,10 @@ const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
 		[setIsOpen],
 	);
 
+	const handleSidebarItemClick = useCallback(() => {
+		setIsOpen(false);
+	}, [setIsOpen]);
+
 	useEffect(() => {
 		document.addEventListener("keydown", handleKeyDown);
 
@@ -88,6 +92,7 @@ const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
 										isLabelHidden={!isOpen}
 										key={item.icon}
 										label={item.label}
+										onClick={handleSidebarItemClick}
 									/>
 								))}
 							</ul>

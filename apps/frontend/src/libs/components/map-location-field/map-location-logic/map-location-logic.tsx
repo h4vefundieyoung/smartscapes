@@ -1,7 +1,6 @@
 import { LocationType, type PointGeometry } from "@smartscapes/shared";
-import { type Marker } from "mapbox-gl";
 
-import { useEffect, useMapClient, useRef } from "~/libs/hooks/hooks.js";
+import { useEffect, useMapClient } from "~/libs/hooks/hooks.js";
 
 type Properties = {
 	location: PointGeometry | undefined;
@@ -10,59 +9,39 @@ type Properties = {
 
 const MapLocationLogic = ({ location, onLocationChange }: Properties): null => {
 	const mapClient = useMapClient();
-	const markerReference = useRef<Marker | null>(null);
 
-	useEffect((): (() => void) => {
+	useEffect(() => {
 		const updateForm = (coords: [number, number]): void => {
 			onLocationChange({ coordinates: coords, type: LocationType.POINT });
 		};
 
-		const setOrCreate = (coords: [number, number]): void => {
-			if (markerReference.current) {
-				markerReference.current.setLngLat(coords);
-
-				return;
+		const offReady = mapClient.onReady(() => {
+			if (location?.coordinates) {
+				mapClient.setSelectionMarker({
+					coordinates: location.coordinates,
+					draggable: true,
+					onDragEnd: updateForm,
+				});
+			} else {
+				mapClient.clearSelectionMarker();
 			}
+		});
 
-			const created = mapClient.addMarker({
+		const offClick = mapClient.onClick((coords) => {
+			mapClient.setSelectionMarker({
 				coordinates: coords,
 				draggable: true,
 				onDragEnd: updateForm,
 			});
-
-			if (created) {
-				markerReference.current = created;
-			}
-		};
-
-		const removeMarker = (): void => {
-			if (markerReference.current) {
-				markerReference.current.remove();
-				markerReference.current = null;
-			}
-		};
-
-		let cleanupReady: () => void = (): void => {};
-
-		if (location?.coordinates) {
-			cleanupReady = mapClient.onReady((): void => {
-				setOrCreate(location.coordinates);
-			});
-		} else {
-			removeMarker();
-		}
-
-		const cleanupClick = mapClient.onClick((coords: [number, number]): void => {
-			setOrCreate(coords);
 			updateForm(coords);
 		});
 
 		return (): void => {
-			cleanupReady();
-			cleanupClick();
-			removeMarker();
+			offReady();
+			offClick();
+			mapClient.clearSelectionMarker();
 		};
-	}, [mapClient, onLocationChange, location]);
+	}, [mapClient, onLocationChange, location?.coordinates]);
 
 	return null;
 };

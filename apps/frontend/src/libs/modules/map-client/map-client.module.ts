@@ -27,6 +27,7 @@ class MapClient {
 	private map: mapboxgl.Map | null = null;
 	private readyCallbacks: Array<() => void> = [];
 	private resizeObserver: null | ResizeObserver = null;
+	private selectionMarker: mapboxgl.Marker | null = null;
 
 	public constructor() {
 		this.accessToken = config.ENV.MAPBOX.ACCESS_TOKEN;
@@ -114,6 +115,13 @@ class MapClient {
 		);
 	}
 
+	public clearSelectionMarker(): void {
+		if (this.selectionMarker) {
+			this.selectionMarker.remove();
+			this.selectionMarker = null;
+		}
+	}
+
 	public destroy(): void {
 		for (const control of this.controls.values()) {
 			this.map?.removeControl(control);
@@ -126,12 +134,22 @@ class MapClient {
 
 		this.map?.remove();
 		this.map = null;
-
+		this.clearSelectionMarker();
 		this.readyCallbacks = [];
 	}
 
 	public flyTo(center: [number, number]): void {
-		this.map?.flyTo({ center, essential: true, zoom: ZOOM_LEVEL });
+		if (!this.map) {
+			return;
+		}
+
+		this.map.stop();
+
+		this.map.flyTo({
+			center,
+			essential: true,
+			zoom: ZOOM_LEVEL,
+		});
 	}
 
 	public init(container: HTMLElement): void {
@@ -195,6 +213,45 @@ class MapClient {
 
 	public setCenter(center: [number, number]): void {
 		this.map?.setCenter(center);
+	}
+
+	public setSelectionMarker(options: {
+		coordinates: [number, number];
+		draggable?: boolean;
+		onDragEnd?: (coords: [number, number]) => void;
+	}): void {
+		if (!this.map) {
+			return;
+		}
+
+		const { coordinates, draggable, onDragEnd } = options;
+
+		if (this.selectionMarker) {
+			this.selectionMarker.setLngLat(coordinates);
+			const shouldDrag = Boolean(draggable);
+
+			if (this.selectionMarker.isDraggable() !== shouldDrag) {
+				this.selectionMarker.setDraggable(shouldDrag);
+			}
+		} else {
+			this.selectionMarker = new mapboxgl.Marker({
+				...MARKER_OPTIONS,
+				draggable: Boolean(draggable),
+			})
+				.setLngLat(coordinates)
+				.addTo(this.map);
+
+			if (draggable && onDragEnd) {
+				this.selectionMarker.on("dragend", () => {
+					if (!this.selectionMarker) {
+						return;
+					}
+
+					const position = this.selectionMarker.getLngLat();
+					onDragEnd([position.lng, position.lat]);
+				});
+			}
+		}
 	}
 
 	private addControl(

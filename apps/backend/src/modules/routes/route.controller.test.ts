@@ -104,7 +104,7 @@ describe("Routes controller", () => {
 
 		assert.deepStrictEqual(result, {
 			payload: { data: mockRoute },
-			status: HTTPCode.OK,
+			status: HTTPCode.CREATED,
 		});
 	});
 

@@ -113,7 +113,7 @@ const Dashboard = (): React.JSX.Element => {
 	}, [createStatus]);
 
 	return (
-		<div className={styles["container"]}>
+		<main className={styles["container"]}>
 			<div className={styles["components-container"]}>
 				<Loader />
 				<div className={styles["carousel-container"]}>
@@ -167,7 +167,7 @@ const Dashboard = (): React.JSX.Element => {
 					onSubmit={handleSubmit}
 				/>
 			</div>
-		</div>
+		</main>
 	);
 };
 

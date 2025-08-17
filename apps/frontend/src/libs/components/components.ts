@@ -1,3 +1,4 @@
+export { AppLayout } from "./app-layout/app-layout.js";
 export { App } from "./app/app.js";
 export { Avatar } from "./avatar/avatar.js";
 export { Button } from "./button/button.js";
@@ -7,7 +8,6 @@ export { Icon } from "./icon/icon.js";
 export { Input } from "./input/input.js";
 export { Link } from "./link/link.js";
 export { Loader } from "./loader/loader.js";
-export { MainLayout } from "./main-layout/main-layout.js";
 export { MapContext, MapProvider } from "./map-provider/map-provider.js";
 export { Modal } from "./modal/modal.js";
 export { PasswordInput } from "./password-input/password-input.js";

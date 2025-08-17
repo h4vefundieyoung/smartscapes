@@ -9,6 +9,7 @@ export {
 	AppEnvironment,
 	CommonExceptionMessage,
 	ContentType,
+	LocationType,
 } from "./libs/enums/enums.js";
 export { ValidationError } from "./libs/exceptions/exceptions.js";
 export { configureString } from "./libs/helpers/helpers.js";

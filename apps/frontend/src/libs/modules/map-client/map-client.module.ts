@@ -24,22 +24,12 @@ import "mapbox-gl/dist/mapbox-gl.css";
 class MapClient {
 	private accessToken: MapOptions["accessToken"];
 	private controls = new Map<string, MapControl>();
-	private isClickAttached = false;
 	private map: mapboxgl.Map | null = null;
-
-	private onMapClickBound: (event: mapboxgl.MapMouseEvent) => void;
-	private onMapLoadAttachBound: () => void;
-
-	private onSelectCallback: ((coords: [number, number]) => void) | null = null;
 	private readyCallbacks: Array<() => void> = [];
-
 	private resizeObserver: null | ResizeObserver = null;
-	private selectedMarker: mapboxgl.Marker | null = null;
 
 	public constructor() {
 		this.accessToken = config.ENV.MAPBOX.ACCESS_TOKEN;
-		this.onMapClickBound = this.onMapClick.bind(this);
-		this.onMapLoadAttachBound = this.onMapLoadAttach.bind(this);
 	}
 
 	public addGeolocateControl(): void {
@@ -62,11 +52,37 @@ class MapClient {
 		});
 	}
 
+	public addMarker(options: {
+		coordinates: [number, number];
+		draggable?: boolean;
+		onDragEnd?: (coords: [number, number]) => void;
+	}): mapboxgl.Marker | null {
+		if (!this.map) {
+			return null;
+		}
+
+		const marker = new mapboxgl.Marker({
+			...MARKER_OPTIONS,
+			draggable: Boolean(options.draggable),
+		})
+			.setLngLat(options.coordinates)
+			.addTo(this.map);
+
+		if (options.draggable && options.onDragEnd) {
+			marker.on("dragend", (): void => {
+				const pos = marker.getLngLat();
+				options.onDragEnd?.([pos.lng, pos.lat]);
+			});
+		}
+
+		return marker;
+	}
+
 	public addMarkers(
 		markers: { coordinates: PointGeometry["coordinates"] }[],
 	): void {
-		for (const marker of markers) {
-			this.addMarker(marker.coordinates);
+		for (const { coordinates } of markers) {
+			this.addMarker({ coordinates, draggable: false });
 		}
 	}
 
@@ -98,11 +114,6 @@ class MapClient {
 		);
 	}
 
-	public clearSelected(): void {
-		this.selectedMarker?.remove();
-		this.selectedMarker = null;
-	}
-
 	public destroy(): void {
 		for (const control of this.controls.values()) {
 			this.map?.removeControl(control);
@@ -110,47 +121,17 @@ class MapClient {
 
 		this.controls.clear();
 
-		this.detachClickHandler();
-		this.onSelectCallback = null;
-		this.isClickAttached = false;
-
 		this.resizeObserver?.disconnect();
 		this.resizeObserver = null;
 
 		this.map?.remove();
 		this.map = null;
-		this.selectedMarker = null;
+
 		this.readyCallbacks = [];
 	}
 
-	public enableClickToSelect(
-		onSelect: (coords: [number, number]) => void,
-	): () => void {
-		this.onSelectCallback = onSelect;
-
-		if (this.map) {
-			return this.registerClickHandler();
-		}
-
-		let innerCleanup: () => void = this.noop;
-		const unsub = this.onReady(() => {
-			innerCleanup = this.registerClickHandler();
-		});
-
-		return () => {
-			unsub();
-			innerCleanup();
-			this.onSelectCallback = null;
-		};
-	}
-
 	public flyTo(center: [number, number]): void {
-		if (!this.map) {
-			return;
-		}
-
-		this.map.stop();
-		this.map.flyTo({ center, essential: true, zoom: ZOOM_LEVEL });
+		this.map?.flyTo({ center, essential: true, zoom: ZOOM_LEVEL });
 	}
 
 	public init(container: HTMLElement): void {
@@ -164,7 +145,7 @@ class MapClient {
 			...MAP_OPTIONS,
 		});
 
-		this.resizeObserver = new ResizeObserver(() => {
+		this.resizeObserver = new ResizeObserver((): void => {
 			this.map?.resize();
 		});
 		this.resizeObserver.observe(container);
@@ -177,16 +158,33 @@ class MapClient {
 		}
 	}
 
+	public onClick(handler: (coords: [number, number]) => void): () => void {
+		if (!this.map) {
+			let innerCleanup: () => void = (): void => {};
+
+			const unsubscribe = this.onReady((): void => {
+				innerCleanup = this.attachClick(handler);
+			});
+
+			return (): void => {
+				unsubscribe();
+				innerCleanup();
+			};
+		}
+
+		return this.attachClick(handler);
+	}
+
 	public onReady(callback: () => void): () => void {
 		if (this.map) {
 			callback();
 
-			return this.noop;
+			return (): void => {};
 		}
 
 		this.readyCallbacks.push(callback);
 
-		return () => {
+		return (): void => {
 			this.readyCallbacks = this.readyCallbacks.filter((f) => f !== callback);
 		};
 	}
@@ -197,20 +195,6 @@ class MapClient {
 
 	public setCenter(center: [number, number]): void {
 		this.map?.setCenter(center);
-	}
-
-	public setSelected(coordinates: [number, number]): void {
-		if (!this.map) {
-			return;
-		}
-
-		if (this.selectedMarker) {
-			this.selectedMarker.setLngLat(coordinates);
-		} else {
-			this.selectedMarker = new mapboxgl.Marker(MARKER_OPTIONS)
-				.setLngLat(coordinates)
-				.addTo(this.map);
-		}
 	}
 
 	private addControl(
@@ -227,66 +211,21 @@ class MapClient {
 		this.controls.set(id, control);
 	}
 
-	private addMarker(coordinates: PointGeometry["coordinates"]): void {
+	private attachClick(handler: (coords: [number, number]) => void): () => void {
 		if (!this.map) {
-			return;
+			return (): void => {};
 		}
 
-		new mapboxgl.Marker(MARKER_OPTIONS).setLngLat(coordinates).addTo(this.map);
-	}
+		const callback = (event: mapboxgl.MapMouseEvent): void => {
+			handler([event.lngLat.lng, event.lngLat.lat]);
+		};
 
-	private attachClickHandler(): void {
-		if (!this.map || this.isClickAttached) {
-			return;
-		}
+		this.map.on("click", callback);
 
-		this.map.on("click", this.onMapClickBound);
-		this.isClickAttached = true;
-	}
-
-	private detachClickHandler(): void {
-		if (!this.map || !this.isClickAttached) {
-			return;
-		}
-
-		this.map.off("click", this.onMapClickBound);
-		this.isClickAttached = false;
-	}
-
-	private noop = (): void => {};
-
-	private onMapClick(event: mapboxgl.MapMouseEvent): void {
-		const coords: [number, number] = [event.lngLat.lng, event.lngLat.lat];
-		this.setSelected(coords);
-
-		if (this.onSelectCallback) {
-			this.onSelectCallback(coords);
-		}
-	}
-
-	private onMapLoadAttach(): void {
-		this.map?.off("load", this.onMapLoadAttachBound);
-		this.attachClickHandler();
-	}
-
-	private registerClickHandler(): () => void {
-		if (!this.map) {
-			return this.noop;
-		}
-
-		if (this.map.loaded()) {
-			this.attachClickHandler();
-
-			return () => {
-				this.detachClickHandler();
-			};
-		}
-
-		this.map.on("load", this.onMapLoadAttachBound);
-
-		return () => {
-			this.map?.off("load", this.onMapLoadAttachBound);
-			this.detachClickHandler();
+		return (): void => {
+			if (this.map) {
+				this.map.off("click", callback);
+			}
 		};
 	}
 

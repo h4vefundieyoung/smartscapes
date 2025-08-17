@@ -122,6 +122,19 @@ erDiagram
     geometry geometry
   }
 
+  user_routes {
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    int route_id FK
+    int user_id FK
+    geometry planned_geometry
+    geometry actual_geometry
+    dateTime started_at
+    dateTime completed_at
+    enum status
+  }
+
   routes_to_pois {
     int id PK
     dateTime created_at
@@ -158,6 +171,8 @@ erDiagram
   users ||--|{ user_follows : following_id
   points_of_interest }|--|{routes_to_pois:"poi_id"
   routes }|--|{routes_to_pois:"route_id"
+  users ||--|{ user_routes : user_id
+  routes }|--|{ user_routes : route_id
   users ||--|{ reviews : user_id
   routes ||--|{ reviews : route_id
   points_of_interest ||--|{ reviews : poi_id

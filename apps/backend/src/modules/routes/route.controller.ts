@@ -350,12 +350,25 @@ class RouteController extends BaseController {
 	 *       **Without query parameters**: Returns all routes.
 	 *
 	 *       **With query `name` parameter**: Returns routes whose names match the search query. Search is case-insensitive.
+	 *       **With `latitude` and `longitude`**: Sorts routes by proximity to the provided coordinates (based on their first point of interest).
 	 *     parameters:
 	 *       - in: query
 	 *         name: name
 	 *         schema:
 	 *           type: string
 	 *           example: "landscape"
+	 *       - in: query
+	 *         name: latitude
+	 *         schema:
+	 *           type: number
+	 *           format: float
+	 *           example: 49.8397
+	 *       - in: query
+	 *         name: longitude
+	 *         schema:
+	 *           type: number
+	 *           format: float
+	 *           example: 24.0297
 	 *     responses:
 	 *       200:
 	 *         description: A list of routes

@@ -1,10 +1,7 @@
 import { SortingOrder } from "~/libs/enums/enums.js";
 import { type Repository } from "~/libs/types/types.js";
 
-import {
-	type RouteFindAllNearbyOptions,
-	type RouteFindAllOptions,
-} from "./libs/types/types.js";
+import { type RouteFindAllOptions } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
 import { type RouteModel } from "./route.model.js";
 
@@ -35,7 +32,9 @@ class RouteRepository implements Repository {
 	public async findAll(
 		options: null | RouteFindAllOptions,
 	): Promise<RouteEntity[]> {
-		const routes = await this.routesModel
+		const { latitude, longitude, name } = options ?? {};
+
+		const query = this.routesModel
 			.query()
 			.withGraphFetched("pois(selectPoiIdOrder)")
 			.modifiers({
@@ -43,51 +42,35 @@ class RouteRepository implements Repository {
 					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
 				},
 			})
-			.select("routes.id", "routes.name")
-			.modify((builder) => {
-				if (options?.name) {
-					builder.whereILike("name", `%${options.name.trim()}%`);
-				}
-			});
+			.select("routes.id", "routes.name", "routes.description");
+
+		if (name) {
+			query.whereILike("routes.name", `%${name.trim()}%`);
+		}
+
+		if (latitude !== undefined && longitude !== undefined) {
+			query
+				.joinRaw(
+					`
+					JOIN routes_to_pois ON routes.id = routes_to_pois.route_id
+					JOIN points_of_interest AS poi ON poi.id = routes_to_pois.poi_id AND routes_to_pois.visit_order = 0
+				`,
+				)
+				.select(
+					this.routesModel.raw(
+						`ST_Distance(
+						poi.location::geography,
+						ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography
+						) as distance`,
+						[longitude, latitude],
+					),
+				)
+				.orderBy("distance", SortingOrder.ASC);
+		}
+
+		const routes = await query;
 
 		return routes.map((point) => RouteEntity.initializeList(point));
-	}
-
-	public async findAllNearby(
-		options: RouteFindAllNearbyOptions,
-	): Promise<RouteEntity[]> {
-		const { latitude, longitude } = options;
-
-		const routes = await this.routesModel
-			.query()
-			.withGraphFetched("pois(selectPoiIdOrder)")
-			.modifiers({
-				selectPoiIdOrder(builder) {
-					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
-				},
-			})
-			.select([
-				"routes.id",
-				"routes.name",
-				"routes.description",
-				this.routesModel.raw(
-					"ST_AsGeoJSON(poi.location)::json as first_poi_location",
-				),
-				this.routesModel.raw(
-					`ST_Distance(
-					poi.location::geography,
-					ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography
-					) as distance`,
-					[longitude, latitude],
-				),
-			])
-			.joinRaw(
-				`JOIN routes_to_pois ON routes.id = routes_to_pois.route_id
-				JOIN points_of_interest AS poi ON poi.id = routes_to_pois.poi_id AND routes_to_pois.visit_order = 0`,
-			)
-			.orderBy("distance", SortingOrder.ASC);
-
-		return routes.map((route) => RouteEntity.initialize(route));
 	}
 
 	public async findById(id: number): Promise<null | RouteEntity> {

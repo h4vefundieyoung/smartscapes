@@ -1,1 +1,1 @@
-export { checkPathEndsWithRoute } from "./check-route-ends-with-route.helper.js";
+export { checkPathEndsWithRoute } from "./check-path-ends-with-route.helper.js";

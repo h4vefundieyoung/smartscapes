@@ -1,1 +1,1 @@
-export { unauthorizedHeaderActions } from "./unauthorized-header-actions.js";
+export { unauthorizedHeaderActions } from "./unauthorized-header-actions.constant.js";

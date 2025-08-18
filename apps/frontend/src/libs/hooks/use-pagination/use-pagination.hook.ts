@@ -84,13 +84,6 @@ const usePagination = ({
 		setPage((previous) => Math.max(previous - OFFSET, FIRST_PAGE));
 	}, []);
 
-	useEffect(() => {
-		if (meta) {
-			setPage(meta.currentPage);
-			setPageSize(meta.itemsPerPage);
-		}
-	}, [meta]);
-
 	return {
 		goToEnd,
 		goToNext,

@@ -35,7 +35,22 @@ body {
 }
 
 ::-webkit-scrollbar {
-	height: 16px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--color-fill-brand-strong);
+	border-radius: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--color-background-base);
+	border-radius: 8px;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+	display: none;
 }
 
 @supports (scrollbar-width: auto) {

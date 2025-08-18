@@ -32,6 +32,14 @@ class RoutesApi extends BaseHTTPApi {
 			queryParameters["name"] = query.name;
 		}
 
+		if (query?.latitude !== undefined) {
+			queryParameters["latitude"] = query.latitude.toString();
+		}
+
+		if (query?.longitude !== undefined) {
+			queryParameters["longitude"] = query.longitude.toString();
+		}
+
 		const response = await this.load<APIResponse<RouteGetByIdResponseDto[]>>(
 			this.getFullEndpoint(RoutesApiPath.ROOT, queryParameters),
 			{

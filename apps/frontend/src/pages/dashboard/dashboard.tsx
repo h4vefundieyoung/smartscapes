@@ -120,14 +120,13 @@ const Dashboard = (): React.JSX.Element => {
 		}
 	}, [createStatus]);
 
-	const userPermissions = authenticatedUser?.group.permissions;
-
 	const permittedNavigationItems = useMemo(() => {
 		return getPermittedNavigationItems(
+			Boolean(authenticatedUser),
 			NAVIGATION_ITEMS_GROUPS,
-			userPermissions ?? [],
+			authenticatedUser?.group.permissions ?? [],
 		);
-	}, [userPermissions]);
+	}, [authenticatedUser]);
 
 	return (
 		<div className={styles["container"]}>

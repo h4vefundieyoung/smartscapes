@@ -47,11 +47,12 @@ class UserRouteService implements Service {
 
 	public async finish(payload: {
 		actualGeometry: LineStringGeometry;
+		routeId: number;
 		userId: number;
 	}): Promise<UserRouteResponseDto> {
-		const { actualGeometry, userId } = payload;
+		const { actualGeometry, routeId, userId } = payload;
 
-		const userRoute = await this.getUserRoute(userId);
+		const userRoute = await this.getRoute(userId, routeId);
 
 		const updatedData = UserRouteEntity.initializeNew({
 			...userRoute,
@@ -68,18 +69,18 @@ class UserRouteService implements Service {
 	}
 
 	public async start(payload: {
+		routeId: number;
 		userId: number;
 	}): Promise<UserRouteResponseDto> {
-		const { userId } = payload;
+		const { routeId, userId } = payload;
 
-		const userRoute = await this.getUserRoute(userId);
+		const userRoutes = await this.getUserRoutes(userId);
 
-		if (userRoute.status === UserRouteStatus.ACTIVE) {
-			throw new UserRouteError({
-				message: UserRouteExeptionMessage.USER_ALREADY_ON_ACTIVE_STATUS,
-				status: HTTPCode.CONFLICT,
-			});
-		}
+		this.ensureUserIsNotOnActiveStatus(userRoutes);
+
+		const userRoute = this.findUserRoute(userRoutes, routeId);
+
+		this.ensureUserIsOwner(userRoute, userId);
 
 		const updatedData = UserRouteEntity.initializeNew({
 			...userRoute,
@@ -94,8 +95,57 @@ class UserRouteService implements Service {
 		return updatedRoute.toObject();
 	}
 
-	private async getUserRoute(userId: number): Promise<UserRouteResponseDto> {
-		const result = await this.userRouteRepository.findById(userId);
+	private ensureUserIsNotOnActiveStatus(
+		userRoutes: UserRouteResponseDto[],
+	): void {
+		const isAlreadyActive = userRoutes.some(
+			(route) => route.status === UserRouteStatus.ACTIVE,
+		);
+
+		if (isAlreadyActive) {
+			throw new UserRouteError({
+				message: UserRouteExeptionMessage.USER_ALREADY_ON_ACTIVE_STATUS,
+				status: HTTPCode.CONFLICT,
+			});
+		}
+	}
+
+	private ensureUserIsOwner(
+		userRoute: UserRouteResponseDto,
+		userId: number,
+	): void {
+		if (userRoute.userId !== userId) {
+			throw new UserRouteError({
+				message: UserRouteExeptionMessage.USER_ROUTE_NOT_OWNED,
+				status: HTTPCode.FORBIDDEN,
+			});
+		}
+	}
+
+	private findUserRoute(
+		userRoutes: UserRouteResponseDto[],
+		routeId: number,
+	): UserRouteResponseDto {
+		const userRoute = userRoutes.find((route) => route.routeId === routeId);
+
+		if (!userRoute) {
+			throw new UserRouteError({
+				message: UserRouteExeptionMessage.USER_ROUTE_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return userRoute;
+	}
+
+	private async getRoute(
+		userId: number,
+		routeId: number,
+	): Promise<UserRouteResponseDto> {
+		const result = await this.userRouteRepository.getRouteByUserIdAndRouteId(
+			userId,
+			routeId,
+		);
 
 		if (!result) {
 			throw new UserRouteError({
@@ -105,6 +155,13 @@ class UserRouteService implements Service {
 		}
 
 		return result.toObject();
+	}
+
+	private async getUserRoutes(userId: number): Promise<UserRouteResponseDto[]> {
+		const userRoutes =
+			await this.userRouteRepository.findRoutesByUserId(userId);
+
+		return userRoutes.map((item) => item.toObject());
 	}
 }
 

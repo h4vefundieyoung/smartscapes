@@ -35,10 +35,36 @@ class UserRouteRepository implements Repository {
 		return UserRouteEntity.initialize(result);
 	}
 
-	public async findById(id: number): Promise<null | UserRouteEntity> {
+	public async findRoutesByUserId(userId: number): Promise<UserRouteEntity[]> {
 		const result = await this.userRouteModel
 			.query()
-			.findById(id)
+			.where({ userId })
+			.returning([
+				"id",
+				"routeId",
+				"userId",
+				"status",
+				"startedAt",
+				"completedAt",
+				this.userRouteModel.raw(
+					"ST_AsGeoJSON(actual_geometry)::json as actualGeometry",
+				),
+				this.userRouteModel.raw(
+					"ST_AsGeoJSON(planned_geometry)::json as plannedGeometry",
+				),
+			])
+			.execute();
+
+		return result.map((item) => UserRouteEntity.initialize(item));
+	}
+
+	public async getRouteByUserIdAndRouteId(
+		userId: number,
+		routeId: number,
+	): Promise<null | UserRouteEntity> {
+		const [result] = await this.userRouteModel
+			.query()
+			.where({ routeId, userId })
 			.returning([
 				"id",
 				"routeId",
@@ -59,14 +85,14 @@ class UserRouteRepository implements Repository {
 	}
 
 	public async patch(
-		id: number,
+		userId: number,
 		entity: UserRouteEntity,
 	): Promise<null | UserRouteEntity> {
 		const updateData = entity.toNewObject();
 
 		const [updated] = await this.userRouteModel
 			.query()
-			.where({ id })
+			.where({ userId })
 			.patch(updateData)
 			.returning([
 				"id",

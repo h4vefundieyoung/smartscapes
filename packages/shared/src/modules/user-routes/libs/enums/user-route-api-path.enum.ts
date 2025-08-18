@@ -1,7 +1,7 @@
 const UserRouteApiPath = {
-	$ID: "/:id",
-	FINISH: "/:id/finish",
-	START: "/:id/start",
+	$ID: "/:userId",
+	FINISH: "/:userId/finish",
+	START: "/:userId/start",
 } as const;
 
 export { UserRouteApiPath };

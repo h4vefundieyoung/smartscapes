@@ -1,13 +1,13 @@
 export { UserRouteApiPath, UserRouteStatus } from "./libs/enums/enums.js";
 export {
 	type UserRouteCreateRequestDto,
-	type UserRouteFinishRequestDto,
 	type UserRouteParameters,
 	type UserRouteResponseDto,
 	type UserRouteStatusType,
+	type UserRouteUpdateRequestDto,
 } from "./libs/types/types.js";
 export {
 	userRouteCreate as userRouteCreateValidationSchema,
-	userRouteFinish as userRouteFinishValidationSchema,
 	userRouteParameters as userRouteParametersValidationSchema,
+	userRouteUpdate as userRouteUpdateValidationSchema,
 } from "./validation-schemas/validation-schemas.js";

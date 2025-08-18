@@ -12,13 +12,16 @@ const lineStringSchema = z.strictObject({
 	}),
 });
 
-const userRouteFinish = z.strictObject({
+const userRouteUpdate = z.strictObject({
 	actualPath: lineStringSchema.refine(
 		(value) => value.coordinates.length >= TWO_COORDINATES,
 		{
 			message: UserRouteValidationMessage.INVALID_COORDINATES,
 		},
 	),
+	routeId: z.number({
+		message: UserRouteValidationMessage.ROUTE_ID_INVALID_TYPE,
+	}),
 });
 
-export { userRouteFinish };
+export { userRouteUpdate };

@@ -10,14 +10,14 @@ import { type Logger } from "~/libs/modules/logger/libs/types/logger.type.js";
 import { UserRouteApiPath } from "./libs/enums/enum.js";
 import {
 	type UserRouteCreateRequestDto,
-	type UserRouteFinishRequestDto,
 	type UserRouteParameters,
 	type UserRouteResponseDto,
+	type UserRouteUpdateRequestDto,
 } from "./libs/types/type.js";
 import {
 	userRouteCreateValidationSchema,
-	userRouteFinishValidationSchema,
 	userRouteParametersValidationSchema,
+	userRouteUpdateValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 import { type UserRouteService } from "./user-route.service.js";
 
@@ -43,7 +43,7 @@ class UserRouteController extends BaseController {
 			method: "POST",
 			path: UserRouteApiPath.FINISH,
 			validation: {
-				body: userRouteFinishValidationSchema,
+				body: userRouteUpdateValidationSchema,
 				params: userRouteParametersValidationSchema,
 			},
 		});
@@ -78,16 +78,17 @@ class UserRouteController extends BaseController {
 
 	public async finish(
 		options: APIHandlerOptions<{
-			body: UserRouteFinishRequestDto;
+			body: UserRouteUpdateRequestDto;
 			params: UserRouteParameters;
 		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
 		const { body, params } = options;
-		const { actualGeometry } = body;
+		const { actualGeometry, routeId } = body;
 		const { userId } = params;
 
 		const updated = await this.userRouteService.finish({
 			actualGeometry,
+			routeId,
 			userId,
 		});
 
@@ -99,12 +100,17 @@ class UserRouteController extends BaseController {
 
 	public async start(
 		options: APIHandlerOptions<{
+			body: UserRouteUpdateRequestDto;
 			params: UserRouteParameters;
 		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
+		const { routeId } = options.body;
 		const { userId } = options.params;
 
-		const updated = await this.userRouteService.start({ userId });
+		const updated = await this.userRouteService.start({
+			routeId,
+			userId,
+		});
 
 		return {
 			payload: { data: updated },

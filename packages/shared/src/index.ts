@@ -107,13 +107,13 @@ export {
 	UserRouteApiPath,
 	type UserRouteCreateRequestDto,
 	userRouteCreateValidationSchema,
-	type UserRouteFinishRequestDto,
-	userRouteFinishValidationSchema,
 	type UserRouteParameters,
 	userRouteParametersValidationSchema,
 	type UserRouteResponseDto,
 	UserRouteStatus,
 	type UserRouteStatusType,
+	type UserRouteUpdateRequestDto,
+	userRouteUpdateValidationSchema,
 } from "./modules/user-routes/user-routes.js";
 export {
 	type AuthenticatedUserPatchRequestDto,

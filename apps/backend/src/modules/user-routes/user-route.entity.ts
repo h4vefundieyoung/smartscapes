@@ -92,12 +92,14 @@ class UserRouteEntity implements Entity {
 		actualGeometry: LineStringGeometry;
 		plannedGeometry: LineStringGeometry;
 		routeId: number;
+		status: UserRouteStatusType;
 		userId: number;
 	} {
 		return {
 			actualGeometry: this.actualGeometry,
 			plannedGeometry: this.plannedGeometry,
 			routeId: this.routeId,
+			status: this.status as UserRouteStatusType,
 			userId: this.userId,
 		};
 	}

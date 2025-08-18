@@ -3,9 +3,12 @@ import { type CollectionResult, type Service } from "~/libs/types/types.js";
 
 import { CategoryEntity } from "./category.entity.js";
 import { type CategoryRepository } from "./category.repository.js";
-import { CategoryExceptionMessage } from "./libs/enums/enums.js";
+import {
+	CategoryExceptionMessage,
+	StringCaseType,
+} from "./libs/enums/enums.js";
 import { RouteCategoryError } from "./libs/exceptions/exceptions.js";
-import { stringToCamelCase } from "./libs/helpers/helpers.js";
+import { changeStringCase } from "./libs/helpers/helpers.js";
 import {
 	type CategoryCreateRequestDto,
 	type CategoryGetAllItemResponseDto,
@@ -23,7 +26,7 @@ class CategoryService implements Service {
 	): Promise<CategoryGetAllItemResponseDto> {
 		const { name } = payload;
 
-		const key = stringToCamelCase(name);
+		const key = changeStringCase(name, StringCaseType.CAMEL);
 
 		const existingRouteCategory =
 			await this.categoryRepository.findByName(name);

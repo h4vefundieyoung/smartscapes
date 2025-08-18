@@ -69,5 +69,8 @@
 	"simple-git-hooks": {
 		"pre-commit": "npm run lint:types && npm run git:hooks:precommit",
 		"commit-msg": "npm run git:hooks:commit"
+	},
+	"dependencies": {
+		"change-case": "5.4.4"
 	}
 }

@@ -16,7 +16,7 @@ const PointOfInterestDetails = (): React.JSX.Element => {
 	return (
 		<main className={styles["container"]}>
 			<Header actions={headerButtons} user={authenticatedUser} />
-			<h1 className={styles["title"]}>Point Of Interest Details id = {id}</h1>
+			<h1>Point Of Interest Details id = {id}</h1>
 		</main>
 	);
 };

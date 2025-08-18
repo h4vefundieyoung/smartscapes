@@ -6,7 +6,6 @@ class RouteEntity implements Entity {
 	private name: string;
 	private pois: {
 		id: number;
-		name?: string;
 		visitOrder: number;
 	}[];
 
@@ -21,7 +20,6 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
-			name?: string;
 			visitOrder: number;
 		}[];
 	}) {
@@ -124,7 +122,6 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
-			name?: string;
 			visitOrder: number;
 		}[];
 	} {

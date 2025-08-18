@@ -22,8 +22,8 @@ describe("CategoryService", () => {
 		const routeCategoryRepository = {
 			create: (() =>
 				Promise.resolve(routeCategoryEntity)) as CategoryRepository["create"],
-			findByName: (() =>
-				Promise.resolve(null)) as CategoryRepository["findByName"],
+			findByKey: (() =>
+				Promise.resolve(null)) as CategoryRepository["findByKey"],
 		} as CategoryRepository;
 
 		const routeCategoryService = new CategoryService(routeCategoryRepository);
@@ -35,16 +35,16 @@ describe("CategoryService", () => {
 		assert.deepStrictEqual(result, mockRouteCategory);
 	});
 
-	it("create should throw exception if category with such name already exists", async () => {
+	it("create should throw exception if category with such key already exists", async () => {
 		const routeCategoryEntity = CategoryEntity.initialize(mockRouteCategory);
 
 		const routeCategoryRepository = {
 			create: (() =>
 				Promise.resolve(routeCategoryEntity)) as CategoryRepository["create"],
-			findByName: (() =>
+			findByKey: (() =>
 				Promise.resolve(
 					routeCategoryEntity,
-				)) as CategoryRepository["findByName"],
+				)) as CategoryRepository["findByKey"],
 		} as CategoryRepository;
 
 		const routeCategoryService = new CategoryService(routeCategoryRepository);

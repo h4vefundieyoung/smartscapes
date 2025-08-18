@@ -28,8 +28,7 @@ class CategoryService implements Service {
 
 		const key = changeStringCase(name, StringCaseType.CAMEL);
 
-		const existingRouteCategory =
-			await this.categoryRepository.findByName(name);
+		const existingRouteCategory = await this.categoryRepository.findByKey(key);
 
 		if (existingRouteCategory) {
 			throw new RouteCategoryError({

@@ -30,6 +30,16 @@ class CategoryRepository implements Repository {
 		);
 	}
 
+	public async findByKey(key: string): Promise<CategoryEntity | null> {
+		const routeCategory = await this.categoryModel
+			.query()
+			.whereRaw("LOWER(key) LIKE ?", [`%${key.toLowerCase()}%`])
+			.first()
+			.execute();
+
+		return routeCategory ? CategoryEntity.initialize(routeCategory) : null;
+	}
+
 	public async findByName(name: string): Promise<CategoryEntity | null> {
 		const routeCategory = await this.categoryModel
 			.query()

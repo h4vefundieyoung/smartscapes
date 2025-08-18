@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.23.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.22.1...@smartscapes/shared-v1.23.0) (2025-08-18)
+
+
+### Features
+
+* **frontend/backend/shared:** implement points of interest details page ss-245 ([#337](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/337)) ([26c5795](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/26c5795e69f7d5746b791b9f1276a60d24f38e10))
+
+## [1.22.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.22.0...@smartscapes/shared-v1.22.1) (2025-08-18)
+
+
+### Bug Fixes
+
+* **frontend:** poi create modal stucked data in reopened form ss-378 ([#406](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/406)) ([34c86db](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/34c86db6602c2f17c43352cc0e585f66a08709d8))
+
 ## [1.22.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.21.0...@smartscapes/shared-v1.22.0) (2025-08-17)
 
 

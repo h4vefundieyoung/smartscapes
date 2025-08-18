@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.36.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.35.2...v1.36.0) (2025-08-18)
+
+
+### Features
+
+* **frontend/backend/shared:** implement points of interest details page ss-245 ([#337](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/337)) ([26c5795](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/26c5795e69f7d5746b791b9f1276a60d24f38e10))
+
+
+### Bug Fixes
+
+* **backend:** solve validation complier error issue ss-415 ([#418](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/418)) ([1daf53e](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/1daf53e6616ae62caf52aa8a44d995458667327c))
+
+## [1.35.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.35.1...v1.35.2) (2025-08-18)
+
+
+### Bug Fixes
+
+* **frontend:** poi create modal stucked data in reopened form ss-378 ([#406](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/406)) ([34c86db](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/34c86db6602c2f17c43352cc0e585f66a08709d8))
+* **frontend:** solve carousel issues ss-348 ([#409](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/409)) ([86c3439](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/86c34396d175f7bf19ccc1f9430258763bdd80de))
+
 ## [1.35.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.35.0...v1.35.1) (2025-08-18)
 
 

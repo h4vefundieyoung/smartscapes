@@ -227,10 +227,14 @@ class BaseServerApplication implements ServerApplication {
 
 	private initValidationCompiler(): void {
 		this.app.setValidatorCompiler<ValidationSchema>(({ schema }) => {
-			return (data): boolean => {
-				const result = schema.parse(data);
+			return (data): { error?: Error; value?: unknown } => {
+				try {
+					const value = schema.parse(data);
 
-				return Boolean(result);
+					return { value };
+				} catch (error) {
+					return { error: error as Error };
+				}
 			};
 		});
 	}

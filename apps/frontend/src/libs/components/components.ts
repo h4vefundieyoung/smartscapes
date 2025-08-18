@@ -6,6 +6,7 @@ export { CreatePOIModal } from "./create-poi-modal/create-poi-modal.js";
 export { FieldError } from "./field-error/field-error.js";
 export { Header } from "./header/header.js";
 export { Icon } from "./icon/icon.js";
+export { ImageGallery } from "./image-gallery/image-gallery.js";
 export { Input } from "./input/input.js";
 export { Link } from "./link/link.js";
 export { Loader } from "./loader/loader.js";

@@ -1,4 +1,9 @@
-import { Button, Input, Link } from "~/libs/components/components.js";
+import {
+	Button,
+	Input,
+	Link,
+	PasswordInput,
+} from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
@@ -57,21 +62,19 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 					name="email"
 					type="email"
 				/>
-				<Input
+				<PasswordInput
 					autocomplete="new-password"
 					control={control}
 					errors={errors}
 					label="Password"
 					name="password"
-					type="password"
 				/>
-				<Input
+				<PasswordInput
 					autocomplete="new-password"
 					control={control}
 					errors={errors}
 					label="Confirm password"
 					name="confirmPassword"
-					type="password"
 				/>
 				<Button label="Sign up" type="submit" />
 			</form>

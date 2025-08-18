@@ -1,41 +1,63 @@
-import { forwardRef, type ComponentPropsWithRef } from "react";
+import {
+	type Control,
+	type FieldErrors,
+	type FieldPath,
+	type FieldValues,
+} from "react-hook-form";
 
+import { combineClassNames } from "~/libs/helpers/helpers.js";
+import { useFormController } from "~/libs/hooks/hooks.js";
+
+import { Icon } from "../components.js";
 import styles from "./styles.module.css";
 
-type Properties = ComponentPropsWithRef<"textarea"> & {
-	hasError?: boolean;
-	isDisabled?: boolean;
-	label?: string;
+type Properties<T extends FieldValues> = {
+	control: Control<T, null>;
+	errors: FieldErrors<T>;
+	label: string;
+	name: FieldPath<T>;
 	placeholder?: string;
+	className?: string;
+	rows?: number;
 };
 
-const Textarea = forwardRef<HTMLTextAreaElement, Properties>(
-	(
-		{
-			className,
-			hasError = false,
-			isDisabled = false,
-			label,
-			placeholder = "",
-			...rest
-		},
-		reference,
-	): React.JSX.Element => {
-		return (
-			<label className={styles["container"]}>
-				{label && <span className={styles["label"]}>{label}</span>}
-				<textarea
-					{...rest}
-					className={`${styles["textarea"]} ${hasError ? styles["error"] : ""} ${className ?? ""}`}
-					disabled={isDisabled}
-					placeholder={placeholder}
-					ref={reference}
-				/>
-			</label>
-		);
-	},
-);
+const TextArea = <T extends FieldValues>({
+	control,
+	errors,
+	label,
+	name,
+	placeholder = "",
+	className,
+	rows,
+}: Properties<T>): React.JSX.Element => {
+	const { field } = useFormController({ control, name });
 
-Textarea.displayName = "Textarea";
+	const error = errors[name]?.message as string | undefined;
+	const hasError = Boolean(error);
 
-export { Textarea };
+	return (
+		<label className={styles["label"]}>
+			<span className={styles["label-caption"]}>{label}</span>
+			<textarea
+				className={combineClassNames(
+					styles["textarea"],
+					hasError && styles["textarea-error"],
+					className,
+				)}
+				name={field.name}
+				onChange={field.onChange}
+				placeholder={placeholder}
+				rows={rows}
+				value={field.value ?? ""}
+			/>
+			{hasError && (
+				<span className={styles["error"]}>
+					<Icon height={24} name="error" width={24} />
+					{error}
+				</span>
+			)}
+		</label>
+	);
+};
+
+export { TextArea };

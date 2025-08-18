@@ -3,13 +3,13 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 
 import {
-	type RoutesRequestCreateDto,
-	type RoutesResponseDto,
-} from "@smartscapes/shared";
+	type RouteCreateRequestDto,
+	type RouteGetByIdResponseDto,
+} from "../libs/types/types.js";
 
 const create = createAsyncThunk<
-	APIResponse<RoutesResponseDto>,
-	RoutesRequestCreateDto,
+	APIResponse<RouteGetByIdResponseDto>,
+	RouteCreateRequestDto,
 	AsyncThunkConfig
 >(`routes/create`, async (payload, { extra }) => {
 	const { routesApi } = extra;
@@ -17,4 +17,14 @@ const create = createAsyncThunk<
 	return await routesApi.create(payload);
 });
 
-export { create };
+const getRouteById = createAsyncThunk<
+	APIResponse<RouteGetByIdResponseDto>,
+	number,
+	AsyncThunkConfig
+>(`routes/get-route-by-id`, (id, { extra }) => {
+	const { routesApi } = extra;
+
+	return routesApi.getRouteById(id);
+});
+
+export { create, getRouteById };

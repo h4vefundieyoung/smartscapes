@@ -1,173 +1,150 @@
-import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router";
+import { useEffect, useRef } from "react";
+import { useSearchParams } from "react-router";
 
-import { Button, Input, Textarea } from "~/libs/components/components.js";
-import { AppRoute } from "~/libs/enums/enums.js";
-import { useAppDispatch, useAppForm } from "~/libs/hooks/hooks.js";
-import { actions as routesActions } from "~/modules/routes/routes.js";
-import { type RoutesRequestCreateDto } from "@smartscapes/shared";
+import { Button, Input, TextArea } from "~/libs/components/components.js";
+import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
+import {
+	type RouteCreateRequestDto,
+	routesCreateValidationSchema,
+} from "~/modules/routes/routes.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
-	onClose: () => void;
-	onSubmit?: (data: { description: string; name: string }) => void;
-};
-
-type FormValues = {
-	description: string;
-	name: string;
+	onSubmit?: (data: RouteCreateRequestDto) => void;
+	onClose?: () => void;
+	registerCleanup?: (cleanupFn: () => void) => void;
 };
 
 const STORAGE_KEY = "create-route-form-data";
 
 const CreateRouteForm = ({
-	onClose,
 	onSubmit,
-}: Properties): React.JSX.Element => {
+	onClose,
+	registerCleanup,
+}: Properties = {}): React.JSX.Element => {
 	const [searchParams] = useSearchParams();
-	const dispatch = useAppDispatch();
-	const [descriptionValue, setDescriptionValue] = useState("");
+	const hasBeenSubmittedRef = useRef(false);
 
 	const {
 		control,
 		handleSubmit: handleFormSubmit,
 		handleValueSet,
 		errors,
-	} = useAppForm<FormValues>({
-		defaultValues: {
-			name: "",
-			description: "",
-		},
+	} = useAppForm<RouteCreateRequestDto>({
+		defaultValues: { name: "", description: "", pois: [] },
+		validationSchema: routesCreateValidationSchema,
 	});
 
 	const plannedRouteId = searchParams.get("plannedRouteId");
-
-	const saveToStorage = useCallback((name: string, description: string) => {
-		try {
-			localStorage.setItem(STORAGE_KEY, JSON.stringify({ name, description }));
-		} catch (error) {
-			console.error("Failed to save to localStorage:", error);
-		}
-	}, []);
+	const isRouteConstructed = Boolean(plannedRouteId);
 
 	useEffect(() => {
+		const savedData = localStorage.getItem(STORAGE_KEY);
+		if (!savedData) return;
+
 		try {
-			const savedData = localStorage.getItem(STORAGE_KEY);
-			if (savedData) {
-				const { name: savedName, description: savedDescription } =
-					JSON.parse(savedData);
-				if (savedName) handleValueSet("name", savedName);
-				if (savedDescription) {
-					handleValueSet("description", savedDescription);
-					setDescriptionValue(savedDescription);
-				}
-			}
-		} catch (error) {
-			console.error("Failed to load from localStorage:", error);
+			const { name, description } = JSON.parse(savedData);
+			if (name) handleValueSet("name", name);
+			if (description) handleValueSet("description", description);
+		} catch {
+			localStorage.removeItem(STORAGE_KEY);
 		}
 	}, [handleValueSet]);
 
 	useEffect(() => {
-		const nameElement = document.querySelector(
-			'input[name="name"]',
-		) as HTMLInputElement;
-		const name = nameElement?.value || "";
-		if (name || descriptionValue) {
-			saveToStorage(name, descriptionValue);
-		}
-	}, [descriptionValue, saveToStorage]);
+		const subscription = control._subjects.state.subscribe({
+			next: () => {
+				const { name = "", description = "" } = control._formValues;
 
-	const clearStorage = useCallback(() => {
-		try {
+				if (name || description) {
+					localStorage.setItem(
+						STORAGE_KEY,
+						JSON.stringify({ name, description }),
+					);
+				}
+			},
+		});
+
+		return () => subscription.unsubscribe();
+	}, [control]);
+
+	const handleModalClose = useCallback(() => {
+		if (!hasBeenSubmittedRef.current) {
 			localStorage.removeItem(STORAGE_KEY);
-		} catch (error) {
-			console.error("Failed to clear localStorage:", error);
 		}
 	}, []);
 
-	const handleSubmit = handleFormSubmit(async (data: FormValues) => {
-		if (onSubmit) {
-			onSubmit(data);
-		} else {
-			try {
-				const createData: RoutesRequestCreateDto = {
-					description: data.description,
-					name: data.name,
-					pois: [],
-				};
+	useEffect(() => {
+		registerCleanup?.(handleModalClose);
+	}, [registerCleanup, handleModalClose]);
 
-				await dispatch(routesActions.create(createData)).unwrap();
-			} catch (error) {
-				return;
-			}
-		}
+	const handleSubmit = handleFormSubmit((data: RouteCreateRequestDto) => {
+		if (!isRouteConstructed || !onSubmit) return;
 
-		clearStorage();
-		onClose();
+		hasBeenSubmittedRef.current = true;
+		onSubmit({
+			name: data.name,
+			description: data.description,
+			pois: [],
+		});
+		localStorage.removeItem(STORAGE_KEY);
+		onClose?.();
 	});
 
-	const handleCancel = useCallback(() => {
-		clearStorage();
-		onClose();
-	}, [clearStorage, onClose]);
+	const handleConstructRouteClick = () => {
+		const { name = "", description = "" } = control._formValues;
 
-	const handleDescriptionChange = useCallback(
-		(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-			const value = event.target.value;
-			setDescriptionValue(value);
-			handleValueSet("description", value);
-		},
-		[handleValueSet],
-	);
-
-	const isRouteConstructed = Boolean(plannedRouteId);
+		if (name || description) {
+			localStorage.setItem(STORAGE_KEY, JSON.stringify({ name, description }));
+		}
+	};
 
 	return (
-		<form className={styles["form"]} onSubmit={handleSubmit}>
-			<div className={styles["field"]}>
-				<Input
-					control={control}
-					errors={errors}
-					label="Name"
-					name="name"
-					placeholder="Enter route name"
-				/>
-			</div>
+		<div>
+			<h4 className={styles["title"]}>Create New Route</h4>
+			<form className={styles["form"]} onSubmit={handleSubmit}>
+				<div className={styles["field"]}>
+					<Input control={control} errors={errors} label="Name" name="name" />
+				</div>
 
-			<div className={styles["field"]}>
-				<Textarea
-					label="Description"
-					onChange={handleDescriptionChange}
-					placeholder="Enter route description"
-					required
-					value={descriptionValue}
-				/>
-			</div>
-
-			<div className={styles["field"]}>
-				<label className={styles["label"]}>Route *</label>
-				{isRouteConstructed ? (
-					<div className={styles["route-constructed"]}>
-						<span className={styles["route-status"]}>✓ Route constructed</span>
-						<p className={styles["route-id"]}>
-							Planned Route ID: {plannedRouteId}
-						</p>
+				<div className={styles["field"]}>
+					<label className={styles["label"]}>Route</label>
+					<div className={styles["route-section"]}>
+						{isRouteConstructed && (
+							<div>
+								<span>Route constructed</span>
+							</div>
+						)}
+						<div>
+							<Button
+								label="Construct"
+								onClick={handleConstructRouteClick}
+								to="/routes/construct?returnTo=/routes?modal=create-route"
+								type="button"
+								variant="outlined"
+							/>
+						</div>
 					</div>
-				) : (
-					<Button
-						label="Construct route"
-						to={`${AppRoute.ROOT}routes/construct?returnTo=${encodeURIComponent("/routes?modal=create-route")}`}
-						type="button"
-					/>
-				)}
-			</div>
+				</div>
 
-			<div className={styles["actions"]}>
-				<Button label="Cancel" onClick={handleCancel} type="button" />
-				<Button label="Create Route" type="submit" />
-			</div>
-		</form>
+				<div className={styles["field"]}>
+					<TextArea
+						control={control}
+						errors={errors}
+						label="Description"
+						name="description"
+						rows={5}
+					/>
+				</div>
+
+				<div className={styles["footer"]}>
+					<div className={styles["button-container"]}>
+						<Button label="Create" type="submit" />
+					</div>
+				</div>
+			</form>
+		</div>
 	);
 };
 

@@ -1,13 +1,14 @@
+import {
+	type RouteCreateRequestDto,
+	type RouteGetByIdResponseDto,
+} from "./libs/types/types.js";
+import { RoutesApiPath } from "./libs/enums/enums.js";
+
 import { APIPath, ContentType } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
-
-import {
-	type RoutesRequestCreateDto,
-	type RoutesResponseDto,
-} from "@smartscapes/shared";
 
 type Constructor = {
 	baseUrl: string;
@@ -21,15 +22,29 @@ class RoutesApi extends BaseHTTPApi {
 	}
 
 	public async create(
-		payload: RoutesRequestCreateDto,
-	): Promise<APIResponse<RoutesResponseDto>> {
-		const response = await this.load<APIResponse<RoutesResponseDto>>(
+		payload: RouteCreateRequestDto,
+	): Promise<APIResponse<RouteGetByIdResponseDto>> {
+		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
 			this.getFullEndpoint("/", {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,
 				method: "POST",
 				payload: JSON.stringify(payload),
+			},
+		);
+
+		return await response.json();
+	}
+
+	public async getRouteById(
+		id: number,
+	): Promise<APIResponse<RouteGetByIdResponseDto>> {
+		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
+			this.getFullEndpoint(`${RoutesApiPath.ROOT}${id.toString()}`, {}),
+			{
+				hasAuth: false,
+				method: "GET",
 			},
 		);
 

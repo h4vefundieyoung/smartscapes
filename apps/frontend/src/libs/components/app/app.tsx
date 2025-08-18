@@ -1,4 +1,4 @@
-import { Loader, RouterOutlet } from "~/libs/components/components.js";
+import { Loader, RouterOutlet, Modal } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -38,11 +38,10 @@ const App = (): React.JSX.Element => {
 	}
 
 	return (
-		<div className={styles["container"]}>
-			<div className={styles["outlet-container"]}>
-				<RouterOutlet />
-			</div>
-		</div>
+		<>
+			<RouterOutlet />
+			<Modal />
+		</>
 	);
 };
 

@@ -1,5 +1,7 @@
 import {
 	Button,
+	CreatePOIModal,
+	CreateRouteForm,
 	Header,
 	Loader,
 	Select,
@@ -7,12 +9,29 @@ import {
 } from "~/libs/components/components.js";
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
 import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
-import { AppRoute } from "~/libs/enums/enums.js";
-import { useAppForm, useAppSelector, useModal } from "~/libs/hooks/hooks.js";
+import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
+import {
+	useAppDispatch,
+	useAppForm,
+	useAppSelector,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+	useModal,
+} from "~/libs/hooks/hooks.js";
+import { HTTPError } from "~/libs/modules/http/http.js";
+import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
+import { fileApi } from "~/modules/files/files.js";
+import { FileFolderName } from "~/modules/files/libs/enums/enums.js";
+import { type PointsOfInterestRequestDto } from "~/modules/points-of-interest/libs/types/types.js";
+import { actions as poiActions } from "~/modules/points-of-interest/points-of-interest.js";
+import {
+	type RouteCreateRequestDto,
+	actions as routesActions,
+} from "~/modules/routes/routes.js";
 
-import { mockImages } from "../../libs/components/carousel/assets/mock-images/mock-images.js";
 import { Carousel } from "../../libs/components/carousel/carousel.js";
-import { CreateRouteForm } from "~/libs/components/components.js";
 import styles from "./styles.module.css";
 
 type FormValues = {
@@ -20,16 +39,17 @@ type FormValues = {
 	singleColor: null | string;
 };
 
+const DEFAULT_LONGITUDE = 30.5234;
+const DEFAULT_LATITUDE = 50.4501;
+
 const Dashboard = (): React.JSX.Element => {
+	const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+	const [isUploading, setIsUploading] = useState<boolean>(false);
+	const fileInputReference = useRef<HTMLInputElement>(null);
 	const authenticatedUser = useAppSelector(
 		({ auth }) => auth.authenticatedUser,
 	);
-
-	const { openModal, ModalComponent } = useModal({
-		component: CreateRouteForm,
-		title: "Create Route",
-		modalName: "create-route",
-	});
+	const dispatch = useAppDispatch();
 
 	const colorOptions: SelectOption<string>[] = [
 		{ label: "Red", value: "red" },
@@ -38,9 +58,95 @@ const Dashboard = (): React.JSX.Element => {
 	];
 
 	const { control } = useAppForm<FormValues>({
-		defaultValues: {
-			multiColors: [],
-			singleColor: null,
+		defaultValues: { multiColors: [], singleColor: null },
+	});
+
+	const handleFileUpload = useCallback(
+		async (event: React.ChangeEvent<HTMLInputElement>) => {
+			const file = event.target.files?.[0];
+
+			if (!file) {
+				return;
+			}
+
+			setIsUploading(true);
+
+			try {
+				const responseURL = await fileApi.uploadFile({
+					file,
+					folder: FileFolderName.AVATARS,
+				});
+
+				setUploadedImages((previous) => [...previous, responseURL.data.url]);
+				setIsUploading(false);
+
+				toastNotifier.showSuccess("File uploaded successfully");
+			} catch (error: unknown) {
+				setIsUploading(false);
+				toastNotifier.showError(
+					error instanceof HTTPError ? error.message : "Uploading file failed",
+				);
+			}
+		},
+		[],
+	);
+
+	const handleButtonClick = useCallback(() => {
+		fileInputReference.current?.click();
+	}, []);
+
+	useEffect(() => {
+		const loadFiles = async (): Promise<void> => {
+			const response = await fileApi.getAllFiles();
+			setUploadedImages(response.data.map((file) => file.url));
+		};
+
+		void loadFiles();
+	}, []);
+
+	const [isCreatePOIOpen, setIsCreatePOIOpen] = useState<boolean>(false);
+	const createStatus = useAppSelector(
+		(state) => state.pointsOfInterest.createStatus,
+	);
+	const handleModalToggle = useCallback(() => {
+		setIsCreatePOIOpen((previous) => !previous);
+	}, []);
+
+	const handleSubmit = useCallback(
+		(payload: PointsOfInterestRequestDto): void => {
+			void dispatch(poiActions.create(payload));
+		},
+		[dispatch],
+	);
+
+	const handleRouteSubmit = useCallback(
+		(payload: RouteCreateRequestDto): void => {
+			void dispatch(routesActions.create(payload));
+		},
+		[dispatch],
+	);
+
+	useEffect(() => {
+		if (createStatus === DataStatus.FULFILLED) {
+			setIsCreatePOIOpen(false);
+		}
+	}, [createStatus]);
+
+	const { handleModalOpen } = useModal({
+		queryParameter: "create-route",
+		component: CreateRouteForm,
+		props: { onSubmit: handleRouteSubmit },
+	});
+
+	const { handleModalOpen: handleCreatePoiModal } = useModal({
+		queryParameter: "create-poi",
+		component: CreatePOIModal,
+		props: {
+			defaultLatitude: DEFAULT_LATITUDE,
+			defaultLongitude: DEFAULT_LONGITUDE,
+			isOpen: isCreatePOIOpen,
+			onClose: handleModalToggle,
+			onSubmit: handleSubmit,
 		},
 	});
 
@@ -55,11 +161,26 @@ const Dashboard = (): React.JSX.Element => {
 					<Sidebar navigationItemsGroups={NAVIGATION_ITEMS_GROUPS} />
 				</div>
 				<Loader />
-				<div className={styles["button-container"]}>
-					<Button label="Create Route" onClick={openModal} type="button" />
-				</div>
 				<div className={styles["carousel-container"]}>
-					<Carousel images={mockImages} />
+					<Carousel images={uploadedImages} />
+				</div>
+
+				<div className={styles["file-upload-container"]}>
+					<label style={{ display: "block", marginBottom: "10px" }}>
+						<Button
+							label={isUploading ? "Loading..." : "Select File"}
+							onClick={handleButtonClick}
+							type="button"
+						/>
+						<input
+							accept="image/*"
+							disabled={isUploading}
+							onChange={handleFileUpload}
+							ref={fileInputReference}
+							style={{ display: "none" }}
+							type="file"
+						/>
+					</label>
 				</div>
 				<div className={styles["select-container"]}>
 					<Select
@@ -76,8 +197,21 @@ const Dashboard = (): React.JSX.Element => {
 						options={colorOptions}
 					/>
 				</div>
+				<div className={styles["button-container"]}>
+					<Button
+						label="Create new POI"
+						onClick={handleCreatePoiModal}
+						type="button"
+					/>
+				</div>
+				<div className={styles["button-container"]}>
+					<Button
+						label="Create new route"
+						onClick={handleModalOpen}
+						type="button"
+					/>
+				</div>
 			</div>
-			<ModalComponent />
 		</div>
 	);
 };

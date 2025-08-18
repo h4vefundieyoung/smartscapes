@@ -5,6 +5,7 @@ type Properties = {
 	onClick?: () => void;
 	to?: string;
 	type?: "button" | "submit";
+	variant?: "primary" | "outlined";
 };
 
 const Button = ({
@@ -12,17 +13,21 @@ const Button = ({
 	onClick,
 	to,
 	type = "submit",
+	variant = "primary",
 }: Properties): React.JSX.Element => {
+	const buttonClass =
+		variant === "outlined" ? styles["button-outlined"] : styles["button"];
+
 	if (to) {
 		return (
-			<a className={styles["button"]} href={to}>
+			<a className={buttonClass} href={to}>
 				{label}
 			</a>
 		);
 	}
 
 	return (
-		<button className={styles["button"]} onClick={onClick} type={type}>
+		<button className={buttonClass} onClick={onClick} type={type}>
 			{label}
 		</button>
 	);

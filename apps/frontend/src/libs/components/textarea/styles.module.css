@@ -1,24 +1,23 @@
-.container {
+.label {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
 	width: 100%;
 }
 
-.label {
+.label-caption {
 	font-size: var(--font-size-small);
-	font-weight: var(--font-weight-regular);
-	line-height: 1.5;
 	color: var(--color-text-strong);
 }
 
 .textarea {
-	width: 100%;
-	min-height: 80px;
+	min-height: 96px;
 	padding: 12px 16px;
+	font-family: var(--font-family);
 	font-size: var(--font-size-small);
 	line-height: 1.5;
-	resize: vertical;
+	resize: none;
+	background-color: var(--color-background-base);
 	border: 1px solid var(--color-stroke-strong);
 	border-radius: 8px;
 	transition: background-color 0.2s ease-in-out;
@@ -28,42 +27,34 @@
 	background-color: var(--color-fill-hover);
 }
 
-.textarea::placeholder {
-	color: var(--color-text-placeholder);
-}
-
 .textarea:focus {
 	outline: 2px solid var(--color-stroke-focus);
 	outline-offset: 2px;
 	background-color: initial;
+	border: 1px solid var(--color-stroke-strong);
 }
 
-.textarea:focus::placeholder {
-	color: transparent;
-}
-
-.textarea:disabled {
-	color: var(--color-text-disabled);
-	cursor: not-allowed;
-	background-color: var(--color-fill-disabled);
-}
-
-.textarea.error {
+.textarea-error {
+	outline: none;
 	background-color: var(--color-fill-error-weak);
 	border: 2px solid var(--color-stroke-error-strong);
 }
 
-.textarea.error:hover,
-.textarea.error:focus {
-	background-color: var(--color-fill-error-weak);
+.textarea-error:hover,
+.textarea-error:focus {
+	background-color: var(--color-background-base);
 }
 
-@media (width <= 768px) {
-	.textarea {
-		padding: 8px 10px;
-	}
+.error {
+	display: inline-flex;
+	gap: 8px;
+	align-items: center;
+	font-size: var(--font-size-tiny);
+	font-weight: var(--font-weight-semibold);
+	line-height: 1.4;
+	color: var(--color-text-error);
+}
 
-	.label {
-		font-size: var(--font-size-tiny);
-	}
+.label:focus-within .error {
+	display: none;
 }

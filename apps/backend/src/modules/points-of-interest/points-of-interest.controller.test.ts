@@ -24,6 +24,7 @@ describe("PointsOfInterestController", () => {
 	};
 
 	const mockPointOfInterest = {
+		description: "Point Of Interest Test Description",
 		id: 1,
 		location: {
 			coordinates: TEST_COORDINATES,
@@ -79,6 +80,7 @@ describe("PointsOfInterestController", () => {
 
 		const result = await pointsOfInterestController.create({
 			body: {
+				description: mockPointOfInterest.description,
 				location: mockPointOfInterest.location,
 				name: mockPointOfInterest.name,
 			},
@@ -227,6 +229,7 @@ describe("PointsOfInterestController", () => {
 
 		const result = await pointsOfInterestController.patch({
 			body: {
+				description: updatedPointOfInterest.description,
 				location: updatedPointOfInterest.location,
 				name: updatedPointOfInterest.name,
 			},

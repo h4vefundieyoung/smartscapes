@@ -1,58 +1,38 @@
+.title {
+	margin: 0;
+	margin-bottom: 24px;
+	font-size: var(--font-size-h4);
+	line-height: 1;
+}
+
 .form {
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
-	min-width: 300px;
 }
 
 .field {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	justify-content: flex-start;
+	height: fit-content;
 }
 
 .label {
-	font-size: var(--font-size-small);
-	font-weight: var(--font-weight-regular);
-	line-height: 1.5;
-	color: var(--color-text-strong);
+	margin-bottom: 16px;
 }
 
-.actions {
+.route-section {
 	display: flex;
+	flex-direction: column;
 	gap: 12px;
+}
+
+.footer {
+	display: flex;
 	justify-content: flex-end;
-	padding-top: 20px;
-	margin-top: 20px;
-	border-top: 1px solid var(--color-stroke-weak);
 }
 
-.route-constructed {
-	padding: 12px;
-	background-color: var(--color-brand-50);
-	border: 1px solid var(--color-stroke-selected);
-	border-radius: 8px;
-}
-
-.route-status {
-	font-size: var(--font-size-small);
-	font-weight: var(--font-weight-semibold);
-	color: var(--color-text-brand);
-}
-
-.route-id {
-	margin: 4px 0 0;
-	font-size: var(--font-size-tiny);
-	color: var(--color-text-weak);
-}
-
-@media (width <= 768px) {
-	.form {
-		gap: 16px;
-		min-width: unset;
-	}
-
-	.label {
-		font-size: var(--font-size-tiny);
-	}
+.button-container {
+	width: 120px;
 }

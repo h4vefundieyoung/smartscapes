@@ -19,7 +19,7 @@ const NotFound = (): React.JSX.Element => {
 				</div>
 
 				<div>
-					<Button label="Back to home" to={AppRoute.ROOT} />
+					<Button label="Back to home" to={AppRoute.APP} />
 				</div>
 			</div>
 		</main>

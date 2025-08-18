@@ -44,7 +44,7 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 										<Dashboard />
 									</ProtectedRoute>
 								),
-								path: AppRoute.APP,
+								path: AppRoute.DASHBOARD,
 							},
 							{
 								element: <RouteDetails />,

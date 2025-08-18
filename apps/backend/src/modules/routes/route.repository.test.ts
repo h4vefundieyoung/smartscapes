@@ -9,7 +9,7 @@ import {
 	type LineStringGeometry,
 } from "~/libs/types/types.js";
 
-import { PlannedPathModel } from "../planned-routes/planned-path.model.js";
+import { PlannedPathModel } from "../planned-paths/planned-path.model.js";
 import { type RouteFindAllOptions } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
 import { RouteModel } from "./route.model.js";

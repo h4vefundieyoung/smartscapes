@@ -9,7 +9,7 @@ import {
 	type LineStringGeometry,
 } from "~/libs/types/types.js";
 
-import { type PlannedPathService } from "../planned-routes/planned-paths.js";
+import { type PlannedPathService } from "../planned-paths/planned-paths.js";
 import {
 	type PointsOfInterestResponseDto,
 	type PointsOfInterestService,

@@ -1,8 +1,8 @@
 import { logger } from "~/libs/modules/logger/logger.js";
 import { mapboxDirectionsApi } from "~/libs/modules/mapbox/mapbox.js";
 
-import { PlannedPathModel } from "../planned-routes/planned-path.model.js";
-import { plannedPathService } from "../planned-routes/planned-paths.js";
+import { PlannedPathModel } from "../planned-paths/planned-path.model.js";
+import { plannedPathService } from "../planned-paths/planned-paths.js";
 import { pointsOfInterestService } from "../points-of-interest/points-of-interest.js";
 import { RouteController } from "./route.controller.js";
 import { RouteModel } from "./route.model.js";

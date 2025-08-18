@@ -8,8 +8,8 @@ import {
 } from "~/libs/modules/mapbox/mapbox.js";
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
 
-import { type PlannedPathResponseDto } from "../planned-routes/libs/types/planned-path-response-dto.type.js";
-import { type PlannedPathService } from "../planned-routes/planned-path.service.js";
+import { type PlannedPathResponseDto } from "../planned-paths/libs/types/planned-path-response-dto.type.js";
+import { type PlannedPathService } from "../planned-paths/planned-paths.js";
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";

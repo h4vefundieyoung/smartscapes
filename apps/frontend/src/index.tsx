@@ -18,6 +18,7 @@ import { ConstructRoute } from "./pages/construct-route/construct-route.js";
 import { Dashboard } from "./pages/dashboard/dashboard.js";
 import { Explore } from "./pages/explore/explore.js";
 import { Landing } from "./pages/landing/landing.jsx";
+import { PointsOfInterestDetails } from "./pages/points-of-interest-details/points-of-interest-details.js";
 import { Profile } from "./pages/profile/profile.js";
 import { RouteDetails } from "./pages/route-description/route-details.js";
 import { Routes } from "./pages/routes/routes.js";
@@ -32,6 +33,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 					{
 						children: [
 							{
+								element: <PointsOfInterestDetails />,
+								path: AppRoute.POINTS_OF_INTEREST_$ID,
+							},
+							{
 								element: <Auth />,
 								path: AppRoute.SIGN_IN,
 							},
@@ -45,7 +50,7 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 										<Dashboard />
 									</ProtectedRoute>
 								),
-								path: AppRoute.APP,
+								path: AppRoute.DASHBOARD,
 							},
 							{
 								element: <RouteDetails />,

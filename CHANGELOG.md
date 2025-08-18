@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.35.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.35.1...v1.35.2) (2025-08-18)
+
+
+### Bug Fixes
+
+* **frontend:** poi create modal stucked data in reopened form ss-378 ([#406](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/406)) ([34c86db](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/34c86db6602c2f17c43352cc0e585f66a08709d8))
+* **frontend:** solve carousel issues ss-348 ([#409](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/409)) ([86c3439](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/86c34396d175f7bf19ccc1f9430258763bdd80de))
+
+## [1.35.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.35.0...v1.35.1) (2025-08-18)
+
+
+### Bug Fixes
+
+* **frontend:** remove unused users slice ss-407 ([#413](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/413)) ([121dd66](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/121dd6692f290b78e96eee12fc9d614ee1a006da))
+
+## [1.35.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.34.0...v1.35.0) (2025-08-18)
+
+
+### Features
+
+* **frontend:** set up app redirection ss-407 ([#408](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/408)) ([c5b232a](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c5b232ae0d4fec855ac6183b19a9e3071cddf382))
+
+
+### Bug Fixes
+
+* **backend:** update helmet config ss-220 ([#411](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/411)) ([c7e022f](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c7e022f5bd57fce8f0669c59326df0c7202e4c91))
+
 ## [1.34.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.33.0...v1.34.0) (2025-08-17)
 
 

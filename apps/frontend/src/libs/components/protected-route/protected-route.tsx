@@ -1,5 +1,4 @@
-import { Navigate } from "react-router";
-
+import { Navigate } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/app-route.enum.js";
 import { type PermissionKey } from "~/libs/enums/enums.js";
 import { checkHasPermission } from "~/libs/helpers/helpers.js";

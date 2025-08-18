@@ -62,6 +62,20 @@ class PointOfInterestApi extends BaseHTTPApi {
 
 		return await response.json();
 	}
+
+	public async getById(
+		id: number,
+	): Promise<APIResponse<PointsOfInterestResponseDto>> {
+		const response = await this.load<APIResponse<PointsOfInterestResponseDto>>(
+			this.getFullEndpoint(PointsOfInterestApiPath.ROOT, String(id), {}),
+			{
+				hasAuth: false,
+				method: "GET",
+			},
+		);
+
+		return await response.json();
+	}
 }
 
 export { PointOfInterestApi };

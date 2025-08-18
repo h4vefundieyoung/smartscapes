@@ -72,6 +72,7 @@ erDiagram
     dateTime created_at
     dateTime updated_at
     varchar name
+    varchar description
     geometry location
   }
 

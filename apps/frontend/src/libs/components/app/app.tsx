@@ -1,4 +1,8 @@
-import { Loader, RouterOutlet } from "~/libs/components/components.js";
+import {
+	AppLayout,
+	Loader,
+	RouterOutlet,
+} from "~/libs/components/components.js";
 import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { getPermittedNavigationItems } from "~/libs/helpers/helpers.js";
@@ -45,7 +49,11 @@ const App = (): React.JSX.Element => {
 		);
 	}
 
-	return <RouterOutlet />;
+	return (
+		<AppLayout excludedRoutes={[AppRoute.SIGN_IN, AppRoute.SIGN_UP]}>
+			<RouterOutlet />
+		</AppLayout>
+	);
 };
 
 export { App };

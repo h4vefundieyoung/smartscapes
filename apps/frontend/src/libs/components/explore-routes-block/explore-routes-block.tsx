@@ -5,6 +5,7 @@ import {
 	useAppDispatch,
 	useAppSelector,
 	useEffect,
+	useMemo,
 } from "~/libs/hooks/hooks.js";
 import { actions as exploreActions } from "~/modules/explore/explore.js";
 import { actions as locationActions } from "~/modules/location/location.js";
@@ -30,30 +31,29 @@ const ExploreRoutesBlock = (): React.JSX.Element => {
 		}
 	}, [locationDataStatus, dispatch]);
 
-	let content;
+	const content = useMemo(() => {
+		if (loading) {
+			return <Loader />;
+		}
 
-	if (loading) {
-		content = (
-			<div className={styles["loading"]}>
-				<Loader />
-			</div>
-		);
-	} else if (error || locationError) {
-		content = (
-			<div className={styles["error"]}>Error: {error ?? locationError}</div>
-		);
-	} else {
-		content =
-			routes.length === 0 ? (
-				<div className={styles["not-found"]}>No routes found nearby.</div>
-			) : (
-				<ul className={styles["list"]}>
-					{routes.map((route) => (
-						<RouteCard imageUrl={null} key={route.id} name={route.name} />
-					))}
-				</ul>
+		if (error || locationError) {
+			return (
+				<div className={styles["error"]}>Error: {error ?? locationError}</div>
 			);
-	}
+		}
+
+		if (routes.length === 0) {
+			return <div className={styles["not-found"]}>No routes found nearby.</div>;
+		}
+
+		return (
+			<ul className={styles["list"]}>
+				{routes.map((route) => (
+					<RouteCard imageUrl={null} key={route.id} name={route.name} />
+				))}
+			</ul>
+		);
+	}, [loading, error, locationError, routes]);
 
 	return (
 		<div className={styles["container"]}>

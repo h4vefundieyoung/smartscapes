@@ -8,6 +8,7 @@
 	top: 32px;
 	left: 32px;
 	z-index: 1;
+	max-height: 100%;
 }
 
 .container {

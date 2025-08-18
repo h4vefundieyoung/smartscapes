@@ -37,6 +37,7 @@ erDiagram
     varchar email
     varchar first_name
     varchar last_name
+    boolean is_visible_profile
     text password_hash
     text password_salt
     int group_id FK
@@ -129,6 +130,14 @@ erDiagram
     int entity_id
     text content
     timestamp read_at
+  }
+
+  files {
+    id integer [primary key]
+    created_at timestamp
+    updated_at timestamp
+    url varchar
+    content_type varchar
   }
 
   users }|--|| groups : group_id

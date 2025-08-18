@@ -1,7 +1,9 @@
 export { App } from "./app/app.js";
 export { Avatar } from "./avatar/avatar.js";
 export { Button } from "./button/button.js";
+export { Checkbox } from "./checkbox/checkbox.js";
 export { CreatePOIModal } from "./create-poi-modal/create-poi-modal.js";
+export { FieldError } from "./field-error/field-error.js";
 export { Header } from "./header/header.js";
 export { Icon } from "./icon/icon.js";
 export { ImageGallery } from "./image-gallery/image-gallery.js";
@@ -20,4 +22,4 @@ export { TabContainer } from "./tab-container/tab-container.js";
 export { TextArea } from "./textarea/textarea.js";
 export { ToastContainer } from "./toast-container/toast-container.js";
 export { Provider as StoreProvider } from "react-redux";
-export { NavLink, Outlet as RouterOutlet } from "react-router";
+export { Navigate, NavLink, Outlet as RouterOutlet } from "react-router";

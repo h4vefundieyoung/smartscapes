@@ -2,6 +2,7 @@ const AppRoute = {
 	APP: "/app",
 	CATEGORIES: "/app/categories",
 	CONTENT: "/app/content",
+	DASHBOARD: "/app/dashboard",
 	EXPLORE: "/app/explore",
 	POINTS_OF_INTEREST: "/app/points-of-interest",
 	POINTS_OF_INTEREST_$ID: "/app/points-of-interest/:id",

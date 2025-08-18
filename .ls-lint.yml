@@ -22,3 +22,5 @@ ignore:
   - "**/dev-dist"
   - "**/CHANGELOG.md"
   - ".vscode"
+  - "**/dev-dist"
+  - ".platform"

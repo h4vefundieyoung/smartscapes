@@ -22,7 +22,7 @@ import {
 	type ValidationSchema,
 } from "~/libs/types/types.js";
 
-import { authPlugin } from "../plugins/plugins.js";
+import { authPlugin, multipartPlugin } from "../plugins/plugins.js";
 import { HELMET_CONFIG } from "./libs/constants/constants.js";
 import {
 	type ServerApplication,
@@ -97,6 +97,7 @@ class BaseServerApplication implements ServerApplication {
 			routeOptions.schema = {
 				...(validation.body ? { body: validation.body } : {}),
 				...(validation.query ? { querystring: validation.query } : {}),
+				...(validation.params ? { params: validation.params } : {}),
 			};
 		}
 
@@ -196,8 +197,10 @@ class BaseServerApplication implements ServerApplication {
 
 	private async initPlugins(): Promise<void> {
 		const whiteRoutes = this.apis.flatMap((api) => api.whiteRoutes);
+		const { MAX_FILE_SIZE_MB } = this.config.ENV.AWS;
 
 		await this.app.register(authPlugin, { whiteRoutes });
+		await this.app.register(multipartPlugin, { MAX_FILE_SIZE_MB });
 	}
 
 	private initRoutes(): void {
@@ -224,10 +227,14 @@ class BaseServerApplication implements ServerApplication {
 
 	private initValidationCompiler(): void {
 		this.app.setValidatorCompiler<ValidationSchema>(({ schema }) => {
-			return (data): boolean => {
-				const result = schema.parse(data);
+			return (data): { error?: Error; value?: unknown } => {
+				try {
+					const value = schema.parse(data);
 
-				return Boolean(result);
+					return { value };
+				} catch (error) {
+					return { error: error as Error };
+				}
 			};
 		});
 	}

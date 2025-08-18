@@ -46,6 +46,7 @@ import {
  *       required:
  *         - location
  *         - name
+ *         - description
  *       properties:
  *         location:
  *           $ref: '#/components/schemas/PointsOfInterestLocation'
@@ -54,8 +55,8 @@ import {
  *           example: "Central Park"
  *         description:
  *           type: string | null
- *           example: "A large park in New York City"
  *           nullable: true
+ *           example: "A large park in New York City"
  *
  *     PointsOfInterestResponseDto:
  *       type: object
@@ -88,8 +89,8 @@ import {
  *           example: "Central Park"
  *         description:
  *           type: string | null
- *           example: "A large park in New York City"
  *           nullable: true
+ *           example: "A large park in New York City"
  */
 
 const DEFAULT_LIMIT = 10;
@@ -313,16 +314,16 @@ class PointsOfInterestController extends BaseController {
 	 *                   data:
 	 *                     - id: 1
 	 *                       name: "Central Park"
+	 *                       description: "A large park in New York City"
 	 *                       location:
 	 *                         type: "Point"
 	 *                         coordinates: [30.5234, 50.4501]
-	 *                       description: "A large park in New York City"
 	 *                     - id: 2
 	 *                       name: "Glass Bridge"
+	 *                       description: "A modern architectural marvel in Kyiv"
 	 *                       location:
 	 *                         type: "Point"
 	 *                         coordinates: [30.5289, 50.4553]
-	 *                       description: "A modern architectural marvel in Kyiv"
 	 *               nearby_pois:
 	 *                 summary: Nearby points of interest
 	 *                 description: Response when location filters are provided

@@ -1,18 +1,20 @@
-import { type RouteGetByIdResponseDto } from "@smartscapes/shared";
-import { useParams } from "react-router";
-
-import { Header, Loader } from "~/libs/components/components.js";
-import { AppRoute } from "~/libs/enums/app-route.enum.js";
-import { DataStatus } from "~/libs/enums/data-status.enum.js";
+import image1 from "~/assets/images/route-details/placeholder-image-1.png";
+import image2 from "~/assets/images/route-details/placeholder-image-2.png";
+import image3 from "~/assets/images/route-details/placeholder-image-3.png";
+import { ImageGallery, Loader } from "~/libs/components/components.js";
+import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
 	useEffect,
+	useParams,
 } from "~/libs/hooks/hooks.js";
-import { actions as routeActions } from "~/modules/routes/routes.js";
+import {
+	actions as routeActions,
+	type RouteGetByIdResponseDto,
+} from "~/modules/routes/routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
-import { ImageGallery } from "./libs/components/image-gallery/image-gallery.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
@@ -20,15 +22,11 @@ const RouteDetails = (): React.JSX.Element => {
 
 	const { id } = useParams<{ id: string }>();
 
-	const authenticatedUser = useAppSelector(
-		({ auth }) => auth.authenticatedUser,
-	);
-
 	useEffect(() => {
 		void dispatch(routeActions.getRouteById(Number(id)));
 	}, [dispatch, id]);
 
-	const data = useAppSelector(({ route }) => route.route);
+	const route = useAppSelector(({ route }) => route.route);
 
 	const dataStatus = useAppSelector(({ route }) => route.dataStatus);
 
@@ -40,17 +38,13 @@ const RouteDetails = (): React.JSX.Element => {
 		return <Loader />;
 	}
 
-	const { description, name } = data as RouteGetByIdResponseDto;
+	const { description, name } = route as RouteGetByIdResponseDto;
 
 	return (
 		<>
-			<Header
-				actions={[{ label: "Sign in", to: AppRoute.SIGN_IN }]}
-				user={authenticatedUser}
-			/>
 			<main className={styles["container"]}>
 				<h1 className={styles["label"]}>{name}</h1>
-				<ImageGallery />
+				<ImageGallery images={[image1, image2, image3]} />
 				<p className={styles["description"]}>{description}</p>
 			</main>
 		</>

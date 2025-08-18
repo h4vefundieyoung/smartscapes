@@ -1,3 +1,7 @@
+.container {
+	width: 100%;
+}
+
 .components-container {
 	display: flex;
 	flex-direction: column;
@@ -6,13 +10,9 @@
 	justify-content: space-between;
 }
 
-.sidebar-container {
-	align-self: flex-start;
-}
-
 .carousel-container {
 	width: 50%;
-	margin-bottom: 2rem;
+	margin-bottom: 1rem;
 }
 
 .select-container {

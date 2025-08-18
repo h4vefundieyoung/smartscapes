@@ -1,4 +1,8 @@
-export { METERS_IN_KM, TIME_UNIT } from "./libs/constants/constants.js";
+export {
+	BYTES_IN_MB,
+	METERS_IN_KM,
+	TIME_UNIT,
+} from "./libs/constants/constants.js";
 export {
 	APIErrorType,
 	APIPath,
@@ -23,6 +27,7 @@ export {
 	type APIErrorResponse,
 	type APIResponse,
 	type APIValidationErrorDetail,
+	type Coordinates,
 	type LineStringGeometry,
 	type PaginationMeta,
 	type PaginationQuery,
@@ -31,6 +36,14 @@ export {
 	type ValueOf,
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
+export {
+	FileFolderName,
+	type FileMimeType,
+	FilesApiPath,
+	fileUploadFolderValidationSchema,
+	type FileUploadRequestDto,
+	type FileUploadResponseDto,
+} from "./modules/files/files.js";
 export {
 	GroupExceptionMessage,
 	type GroupItemWithPermissionsDto,

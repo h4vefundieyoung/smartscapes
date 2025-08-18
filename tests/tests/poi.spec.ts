@@ -2,17 +2,19 @@ import { expect, request, test } from "@playwright/test";
 import {
 	APIResponse,
 	HTTPCode,
-	PointsOfInterestRequestDto,
 	PointsOfInterestResponseDto,
 	UserSignInResponseDto,
 	UserSignUpResponseDto,
 } from "@smartscapes/shared";
-import { ApiController } from "api/controllers/api-controller.js";
-import { loginSchema } from "api/schemas/login-schema.js";
-import { poiSchema } from "api/schemas/poi-schema.js";
-import { signupSchema } from "api/schemas/signup-schema.js";
-import { createRandomUser, generateRandomPoi } from "helpers/generate-data.js";
-import { expectToMatchSchema } from "helpers/schema-validator.js";
+import { ApiController } from "../api/controllers/api-controller.js";
+import { loginSchema } from "../api/schemas/login-schema.js";
+import { poiSchema } from "../api/schemas/poi-schema.js";
+import { signupSchema } from "../api/schemas/signup-schema.js";
+import {
+	createRandomUser,
+	generateRandomPoi,
+} from "../helpers/generate-data.js";
+import { expectToMatchSchema } from "../helpers/schema-validator.js";
 
 let api: ApiController;
 let accessToken: string;

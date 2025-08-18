@@ -1,6 +1,7 @@
 import { type APIRequestContext, type APIResponse } from "@playwright/test";
 import { type PointsOfInterestRequestDto } from "@smartscapes/shared";
-import { APIPath } from "consts/api-path.js";
+
+import { APIPath } from "../../consts/api-path.js";
 
 class POIController {
 	public constructor(private request: APIRequestContext) {}

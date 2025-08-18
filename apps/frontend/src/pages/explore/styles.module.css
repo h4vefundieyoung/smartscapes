@@ -5,8 +5,8 @@
 
 .routes-container {
 	position: absolute;
-	top: 32px;
-	left: 32px;
+	top: 104px;
+	left: 104px;
 	z-index: 1;
 	max-height: 100%;
 }

@@ -13,7 +13,7 @@ import {
 	useEffect,
 	useState,
 } from "~/libs/hooks/hooks.js";
-import { type PointGeometry } from "~/libs/types/types.js";
+import { type Coordinates } from "~/libs/types/types.js";
 import {
 	actions as pointOfInterestActions,
 	type PointsOfInterestResponseDto,
@@ -35,9 +35,7 @@ const ConstructRoute = (): React.JSX.Element => {
 	const [selectedPois, setSelectedPois] = useState<
 		PointsOfInterestResponseDto[]
 	>([]);
-	const [markers, setMarkers] = useState<Pick<PointGeometry, "coordinates">[]>(
-		[],
-	);
+	const [markers, setMarkers] = useState<{ coordinates: Coordinates }[]>([]);
 	const [selectValue, setSelectValue] = useState<null | SelectOption>(null);
 
 	const loadOptions = useCallback(
@@ -79,7 +77,9 @@ const ConstructRoute = (): React.JSX.Element => {
 	const handleConstructClick = useCallback(() => {}, []);
 
 	useEffect(() => {
-		const coordinates = selectedPois.map((poi) => poi.location);
+		const coordinates = selectedPois.map((poi) => ({
+			coordinates: poi.location.coordinates,
+		}));
 		setMarkers(coordinates);
 	}, [selectedPois]);
 

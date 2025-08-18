@@ -1,4 +1,8 @@
-import { Loader, RouterOutlet } from "~/libs/components/components.js";
+import {
+	AppLayout,
+	Loader,
+	RouterOutlet,
+} from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -37,7 +41,14 @@ const App = (): React.JSX.Element => {
 		);
 	}
 
-	return <RouterOutlet />;
+	return (
+		<AppLayout
+			excludedRoutes={[AppRoute.SIGN_IN, AppRoute.SIGN_UP]}
+			unauthorizedRoutes={[AppRoute.EXPLORE]}
+		>
+			<RouterOutlet />
+		</AppLayout>
+	);
 };
 
 export { App };

@@ -6,7 +6,7 @@ import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
 import { combineClassNames } from "~/libs/helpers/combine-class-names.helper.js";
 import { useAppSelector, useLocation } from "~/libs/hooks/hooks.js";
 
-import { unauthorizedHeaderActions } from "./libs/constants/constants.js";
+import { UNAUTHORIZED_HEADER_ACTIONS } from "./libs/constants/constants.js";
 import { checkPathEndsWithRoute } from "./libs/helpers/helpers.js";
 import { type RouteList } from "./libs/types/types.js";
 import styles from "./styles.module.css";
@@ -23,26 +23,26 @@ const AppLayout = ({
 }: Properties): JSX.Element => {
 	const { pathname } = useLocation();
 	const user = useAppSelector(({ auth }) => auth.authenticatedUser);
-	const hasUser = Boolean(user);
+	const hasSidebar = Boolean(user);
 	const isUnauthorizedRoute = checkPathEndsWithRoute(
 		unauthorizedRoutes,
 		pathname,
 	);
 	const isRouteExcluded = !checkPathEndsWithRoute(excludedRoutes, pathname);
 	const headerActions =
-		isUnauthorizedRoute && !hasUser ? unauthorizedHeaderActions : [];
+		isUnauthorizedRoute && Boolean(user) ? UNAUTHORIZED_HEADER_ACTIONS : [];
 
 	return (
 		<div
 			className={combineClassNames(
 				styles["container"],
-				hasUser && styles["sidebar-space"],
+				hasSidebar && styles["sidebar-space"],
 			)}
 		>
 			{isRouteExcluded && (
 				<>
 					<Header actions={headerActions} user={user} />
-					{hasUser && (
+					{hasSidebar && (
 						<Sidebar navigationItemsGroups={NAVIGATION_ITEMS_GROUPS} />
 					)}
 				</>

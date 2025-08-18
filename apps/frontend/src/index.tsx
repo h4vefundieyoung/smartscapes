@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 
 import {
 	App,
-	AppLayout,
 	ProtectedRoute,
 	RouterProvider,
 	StoreProvider,
@@ -63,14 +62,7 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 								path: AppRoute.PROFILE,
 							},
 						],
-						element: (
-							<AppLayout
-								excludedRoutes={[AppRoute.SIGN_IN, AppRoute.SIGN_UP]}
-								unauthorizedRoutes={[AppRoute.EXPLORE]}
-							>
-								<App />
-							</AppLayout>
-						),
+						element: <App />,
 						path: AppRoute.APP,
 					},
 					{

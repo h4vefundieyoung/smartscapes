@@ -13,6 +13,7 @@ import {
 	type UserRouteResponseDto,
 } from "./libs/types/type.js";
 import { type UserRouteService } from "./user-route.service.js";
+import { userRouteValidationSchema } from "./validation-schemas/validation-schemas.js";
 
 class UserRouteController extends BaseController {
 	private userRouteService: UserRouteService;
@@ -25,20 +26,26 @@ class UserRouteController extends BaseController {
 			handler: this.create.bind(this),
 			method: "POST",
 			path: UserRouteApiPath.ROOT,
+			validator: {
+				body: userRouteValidationSchema,
+			},
 		});
 	}
 
 	public async create(
-		options: APIHandlerOptions<{ body: UserRouteRequestDto }>,
+		options: APIHandlerOptions<{
+			body: UserRouteRequestDto;
+		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
-		const { body } = options;
+		const { routeId, userId } = options.body;
 
 		const created = await this.userRouteService.create({
-			...body,
+			routeId,
+			userId,
 		});
 
 		return {
-			payload: created,
+			payload: { data: created },
 			status: HTTPCode.CREATED,
 		};
 	}

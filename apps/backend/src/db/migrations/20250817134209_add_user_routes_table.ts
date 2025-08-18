@@ -59,18 +59,21 @@ async function up(knex: Knex): Promise<void> {
 				useNative: true,
 			})
 			.notNullable()
-			.defaultTo("not_started");
+			.defaultTo("active");
 		table
 			.timestamp(ColumnName.STARTED_AT)
 			.notNullable()
 			.defaultTo(knex.fn.now());
-		table.timestamp(ColumnName.COMPLETED_AT).nullable();
+		table
+			.timestamp(ColumnName.COMPLETED_AT)
+			.nullable()
+			.defaultTo(null);
 		table
 			.specificType(ColumnName.PLANNED_GEOMETRY, "geometry(LineString, 4326)")
 			.notNullable();
 		table
 			.specificType(ColumnName.ACTUAL_GEOMETRY, "geometry(LineString, 4326)")
-			.nullable();
+			.notNullable();
 	});
 }
 

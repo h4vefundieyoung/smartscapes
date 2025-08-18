@@ -11,35 +11,16 @@ class UserRouteRepository implements Repository {
 	}
 
 	public async create(entity: UserRouteEntity): Promise<UserRouteEntity> {
-		const {
-			actualGeometry,
-			actualPath,
-			completedAt,
-			plannedGeometry,
-			routeId,
-			startedAt,
-			status,
-			userId,
-		} = entity.toNewObject();
+		const insertData = entity.toNewObject();
 
 		const result = await this.userRouteModel
 			.query()
-			.insert({
-				actualGeometry,
-				actualPath,
-				completedAt,
-				plannedGeometry,
-				routeId,
-				startedAt,
-				status,
-				userId,
-			})
+			.insert(insertData)
 			.returning([
 				"id",
 				this.userRouteModel.raw(
 					"ST_AsGeoJSON(actual_geometry)::json as actualGeometry",
 				),
-				"actualPath",
 				"completedAt",
 				this.userRouteModel.raw(
 					"ST_AsGeoJSON(planned_geometry)::json as plannedGeometry",
@@ -51,9 +32,10 @@ class UserRouteRepository implements Repository {
 			])
 			.execute();
 
-		return UserRouteEntity.initialize(result);
+		const initialized = UserRouteEntity.initialize(result);
+
+		return initialized;
 	}
 }
 
 export { UserRouteRepository };
-

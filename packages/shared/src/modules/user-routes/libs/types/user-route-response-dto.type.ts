@@ -3,8 +3,7 @@ import { type UserRouteStatusType } from "./user-route-status.type.js";
 
 type UserRouteResponseDto = {
 	actualGeometry: LineStringGeometry;
-	actualPath: string;
-	completedAt: string;
+	completedAt: null | string;
 	id: number;
 	plannedGeometry: LineStringGeometry;
 	routeId: number;

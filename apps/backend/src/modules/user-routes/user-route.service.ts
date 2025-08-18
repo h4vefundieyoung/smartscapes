@@ -1,5 +1,6 @@
 import { type Service } from "~/libs/types/types.js";
 
+import { type RouteService } from "../routes/route.service.js";
 import {
 	type UserRouteRequestDto,
 	type UserRouteResponseDto,
@@ -8,31 +9,36 @@ import { UserRouteEntity } from "./user-route.entity.js";
 import { type UserRouteRepository } from "./user-route.repository.js";
 
 class UserRouteService implements Service {
+	private routeService: RouteService;
+
 	private userRouteRepository: UserRouteRepository;
 
-	public constructor(userRouteRepository: UserRouteRepository) {
+	public constructor(
+		userRouteRepository: UserRouteRepository,
+		routeService: RouteService,
+	) {
 		this.userRouteRepository = userRouteRepository;
+		this.routeService = routeService;
 	}
 
 	public async create(
-		payload: UserRouteRequestDto & { userId: number },
+		payload: UserRouteRequestDto,
 	): Promise<UserRouteResponseDto> {
-		const entity = UserRouteEntity.initializeNew({
-			actualGeometry: { coordinates: [], type: "LineString" },
-			actualPath: "",
-			completedAt: new Date().toISOString(),
-			plannedGeometry: { coordinates: [], type: "LineString" },
-			routeId: payload.routeId,
-			startedAt: new Date().toISOString(),
-			status: "active" as never,
-			userId: payload.userId,
+		const { routeId, userId } = payload;
+
+		const { geometry } = await this.routeService.findById(routeId);
+
+		const created = UserRouteEntity.initializeNew({
+			actualGeometry: geometry,
+			plannedGeometry: geometry,
+			routeId,
+			userId,
 		});
 
-		const created = await this.userRouteRepository.create(entity);
+		const createdUserRoute = await this.userRouteRepository.create(created);
 
-		return created.toObject();
+		return createdUserRoute.toObject();
 	}
 }
 
 export { UserRouteService };
-

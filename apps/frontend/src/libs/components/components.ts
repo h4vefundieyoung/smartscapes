@@ -21,4 +21,4 @@ export { TabContainer } from "./tab-container/tab-container.js";
 export { TextArea } from "./textarea/textarea.js";
 export { ToastContainer } from "./toast-container/toast-container.js";
 export { Provider as StoreProvider } from "react-redux";
-export { NavLink, Outlet as RouterOutlet } from "react-router";
+export { Navigate, NavLink, Outlet as RouterOutlet } from "react-router";

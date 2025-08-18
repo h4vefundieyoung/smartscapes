@@ -2,6 +2,7 @@ const AppRoute = {
 	APP: "/app",
 	CATEGORIES: "/app/categories",
 	CONTENT: "/app/content",
+	DASHBOARD: "/app/dashboard",
 	EXPLORE: "/app/explore",
 	PROFILE: "/app/profile",
 	ROOT: "/",

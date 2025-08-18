@@ -6,6 +6,9 @@ import {
 } from "../enums/enums.js";
 
 const routesCreate = z.strictObject({
+	createdByUserId: z.number({
+		message: RoutesValidationMessage.USER_ID_INVALID_TYPE,
+	}),
 	description: z
 		.string()
 		.trim()
@@ -32,9 +35,6 @@ const routesCreate = z.strictObject({
 		.min(RoutesValidationRule.ROUTES_MINIMUM_COUNT, {
 			message: RoutesValidationMessage.ROUTES_MINIMUM_COUNT,
 		}),
-	userId: z.number({
-		message: RoutesValidationMessage.USER_ID_INVALID_TYPE,
-	}),
 });
 
 export { routesCreate };

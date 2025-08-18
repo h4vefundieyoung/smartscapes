@@ -25,6 +25,7 @@ describe("RouteRepository", () => {
 	let databaseTracker: Tracker;
 
 	const mockRoute = {
+		createdByUserId: 10,
 		description: "A test route description",
 		distance: 1.23,
 		duration: 4.56,
@@ -38,17 +39,16 @@ describe("RouteRepository", () => {
 		id: 1,
 		name: "Test Route",
 		pois: [{ id: 1, visitOrder: 1 }],
-		userId: 10,
 	};
 
 	const mockRouteList = {
+		createdByUserId: mockRoute.createdByUserId,
 		distance: mockRoute.distance,
 		duration: mockRoute.duration,
 		geometry: mockRoute.geometry,
 		id: mockRoute.id,
 		name: mockRoute.name,
 		pois: [] as { id: number; visitOrder: number }[],
-		userId: mockRoute.userId,
 	};
 
 	const createMockRouteEntity = (): RouteEntity =>
@@ -76,8 +76,7 @@ describe("RouteRepository", () => {
 		databaseTracker.on.insert(DatabaseTableName.ROUTES_TO_POIS).response([]);
 
 		const result = await RouteModel.knex().transaction(async (trx) => {
-			const created = await routesRepository.create({
-				entity: routeEntity,
+			const created = await routesRepository.create(routeEntity, {
 				transaction: trx,
 			});
 

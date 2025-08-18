@@ -1,7 +1,6 @@
-import { type Knex } from "knex";
-
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type MapboxConstructRouteResponseDto } from "~/libs/modules/mapbox/libs/types/types.js";
+import { type TransactionOptions } from "~/libs/types/types.js";
 
 import { PlannedPathExceptionMessage } from "./libs/enums/enums.js";
 import { PlannedPathError } from "./libs/exceptions/exceptions.js";
@@ -33,16 +32,11 @@ class PlannedPathService {
 		return plannedRoute.toObject();
 	}
 
-	public async delete(payload: {
-		id: number;
-		transaction: Knex.Transaction;
-	}): Promise<boolean> {
-		const { id, transaction } = payload;
-
-		const isDeleted = await this.plannedPathRepository.deleteWithTransaction({
-			id,
-			transaction,
-		});
+	public async delete(
+		id: number,
+		options?: TransactionOptions,
+	): Promise<boolean> {
+		const isDeleted = await this.plannedPathRepository.delete(id, options);
 
 		return isDeleted;
 	}

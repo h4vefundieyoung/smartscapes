@@ -1,6 +1,7 @@
-import { type Knex } from "knex";
-
-import { type Repository } from "~/libs/types/types.js";
+import {
+	type Repository,
+	type TransactionOptions,
+} from "~/libs/types/types.js";
 
 import { PlannedPathEntity } from "./planned-path.entity.js";
 import { type PlannedPathModel } from "./planned-path.model.js";
@@ -32,18 +33,17 @@ class PlannedPathRepository implements Repository {
 		return PlannedPathEntity.initialize(result);
 	}
 
-	public async deleteWithTransaction(payload: {
-		id: number;
-		transaction: Knex.Transaction;
-	}): Promise<boolean> {
-		const { id, transaction } = payload;
+	public async delete(
+		id: number,
+		options?: TransactionOptions,
+	): Promise<boolean> {
+		let query = this.plannedPathModel.query();
 
-		const PlannedPathModelTransaction =
-			this.plannedPathModel.bindKnex(transaction);
+		if (options?.transaction) {
+			query = query.transacting(options.transaction);
+		}
 
-		const isDeleted = await PlannedPathModelTransaction.query()
-			.deleteById(id)
-			.execute();
+		const isDeleted = await query.deleteById(id).execute();
 
 		return Boolean(isDeleted);
 	}

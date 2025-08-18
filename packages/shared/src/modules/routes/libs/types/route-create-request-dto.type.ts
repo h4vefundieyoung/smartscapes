@@ -1,9 +1,9 @@
 type RouteCreateRequestDto = {
+	createdByUserId: number;
 	description: string;
 	name: string;
 	plannedPathId: number;
 	poiIds: number[];
-	userId: number;
 };
 
 export { type RouteCreateRequestDto };

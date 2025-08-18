@@ -82,6 +82,7 @@ describe("Routes controller", () => {
 	};
 
 	const mockRoute: RouteGetByIdResponseDto = {
+		createdByUserId: 10,
 		description: "Test route description",
 		distance: 1.23,
 		duration: 4.56,
@@ -92,7 +93,6 @@ describe("Routes controller", () => {
 			{ id: FIRST_POI_ID, visitOrder: FIRST_VISIT_ORDER },
 			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
 		],
-		userId: 10,
 	};
 
 	const mockAdminUser = {
@@ -133,11 +133,11 @@ describe("Routes controller", () => {
 	it("create should return created route", async () => {
 		const createRouteMockData = {
 			body: {
+				createdByUserId: mockAdminUser.id,
 				description: mockRoute.description,
 				name: mockRoute.name,
 				plannedPathId: 1,
 				poiIds: [FIRST_POI_ID, SECOND_POI_ID],
-				userId: mockAdminUser.id,
 			},
 			params: {},
 			query: {},
@@ -375,11 +375,11 @@ describe("Routes controller", () => {
 		it("CREATE - should work correctly when called with admin user (correct permission)", async () => {
 			const createRouteMockData = {
 				body: {
+					createdByUserId: mockAdminUser.id,
 					description: mockRoute.description,
 					name: mockRoute.name,
 					plannedPathId: 1,
 					poiIds: [FIRST_POI_ID, SECOND_POI_ID],
-					userId: mockAdminUser.id,
 				},
 				params: {},
 				query: {},

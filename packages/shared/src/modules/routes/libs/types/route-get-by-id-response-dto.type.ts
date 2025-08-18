@@ -1,6 +1,7 @@
 import { type LineStringGeometry } from "../../../../libs/types/types.js";
 
 type RouteGetByIdResponseDto = {
+	createdByUserId: number;
 	description: string;
 	distance: number;
 	duration: number;
@@ -11,7 +12,6 @@ type RouteGetByIdResponseDto = {
 		id: number;
 		visitOrder: number;
 	}[];
-	userId: number;
 };
 
 export { type RouteGetByIdResponseDto };

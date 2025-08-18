@@ -77,7 +77,7 @@ import { type RouteService } from "./route.service.js";
  *               visitOrder:
  *                 type: number
  *           example: [{id: 1, visitOrder: 0}, {id: 2, visitOrder: 1}]
- *         userId:
+ *         createdByUserId:
  *           type: number
  *
  *     RouteListItem:
@@ -107,7 +107,7 @@ import { type RouteService } from "./route.service.js";
  *                 type: number
  *               visitOrder:
  *                 type: number
- *         userId:
+ *         createdByUserId:
  *           type: number
  *
  *     PlannedPath:
@@ -251,7 +251,7 @@ class RouteController extends BaseController {
 	 *               - description
 	 *               - poiIds
 	 *               - plannedPathId
-	 *               - userId
+	 *               - createdByUserId
 	 *             properties:
 	 *               name:
 	 *                 type: string
@@ -267,7 +267,7 @@ class RouteController extends BaseController {
 	 *               plannedPathId:
 	 *                 type: number
 	 *                 example: 2
-	 *               userId:
+	 *               createdByUserId:
 	 *                 type: number
 	 *                 example: 1
 	 *     responses:

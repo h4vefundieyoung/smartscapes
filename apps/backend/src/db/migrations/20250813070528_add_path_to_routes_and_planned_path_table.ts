@@ -4,10 +4,10 @@ const ROUTES_TABLE = "routes";
 const PLANNED_PATHS_TABLE = "planned_paths";
 
 const ColumnName = {
+	CREATED_BY_USER_ID: "created_by_user_id",
 	DISTANCE: "distance",
 	DURATION: "duration",
 	GEOMETRY: "geometry",
-	USER_ID: "user_id",
 } as const;
 
 const DECIMAL_PRECISION = 10;
@@ -38,7 +38,7 @@ async function up(knex: Knex): Promise<void> {
 				.specificType(ColumnName.GEOMETRY, "geometry(LineString, 4326)")
 				.notNullable();
 			table
-				.integer(ColumnName.USER_ID)
+				.integer(ColumnName.CREATED_BY_USER_ID)
 				.notNullable()
 				.references("id")
 				.inTable("users")

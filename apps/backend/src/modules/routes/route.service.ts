@@ -98,17 +98,13 @@ class RouteService implements Service {
 
 		const route = await RouteModel.knex().transaction(
 			async (transaction: Knex.Transaction) => {
-				const created = await this.routesRepository.create({
-					entity: routeEntity,
+				const createdRoute = await this.routesRepository.create(routeEntity, {
 					transaction,
 				});
 
-				await this.plannedPathService.delete({
-					id: plannedPathId,
-					transaction,
-				});
+				await this.plannedPathService.delete(plannedPathId, { transaction });
 
-				return created;
+				return createdRoute;
 			},
 		);
 

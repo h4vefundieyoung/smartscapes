@@ -34,7 +34,7 @@ describe("PlannedPathService", () => {
 	it("create should persist planned route and return dto", async () => {
 		const repo: PlannedPathRepository = {
 			create: mock.fn((entity: PlannedPathEntity) => entity),
-			deleteWithTransaction: mock.fn(),
+			delete: mock.fn(),
 			findById: mock.fn(),
 		} as unknown as PlannedPathRepository;
 
@@ -50,10 +50,10 @@ describe("PlannedPathService", () => {
 		});
 	});
 
-	it("delete should call repository.deleteWithTransaction with trx and return boolean", async () => {
+	it("delete should call repository.delete with trx and return boolean", async () => {
 		const repo: PlannedPathRepository = {
 			create: mock.fn(),
-			deleteWithTransaction: mock.fn(() => Promise.resolve(true)),
+			delete: mock.fn(() => Promise.resolve(true)),
 			findById: mock.fn(),
 		} as unknown as PlannedPathRepository;
 
@@ -61,7 +61,7 @@ describe("PlannedPathService", () => {
 
 		const fakeTrx = {} as Knex.Transaction;
 
-		const result = await service.delete({ id: 1, transaction: fakeTrx });
+		const result = await service.delete(1, { transaction: fakeTrx });
 
 		assert.equal(result, true);
 	});
@@ -69,7 +69,7 @@ describe("PlannedPathService", () => {
 	it("findById should throw when not found", async () => {
 		const repo: PlannedPathRepository = {
 			create: mock.fn(),
-			deleteWithTransaction: mock.fn(),
+			delete: mock.fn(),
 			findById: mock.fn(() => null),
 		} as unknown as PlannedPathRepository;
 

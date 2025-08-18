@@ -76,31 +76,25 @@ describe("PlannedPathRepository", () => {
 		assert.equal(found, null);
 	});
 
-	it("deleteWithTransaction should return true when deleted", async () => {
+	it("delete should return true when deleted", async () => {
 		tracker.on.delete(DatabaseTableName.PLANNED_PATHS).response(1);
 
 		const isDeleted = await (
 			PlannedPathModel.knex() as unknown as ReturnType<typeof knex>
 		).transaction(async (trx) => {
-			return await repository.deleteWithTransaction({
-				id: existing.id,
-				transaction: trx,
-			});
+			return await repository.delete(existing.id, { transaction: trx });
 		});
 
 		assert.equal(isDeleted, true);
 	});
 
-	it("deleteWithTransaction should return false when nothing deleted", async () => {
+	it("delete should return false when nothing deleted", async () => {
 		tracker.on.delete(DatabaseTableName.PLANNED_PATHS).response(0);
 
 		const isDeleted = await (
 			PlannedPathModel.knex() as unknown as ReturnType<typeof knex>
 		).transaction(async (trx) => {
-			return await repository.deleteWithTransaction({
-				id: 999,
-				transaction: trx,
-			});
+			return await repository.delete(999, { transaction: trx });
 		});
 
 		assert.equal(isDeleted, false);

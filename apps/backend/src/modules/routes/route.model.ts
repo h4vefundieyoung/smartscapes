@@ -26,6 +26,7 @@ class RouteModel extends Model {
 		return DatabaseTableName.ROUTES;
 	}
 
+	public createdByUserId!: number;
 	public description!: string;
 	public distance!: number;
 	public duration!: number;
@@ -36,7 +37,6 @@ class RouteModel extends Model {
 		id: number;
 		visitOrder: number;
 	}[];
-	public userId!: number;
 }
 
 export { RouteModel };

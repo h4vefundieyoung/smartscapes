@@ -91,14 +91,15 @@ describe("RouteService", () => {
 	});
 
 	const mockCreatePayload = {
+		createdByUserId: 5,
 		description: "Test route description",
 		name: "Test Route",
 		plannedPathId: 10,
 		poiIds: [FIRST_POI_ID, SECOND_POI_ID],
-		userId: 5,
 	};
 
 	const mockRouteIdResponse: RouteGetByIdResponseDto = {
+		createdByUserId: 5,
 		description: "Test route description",
 		distance: 12.3,
 		duration: 45.6,
@@ -109,10 +110,10 @@ describe("RouteService", () => {
 			{ id: FIRST_POI_ID, visitOrder: FIRST_VISIT_ORDER },
 			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
 		],
-		userId: 5,
 	};
 
 	const mockRouteAllItemResponse: RouteGetAllItemResponseDto = {
+		createdByUserId: 5,
 		distance: 12.3,
 		duration: 45.6,
 		geometry,
@@ -122,7 +123,6 @@ describe("RouteService", () => {
 			{ id: FIRST_POI_ID, visitOrder: FIRST_VISIT_ORDER },
 			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
 		],
-		userId: 5,
 	};
 
 	const mockPoisFindAll: PointsOfInterestResponseDto[] = [

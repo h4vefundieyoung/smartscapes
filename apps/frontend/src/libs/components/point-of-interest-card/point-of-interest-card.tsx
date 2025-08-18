@@ -1,6 +1,6 @@
 import { NavLink } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import { type ValueOf } from "~/libs/types/types.js";
+import { configureString } from "~/libs/helpers/helpers.js";
 
 import styles from "./styles.module.css";
 
@@ -19,11 +19,7 @@ const PointOfInterestCard = ({
 		<li className={styles["card"]}>
 			<NavLink
 				className={styles["link"] as string}
-				to={
-					AppRoute.POI_$ID.replace(":id", String(id)) as ValueOf<
-						typeof AppRoute
-					>
-				}
+				to={configureString(AppRoute.POI_$ID, { id: id.toString() })}
 			>
 				{imageUrl ? (
 					<img alt={name} className={styles["image"]} src={imageUrl} />

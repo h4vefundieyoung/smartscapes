@@ -55,7 +55,11 @@ class RouteRepository implements Repository {
 			.withGraphFetched("pois(selectPoiIdOrder)")
 			.modifiers({
 				selectPoiIdOrder(builder) {
-					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
+					builder.select(
+						"points_of_interest.id",
+						"points_of_interest.name",
+						"routes_to_pois.visit_order",
+					);
 				},
 			})
 			.select("routes.id", "routes.name", "routes.description")

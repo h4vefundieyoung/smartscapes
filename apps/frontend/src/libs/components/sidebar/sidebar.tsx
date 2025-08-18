@@ -5,7 +5,7 @@ import { combineClassNames } from "~/libs/helpers/helpers.js";
 import {
 	useCallback,
 	useEffect,
-	useSearchParams,
+	useLocation,
 	useState,
 } from "~/libs/hooks/hooks.js";
 import { type NavigationItemsGroup } from "~/libs/types/types.js";
@@ -18,7 +18,7 @@ type Properties = {
 };
 
 const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
-	const [searchParameters] = useSearchParams();
+	const { pathname } = useLocation();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
 	const handleClick = useCallback((): void => {
@@ -44,7 +44,7 @@ const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
 
 	useEffect(() => {
 		setIsOpen(false);
-	}, [searchParameters]);
+	}, [pathname]);
 
 	return (
 		<div className={styles["container"]}>

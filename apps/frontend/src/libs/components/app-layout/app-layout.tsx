@@ -23,7 +23,7 @@ const AppLayout = ({ children, excludedRoutes }: Properties): JSX.Element => {
 	const user = useAppSelector(({ auth }) => auth.authenticatedUser);
 	const hasSidebar = Boolean(user);
 	const isRouteExcluded = !checkPathEndsWithRoute(excludedRoutes, pathname);
-	const headerActions = user ? UNAUTHORIZED_HEADER_ACTIONS : [];
+	const headerActions = user ? [] : UNAUTHORIZED_HEADER_ACTIONS;
 
 	const permittedNavigationItems = useMemo(() => {
 		return getPermittedNavigationItems(

@@ -1,12 +1,14 @@
-import { NavLink } from "~/libs/components/components.js";
+import defaultUrl from "~/assets/images/placeholder-card.jpg";
+import { Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { configureString } from "~/libs/helpers/helpers.js";
+import { type ValueOf } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
 	id: number;
-	imageUrl: null | string;
+	imageUrl?: string;
 	name: string;
 };
 
@@ -17,19 +19,20 @@ const PointOfInterestCard = ({
 }: Properties): React.JSX.Element => {
 	return (
 		<li className={styles["card"]}>
-			<NavLink
-				className={styles["link"] as string}
-				to={configureString(AppRoute.POINTS_OF_INTEREST_$ID, {
-					id: id.toString(),
-				})}
+			<Link
+				to={
+					configureString(AppRoute.POINTS_OF_INTEREST_$ID, {
+						id: id.toString(),
+					}) as ValueOf<typeof AppRoute>
+				}
 			>
-				{imageUrl ? (
-					<img alt={name} className={styles["image"]} src={imageUrl} />
-				) : (
-					<div className={styles["image-placeholder"]} />
-				)}
-				<div className={styles["label"]}>{name}</div>
-			</NavLink>
+				<img
+					alt={name}
+					className={styles["image"]}
+					src={imageUrl ?? defaultUrl}
+				/>
+				<div className={styles["title"]}>{name}</div>
+			</Link>
 		</li>
 	);
 };

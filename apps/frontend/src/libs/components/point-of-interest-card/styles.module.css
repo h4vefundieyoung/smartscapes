@@ -1,13 +1,12 @@
 .card {
-	display: flex;
 	flex-shrink: 0;
-	flex-direction: column;
 	gap: 16px;
 	width: 100%;
 	max-width: 390px;
+	list-style: none;
 }
 
-.link {
+.card :any-link {
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
@@ -15,20 +14,14 @@
 }
 
 .image {
+	display: block;
+	width: 100%;
+	height: 100%;
 	object-fit: cover;
-}
-
-.image-placeholder {
-	background-color: var(--color-fill-grey);
-}
-
-.image,
-.image-placeholder {
-	height: 240px;
 	border-radius: 8px;
 }
 
-.label {
+.title {
 	margin: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -37,4 +30,15 @@
 	line-height: 1.2;
 	color: var(--color-text-strong);
 	white-space: nowrap;
+}
+
+@media (width <= 991px) {
+	.card {
+		max-width: 300px;
+	}
+
+	.title {
+		font-size: var(--font-size-h5);
+		white-space: normal;
+	}
 }

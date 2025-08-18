@@ -19,7 +19,9 @@ const PointOfInterestCard = ({
 		<li className={styles["card"]}>
 			<NavLink
 				className={styles["link"] as string}
-				to={configureString(AppRoute.POI_$ID, { id: id.toString() })}
+				to={configureString(AppRoute.POINTS_OF_INTEREST_$ID, {
+					id: id.toString(),
+				})}
 			>
 				{imageUrl ? (
 					<img alt={name} className={styles["image"]} src={imageUrl} />

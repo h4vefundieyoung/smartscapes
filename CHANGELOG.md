@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.35.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.34.0...v1.35.0) (2025-08-18)
+
+
+### Features
+
+* **frontend:** set up app redirection ss-407 ([#408](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/408)) ([c5b232a](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c5b232ae0d4fec855ac6183b19a9e3071cddf382))
+
+
+### Bug Fixes
+
+* **backend:** update helmet config ss-220 ([#411](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/411)) ([c7e022f](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c7e022f5bd57fce8f0669c59326df0c7202e4c91))
+
+## [1.34.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.33.0...v1.34.0) (2025-08-17)
+
+
+### Features
+
+* **frontend/backend/shared:** implement profile visibility feature ss-342 ([#404](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/404)) ([03849a7](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/03849a781aa66dfc914eee7cd94d17add870da7b))
+* **frontend:** cover dashboard items with permissions ss-336 ([#383](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/383)) ([a95e910](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/a95e91037cddab36aec4d0d868b476a4bfd5c548))
+
 ## [1.33.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.32.0...v1.33.0) (2025-08-17)
 
 

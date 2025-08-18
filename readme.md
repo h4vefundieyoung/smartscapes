@@ -37,6 +37,7 @@ erDiagram
     varchar email
     varchar first_name
     varchar last_name
+    boolean is_visible_profile
     text password_hash
     text password_salt
     int group_id FK

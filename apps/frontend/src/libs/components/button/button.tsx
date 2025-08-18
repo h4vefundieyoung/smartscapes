@@ -5,7 +5,7 @@ type Properties = {
 	onClick?: () => void;
 	to?: string;
 	type?: "button" | "submit";
-	variant?: "primary" | "outlined";
+	variant?: "outlined" | "primary";
 };
 
 const Button = ({

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Children } from "react";
 import { useEffect, useRef } from "react";
 
 import { KeyboardKey } from "~/libs/enums/enums.js";
@@ -63,11 +63,13 @@ const Modal = ({
 		return null;
 	}
 
-	const modalContent = React.createElement(component, {
-		...componentProps,
-		onClose: handleClose,
-		registerCleanup,
-	});
+	const modalContent = component
+		? React.createElement(component, {
+				...componentProps,
+				onClose: handleClose,
+				registerCleanup,
+			})
+		: null;
 
 	return (
 		<>

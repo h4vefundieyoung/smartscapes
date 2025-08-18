@@ -11,42 +11,51 @@ import {
 import styles from "./styles.module.css";
 
 type Properties = {
-	onSubmit?: (data: RouteCreateRequestDto) => void;
 	onClose?: () => void;
-	registerCleanup?: (cleanupFn: () => void) => void;
+	onSubmit?: (data: RouteCreateRequestDto) => void;
+	registerCleanup?: (cleanupFunction: () => void) => void;
 };
 
 const STORAGE_KEY = "create-route-form-data";
 
 const CreateRouteForm = ({
-	onSubmit,
 	onClose,
+	onSubmit,
 	registerCleanup,
 }: Properties = {}): React.JSX.Element => {
-	const [searchParams] = useSearchParams();
-	const hasBeenSubmittedRef = useRef(false);
+	const [searchParameters] = useSearchParams();
+	const hasBeenSubmittedReference = useRef(false);
 
 	const {
 		control,
+		errors,
 		handleSubmit: handleFormSubmit,
 		handleValueSet,
-		errors,
 	} = useAppForm<RouteCreateRequestDto>({
-		defaultValues: { name: "", description: "", pois: [] },
+		defaultValues: { description: "", name: "", pois: [] },
 		validationSchema: routesCreateValidationSchema,
 	});
 
-	const plannedRouteId = searchParams.get("plannedRouteId");
+	const plannedRouteId = searchParameters.get("plannedRouteId");
 	const isRouteConstructed = Boolean(plannedRouteId);
 
 	useEffect(() => {
 		const savedData = localStorage.getItem(STORAGE_KEY);
-		if (!savedData) return;
+		if (!savedData) {
+			return;
+		}
 
 		try {
-			const { name, description } = JSON.parse(savedData);
-			if (name) handleValueSet("name", name);
-			if (description) handleValueSet("description", description);
+			const { description, name } = JSON.parse(savedData) as {
+				description: string;
+				name: string;
+			};
+			if (name) {
+				handleValueSet("name", name);
+			}
+			if (description) {
+				handleValueSet("description", description);
+			}
 		} catch {
 			localStorage.removeItem(STORAGE_KEY);
 		}
@@ -55,12 +64,15 @@ const CreateRouteForm = ({
 	useEffect(() => {
 		const subscription = control._subjects.state.subscribe({
 			next: () => {
-				const { name = "", description = "" } = control._formValues;
+				const { description = "", name = "" } = control._formValues as {
+					description: string;
+					name: string;
+				};
 
 				if (name || description) {
 					localStorage.setItem(
 						STORAGE_KEY,
-						JSON.stringify({ name, description }),
+						JSON.stringify({ description, name }),
 					);
 				}
 			},
@@ -69,8 +81,8 @@ const CreateRouteForm = ({
 		return () => subscription.unsubscribe();
 	}, [control]);
 
-	const handleModalClose = useCallback(() => {
-		if (!hasBeenSubmittedRef.current) {
+	const handleModalClose = useCallback((): void => {
+		if (!hasBeenSubmittedReference.current) {
 			localStorage.removeItem(STORAGE_KEY);
 		}
 	}, []);
@@ -80,23 +92,28 @@ const CreateRouteForm = ({
 	}, [registerCleanup, handleModalClose]);
 
 	const handleSubmit = handleFormSubmit((data: RouteCreateRequestDto) => {
-		if (!isRouteConstructed || !onSubmit) return;
+		if (!isRouteConstructed || !onSubmit) {
+			return;
+		}
 
-		hasBeenSubmittedRef.current = true;
+		hasBeenSubmittedReference.current = true;
 		onSubmit({
-			name: data.name,
 			description: data.description,
+			name: data.name,
 			pois: [],
 		});
 		localStorage.removeItem(STORAGE_KEY);
 		onClose?.();
 	});
 
-	const handleConstructRouteClick = () => {
-		const { name = "", description = "" } = control._formValues;
+	const handleConstructRouteClick = (): void => {
+		const { description = "", name = "" } = control._formValues as {
+			description: string;
+			name: string;
+		};
 
 		if (name || description) {
-			localStorage.setItem(STORAGE_KEY, JSON.stringify({ name, description }));
+			localStorage.setItem(STORAGE_KEY, JSON.stringify({ description, name }));
 		}
 	};
 
@@ -109,8 +126,8 @@ const CreateRouteForm = ({
 				</div>
 
 				<div className={styles["field"]}>
-					<label className={styles["label"]}>Route</label>
 					<div className={styles["route-section"]}>
+						<label className={styles["label"]}>Route</label>
 						{isRouteConstructed && (
 							<div>
 								<span>Route constructed</span>

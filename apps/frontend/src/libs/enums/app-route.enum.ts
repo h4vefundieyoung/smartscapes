@@ -3,6 +3,7 @@ const AppRoute = {
 	CATEGORIES: "/app/categories",
 	CONTENT: "/app/content",
 	EXPLORE: "/app/explore",
+	POI_$ID: "/app/points-of-interest/:id",
 	PROFILE: "/app/profile",
 	ROOT: "/",
 	ROUTES: "/app/routes",

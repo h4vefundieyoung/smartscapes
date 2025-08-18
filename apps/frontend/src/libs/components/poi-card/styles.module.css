@@ -1,0 +1,40 @@
+.card {
+	display: flex;
+	flex-shrink: 0;
+	flex-direction: column;
+	gap: 16px;
+	width: 100%;
+	max-width: 390px;
+}
+
+.link {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	text-decoration: none;
+}
+
+.image {
+	object-fit: cover;
+}
+
+.image-placeholder {
+	background-color: var(--color-fill-grey);
+}
+
+.image,
+.image-placeholder {
+	height: 240px;
+	border-radius: 8px;
+}
+
+.label {
+	margin: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: var(--font-size-h4);
+	font-weight: var(--font-weight-semibold);
+	line-height: 1.2;
+	color: var(--color-text-strong);
+	white-space: nowrap;
+}

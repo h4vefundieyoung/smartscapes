@@ -17,6 +17,7 @@ import { NotFound } from "~/pages/not-found/not-found.jsx";
 import { Dashboard } from "./pages/dashboard/dashboard.js";
 import { Explore } from "./pages/explore/explore.js";
 import { Landing } from "./pages/landing/landing.jsx";
+import { PointOfInterestDetails } from "./pages/point-of-interest-details/point-of-interest-details.js";
 import { Profile } from "./pages/profile/profile.js";
 import { RouteDetails } from "./pages/route-description/route-details.js";
 import { Routes } from "./pages/routes/routes.js";
@@ -49,6 +50,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 							{
 								element: <RouteDetails />,
 								path: AppRoute.ROUTES_$ID,
+							},
+							{
+								element: <PointOfInterestDetails />,
+								path: AppRoute.POI_$ID,
 							},
 							{
 								element: <Explore />,

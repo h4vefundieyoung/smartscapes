@@ -12,7 +12,11 @@ import {
 } from "~/modules/routes/routes.js";
 import { NotFound } from "~/pages/not-found/not-found.jsx";
 
-import { ImageGallery } from "./libs/components/components.js";
+import {
+	ImageGallery,
+	PointOfInterestSection,
+} from "./libs/components/components.js";
+import { type PointOfInterestDetails } from "./libs/types/types.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
@@ -40,7 +44,7 @@ const RouteDetails = (): React.JSX.Element => {
 		return <Loader />;
 	}
 
-	const { description, name } = route as RouteGetByIdResponseDto;
+	const { description, name, pois } = route as RouteGetByIdResponseDto;
 
 	return (
 		<>
@@ -52,6 +56,9 @@ const RouteDetails = (): React.JSX.Element => {
 				<h1 className={styles["label"]}>{name}</h1>
 				<ImageGallery />
 				<p className={styles["description"]}>{description}</p>
+				<PointOfInterestSection
+					pointOfInterests={pois as PointOfInterestDetails[]}
+				/>
 			</main>
 		</>
 	);

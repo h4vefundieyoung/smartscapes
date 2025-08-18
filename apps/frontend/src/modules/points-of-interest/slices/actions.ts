@@ -21,14 +21,4 @@ const create = createAsyncThunk<
 	return pointOfInterest;
 });
 
-const getById = createAsyncThunk<
-	APIResponse<PointsOfInterestResponseDto>,
-	number,
-	AsyncThunkConfig
->(`${sliceName}/get-by-id`, async (id, { extra }) => {
-	const { pointOfInterestApi } = extra;
-
-	return await pointOfInterestApi.getById(id);
-});
-
-export { create, getById };
+export { create };

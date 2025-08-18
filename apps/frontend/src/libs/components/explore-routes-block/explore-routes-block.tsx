@@ -1,37 +1,34 @@
 import React from "react";
 
-import { useAppDispatch, useEffect, useState } from "~/libs/hooks/hooks.js";
-import { type RouteGetByIdResponseDto } from "~/modules/routes/libs/types/types.js";
+import { DataStatus } from "~/libs/enums/enums.js";
+import {
+	useAppDispatch,
+	useAppSelector,
+	useEffect,
+} from "~/libs/hooks/hooks.js";
+import { actions as exploreActions } from "~/modules/explore/explore.js";
+import { actions as locationActions } from "~/modules/location/location.js";
 
 import { Loader, RouteCard } from "../components.js";
-import { getCurrentUserPosition, getSortedRoutes } from "./helpers/helpers.js";
 import styles from "./styles.module.css";
 
 const ExploreRoutesBlock = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
-	const [routes, setRoutes] = useState<RouteGetByIdResponseDto[]>([]);
-	const [loading, setLoading] = useState<boolean>(true);
-	const [error, setError] = useState<null | string>(null);
+	const { error, loading, routes } = useAppSelector((state) => state.explore);
+	const locationError = useAppSelector((state) => state.location.locationError);
+	const locationDataStatus = useAppSelector(
+		(state) => state.location.dataStatus,
+	);
 
 	useEffect(() => {
-		const fetchData = async (): Promise<void> => {
-			try {
-				const userCoordinates = await getCurrentUserPosition();
-				const sortedRoutes = await getSortedRoutes(dispatch, userCoordinates);
-				setRoutes(sortedRoutes);
-			} catch (error: unknown) {
-				if (error instanceof Error) {
-					setError(error.message);
-				} else {
-					setError("An unknown error occured.");
-				}
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		void fetchData();
+		void dispatch(locationActions.getCurrentUserLocation());
 	}, [dispatch]);
+
+	useEffect(() => {
+		if (locationDataStatus === DataStatus.FULFILLED) {
+			void dispatch(exploreActions.getRoutes());
+		}
+	}, [locationDataStatus, dispatch]);
 
 	let content;
 
@@ -41,8 +38,10 @@ const ExploreRoutesBlock = (): React.JSX.Element => {
 				<Loader />
 			</div>
 		);
-	} else if (error) {
-		content = <div className={styles["error"]}>Error: {error}</div>;
+	} else if (error || locationError) {
+		content = (
+			<div className={styles["error"]}>Error: {error ?? locationError}</div>
+		);
 	} else {
 		content =
 			routes.length === 0 ? (

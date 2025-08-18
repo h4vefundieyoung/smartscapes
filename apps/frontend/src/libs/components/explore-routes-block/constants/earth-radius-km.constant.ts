@@ -1,3 +1,0 @@
-const EARTH_RADIUS_KM = 6371;
-
-export { EARTH_RADIUS_KM };

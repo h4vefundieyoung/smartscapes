@@ -1,5 +1,4 @@
 import { APIErrorType } from "~/libs/enums/enums.js";
-import { configureString } from "~/libs/helpers/helpers.js";
 import {
 	AuthError,
 	type HTTP,
@@ -69,15 +68,34 @@ class BaseHTTPApi implements HTTPApi {
 		...parameters: [...string[], T]
 	): string {
 		const copiedParameters = [...parameters];
-
 		const options = copiedParameters.pop() as T;
 
-		return configureString(
-			this.baseUrl,
-			this.path,
-			...(copiedParameters as string[]),
-			options,
-		);
+		let path = this.constructPath(copiedParameters as string[]);
+
+		path = this.replaceDynamicPathSegments(path, options);
+
+		const queryString = this.buildQueryString(options, path);
+
+		return queryString ? `${path}?${queryString}` : path;
+	}
+
+	private buildQueryString(
+		options: Record<string, string>,
+		path: string,
+	): string {
+		const queryParameters = new URLSearchParams();
+
+		for (const [key, value] of Object.entries(options)) {
+			const dynamicPathKey = `:${key}`;
+
+			if (path.includes(dynamicPathKey)) {
+				continue;
+			}
+
+			queryParameters.append(key, value);
+		}
+
+		return queryParameters.toString();
 	}
 
 	private async checkResponse<T>(
@@ -88,6 +106,10 @@ class BaseHTTPApi implements HTTPApi {
 		}
 
 		return response;
+	}
+
+	private constructPath(copiedParameters: string[]): string {
+		return [this.baseUrl, this.path, ...copiedParameters].join("");
 	}
 
 	private async getHeaders({
@@ -141,6 +163,21 @@ class BaseHTTPApi implements HTTPApi {
 				: new HTTPError(errorData);
 
 		throw error;
+	}
+
+	private replaceDynamicPathSegments(
+		path: string,
+		options: Record<string, string>,
+	): string {
+		for (const [key, value] of Object.entries(options)) {
+			const dynamicPathKey = `:${key}`;
+
+			if (path.includes(dynamicPathKey)) {
+				path = path.replace(dynamicPathKey, encodeURIComponent(value));
+			}
+		}
+
+		return path;
 	}
 }
 

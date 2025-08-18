@@ -36,13 +36,13 @@ class FileApi extends BaseHTTPApi {
 	public async uploadFile(
 		payload: FileUploadRequestDto,
 	): Promise<APIResponse<FileUploadResponseDto>> {
-		const { file, folder } = payload;
+		const { entityId, file, folder } = payload;
 		const formData = new FormData();
 
 		formData.append("file", file);
 
 		const response = await this.load<APIResponse<FileUploadResponseDto>>(
-			this.getFullEndpoint(FilesApiPath.UPLOAD, { folder }),
+			this.getFullEndpoint(FilesApiPath.UPLOAD, { entityId, folder }),
 			{
 				hasAuth: true,
 				method: "POST",

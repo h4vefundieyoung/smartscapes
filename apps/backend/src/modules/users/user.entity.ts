@@ -3,6 +3,8 @@ import { type Entity } from "~/libs/types/types.js";
 import { type GroupEntity } from "../groups/group.entity.js";
 
 class UserEntity implements Entity {
+	private avatarUrl: null | string;
+
 	private email: string;
 
 	private firstName: string;
@@ -20,6 +22,7 @@ class UserEntity implements Entity {
 	private passwordSalt: string;
 
 	private constructor({
+		avatarUrl,
 		email,
 		firstName,
 		group,
@@ -29,6 +32,7 @@ class UserEntity implements Entity {
 		passwordHash,
 		passwordSalt,
 	}: {
+		avatarUrl: null | string;
 		email: string;
 		firstName: string;
 		group: null | ReturnType<GroupEntity["toObject"]>;
@@ -46,9 +50,11 @@ class UserEntity implements Entity {
 		this.passwordSalt = passwordSalt;
 		this.group = group;
 		this.groupId = groupId;
+		this.avatarUrl = avatarUrl;
 	}
 
 	public static initialize({
+		avatarUrl,
 		email,
 		firstName,
 		group,
@@ -58,6 +64,7 @@ class UserEntity implements Entity {
 		passwordHash,
 		passwordSalt,
 	}: {
+		avatarUrl: null | string;
 		email: string;
 		firstName: string;
 		group: null | ReturnType<GroupEntity["toObject"]>;
@@ -68,6 +75,7 @@ class UserEntity implements Entity {
 		passwordSalt: string;
 	}): UserEntity {
 		return new UserEntity({
+			avatarUrl,
 			email,
 			firstName,
 			group,
@@ -95,6 +103,7 @@ class UserEntity implements Entity {
 		passwordSalt: string;
 	}): UserEntity {
 		return new UserEntity({
+			avatarUrl: null,
 			email,
 			firstName,
 			group: null,
@@ -125,6 +134,7 @@ class UserEntity implements Entity {
 	}
 
 	public toObject(): {
+		avatarUrl: string;
 		email: string;
 		firstName: string;
 		group: ReturnType<GroupEntity["toObject"]>;
@@ -133,6 +143,7 @@ class UserEntity implements Entity {
 		lastName: string;
 	} {
 		return {
+			avatarUrl: this.avatarUrl as string,
 			email: this.email,
 			firstName: this.firstName,
 			group: this.group as ReturnType<GroupEntity["toObject"]>,

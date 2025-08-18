@@ -85,7 +85,7 @@ class FilesController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /api/v1/files:
+	 * /files:
 	 *   get:
 	 *     summary: Get all files
 	 *     description: Retrieve a list of all uploaded files (limited to 10)
@@ -116,7 +116,7 @@ class FilesController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /api/v1/files/upload/{folder}:
+	 * /files/upload/{folder}/{entityId}:
 	 *   post:
 	 *     summary: Upload a file
 	 *     description: Upload a file to the specified folder
@@ -130,6 +130,12 @@ class FilesController extends BaseController {
 	 *         schema:
 	 *           $ref: '#/components/schemas/FileFolderName'
 	 *         description: Folder name where to upload the file
+	 *       - in: path
+	 *         name: entityId
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *         description: Id of an entity type
 	 *     requestBody:
 	 *       required: true
 	 *       content:
@@ -157,13 +163,14 @@ class FilesController extends BaseController {
 	public async uploadFile(
 		options: APIHandlerOptions<{
 			body: { file: MultipartFile };
-			params: { folder: ValueOf<typeof FileFolderName> };
+			params: { entityId: number; folder: ValueOf<typeof FileFolderName> };
 		}>,
 	): Promise<APIHandlerResponse<FileUploadResponseDto>> {
-		const { folder } = options.params;
+		const { entityId, folder } = options.params;
 		const { file } = options.body;
 
 		const result = await this.fileService.uploadFile({
+			entityId,
 			file,
 			folder,
 		});

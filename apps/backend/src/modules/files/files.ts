@@ -10,5 +10,5 @@ const fileRepository = new FileRepository(FileModel);
 const fileService = new FileService(fileRepository, awsFileService);
 const filesController = new FilesController(logger, fileService);
 
-export { filesController };
+export { filesController, fileService };
 export { type FileMimeType } from "./libs/types/types.js";

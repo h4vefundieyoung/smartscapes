@@ -13,6 +13,7 @@ import {
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
 
+import { type FileService } from "../files/files.service.js";
 import { GroupEntity } from "../groups/group.entity.js";
 import { GroupKey } from "../groups/libs/enums/enums.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
@@ -44,6 +45,7 @@ describe("AuthService", () => {
 		const mockToken = "mock token";
 
 		const mockUserServiceResponse: UserAuthResponseDto = {
+			avatarUrl: "google.com",
 			email: signUpRequestDto.email,
 			firstName: signUpRequestDto.firstName,
 			group: mockGroup.toObject(),
@@ -84,8 +86,11 @@ describe("AuthService", () => {
 			hash: mock.fn(() => Promise.resolve("hashedPassword")),
 		} as unknown as BaseEncryption;
 
+		const mockFileService = {} as FileService;
+
 		const authService = new AuthService({
 			encryptionService: mockEncryptionService,
+			fileService: mockFileService,
 			tokenService: mockTokenService,
 			userService: mockUserService,
 		});
@@ -108,6 +113,7 @@ describe("AuthService", () => {
 		};
 
 		const mockPasswordDetails: UserPasswordDetails = {
+			avatarUrl: "google.com",
 			email: signInRequestDto.email,
 			firstName: "John",
 			group: mockGroup.toObject(),
@@ -121,6 +127,7 @@ describe("AuthService", () => {
 		const expectedSignInResponse: UserSignInResponseDto = {
 			token: mockToken,
 			user: {
+				avatarUrl: "google.com",
 				email: signInRequestDto.email,
 				firstName: mockPasswordDetails.firstName,
 				group: mockGroup.toObject(),
@@ -153,6 +160,8 @@ describe("AuthService", () => {
 				mockFindPasswordDetails as UserService["findPasswordDetails"],
 		} as UserService;
 
+		const mockFileService = {} as FileService;
+
 		const mockEncryptionService = {
 			compare: mock.fn((password, hash) => {
 				if (
@@ -168,6 +177,7 @@ describe("AuthService", () => {
 
 		const authService = new AuthService({
 			encryptionService: mockEncryptionService,
+			fileService: mockFileService,
 			tokenService: mockTokenService,
 			userService: mockUserService,
 		});

@@ -1,9 +1,10 @@
-import { Avatar, Loader } from "~/libs/components/components.js";
+import { Avatar, Button, Loader } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
 	useCallback,
+	useRef,
 } from "~/libs/hooks/hooks.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import {
@@ -19,6 +20,7 @@ const UserDetails = (): null | React.JSX.Element => {
 	const { authenticatedUser } = useAppSelector((state) => state.auth) as {
 		authenticatedUser: UserAuthResponseDto;
 	};
+	const fileInputReference = useRef<HTMLInputElement>(null);
 
 	const isLoading = useAppSelector(
 		(state) => state.auth.authenticatedUserPatchStatus === DataStatus.PENDING,
@@ -31,10 +33,22 @@ const UserDetails = (): null | React.JSX.Element => {
 		[dispatch],
 	);
 
-	const user = {
-		...authenticatedUser,
-		avatarUrl: null,
-	};
+	const handleFileUpload = useCallback(
+		(event: React.ChangeEvent<HTMLInputElement>) => {
+			const file = event.target.files?.[0];
+
+			if (!file) {
+				return;
+			}
+
+			void dispatch(authActions.uploadAvatar(file));
+		},
+		[dispatch],
+	);
+
+	const handleButtonClick = useCallback(() => {
+		fileInputReference.current?.click();
+	}, []);
 
 	if (isLoading) {
 		return (
@@ -47,9 +61,21 @@ const UserDetails = (): null | React.JSX.Element => {
 	return (
 		<div className={styles["user-details-container"]}>
 			<div className={styles["user-details-avatar"]}>
-				<Avatar size={140} user={user} />
+				<Avatar size={140} user={authenticatedUser} />
+				<Button
+					label="Update avatar"
+					onClick={handleButtonClick}
+					type="button"
+				/>
+				<input
+					accept="image/*"
+					onChange={handleFileUpload}
+					ref={fileInputReference}
+					style={{ display: "none" }}
+					type="file"
+				/>
 			</div>
-			<ProfileForm onSubmit={handleFormSubmit} user={user} />
+			<ProfileForm onSubmit={handleFormSubmit} user={authenticatedUser} />
 		</div>
 	);
 };

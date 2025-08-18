@@ -1,16 +1,19 @@
-import { type RelationMappings } from "objection";
+import { type QueryBuilder, type RelationMappings } from "objection";
 
 import {
 	AbstractModel,
 	DatabaseTableName,
 } from "~/libs/modules/database/database.js";
 
+import { FileModel } from "../files/files.model.js";
 import { GroupModel } from "../groups/group.model.js";
 
 class UserModel extends AbstractModel {
 	public static override get tableName(): string {
 		return DatabaseTableName.USERS;
 	}
+
+	public avatar?: FileModel;
 
 	public email!: string;
 
@@ -28,6 +31,17 @@ class UserModel extends AbstractModel {
 
 	public static relationMappings(): RelationMappings {
 		return {
+			avatar: {
+				filter: (query: QueryBuilder<FileModel>): void => {
+					query.where("folder", "avatars");
+				},
+				join: {
+					from: "users.id",
+					to: "files.entity_id",
+				},
+				modelClass: FileModel,
+				relation: this.HasOneRelation,
+			},
 			group: {
 				join: {
 					from: `${DatabaseTableName.USERS}.group_id`,

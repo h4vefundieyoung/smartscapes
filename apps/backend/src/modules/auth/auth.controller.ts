@@ -1,3 +1,6 @@
+import { type MultipartFile } from "@fastify/multipart";
+import { type FileUploadResponseDto } from "@smartscapes/shared";
+
 import { APIPath } from "~/libs/enums/enums.js";
 import {
 	type APIHandlerOptions,
@@ -270,6 +273,12 @@ class AuthController extends BaseController {
 		this.authService = authService;
 
 		this.addRoute({
+			handler: this.uploadAvatar.bind(this),
+			method: "POST",
+			path: AuthApiPath.AUTHENTICATED_USER_UPLOAD_AVATAR,
+		});
+
+		this.addRoute({
 			handler: this.signUp.bind(this),
 			method: "POST",
 			path: AuthApiPath.SIGN_UP,
@@ -464,6 +473,64 @@ class AuthController extends BaseController {
 		const { body } = options;
 
 		const data = await this.authService.signUp(body);
+
+		return {
+			payload: { data },
+			status: HTTPCode.CREATED,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /auth/authenticated-user/upload/avatar:
+	 *   post:
+	 *     summary: Upload an avatar
+	 *     description: Upload an avatar to the authorized user
+	 *     tags:
+	 *       - Auth
+	 *     security:
+	 *       - bearerAuth: []
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         multipart/form-data:
+	 *           schema:
+	 *             type: object
+	 *             required:
+	 *               - file
+	 *             properties:
+	 *               file:
+	 *                 type: string
+	 *                 format: binary
+	 *                 description: File to upload (image/jpeg or image/png)
+	 *     responses:
+	 *       201:
+	 *         description: Avatar updated succesfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/FileUploadResponseDto'
+	 */
+
+	public async uploadAvatar(
+		options: APIHandlerOptions<{
+			body: {
+				file: MultipartFile;
+			};
+			user: UserAuthResponseDto;
+		}>,
+	): Promise<APIHandlerResponse<FileUploadResponseDto>> {
+		const { body, user } = options;
+
+		if (!user) {
+			throw new AuthError();
+		}
+
+		const { id } = user;
+		const data = await this.authService.uploadAvatar(id, body.file);
 
 		return {
 			payload: { data },

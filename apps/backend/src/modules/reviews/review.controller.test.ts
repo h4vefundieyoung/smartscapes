@@ -31,6 +31,7 @@ describe("ReviewController", () => {
 	};
 
 	const mockUser = {
+		avatarUrl: "google.com",
 		email: "test@example.com",
 		firstName: "John",
 		group: mockGroup.toObject(),

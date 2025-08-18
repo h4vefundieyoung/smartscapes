@@ -16,6 +16,8 @@ describe("FileRepository", () => {
 	const mockFile: Parameters<typeof FileEntity.initialize>[0] = {
 		contentType: "image/jpg",
 		createdAt: "2024-01-01T00:00:00Z",
+		entityId: 1,
+		folder: "avatars",
 		id: 1,
 		updatedAt: "2024-01-01T00:00:00Z",
 		url: "https://example.com/file.jpg",

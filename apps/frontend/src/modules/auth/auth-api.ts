@@ -13,6 +13,7 @@ import {
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
 
+import { type FileUploadResponseDto } from "../files/libs/types/types.js";
 import { AuthApiPath } from "./libs/enums/enums.js";
 
 type Constructor = {
@@ -87,6 +88,25 @@ class AuthApi extends BaseHTTPApi {
 				hasAuth: false,
 				method: "POST",
 				payload: JSON.stringify(payload),
+			},
+		);
+
+		return await response.json();
+	}
+
+	public async uploadAvatar(
+		payload: File,
+	): Promise<APIResponse<FileUploadResponseDto>> {
+		const formData = new FormData();
+
+		formData.append("file", payload);
+
+		const response = await this.load<APIResponse<FileUploadResponseDto>>(
+			this.getFullEndpoint(AuthApiPath.AUTHENTICATED_USER_UPLOAD_AVATAR, {}),
+			{
+				hasAuth: true,
+				method: "POST",
+				payload: formData,
 			},
 		);
 

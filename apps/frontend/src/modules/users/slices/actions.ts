@@ -1,15 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
-import { type UserAuthResponseDto } from "~/modules/users/users.js";
+import { type UserGetByIdItemResponseDto } from "~/modules/users/users.js";
 
 import { name as sliceName } from "./users.slice.js";
 
 const loadAll = createAsyncThunk<
-	APIResponse<UserAuthResponseDto[]>,
+	APIResponse<UserGetByIdItemResponseDto[]>,
 	undefined,
 	AsyncThunkConfig
->(`${sliceName}/load-all`, async (_, { extra }) => {
+>(`${sliceName}/load-all`, async (_payload, { extra }) => {
 	const { userApi } = extra;
 
 	return await userApi.getAll();

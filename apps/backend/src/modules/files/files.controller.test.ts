@@ -60,7 +60,7 @@ describe("FilesController", () => {
 			body: {} as unknown as Parameters<
 				typeof filesController.uploadFile
 			>[0]["body"],
-			params: { folder: "avatars" },
+			params: { entityId: 1, folder: "avatars" },
 			query: {},
 			user: null,
 		});

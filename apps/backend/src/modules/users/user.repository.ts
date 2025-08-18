@@ -8,6 +8,7 @@ import {
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
 
+import { FileEntity } from "../files/files.entity.js";
 import { GroupEntity } from "../groups/group.entity.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
 
@@ -43,6 +44,7 @@ class UserRepository implements Repository {
 			>;
 
 			return UserEntity.initialize({
+				avatarUrl: null,
 				email: user.email,
 				firstName: user.firstName,
 				group: GroupEntity.initializeWithPermissions({
@@ -66,6 +68,7 @@ class UserRepository implements Repository {
 		const users = await this.userModel
 			.query()
 			.withGraphJoined("group.permissions")
+			.withGraphJoined("avatar")
 			.execute();
 
 		return users.map((user) => {
@@ -73,8 +76,10 @@ class UserRepository implements Repository {
 			const permissions = user.group?.permissions as NonNullable<
 				typeof group.permissions
 			>;
+			const { avatar } = user;
 
 			return UserEntity.initialize({
+				avatarUrl: avatar ? FileEntity.initialize(avatar).toObject().url : null,
 				email: user.email,
 				firstName: user.firstName,
 				group: GroupEntity.initializeWithPermissions({
@@ -99,6 +104,7 @@ class UserRepository implements Repository {
 			.query()
 			.where("email", email)
 			.withGraphJoined("group.permissions")
+			.withGraphJoined("avatar")
 			.first();
 
 		if (!user) {
@@ -109,8 +115,10 @@ class UserRepository implements Repository {
 		const permissions = user.group?.permissions as NonNullable<
 			typeof group.permissions
 		>;
+		const { avatar } = user;
 
 		return UserEntity.initialize({
+			avatarUrl: avatar ? FileEntity.initialize(avatar).toObject().url : null,
 			email: user.email,
 			firstName: user.firstName,
 			group: GroupEntity.initializeWithPermissions({
@@ -134,6 +142,7 @@ class UserRepository implements Repository {
 			.query()
 			.findById(id)
 			.withGraphJoined("group.permissions")
+			.withGraphJoined("avatar")
 			.first();
 
 		if (!user) {
@@ -144,8 +153,10 @@ class UserRepository implements Repository {
 		const permissions = user.group?.permissions as NonNullable<
 			typeof group.permissions
 		>;
+		const { avatar } = user;
 
 		return UserEntity.initialize({
+			avatarUrl: avatar ? FileEntity.initialize(avatar).toObject().url : null,
 			email: user.email,
 			firstName: user.firstName,
 			group: GroupEntity.initializeWithPermissions({
@@ -180,6 +191,7 @@ class UserRepository implements Repository {
 				"users.group_id as groupId",
 			)
 			.withGraphJoined("group.permissions")
+			.withGraphJoined("avatar")
 			.where("users.email", email)
 			.first();
 
@@ -191,8 +203,10 @@ class UserRepository implements Repository {
 		const permissions = user.group?.permissions as NonNullable<
 			typeof group.permissions
 		>;
+		const { avatar } = user;
 
 		return {
+			avatarUrl: avatar ? FileEntity.initialize(avatar).toObject().url : null,
 			email: user.email,
 			firstName: user.firstName,
 			group: GroupEntity.initializeWithPermissions({
@@ -231,14 +245,17 @@ class UserRepository implements Repository {
 			const user = (await UserModel.query()
 				.where("users.id", updatedRow.id)
 				.withGraphJoined("group.permissions")
+				.withGraphJoined("avatar")
 				.first()) as UserModel;
 
 			const group = user.group as NonNullable<typeof user.group>;
 			const permissions = group.permissions as NonNullable<
 				typeof group.permissions
 			>;
+			const { avatar } = user;
 
 			return UserEntity.initialize({
+				avatarUrl: avatar ? FileEntity.initialize(avatar).toObject().url : null,
 				email: user.email,
 				firstName: user.firstName,
 				group: GroupEntity.initializeWithPermissions({
@@ -250,6 +267,7 @@ class UserRepository implements Repository {
 					),
 				}).toObject(),
 				groupId: user.groupId,
+
 				id: user.id,
 				lastName: user.lastName,
 				passwordHash: user.passwordHash,

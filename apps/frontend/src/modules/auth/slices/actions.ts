@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
+import { type FileUploadResponseDto } from "~/modules/files/libs/types/types.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
 	type AuthenticatedUserPatchResponseDto,
@@ -85,4 +86,27 @@ const patchAuthenticatedUser = createAsyncThunk<
 	return response;
 });
 
-export { getAuthenticatedUser, logout, patchAuthenticatedUser, signIn, signUp };
+const uploadAvatar = createAsyncThunk<
+	APIResponse<FileUploadResponseDto>,
+	File,
+	AsyncThunkConfig
+>(
+	`${sliceName}/authenticated-user/upload/avatar`,
+	async (payload, { extra }) => {
+		const { authApi, toastNotifier } = extra;
+
+		const response = await authApi.uploadAvatar(payload);
+		toastNotifier.showSuccess("Profile updated");
+
+		return response;
+	},
+);
+
+export {
+	getAuthenticatedUser,
+	logout,
+	patchAuthenticatedUser,
+	signIn,
+	signUp,
+	uploadAvatar,
+};

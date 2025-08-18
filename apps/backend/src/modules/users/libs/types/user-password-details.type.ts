@@ -1,6 +1,7 @@
 import { type GroupItemWithPermissionsDto } from "~/modules/groups/libs/types/types.js";
 
 type UserPasswordDetails = {
+	avatarUrl: null | string;
 	email: string;
 	firstName: string;
 	group: GroupItemWithPermissionsDto;

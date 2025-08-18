@@ -1,3 +1,4 @@
+import { FileFolderName } from "@smartscapes/shared";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
@@ -12,6 +13,8 @@ describe("FileService", () => {
 	const mockFile: Parameters<typeof FileEntity.initialize>[0] = {
 		contentType: "image/jpg" as FileMimeType,
 		createdAt: "2024-01-01T00:00:00Z",
+		entityId: 1,
+		folder: FileFolderName.AVATARS,
 		id: 1,
 		updatedAt: "2024-01-01T00:00:00Z",
 		url: "https://example.com/file.jpg",
@@ -31,6 +34,8 @@ describe("FileService", () => {
 
 		const result = await fileService.create({
 			contentType: mockFile.contentType,
+			entityId: mockFile.entityId,
+			folder: mockFile.folder,
 			url: mockFile.url,
 		});
 
@@ -70,6 +75,7 @@ describe("FileService", () => {
 		const fileService = new FileService(fileRepository, awsFileService);
 
 		const result = await fileService.uploadFile({
+			entityId: 1,
 			file: {
 				file: { truncated: false },
 				filename: "test.jpg",

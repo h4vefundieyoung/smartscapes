@@ -1,3 +1,6 @@
+import { type MultipartFile } from "@fastify/multipart";
+import { type FileUploadResponseDto } from "@smartscapes/shared";
+
 import { type encryption } from "~/libs/modules/encryption/libs/encryption.js";
 import { type BaseToken } from "~/libs/modules/token/token.js";
 import {
@@ -10,28 +13,33 @@ import {
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
 
+import { type FileService } from "../files/files.service.js";
 import { AuthExceptionMessage } from "./libs/enums/enums.js";
 import { AuthError } from "./libs/exceptions/auth.exception.js";
 
 type Constructor = {
 	encryptionService: typeof encryption;
+	fileService: FileService;
 	tokenService: BaseToken;
 	userService: UserService;
 };
 
 class AuthService {
 	private encryptionService: typeof encryption;
+	private fileService: FileService;
 	private tokenService: BaseToken;
 	private userService: UserService;
 
 	public constructor({
 		encryptionService,
+		fileService,
 		tokenService,
 		userService,
 	}: Constructor) {
 		this.encryptionService = encryptionService;
 		this.tokenService = tokenService;
 		this.userService = userService;
+		this.fileService = fileService;
 	}
 
 	public async patch(
@@ -72,6 +80,7 @@ class AuthService {
 		return {
 			token,
 			user: {
+				avatarUrl: user.avatarUrl,
 				email,
 				firstName: user.firstName,
 				group: user.group,
@@ -95,6 +104,21 @@ class AuthService {
 			token,
 			user,
 		};
+	}
+
+	public async uploadAvatar(
+		id: number,
+		file: MultipartFile,
+	): Promise<FileUploadResponseDto> {
+		const payload = {
+			entityId: id,
+			file,
+			folder: "avatars" as const,
+		};
+
+		const avatar = await this.fileService.uploadFile(payload);
+
+		return avatar;
 	}
 }
 

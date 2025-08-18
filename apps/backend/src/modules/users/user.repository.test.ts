@@ -28,6 +28,7 @@ describe("UserRepository", () => {
 	}).toObject();
 
 	const mockUser = UserEntity.initialize({
+		avatarUrl: "google.com",
 		email: "test@example.com",
 		firstName: "John",
 		group: mockGroup,
@@ -52,6 +53,7 @@ describe("UserRepository", () => {
 
 	it("create should insert and return new user", async () => {
 		const userEntity = UserEntity.initialize({
+			avatarUrl: "google.com",
 			email: "test@example.com",
 			firstName: "John",
 			group: mockGroup,

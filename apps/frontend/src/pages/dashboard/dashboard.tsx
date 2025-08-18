@@ -21,7 +21,6 @@ import {
 import { HTTPError } from "~/libs/modules/http/http.js";
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { fileApi } from "~/modules/files/files.js";
-import { FileFolderName } from "~/modules/files/libs/enums/enums.js";
 import { type PointsOfInterestRequestDto } from "~/modules/points-of-interest/libs/types/types.js";
 import { actions as poiActions } from "~/modules/points-of-interest/points-of-interest.js";
 
@@ -67,8 +66,9 @@ const Dashboard = (): React.JSX.Element => {
 
 			try {
 				const responseURL = await fileApi.uploadFile({
+					entityId: "0",
 					file,
-					folder: FileFolderName.AVATARS,
+					folder: "reviews",
 				});
 
 				setUploadedImages((previous) => [...previous, responseURL.data.url]);

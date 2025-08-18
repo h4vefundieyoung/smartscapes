@@ -1,1 +1,1 @@
-export { FileFolderName, FilesApiPath } from "@smartscapes/shared";
+export { FilesApiPath } from "@smartscapes/shared";

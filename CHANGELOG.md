@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.38.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.37.0...v1.38.0) (2025-08-18)
+
+
+### Features
+
+* **backend:** add planed path to routes ss-349 ([#422](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/422)) ([1e07262](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/1e072626ceebf6f9cff465e162768be7a7443e44))
+
+## [1.37.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.36.0...v1.37.0) (2025-08-18)
+
+
+### Features
+
+* **frontend:** implement common layout component ss-130 ([#397](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/397)) ([2a8a731](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2a8a7318f7aa4db314317f0cccdbfc19b449a9b6))
+
+## [1.36.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.35.2...v1.36.0) (2025-08-18)
+
+
+### Features
+
+* **frontend/backend/shared:** implement points of interest details page ss-245 ([#337](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/337)) ([26c5795](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/26c5795e69f7d5746b791b9f1276a60d24f38e10))
+
+
+### Bug Fixes
+
+* **backend:** solve validation complier error issue ss-415 ([#418](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/418)) ([1daf53e](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/1daf53e6616ae62caf52aa8a44d995458667327c))
+
 ## [1.35.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.35.1...v1.35.2) (2025-08-18)
 
 

@@ -12,9 +12,9 @@ const pointOfInterestApi = new PointOfInterestApi({
 
 export { pointOfInterestApi };
 export {
+	type PointsOfInterestGetPaginatedSearchQuery,
 	type PointsOfInterestPaginatedResponseDto,
 	type PointsOfInterestPaginatedSummary,
-	type PointsOfInterestPaginationMeta,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 } from "./libs/types/types.js";

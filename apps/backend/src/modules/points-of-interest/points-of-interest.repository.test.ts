@@ -203,4 +203,50 @@ describe("PointsOfInterestRepository", () => {
 
 		assert.strictEqual(result, false);
 	});
+
+	it("findPaginated should return correct items", async () => {
+		const mockEntities = [
+			PointsOfInterestEntity.initializeSummary({
+				createdAt: "2025-08-14T00:00:00Z",
+				id: 1,
+				name: "Point 1",
+			}),
+			PointsOfInterestEntity.initializeSummary({
+				createdAt: "2025-08-15T00:00:00Z",
+				id: 2,
+				name: "Point 2",
+			}),
+		];
+
+		databaseTracker.on
+			.select(DatabaseTableName.POINTS_OF_INTEREST)
+			.response(mockEntities);
+
+		const result = await pointsOfInterestRepository.findPaginated({
+			page: 1,
+			perPage: 10,
+			search: undefined,
+		});
+
+		const resultItems = result.items.map((item) => item.toSummaryObject());
+		const expectedItems = mockEntities.map((item) => item.toSummaryObject());
+
+		assert.deepStrictEqual(resultItems, expectedItems);
+	});
+
+	it("findPaginated should return correct total count", async () => {
+		const mockTotal = 42;
+
+		databaseTracker.on
+			.select(DatabaseTableName.POINTS_OF_INTEREST)
+			.response([{ "count(*)": mockTotal }]);
+
+		const result = await pointsOfInterestRepository.findPaginated({
+			page: 1,
+			perPage: 10,
+			search: undefined,
+		});
+
+		assert.strictEqual(result.total, mockTotal);
+	});
 });

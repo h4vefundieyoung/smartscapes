@@ -1,13 +1,12 @@
 import { flexRender, type Table } from "@tanstack/react-table";
-import { type JSX } from "react";
 
-import styles from "../../../styles.module.css";
+import styles from "./styles.module.css";
 
 type Properties<T> = {
 	table: Table<T>;
 };
 
-function TableHead<T>({ table }: Readonly<Properties<T>>): JSX.Element {
+function TableHead<T>({ table }: Readonly<Properties<T>>): React.JSX.Element {
 	return (
 		<thead className={styles["thead"]}>
 			{table.getHeaderGroups().map((headerGroup) => (

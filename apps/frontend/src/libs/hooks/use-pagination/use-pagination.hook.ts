@@ -1,135 +1,105 @@
-import { type AsyncThunk, type UnknownAction } from "@reduxjs/toolkit";
-
-import { PaginationAction } from "~/libs/enums/enums.js";
 import {
-	useAppDispatch,
 	useCallback,
 	useEffect,
-	useReducer,
+	useSearchParams,
+	useState,
 } from "~/libs/hooks/hooks.js";
-import { type PaginationQuery, type ValueOf } from "~/libs/types/types.js";
+import { type PaginationMeta } from "~/libs/types/types.js";
 
-type Action = {
-	payload?: number | string;
-	type: ValueOf<typeof PaginationAction>;
+const FIRST_PAGE = 1;
+const DEFAULT_PAGE_SIZE = 10;
+const OFFSET = 1;
+
+type UsePaginationArguments = {
+	meta: null | PaginationMeta;
+	queryParameterPrefix: string;
 };
 
-type PaginationState = {
-	limit: number;
-	name: string;
-	page: number;
-};
-
-type UsePaginationResult = PaginationState & {
-	goToEnd: (totalPages: number) => void;
-	goToNext: (totalPages: number) => void;
+type UsePaginationResult = {
+	goToEnd: () => void;
+	goToNext: () => void;
 	goToPrevious: () => void;
 	goToStart: () => void;
-	setLimit: (newLimit: number) => void;
-	setName: (newName: string) => void;
+	onPageChange: (newPage: number) => void;
+	onPageSizeChange: (newPageSize: number) => void;
+	page: number;
+	pageSize: number;
 };
 
-const START_PAGE_NUMBER = 1;
-const PAGE_STEP = 1;
+const usePagination = ({
+	meta,
+	queryParameterPrefix,
+}: UsePaginationArguments): UsePaginationResult => {
+	const [searchParameters, setSearchParameters] = useSearchParams();
 
-const initialState: PaginationState = {
-	limit: 10,
-	name: "",
-	page: 1,
-};
+	const pageParameterName = `${queryParameterPrefix}Page`;
+	const pageSizeParameterName = `${queryParameterPrefix}PageSize`;
 
-const paginationReducer = (
-	state: PaginationState,
-	action: Action,
-): PaginationState => {
-	switch (action.type) {
-		case PaginationAction.GO_TO_END: {
-			return { ...state, page: action.payload as number };
-		}
+	const [pageSize, setPageSize] = useState<number>(
+		() =>
+			Number(searchParameters.get(pageSizeParameterName)) ||
+			meta?.itemsPerPage ||
+			DEFAULT_PAGE_SIZE,
+	);
 
-		case PaginationAction.GO_TO_START: {
-			return { ...state, page: 1 };
-		}
+	const [page, setPage] = useState<number>(
+		() =>
+			Number(searchParameters.get(pageParameterName)) ||
+			meta?.currentPage ||
+			FIRST_PAGE,
+	);
 
-		case PaginationAction.NEXT: {
-			return {
-				...state,
-				page: Math.min(state.page + PAGE_STEP, action.payload as number),
-			};
-		}
+	useEffect(() => {
+		const updatedSearchParameters = new URLSearchParams(searchParameters);
+		updatedSearchParameters.set(pageParameterName, String(page));
+		updatedSearchParameters.set(pageSizeParameterName, String(pageSize));
+		setSearchParameters(updatedSearchParameters);
+	}, [page, pageSize, setSearchParameters]);
 
-		case PaginationAction.PREVIOUS: {
-			return {
-				...state,
-				page: Math.max(state.page - PAGE_STEP, START_PAGE_NUMBER),
-			};
-		}
+	const totalPages = meta?.totalPages ?? FIRST_PAGE;
 
-		case PaginationAction.SET_LIMIT: {
-			return {
-				...state,
-				limit: action.payload as number,
-				page: START_PAGE_NUMBER,
-			};
-		}
+	const onPageChange = useCallback(
+		(newPage: number) => {
+			const validPage = Math.max(FIRST_PAGE, Math.min(newPage, totalPages));
+			setPage(validPage);
+		},
+		[totalPages],
+	);
 
-		case PaginationAction.SET_NAME: {
-			return {
-				...state,
-				name: action.payload as string,
-				page: START_PAGE_NUMBER,
-			};
-		}
-
-		default: {
-			return state;
-		}
-	}
-};
-
-const usePagination = <Result, ThunkCfg extends object = object>(
-	action: AsyncThunk<Result, PaginationQuery, ThunkCfg>,
-): UsePaginationResult => {
-	const [state, localDispatch] = useReducer(paginationReducer, initialState);
-	const dispatch = useAppDispatch();
-
-	const goToStart = useCallback((): void => {
-		localDispatch({ type: PaginationAction.GO_TO_START });
+	const onPageSizeChange = useCallback((newPageSize: number) => {
+		setPageSize(newPageSize);
+		setPage(FIRST_PAGE);
 	}, []);
-	const goToEnd = useCallback((totalPages: number): void => {
-		localDispatch({ payload: totalPages, type: PaginationAction.GO_TO_END });
+
+	const goToStart = useCallback(() => {
+		setPage(FIRST_PAGE);
 	}, []);
-	const goToNext = useCallback((totalPages: number): void => {
-		localDispatch({ payload: totalPages, type: PaginationAction.NEXT });
-	}, []);
-	const goToPrevious = useCallback((): void => {
-		localDispatch({ type: PaginationAction.PREVIOUS });
-	}, []);
-	const setLimit = useCallback((newLimit: number | string): void => {
-		localDispatch({ payload: newLimit, type: PaginationAction.SET_LIMIT });
-	}, []);
-	const setName = useCallback((newName: string): void => {
-		localDispatch({ payload: newName, type: PaginationAction.SET_NAME });
+	const goToEnd = useCallback(() => {
+		setPage(totalPages);
+	}, [totalPages]);
+	const goToNext = useCallback(() => {
+		setPage((previous) => Math.min(previous + OFFSET, totalPages));
+	}, [totalPages]);
+	const goToPrevious = useCallback(() => {
+		setPage((previous) => Math.max(previous - OFFSET, FIRST_PAGE));
 	}, []);
 
 	useEffect(() => {
-		dispatch(
-			action({
-				limit: String(state.limit),
-				page: String(state.page),
-				search: state.name,
-			}) as unknown as UnknownAction,
-		);
-	}, [state.limit, state.name, state.page]);
+		if (meta) {
+			setPage(meta.currentPage);
+			setPageSize(meta.itemsPerPage);
+		}
+	}, [meta]);
 
 	return {
-		...state,
 		goToEnd,
 		goToNext,
 		goToPrevious,
 		goToStart,
-		setLimit,
-		setName,
+		onPageChange,
+		onPageSizeChange,
+		page,
+		pageSize,
 	};
 };
 

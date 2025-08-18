@@ -1,9 +1,9 @@
+import { type PaginationMeta } from "../../../../libs/types/pagination-meta-dto.type.js";
 import { type PointsOfInterestPaginatedSummary } from "./points-of-interest-paginated-summary-dto.type.js";
-import { type PointsOfInterestPaginationMeta } from "./points-of-interest-pagination-meta-dto.type.js";
 
 type PointsOfInterestPaginatedResponseDto = {
 	data: PointsOfInterestPaginatedSummary[];
-	meta: PointsOfInterestPaginationMeta;
+	meta: PaginationMeta;
 };
 
 export { type PointsOfInterestPaginatedResponseDto };

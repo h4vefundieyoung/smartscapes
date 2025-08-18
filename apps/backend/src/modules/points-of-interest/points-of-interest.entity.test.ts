@@ -49,4 +49,24 @@ describe("PointsOfInterestEntity", () => {
 		assert.strictEqual(result.description, pointOfInterestData.description);
 		assert.deepStrictEqual(result.location, pointOfInterestData.location);
 	});
+
+	it("should return only id, name, and createdAt without location and description", () => {
+		const entity = PointsOfInterestEntity.initializeSummary({
+			createdAt: "2025-08-14T00:00:00Z",
+			id: 1,
+			name: "Point 1",
+		});
+
+		const result = entity.toSummaryObject();
+
+		assert.deepStrictEqual(result, {
+			createdAt: "2025-08-14T00:00:00Z",
+			id: 1,
+			name: "Point 1",
+		});
+
+		const keys = Object.keys(result);
+		assert.strictEqual(keys.includes("location"), false);
+		assert.strictEqual(keys.includes("description"), false);
+	});
 });

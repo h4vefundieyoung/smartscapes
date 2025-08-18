@@ -1,5 +1,4 @@
 import { type ColumnDef } from "@tanstack/react-table";
-import { type JSX } from "react";
 
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 
@@ -13,7 +12,7 @@ type Properties<T> = {
 function TableSkeleton<T>({
 	columns,
 	rowCount,
-}: Readonly<Properties<T>>): JSX.Element {
+}: Readonly<Properties<T>>): React.JSX.Element {
 	return (
 		<>
 			<thead>

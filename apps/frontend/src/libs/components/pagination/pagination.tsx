@@ -17,16 +17,16 @@ const Pagination = ({
 	totalPages,
 }: Properties): JSX.Element => {
 	const handleNextClick = useCallback(() => {
-		paginationSettings.goToNext(totalPages);
-	}, [paginationSettings, totalPages]);
+		paginationSettings.goToNext();
+	}, [paginationSettings]);
 
 	const handleEndClick = useCallback(() => {
-		paginationSettings.goToEnd(totalPages);
-	}, [paginationSettings, totalPages]);
+		paginationSettings.goToEnd();
+	}, [paginationSettings]);
 
-	const handleSetLimit = useCallback(
+	const handlePageSizeChange = useCallback(
 		(value: number) => {
-			paginationSettings.setLimit(value);
+			paginationSettings.onPageSizeChange(value);
 		},
 		[paginationSettings],
 	);
@@ -40,8 +40,8 @@ const Pagination = ({
 					<NumberInput
 						max={totalItems}
 						min={1}
-						onChange={handleSetLimit}
-						value={paginationSettings.limit}
+						onChange={handlePageSizeChange}
+						value={paginationSettings.pageSize}
 					/>
 				</div>
 				<span className={styles["page-status"]}>

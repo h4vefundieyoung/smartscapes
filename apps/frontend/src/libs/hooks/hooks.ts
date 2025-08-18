@@ -10,7 +10,6 @@ export {
 	useContext,
 	useEffect,
 	useMemo,
-	useReducer,
 	useRef,
 	useState,
 } from "react";

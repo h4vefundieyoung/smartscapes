@@ -1,5 +1,3 @@
-import { type JSX } from "react";
-
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -7,7 +5,10 @@ type Properties = {
 	title: string;
 };
 
-const DashboardHeading = ({ subtitle, title }: Properties): JSX.Element => {
+const DashboardHeading = ({
+	subtitle,
+	title,
+}: Properties): React.JSX.Element => {
 	return (
 		<div className={styles["heading"]}>
 			<h1 className={styles["title"]}>{title}</h1>

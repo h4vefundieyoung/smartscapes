@@ -10,7 +10,6 @@ import {
 	type PointsOfInterestFindAllOptions,
 	type PointsOfInterestPaginatedOptions,
 	type PointsOfInterestPaginatedResponseDto,
-	type PointsOfInterestPaginationMeta,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 } from "./libs/types/type.js";
@@ -100,25 +99,25 @@ class PointsOfInterestService implements Service {
 	public async findPaginated(
 		options: PointsOfInterestPaginatedOptions,
 	): Promise<PointsOfInterestPaginatedResponseDto> {
-		const { limit, page, search } = options;
+		const { page, perPage, search } = options;
 
 		const { items, total } =
 			await this.pointsOfInterestRepository.findPaginated({
-				limit,
 				page,
-				search: search || "",
+				perPage,
+				search,
 			});
 
-		const totalPages = Math.ceil(total / limit);
+		const totalPages = Math.ceil(total / perPage);
 
 		return {
 			data: items.map((item) => item.toSummaryObject()),
 			meta: {
 				currentPage: page,
-				itemsPerPage: limit,
+				itemsPerPage: perPage,
 				total,
 				totalPages,
-			} as PointsOfInterestPaginationMeta,
+			},
 		};
 	}
 

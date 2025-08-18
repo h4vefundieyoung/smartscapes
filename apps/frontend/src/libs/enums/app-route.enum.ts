@@ -1,9 +1,9 @@
 const AppRoute = {
-	ADMINISTRATIVE_DASHBOARD: "/app/administrative-dashboard",
 	APP: "/app",
 	CATEGORIES: "/app/categories",
 	CONTENT: "/app/content",
 	EXPLORE: "/app/explore",
+	MANAGE_ROUTES: "/app/manage-routes",
 	PROFILE: "/app/profile",
 	ROOT: "/",
 	ROUTES: "/app/routes",

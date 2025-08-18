@@ -1,7 +1,6 @@
 type PaginationQuery = {
-	limit: string;
 	page: string;
-	search?: string;
+	perPage: string;
 };
 
 export { type PaginationQuery };

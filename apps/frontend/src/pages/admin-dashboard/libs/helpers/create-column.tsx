@@ -1,7 +1,6 @@
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { ActionCell } from "~/libs/components/table/libs/components/components.js";
-
+import { ActionCell } from "../components/components.js";
 import { type RowData } from "../types/types.js";
 
 const createColumns = (

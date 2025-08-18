@@ -3,7 +3,6 @@ import {
 	getCoreRowModel,
 	useReactTable,
 } from "@tanstack/react-table";
-import { type JSX } from "react";
 
 import { Pagination } from "~/libs/components/components.js";
 import { type usePagination } from "~/libs/hooks/hooks.js";
@@ -27,7 +26,7 @@ type Properties<T> = {
 
 const DEFAULT_ROWS_COUNT = 5;
 
-function Table<T>({
+const Table = <T,>({
 	columns,
 	data,
 	loading,
@@ -35,7 +34,7 @@ function Table<T>({
 	title,
 	totalItems,
 	totalPages,
-}: Readonly<Properties<T>>): JSX.Element {
+}: Readonly<Properties<T>>): React.JSX.Element => {
 	const table = useReactTable({
 		columns,
 		data,
@@ -43,8 +42,8 @@ function Table<T>({
 	});
 
 	const rowCount =
-		paginationSettings.limit > 0
-			? paginationSettings.limit
+		paginationSettings.pageSize > 0
+			? paginationSettings.pageSize
 			: DEFAULT_ROWS_COUNT;
 
 	return (
@@ -71,6 +70,6 @@ function Table<T>({
 			)}
 		</section>
 	);
-}
+};
 
 export { Table };

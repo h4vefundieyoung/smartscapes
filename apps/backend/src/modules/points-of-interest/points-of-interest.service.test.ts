@@ -201,4 +201,55 @@ describe("PointsOfInterestService", () => {
 
 		assert.strictEqual(result, true);
 	});
+
+	it("findPaginated should return paginated points of interest", async () => {
+		const mockEntities = [
+			PointsOfInterestEntity.initializeSummary({
+				createdAt: "2025-08-14T00:00:00Z",
+				id: 1,
+				name: "Point 1",
+			}),
+			PointsOfInterestEntity.initializeSummary({
+				createdAt: "2025-08-15T00:00:00Z",
+				id: 2,
+				name: "Point 2",
+			}),
+			PointsOfInterestEntity.initializeSummary({
+				createdAt: "2025-08-16T00:00:00Z",
+				id: 3,
+				name: "Point 3",
+			}),
+		];
+
+		const mockTotal = mockEntities.length;
+		const totalPages = Math.ceil(mockTotal / 10);
+
+		const pointsOfInterestRepository = {
+			findPaginated: (() =>
+				Promise.resolve({
+					items: mockEntities,
+					total: mockTotal,
+				})) as PointsOfInterestRepository["findPaginated"],
+		} as PointsOfInterestRepository;
+
+		const pointsOfInterestService = new PointsOfInterestService(
+			pointsOfInterestRepository,
+		);
+
+		const result = await pointsOfInterestService.findPaginated({
+			page: 1,
+			perPage: 10,
+			search: undefined,
+		});
+
+		const expectedData = mockEntities.map((item) => item.toSummaryObject());
+		assert.deepStrictEqual(result.data, expectedData);
+
+		assert.deepStrictEqual(result.meta, {
+			currentPage: 1,
+			itemsPerPage: 10,
+			total: mockTotal,
+			totalPages,
+		});
+	});
 });

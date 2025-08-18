@@ -1,13 +1,12 @@
 import { flexRender, type Table } from "@tanstack/react-table";
-import { type JSX } from "react";
 
-import styles from "../../../styles.module.css";
+import styles from "./styles.module.css";
 
 type Properties<T> = {
 	table: Table<T>;
 };
 
-function TableBody<T>({ table }: Readonly<Properties<T>>): JSX.Element {
+function TableBody<T>({ table }: Readonly<Properties<T>>): React.JSX.Element {
 	return (
 		<tbody className={styles["tbody"]}>
 			{table.getRowModel().rows.map((row) => (

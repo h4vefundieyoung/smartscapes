@@ -173,7 +173,7 @@ class PointsOfInterestRepository implements Repository {
 	public async findPaginated(
 		options: PointsOfInterestPaginatedOptions,
 	): Promise<EntityPagination<PointsOfInterestEntity>> {
-		const { limit, page, search } = options;
+		const { page, perPage, search } = options;
 
 		const query = this.pointsOfInterestModel
 			.query()
@@ -187,8 +187,8 @@ class PointsOfInterestRepository implements Repository {
 		const total = await query.resultSize();
 
 		const items = await query
-			.offset((page - PAGE_NUMBER_OFFSET) * limit)
-			.limit(limit)
+			.offset((page - PAGE_NUMBER_OFFSET) * perPage)
+			.limit(perPage)
 			.execute();
 
 		return {

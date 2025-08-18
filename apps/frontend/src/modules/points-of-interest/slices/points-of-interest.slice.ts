@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
-import { type ValueOf } from "~/libs/types/types.js";
+import { getFormattedDate } from "~/libs/helpers/helpers.js";
+import { type PaginationMeta, type ValueOf } from "~/libs/types/types.js";
 import {
 	type PointsOfInterestPaginatedSummary,
-	type PointsOfInterestPaginationMeta,
 	type PointsOfInterestResponseDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
@@ -14,7 +14,7 @@ type State = {
 	createStatus: ValueOf<typeof DataStatus>;
 	data: null | PointsOfInterestResponseDto;
 	dataStatus: ValueOf<typeof DataStatus>;
-	meta: PointsOfInterestPaginationMeta;
+	meta: null | PaginationMeta;
 	summary: PointsOfInterestPaginatedSummary[];
 };
 
@@ -22,12 +22,7 @@ const initialState: State = {
 	createStatus: DataStatus.IDLE,
 	data: null,
 	dataStatus: DataStatus.IDLE,
-	meta: {
-		currentPage: 1,
-		itemsPerPage: 10,
-		total: 0,
-		totalPages: 0,
-	},
+	meta: null,
 	summary: [],
 };
 
@@ -52,7 +47,7 @@ const { actions, name, reducer } = createSlice({
 
 			state.summary = payload.data.data.map((item) => ({
 				...item,
-				createdAt: item.createdAt.split("T")[0] as string,
+				createdAt: getFormattedDate(item.createdAt, "dd MMM yyyy"),
 			}));
 			state.meta = payload.data.meta;
 			state.dataStatus = DataStatus.FULFILLED;

@@ -11,10 +11,10 @@ import {
 import { AppRoute } from "~/libs/enums/enums.js";
 import { pwa } from "~/libs/modules/pwa/pwa.js";
 import { store } from "~/libs/modules/store/store.js";
-import { AdminDashboard } from "~/pages/admin-dashboard/admin-dashboard.js";
 import { Auth } from "~/pages/auth/auth.jsx";
 import { NotFound } from "~/pages/not-found/not-found.jsx";
 
+import { ManageRoutes } from "./pages/admin-dashboard/manage-routes.js";
 import { Dashboard } from "./pages/dashboard/dashboard.js";
 import { Explore } from "./pages/explore/explore.js";
 import { Landing } from "./pages/landing/landing.jsx";
@@ -53,10 +53,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 							{
 								element: (
 									<ProtectedRoute>
-										<AdminDashboard />
+										<ManageRoutes />
 									</ProtectedRoute>
 								),
-								path: AppRoute.ADMINISTRATIVE_DASHBOARD,
+								path: AppRoute.MANAGE_ROUTES,
 							},
 							{
 								element: <Explore />,

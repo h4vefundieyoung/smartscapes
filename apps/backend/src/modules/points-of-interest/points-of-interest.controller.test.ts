@@ -270,4 +270,58 @@ describe("PointsOfInterestController", () => {
 			status: HTTPCode.OK,
 		});
 	});
+
+	it("findPaginated should return paginated points of interest", async () => {
+		const mockPoints = [
+			{ createdAt: "2025-08-14T00:00:00Z", id: 1, name: "Point 1" },
+			{ createdAt: "2025-08-15T00:00:00Z", id: 2, name: "Point 2" },
+			{ createdAt: "2025-08-16T00:00:00Z", id: 3, name: "Point 3" },
+		];
+
+		const mockFindPaginated: PointsOfInterestService["findPaginated"] = () => {
+			return Promise.resolve({
+				data: mockPoints,
+				meta: {
+					currentPage: 1,
+					itemsPerPage: 10,
+					total: mockPoints.length,
+					totalPages: 1,
+				},
+			});
+		};
+
+		const pointsOfInterestService = {
+			findPaginated: mockFindPaginated,
+		} as PointsOfInterestService;
+
+		const controller = new PointsOfInterestController(
+			mockLogger,
+			pointsOfInterestService,
+		);
+
+		const result = await controller.findPaginated({
+			body: {},
+			params: {},
+			query: { page: "1", perPage: "10" },
+			user: null,
+		});
+
+		//will change to better response without additional data layout
+		const expected = {
+			payload: {
+				data: {
+					data: mockPoints,
+					meta: {
+						currentPage: 1,
+						itemsPerPage: 10,
+						total: mockPoints.length,
+						totalPages: 1,
+					},
+				},
+			},
+			status: HTTPCode.OK,
+		};
+
+		assert.deepStrictEqual(result, expected);
+	});
 });

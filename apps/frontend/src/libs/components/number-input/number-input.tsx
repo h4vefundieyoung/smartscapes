@@ -1,6 +1,4 @@
-import { type JSX } from "react";
-
-import { Icon } from "~/libs/components/components.js";
+import { IconButton } from "~/libs/components/components.js";
 import { useCallback } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
@@ -19,7 +17,7 @@ const NumberInput = ({
 	min,
 	onChange,
 	value,
-}: Properties): JSX.Element => {
+}: Properties): React.JSX.Element => {
 	const handleIncrement = useCallback((): void => {
 		const newValue = Math.min(max, (value || min) + STEP_VALUE);
 		onChange?.(newValue);
@@ -58,24 +56,22 @@ const NumberInput = ({
 					value={value}
 				/>
 				<div className={styles["buttons"]}>
-					<button
+					<IconButton
 						className={styles["button"]}
-						disabled={(value || min) >= max}
+						disabled={value >= max}
+						hiddenLabel="Increase value"
+						icon="caretUp"
 						onClick={handleIncrement}
-						type="button"
-					>
-						<Icon height={8} name="caretUp" width={8} />
-						<span className="visually-hidden">Increase value</span>
-					</button>
-					<button
+						size={8}
+					/>
+					<IconButton
 						className={styles["button"]}
-						disabled={(value || min) <= min}
+						disabled={value <= min}
+						hiddenLabel="Increase value"
+						icon="caretDown"
 						onClick={handleDecrement}
-						type="button"
-					>
-						<Icon height={8} name="caretDown" width={8} />
-						<span className="visually-hidden">Increase value</span>
-					</button>
+						size={8}
+					/>
 				</div>
 			</div>
 		</div>

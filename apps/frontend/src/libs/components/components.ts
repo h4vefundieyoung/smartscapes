@@ -3,6 +3,7 @@ export { Avatar } from "./avatar/avatar.js";
 export { Button } from "./button/button.js";
 export { CreatePOIModal } from "./create-poi-modal/create-poi-modal.js";
 export { Header } from "./header/header.js";
+export { IconButton } from "./icon-button/icon-button.js";
 export { Icon } from "./icon/icon.js";
 export { Input } from "./input/input.js";
 export { Link } from "./link/link.js";

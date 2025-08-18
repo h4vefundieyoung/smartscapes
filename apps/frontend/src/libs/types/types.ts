@@ -6,6 +6,7 @@ export {
 	type APIErrorResponse,
 	type APIResponse,
 	type APIValidationErrorDetail,
+	type PaginationMeta,
 	type PaginationQuery,
 	type ValidationSchema,
 	type ValueOf,

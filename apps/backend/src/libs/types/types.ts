@@ -9,7 +9,6 @@ export {
 	type APIValidationErrorDetail,
 	type HTTPMethod,
 	type LineStringGeometry,
-	type PaginationQuery,
 	type PointGeometry,
 	type UserAuthResponseDto,
 	type ValidationSchema,

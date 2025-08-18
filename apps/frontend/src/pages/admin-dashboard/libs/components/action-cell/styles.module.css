@@ -3,6 +3,7 @@
 	align-items: center;
 	justify-content: center;
 	padding: 12px;
+	color: var(--color-brand-1000);
 	cursor: pointer;
 	background: transparent;
 	border: none;
@@ -12,15 +13,11 @@
 		color 0.2s ease;
 }
 
-.icon-button .icon {
-	color: var(--color-brand-1000);
-}
-
-.icon-button:first-child:hover .icon {
+.icon-button:first-child:hover {
 	color: var(--color-fill-press);
 }
 
-.icon-button:last-child:hover .icon {
+.icon-button:last-child:hover {
 	color: var(--color-fill-press);
 }
 

@@ -1,7 +1,7 @@
 export {
+	type PointsOfInterestGetPaginatedSearchQuery,
 	type PointsOfInterestPaginatedResponseDto,
 	type PointsOfInterestPaginatedSummary,
-	type PointsOfInterestPaginationMeta,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 } from "@smartscapes/shared";

@@ -1,5 +1,58 @@
 # Changelog
 
+## [1.38.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.37.0...v1.38.0) (2025-08-18)
+
+
+### Features
+
+* **backend:** add planed path to routes ss-349 ([#422](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/422)) ([1e07262](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/1e072626ceebf6f9cff465e162768be7a7443e44))
+
+## [1.37.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.36.0...v1.37.0) (2025-08-18)
+
+
+### Features
+
+* **frontend:** implement common layout component ss-130 ([#397](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/397)) ([2a8a731](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2a8a7318f7aa4db314317f0cccdbfc19b449a9b6))
+
+## [1.36.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.35.2...v1.36.0) (2025-08-18)
+
+
+### Features
+
+* **frontend/backend/shared:** implement points of interest details page ss-245 ([#337](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/337)) ([26c5795](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/26c5795e69f7d5746b791b9f1276a60d24f38e10))
+
+
+### Bug Fixes
+
+* **backend:** solve validation complier error issue ss-415 ([#418](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/418)) ([1daf53e](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/1daf53e6616ae62caf52aa8a44d995458667327c))
+
+## [1.35.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.35.1...v1.35.2) (2025-08-18)
+
+
+### Bug Fixes
+
+* **frontend:** poi create modal stucked data in reopened form ss-378 ([#406](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/406)) ([34c86db](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/34c86db6602c2f17c43352cc0e585f66a08709d8))
+* **frontend:** solve carousel issues ss-348 ([#409](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/409)) ([86c3439](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/86c34396d175f7bf19ccc1f9430258763bdd80de))
+
+## [1.35.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.35.0...v1.35.1) (2025-08-18)
+
+
+### Bug Fixes
+
+* **frontend:** remove unused users slice ss-407 ([#413](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/413)) ([121dd66](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/121dd6692f290b78e96eee12fc9d614ee1a006da))
+
+## [1.35.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.34.0...v1.35.0) (2025-08-18)
+
+
+### Features
+
+* **frontend:** set up app redirection ss-407 ([#408](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/408)) ([c5b232a](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c5b232ae0d4fec855ac6183b19a9e3071cddf382))
+
+
+### Bug Fixes
+
+* **backend:** update helmet config ss-220 ([#411](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/411)) ([c7e022f](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c7e022f5bd57fce8f0669c59326df0c7202e4c91))
+
 ## [1.34.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.33.0...v1.34.0) (2025-08-17)
 
 

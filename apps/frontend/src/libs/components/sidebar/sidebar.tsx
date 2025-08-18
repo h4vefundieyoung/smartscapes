@@ -2,7 +2,12 @@ import smartScapesLogo from "~/assets/images/logo.svg";
 import { Link } from "~/libs/components/components.js";
 import { AppRoute, KeyboardKey } from "~/libs/enums/enums.js";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
-import { useCallback, useEffect, useState } from "~/libs/hooks/hooks.js";
+import {
+	useCallback,
+	useEffect,
+	useLocation,
+	useState,
+} from "~/libs/hooks/hooks.js";
 import { type NavigationItemsGroup } from "~/libs/types/types.js";
 
 import { SidebarItem } from "./libs/components/components.js";
@@ -13,6 +18,7 @@ type Properties = {
 };
 
 const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
+	const { pathname } = useLocation();
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
 	const handleClick = useCallback((): void => {
@@ -35,6 +41,10 @@ const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
 			document.removeEventListener("keydown", handleKeyDown);
 		};
 	}, [setIsOpen, handleKeyDown]);
+
+	useEffect(() => {
+		setIsOpen(false);
+	}, [pathname]);
 
 	return (
 		<div className={styles["container"]}>

@@ -5,6 +5,7 @@ type NavigationItem = {
 	href: ValueOf<typeof AppRoute>;
 	icon: IconName;
 	isLabelHidden?: boolean;
+	isPagePublic?: boolean;
 	label: string;
 	pagePermissions?: ValueOf<typeof PermissionKey>[];
 };

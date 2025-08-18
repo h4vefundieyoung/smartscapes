@@ -1,7 +1,5 @@
-import { Navigate } from "react-router";
-
 import logo from "~/assets/images/logo.svg";
-import { Link } from "~/libs/components/components.js";
+import { Link, Navigate } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -21,11 +19,10 @@ import styles from "./styles.module.css";
 const Auth = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const { pathname } = useLocation();
-
 	const authenticatedUser = useAppSelector(
 		({ auth }) => auth.authenticatedUser,
 	);
-	const hasUser = Boolean(authenticatedUser);
+	const hasAuthenticatedUser = Boolean(authenticatedUser);
 
 	const handleSignInSubmit = useCallback(
 		(payload: UserSignInRequestDto): void => {
@@ -58,7 +55,7 @@ const Auth = (): React.JSX.Element => {
 		[handleSignInSubmit, handleSignUpSubmit],
 	);
 
-	if (hasUser) {
+	if (hasAuthenticatedUser) {
 		return <Navigate replace to={AppRoute.APP} />;
 	}
 

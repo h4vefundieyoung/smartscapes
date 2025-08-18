@@ -18,23 +18,73 @@ class UserRouteRepository implements Repository {
 			.insert(insertData)
 			.returning([
 				"id",
+				"routeId",
+				"userId",
+				"status",
+				"startedAt",
+				"completedAt",
 				this.userRouteModel.raw(
 					"ST_AsGeoJSON(actual_geometry)::json as actualGeometry",
 				),
-				"completedAt",
 				this.userRouteModel.raw(
 					"ST_AsGeoJSON(planned_geometry)::json as plannedGeometry",
 				),
-				"routeId",
-				"startedAt",
-				"status",
-				"userId",
 			])
 			.execute();
 
-		const initialized = UserRouteEntity.initialize(result);
+		return UserRouteEntity.initialize(result);
+	}
 
-		return initialized;
+	public async findById(id: number): Promise<null | UserRouteEntity> {
+		const result = await this.userRouteModel
+			.query()
+			.findById(id)
+			.returning([
+				"id",
+				"routeId",
+				"userId",
+				"status",
+				"startedAt",
+				"completedAt",
+				this.userRouteModel.raw(
+					"ST_AsGeoJSON(actual_geometry)::json as actualGeometry",
+				),
+				this.userRouteModel.raw(
+					"ST_AsGeoJSON(planned_geometry)::json as plannedGeometry",
+				),
+			])
+			.execute();
+
+		return result ? UserRouteEntity.initialize(result) : null;
+	}
+
+	public async patch(
+		id: number,
+		entity: UserRouteEntity,
+	): Promise<null | UserRouteEntity> {
+		const updateData = entity.toNewObject();
+
+		const [updated] = await this.userRouteModel
+			.query()
+			.where({ id })
+			.patch(updateData)
+			.returning([
+				"id",
+				"routeId",
+				"userId",
+				"status",
+				"startedAt",
+				"completedAt",
+				this.userRouteModel.raw(
+					"ST_AsGeoJSON(actual_geometry)::json as actualGeometry",
+				),
+				this.userRouteModel.raw(
+					"ST_AsGeoJSON(planned_geometry)::json as plannedGeometry",
+				),
+			])
+			.execute();
+
+		return updated ? UserRouteEntity.initialize(updated) : null;
 	}
 }
 

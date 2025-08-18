@@ -15,7 +15,7 @@ class UserRouteModel extends AbstractModel {
 	public completedAt!: null | string;
 	public plannedGeometry!: LineStringGeometry;
 	public routeId!: number;
-	public startedAt!: string;
+	public startedAt!: null | string;
 	public status!: UserRouteStatusType;
 	public userId!: number;
 }

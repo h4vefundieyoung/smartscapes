@@ -9,11 +9,17 @@ import { type Logger } from "~/libs/modules/logger/libs/types/logger.type.js";
 
 import { UserRouteApiPath } from "./libs/enums/enum.js";
 import {
-	type UserRouteRequestDto,
+	type UserRouteCreateRequestDto,
+	type UserRouteFinishRequestDto,
+	type UserRouteParameters,
 	type UserRouteResponseDto,
 } from "./libs/types/type.js";
+import {
+	userRouteCreateValidationSchema,
+	userRouteFinishValidationSchema,
+	userRouteParametersValidationSchema,
+} from "./libs/validation-schemas/validation-schemas.js";
 import { type UserRouteService } from "./user-route.service.js";
-import { userRouteValidationSchema } from "./validation-schemas/validation-schemas.js";
 
 class UserRouteController extends BaseController {
 	private userRouteService: UserRouteService;
@@ -25,28 +31,84 @@ class UserRouteController extends BaseController {
 		this.addRoute({
 			handler: this.create.bind(this),
 			method: "POST",
-			path: UserRouteApiPath.ROOT,
-			validator: {
-				body: userRouteValidationSchema,
+			path: UserRouteApiPath.$ID,
+			validation: {
+				body: userRouteCreateValidationSchema,
+				params: userRouteParametersValidationSchema,
+			},
+		});
+
+		this.addRoute({
+			handler: this.finish.bind(this),
+			method: "POST",
+			path: UserRouteApiPath.FINISH,
+			validation: {
+				body: userRouteFinishValidationSchema,
+				params: userRouteParametersValidationSchema,
+			},
+		});
+
+		this.addRoute({
+			handler: this.start.bind(this),
+			method: "POST",
+			path: UserRouteApiPath.START,
+			validation: {
+				params: userRouteParametersValidationSchema,
 			},
 		});
 	}
 
 	public async create(
 		options: APIHandlerOptions<{
-			body: UserRouteRequestDto;
+			body: UserRouteCreateRequestDto;
+			params: UserRouteParameters;
 		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
-		const { routeId, userId } = options.body;
+		const { body, params } = options;
+		const { routeId } = body;
+		const { userId } = params;
 
-		const created = await this.userRouteService.create({
-			routeId,
-			userId,
-		});
+		const created = await this.userRouteService.create({ routeId, userId });
 
 		return {
 			payload: { data: created },
 			status: HTTPCode.CREATED,
+		};
+	}
+
+	public async finish(
+		options: APIHandlerOptions<{
+			body: UserRouteFinishRequestDto;
+			params: UserRouteParameters;
+		}>,
+	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
+		const { body, params } = options;
+		const { actualGeometry } = body;
+		const { userId } = params;
+
+		const updated = await this.userRouteService.finish({
+			actualGeometry,
+			userId,
+		});
+
+		return {
+			payload: { data: updated },
+			status: HTTPCode.OK,
+		};
+	}
+
+	public async start(
+		options: APIHandlerOptions<{
+			params: UserRouteParameters;
+		}>,
+	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
+		const { userId } = options.params;
+
+		const updated = await this.userRouteService.start({ userId });
+
+		return {
+			payload: { data: updated },
+			status: HTTPCode.OK,
 		};
 	}
 }

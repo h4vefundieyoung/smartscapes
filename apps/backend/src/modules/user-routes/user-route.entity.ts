@@ -48,7 +48,7 @@ class UserRouteEntity implements Entity {
 		plannedGeometry: LineStringGeometry;
 		routeId: number;
 		startedAt: null | string;
-		status: null | UserRouteStatusType;
+		status: UserRouteStatusType;
 		userId: number;
 	}): UserRouteEntity {
 		return new UserRouteEntity({
@@ -67,11 +67,13 @@ class UserRouteEntity implements Entity {
 		actualGeometry,
 		plannedGeometry,
 		routeId,
+		status,
 		userId,
 	}: {
 		actualGeometry: LineStringGeometry;
 		plannedGeometry: LineStringGeometry;
 		routeId: number;
+		status: UserRouteStatusType;
 		userId: number;
 	}): UserRouteEntity {
 		return new UserRouteEntity({
@@ -81,7 +83,7 @@ class UserRouteEntity implements Entity {
 			plannedGeometry,
 			routeId,
 			startedAt: null,
-			status: null,
+			status,
 			userId,
 		});
 	}
@@ -102,21 +104,21 @@ class UserRouteEntity implements Entity {
 
 	public toObject(): {
 		actualGeometry: LineStringGeometry;
-		completedAt: string;
+		completedAt: null | string;
 		id: number;
 		plannedGeometry: LineStringGeometry;
 		routeId: number;
-		startedAt: string;
+		startedAt: null | string;
 		status: UserRouteStatusType;
 		userId: number;
 	} {
 		return {
 			actualGeometry: this.actualGeometry,
-			completedAt: this.completedAt as string,
+			completedAt: this.completedAt,
 			id: this.id as number,
 			plannedGeometry: this.plannedGeometry,
 			routeId: this.routeId,
-			startedAt: this.startedAt as string,
+			startedAt: this.startedAt,
 			status: this.status as UserRouteStatusType,
 			userId: this.userId,
 		};

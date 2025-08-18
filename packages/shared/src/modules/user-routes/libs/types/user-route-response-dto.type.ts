@@ -7,7 +7,7 @@ type UserRouteResponseDto = {
 	id: number;
 	plannedGeometry: LineStringGeometry;
 	routeId: number;
-	startedAt: string;
+	startedAt: null | string;
 	status: UserRouteStatusType;
 	userId: number;
 };

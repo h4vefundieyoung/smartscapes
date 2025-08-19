@@ -74,10 +74,7 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 					!isDropdownOpen && styles["hidden"],
 				)}
 			>
-				<UserDropdown
-					dropdownMenuItems={DROPDOWN_MENU_ITEMS}
-					onLogout={handleLogout}
-				/>
+				<UserDropdown items={DROPDOWN_MENU_ITEMS} onLogout={handleLogout} />
 			</div>
 		</div>
 	);

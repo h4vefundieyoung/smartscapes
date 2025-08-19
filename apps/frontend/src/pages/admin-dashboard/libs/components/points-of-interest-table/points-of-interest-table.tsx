@@ -52,7 +52,6 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 			data={summary}
 			loading={dataStatus === DataStatus.PENDING}
 			paginationSettings={paginationPOIS}
-			title="Points of interest"
 			totalItems={meta?.total ?? DEFAULT_TOTAL_ITEMS}
 			totalPages={meta?.totalPages ?? DEFAULT_TOTAL_PAGES}
 		/>

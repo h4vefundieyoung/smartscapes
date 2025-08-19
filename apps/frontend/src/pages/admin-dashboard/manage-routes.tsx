@@ -11,6 +11,7 @@ const ManageRoutes = (): React.JSX.Element => {
 				subtitle="Manage points of interest and routes."
 				title="Dashboard"
 			/>
+			<h2 className={styles["table-title"]}>Points of interest</h2>
 			<PointsOfInterestTable />
 		</main>
 	);

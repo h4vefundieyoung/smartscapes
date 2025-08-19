@@ -56,13 +56,11 @@ class RouteRepository implements Repository {
 	public async findAll(
 		options: null | RouteFindAllOptions,
 	): Promise<RouteEntity[]> {
-		const routes = await this.routesModel
+		const query = this.routesModel
 			.query()
-			.withGraphFetched("pois(selectPoiIdOrder)")
-			.modifiers({
-				selectPoiIdOrder(builder) {
-					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
-				},
+			.withGraphFetched("pois")
+			.modifyGraph("pois", (builder) => {
+				builder.select("points_of_interest.id", "routes_to_pois.visit_order");
 			})
 			.select([
 				"routes.id",
@@ -79,7 +77,20 @@ class RouteRepository implements Repository {
 				}
 			});
 
-		return routes.map((point) => RouteEntity.initializeList(point));
+		if (options?.name) {
+			query.whereILike("routes.name", `%${options.name.trim()}%`);
+		}
+
+		if (options?.categories?.length) {
+			query
+				.joinRelated("categories")
+				.whereIn("categories.key", options.categories as string[])
+				.groupBy("routes.id");
+		}
+
+		const routes = await query;
+
+		return routes.map((route) => RouteEntity.initializeList(route));
 	}
 
 	public async findById(id: number): Promise<null | RouteEntity> {

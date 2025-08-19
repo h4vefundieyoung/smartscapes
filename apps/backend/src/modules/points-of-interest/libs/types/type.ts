@@ -3,6 +3,7 @@ export { type PointsOfInterestPaginatedOptions } from "./points-of-interest-pagi
 export {
 	type PointsOfInterestGetPaginatedSearchQuery,
 	type PointsOfInterestPaginatedResponseDto,
+	type PointsOfInterestPaginatedSummary,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 	type PointsOfInterestSearchQuery,

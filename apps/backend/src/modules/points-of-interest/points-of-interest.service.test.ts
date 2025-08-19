@@ -52,12 +52,7 @@ describe("PointsOfInterestService", () => {
 			name: mockPointOfInterest.name,
 		});
 
-		assert.deepStrictEqual(result, {
-			description: mockPointOfInterest.description,
-			id: mockPointOfInterest.id,
-			location: mockPointOfInterest.location,
-			name: mockPointOfInterest.name,
-		});
+		assert.deepStrictEqual(result, pointOfInterestEntity.toObject());
 	});
 
 	it("findAll should return all points of interest", async () => {
@@ -204,20 +199,38 @@ describe("PointsOfInterestService", () => {
 
 	it("findPaginated should return paginated points of interest", async () => {
 		const mockEntities = [
-			PointsOfInterestEntity.initializeSummary({
+			PointsOfInterestEntity.initialize({
 				createdAt: "2025-08-14T00:00:00Z",
+				description: "Point Of Interest Test Description 1",
 				id: 1,
+				location: {
+					coordinates: TEST_COORDINATES,
+					type: "Point" as const,
+				},
 				name: "Point 1",
+				updatedAt: "2025-08-14T00:00:00Z",
 			}),
-			PointsOfInterestEntity.initializeSummary({
+			PointsOfInterestEntity.initialize({
 				createdAt: "2025-08-15T00:00:00Z",
+				description: "Point Of Interest Test Description 2",
 				id: 2,
+				location: {
+					coordinates: TEST_COORDINATES,
+					type: "Point" as const,
+				},
 				name: "Point 2",
+				updatedAt: "2025-08-15T00:00:00Z",
 			}),
-			PointsOfInterestEntity.initializeSummary({
+			PointsOfInterestEntity.initialize({
 				createdAt: "2025-08-16T00:00:00Z",
+				description: "Point Of Interest Test Description 3",
 				id: 3,
+				location: {
+					coordinates: TEST_COORDINATES,
+					type: "Point" as const,
+				},
 				name: "Point 3",
+				updatedAt: "2025-08-16T00:00:00Z",
 			}),
 		];
 
@@ -242,7 +255,7 @@ describe("PointsOfInterestService", () => {
 			search: undefined,
 		});
 
-		const expectedData = mockEntities.map((item) => item.toSummaryObject());
+		const expectedData = mockEntities.map((item) => item.toObject());
 		assert.deepStrictEqual(result.data, expectedData);
 
 		assert.deepStrictEqual(result.meta, {

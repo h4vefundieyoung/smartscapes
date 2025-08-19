@@ -62,20 +62,6 @@ class PointsOfInterestEntity implements Entity {
 		});
 	}
 
-	public static initializeSummary(data: {
-		createdAt: string;
-		id: number;
-		name: string;
-	}): PointsOfInterestEntity {
-		return new PointsOfInterestEntity({
-			createdAt: data.createdAt,
-			description: null,
-			id: data.id,
-			location: null,
-			name: data.name,
-		});
-	}
-
 	public toNewObject(): {
 		description: null | string;
 		location: PointGeometry;
@@ -89,27 +75,17 @@ class PointsOfInterestEntity implements Entity {
 	}
 
 	public toObject(): {
+		createdAt: null | string;
 		description: null | string;
 		id: number;
 		location: PointGeometry;
 		name: string;
 	} {
 		return {
+			createdAt: this.createdAt,
 			description: this.description,
 			id: this.id as number,
 			location: this.location as PointGeometry,
-			name: this.name,
-		};
-	}
-
-	public toSummaryObject(): {
-		createdAt: string;
-		id: number;
-		name: string;
-	} {
-		return {
-			createdAt: this.createdAt as string,
-			id: this.id as number,
 			name: this.name,
 		};
 	}

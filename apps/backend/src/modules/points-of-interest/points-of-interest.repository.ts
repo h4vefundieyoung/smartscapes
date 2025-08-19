@@ -195,9 +195,7 @@ class PointsOfInterestRepository implements Repository {
 		]);
 
 		return {
-			items: items.map((item) =>
-				PointsOfInterestEntity.initializeSummary(item),
-			),
+			items: items.map((item) => PointsOfInterestEntity.initialize(item)),
 			total,
 		};
 	}

@@ -10,6 +10,7 @@ import {
 	type PointsOfInterestFindAllOptions,
 	type PointsOfInterestPaginatedOptions,
 	type PointsOfInterestPaginatedResponseDto,
+	type PointsOfInterestPaginatedSummary,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 } from "./libs/types/type.js";
@@ -111,7 +112,9 @@ class PointsOfInterestService implements Service {
 		const totalPages = Math.ceil(total / perPage);
 
 		return {
-			data: items.map((item) => item.toSummaryObject()),
+			data: items.map((item) =>
+				item.toObject(),
+			) as PointsOfInterestPaginatedSummary[],
 			meta: {
 				currentPage: page,
 				itemsPerPage: perPage,

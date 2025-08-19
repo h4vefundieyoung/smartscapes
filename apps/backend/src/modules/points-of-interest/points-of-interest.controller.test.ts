@@ -273,9 +273,36 @@ describe("PointsOfInterestController", () => {
 
 	it("findPaginated should return paginated points of interest", async () => {
 		const mockPoints = [
-			{ createdAt: "2025-08-14T00:00:00Z", id: 1, name: "Point 1" },
-			{ createdAt: "2025-08-15T00:00:00Z", id: 2, name: "Point 2" },
-			{ createdAt: "2025-08-16T00:00:00Z", id: 3, name: "Point 3" },
+			{
+				createdAt: "2025-08-14T00:00:00Z",
+				description: "Point Of Interest Test Description 1",
+				id: 1,
+				location: {
+					coordinates: TEST_COORDINATES,
+					type: "Point" as const,
+				},
+				name: "Point 1",
+			},
+			{
+				createdAt: "2025-08-15T00:00:00Z",
+				description: "Point Of Interest Test Description 2",
+				id: 2,
+				location: {
+					coordinates: TEST_COORDINATES,
+					type: "Point" as const,
+				},
+				name: "Point 2",
+			},
+			{
+				createdAt: "2025-08-16T00:00:00Z",
+				description: "Point Of Interest Test Description 3",
+				id: 3,
+				location: {
+					coordinates: TEST_COORDINATES,
+					type: "Point" as const,
+				},
+				name: "Point 3",
+			},
 		];
 
 		const mockFindPaginated: PointsOfInterestService["findPaginated"] = () => {

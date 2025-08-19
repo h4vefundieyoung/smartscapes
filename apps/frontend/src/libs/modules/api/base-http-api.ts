@@ -1,4 +1,5 @@
 import { APIErrorType } from "~/libs/enums/enums.js";
+import { configureString } from "~/libs/helpers/helpers.js";
 import {
 	AuthError,
 	type HTTP,
@@ -72,7 +73,7 @@ class BaseHTTPApi implements HTTPApi {
 
 		let path = this.constructPath(copiedParameters as string[]);
 
-		path = this.replaceDynamicPathSegments(path, options);
+		path = configureString(path, options);
 
 		const queryString = this.buildQueryString(options, path);
 
@@ -163,21 +164,6 @@ class BaseHTTPApi implements HTTPApi {
 				: new HTTPError(errorData);
 
 		throw error;
-	}
-
-	private replaceDynamicPathSegments(
-		path: string,
-		options: Record<string, string>,
-	): string {
-		for (const [key, value] of Object.entries(options)) {
-			const dynamicPathKey = `:${key}`;
-
-			if (path.includes(dynamicPathKey)) {
-				path = path.replace(dynamicPathKey, encodeURIComponent(value));
-			}
-		}
-
-		return path;
 	}
 }
 

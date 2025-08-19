@@ -1,8 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 
-import { type RouteGetByIdResponseDto } from "../libs/types/types.js";
+import { RoutesNotification } from "../libs/enums/enums.js";
+import {
+	type PatchActionPayload,
+	type RouteGetByIdResponseDto,
+} from "../libs/types/types.js";
 import { name as sliceName } from "./route.slice.js";
 
 const getRouteById = createAsyncThunk<
@@ -15,4 +20,16 @@ const getRouteById = createAsyncThunk<
 	return routeApi.getRouteById(id);
 });
 
-export { getRouteById };
+const patchRoute = createAsyncThunk<
+	APIResponse<RouteGetByIdResponseDto>,
+	PatchActionPayload,
+	AsyncThunkConfig
+>(`${sliceName}/get-route-by-id`, async (payload, { extra }) => {
+	const { routeApi } = extra;
+	const patchResult = await routeApi.patchRoute(payload);
+	toastNotifier.showSuccess(RoutesNotification.UPDATED);
+
+	return patchResult;
+});
+
+export { getRouteById, patchRoute };

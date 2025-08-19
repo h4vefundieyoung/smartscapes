@@ -1,5 +1,6 @@
 .tbody {
 	width: 100%;
+	border-right: 2px solid var(--color-stroke-weak);
 }
 
 .td {

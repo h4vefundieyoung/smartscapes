@@ -32,21 +32,21 @@ const usePagination = ({
 }: UsePaginationArguments): UsePaginationResult => {
 	const [searchParameters, setSearchParameters] = useSearchParams();
 
-	const pageParameterName = `${queryParameterPrefix}Page`;
-	const pageSizeParameterName = `${queryParameterPrefix}PageSize`;
+	const pageParameterName = `${queryParameterPrefix}-page`;
+	const pageSizeParameterName = `${queryParameterPrefix}-page-size`;
+
+	const {
+		currentPage = FIRST_PAGE,
+		itemsPerPage = DEFAULT_PAGE_SIZE,
+		totalPages = FIRST_PAGE,
+	} = meta ?? {};
 
 	const [pageSize, setPageSize] = useState<number>(
-		() =>
-			Number(searchParameters.get(pageSizeParameterName)) ||
-			meta?.itemsPerPage ||
-			DEFAULT_PAGE_SIZE,
+		() => Number(searchParameters.get(pageSizeParameterName)) || itemsPerPage,
 	);
 
 	const [page, setPage] = useState<number>(
-		() =>
-			Number(searchParameters.get(pageParameterName)) ||
-			meta?.currentPage ||
-			FIRST_PAGE,
+		() => Number(searchParameters.get(pageParameterName)) || currentPage,
 	);
 
 	useEffect(() => {
@@ -54,9 +54,14 @@ const usePagination = ({
 		updatedSearchParameters.set(pageParameterName, String(page));
 		updatedSearchParameters.set(pageSizeParameterName, String(pageSize));
 		setSearchParameters(updatedSearchParameters);
-	}, [page, pageSize, setSearchParameters]);
-
-	const totalPages = meta?.totalPages ?? FIRST_PAGE;
+	}, [
+		page,
+		pageSize,
+		setSearchParameters,
+		pageParameterName,
+		pageSizeParameterName,
+		searchParameters,
+	]);
 
 	const onPageChange = useCallback(
 		(newPage: number) => {
@@ -74,12 +79,15 @@ const usePagination = ({
 	const goToStart = useCallback(() => {
 		setPage(FIRST_PAGE);
 	}, []);
+
 	const goToEnd = useCallback(() => {
 		setPage(totalPages);
 	}, [totalPages]);
+
 	const goToNext = useCallback(() => {
 		setPage((previous) => Math.min(previous + OFFSET, totalPages));
 	}, [totalPages]);
+
 	const goToPrevious = useCallback(() => {
 		setPage((previous) => Math.max(previous - OFFSET, FIRST_PAGE));
 	}, []);

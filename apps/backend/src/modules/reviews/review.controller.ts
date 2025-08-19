@@ -12,8 +12,12 @@ import { type ReviewService } from "~/modules/reviews/review.service.js";
 import {
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
+	type ReviewSearchQuery,
 } from "./libs/types/types.js";
-import { reviewCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
+import {
+	reviewCreateValidationSchema,
+	reviewSearchQueryValidationSchema,
+} from "./libs/validation-schemas/validation-schemas.js";
 
 /**
  * @swagger
@@ -78,6 +82,9 @@ class ReviewController extends BaseController {
 			handler: this.findAll.bind(this),
 			method: "GET",
 			path: "/",
+			validation: {
+				query: reviewSearchQueryValidationSchema,
+			},
 		});
 	}
 
@@ -125,6 +132,11 @@ class ReviewController extends BaseController {
 		const authenticatedUser = user as UserAuthResponseDto;
 		const review = await this.reviewService.create({
 			...body,
+			currentUser: {
+				firstName: authenticatedUser.firstName,
+				id: authenticatedUser.id,
+				lastName: authenticatedUser.lastName,
+			},
 			userId: authenticatedUser.id,
 		});
 
@@ -142,7 +154,15 @@ class ReviewController extends BaseController {
 	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Reviews
-	 *     summary: Retrieve all reviews
+	 *     summary: Retrieve reviews (optionally filter by routeId)
+	 *     parameters:
+	 *       - in: query
+	 *         name: routeId
+	 *         schema:
+	 *           type: integer
+	 *           minimum: 1
+	 *         required: false
+	 *         description: Return only reviews for the specified route
 	 *     responses:
 	 *       200:
 	 *         description: A list of reviews
@@ -155,11 +175,25 @@ class ReviewController extends BaseController {
 	 *                   type: array
 	 *                   items:
 	 *                     $ref: '#/components/schemas/Review'
+	 *       404:
+	 *        description: Route was not found
+	 *        content:
+	 *          application/json:
+	 *            schema:
+	 *              type: object
+	 *              properties:
+	 *                message:
+	 *                  type: string
+	 *                  example: "A route with the specified ID was not found."
 	 */
-	public async findAll(): Promise<
-		APIHandlerResponse<ReviewGetByIdResponseDto[]>
-	> {
-		const { items } = await this.reviewService.findAll();
+	public async findAll(
+		options: APIHandlerOptions<{
+			query: null | ReviewSearchQuery;
+		}>,
+	): Promise<APIHandlerResponse<ReviewGetByIdResponseDto[]>> {
+		const { query } = options;
+
+		const { items } = await this.reviewService.findAll(query);
 
 		return {
 			payload: { data: items },

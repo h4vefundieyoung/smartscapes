@@ -7,6 +7,7 @@ import { type RouteService } from "../routes/route.service.js";
 import {
 	type ReviewCreatePayload,
 	type ReviewGetByIdResponseDto,
+	type ReviewSearchQuery,
 } from "./libs/types/types.js";
 
 class ReviewService implements Service {
@@ -25,7 +26,9 @@ class ReviewService implements Service {
 	}
 
 	public async create(
-		payload: ReviewCreatePayload,
+		payload: ReviewCreatePayload & {
+			currentUser: { firstName: string; id: number; lastName: string };
+		},
 	): Promise<ReviewGetByIdResponseDto> {
 		if (payload.poiId) {
 			await this.ensurePoiExists(payload.poiId);
@@ -40,20 +43,39 @@ class ReviewService implements Service {
 			likesCount: 0,
 			poiId: payload.poiId ?? null,
 			routeId: payload.routeId ?? null,
-			userId: payload.userId,
+			userId: payload.currentUser.id,
 		});
 
-		const item = await this.reviewRepository.create(reviewEntity);
+		const created = await this.reviewRepository.create(reviewEntity);
 
-		return item.toObject();
-	}
-
-	public async findAll(): Promise<CollectionResult<ReviewGetByIdResponseDto>> {
-		const items = await this.reviewRepository.findAll();
+		const base = created.toObject();
 
 		return {
-			items: items.map((items) => items.toObject()),
+			content: base.content,
+			id: base.id,
+			likesCount: base.likesCount,
+			poiId: base.poiId,
+			routeId: base.routeId,
+			user: {
+				firstName: payload.currentUser.firstName,
+				id: payload.currentUser.id,
+				lastName: payload.currentUser.lastName,
+			},
 		};
+	}
+
+	public async findAll(
+		options: null | ReviewSearchQuery,
+	): Promise<CollectionResult<ReviewGetByIdResponseDto>> {
+		const routeId = options?.routeId;
+
+		if (routeId !== null && routeId !== undefined) {
+			await this.ensureRouteExists(routeId);
+		}
+
+		const items = await this.reviewRepository.findAll(options);
+
+		return { items };
 	}
 
 	private async ensurePoiExists(id: number): Promise<void> {

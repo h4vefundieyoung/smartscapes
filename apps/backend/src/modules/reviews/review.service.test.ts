@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { type RouteService } from "../routes/route.service.js";
+import { type ReviewGetByIdResponseDto } from "./libs/types/types.js";
 import { ReviewEntity } from "./review.entity.js";
 import { type ReviewRepository } from "./review.repository.js";
 import { ReviewService } from "./review.service.js";
@@ -37,21 +38,15 @@ const createMockRoutesService = (): Partial<RouteService> => ({
 			id,
 			name: "Test Route",
 			pois: [
-				{
-					id: 1,
-					visitOrder: 1,
-				},
-				{
-					id: 2,
-					visitOrder: 2,
-				},
+				{ id: 1, visitOrder: 1 },
+				{ id: 2, visitOrder: 2 },
 			],
 			updatedAt: new Date().toISOString(),
 		}),
 });
 
 describe("ReviewService", () => {
-	const mockReview: Parameters<typeof ReviewEntity.initialize>[0] = {
+	const mockReviewDB: Parameters<typeof ReviewEntity.initialize>[0] = {
 		content: "Great route!",
 		createdAt: "2025-07-26T12:00:00Z",
 		id: 1,
@@ -62,8 +57,11 @@ describe("ReviewService", () => {
 		userId: 10,
 	};
 
-	it("create should return new review", async () => {
-		const reviewEntity = ReviewEntity.initialize(mockReview);
+	const currentUser = { firstName: "John", id: 10, lastName: "Doe" };
+
+	it("create should return new review (DTO з user)", async () => {
+		const reviewEntity = ReviewEntity.initialize(mockReviewDB);
+
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const routesService = createMockRoutesService();
 
@@ -80,27 +78,37 @@ describe("ReviewService", () => {
 		);
 
 		const result = await reviewService.create({
-			content: mockReview.content,
-			poiId: mockReview.poiId ?? null,
-			routeId: mockReview.routeId ?? null,
-			userId: mockReview.userId,
+			content: mockReviewDB.content,
+			currentUser,
+			poiId: mockReviewDB.poiId,
+			routeId: mockReviewDB.routeId,
+			userId: currentUser.id,
 		});
 
-		assert.deepStrictEqual(result, {
-			content: mockReview.content,
-			id: mockReview.id,
-			likesCount: mockReview.likesCount,
-			poiId: mockReview.poiId,
-			routeId: mockReview.routeId,
-			userId: mockReview.userId,
-		});
+		const expected: ReviewGetByIdResponseDto = {
+			content: mockReviewDB.content,
+			id: mockReviewDB.id,
+			likesCount: mockReviewDB.likesCount,
+			poiId: mockReviewDB.poiId,
+			routeId: mockReviewDB.routeId,
+			user: currentUser,
+		};
+
+		assert.deepStrictEqual(result, expected);
 	});
 
-	it("findAll should return all reviews", async () => {
-		const reviewEntity = ReviewEntity.initialize(mockReview);
+	it("findAll should return all reviews (масив DTO)", async () => {
+		const dto: ReviewGetByIdResponseDto = {
+			content: mockReviewDB.content,
+			id: mockReviewDB.id,
+			likesCount: mockReviewDB.likesCount,
+			poiId: mockReviewDB.poiId,
+			routeId: mockReviewDB.routeId,
+			user: currentUser,
+		};
 
 		const reviewRepository = {
-			findAll: () => Promise.resolve([reviewEntity]),
+			findAll: (() => Promise.resolve([dto])) as ReviewRepository["findAll"],
 		} as ReviewRepository;
 
 		const reviewService = new ReviewService(
@@ -109,10 +117,8 @@ describe("ReviewService", () => {
 			createMockRoutesService() as RouteService,
 		);
 
-		const result = await reviewService.findAll();
+		const result = await reviewService.findAll(null);
 
-		assert.deepStrictEqual(result, {
-			items: [reviewEntity.toObject()],
-		});
+		assert.deepStrictEqual(result, { items: [dto] });
 	});
 });

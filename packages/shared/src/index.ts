@@ -74,6 +74,8 @@ export {
 	reviewCreateValidationSchema,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
+	type ReviewSearchQuery,
+	reviewSearchQueryValidationSchema,
 } from "./modules/reviews/reviews.js";
 export {
 	RouteCategoriesApiPath,

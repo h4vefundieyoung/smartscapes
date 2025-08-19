@@ -1,1 +1,4 @@
-export { reviewCreateValidationSchema } from "@smartscapes/shared";
+export {
+	reviewCreateValidationSchema,
+	reviewSearchQueryValidationSchema,
+} from "@smartscapes/shared";

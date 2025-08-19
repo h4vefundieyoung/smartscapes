@@ -28,6 +28,7 @@ export {
 	type APIErrorResponse,
 	type APIResponse,
 	type APIValidationErrorDetail,
+	type Coordinates,
 	type LineStringGeometry,
 	type PointGeometry,
 	type ValidationSchema,

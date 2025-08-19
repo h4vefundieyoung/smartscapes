@@ -1,5 +1,8 @@
-import { Header, Loader } from "~/libs/components/components.js";
-import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
+import image1 from "~/assets/images/route-details/placeholder-image-1.png";
+import image2 from "~/assets/images/route-details/placeholder-image-2.png";
+import image3 from "~/assets/images/route-details/placeholder-image-3.png";
+import { ImageGallery, Loader } from "~/libs/components/components.js";
+import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -10,19 +13,14 @@ import {
 	actions as routeActions,
 	type RouteGetByIdResponseDto,
 } from "~/modules/routes/routes.js";
-import { NotFound } from "~/pages/not-found/not-found.jsx";
 
-import { ImageGallery } from "./libs/components/components.js";
+import { NotFound } from "../not-found/not-found.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 
 	const { id } = useParams<{ id: string }>();
-
-	const authenticatedUser = useAppSelector(
-		({ auth }) => auth.authenticatedUser,
-	);
 
 	useEffect(() => {
 		void dispatch(routeActions.getRouteById(Number(id)));
@@ -44,13 +42,9 @@ const RouteDetails = (): React.JSX.Element => {
 
 	return (
 		<>
-			<Header
-				actions={[{ label: "Sign in", to: AppRoute.SIGN_IN }]}
-				user={authenticatedUser}
-			/>
 			<main className={styles["container"]}>
 				<h1 className={styles["label"]}>{name}</h1>
-				<ImageGallery />
+				<ImageGallery images={[image1, image2, image3]} />
 				<p className={styles["description"]}>{description}</p>
 			</main>
 		</>

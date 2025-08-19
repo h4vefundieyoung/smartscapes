@@ -32,6 +32,11 @@ describe("RouteEntity", () => {
 		const routesDataWithOutId = {
 			...routesDataWithId,
 			id: 1,
+			name: "Route 1 Test Name",
+			pois: [
+				{ id: 1, name: "POI 1 Test Name", visitOrder: 0 },
+				{ id: 2, name: "POI 2 Test Name", visitOrder: 1 },
+			],
 		};
 
 		const routesEntity = RouteEntity.initialize(routesDataWithOutId);

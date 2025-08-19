@@ -1,5 +1,8 @@
 import { faker } from "@faker-js/faker";
-import { type UserSignUpRequestDto } from "@smartscapes/shared";
+import {
+	type PointsOfInterestRequestDto,
+	type UserSignUpRequestDto,
+} from "@smartscapes/shared";
 
 const generateId = (): string => crypto.randomUUID();
 
@@ -15,4 +18,15 @@ const createRandomUser = (): UserSignUpRequestDto => {
 	};
 };
 
-export { createRandomUser, generateId };
+const generateRandomPoi = (): PointsOfInterestRequestDto => {
+	return {
+		description: faker.lorem.sentence(),
+		location: {
+			coordinates: [faker.location.longitude(), faker.location.latitude()],
+			type: "Point",
+		},
+		name: `Place-${generateId()}`,
+	};
+};
+
+export { createRandomUser, generateId, generateRandomPoi };

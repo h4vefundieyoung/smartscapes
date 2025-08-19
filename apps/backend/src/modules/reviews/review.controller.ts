@@ -54,8 +54,18 @@ import {
  *         routeId:
  *           type: integer
  *           nullable: true
- *         userId:
- *           type: integer
+ *         user:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: integer
+ *               example: 7
+ *             firstName:
+ *               type: string
+ *               example: Anna
+ *             lastName:
+ *               type: string
+ *               example: Kovalenko
  *
  *     ReviewGetByIdResponseDto:
  *        type: object

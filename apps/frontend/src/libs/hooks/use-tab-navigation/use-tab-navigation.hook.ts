@@ -12,18 +12,23 @@ const useTabNavigation = (
 	const activeTabId = searchParameters.get(queryParameterName) ?? initialTabId;
 
 	const handleTabChange = (tabId: string): void => {
-		setSearchParameters((previousParameters) => {
-			const currentParameters = Object.fromEntries(
-				previousParameters.entries(),
-			);
+		setSearchParameters(
+			(previousParameters) => {
+				const currentParameters = Object.fromEntries(
+					previousParameters.entries(),
+				);
 
-			const newParameters = {
-				...currentParameters,
-				[queryParameterName]: tabId,
-			};
+				const newParameters = {
+					...currentParameters,
+					[queryParameterName]: tabId,
+				};
 
-			return newParameters;
-		});
+				return newParameters;
+			},
+			{
+				replace: true,
+			},
+		);
 	};
 
 	useEffect(() => {

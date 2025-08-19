@@ -1,7 +1,7 @@
 import React from "react";
 
 import { MapProvider } from "~/libs/components/components.js";
-import { ExploreRoutesBlock } from "~/libs/components/explore-routes-block/explore-routes-block.js";
+import { RoutesPanel } from "~/libs/components/routes-panel/routes-panel.js";
 import { useMapClient } from "~/libs/hooks/hooks.js";
 
 import { mockPOIs } from "./mock-pois.js";
@@ -20,7 +20,7 @@ const Explore = (): React.JSX.Element => {
 	return (
 		<main className={styles["main"]}>
 			<div className={styles["routes-container"]}>
-				<ExploreRoutesBlock />
+				<RoutesPanel />
 			</div>
 			<div className={styles["container"]}>
 				<MapProvider markers={mockPOIs}>

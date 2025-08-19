@@ -13,7 +13,7 @@ import { actions as locationActions } from "~/modules/location/location.js";
 import { Loader, RouteCard } from "../components.js";
 import styles from "./styles.module.css";
 
-const ExploreRoutesBlock = (): React.JSX.Element => {
+const RoutesPanel = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const { error, loading, routes } = useAppSelector((state) => state.explore);
 	const locationError = useAppSelector((state) => state.location.locationError);
@@ -63,4 +63,4 @@ const ExploreRoutesBlock = (): React.JSX.Element => {
 	);
 };
 
-export { ExploreRoutesBlock };
+export { RoutesPanel };

@@ -421,6 +421,7 @@ class RouteController extends BaseController {
 	 *           type: number
 	 *           format: float
 	 *           example: 24.0297
+	 *       - in: query
 	 *         name: categories
 	 *         schema:
 	 *           type: array

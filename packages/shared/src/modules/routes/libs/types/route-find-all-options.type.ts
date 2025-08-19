@@ -1,7 +1,7 @@
 type RouteFindAllOptions = {
+	categories?: string | string[];
 	latitude?: number;
 	longitude?: number;
-	categories?: string | string[];
 	name?: string;
 };
 

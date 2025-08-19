@@ -57,8 +57,8 @@ class RouteRepository implements Repository {
 	public async findAll(
 		options: null | RouteFindAllOptions,
 	): Promise<RouteEntity[]> {
-		const { latitude, longitude, name } = options ?? {};
-     
+		const { categories, latitude, longitude, name } = options ?? {};
+
 		const query = this.routesModel
 			.query()
 			.withGraphFetched("pois")
@@ -79,6 +79,13 @@ class RouteRepository implements Repository {
 			query.whereILike("routes.name", `%${name.trim()}%`);
 		}
 
+		if (categories?.length) {
+			query
+				.joinRelated("categories")
+				.whereIn("categories.key", categories as string[])
+				.groupBy("routes.id");
+		}
+
 		if (latitude !== undefined && longitude !== undefined) {
 			query
 				.joinRelated("pois")
@@ -93,19 +100,6 @@ class RouteRepository implements Repository {
 					),
 				)
 				.orderBy("distance_points", SortingOrder.ASC);
-		}
-
-		const routes = await query;
-
-		if (options?.name) {
-			query.whereILike("routes.name", `%${options.name.trim()}%`);
-		}
-
-		if (options?.categories?.length) {
-			query
-				.joinRelated("categories")
-				.whereIn("categories.key", options.categories as string[])
-				.groupBy("routes.id");
 		}
 
 		const routes = await query;

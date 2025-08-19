@@ -24,10 +24,10 @@ const categoryKey = z
 
 const routesSearchQuery = z
 	.object({
-    categories: z
-		  .union([categoryKey, z.array(categoryKey)])
-		  .transform((value) => (Array.isArray(value) ? value : [value]))
-	  	.optional(),
+		categories: z
+			.union([categoryKey, z.array(categoryKey)])
+			.transform((value) => (Array.isArray(value) ? value : [value]))
+			.optional(),
 		latitude: z
 			.string()
 			.trim()

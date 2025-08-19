@@ -69,34 +69,15 @@ class BaseHTTPApi implements HTTPApi {
 		...parameters: [...string[], T]
 	): string {
 		const copiedParameters = [...parameters];
+
 		const options = copiedParameters.pop() as T;
 
-		let path = this.constructPath(copiedParameters as string[]);
-
-		path = configureString(path, options);
-
-		const queryString = this.buildQueryString(options, path);
-
-		return queryString ? `${path}?${queryString}` : path;
-	}
-
-	private buildQueryString(
-		options: Record<string, string>,
-		path: string,
-	): string {
-		const queryParameters = new URLSearchParams();
-
-		for (const [key, value] of Object.entries(options)) {
-			const dynamicPathKey = `:${key}`;
-
-			if (path.includes(dynamicPathKey)) {
-				continue;
-			}
-
-			queryParameters.append(key, value);
-		}
-
-		return queryParameters.toString();
+		return configureString(
+			this.baseUrl,
+			this.path,
+			...(copiedParameters as string[]),
+			options,
+		);
 	}
 
 	private async checkResponse<T>(
@@ -107,10 +88,6 @@ class BaseHTTPApi implements HTTPApi {
 		}
 
 		return response;
-	}
-
-	private constructPath(copiedParameters: string[]): string {
-		return [this.baseUrl, this.path, ...copiedParameters].join("");
 	}
 
 	private async getHeaders({

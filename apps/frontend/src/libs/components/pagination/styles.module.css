@@ -20,27 +20,9 @@
 	align-items: center;
 }
 
-.buttons {
+.navigation-buttons-container {
 	display: flex;
 	gap: 8px;
 	align-items: center;
 	justify-self: flex-end;
-}
-
-.buttons button {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 32px;
-	height: 32px;
-	padding: 5px 6px;
-	font-size: var(--font-size-h4);
-	color: var(--color-fill-brand-strong);
-	background: transparent;
-	border: 1px solid var(--color-stroke-strong);
-}
-
-.buttons button:focus,
-.buttons button:hover {
-	color: var(--color-text-inverse-strong);
 }

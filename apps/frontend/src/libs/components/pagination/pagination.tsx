@@ -1,8 +1,7 @@
-import { type JSX } from "react";
-
-import { Button, NumberInput } from "~/libs/components/components.js";
+import { NumberInput } from "~/libs/components/components.js";
 import { useCallback, type usePagination } from "~/libs/hooks/hooks.js";
 
+import { NavigationButton } from "./libs/components/components.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -15,20 +14,21 @@ const Pagination = ({
 	paginationSettings,
 	totalItems,
 	totalPages,
-}: Properties): JSX.Element => {
-	const handleNextClick = useCallback(() => {
-		paginationSettings.goToNext();
-	}, [paginationSettings]);
-
-	const handleEndClick = useCallback(() => {
-		paginationSettings.goToEnd();
-	}, [paginationSettings]);
+}: Properties): React.JSX.Element => {
+	const {
+		goToEnd,
+		goToNext,
+		goToPrevious,
+		goToStart,
+		onPageSizeChange,
+		pageSize,
+	} = paginationSettings;
 
 	const handlePageSizeChange = useCallback(
 		(value: number) => {
-			paginationSettings.onPageSizeChange(value);
+			onPageSizeChange(value);
 		},
-		[paginationSettings],
+		[onPageSizeChange],
 	);
 
 	return (
@@ -41,25 +41,17 @@ const Pagination = ({
 						max={totalItems}
 						min={1}
 						onChange={handlePageSizeChange}
-						value={paginationSettings.pageSize}
+						value={pageSize}
 					/>
 				</div>
 				<span className={styles["page-status"]}>
 					Page {paginationSettings.page} of {totalPages}
 				</span>
-				<div className={styles["buttons"]}>
-					<Button
-						label="«"
-						onClick={paginationSettings.goToStart}
-						type="button"
-					/>
-					<Button
-						label="‹"
-						onClick={paginationSettings.goToPrevious}
-						type="button"
-					/>
-					<Button label="›" onClick={handleNextClick} type="button" />
-					<Button label="»" onClick={handleEndClick} type="button" />
+				<div className={styles["navigation-buttons-container"]}>
+					<NavigationButton label="«" onClick={goToStart} />
+					<NavigationButton label="‹" onClick={goToPrevious} />
+					<NavigationButton label="›" onClick={goToNext} />
+					<NavigationButton label="»" onClick={goToEnd} />
 				</div>
 			</div>
 		</div>

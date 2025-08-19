@@ -1,9 +1,8 @@
 .link {
 	color: var(--color-text-brand);
-	text-decoration: none;
-	transition: all 0.3s ease;
+	transition: all 0.2s ease;
 }
 
 .link:hover {
-	color: var(--color-text-strong);
+	filter: brightness(70%);
 }

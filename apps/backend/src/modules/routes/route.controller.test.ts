@@ -4,86 +4,61 @@ import { describe, it } from "node:test";
 import { HTTPCode, PermissionKey } from "~/libs/enums/enums.js";
 import { checkHasPermission } from "~/libs/hooks/hooks.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import {
+	type Coordinates,
+	type LineStringGeometry,
+} from "~/libs/types/types.js";
 
 import { GroupEntity } from "../groups/group.entity.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
+import {
+	type RouteGetAllItemResponseDto,
+	type RouteGetByIdResponseDto,
+} from "./libs/types/types.js";
 import { RouteController } from "./route.controller.js";
 import { type RouteService } from "./route.service.js";
 
-const MINIMUM_EXPECTED_ROUTES_COUNT = 6;
-
-const mockReadPermission = PermissionEntity.initialize({
+const mockPermission = PermissionEntity.initialize({
 	id: 1,
 	key: "READ",
 	name: "Can read",
 });
 
-const mockManageRoutesPermission = PermissionEntity.initialize({
-	id: 2,
-	key: PermissionKey.MANAGE_ROUTES,
-	name: "Manage Routes",
-});
-
-const mockWrongPermission = PermissionEntity.initialize({
-	id: 3,
-	key: "WRONG_PERMISSION",
-	name: "Wrong Permission",
-});
-
-const mockUserGroup = GroupEntity.initializeWithPermissions({
+const mockGroup = GroupEntity.initializeWithPermissions({
 	id: 2,
 	key: "users",
 	name: "Users",
-	permissions: [mockReadPermission.toObject()],
+	permissions: [mockPermission.toObject()],
 }).toObject();
 
-const mockUserGroupWithWrongPermission = GroupEntity.initializeWithPermissions({
+const mockManageRoutesPermission = PermissionEntity.initialize({
 	id: 3,
-	key: "users",
-	name: "Users with Wrong Permission",
-	permissions: [mockReadPermission.toObject(), mockWrongPermission.toObject()],
-}).toObject();
+	key: PermissionKey.MANAGE_ROUTES,
+	name: "Manage routes",
+});
 
 const mockAdminGroup = GroupEntity.initializeWithPermissions({
-	id: 1,
+	id: 3,
 	key: "admins",
 	name: "Admins",
-	permissions: [
-		mockReadPermission.toObject(),
-		mockManageRoutesPermission.toObject(),
-	],
+	permissions: [mockManageRoutesPermission.toObject()],
 }).toObject();
+
+const MINIMUM_EXPECTED_ROUTES_COUNT = 6;
 
 const mockDelete: RouteService["delete"] = () => {
 	return Promise.resolve(true);
 };
 
-describe("Routes controller", () => {
+describe("Route controller", () => {
 	const mockUser = {
 		email: "test@example.com",
 		firstName: "John",
-		group: mockUserGroup,
+		group: mockGroup,
 		groupId: 2,
 		id: 1,
+		isVisibleProfile: true,
 		lastName: "Doe",
-	};
-
-	const mockUserWithWrongPermission = {
-		email: "wrong@example.com",
-		firstName: "Wrong",
-		group: mockUserGroupWithWrongPermission,
-		groupId: 3,
-		id: 3,
-		lastName: "User",
-	};
-
-	const mockAdminUser = {
-		email: "admin@example.com",
-		firstName: "Jane",
-		group: mockAdminGroup,
-		groupId: 1,
-		id: 2,
-		lastName: "Admin",
 	};
 
 	const mockLogger: Logger = {
@@ -98,8 +73,20 @@ describe("Routes controller", () => {
 	const FIRST_VISIT_ORDER = 0;
 	const SECOND_VISIT_ORDER = 1;
 
-	const mockRoute = {
+	const mockGeometry: LineStringGeometry = {
+		coordinates: [
+			[30.5234, 50.4501],
+			[30.524, 50.451],
+		] as Coordinates[],
+		type: "LineString",
+	};
+
+	const mockRoute: RouteGetByIdResponseDto = {
+		createdByUserId: 10,
 		description: "Test route description",
+		distance: 1.23,
+		duration: 4.56,
+		geometry: mockGeometry,
 		id: FIRST_POI_ID,
 		name: "Test Route",
 		pois: [
@@ -108,18 +95,32 @@ describe("Routes controller", () => {
 		],
 	};
 
+	const mockAdminUser = {
+		email: "admin@example.com",
+		firstName: "Alice",
+		group: mockAdminGroup,
+		groupId: 3,
+		id: 2,
+		isVisibleProfile: true,
+		lastName: "Admin",
+	};
+
+	const mockUserWithWrongPermission = {
+		...mockUser,
+	};
+
 	it("Should return data with 200 status code", async () => {
 		const mockData = "mockData";
 		const constructRouteMockData = {
-			body: { pointsOfInterest: [] },
+			body: { poiIds: [] },
 			params: null,
 			query: null,
 			user: mockUser,
 		};
-		const routesServiceMock = {
+		const routeServiceMock = {
 			construct: () => Promise.resolve(mockData),
 		} as unknown as RouteService;
-		const controller = new RouteController(mockLogger, routesServiceMock);
+		const controller = new RouteController(mockLogger, routeServiceMock);
 
 		const { payload, status } = await controller.constructRoute(
 			constructRouteMockData,
@@ -132,24 +133,24 @@ describe("Routes controller", () => {
 	it("create should return created route", async () => {
 		const createRouteMockData = {
 			body: {
+				createdByUserId: mockAdminUser.id,
 				description: mockRoute.description,
 				name: mockRoute.name,
-				pois: [FIRST_POI_ID, SECOND_POI_ID],
+				plannedPathId: 1,
+				poiIds: [FIRST_POI_ID, SECOND_POI_ID],
 			},
 			params: {},
 			query: {},
 			user: mockAdminUser,
 		};
 
-		const mockCreate: RouteService["create"] = () => {
-			return Promise.resolve(mockRoute);
-		};
+		const mockCreate: RouteService["create"] = () => Promise.resolve(mockRoute);
 
-		const routesService = {
+		const routeService = {
 			create: mockCreate,
 		} as RouteService;
 
-		const controller = new RouteController(mockLogger, routesService);
+		const controller = new RouteController(mockLogger, routeService);
 
 		const result = await controller.create(createRouteMockData);
 
@@ -167,15 +168,13 @@ describe("Routes controller", () => {
 			user: mockUser,
 		};
 
-		const mockFind: RouteService["findById"] = () => {
-			return Promise.resolve(mockRoute);
-		};
+		const mockFind: RouteService["findById"] = () => Promise.resolve(mockRoute);
 
-		const routesService = {
+		const routeService = {
 			findById: mockFind,
 		} as RouteService;
 
-		const controller = new RouteController(mockLogger, routesService);
+		const controller = new RouteController(mockLogger, routeService);
 
 		const result = await controller.findById(findRouteMockData);
 
@@ -186,15 +185,16 @@ describe("Routes controller", () => {
 	});
 
 	it("findAll should return all routes if query is not provided", async () => {
-		const mockFindAll: RouteService["findAll"] = () => {
-			return Promise.resolve({ items: [mockRoute] });
-		};
+		const mockFindAll: RouteService["findAll"] = () =>
+			Promise.resolve({
+				items: [mockRoute as RouteGetAllItemResponseDto],
+			} as { items: RouteGetAllItemResponseDto[] });
 
-		const routesService = {
+		const routeService = {
 			findAll: mockFindAll,
 		} as RouteService;
 
-		const controller = new RouteController(mockLogger, routesService);
+		const controller = new RouteController(mockLogger, routeService);
 
 		const result = await controller.findAll({
 			body: {},
@@ -210,15 +210,21 @@ describe("Routes controller", () => {
 	});
 
 	it("findAll should return response with routes matching search query", async () => {
-		const mockFindAll: RouteService["findAll"] = () => {
-			return Promise.resolve({ items: [mockRoute] });
+		const mockFindAll: RouteService["findAll"] = (options) => {
+			const items = options?.name
+				? ([
+						mockRoute as RouteGetAllItemResponseDto,
+					] as RouteGetAllItemResponseDto[])
+				: ([] as RouteGetAllItemResponseDto[]);
+
+			return Promise.resolve({ items });
 		};
 
-		const routesService = {
+		const routeService = {
 			findAll: mockFindAll,
 		} as RouteService;
 
-		const controller = new RouteController(mockLogger, routesService);
+		const controller = new RouteController(mockLogger, routeService);
 
 		const mockSearchQuery = mockRoute.name.toLowerCase();
 
@@ -236,14 +242,14 @@ describe("Routes controller", () => {
 	});
 
 	it("findAll should return response with empty array if no routes found", async () => {
-		const routesService = {
+		const routeService = {
 			findAll: (() =>
 				Promise.resolve({ items: [] })) as RouteService["findAll"],
 		} as RouteService;
 
 		const mockSearchQuery = "nonexistent";
 
-		const controller = new RouteController(mockLogger, routesService);
+		const controller = new RouteController(mockLogger, routeService);
 
 		const result = await controller.findAll({
 			body: {},
@@ -274,15 +280,14 @@ describe("Routes controller", () => {
 			user: mockAdminUser,
 		};
 
-		const mockUpdate: RouteService["patch"] = () => {
-			return Promise.resolve(updatedRoute);
-		};
+		const mockUpdate: RouteService["patch"] = () =>
+			Promise.resolve(updatedRoute);
 
-		const routesService = {
+		const routeService = {
 			patch: mockUpdate,
 		} as RouteService;
 
-		const controller = new RouteController(mockLogger, routesService);
+		const controller = new RouteController(mockLogger, routeService);
 
 		const result = await controller.patch(updateRouteMockData);
 
@@ -300,11 +305,11 @@ describe("Routes controller", () => {
 			user: mockAdminUser,
 		};
 
-		const routesService = {
+		const routeService = {
 			delete: mockDelete,
 		} as RouteService;
 
-		const controller = new RouteController(mockLogger, routesService);
+		const controller = new RouteController(mockLogger, routeService);
 
 		const result = await controller.delete(deleteRouteMockData);
 
@@ -370,9 +375,11 @@ describe("Routes controller", () => {
 		it("CREATE - should work correctly when called with admin user (correct permission)", async () => {
 			const createRouteMockData = {
 				body: {
+					createdByUserId: mockAdminUser.id,
 					description: mockRoute.description,
 					name: mockRoute.name,
-					pois: [FIRST_POI_ID, SECOND_POI_ID],
+					plannedPathId: 1,
+					poiIds: [FIRST_POI_ID, SECOND_POI_ID],
 				},
 				params: {},
 				query: {},
@@ -383,11 +390,11 @@ describe("Routes controller", () => {
 				return Promise.resolve(mockRoute);
 			};
 
-			const routesService = {
+			const routeService = {
 				create: mockCreate,
-			} as unknown as RouteService;
+			} as RouteService;
 
-			const controller = new RouteController(mockLogger, routesService);
+			const controller = new RouteController(mockLogger, routeService);
 
 			const result = await controller.create(createRouteMockData);
 
@@ -417,11 +424,11 @@ describe("Routes controller", () => {
 				return Promise.resolve(updatedRoute);
 			};
 
-			const routesService = {
+			const routeService = {
 				patch: mockUpdate,
-			} as unknown as RouteService;
+			} as RouteService;
 
-			const controller = new RouteController(mockLogger, routesService);
+			const controller = new RouteController(mockLogger, routeService);
 
 			const result = await controller.patch(updateRouteMockData);
 
@@ -439,11 +446,11 @@ describe("Routes controller", () => {
 				user: mockAdminUser,
 			};
 
-			const routesService = {
+			const routeService = {
 				delete: mockDelete,
-			} as unknown as RouteService;
+			} as RouteService;
 
-			const controller = new RouteController(mockLogger, routesService);
+			const controller = new RouteController(mockLogger, routeService);
 
 			const result = await controller.delete(deleteRouteMockData);
 
@@ -457,14 +464,16 @@ describe("Routes controller", () => {
 	describe("GET routes should be accessible to all users (no permission required)", () => {
 		it("should allow user without manage_routes permission to get all routes", async () => {
 			const mockFindAll: RouteService["findAll"] = () => {
-				return Promise.resolve({ items: [mockRoute] });
+				return Promise.resolve({ items: [mockRoute] } as {
+					items: RouteGetAllItemResponseDto[];
+				});
 			};
 
-			const routesService = {
+			const routeService = {
 				findAll: mockFindAll,
-			} as unknown as RouteService;
+			} as RouteService;
 
-			const controller = new RouteController(mockLogger, routesService);
+			const controller = new RouteController(mockLogger, routeService);
 
 			const result = await controller.findAll({
 				body: {},
@@ -491,11 +500,11 @@ describe("Routes controller", () => {
 				return Promise.resolve(mockRoute);
 			};
 
-			const routesService = {
+			const routeService = {
 				findById: mockFind,
-			} as unknown as RouteService;
+			} as RouteService;
 
-			const controller = new RouteController(mockLogger, routesService);
+			const controller = new RouteController(mockLogger, routeService);
 
 			const result = await controller.findById(findRouteMockData);
 
@@ -517,11 +526,11 @@ describe("Routes controller", () => {
 				return Promise.resolve(mockRoute);
 			};
 
-			const routesService = {
+			const routeService = {
 				findById: mockFind,
-			} as unknown as RouteService;
+			} as RouteService;
 
-			const controller = new RouteController(mockLogger, routesService);
+			const controller = new RouteController(mockLogger, routeService);
 
 			const result = await controller.findById(
 				findRouteWithWrongPermissionMockData,
@@ -545,11 +554,11 @@ describe("Routes controller", () => {
 				return Promise.resolve(mockRoute);
 			};
 
-			const routesService = {
+			const routeService = {
 				findById: mockFind,
-			} as unknown as RouteService;
+			} as RouteService;
 
-			const controller = new RouteController(mockLogger, routesService);
+			const controller = new RouteController(mockLogger, routeService);
 
 			const result = await controller.findById(findRouteAdminMockData);
 
@@ -562,15 +571,18 @@ describe("Routes controller", () => {
 
 	describe("Verify Permission Configuration is Applied", () => {
 		it("should confirm that routes are configured with proper permission checks", () => {
-			const routesService = {
+			const routeService = {
 				create: () => Promise.resolve(mockRoute),
 				delete: () => Promise.resolve(true),
-				findAll: () => Promise.resolve({ items: [mockRoute] }),
+				findAll: () =>
+					Promise.resolve({
+						items: [mockRoute],
+					} as unknown as RouteGetAllItemResponseDto[]),
 				findById: () => Promise.resolve(mockRoute),
 				patch: () => Promise.resolve(mockRoute),
 			} as unknown as RouteService;
 
-			const controller = new RouteController(mockLogger, routesService);
+			const controller = new RouteController(mockLogger, routeService);
 
 			assert.ok(controller.routes, "Controller should have routes configured");
 

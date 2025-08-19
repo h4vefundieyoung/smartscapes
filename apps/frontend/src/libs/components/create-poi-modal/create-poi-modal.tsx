@@ -58,7 +58,7 @@ const CreatePOIModal = ({
 					name="name"
 					type="text"
 				/>
-				<MapLocationField<CreatePOIFormValues>
+				<MapLocationField
 					control={control}
 					errors={errors}
 					label="Location"

@@ -24,7 +24,7 @@ type Properties<T extends FieldValues> = {
 const MapLocationField = <T extends FieldValues>({
 	control,
 	errors,
-	label = "Location",
+	label,
 	name,
 }: Properties<T>): React.JSX.Element => {
 	const { field } = useFormController<T>({ control, name });
@@ -36,10 +36,7 @@ const MapLocationField = <T extends FieldValues>({
 		},
 		[field],
 	);
-	const fieldError = (errors as Record<string, { message?: string }>)[
-		name as string
-	];
-	const errorMessage = fieldError?.message;
+	const error = errors[name]?.message;
 
 	return (
 		<div className={styles["map-field"]}>
@@ -47,7 +44,7 @@ const MapLocationField = <T extends FieldValues>({
 			<div
 				className={combineClassNames(
 					styles["map-section"],
-					errorMessage && styles["map-section-error"],
+					error && styles["map-section-error"],
 				)}
 			>
 				<MapProvider>
@@ -57,7 +54,7 @@ const MapLocationField = <T extends FieldValues>({
 					/>
 				</MapProvider>
 			</div>
-			{errorMessage && <FieldError description={errorMessage} />}
+			{error && <FieldError description={error as string} />}
 		</div>
 	);
 };

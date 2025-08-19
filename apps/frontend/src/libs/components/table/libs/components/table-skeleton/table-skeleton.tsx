@@ -9,10 +9,10 @@ type Properties<T> = {
 	rowCount: number;
 };
 
-function TableSkeleton<T>({
+const TableSkeleton = <T,>({
 	columns,
 	rowCount,
-}: Readonly<Properties<T>>): React.JSX.Element {
+}: Properties<T>): React.JSX.Element => {
 	return (
 		<>
 			<thead>
@@ -49,6 +49,6 @@ function TableSkeleton<T>({
 			</tbody>
 		</>
 	);
-}
+};
 
 export { TableSkeleton };

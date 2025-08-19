@@ -6,7 +6,7 @@ type Properties<T> = {
 	table: Table<T>;
 };
 
-function TableHead<T>({ table }: Readonly<Properties<T>>): React.JSX.Element {
+const TableHead = <T,>({ table }: Properties<T>): React.JSX.Element => {
 	return (
 		<thead className={styles["thead"]}>
 			{table.getHeaderGroups().map((headerGroup) => (
@@ -24,6 +24,6 @@ function TableHead<T>({ table }: Readonly<Properties<T>>): React.JSX.Element {
 			))}
 		</thead>
 	);
-}
+};
 
 export { TableHead };

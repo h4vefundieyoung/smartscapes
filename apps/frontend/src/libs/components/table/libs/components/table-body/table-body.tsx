@@ -6,7 +6,7 @@ type Properties<T> = {
 	table: Table<T>;
 };
 
-function TableBody<T>({ table }: Readonly<Properties<T>>): React.JSX.Element {
+const TableBody = <T,>({ table }: Properties<T>): React.JSX.Element => {
 	return (
 		<tbody className={styles["tbody"]}>
 			{table.getRowModel().rows.map((row) => (
@@ -20,6 +20,6 @@ function TableBody<T>({ table }: Readonly<Properties<T>>): React.JSX.Element {
 			))}
 		</tbody>
 	);
-}
+};
 
 export { TableBody };

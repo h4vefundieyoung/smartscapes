@@ -50,7 +50,7 @@ const mockDelete: RouteService["delete"] = () => {
 	return Promise.resolve(true);
 };
 
-describe("Routes controller", () => {
+describe("Route controller", () => {
 	const mockUser = {
 		email: "test@example.com",
 		firstName: "John",

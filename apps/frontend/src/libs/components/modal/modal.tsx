@@ -1,75 +1,94 @@
-import React, { Children } from "react";
-import { useEffect, useRef } from "react";
+import React from "react";
 
 import { KeyboardKey } from "~/libs/enums/enums.js";
-import { useCallback } from "~/libs/hooks/hooks.js";
-import { useModal } from "~/libs/hooks/use-modal/use-modal.js";
+import {
+	useCallback,
+	useEffect,
+	useModal,
+	useRef,
+} from "~/libs/hooks/hooks.js";
 
 import { Icon } from "../components.js";
 import styles from "./styles.module.css";
 
-type Properties = {
+type ModalComponentProperties = ModalInjectedProperties &
+	Record<string, unknown>;
+
+interface ModalInjectedProperties {
+	onClose?: () => void;
+	registerCleanup?: (cleanupFunction: () => void) => void;
+}
+
+interface ModalProperties {
 	children?: React.ReactNode;
 	isOpen?: boolean;
 	onClose?: () => void;
-};
+}
 
 const Modal = ({
-	isOpen: propIsOpen,
-	onClose: propOnClose,
-}: Properties): null | React.JSX.Element => {
-	const modalCleanupRef = useRef<(() => void) | null>(null);
+	isOpen: propertyIsOpen,
+	onClose: propertyOnClose,
+}: ModalProperties): null | React.JSX.Element => {
+	const modalCleanupReference = useRef<(() => void) | null>(null);
 
 	const globalModal = useModal({
+		component: <></>,
 		queryParameter: "",
-		component: () => null,
 		useGlobalState: true,
 	});
 
-	const isOpen = globalModal.isOpen || propIsOpen || false;
-	const component = globalModal.component;
-	const componentProps = globalModal.modalProps || {};
+	const isOpen = globalModal.isOpen || propertyIsOpen;
+	const { component } = globalModal;
+	const componentProperties = globalModal.modalProps as Record<string, unknown>;
+
+	const hasValidComponent =
+		component &&
+		React.isValidElement(component) &&
+		component.type !== React.Fragment;
 
 	const handleClose = useCallback(() => {
-		if (modalCleanupRef.current) {
-			modalCleanupRef.current();
+		if (modalCleanupReference.current) {
+			modalCleanupReference.current();
 		}
 
 		if (globalModal.isOpen) {
 			globalModal.close();
-		} else if (propOnClose) {
-			propOnClose();
+		} else if (propertyOnClose) {
+			propertyOnClose();
 		}
-	}, [globalModal, propOnClose]);
+	}, [globalModal, propertyOnClose]);
 
-	const registerCleanup = useCallback((cleanupFn: () => void) => {
-		modalCleanupRef.current = cleanupFn;
+	const registerCleanup = useCallback((cleanupFunction: () => void) => {
+		modalCleanupReference.current = cleanupFunction;
 	}, []);
 
 	useEffect(() => {
-		if (!isOpen) return;
+		if (!isOpen || !hasValidComponent) {
+			return;
+		}
 
-		const handleKeyDown = (event: KeyboardEvent) => {
+		const handleKeyDown = (event: KeyboardEvent): void => {
 			if (event.key === KeyboardKey.ESCAPE) {
 				handleClose();
 			}
 		};
 
 		document.addEventListener("keydown", handleKeyDown);
-		return () => document.removeEventListener("keydown", handleKeyDown);
-	}, [isOpen, handleClose]);
 
-	if (!isOpen) {
+		return (): void => {
+			document.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [isOpen, hasValidComponent, handleClose]);
+
+	if (!isOpen || !hasValidComponent) {
 		return null;
 	}
 
-	const modalContent = component
-		? React.createElement(component, {
-				...componentProps,
-				onClose: handleClose,
-				registerCleanup,
-			})
-		: null;
+	const modalContent = React.cloneElement(component, {
+		...componentProperties,
+		onClose: handleClose,
+		registerCleanup,
+	} as ModalComponentProperties);
 
 	return (
 		<>

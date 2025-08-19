@@ -22,6 +22,7 @@ const authenticatedUserPatch = z
 				message: UserValidationMessage.FIRST_NAME_INVALID,
 			})
 			.optional(),
+		isVisibleProfile: z.boolean().optional(),
 		lastName: z
 			.string()
 			.trim()
@@ -39,8 +40,8 @@ const authenticatedUserPatch = z
 			})
 			.optional(),
 	})
-	.refine((data) => data.firstName || data.lastName, {
-		message: UserValidationMessage.FIRST_OR_LAST_NAME_REQUIRED,
+	.refine((data) => data.firstName || data.lastName || data.isVisibleProfile, {
+		message: UserValidationMessage.ONE_FIELD_REQUIRED,
 	});
 
 export { authenticatedUserPatch };

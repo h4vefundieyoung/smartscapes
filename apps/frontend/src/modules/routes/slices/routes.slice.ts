@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { type RouteGetByIdResponseDto } from "./../libs/types/types.js";
-
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
+import { type RouteGetByIdResponseDto } from "./../libs/types/types.js";
 import { create, getRouteById } from "./actions.js";
 
 type State = {

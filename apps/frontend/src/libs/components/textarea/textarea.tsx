@@ -12,22 +12,22 @@ import { Icon } from "../components.js";
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
+	className?: string;
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
 	label: string;
 	name: FieldPath<T>;
 	placeholder?: string;
-	className?: string;
 	rows?: number;
 };
 
 const TextArea = <T extends FieldValues>({
+	className,
 	control,
 	errors,
 	label,
 	name,
 	placeholder = "",
-	className,
 	rows,
 }: Properties<T>): React.JSX.Element => {
 	const { field } = useFormController({ control, name });

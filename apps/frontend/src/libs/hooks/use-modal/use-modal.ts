@@ -1,81 +1,88 @@
-import { useCallback } from "react";
-import { useSearchParams } from "react-router";
+import { type ReactElement } from "react";
 
-interface UseModalProps {
-	queryParameter: string;
-	component: React.ComponentType<any> | ((props: any) => React.JSX.Element);
-	useGlobalState?: boolean;
-	props?: Record<string, any>;
+import { useCallback, useSearchParams } from "~/libs/hooks/hooks.js";
+
+interface GlobalModalState {
+	close: () => void;
+	component: null | ReactElement;
+	currentModal: null | string;
+	isOpen: boolean;
+	modalProps: ModalProperties;
 }
 
-interface UseModalReturn {
+interface LocalModalState {
 	handleModalOpen: () => void;
 }
 
-interface UseModalGlobalReturn {
-	isOpen: boolean;
-	component: React.ComponentType<any> | null;
-	modalProps: Record<string, any>;
-	close: () => void;
-	currentModal: string | null;
+type ModalProperties = Record<string, unknown>;
+
+interface UseModalOptions {
+	component: ReactElement;
+	queryParameter: string;
+	useGlobalState?: boolean;
 }
 
-const modalRegistry: Record<
-	string,
-	React.ComponentType<any> | ((props: any) => React.JSX.Element)
-> = {};
+type UseModalReturn<TUseGlobalState extends boolean = false> =
+	TUseGlobalState extends true ? GlobalModalState : LocalModalState;
 
-const modalPropsRegistry: Record<string, Record<string, any>> = {};
+const modalComponentRegistry: Record<string, ReactElement> = {};
+const modalPropertiesRegistry: Record<string, ModalProperties> = {};
 
-export const useModal = ({
-	queryParameter,
+const useModal = <TUseGlobalState extends boolean = false>({
 	component,
-	useGlobalState = false,
-	props = {},
-}: UseModalProps): any => {
-	const [searchParams, setSearchParams] = useSearchParams();
+	queryParameter,
+	useGlobalState = false as TUseGlobalState,
+}: UseModalOptions & {
+	useGlobalState?: TUseGlobalState;
+}): UseModalReturn<TUseGlobalState> => {
+	const [searchParameters, setSearchParameters] = useSearchParams();
 
-	if (!useGlobalState && queryParameter && component) {
-		modalRegistry[queryParameter] = component;
-		modalPropsRegistry[queryParameter] = props;
+	if (!useGlobalState) {
+		modalComponentRegistry[queryParameter] = component;
+		modalPropertiesRegistry[queryParameter] = {};
 	}
 
 	const handleModalOpen = useCallback(() => {
-		setSearchParams((prev) => {
-			const newParams = new URLSearchParams(prev);
-			newParams.set("modal", queryParameter);
-			return newParams;
+		setSearchParameters((previous) => {
+			const newParameters = new URLSearchParams(previous);
+			newParameters.set("modal", queryParameter);
+
+			return newParameters;
 		});
-	}, [queryParameter, setSearchParams]);
+	}, [queryParameter, setSearchParameters]);
 
 	const handleModalClose = useCallback(() => {
-		setSearchParams((prev) => {
-			const newParams = new URLSearchParams(prev);
-			newParams.delete("modal");
-			return newParams;
+		setSearchParameters((previous) => {
+			const newParameters = new URLSearchParams(previous);
+			newParameters.delete("modal");
+
+			return newParameters;
 		});
-	}, [setSearchParams]);
+	}, [setSearchParameters]);
 
 	if (useGlobalState) {
-		const currentModalParam = searchParams.get("modal");
-		const isOpen = Boolean(currentModalParam);
-		const currentComponent = currentModalParam
-			? modalRegistry[currentModalParam]
+		const currentModalParameter = searchParameters.get("modal");
+		const isOpen = Boolean(currentModalParameter);
+		const currentComponent = currentModalParameter
+			? (modalComponentRegistry[currentModalParameter] as null | ReactElement)
 			: null;
-		const currentModalProps = currentModalParam
-			? modalPropsRegistry[currentModalParam] || {}
-			: {};
+		const currentModalProperties = currentModalParameter
+			? (modalPropertiesRegistry[currentModalParameter] ??
+				({} as ModalProperties))
+			: ({} as ModalProperties);
 
 		return {
-			isOpen,
-			component: currentComponent,
-			modalProps: currentModalProps,
 			close: handleModalClose,
-			currentModal: currentModalParam,
-		} as UseModalGlobalReturn;
+			component: currentComponent,
+			currentModal: currentModalParameter,
+			isOpen,
+			modalProps: currentModalProperties,
+		} as UseModalReturn<TUseGlobalState>;
 	}
 
 	return {
 		handleModalOpen,
-	} as UseModalReturn;
+	} as UseModalReturn<TUseGlobalState>;
 };
+
+export { useModal };

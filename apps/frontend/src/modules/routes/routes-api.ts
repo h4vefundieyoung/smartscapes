@@ -1,14 +1,14 @@
-import {
-	type RouteCreateRequestDto,
-	type RouteGetByIdResponseDto,
-} from "./libs/types/types.js";
-import { RoutesApiPath } from "./libs/enums/enums.js";
-
 import { APIPath, ContentType } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
+
+import { RoutesApiPath } from "./libs/enums/enums.js";
+import {
+	type RouteCreateRequestDto,
+	type RouteGetByIdResponseDto,
+} from "./libs/types/types.js";
 
 type Constructor = {
 	baseUrl: string;

@@ -20,10 +20,10 @@ const CreatePOIModal = ({
 	defaultLongitude,
 	onSubmit,
 }: Properties): React.JSX.Element => {
-	const { control, errors, handleSubmit } =
+	const { control, errors, handleReset, handleSubmit } =
 		useAppForm<PointsOfInterestRequestDto>({
 			defaultValues: {
-				description: "",
+				description: null,
 				location: {
 					coordinates: [defaultLongitude, defaultLatitude],
 					type: "Point",
@@ -42,6 +42,7 @@ const CreatePOIModal = ({
 				coordinates: values.location.coordinates,
 			},
 		});
+		handleReset();
 	};
 
 	return (

@@ -1,25 +1,26 @@
-import { useEffect, useRef } from "react";
-import { useSearchParams } from "react-router";
-
 import { Button, Input, TextArea } from "~/libs/components/components.js";
-import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
+import {
+	useAppForm,
+	useCallback,
+	useEffect,
+	useRef,
+	useSearchParams,
+} from "~/libs/hooks/hooks.js";
+import { storage, StorageKey } from "~/libs/modules/storage/storage.js";
 import {
 	type RouteCreateRequestDto,
 	routesCreateValidationSchema,
 } from "~/modules/routes/routes.js";
 
+import { DEFAULT_CREATE_ROUTE_PAYLOAD } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	onClose?: () => void;
 	onSubmit?: (data: RouteCreateRequestDto) => void;
 	registerCleanup?: (cleanupFunction: () => void) => void;
 };
 
-const STORAGE_KEY = "create-route-form-data";
-
 const CreateRouteForm = ({
-	onClose,
 	onSubmit,
 	registerCleanup,
 }: Properties = {}): React.JSX.Element => {
@@ -31,8 +32,8 @@ const CreateRouteForm = ({
 		errors,
 		handleSubmit: handleFormSubmit,
 		handleValueSet,
-	} = useAppForm<RouteCreateRequestDto>({
-		defaultValues: { description: "", name: "", pois: [] },
+	} = useAppForm({
+		defaultValues: DEFAULT_CREATE_ROUTE_PAYLOAD,
 		validationSchema: routesCreateValidationSchema,
 	});
 
@@ -40,25 +41,32 @@ const CreateRouteForm = ({
 	const isRouteConstructed = Boolean(plannedRouteId);
 
 	useEffect(() => {
-		const savedData = localStorage.getItem(STORAGE_KEY);
-		if (!savedData) {
-			return;
-		}
+		const loadSavedData = async (): Promise<void> => {
+			const savedData = await storage.get(StorageKey.CREATE_ROUTE_FORM_DATA);
 
-		try {
-			const { description, name } = JSON.parse(savedData) as {
-				description: string;
-				name: string;
-			};
-			if (name) {
-				handleValueSet("name", name);
+			if (!savedData) {
+				return;
 			}
-			if (description) {
-				handleValueSet("description", description);
+
+			try {
+				const { description, name } = JSON.parse(savedData) as {
+					description: string;
+					name: string;
+				};
+
+				if (name) {
+					handleValueSet("name", name);
+				}
+
+				if (description) {
+					handleValueSet("description", description);
+				}
+			} catch {
+				await storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
 			}
-		} catch {
-			localStorage.removeItem(STORAGE_KEY);
-		}
+		};
+
+		void loadSavedData();
 	}, [handleValueSet]);
 
 	useEffect(() => {
@@ -70,64 +78,58 @@ const CreateRouteForm = ({
 				};
 
 				if (name || description) {
-					localStorage.setItem(
-						STORAGE_KEY,
+					void storage.set(
+						StorageKey.CREATE_ROUTE_FORM_DATA,
 						JSON.stringify({ description, name }),
 					);
+				} else {
+					void storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
 				}
 			},
 		});
 
-		return () => subscription.unsubscribe();
+		return (): void => {
+			subscription.unsubscribe();
+		};
 	}, [control]);
 
 	const handleModalClose = useCallback((): void => {
 		if (!hasBeenSubmittedReference.current) {
-			localStorage.removeItem(STORAGE_KEY);
+			void storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
 		}
 	}, []);
 
-	useEffect(() => {
+	useEffect((): void => {
 		registerCleanup?.(handleModalClose);
 	}, [registerCleanup, handleModalClose]);
 
-	const handleSubmit = handleFormSubmit((data: RouteCreateRequestDto) => {
-		if (!isRouteConstructed || !onSubmit) {
-			return;
-		}
+	const handleSubmit = useCallback(
+		(data: RouteCreateRequestDto): void => {
+			if (!onSubmit) {
+				return;
+			}
 
-		hasBeenSubmittedReference.current = true;
-		onSubmit({
-			description: data.description,
-			name: data.name,
-			pois: [],
-		});
-		localStorage.removeItem(STORAGE_KEY);
-		onClose?.();
-	});
-
-	const handleConstructRouteClick = (): void => {
-		const { description = "", name = "" } = control._formValues as {
-			description: string;
-			name: string;
-		};
-
-		if (name || description) {
-			localStorage.setItem(STORAGE_KEY, JSON.stringify({ description, name }));
-		}
-	};
+			hasBeenSubmittedReference.current = true;
+			onSubmit(data);
+			void storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
+		},
+		[onSubmit],
+	);
 
 	return (
 		<div>
 			<h4 className={styles["title"]}>Create New Route</h4>
-			<form className={styles["form"]} onSubmit={handleSubmit}>
+			<form
+				className={styles["form"]}
+				onSubmit={handleFormSubmit(handleSubmit)}
+			>
 				<div className={styles["field"]}>
 					<Input control={control} errors={errors} label="Name" name="name" />
 				</div>
 
 				<div className={styles["field"]}>
 					<div className={styles["route-section"]}>
-						<label className={styles["label"]}>Route</label>
+						<span className={styles["label"]}>Route</span>
 						{isRouteConstructed && (
 							<div>
 								<span>Route constructed</span>
@@ -136,7 +138,6 @@ const CreateRouteForm = ({
 						<div>
 							<Button
 								label="Construct"
-								onClick={handleConstructRouteClick}
 								to="/routes/construct?returnTo=/routes?modal=create-route"
 								type="button"
 								variant="outlined"

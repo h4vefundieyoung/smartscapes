@@ -1,7 +1,6 @@
 import {
 	Button,
 	CreatePOIModal,
-	CreateRouteForm,
 	Header,
 	Loader,
 	Select,
@@ -10,15 +9,17 @@ import {
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
 import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
 import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
+import { getPermittedNavigationItems } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppForm,
 	useAppSelector,
 	useCallback,
 	useEffect,
+	useMemo,
+	useModal,
 	useRef,
 	useState,
-	useModal,
 } from "~/libs/hooks/hooks.js";
 import { HTTPError } from "~/libs/modules/http/http.js";
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
@@ -26,10 +27,6 @@ import { fileApi } from "~/modules/files/files.js";
 import { FileFolderName } from "~/modules/files/libs/enums/enums.js";
 import { type PointsOfInterestRequestDto } from "~/modules/points-of-interest/libs/types/types.js";
 import { actions as poiActions } from "~/modules/points-of-interest/points-of-interest.js";
-import {
-	type RouteCreateRequestDto,
-	actions as routesActions,
-} from "~/modules/routes/routes.js";
 
 import { Carousel } from "../../libs/components/carousel/carousel.js";
 import styles from "./styles.module.css";
@@ -119,35 +116,31 @@ const Dashboard = (): React.JSX.Element => {
 		[dispatch],
 	);
 
-	const handleRouteSubmit = useCallback(
-		(payload: RouteCreateRequestDto): void => {
-			void dispatch(routesActions.create(payload));
-		},
-		[dispatch],
-	);
-
 	useEffect(() => {
 		if (createStatus === DataStatus.FULFILLED) {
 			setIsCreatePOIOpen(false);
 		}
 	}, [createStatus]);
 
-	const { handleModalOpen } = useModal({
-		queryParameter: "create-route",
-		component: CreateRouteForm,
-		props: { onSubmit: handleRouteSubmit },
-	});
+	const permittedNavigationItems = useMemo(() => {
+		return getPermittedNavigationItems(
+			Boolean(authenticatedUser),
+			NAVIGATION_ITEMS_GROUPS,
+			authenticatedUser?.group.permissions ?? [],
+		);
+	}, [authenticatedUser]);
 
 	const { handleModalOpen: handleCreatePoiModal } = useModal({
+		component: (
+			<CreatePOIModal
+				defaultLatitude={DEFAULT_LATITUDE}
+				defaultLongitude={DEFAULT_LONGITUDE}
+				isOpen={isCreatePOIOpen}
+				onClose={handleModalToggle}
+				onSubmit={handleSubmit}
+			/>
+		),
 		queryParameter: "create-poi",
-		component: CreatePOIModal,
-		props: {
-			defaultLatitude: DEFAULT_LATITUDE,
-			defaultLongitude: DEFAULT_LONGITUDE,
-			isOpen: isCreatePOIOpen,
-			onClose: handleModalToggle,
-			onSubmit: handleSubmit,
-		},
 	});
 
 	return (
@@ -158,7 +151,7 @@ const Dashboard = (): React.JSX.Element => {
 					user={authenticatedUser}
 				/>
 				<div className={styles["sidebar-container"]}>
-					<Sidebar navigationItemsGroups={NAVIGATION_ITEMS_GROUPS} />
+					<Sidebar navigationItemsGroups={permittedNavigationItems} />
 				</div>
 				<Loader />
 				<div className={styles["carousel-container"]}>
@@ -201,13 +194,6 @@ const Dashboard = (): React.JSX.Element => {
 					<Button
 						label="Create new POI"
 						onClick={handleCreatePoiModal}
-						type="button"
-					/>
-				</div>
-				<div className={styles["button-container"]}>
-					<Button
-						label="Create new route"
-						onClick={handleModalOpen}
 						type="button"
 					/>
 				</div>

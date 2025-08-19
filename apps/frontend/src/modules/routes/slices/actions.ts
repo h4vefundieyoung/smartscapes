@@ -11,7 +11,7 @@ const create = createAsyncThunk<
 	APIResponse<RouteGetByIdResponseDto>,
 	RouteCreateRequestDto,
 	AsyncThunkConfig
->(`routes/create`, async (payload, { extra }) => {
+>("routes/create", async (payload, { extra }) => {
 	const { routesApi } = extra;
 
 	return await routesApi.create(payload);
@@ -21,7 +21,7 @@ const getRouteById = createAsyncThunk<
 	APIResponse<RouteGetByIdResponseDto>,
 	number,
 	AsyncThunkConfig
->(`routes/get-route-by-id`, (id, { extra }) => {
+>("routes/get-route-by-id", (id, { extra }) => {
 	const { routesApi } = extra;
 
 	return routesApi.getRouteById(id);

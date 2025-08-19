@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.25.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.25.1...@smartscapes/backend-v1.25.2) (2025-08-18)
+
+
+### Bug Fixes
+
+* **backend:** update helmet config for swagger ss-295 ([#429](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/429)) ([f4b0a43](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/f4b0a43111afa8da9902a972e06214c42d95a20c))
+
+## [1.25.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.25.0...@smartscapes/backend-v1.25.1) (2025-08-18)
+
+
+### Bug Fixes
+
+* **backend:** enable swagger generation for production envrionment ss-295 ([#427](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/427)) ([c9fc9c8](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c9fc9c881b8160b673eecb717e1cb71560c93f24))
+
 ## [1.25.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.24.0...@smartscapes/backend-v1.25.0) (2025-08-18)
 
 

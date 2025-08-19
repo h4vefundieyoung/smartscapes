@@ -10,8 +10,10 @@ const getUrlWithQueryString = (
 
 	for (const [key, value] of Object.entries(queryString)) {
 		if (Array.isArray(value)) {
-			for (const v of value) {
-				parameters.append(key, String(v));
+			const valueArray = value;
+
+			for (const item of valueArray) {
+				parameters.append(key, String(item));
 			}
 		} else {
 			parameters.append(key, String(value));

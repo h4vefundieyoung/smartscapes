@@ -13,7 +13,7 @@ import {
 import { actions as authActions } from "~/modules/auth/auth.js";
 import { type UserAuthResponseDto } from "~/modules/users/libs/types/types.js";
 
-import { UserDropdown } from "../../../../user-dropdown/user-dropdown.js";
+import { UserDropdown } from "../user-dropdown/user-dropdown.js";
 import styles from "./styles.module.css";
 
 type Properties = {

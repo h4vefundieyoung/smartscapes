@@ -1,8 +1,8 @@
 import { type JSX } from "react";
 
+import { Button, Link } from "~/libs/components/components.js";
 import { type DropdownMenuItem } from "~/libs/types/types.js";
 
-import { Button, Link } from "../components.js";
 import styles from "./styles.module.css";
 
 type Properties = {

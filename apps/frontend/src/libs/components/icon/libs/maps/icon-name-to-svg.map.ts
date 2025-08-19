@@ -5,6 +5,7 @@ import Dashboard from "~/assets/images/icons/dashboard.svg?react";
 import Error from "~/assets/images/icons/error.svg?react";
 import EyeOff from "~/assets/images/icons/eye-off.svg?react";
 import Eye from "~/assets/images/icons/eye.svg?react";
+import Logout from "~/assets/images/icons/logout.svg?react";
 import Map from "~/assets/images/icons/map.svg?react";
 import Message from "~/assets/images/icons/message.svg?react";
 import Route from "~/assets/images/icons/route.svg?react";
@@ -23,6 +24,7 @@ const iconNameToSvg: Record<
 	error: Error,
 	eye: Eye,
 	eyeOff: EyeOff,
+	logout: Logout,
 	map: Map,
 	message: Message,
 	route: Route,

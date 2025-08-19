@@ -4,7 +4,7 @@ class PointsOfInterestEntity implements Entity {
 	private createdAt: null | string;
 	private description: null | string;
 	private id: null | number;
-	private location: null | PointGeometry;
+	private location: PointGeometry;
 	private name: string;
 
 	private constructor({
@@ -17,7 +17,7 @@ class PointsOfInterestEntity implements Entity {
 		createdAt: null | string;
 		description: null | string;
 		id: null | number;
-		location: null | PointGeometry;
+		location: PointGeometry;
 		name: string;
 	}) {
 		this.id = id;
@@ -69,7 +69,7 @@ class PointsOfInterestEntity implements Entity {
 	} {
 		return {
 			description: this.description,
-			location: this.location as PointGeometry,
+			location: this.location,
 			name: this.name,
 		};
 	}
@@ -85,7 +85,7 @@ class PointsOfInterestEntity implements Entity {
 			createdAt: this.createdAt,
 			description: this.description,
 			id: this.id as number,
-			location: this.location as PointGeometry,
+			location: this.location,
 			name: this.name,
 		};
 	}

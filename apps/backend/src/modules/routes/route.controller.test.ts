@@ -50,7 +50,7 @@ const mockDelete: RouteService["delete"] = () => {
 	return Promise.resolve(true);
 };
 
-describe("Routes controller", () => {
+describe("Route controller", () => {
 	const mockUser = {
 		avatarUrl: "https://aws/avatars/example_file.jpg",
 		email: "test@example.com",

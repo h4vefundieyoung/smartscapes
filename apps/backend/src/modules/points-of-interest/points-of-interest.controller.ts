@@ -392,6 +392,90 @@ class PointsOfInterestController extends BaseController {
 		};
 	}
 
+	/**
+	 * @swagger
+	 * /points-of-interest/paginated:
+	 *   get:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - Points of Interest
+	 *     summary: Get paginated points of interest
+	 *     description: Retrieve points of interest with pagination support and optional search functionality
+	 *     parameters:
+	 *       - in: query
+	 *         name: page
+	 *         schema:
+	 *           type: string
+	 *           pattern: '^[1-9][0-9]*$'
+	 *           example: "1"
+	 *         description: Page number (starts from 1). Default is 1.
+	 *       - in: query
+	 *         name: perPage
+	 *         schema:
+	 *           type: string
+	 *           pattern: '^[1-9][0-9]*$'
+	 *           example: "10"
+	 *         description: Number of items per page. Default is 10.
+	 *       - in: query
+	 *         name: search
+	 *         schema:
+	 *           type: string
+	 *           minLength: 1
+	 *           maxLength: 255
+	 *           example: "Central Park"
+	 *         description: Optional search term to filter points of interest by name
+	 *     responses:
+	 *       200:
+	 *         description: Successfully retrieved paginated points of interest
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: object
+	 *                   properties:
+	 *                     items:
+	 *                       type: array
+	 *                       items:
+	 *                         $ref: '#/components/schemas/PointsOfInterestResponseDto'
+	 *                     meta:
+	 *                       type: object
+	 *                       properties:
+	 *                         page:
+	 *                           type: number
+	 *                           example: 1
+	 *                         perPage:
+	 *                           type: number
+	 *                           example: 10
+	 *                         total:
+	 *                           type: number
+	 *                           example: 25
+	 *                         totalPages:
+	 *                           type: number
+	 *                           example: 3
+	 *             example:
+	 *               data:
+	 *                 items:
+	 *                   - id: 1
+	 *                     name: "Central Park"
+	 *                     description: "A large park in New York City"
+	 *                     location:
+	 *                       type: "Point"
+	 *                       coordinates: [30.5234, 50.4501]
+	 *                   - id: 2
+	 *                     name: "Glass Bridge"
+	 *                     description: "A modern architectural marvel"
+	 *                     location:
+	 *                       type: "Point"
+	 *                       coordinates: [30.5289, 50.4553]
+	 *                 meta:
+	 *                   page: 1
+	 *                   perPage: 10
+	 *                   total: 25
+	 *                   totalPages: 3
+	 */
 	public async findPaginated(
 		options: APIHandlerOptions<{
 			query: PointsOfInterestGetPaginatedSearchQuery;

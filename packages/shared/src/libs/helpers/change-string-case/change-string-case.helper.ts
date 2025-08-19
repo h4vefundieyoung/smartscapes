@@ -1,7 +1,7 @@
 import * as changeCase from "change-case";
 
 import { StringCaseType } from "../../enums/enums.js";
-import { type ValueOf } from "../../types/value-of.type.js";
+import { type ValueOf } from "../../types/types.js";
 
 const changeStringCase = (
 	string_: string,

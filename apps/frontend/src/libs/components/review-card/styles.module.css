@@ -1,0 +1,23 @@
+.card {
+	padding: 14px;
+	background: var(--color-base);
+	border: 1px solid var(--color-stroke-weak);
+	border-radius: 12px;
+}
+
+.head {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.userName {
+	font-size: var(--font-size-tiny);
+	color: var(--color-text-weak);
+}
+
+.content {
+	margin: 0;
+	color: var(--color-text-strong);
+}

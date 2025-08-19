@@ -134,7 +134,7 @@ class FilesController extends BaseController {
 	 *         name: entityId
 	 *         required: true
 	 *         schema:
-	 *           type: string
+	 *           type: number
 	 *         description: Id of an entity type
 	 *     requestBody:
 	 *       required: true

@@ -3,12 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
-import { type Coordinates } from "../libs/types/types.js";
+import { type Location } from "../libs/types/types.js";
 import { getCurrentUserLocation } from "./actions.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
-	location: Coordinates | null;
+	location: Location | null;
 	locationError: null | string;
 };
 

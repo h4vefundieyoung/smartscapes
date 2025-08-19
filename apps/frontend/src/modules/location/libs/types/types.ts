@@ -1,1 +1,1 @@
-export { type Coordinates } from "./coordinates.type.js";
+export { type Location } from "~/libs/types/types.js";

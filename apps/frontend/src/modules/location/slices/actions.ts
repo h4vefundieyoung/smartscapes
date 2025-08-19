@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { type Coordinates } from "../libs/types/types.js";
+import { type Location } from "../libs/types/types.js";
 import { name as sliceName } from "./location.slice.js";
 
 const getCurrentUserLocation = createAsyncThunk<
-	Coordinates,
+	Location,
 	undefined,
 	{ rejectValue: string }
 >(`${sliceName}/get-user-location`, async (_, { rejectWithValue }) => {

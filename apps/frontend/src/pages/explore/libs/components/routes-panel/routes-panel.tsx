@@ -22,16 +22,22 @@ const RoutesPanel = (): React.JSX.Element => {
 	const locationDataStatus = useAppSelector(
 		(state) => state.location.dataStatus,
 	);
+	const location = useAppSelector((state) => state.location.location);
 
 	useEffect(() => {
 		void dispatch(locationActions.getCurrentUserLocation());
 	}, [dispatch]);
 
 	useEffect(() => {
-		if (locationDataStatus === DataStatus.FULFILLED) {
-			void dispatch(exploreActions.getRoutes());
+		if (locationDataStatus === DataStatus.FULFILLED && location !== null) {
+			void dispatch(
+				exploreActions.getRoutes({
+					latitude: location.latitude,
+					longitude: location.longitude,
+				}),
+			);
 		}
-	}, [locationDataStatus, dispatch]);
+	}, [locationDataStatus, location, dispatch]);
 
 	const content = useMemo(() => {
 		if (loading) {
@@ -45,7 +51,9 @@ const RoutesPanel = (): React.JSX.Element => {
 		}
 
 		if (routes.length === 0) {
-			return <div className={styles["not-found"]}>No routes found nearby.</div>;
+			return (
+				<div className={styles["list-empty"]}>No routes found nearby.</div>
+			);
 		}
 
 		return (

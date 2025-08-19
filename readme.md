@@ -112,6 +112,7 @@ erDiagram
     decimal distance
     int duration
     geometry geometry
+    int created_by_user_id FK
   }
 
   planned_paths {

@@ -13,4 +13,4 @@ const DEFAULT_CREATE_POI_PAYLOAD: CreatePOIFormValues = {
 	name: "",
 };
 
-export { DEFAULT_CREATE_POI_PAYLOAD };
+export { type CreatePOIFormValues, DEFAULT_CREATE_POI_PAYLOAD };

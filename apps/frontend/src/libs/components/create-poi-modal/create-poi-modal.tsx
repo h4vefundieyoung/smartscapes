@@ -13,7 +13,10 @@ import {
 	type PointsOfInterestRequestDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
-import { DEFAULT_CREATE_POI_PAYLOAD } from "./libs/constants/constants.js";
+import {
+	type CreatePOIFormValues,
+	DEFAULT_CREATE_POI_PAYLOAD,
+} from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -28,13 +31,13 @@ const CreatePOIModal = ({
 	onSubmit,
 }: Properties): React.JSX.Element => {
 	const { control, errors, handleReset, handleSubmit } =
-		useAppForm<PointsOfInterestRequestDto>({
+		useAppForm<CreatePOIFormValues>({
 			defaultValues: DEFAULT_CREATE_POI_PAYLOAD,
 			validationSchema: pointOfInterestCreateValidationSchema,
 		});
 
-	const handleFormSubmit = (payload: PointsOfInterestRequestDto): void => {
-		onSubmit(payload);
+	const handleFormSubmit = (payload: CreatePOIFormValues): void => {
+		onSubmit(payload as PointsOfInterestRequestDto);
 		handleReset(DEFAULT_CREATE_POI_PAYLOAD);
 	};
 
@@ -55,7 +58,7 @@ const CreatePOIModal = ({
 					name="name"
 					type="text"
 				/>
-				<MapLocationField<PointsOfInterestRequestDto>
+				<MapLocationField<CreatePOIFormValues>
 					control={control}
 					errors={errors}
 					label="Location"

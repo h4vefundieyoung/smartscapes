@@ -72,6 +72,7 @@ erDiagram
     dateTime created_at
     dateTime updated_at
     varchar name
+    varchar description
     geometry location
   }
 
@@ -108,6 +109,20 @@ erDiagram
     dateTime updated_at
     varchar name
     varchar description
+    decimal distance
+    int duration
+    geometry geometry
+    int created_by_user_id FK
+  }
+
+  planned_paths {
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    int user_id FK
+    decimal distance
+    decimal duration
+    geometry geometry
   }
 
   routes_to_pois {

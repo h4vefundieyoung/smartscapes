@@ -30,18 +30,26 @@ const createMockPointsOfInterestService =
 			}),
 	});
 
-const createMockRoutesService = (): Partial<RouteService> => ({
+const createMockRouteService = (): Partial<RouteService> => ({
 	findById: (id: number) =>
 		Promise.resolve({
-			createdAt: new Date().toISOString(),
+			createdByUserId: 10,
 			description: "Route description",
+			distance: 1.23,
+			duration: 4.56,
+			geometry: {
+				coordinates: [
+					[FIRST_COORDINATE, SECOND_COORDINATE],
+					[SECOND_COORDINATE, FIRST_COORDINATE],
+				] as [number, number][],
+				type: "LineString" as const,
+			},
 			id,
 			name: "Test Route",
 			pois: [
 				{ id: 1, visitOrder: 1 },
 				{ id: 2, visitOrder: 2 },
 			],
-			updatedAt: new Date().toISOString(),
 		}),
 });
 
@@ -63,7 +71,7 @@ describe("ReviewService", () => {
 		const reviewEntity = ReviewEntity.initialize(mockReviewDB);
 
 		const pointsOfInterestService = createMockPointsOfInterestService();
-		const routesService = createMockRoutesService();
+		const routeService = createMockRouteService();
 
 		const reviewRepository = {
 			create: (() =>
@@ -74,7 +82,7 @@ describe("ReviewService", () => {
 		const reviewService = new ReviewService(
 			reviewRepository,
 			pointsOfInterestService as PointsOfInterestService,
-			routesService as RouteService,
+			routeService as RouteService,
 		);
 
 		const result = await reviewService.create({
@@ -114,7 +122,7 @@ describe("ReviewService", () => {
 		const reviewService = new ReviewService(
 			reviewRepository,
 			createMockPointsOfInterestService() as PointsOfInterestService,
-			createMockRoutesService() as RouteService,
+			createMockRouteService() as RouteService,
 		);
 
 		const result = await reviewService.findAll(null);

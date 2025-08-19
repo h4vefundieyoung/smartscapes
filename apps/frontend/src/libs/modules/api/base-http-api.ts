@@ -1,5 +1,8 @@
 import { APIErrorType } from "~/libs/enums/enums.js";
-import { configureString } from "~/libs/helpers/helpers.js";
+import {
+	configureString,
+	getUrlWithQueryString,
+} from "~/libs/helpers/helpers.js";
 import {
 	AuthError,
 	type HTTP,
@@ -49,7 +52,7 @@ class BaseHTTPApi implements HTTPApi {
 			hasAuth = false,
 			method,
 			payload = null,
-			query,
+			query = undefined,
 		} = options;
 
 		const headers = await this.getHeaders({
@@ -57,21 +60,9 @@ class BaseHTTPApi implements HTTPApi {
 			hasAuth,
 		});
 
-		let url = path;
+		const fullUrl = getUrlWithQueryString(path, query);
 
-		if (query) {
-			const parameters = new URLSearchParams();
-
-			for (const [key, value] of Object.entries(query)) {
-				parameters.append(key, String(value));
-			}
-
-			const queryString = parameters.toString();
-
-			url = queryString ? `${path}?${queryString}` : path;
-		}
-
-		const response = await this.http.load<T>(url, {
+		const response = await this.http.load<T>(fullUrl, {
 			headers,
 			method,
 			payload,

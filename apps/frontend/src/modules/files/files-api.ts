@@ -42,7 +42,10 @@ class FileApi extends BaseHTTPApi {
 		formData.append("file", file);
 
 		const response = await this.load<APIResponse<FileUploadResponseDto>>(
-			this.getFullEndpoint(FilesApiPath.UPLOAD, { entityId, folder }),
+			this.getFullEndpoint(FilesApiPath.UPLOAD, {
+				entityId: entityId.toString(),
+				folder,
+			}),
 			{
 				hasAuth: true,
 				method: "POST",

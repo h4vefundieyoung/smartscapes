@@ -41,6 +41,7 @@ erDiagram
     text password_hash
     text password_salt
     int group_id FK
+    varchar avatarUrl
   }
 
   groups {
@@ -155,11 +156,13 @@ erDiagram
   }
 
   files {
-    id integer [primary key]
-    created_at timestamp
-    updated_at timestamp
-    url varchar
-    content_type varchar
+    int id PK
+    timestamp created_at
+    timestamp updated_at
+    varchar url
+    varchar content_type
+    enum folder
+    int entity_id
   }
 
   users }|--|| groups : group_id

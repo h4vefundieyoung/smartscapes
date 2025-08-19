@@ -8,8 +8,8 @@ export {
 	type PointsOfInterestSearchQuery,
 } from "./libs/types/types.js";
 export {
-	pointOfInterestCreate as pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdate as pointOfInterestUpdateValidationSchema,
+	pointsOfInterestCreate as pointsOfInterestCreateValidationSchema,
 	pointsOfInterestPaginatedQuery as pointsOfInterestPaginatedQueryValidationSchema,
 	pointsOfInterestSearchQuery as pointsOfInterestSearchQueryValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";

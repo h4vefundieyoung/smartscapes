@@ -64,9 +64,9 @@ export {
 	PermissionKey,
 } from "./modules/permission/permission.js";
 export {
-	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
 	PointsOfInterestApiPath,
+	pointsOfInterestCreateValidationSchema,
 	type PointsOfInterestGetPaginatedSearchQuery,
 	pointsOfInterestPaginatedQueryValidationSchema,
 	type PointsOfInterestPaginatedResponseDto,

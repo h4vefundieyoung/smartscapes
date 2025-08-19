@@ -6,7 +6,7 @@ import {
 } from "~/libs/components/components.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
-	pointOfInterestCreateValidationSchema,
+	pointsOfInterestCreateValidationSchema,
 	type PointsOfInterestRequestDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
@@ -37,7 +37,7 @@ const CreatePOIModal = ({
 				},
 				name: "",
 			},
-			validationSchema: pointOfInterestCreateValidationSchema,
+			validationSchema: pointsOfInterestCreateValidationSchema,
 		});
 
 	const handleFormSubmit = (values: PointsOfInterestRequestDto): void => {

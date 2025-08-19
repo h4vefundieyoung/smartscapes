@@ -6,7 +6,7 @@ import {
 } from "../enums/enums.js";
 import { locationSchema } from "./location.validation-schema.js";
 
-const pointOfInterestCreate = z.strictObject({
+const pointsOfInterestCreate = z.strictObject({
 	description: z
 		.string()
 		.trim()
@@ -25,4 +25,4 @@ const pointOfInterestCreate = z.strictObject({
 		}),
 });
 
-export { pointOfInterestCreate };
+export { pointsOfInterestCreate };

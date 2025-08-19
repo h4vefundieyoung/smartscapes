@@ -16,8 +16,8 @@ import {
 	type PointsOfInterestSearchQuery,
 } from "./libs/types/type.js";
 import {
-	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
+	pointsOfInterestCreateValidationSchema,
 	pointsOfInterestPaginatedQueryValidationSchema,
 	pointsOfInterestSearchQueryValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
@@ -111,7 +111,7 @@ class PointsOfInterestController extends BaseController {
 			method: "POST",
 			path: "/",
 			validation: {
-				body: pointOfInterestCreateValidationSchema,
+				body: pointsOfInterestCreateValidationSchema,
 			},
 		});
 

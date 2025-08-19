@@ -2,7 +2,6 @@
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
-	width: 464px;
 	max-height: calc(100vh - 110px);
 	padding: 24px 32px;
 	background-color: var(--color-base);

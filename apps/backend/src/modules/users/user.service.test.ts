@@ -41,7 +41,7 @@ describe("UserService", () => {
 
 	it("create should return new user", async () => {
 		const userEntity = UserEntity.initialize({
-			avatarUrl: "https://aws/avatars/example_file.jpg",
+			avatarUrl: null,
 			email: "test@example.com",
 			firstName: "John",
 			group: mockGroup.toObject(),
@@ -72,6 +72,7 @@ describe("UserService", () => {
 		});
 
 		assert.deepStrictEqual(result, {
+			avatarUrl: null,
 			email: mockUser.toObject().email,
 			firstName: mockUser.toObject().firstName,
 			group: {

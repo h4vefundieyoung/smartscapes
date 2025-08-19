@@ -11,6 +11,8 @@ import {
 import { actions } from "~/modules/points-of-interest/points-of-interest.js";
 import { createColumns } from "~/pages/admin-dashboard/libs/helpers/helpers.js";
 
+import styles from "./styles.module.css";
+
 const DEFAULT_TOTAL_ITEMS = 0;
 const DEFAULT_TOTAL_PAGES = 1;
 
@@ -47,15 +49,17 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 	}, [dispatch, paginationPOIS.page, paginationPOIS.pageSize]);
 
 	return (
-		<Table
-			columns={columns}
-			data={summary}
-			loading={dataStatus === DataStatus.PENDING}
-			paginationSettings={paginationPOIS}
-			title="Points of interest"
-			totalItems={meta?.total ?? DEFAULT_TOTAL_ITEMS}
-			totalPages={meta?.totalPages ?? DEFAULT_TOTAL_PAGES}
-		/>
+		<section>
+			<h2 className={styles["title"]}>Points of interest</h2>
+			<Table
+				columns={columns}
+				data={summary}
+				loading={dataStatus === DataStatus.PENDING}
+				paginationSettings={paginationPOIS}
+				totalItems={meta?.total ?? DEFAULT_TOTAL_ITEMS}
+				totalPages={meta?.totalPages ?? DEFAULT_TOTAL_PAGES}
+			/>
+		</section>
 	);
 };
 

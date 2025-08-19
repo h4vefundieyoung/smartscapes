@@ -1,0 +1,6 @@
+.title {
+	margin: 0 0 32px;
+	font-size: var(--font-size-h2);
+	line-height: 1.25;
+	color: var(--color-text-strong);
+}

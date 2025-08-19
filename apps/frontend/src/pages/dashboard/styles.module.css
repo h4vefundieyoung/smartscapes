@@ -10,19 +10,6 @@
 	justify-content: space-between;
 }
 
-.sidebar-container {
-	align-self: flex-start;
-}
-
-.button-container {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 1rem;
-	justify-content: center;
-	width: 100%;
-	max-width: 600px;
-}
-
 .carousel-container {
 	width: 50%;
 	margin-bottom: 1rem;

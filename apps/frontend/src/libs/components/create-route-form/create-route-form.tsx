@@ -1,6 +1,8 @@
 import { Button, Input, TextArea } from "~/libs/components/components.js";
+import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppForm,
+	useAppSelector,
 	useCallback,
 	useEffect,
 	useRef,
@@ -11,21 +13,30 @@ import {
 	type RouteCreateRequestDto,
 	routesCreateValidationSchema,
 } from "~/modules/routes/routes.js";
+import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
 import { DEFAULT_CREATE_ROUTE_PAYLOAD } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 type Properties = {
+	closeModal?: () => void;
 	onSubmit?: (data: RouteCreateRequestDto) => void;
 	registerCleanup?: (cleanupFunction: () => void) => void;
 };
 
 const CreateRouteForm = ({
+	closeModal,
 	onSubmit,
 	registerCleanup,
 }: Properties = {}): React.JSX.Element => {
 	const [searchParameters] = useSearchParams();
 	const hasBeenSubmittedReference = useRef(false);
+
+	const { authenticatedUser } = useAppSelector((state) => state.auth) as {
+		authenticatedUser: UserAuthResponseDto;
+	};
+
+	const createStatus = useAppSelector((state) => state.route.createStatus);
 
 	const {
 		control,
@@ -39,6 +50,12 @@ const CreateRouteForm = ({
 
 	const plannedRouteId = searchParameters.get("plannedRouteId");
 	const isRouteConstructed = Boolean(plannedRouteId);
+
+	useEffect(() => {
+		if (createStatus === DataStatus.FULFILLED) {
+			closeModal?.();
+		}
+	}, [createStatus, closeModal]);
 
 	useEffect(() => {
 		const loadSavedData = async (): Promise<void> => {
@@ -104,16 +121,24 @@ const CreateRouteForm = ({
 	}, [registerCleanup, handleModalClose]);
 
 	const handleSubmit = useCallback(
-		(data: RouteCreateRequestDto): void => {
+		(data: typeof DEFAULT_CREATE_ROUTE_PAYLOAD): void => {
 			if (!onSubmit) {
 				return;
 			}
 
+			const plannedRouteId = searchParameters.get("plannedRouteId");
+
+			const completeData: RouteCreateRequestDto = {
+				...data,
+				createdByUserId: authenticatedUser.id,
+				plannedPathId: plannedRouteId ? Number(plannedRouteId) : 0,
+			};
+
 			hasBeenSubmittedReference.current = true;
-			onSubmit(data);
+			onSubmit(completeData);
 			void storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
 		},
-		[onSubmit],
+		[onSubmit, authenticatedUser.id, searchParameters],
 	);
 
 	return (

@@ -15,6 +15,7 @@ type ModalComponentProperties = ModalInjectedProperties &
 	Record<string, unknown>;
 
 interface ModalInjectedProperties {
+	closeModal?: () => void;
 	onClose?: () => void;
 	registerCleanup?: (cleanupFunction: () => void) => void;
 }
@@ -86,6 +87,7 @@ const Modal = ({
 
 	const modalContent = React.cloneElement(component, {
 		...componentProperties,
+		closeModal: handleClose,
 		onClose: handleClose,
 		registerCleanup,
 	} as ModalComponentProperties);

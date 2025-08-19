@@ -1,9 +1,14 @@
 import { type RouteCreateRequestDto } from "~/modules/routes/routes.js";
 
-const DEFAULT_CREATE_ROUTE_PAYLOAD: RouteCreateRequestDto = {
+type CreateRouteFormValues = Omit<
+	RouteCreateRequestDto,
+	"createdByUserId" | "plannedPathId"
+>;
+
+const DEFAULT_CREATE_ROUTE_PAYLOAD: CreateRouteFormValues = {
 	description: "",
 	name: "",
-	pois: [],
+	poiIds: [],
 };
 
 export { DEFAULT_CREATE_ROUTE_PAYLOAD };

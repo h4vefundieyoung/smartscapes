@@ -1,22 +1,15 @@
 import {
 	Button,
 	CreatePOIModal,
-	Header,
 	Loader,
 	Select,
-	Sidebar,
 } from "~/libs/components/components.js";
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
-import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
-import { AppRoute, DataStatus } from "~/libs/enums/enums.js";
-import { getPermittedNavigationItems } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppForm,
-	useAppSelector,
 	useCallback,
 	useEffect,
-	useMemo,
 	useModal,
 	useRef,
 	useState,
@@ -43,9 +36,6 @@ const Dashboard = (): React.JSX.Element => {
 	const [uploadedImages, setUploadedImages] = useState<string[]>([]);
 	const [isUploading, setIsUploading] = useState<boolean>(false);
 	const fileInputReference = useRef<HTMLInputElement>(null);
-	const authenticatedUser = useAppSelector(
-		({ auth }) => auth.authenticatedUser,
-	);
 	const dispatch = useAppDispatch();
 
 	const colorOptions: SelectOption<string>[] = [
@@ -101,14 +91,6 @@ const Dashboard = (): React.JSX.Element => {
 		void loadFiles();
 	}, []);
 
-	const [isCreatePOIOpen, setIsCreatePOIOpen] = useState<boolean>(false);
-	const createStatus = useAppSelector(
-		(state) => state.pointsOfInterest.createStatus,
-	);
-	const handleModalToggle = useCallback(() => {
-		setIsCreatePOIOpen((previous) => !previous);
-	}, []);
-
 	const handleSubmit = useCallback(
 		(payload: PointsOfInterestRequestDto): void => {
 			void dispatch(poiActions.create(payload));
@@ -116,27 +98,11 @@ const Dashboard = (): React.JSX.Element => {
 		[dispatch],
 	);
 
-	useEffect(() => {
-		if (createStatus === DataStatus.FULFILLED) {
-			setIsCreatePOIOpen(false);
-		}
-	}, [createStatus]);
-
-	const permittedNavigationItems = useMemo(() => {
-		return getPermittedNavigationItems(
-			Boolean(authenticatedUser),
-			NAVIGATION_ITEMS_GROUPS,
-			authenticatedUser?.group.permissions ?? [],
-		);
-	}, [authenticatedUser]);
-
-	const { handleModalOpen: handleCreatePoiModal } = useModal({
+	const { handleModalOpen } = useModal({
 		component: (
 			<CreatePOIModal
 				defaultLatitude={DEFAULT_LATITUDE}
 				defaultLongitude={DEFAULT_LONGITUDE}
-				isOpen={isCreatePOIOpen}
-				onClose={handleModalToggle}
 				onSubmit={handleSubmit}
 			/>
 		),
@@ -144,15 +110,8 @@ const Dashboard = (): React.JSX.Element => {
 	});
 
 	return (
-		<div className={styles["container"]}>
+		<main className={styles["container"]}>
 			<div className={styles["components-container"]}>
-				<Header
-					actions={[{ label: "Sign in", to: AppRoute.SIGN_IN }]}
-					user={authenticatedUser}
-				/>
-				<div className={styles["sidebar-container"]}>
-					<Sidebar navigationItemsGroups={permittedNavigationItems} />
-				</div>
 				<Loader />
 				<div className={styles["carousel-container"]}>
 					<Carousel images={uploadedImages} />
@@ -193,12 +152,12 @@ const Dashboard = (): React.JSX.Element => {
 				<div className={styles["button-container"]}>
 					<Button
 						label="Create new POI"
-						onClick={handleCreatePoiModal}
+						onClick={handleModalOpen}
 						type="button"
 					/>
 				</div>
 			</div>
-		</div>
+		</main>
 	);
 };
 

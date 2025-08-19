@@ -1,5 +1,6 @@
 import { Button, Input, TextArea } from "~/libs/components/components.js";
-import { useAppForm } from "~/libs/hooks/hooks.js";
+import { DataStatus } from "~/libs/enums/enums.js";
+import { useAppForm, useAppSelector, useEffect } from "~/libs/hooks/hooks.js";
 import {
 	pointOfInterestCreateValidationSchema,
 	type PointsOfInterestRequestDto,
@@ -8,18 +9,22 @@ import {
 import styles from "./styles.module.css";
 
 type Properties = {
+	closeModal?: () => void;
 	defaultLatitude: number;
 	defaultLongitude: number;
-	isOpen: boolean;
-	onClose: () => void;
 	onSubmit: (values: PointsOfInterestRequestDto) => void;
 };
 
 const CreatePOIModal = ({
+	closeModal,
 	defaultLatitude,
 	defaultLongitude,
 	onSubmit,
 }: Properties): React.JSX.Element => {
+	const createStatus = useAppSelector(
+		(state) => state.pointsOfInterest.createStatus,
+	);
+
 	const { control, errors, handleReset, handleSubmit } =
 		useAppForm<PointsOfInterestRequestDto>({
 			defaultValues: {
@@ -32,6 +37,12 @@ const CreatePOIModal = ({
 			},
 			validationSchema: pointOfInterestCreateValidationSchema,
 		});
+
+	useEffect(() => {
+		if (createStatus === DataStatus.FULFILLED) {
+			closeModal?.();
+		}
+	}, [createStatus, closeModal]);
 
 	const handleFormSubmit = (values: PointsOfInterestRequestDto): void => {
 		onSubmit({

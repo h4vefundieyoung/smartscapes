@@ -13,7 +13,8 @@ import { reducer as appReducer } from "~/modules/app/app.js";
 import { authApi, reducer as authReducer } from "~/modules/auth/auth.js";
 import {
 	pointOfInterestApi,
-	reducer as pointsOfInterestReducer,
+	pointOfInterestDetailsReducer,
+	pointsOfInterestReducer,
 } from "~/modules/points-of-interest/points-of-interest.js";
 import { reducer as routeReducer, routesApi } from "~/modules/routes/routes.js";
 import { userApi } from "~/modules/users/users.js";
@@ -54,6 +55,7 @@ class Store {
 			reducer: {
 				app: appReducer,
 				auth: authReducer,
+				pointOfInterestDetails: pointOfInterestDetailsReducer,
 				pointsOfInterest: pointsOfInterestReducer,
 				route: routeReducer,
 			},

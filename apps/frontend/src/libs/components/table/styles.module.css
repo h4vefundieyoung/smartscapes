@@ -1,8 +1,28 @@
+.wrapper {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	min-height: 0;
+}
+
+.content {
+	flex: 1;
+	min-height: 0;
+	contain: layout style paint;
+	overflow-y: auto;
+	border-top: 2px solid var(--color-stroke-weak);
+}
+
+.footer {
+	flex-shrink: 0;
+}
+
 .table {
 	width: 100%;
-	margin-bottom: 16px;
 	text-align: left;
 	table-layout: fixed;
 	border-collapse: collapse;
 	border: 2px solid var(--color-stroke-weak);
+	border-top: none;
+	border-right: none;
 }

@@ -40,7 +40,7 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 	}, [dispatch, page, pageSize]);
 
 	return (
-		<section>
+		<section className={styles["container"]}>
 			<h2 className={styles["title"]}>Points of interest</h2>
 			<Table
 				columns={columns}

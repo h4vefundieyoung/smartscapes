@@ -45,26 +45,30 @@ const Table = <T,>({
 			: DEFAULT_ROWS_COUNT;
 
 	return (
-		<>
-			<table className={styles["table"]}>
-				{loading ? (
-					<TableSkeleton columns={columns} rowCount={rowCount} />
-				) : (
-					<>
-						<TableHead table={table} />
-						<TableBody table={table} />
-					</>
-				)}
-			</table>
+		<div className={styles["wrapper"]}>
+			<div className={styles["content"]}>
+				<table className={styles["table"]}>
+					{loading ? (
+						<TableSkeleton columns={columns} rowCount={rowCount} />
+					) : (
+						<>
+							<TableHead table={table} />
+							<TableBody table={table} />
+						</>
+					)}
+				</table>
+			</div>
 
 			{!loading && (
-				<Pagination
-					paginationSettings={paginationSettings}
-					totalItems={totalItems}
-					totalPages={totalPages}
-				/>
+				<div className={styles["footer"]}>
+					<Pagination
+						paginationSettings={paginationSettings}
+						totalItems={totalItems}
+						totalPages={totalPages}
+					/>
+				</div>
 			)}
-		</>
+		</div>
 	);
 };
 

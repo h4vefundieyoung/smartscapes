@@ -1,5 +1,9 @@
 .thead {
+	position: sticky;
+	top: 0;
+	z-index: 10;
 	width: 100%;
+	background: var(--color-base);
 }
 
 .th {
@@ -13,5 +17,4 @@
 	white-space: nowrap;
 	outline: none;
 	background: var(--color-fill-weak);
-	border-bottom: 2px solid var(--color-stroke-weak);
 }

@@ -6,6 +6,7 @@ import {
 } from "~/libs/modules/mapbox/mapbox.js";
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
 
+import { type PointsOfInterestResponseDto } from "../points-of-interest/libs/types/type.js";
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
@@ -63,15 +64,19 @@ class RouteService implements Service {
 	public async create(
 		payload: RouteCreateRequestDto,
 	): Promise<RouteGetByIdResponseDto> {
-		await this.ensurePoisExist(payload.pois);
+		const poisResult = await this.ensurePoisExist(payload.pois);
 
 		const formattedPayload = {
 			...payload,
-			pois: payload.pois.map((id, index) => ({
-				id,
-				name: "",
-				visitOrder: index,
-			})),
+			pois: payload.pois.map((id, index) => {
+				const poi = poisResult.items.find((p) => p.id === id);
+
+				return {
+					id,
+					name: poi?.name ?? "",
+					visitOrder: index,
+				};
+			}),
 		};
 
 		const routeEntity = RouteEntity.initializeNew(formattedPayload);
@@ -135,7 +140,9 @@ class RouteService implements Service {
 		return item.toObject();
 	}
 
-	private async ensurePoisExist(pois: number[]): Promise<void> {
+	private async ensurePoisExist(
+		pois: number[],
+	): Promise<CollectionResult<PointsOfInterestResponseDto>> {
 		const filteredPois = await this.pointsOfInterestService.findAll({
 			ids: pois,
 		});
@@ -146,6 +153,8 @@ class RouteService implements Service {
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
+
+		return filteredPois;
 	}
 }
 

@@ -189,7 +189,7 @@ class RouteController extends BaseController {
 	 *     security:
 	 *       - bearerAuth: []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Construct Mapbox route
 	 *     requestBody:
 	 *       required: true
@@ -237,7 +237,7 @@ class RouteController extends BaseController {
 	 *     security:
 	 *       - bearerAuth: []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Create a new route (requires manage_routes permission)
 	 *     description: Creates a new route. Requires authentication and manage_routes permission.
 	 *     requestBody:
@@ -328,7 +328,7 @@ class RouteController extends BaseController {
 	 *     security:
 	 *      - bearerAuth: []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Delete a route (requires manage_routes permission)
 	 *     description: Deletes an existing route. Requires authentication and manage_routes permission.
 	 *     parameters:
@@ -394,7 +394,7 @@ class RouteController extends BaseController {
 	 *     security:
 	 *      - bearerAuth:  []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Retrieve all routes with optional search by name
 	 *     description: |
 	 *       Get all routes, or only those whose names match the search query.
@@ -421,6 +421,14 @@ class RouteController extends BaseController {
 	 *           type: number
 	 *           format: float
 	 *           example: 24.0297
+	 *         name: categories
+	 *         schema:
+	 *           type: array
+	 *           items:
+	 *             type: string
+	 *         style: form
+	 *         explode: true
+	 *         description: categories;
 	 *     responses:
 	 *       200:
 	 *         description: A list of routes
@@ -457,7 +465,7 @@ class RouteController extends BaseController {
 	 *     security:
 	 *      - bearerAuth: []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Get a route by ID
 	 *     description: Retrieves a route by its ID. Requires authentication but no special permissions.
 	 *     parameters:
@@ -512,7 +520,7 @@ class RouteController extends BaseController {
 	 *     security:
 	 *      - bearerAuth: []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Update a route
 	 *     parameters:
 	 *       - in: path

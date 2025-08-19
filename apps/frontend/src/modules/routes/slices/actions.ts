@@ -24,7 +24,7 @@ const patchRoute = createAsyncThunk<
 	APIResponse<RouteGetByIdResponseDto>,
 	PatchActionPayload,
 	AsyncThunkConfig
->(`${sliceName}/get-route-by-id`, async (payload, { extra }) => {
+>(`${sliceName}/patch-route`, async (payload, { extra }) => {
 	const { routeApi } = extra;
 	const patchResult = await routeApi.patchRoute(payload);
 	toastNotifier.showSuccess(RoutesNotification.UPDATED);

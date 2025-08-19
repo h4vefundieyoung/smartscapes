@@ -21,6 +21,7 @@ import {
 import {
 	actions as routeActions,
 	type RouteGetByIdResponseDto,
+	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
@@ -29,18 +30,32 @@ import styles from "./styles.module.css";
 const RouteDetails = (): React.JSX.Element => {
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
 	const route = useAppSelector(({ route }) => route.route);
-	const { control, errors, handleValueSet } = useAppForm({
-		defaultValues: { description: "", name: "" },
-	});
+	const { control, errors, getValues, handleValueSet } =
+		useAppForm<RoutePatchRequestDto>({
+			defaultValues: { description: "", name: "" },
+		});
 	const dispatch = useAppDispatch();
 
 	const { id } = useParams<{ id: string }>();
 
 	const dataStatus = useAppSelector(({ route }) => route.dataStatus);
 
-	const handleEditMode = useCallback(() => {
+	const handleToggleEditMode = useCallback(() => {
 		setIsEditMode(!isEditMode);
 	}, [isEditMode]);
+
+	const handlePatchRequest = useCallback(() => {
+		if (route) {
+			const { description, name } = getValues();
+			void dispatch(
+				routeActions.patchRoute({
+					id: route.id,
+					payload: { description, name },
+				}),
+			);
+			setIsEditMode(false);
+		}
+	}, [dispatch, setIsEditMode, route, getValues]);
 
 	useEffect(() => {
 		void dispatch(routeActions.getRouteById(Number(id)));
@@ -79,12 +94,12 @@ const RouteDetails = (): React.JSX.Element => {
 					)}
 					{isEditMode ? (
 						<div className={styles["edit-mode-controls"]}>
-							<Button label="Save" onClick={handleEditMode} />
-							<Button label="Cancel" onClick={handleEditMode} />
+							<Button label="Save" onClick={handlePatchRequest} />
+							<Button label="Cancel" onClick={handleToggleEditMode} />
 						</div>
 					) : (
 						<div className={styles["edit-button-container"]}>
-							<Button label="Edit" onClick={handleEditMode} />
+							<Button label="Edit" onClick={handleToggleEditMode} />
 						</div>
 					)}
 				</div>

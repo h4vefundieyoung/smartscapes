@@ -2,7 +2,6 @@ import defaultUrl from "~/assets/images/placeholder-card.jpg";
 import { Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { configureString } from "~/libs/helpers/helpers.js";
-import { type ValueOf } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
@@ -20,11 +19,9 @@ const PointOfInterestCard = ({
 	return (
 		<li className={styles["card"]}>
 			<Link
-				to={
-					configureString(AppRoute.POINTS_OF_INTEREST_$ID, {
-						id: id.toString(),
-					}) as ValueOf<typeof AppRoute>
-				}
+				to={configureString(AppRoute.POINTS_OF_INTEREST_$ID, {
+					id: id.toString(),
+				})}
 			>
 				<img
 					alt={name}

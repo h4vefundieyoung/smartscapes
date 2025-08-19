@@ -30,16 +30,18 @@ async function up(knex: Knex): Promise<void> {
 		await trx.schema.alterTable(ROUTES_TABLE, (table) => {
 			table
 				.decimal(ColumnName.DISTANCE, DECIMAL_PRECISION, DECIMAL_SCALE)
-				.notNullable();
+				.notNullable()
+				.defaultTo(0);
 			table
 				.decimal(ColumnName.DURATION, DECIMAL_PRECISION, DECIMAL_SCALE)
-				.notNullable();
+				.notNullable()
+				.defaultTo(0);
 			table
 				.specificType(ColumnName.GEOMETRY, "geometry(LineString, 4326)")
-				.notNullable();
+				.nullable();
 			table
 				.integer(ColumnName.CREATED_BY_USER_ID)
-				.notNullable()
+				.nullable()
 				.references("id")
 				.inTable("users")
 				.onDelete("CASCADE");

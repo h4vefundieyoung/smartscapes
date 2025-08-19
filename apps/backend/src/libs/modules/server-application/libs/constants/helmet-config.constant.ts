@@ -11,14 +11,17 @@ const HELMET_CONFIG: FastifyHelmetOptions = {
 				"https://*.tiles.mapbox.com",
 			],
 			defaultSrc: ["'self'"],
+			fontSrc: ["'self'", "data:"],
 			imgSrc: [
 				"'self'",
 				"data:",
 				"blob:",
 				"https://smartscapes-app.s3.amazonaws.com",
 			],
-			workerSrc: ["'self'", "blob:"],
+			scriptSrc: ["'self'", "'unsafe-inline'"],
+			styleSrc: ["'self'", "'unsafe-inline'"],
 		},
+		useDefaults: true,
 	},
 };
 

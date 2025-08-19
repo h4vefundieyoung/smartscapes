@@ -42,7 +42,7 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("to_json(distance)::json as distance"),
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(geometry)::json as geometry"),
-				"user_id",
+				"created_by_user_id",
 			]);
 
 		return RouteEntity.initialize(result);
@@ -74,7 +74,7 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("to_json(distance)::json as distance"),
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
-				"routes.user_id",
+				"routes.created_by_user_id",
 			]);
 
 		if (name) {
@@ -122,7 +122,7 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("to_json(distance)::json as distance"),
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
-				"routes.user_id",
+				"routes.created_by_user_id",
 			])
 			.where("routes.id", id)
 			.first();
@@ -155,7 +155,7 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("to_json(distance)::json as distance"),
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
-				"routes.user_id",
+				"routes.created_by_user_id",
 			])
 			.execute();
 

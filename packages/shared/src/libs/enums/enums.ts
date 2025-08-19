@@ -4,4 +4,3 @@ export { AppEnvironment } from "./app-environment.enum.js";
 export { CommonExceptionMessage } from "./common-exception-message.enum.js";
 export { ContentType } from "./content-type.enum.js";
 export { LocationType } from "./location-type.enum.js";
-export { StringCaseType } from "./string-case-type.enum.js";

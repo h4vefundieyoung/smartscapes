@@ -5,17 +5,17 @@ import { ReviewValidationMessage } from "../enums/review-validation-message.enum
 import { ReviewValidationRule } from "../enums/review-validation-rule.enum.js";
 
 const reviewSearchQuery = z.object({
-	poiId: z
+	routeId: z
 		.string()
 		.trim()
 		.transform(parseToFloat)
 		.pipe(
 			z
 				.number()
-				.int(ReviewValidationMessage.POI_ID_MUST_BE_INTEGER)
+				.int(ReviewValidationMessage.ROUTE_ID_MUST_BE_INTEGER)
 				.min(
 					ReviewValidationRule.ID_MIN_VALUE,
-					ReviewValidationMessage.POI_ID_TOO_SMALL,
+					ReviewValidationMessage.ROUTE_ID_TOO_SMALL,
 				),
 		)
 		.optional(),

@@ -82,6 +82,7 @@ export {
 	reviewCreateValidationSchema,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
+	ReviewsApiPath,
 	type ReviewSearchQuery,
 	reviewSearchQueryValidationSchema,
 } from "./modules/reviews/reviews.js";

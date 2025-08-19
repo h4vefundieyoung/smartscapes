@@ -1,5 +1,5 @@
 type ReviewSearchQuery = {
-	routeId?: null | number;
+	routeId?: number;
 };
 
 export { type ReviewSearchQuery };

@@ -69,7 +69,7 @@ class ReviewService implements Service {
 	): Promise<CollectionResult<ReviewGetByIdResponseDto>> {
 		const routeId = options?.routeId;
 
-		if (routeId !== null && routeId !== undefined) {
+		if (routeId !== undefined) {
 			await this.ensureRouteExists(routeId);
 		}
 

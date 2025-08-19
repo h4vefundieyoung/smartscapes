@@ -49,7 +49,7 @@ class ReviewRepository implements Repository {
 
 		const routeId = options?.routeId;
 
-		if (routeId !== null && routeId !== undefined) {
+		if (routeId !== undefined) {
 			q.where("reviews.route_id", routeId);
 		}
 

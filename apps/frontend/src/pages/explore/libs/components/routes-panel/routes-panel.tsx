@@ -45,9 +45,7 @@ const RoutesPanel = (): React.JSX.Element => {
 		}
 
 		if (error || locationError) {
-			return (
-				<div className={styles["error"]}>Error: {error ?? locationError}</div>
-			);
+			return <span className={styles["error"]}> {error ?? locationError}</span>;
 		}
 
 		if (routes.length === 0) {

@@ -16,8 +16,9 @@ import { MapControlId } from "./libs/enums/enums.js";
 import {
 	type ControlPosition,
 	type MapControl,
+	type MapMarker,
+	type MapMarkerOptions,
 	type MapOptions,
-	type PointGeometry,
 } from "./libs/types/types.js";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -25,9 +26,7 @@ class MapClient {
 	private accessToken: MapOptions["accessToken"];
 	private controls = new Map<string, MapControl>();
 	private map: mapboxgl.Map | null = null;
-	private readyCallbacks: Array<() => void> = [];
 	private resizeObserver: null | ResizeObserver = null;
-	private selectionMarker: mapboxgl.Marker | null = null;
 
 	public constructor() {
 		this.accessToken = config.ENV.MAPBOX.ACCESS_TOKEN;
@@ -53,38 +52,81 @@ class MapClient {
 		});
 	}
 
-	public addMarker(options: {
-		coordinates: [number, number];
-		draggable?: boolean;
-		onDragEnd?: (coords: [number, number]) => void;
-	}): mapboxgl.Marker | null {
+	public addMapClickListener(
+		handler: (coords: [number, number]) => void,
+	): () => void {
+		if (!this.map) {
+			let cancelled = false;
+			let innerCleanup: (() => void) | null = null;
+
+			const tryAttach = (): void => {
+				if (cancelled) {
+					return;
+				}
+
+				if (this.map) {
+					innerCleanup = this.addMapClickListener(handler);
+
+					return;
+				}
+
+				requestAnimationFrame(tryAttach);
+			};
+
+			requestAnimationFrame(tryAttach);
+
+			return () => {
+				cancelled = true;
+				innerCleanup?.();
+			};
+		}
+
+		const onMapClick = (event: mapboxgl.MapMouseEvent): void => {
+			handler([event.lngLat.lng, event.lngLat.lat]);
+		};
+
+		this.map.on("click", onMapClick);
+
+		return () => {
+			this.map?.off("click", onMapClick);
+		};
+	}
+	public addMarker(options: MapMarkerOptions): MapMarker | null {
 		if (!this.map) {
 			return null;
 		}
 
+		const { coordinates, isDraggable = false, onDragEnd } = options;
+
 		const marker = new mapboxgl.Marker({
 			...MARKER_OPTIONS,
-			draggable: Boolean(options.draggable),
+			draggable: isDraggable,
 		})
-			.setLngLat(options.coordinates)
+			.setLngLat(coordinates)
 			.addTo(this.map);
 
-		if (options.draggable && options.onDragEnd) {
-			marker.on("dragend", (): void => {
-				const pos = marker.getLngLat();
-				options.onDragEnd?.([pos.lng, pos.lat]);
+		if (isDraggable && onDragEnd) {
+			marker.on("dragend", () => {
+				const { lat, lng } = marker.getLngLat();
+				onDragEnd([lng, lat]);
 			});
 		}
 
-		return marker;
+		return this.mapMarker(marker);
 	}
 
-	public addMarkers(
-		markers: { coordinates: PointGeometry["coordinates"] }[],
-	): void {
-		for (const { coordinates } of markers) {
-			this.addMarker({ coordinates, draggable: false });
+	public addMarkers(markers: MapMarkerOptions[]): MapMarker[] {
+		const result: MapMarker[] = [];
+
+		for (const marker of markers) {
+			const currentMarker = this.addMarker(marker);
+
+			if (currentMarker) {
+				result.push(currentMarker);
+			}
 		}
+
+		return result;
 	}
 
 	public addNavigationControl(): void {
@@ -115,13 +157,6 @@ class MapClient {
 		);
 	}
 
-	public clearSelectionMarker(): void {
-		if (this.selectionMarker) {
-			this.selectionMarker.remove();
-			this.selectionMarker = null;
-		}
-	}
-
 	public destroy(): void {
 		for (const control of this.controls.values()) {
 			this.map?.removeControl(control);
@@ -134,8 +169,6 @@ class MapClient {
 
 		this.map?.remove();
 		this.map = null;
-		this.clearSelectionMarker();
-		this.readyCallbacks = [];
 	}
 
 	public flyTo(center: [number, number]): void {
@@ -144,12 +177,7 @@ class MapClient {
 		}
 
 		this.map.stop();
-
-		this.map.flyTo({
-			center,
-			essential: true,
-			zoom: ZOOM_LEVEL,
-		});
+		this.map.flyTo({ center, essential: true, zoom: ZOOM_LEVEL });
 	}
 
 	public init(container: HTMLElement): void {
@@ -163,48 +191,10 @@ class MapClient {
 			...MAP_OPTIONS,
 		});
 
-		this.resizeObserver = new ResizeObserver((): void => {
+		this.resizeObserver = new ResizeObserver(() => {
 			this.map?.resize();
 		});
 		this.resizeObserver.observe(container);
-
-		const callbacks = [...this.readyCallbacks];
-		this.readyCallbacks = [];
-
-		for (const callback of callbacks) {
-			callback();
-		}
-	}
-
-	public onClick(handler: (coords: [number, number]) => void): () => void {
-		if (!this.map) {
-			let innerCleanup: () => void = (): void => {};
-
-			const unsubscribe = this.onReady((): void => {
-				innerCleanup = this.attachClick(handler);
-			});
-
-			return (): void => {
-				unsubscribe();
-				innerCleanup();
-			};
-		}
-
-		return this.attachClick(handler);
-	}
-
-	public onReady(callback: () => void): () => void {
-		if (this.map) {
-			callback();
-
-			return (): void => {};
-		}
-
-		this.readyCallbacks.push(callback);
-
-		return (): void => {
-			this.readyCallbacks = this.readyCallbacks.filter((f) => f !== callback);
-		};
 	}
 
 	public resize(): void {
@@ -213,45 +203,6 @@ class MapClient {
 
 	public setCenter(center: [number, number]): void {
 		this.map?.setCenter(center);
-	}
-
-	public setSelectionMarker(options: {
-		coordinates: [number, number];
-		draggable?: boolean;
-		onDragEnd?: (coords: [number, number]) => void;
-	}): void {
-		if (!this.map) {
-			return;
-		}
-
-		const { coordinates, draggable, onDragEnd } = options;
-
-		if (this.selectionMarker) {
-			this.selectionMarker.setLngLat(coordinates);
-			const shouldDrag = Boolean(draggable);
-
-			if (this.selectionMarker.isDraggable() !== shouldDrag) {
-				this.selectionMarker.setDraggable(shouldDrag);
-			}
-		} else {
-			this.selectionMarker = new mapboxgl.Marker({
-				...MARKER_OPTIONS,
-				draggable: Boolean(draggable),
-			})
-				.setLngLat(coordinates)
-				.addTo(this.map);
-
-			if (draggable && onDragEnd) {
-				this.selectionMarker.on("dragend", () => {
-					if (!this.selectionMarker) {
-						return;
-					}
-
-					const position = this.selectionMarker.getLngLat();
-					onDragEnd([position.lng, position.lat]);
-				});
-			}
-		}
 	}
 
 	private addControl(
@@ -268,21 +219,14 @@ class MapClient {
 		this.controls.set(id, control);
 	}
 
-	private attachClick(handler: (coords: [number, number]) => void): () => void {
-		if (!this.map) {
-			return (): void => {};
-		}
-
-		const callback = (event: mapboxgl.MapMouseEvent): void => {
-			handler([event.lngLat.lng, event.lngLat.lat]);
-		};
-
-		this.map.on("click", callback);
-
-		return (): void => {
-			if (this.map) {
-				this.map.off("click", callback);
-			}
+	private mapMarker(marker: mapboxgl.Marker): MapMarker {
+		return {
+			remove: (): void => {
+				marker.remove();
+			},
+			setCoordinates: (coords: [number, number]): void => {
+				marker.setLngLat(coords);
+			},
 		};
 	}
 

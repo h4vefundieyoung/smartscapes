@@ -302,11 +302,10 @@ describe("PointsOfInterestController", () => {
 		const result = await controller.findPaginated({
 			body: {},
 			params: {},
-			query: { page: "1", perPage: "10" },
+			query: { page: 1, perPage: 10 },
 			user: null,
 		});
 
-		//will change to better response without additional data layout
 		const expected = {
 			payload: {
 				data: {

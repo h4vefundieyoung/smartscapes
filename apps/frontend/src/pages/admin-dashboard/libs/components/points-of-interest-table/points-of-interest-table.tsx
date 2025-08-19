@@ -26,16 +26,18 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 		queryParameterPrefix: "poi",
 	});
 
+	const { page, pageSize } = paginationPOIS;
+
 	const { total = 0, totalPages = DEFAULT_TOTAL_PAGES } = meta ?? {};
 
 	useEffect(() => {
 		void dispatch(
 			actions.findPaginated({
-				page: String(paginationPOIS.page),
-				perPage: String(paginationPOIS.pageSize),
+				page,
+				perPage: pageSize,
 			}),
 		);
-	}, [dispatch, paginationPOIS.page, paginationPOIS.pageSize]);
+	}, [dispatch, page, pageSize]);
 
 	return (
 		<section>

@@ -42,12 +42,15 @@ class PointOfInterestApi extends BaseHTTPApi {
 	public async findPaginated(
 		payload: PointsOfInterestGetPaginatedSearchQuery,
 	): Promise<APIResponse<PointsOfInterestPaginatedResponseDto>> {
-		const response = await this.load(this.getFullEndpoint("/paginated", {}), {
-			contentType: ContentType.JSON,
-			hasAuth: true,
-			method: "GET",
-			query: payload,
-		});
+		const response = await this.load(
+			this.getFullEndpoint(PointsOfInterestApiPath.PAGINATED, {}),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "GET",
+				query: payload,
+			},
+		);
 
 		return (await response.json()) as APIResponse<PointsOfInterestPaginatedResponseDto>;
 	}

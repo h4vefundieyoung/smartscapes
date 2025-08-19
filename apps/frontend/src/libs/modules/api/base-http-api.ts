@@ -57,7 +57,19 @@ class BaseHTTPApi implements HTTPApi {
 			hasAuth,
 		});
 
-		const url = query ? `${path}?${new URLSearchParams(query)}` : path;
+		let url = path;
+
+		if (query) {
+			const parameters = new URLSearchParams();
+
+			for (const [key, value] of Object.entries(query)) {
+				parameters.append(key, String(value));
+			}
+
+			const queryString = parameters.toString();
+
+			url = queryString ? `${path}?${queryString}` : path;
+		}
 
 		const response = await this.http.load<T>(url, {
 			headers,

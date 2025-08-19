@@ -1,6 +1,6 @@
 type PaginationQuery = {
-	page: string;
-	perPage: string;
+	page: number;
+	perPage: number;
 };
 
 export { type PaginationQuery };

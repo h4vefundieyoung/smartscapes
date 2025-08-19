@@ -8,6 +8,7 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type PointsOfInterestService } from "~/modules/points-of-interest/points-of-interest.service.js";
 
+import { PointsOfInterestApiPath } from "./libs/enums/enums.js";
 import {
 	type PointsOfInterestGetPaginatedSearchQuery,
 	type PointsOfInterestPaginatedResponseDto,
@@ -109,7 +110,7 @@ class PointsOfInterestController extends BaseController {
 		this.addRoute({
 			handler: this.create.bind(this),
 			method: "POST",
-			path: "/",
+			path: PointsOfInterestApiPath.ROOT,
 			validation: {
 				body: pointsOfInterestCreateValidationSchema,
 			},
@@ -118,13 +119,13 @@ class PointsOfInterestController extends BaseController {
 		this.addRoute({
 			handler: this.delete.bind(this),
 			method: "DELETE",
-			path: "/:id",
+			path: PointsOfInterestApiPath.$ID,
 		});
 
 		this.addRoute({
 			handler: this.findById.bind(this),
 			method: "GET",
-			path: "/:id",
+			path: PointsOfInterestApiPath.$ID,
 		});
 
 		this.addRoute({
@@ -139,7 +140,7 @@ class PointsOfInterestController extends BaseController {
 		this.addRoute({
 			handler: this.patch.bind(this),
 			method: "PATCH",
-			path: "/:id",
+			path: PointsOfInterestApiPath.$ID,
 			validation: {
 				body: pointOfInterestUpdateValidationSchema,
 			},
@@ -148,7 +149,7 @@ class PointsOfInterestController extends BaseController {
 		this.addRoute({
 			handler: this.findPaginated.bind(this),
 			method: "GET",
-			path: "/paginated",
+			path: PointsOfInterestApiPath.PAGINATED,
 			validation: {
 				query: pointsOfInterestPaginatedQueryValidationSchema,
 			},
@@ -397,15 +398,14 @@ class PointsOfInterestController extends BaseController {
 		}>,
 	): Promise<APIHandlerResponse<PointsOfInterestPaginatedResponseDto>> {
 		const { query } = options;
-		const { page, perPage, search } = query;
+		const { page = DEFAULT_PAGE, perPage = DEFAULT_LIMIT, search } = query;
 
 		const response = await this.pointsOfInterestService.findPaginated({
-			page: Number(page) || DEFAULT_PAGE,
-			perPage: Number(perPage) || DEFAULT_LIMIT,
+			page,
+			perPage,
 			search,
 		});
 
-		///Need to add ApiHandlerResponse with meta field
 		return {
 			payload: { data: response },
 			status: HTTPCode.OK,

@@ -28,7 +28,7 @@ describe("RouteRepository", () => {
 	const createMockRouteEntity = (): RouteEntity =>
 		RouteEntity.initialize({
 			...mockRoute,
-			pois: [{ id: 1, visitOrder: 1 }],
+			pois: [{ id: 1, name: "SUP Kayak Club 4 Storony", visitOrder: 1 }],
 		});
 
 	beforeEach(() => {

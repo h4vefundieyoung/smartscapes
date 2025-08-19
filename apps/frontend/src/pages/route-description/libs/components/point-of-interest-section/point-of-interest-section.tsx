@@ -1,10 +1,10 @@
 import { PointOfInterestCard } from "~/libs/components/components.js";
+import { type RouteGetByIdResponseDto } from "~/modules/routes/libs/types/types.js";
 
-import { type PointOfInterestDetails } from "../../types/types.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	pointOfInterests: PointOfInterestDetails[];
+	pointOfInterests: RouteGetByIdResponseDto["pois"];
 };
 
 const PointOfInterestSection = ({

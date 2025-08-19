@@ -16,7 +16,6 @@ import {
 
 import { NotFound } from "../not-found/not-found.js";
 import { PointOfInterestSection } from "./libs/components/components.js";
-import { type PointOfInterestDetails } from "./libs/types/types.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
@@ -56,9 +55,7 @@ const RouteDetails = (): React.JSX.Element => {
 				<h1 className={styles["label"]}>{name}</h1>
 				<ImageGallery images={[image1, image2, image3]} />
 				<p className={styles["description"]}>{description}</p>
-				<PointOfInterestSection
-					pointOfInterests={pois as PointOfInterestDetails[]}
-				/>
+				<PointOfInterestSection pointOfInterests={pois} />
 			</main>
 		</>
 	);

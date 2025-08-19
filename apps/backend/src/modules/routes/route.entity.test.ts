@@ -10,8 +10,8 @@ describe("RouteEntity", () => {
 			id: 1,
 			name: "Routes 1 Test Name",
 			pois: [
-				{ id: 1, visitOrder: 0 },
-				{ id: 2, visitOrder: 1 },
+				{ id: 1, name: "POI 1 Test Name", visitOrder: 0 },
+				{ id: 2, name: "POI 2 Test Name", visitOrder: 1 },
 			],
 		};
 
@@ -29,8 +29,8 @@ describe("RouteEntity", () => {
 			description: "A test route description",
 			name: "Routes 2 Test Name",
 			pois: [
-				{ id: 1, visitOrder: 0 },
-				{ id: 2, visitOrder: 1 },
+				{ id: 1, name: "POI 1 Test Name", visitOrder: 0 },
+				{ id: 2, name: "POI 2 Test Name", visitOrder: 1 },
 			],
 		};
 

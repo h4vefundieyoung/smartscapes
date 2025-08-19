@@ -69,6 +69,7 @@ class RouteService implements Service {
 			...payload,
 			pois: payload.pois.map((id, index) => ({
 				id,
+				name: "",
 				visitOrder: index,
 			})),
 		};

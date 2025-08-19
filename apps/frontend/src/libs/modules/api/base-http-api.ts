@@ -49,6 +49,7 @@ class BaseHTTPApi implements HTTPApi {
 			hasAuth = false,
 			method,
 			payload = null,
+			query,
 		} = options;
 
 		const headers = await this.getHeaders({
@@ -56,7 +57,9 @@ class BaseHTTPApi implements HTTPApi {
 			hasAuth,
 		});
 
-		const response = await this.http.load<T>(path, {
+		const url = query ? `${path}?${new URLSearchParams(query)}` : path;
+
+		const response = await this.http.load<T>(url, {
 			headers,
 			method,
 			payload,

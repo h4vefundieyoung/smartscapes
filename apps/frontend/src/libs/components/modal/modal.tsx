@@ -12,6 +12,8 @@ type Properties = {
 	onClose: () => void;
 };
 
+const ICON_SIZE = 24;
+
 const Modal = ({
 	children,
 	isOpen,
@@ -57,7 +59,7 @@ const Modal = ({
 					onClick={onClose}
 					type="button"
 				>
-					<Icon height={24} name="close" width={24} />
+					<Icon height={ICON_SIZE} name="close" width={ICON_SIZE} />
 				</button>
 				{children}
 			</div>

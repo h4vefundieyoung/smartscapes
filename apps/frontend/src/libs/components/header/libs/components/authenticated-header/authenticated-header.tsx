@@ -19,6 +19,8 @@ type Properties = {
 	user: UserAuthResponseDto;
 };
 
+const ICON_SIZE = 16;
+
 const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 	const dropdownReference = useRef<HTMLDivElement>(null);
@@ -63,7 +65,7 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 						isDropdownOpen && styles["open"],
 					)}
 				>
-					<Icon height={16} name="arrowDown" width={16} />
+					<Icon height={ICON_SIZE} name="arrowDown" width={ICON_SIZE} />
 				</span>
 			</button>
 

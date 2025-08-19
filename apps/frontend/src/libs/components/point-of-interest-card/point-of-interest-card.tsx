@@ -16,13 +16,13 @@ const PointOfInterestCard = ({
 	imageUrl,
 	name,
 }: Properties): React.JSX.Element => {
+	const poiDetailsLink = configureString(AppRoute.POINTS_OF_INTEREST_$ID, {
+		id: id.toString(),
+	});
+
 	return (
 		<li className={styles["card"]}>
-			<Link
-				to={configureString(AppRoute.POINTS_OF_INTEREST_$ID, {
-					id: id.toString(),
-				})}
-			>
+			<Link to={poiDetailsLink}>
 				<img
 					alt={name}
 					className={styles["image"]}

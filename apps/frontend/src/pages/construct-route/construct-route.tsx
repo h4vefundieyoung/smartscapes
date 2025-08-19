@@ -1,3 +1,4 @@
+import { PointsOfInterestValidationRule } from "@smartscapes/shared/src/modules/points-of-interest/libs/enums/points-of-interest-validation-rule.js";
 import {
 	type GroupBase,
 	type OptionsOrGroups,
@@ -8,7 +9,6 @@ import AsyncSelect from "react-select/async";
 import { Button, MapProvider } from "~/libs/components/components.js";
 import {
 	useAppDispatch,
-	useAppSelector,
 	useCallback,
 	useEffect,
 	useState,
@@ -18,6 +18,7 @@ import {
 	actions as pointOfInterestActions,
 	type PointsOfInterestResponseDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
+import { actions as routeActions } from "~/modules/routes/routes.js";
 
 import { PointOfInterestCard } from "./libs/components/point-of-interest-card/point-of-interest-card.js";
 import styles from "./styles.module.css";
@@ -29,9 +30,7 @@ type SelectOption = {
 
 const ConstructRoute = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
-	const pointsOfInterest = useAppSelector(
-		(state) => state.pointsOfInterest.dataAll,
-	);
+
 	const [selectedPois, setSelectedPois] = useState<
 		PointsOfInterestResponseDto[]
 	>([]);
@@ -42,29 +41,31 @@ const ConstructRoute = (): React.JSX.Element => {
 		async (
 			inputValue: string,
 		): Promise<OptionsOrGroups<SelectOption, GroupBase<SelectOption>>> => {
-			try {
-				await dispatch(pointOfInterestActions.loadAll({ name: inputValue }));
-
-				const options = pointsOfInterest.map((point) => ({
-					label: point.name,
-					value: point,
-				}));
-
-				return options;
-			} catch {
+			if (inputValue.length < PointsOfInterestValidationRule.NAME_MIN_LENGTH) {
 				return [];
 			}
+
+			const result = await dispatch(
+				pointOfInterestActions.loadAll({ name: inputValue }),
+			).unwrap();
+
+			const options = result.data.map((point) => ({
+				label: point.name,
+				value: point,
+			}));
+
+			return options;
 		},
-		[dispatch, pointsOfInterest],
+		[dispatch],
 	);
 
 	const handleChange = useCallback(
-		(newValue: SingleValue<SelectOption>): void => {
-			if (!newValue) {
+		(option: SingleValue<SelectOption>): void => {
+			if (!option) {
 				return;
 			}
 
-			setSelectedPois((previous) => [...previous, newValue.value]);
+			setSelectedPois((previous) => [...previous, option.value]);
 			setSelectValue(null);
 		},
 		[],
@@ -74,12 +75,17 @@ const ConstructRoute = (): React.JSX.Element => {
 		setSelectedPois((previous) => previous.filter((poi) => poi.id !== id));
 	}, []);
 
-	const handleConstructClick = useCallback(() => {}, []);
+	const handleConstructClick = useCallback(() => {
+		const poiIds = selectedPois.map(({ id }) => id);
+
+		void dispatch(routeActions.construct({ poiIds }));
+	}, [dispatch, selectedPois]);
 
 	useEffect(() => {
-		const coordinates = selectedPois.map((poi) => ({
-			coordinates: poi.location.coordinates,
+		const coordinates = selectedPois.map(({ location: { coordinates } }) => ({
+			coordinates,
 		}));
+
 		setMarkers(coordinates);
 	}, [selectedPois]);
 

@@ -15,8 +15,8 @@ import styles from "./styles.module.css";
 
 const RoutesPanel = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
+	const dataStatus = useAppSelector((state) => state.explore.dataStatus);
 	const error = useAppSelector((state) => state.explore.error);
-	const loading = useAppSelector((state) => state.explore.loading);
 	const routes = useAppSelector((state) => state.explore.routes);
 	const locationError = useAppSelector((state) => state.location.locationError);
 	const locationDataStatus = useAppSelector(
@@ -40,7 +40,7 @@ const RoutesPanel = (): React.JSX.Element => {
 	}, [locationDataStatus, location, dispatch]);
 
 	const content = useMemo(() => {
-		if (loading) {
+		if (dataStatus === DataStatus.PENDING) {
 			return <Loader />;
 		}
 
@@ -61,7 +61,7 @@ const RoutesPanel = (): React.JSX.Element => {
 				))}
 			</ul>
 		);
-	}, [loading, error, locationError, routes]);
+	}, [dataStatus, error, locationError, routes]);
 
 	return (
 		<div className={styles["container"]}>

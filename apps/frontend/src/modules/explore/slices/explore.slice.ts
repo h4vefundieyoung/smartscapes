@@ -9,14 +9,12 @@ import { getRoutes } from "./actions.js";
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
 	error: null | string;
-	loading: boolean;
 	routes: RouteGetByIdResponseDto[];
 };
 
 const initialState: State = {
 	dataStatus: DataStatus.IDLE,
 	error: null,
-	loading: false,
 	routes: [],
 };
 
@@ -25,7 +23,6 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(getRoutes.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
 			state.error = null;
-			state.loading = true;
 			state.routes = [];
 		});
 		builder.addCase(getRoutes.fulfilled, (state, action) => {
@@ -36,7 +33,6 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(getRoutes.rejected, (state, action) => {
 			state.dataStatus = DataStatus.REJECTED;
 			state.error = action.payload ?? "Unknown error occurred.";
-			state.loading = false;
 			state.routes = [];
 		});
 	},

@@ -198,10 +198,10 @@ class ReviewController extends BaseController {
 	 */
 	public async findAll(
 		options: APIHandlerOptions<{
-			query: null | ReviewSearchQuery;
+			query?: ReviewSearchQuery;
 		}>,
 	): Promise<APIHandlerResponse<ReviewGetByIdResponseDto[]>> {
-		const { query } = options;
+		const { query = null } = options;
 
 		const { items } = await this.reviewService.findAll(query);
 

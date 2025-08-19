@@ -69,10 +69,10 @@ describe("ReviewController", (): void => {
 		const reviewService = { findAll: mockFindAll } as ReviewService;
 		const reviewController = new ReviewController(mockLogger, reviewService);
 
-		const options: APIHandlerOptions<{ query: null | ReviewSearchQuery }> = {
-			body: undefined as never,
+		const options: APIHandlerOptions<{ query?: ReviewSearchQuery }> = {
+			body: {},
 			params: {},
-			query: null,
+			query: {},
 			user: mockUser,
 		};
 

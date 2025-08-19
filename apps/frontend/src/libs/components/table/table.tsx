@@ -19,7 +19,6 @@ type Properties<T> = {
 	data: T[];
 	loading: boolean;
 	paginationSettings: ReturnType<typeof usePagination>;
-	title: string;
 	totalItems: number;
 	totalPages: number;
 };
@@ -31,7 +30,6 @@ const Table = <T,>({
 	data,
 	loading,
 	paginationSettings,
-	title,
 	totalItems,
 	totalPages,
 }: Readonly<Properties<T>>): React.JSX.Element => {
@@ -48,8 +46,6 @@ const Table = <T,>({
 
 	return (
 		<section className={styles["table-section"]}>
-			{title && <h2 className={styles["title"]}>{title}</h2>}
-
 			<table className={styles["table"]}>
 				{loading ? (
 					<TableSkeleton columns={columns} rowCount={rowCount} />

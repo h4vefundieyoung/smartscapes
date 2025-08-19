@@ -1,9 +1,9 @@
 import React from "react";
 
 import { MapProvider } from "~/libs/components/components.js";
-import { RoutesPanel } from "~/libs/components/routes-panel/routes-panel.js";
 import { useMapClient } from "~/libs/hooks/hooks.js";
 
+import { RoutesPanel } from "./libs/components/routes-panel/routes-panel.js";
 import { mockPOIs } from "./mock-pois.js";
 import styles from "./styles.module.css";
 

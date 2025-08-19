@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Loader, RouteCard } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -10,12 +11,13 @@ import {
 import { actions as exploreActions } from "~/modules/explore/explore.js";
 import { actions as locationActions } from "~/modules/location/location.js";
 
-import { Loader, RouteCard } from "../components.js";
 import styles from "./styles.module.css";
 
 const RoutesPanel = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
-	const { error, loading, routes } = useAppSelector((state) => state.explore);
+	const error = useAppSelector((state) => state.explore.error);
+	const loading = useAppSelector((state) => state.explore.loading);
+	const routes = useAppSelector((state) => state.explore.routes);
 	const locationError = useAppSelector((state) => state.location.locationError);
 	const locationDataStatus = useAppSelector(
 		(state) => state.location.dataStatus,

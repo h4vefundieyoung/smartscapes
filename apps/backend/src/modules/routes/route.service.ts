@@ -10,7 +10,6 @@ import { type CollectionResult, type Service } from "~/libs/types/types.js";
 
 import { type PlannedPathResponseDto } from "../planned-paths/libs/types/planned-path-response-dto.type.js";
 import { type PlannedPathService } from "../planned-paths/planned-paths.js";
-import { type PointsOfInterestResponseDto } from "../points-of-interest/libs/types/type.js";
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
@@ -78,19 +77,15 @@ class RouteService implements Service {
 	public async create(
 		payload: RouteCreateRequestDto,
 	): Promise<RouteGetByIdResponseDto> {
-		const poisResult = await this.ensurePoisExist(payload.poiIds);
+		await this.ensurePoisExist(payload.poiIds);
 
 		const formattedPayload = {
 			...payload,
-			pois: payload.poiIds.map((id, index) => {
-				const poi = poisResult.items.find((p) => p.id === id);
-
-				return {
-					id,
-					name: poi?.name ?? "",
-					visitOrder: index,
-				};
-			}),
+			pois: payload.poiIds.map((id, index) => ({
+				id,
+				name: "",
+				visitOrder: index,
+			})),
 		};
 
 		const { plannedPathId } = formattedPayload;
@@ -171,9 +166,7 @@ class RouteService implements Service {
 		return item.toObject();
 	}
 
-	private async ensurePoisExist(
-		pois: number[],
-	): Promise<CollectionResult<PointsOfInterestResponseDto>> {
+	private async ensurePoisExist(pois: number[]): Promise<void> {
 		const filteredPois = await this.pointsOfInterestService.findAll({
 			ids: pois,
 		});
@@ -184,8 +177,6 @@ class RouteService implements Service {
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
-
-		return filteredPois;
 	}
 }
 

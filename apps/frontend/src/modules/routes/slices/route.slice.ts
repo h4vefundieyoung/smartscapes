@@ -9,13 +9,11 @@ import { getAll, getRouteById } from "./actions.js";
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
 	route: null | RouteGetByIdResponseDto;
-	routes: RouteGetByIdResponseDto[];
 };
 
 const initialState: State = {
 	dataStatus: DataStatus.IDLE,
 	route: null,
-	routes: [],
 };
 
 const { actions, name, reducer } = createSlice({
@@ -34,8 +32,7 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(getAll.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
 		});
-		builder.addCase(getAll.fulfilled, (state, action) => {
-			state.routes = action.payload.data;
+		builder.addCase(getAll.fulfilled, (state) => {
 			state.dataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(getAll.rejected, (state) => {

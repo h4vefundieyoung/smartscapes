@@ -31,7 +31,6 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(getRoutes.fulfilled, (state, action) => {
 			state.dataStatus = DataStatus.FULFILLED;
 			state.error = null;
-			state.loading = false;
 			state.routes = action.payload;
 		});
 		builder.addCase(getRoutes.rejected, (state, action) => {

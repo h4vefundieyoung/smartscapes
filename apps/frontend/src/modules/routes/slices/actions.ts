@@ -14,9 +14,13 @@ const construct = createAsyncThunk<
 	RouteConstructRequestDto,
 	AsyncThunkConfig
 >(`${sliceName}/construct-route`, async (payload, { extra }) => {
-	const { routeApi } = extra;
+	const { routeApi, toastNotifier } = extra;
 
-	return await routeApi.construct(payload);
+	const response = await routeApi.construct(payload);
+
+	toastNotifier.showSuccess("Route constructed successfully");
+
+	return response;
 });
 
 const getRouteById = createAsyncThunk<

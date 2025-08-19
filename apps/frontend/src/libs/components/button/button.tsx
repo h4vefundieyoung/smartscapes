@@ -1,3 +1,5 @@
+import { combineClassNames } from "~/libs/helpers/combine-class-names.helper.js";
+
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -15,8 +17,12 @@ const Button = ({
 	type = "submit",
 	variant = "primary",
 }: Properties): React.JSX.Element => {
-	const buttonClass =
-		variant === "outlined" ? styles["button-outlined"] : styles["button"];
+	const buttonClass = combineClassNames(
+		styles["button"],
+		variant === "outlined"
+			? styles["button-outlined"]
+			: styles["button-primary"],
+	);
 
 	if (to) {
 		return (

@@ -17,7 +17,7 @@ import { type FileService } from "../files/files.service.js";
 import { GroupEntity } from "../groups/group.entity.js";
 import { GroupKey } from "../groups/libs/enums/enums.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
-import { type UserPasswordDetails } from "../users/libs/types/user-password-details.type.js";
+import { type UserDetailsWithPassword } from "../users/libs/types/user-password-details.type.js";
 
 describe("AuthService", () => {
 	const signUpRequestDto: UserSignUpRequestDto = {
@@ -45,7 +45,7 @@ describe("AuthService", () => {
 		const mockToken = "mock token";
 
 		const mockUserServiceResponse: UserAuthResponseDto = {
-			avatarUrl: "https://service.photos/example",
+			avatarUrl: "https://aws/avatars/example_file.jpg",
 			email: signUpRequestDto.email,
 			firstName: signUpRequestDto.firstName,
 			group: mockGroup.toObject(),
@@ -113,8 +113,8 @@ describe("AuthService", () => {
 			password: "Password123!",
 		};
 
-		const mockPasswordDetails: UserPasswordDetails = {
-			avatarUrl: "https://service.photos/example",
+		const mockPasswordDetails: UserDetailsWithPassword = {
+			avatarUrl: "https://aws/avatars/example_file.jpg",
 			email: signInRequestDto.email,
 			firstName: "John",
 			group: mockGroup.toObject(),
@@ -129,7 +129,7 @@ describe("AuthService", () => {
 		const expectedSignInResponse: UserSignInResponseDto = {
 			token: mockToken,
 			user: {
-				avatarUrl: "https://service.photos/example",
+				avatarUrl: "https://aws/avatars/example_file.jpg",
 				email: signInRequestDto.email,
 				firstName: mockPasswordDetails.firstName,
 				group: mockGroup.toObject(),

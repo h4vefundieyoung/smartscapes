@@ -28,7 +28,7 @@ describe("UserRepository", () => {
 	}).toObject();
 
 	const mockUser = UserEntity.initialize({
-		avatarUrl: "https://service.photos/example",
+		avatarUrl: "https://aws/avatars/example_file.jpg",
 		email: "test@example.com",
 		firstName: "John",
 		group: mockGroup,
@@ -54,7 +54,7 @@ describe("UserRepository", () => {
 
 	it("create should insert and return new user", async () => {
 		const userEntity = UserEntity.initialize({
-			avatarUrl: "https://service.photos/example",
+			avatarUrl: "https://aws/avatars/example_file.jpg",
 			email: "test@example.com",
 			firstName: "John",
 			group: mockGroup,

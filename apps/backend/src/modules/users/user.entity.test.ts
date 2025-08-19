@@ -6,7 +6,7 @@ import { UserEntity } from "./user.entity.js";
 describe("UserEntity", () => {
 	it("should create new user entity", () => {
 		const userData = {
-			avatarUrl: "https://service.photos/example",
+			avatarUrl: "https://aws/avatars/example_file.jpg",
 			email: "test@example.com",
 			firstName: "John",
 			group: null,

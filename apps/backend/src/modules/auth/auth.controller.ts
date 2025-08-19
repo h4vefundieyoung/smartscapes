@@ -1,5 +1,4 @@
 import { type MultipartFile } from "@fastify/multipart";
-import { type FileUploadResponseDto } from "@smartscapes/shared";
 
 import { APIPath } from "~/libs/enums/enums.js";
 import {
@@ -9,6 +8,7 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type FileUploadResponseDto } from "~/modules/files/libs/types/types.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
 	authenticatedUserPatchValidationSchema,
@@ -491,7 +491,7 @@ class AuthController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /auth/authenticated-user/upload/avatar:
+	 * /auth/authenticated-user/{id}/upload/avatar:
 	 *   post:
 	 *     summary: Upload an avatar
 	 *     description: Upload an avatar to the authorized user
@@ -499,6 +499,13 @@ class AuthController extends BaseController {
 	 *       - Auth
 	 *     security:
 	 *       - bearerAuth: []
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *         description: User ID to upload an avatar
 	 *     requestBody:
 	 *       required: true
 	 *       content:
@@ -529,16 +536,15 @@ class AuthController extends BaseController {
 			body: {
 				file: MultipartFile;
 			};
-			user: UserAuthResponseDto;
+			params: {
+				id: number;
+			};
 		}>,
 	): Promise<APIHandlerResponse<FileUploadResponseDto>> {
-		const { body, user } = options;
+		const { body, params } = options;
 
-		if (!user) {
-			throw new AuthError();
-		}
+		const id = Number(params.id);
 
-		const { id } = user;
 		const data = await this.authService.uploadAvatar(id, body.file);
 
 		return {

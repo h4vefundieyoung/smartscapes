@@ -23,7 +23,7 @@ describe("UserService", () => {
 	});
 
 	const mockUser = UserEntity.initialize({
-		avatarUrl: "https://service.photos/example",
+		avatarUrl: "https://aws/avatars/example_file.jpg",
 		email: "test@example.com",
 		firstName: "John",
 		group: mockGroup.toObject(),
@@ -41,7 +41,7 @@ describe("UserService", () => {
 
 	it("create should return new user", async () => {
 		const userEntity = UserEntity.initialize({
-			avatarUrl: "https://service.photos/example",
+			avatarUrl: "https://aws/avatars/example_file.jpg",
 			email: "test@example.com",
 			firstName: "John",
 			group: mockGroup.toObject(),
@@ -89,7 +89,7 @@ describe("UserService", () => {
 
 	it("findAll should return all users", async () => {
 		const userEntity = UserEntity.initialize({
-			avatarUrl: "https://service.photos/example",
+			avatarUrl: "https://aws/avatars/example_file.jpg",
 			email: "test@example.com",
 			firstName: "John",
 			group: mockGroup.toObject(),

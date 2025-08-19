@@ -3,7 +3,7 @@ import { transaction } from "objection";
 import { type Repository } from "~/libs/types/types.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
-	type UserPasswordDetails,
+	type UserDetailsWithPassword,
 } from "~/modules/users/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
@@ -189,7 +189,7 @@ class UserRepository implements Repository {
 
 	public async findPasswordDetails(
 		email: string,
-	): Promise<null | UserPasswordDetails> {
+	): Promise<null | UserDetailsWithPassword> {
 		const user = await this.userModel
 			.query()
 			.where("email", email)

@@ -20,7 +20,7 @@ describe("AuthController", () => {
 	const mockToken = "mock token";
 
 	const mockUser: UserAuthResponseDto = {
-		avatarUrl: "https://service.photos/example",
+		avatarUrl: "https://aws/avatars/example_file.jpg",
 		email: "test@example.com",
 		firstName: "John",
 		group: {
@@ -39,7 +39,7 @@ describe("AuthController", () => {
 	};
 
 	const mockPatchUser: AuthenticatedUserPatchResponseDto = {
-		avatarUrl: "https://service.photos/example",
+		avatarUrl: "https://aws/avatars/example_file.jpg",
 		email: "test@example.com",
 		firstName: "Jane",
 		group: {

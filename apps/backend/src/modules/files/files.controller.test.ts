@@ -6,6 +6,7 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import { FilesController } from "./files.controller.js";
 import { type FileService } from "./files.service.js";
+import { FileFolderName } from "./libs/enums/enums.js";
 import { type FileMimeType } from "./libs/types/types.js";
 
 describe("FilesController", () => {
@@ -60,7 +61,7 @@ describe("FilesController", () => {
 			body: {} as unknown as Parameters<
 				typeof filesController.uploadFile
 			>[0]["body"],
-			params: { entityId: 1, folder: "avatars" },
+			params: { entityId: 1, folder: FileFolderName.AVATARS },
 			query: {},
 			user: null,
 		});

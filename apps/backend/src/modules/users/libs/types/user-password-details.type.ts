@@ -1,6 +1,6 @@
 import { type GroupItemWithPermissionsDto } from "~/modules/groups/libs/types/types.js";
 
-type UserPasswordDetails = {
+type UserDetailsWithPassword = {
 	avatarUrl: null | string;
 	email: string;
 	firstName: string;
@@ -13,4 +13,4 @@ type UserPasswordDetails = {
 	passwordSalt: string;
 };
 
-export { type UserPasswordDetails };
+export { type UserDetailsWithPassword };

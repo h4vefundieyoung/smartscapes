@@ -1,4 +1,3 @@
-import { FileFolderName } from "@smartscapes/shared";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
@@ -7,6 +6,7 @@ import { type AWSFileService } from "~/libs/modules/aws/aws.js";
 import { FileEntity } from "./files.entity.js";
 import { type FileRepository } from "./files.repository.js";
 import { FileService } from "./files.service.js";
+import { FileFolderName } from "./libs/enums/enums.js";
 import { type FileMimeType } from "./libs/types/types.js";
 
 describe("FileService", () => {
@@ -82,7 +82,7 @@ describe("FileService", () => {
 				mimetype: "image/jpg" as FileMimeType,
 				toBuffer: () => Promise.resolve(Buffer.from("test")),
 			} as unknown as Parameters<typeof fileService.uploadFile>[0]["file"],
-			folder: "avatars",
+			folder: FileFolderName.AVATARS,
 		});
 
 		assert.deepStrictEqual(result, fileEntity.toObject());

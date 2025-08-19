@@ -1,8 +1,9 @@
 import { type MultipartFile } from "@fastify/multipart";
-import { type FileUploadResponseDto } from "@smartscapes/shared";
 
 import { type encryption } from "~/libs/modules/encryption/libs/encryption.js";
 import { type BaseToken } from "~/libs/modules/token/token.js";
+import { FileFolderName } from "~/modules/files/libs/enums/enums.js";
+import { type FileUploadResponseDto } from "~/modules/files/libs/types/types.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
 	type AuthenticatedUserPatchResponseDto,
@@ -114,7 +115,7 @@ class AuthService {
 		const payload = {
 			entityId: id,
 			file,
-			folder: "avatars" as const,
+			folder: FileFolderName.AVATARS,
 		};
 
 		const avatar = await this.fileService.uploadFile(payload);

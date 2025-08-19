@@ -4,7 +4,12 @@ import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
 
 import { DatabaseTableName } from "~/libs/modules/database/database.js";
+import {
+	type Coordinates,
+	type LineStringGeometry,
+} from "~/libs/types/types.js";
 
+import { PlannedPathModel } from "../planned-paths/planned-path.model.js";
 import { type RouteFindAllOptions } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
 import { RouteModel } from "./route.model.js";
@@ -20,16 +25,34 @@ describe("RouteRepository", () => {
 	let databaseTracker: Tracker;
 
 	const mockRoute = {
+		createdByUserId: 10,
 		description: "A test route description",
+		distance: 1.23,
+		duration: 4.56,
+		geometry: {
+			coordinates: [
+				[30.5234, 50.4501],
+				[30.524, 50.451],
+			] as Coordinates[],
+			type: "LineString",
+		} as LineStringGeometry,
 		id: 1,
 		name: "Test Route",
+		pois: [{ id: 1, name: "Test POI", visitOrder: 1 }],
+	};
+
+	const mockRouteList = {
+		createdByUserId: mockRoute.createdByUserId,
+		distance: mockRoute.distance,
+		duration: mockRoute.duration,
+		geometry: mockRoute.geometry,
+		id: mockRoute.id,
+		name: mockRoute.name,
+		pois: [] as { id: number; name: string; visitOrder: number }[],
 	};
 
 	const createMockRouteEntity = (): RouteEntity =>
-		RouteEntity.initialize({
-			...mockRoute,
-			pois: [{ id: 1, name: "SUP Kayak Club 4 Storony", visitOrder: 1 }],
-		});
+		RouteEntity.initialize(mockRoute);
 
 	beforeEach(() => {
 		const database = knex({ client: MockClient });
@@ -38,7 +61,7 @@ describe("RouteRepository", () => {
 
 		RouteModel.knex(database);
 
-		routesRepository = new RouteRepository(RouteModel);
+		routesRepository = new RouteRepository(RouteModel, PlannedPathModel);
 	});
 
 	afterEach(() => {
@@ -52,9 +75,15 @@ describe("RouteRepository", () => {
 		databaseTracker.on.insert(DatabaseTableName.ROUTES).response([routeObject]);
 		databaseTracker.on.insert(DatabaseTableName.ROUTES_TO_POIS).response([]);
 
-		const result = await routesRepository.create(routeEntity);
+		const result = await RouteModel.knex().transaction(async (trx) => {
+			const created = await routesRepository.create(routeEntity, {
+				transaction: trx,
+			});
 
-		assert.deepStrictEqual(structuredClone(result), routeObject);
+			return created;
+		});
+
+		assert.deepStrictEqual(result.toObject(), routeObject);
 	});
 
 	it("find should return null when route not found", async () => {
@@ -66,10 +95,7 @@ describe("RouteRepository", () => {
 	});
 
 	it("findAll should return all routes if options are not provided", async () => {
-		const mockRouteEntity = RouteEntity.initializeList({
-			...mockRoute,
-			pois: [],
-		});
+		const mockRouteEntity = RouteEntity.initializeList(mockRouteList);
 		const mockRouteObject = mockRouteEntity.toObject();
 
 		databaseTracker.on
@@ -82,10 +108,7 @@ describe("RouteRepository", () => {
 	});
 
 	it("findAll should return routes matching search query", async () => {
-		const mockRouteEntity = RouteEntity.initializeList({
-			...mockRoute,
-			pois: [],
-		});
+		const mockRouteEntity = RouteEntity.initializeList(mockRouteList);
 		const mockRouteObject = mockRouteEntity.toObject();
 
 		const mockOptions: RouteFindAllOptions = {

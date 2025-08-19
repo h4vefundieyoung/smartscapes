@@ -1,3 +1,4 @@
+export { AppLayout } from "./app-layout/app-layout.js";
 export { App } from "./app/app.js";
 export { Avatar } from "./avatar/avatar.js";
 export { Button } from "./button/button.js";
@@ -18,7 +19,6 @@ export { ProtectedRoute } from "./protected-route/protected-route.js";
 export { RouteCard } from "./route-card/route-card.js";
 export { RouterProvider } from "./router-provider/router-provider.js";
 export { Select } from "./select/select.js";
-export { Sidebar } from "./sidebar/sidebar.js";
 export { TabContainer } from "./tab-container/tab-container.js";
 export { TextArea } from "./textarea/textarea.js";
 export { ToastContainer } from "./toast-container/toast-container.js";

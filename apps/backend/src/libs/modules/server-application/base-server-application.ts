@@ -11,7 +11,7 @@ import Fastify, {
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { APIErrorType, AppEnvironment } from "~/libs/enums/enums.js";
+import { APIErrorType } from "~/libs/enums/enums.js";
 import { ValidationError } from "~/libs/exceptions/exceptions.js";
 import { type Config } from "~/libs/modules/config/config.js";
 import { type Database } from "~/libs/modules/database/database.js";
@@ -186,9 +186,7 @@ class BaseServerApplication implements ServerApplication {
 	}
 
 	private async initMiddlewares(): Promise<void> {
-		if (this.config.ENV.APP.ENVIRONMENT !== AppEnvironment.PRODUCTION) {
-			await this.initApiDocs();
-		}
+		await this.initApiDocs();
 
 		await this.app.register(fastifyCors);
 
@@ -220,8 +218,12 @@ class BaseServerApplication implements ServerApplication {
 			root: staticPath,
 		});
 
-		this.app.setNotFoundHandler(async (_request, response) => {
-			await response.sendFile("index.html", staticPath);
+		this.app.setNotFoundHandler(async (request, reply) => {
+			if (request.url.startsWith("/api/")) {
+				await reply.status(HTTPCode.NOT_FOUND).send();
+			}
+
+			await reply.sendFile("index.html", staticPath);
 		});
 	}
 

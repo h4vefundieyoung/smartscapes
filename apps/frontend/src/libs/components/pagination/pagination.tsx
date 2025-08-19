@@ -31,6 +31,11 @@ const Pagination = ({
 		[onPageSizeChange],
 	);
 
+	const range = {
+		max: totalItems,
+		min: 1,
+	};
+
 	return (
 		<div className={styles["pagination"]}>
 			<span>{totalItems} items total</span>
@@ -38,9 +43,8 @@ const Pagination = ({
 				<div className={styles["page-size"]}>
 					<span>Rows per page:</span>
 					<NumberInput
-						max={totalItems}
-						min={1}
 						onChange={handlePageSizeChange}
+						range={range}
 						value={pageSize}
 					/>
 				</div>

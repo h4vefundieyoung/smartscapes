@@ -83,16 +83,12 @@ class RouteRepository implements Repository {
 
 		if (latitude !== undefined && longitude !== undefined) {
 			query
-				.joinRaw(
-					`
-					JOIN routes_to_pois ON routes.id = routes_to_pois.route_id
-					JOIN points_of_interest AS poi ON poi.id = routes_to_pois.poi_id AND routes_to_pois.visit_order = 0
-				`,
-				)
+				.joinRelated("pois")
+				.where("pois_join.visit_order", 0)
 				.select(
 					this.routesModel.raw(
 						`ST_Distance(
-						poi.location::geography,
+						pois.location::geography,
 						ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography
 						) as distance_points`,
 						[longitude, latitude],

@@ -40,7 +40,7 @@ class RoutesApi extends BaseHTTPApi {
 		payload,
 	}: PatchActionPayload): Promise<APIResponse<RouteGetByIdResponseDto>> {
 		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
-			this.getFullEndpoint(`${RoutesApiPath.ROOT}${id.toString()}`, {}),
+			this.getFullEndpoint(RoutesApiPath.$ID, { id: id.toString() }),
 			{
 				contentType: "application/json",
 				hasAuth: true,

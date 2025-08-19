@@ -89,26 +89,27 @@ const RouteDetails = (): React.JSX.Element => {
 			<main className={styles["container"]}>
 				<div className={styles["header-container"]}>
 					{isEditMode ? (
-						<Input
-							control={control}
-							errors={errors}
-							label="Title"
-							name="name"
-						/>
-					) : (
-						<h1 className={styles["label"]}>{name}</h1>
-					)}
-					{isEditMode ? (
-						<div className={styles["edit-mode-controls"]}>
-							<Button label="Save" onClick={handlePatchRequest} />
-							<Button label="Cancel" onClick={handleToggleEditMode} />
-						</div>
-					) : (
-						hasEditPermissions && (
-							<div className={styles["edit-button-container"]}>
-								<Button label="Edit" onClick={handleToggleEditMode} />
+						<>
+							<Input
+								control={control}
+								errors={errors}
+								label="Title"
+								name="name"
+							/>
+							<div className={styles["edit-mode-controls"]}>
+								<Button label="Save" onClick={handlePatchRequest} />
+								<Button label="Cancel" onClick={handleToggleEditMode} />
 							</div>
-						)
+						</>
+					) : (
+						<>
+							<h1 className={styles["label"]}>{name}</h1>
+							{hasEditPermissions && (
+								<div className={styles["edit-button-container"]}>
+									<Button label="Edit" onClick={handleToggleEditMode} />
+								</div>
+							)}
+						</>
 					)}
 				</div>
 				<ImageGallery images={[image1, image2, image3]} />

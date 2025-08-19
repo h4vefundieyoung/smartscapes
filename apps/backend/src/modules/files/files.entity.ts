@@ -1,7 +1,6 @@
-import { type FileFolderName } from "@smartscapes/shared";
-
 import { type Entity, type ValueOf } from "~/libs/types/types.js";
 
+import { type FileFolderName } from "./libs/enums/enums.js";
 import { type FileMimeType } from "./libs/types/types.js";
 
 class FileEntity implements Entity {

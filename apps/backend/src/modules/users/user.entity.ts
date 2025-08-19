@@ -147,7 +147,7 @@ class UserEntity implements Entity {
 	}
 
 	public toObject(): {
-		avatarUrl: string;
+		avatarUrl: null | string;
 		email: string;
 		firstName: string;
 		group: ReturnType<GroupEntity["toObject"]>;
@@ -157,7 +157,7 @@ class UserEntity implements Entity {
 		lastName: string;
 	} {
 		return {
-			avatarUrl: this.avatarUrl as string,
+			avatarUrl: this.avatarUrl,
 			email: this.email,
 			firstName: this.firstName,
 			group: this.group as ReturnType<GroupEntity["toObject"]>,

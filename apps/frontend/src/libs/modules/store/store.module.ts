@@ -11,6 +11,8 @@ import { storage } from "~/libs/modules/storage/storage.js";
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { reducer as appReducer } from "~/modules/app/app.js";
 import { authApi, reducer as authReducer } from "~/modules/auth/auth.js";
+import { reducer as exploreReducer } from "~/modules/explore/explore.js";
+import { reducer as locationReducer } from "~/modules/location/location.js";
 import {
 	pointOfInterestApi,
 	pointOfInterestDetailsReducer,
@@ -55,6 +57,8 @@ class Store {
 			reducer: {
 				app: appReducer,
 				auth: authReducer,
+				explore: exploreReducer,
+				location: locationReducer,
 				pointOfInterestDetails: pointOfInterestDetailsReducer,
 				pointsOfInterest: pointsOfInterestReducer,
 				route: routeReducer,

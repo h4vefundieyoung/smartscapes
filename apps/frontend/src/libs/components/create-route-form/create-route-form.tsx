@@ -9,6 +9,7 @@ import {
 	useSearchParams,
 } from "~/libs/hooks/hooks.js";
 import { storage, StorageKey } from "~/libs/modules/storage/storage.js";
+import { type ValueOf } from "~/libs/types/types.js";
 import {
 	type RouteCreateRequestDto,
 	routesCreateValidationSchema,
@@ -37,6 +38,9 @@ const CreateRouteForm = ({
 	};
 
 	const createStatus = useAppSelector((state) => state.route.createStatus);
+	const previousCreateStatusReference = useRef<ValueOf<typeof DataStatus>>(
+		DataStatus.IDLE,
+	);
 
 	const {
 		control,
@@ -52,9 +56,14 @@ const CreateRouteForm = ({
 	const isRouteConstructed = Boolean(plannedRouteId);
 
 	useEffect(() => {
-		if (createStatus === DataStatus.FULFILLED) {
+		if (
+			previousCreateStatusReference.current === DataStatus.PENDING &&
+			createStatus === DataStatus.FULFILLED
+		) {
 			closeModal?.();
 		}
+
+		previousCreateStatusReference.current = createStatus;
 	}, [createStatus, closeModal]);
 
 	useEffect(() => {

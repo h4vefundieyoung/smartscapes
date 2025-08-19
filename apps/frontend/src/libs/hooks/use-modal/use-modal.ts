@@ -42,23 +42,30 @@ const useModal = <TUseGlobalState extends boolean = false>({
 		modalPropertiesRegistry[queryParameter] = {};
 	}
 
-	const handleModalOpen = useCallback(() => {
-		setSearchParameters((previous) => {
-			const newParameters = new URLSearchParams(previous);
-			newParameters.set("modal", queryParameter);
+	const setModalParameter = useCallback(
+		(modal?: string) => {
+			setSearchParameters((previous) => {
+				const parameters = new URLSearchParams(previous);
 
-			return newParameters;
-		});
-	}, [queryParameter, setSearchParameters]);
+				if (modal) {
+					parameters.set("modal", modal);
+				} else {
+					parameters.delete("modal");
+				}
+
+				return parameters;
+			});
+		},
+		[setSearchParameters],
+	);
+
+	const handleModalOpen = useCallback(() => {
+		setModalParameter(queryParameter);
+	}, [queryParameter, setModalParameter]);
 
 	const handleModalClose = useCallback(() => {
-		setSearchParameters((previous) => {
-			const newParameters = new URLSearchParams(previous);
-			newParameters.delete("modal");
-
-			return newParameters;
-		});
-	}, [setSearchParameters]);
+		setModalParameter();
+	}, [setModalParameter]);
 
 	if (useGlobalState) {
 		const currentModalParameter = searchParameters.get("modal");

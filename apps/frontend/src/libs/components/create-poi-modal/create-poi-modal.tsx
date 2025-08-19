@@ -1,6 +1,12 @@
 import { Button, Input, TextArea } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
-import { useAppForm, useAppSelector, useEffect } from "~/libs/hooks/hooks.js";
+import {
+	useAppForm,
+	useAppSelector,
+	useEffect,
+	useRef,
+} from "~/libs/hooks/hooks.js";
+import { type ValueOf } from "~/libs/types/types.js";
 import {
 	pointOfInterestCreateValidationSchema,
 	type PointsOfInterestRequestDto,
@@ -24,6 +30,9 @@ const CreatePOIModal = ({
 	const createStatus = useAppSelector(
 		(state) => state.pointsOfInterest.createStatus,
 	);
+	const previousCreateStatusReference = useRef<ValueOf<typeof DataStatus>>(
+		DataStatus.IDLE,
+	);
 
 	const { control, errors, handleReset, handleSubmit } =
 		useAppForm<PointsOfInterestRequestDto>({
@@ -39,9 +48,14 @@ const CreatePOIModal = ({
 		});
 
 	useEffect(() => {
-		if (createStatus === DataStatus.FULFILLED) {
+		if (
+			previousCreateStatusReference.current === DataStatus.PENDING &&
+			createStatus === DataStatus.FULFILLED
+		) {
 			closeModal?.();
 		}
+
+		previousCreateStatusReference.current = createStatus;
 	}, [createStatus, closeModal]);
 
 	const handleFormSubmit = (values: PointsOfInterestRequestDto): void => {

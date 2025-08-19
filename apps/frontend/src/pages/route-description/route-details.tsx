@@ -8,7 +8,8 @@ import {
 	Loader,
 	TextArea,
 } from "~/libs/components/components.js";
-import { DataStatus } from "~/libs/enums/enums.js";
+import { DataStatus, PermissionKey } from "~/libs/enums/enums.js";
+import { checkHasPermission } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppForm,
@@ -29,16 +30,21 @@ import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
-	const route = useAppSelector(({ route }) => route.route);
+	const { route, user } = useAppSelector(({ auth, route }) => ({
+		route: route.route,
+		user: auth.authenticatedUser,
+	}));
 	const { control, errors, getValues, handleValueSet } =
 		useAppForm<RoutePatchRequestDto>({
 			defaultValues: { description: "", name: "" },
 		});
 	const dispatch = useAppDispatch();
-
 	const { id } = useParams<{ id: string }>();
-
 	const dataStatus = useAppSelector(({ route }) => route.dataStatus);
+	const hasEditPermissions = Boolean(
+		user &&
+			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
+	);
 
 	const handleToggleEditMode = useCallback(() => {
 		setIsEditMode(!isEditMode);
@@ -98,9 +104,11 @@ const RouteDetails = (): React.JSX.Element => {
 							<Button label="Cancel" onClick={handleToggleEditMode} />
 						</div>
 					) : (
-						<div className={styles["edit-button-container"]}>
-							<Button label="Edit" onClick={handleToggleEditMode} />
-						</div>
+						hasEditPermissions && (
+							<div className={styles["edit-button-container"]}>
+								<Button label="Edit" onClick={handleToggleEditMode} />
+							</div>
+						)
 					)}
 				</div>
 				<ImageGallery images={[image1, image2, image3]} />

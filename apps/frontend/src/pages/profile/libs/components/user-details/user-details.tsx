@@ -1,4 +1,4 @@
-import { Avatar, Button, Loader } from "~/libs/components/components.js";
+import { Avatar, Loader } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -13,6 +13,7 @@ import {
 } from "~/modules/users/users.js";
 
 import { ProfileForm } from "./libs/components/components.js";
+import { UploadButton } from "./libs/components/upload-button/upload-button.js";
 import styles from "./styles.module.css";
 
 const UserDetails = (): null | React.JSX.Element => {
@@ -61,12 +62,13 @@ const UserDetails = (): null | React.JSX.Element => {
 	return (
 		<div className={styles["user-details-container"]}>
 			<div className={styles["user-details-avatar"]}>
-				<Avatar size={140} user={authenticatedUser} />
-				<Button
-					label="Update avatar"
+				<Avatar size={100} user={authenticatedUser} />
+				<UploadButton
+					color="green"
+					label="Upload avatar"
 					onClick={handleButtonClick}
-					type="button"
 				/>
+				<UploadButton color="red" label="Delete avatar" />
 				<input
 					accept="image/*"
 					onChange={handleFileUpload}

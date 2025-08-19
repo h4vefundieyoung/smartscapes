@@ -52,7 +52,7 @@ const mockDelete: RouteService["delete"] = () => {
 
 describe("Routes controller", () => {
 	const mockUser = {
-		avatarUrl: "google.com",
+		avatarUrl: "https://service.photos/example",
 		email: "test@example.com",
 		firstName: "John",
 		group: mockGroup,
@@ -63,7 +63,7 @@ describe("Routes controller", () => {
 	};
 
 	const mockAdminUser = {
-		avatarUrl: "google.com",
+		avatarUrl: "https://service.photos/example",
 		email: "admin@example.com",
 		firstName: "Jane",
 		group: mockAdminGroup,

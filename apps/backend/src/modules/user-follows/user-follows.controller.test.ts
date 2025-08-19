@@ -48,7 +48,7 @@ describe("UserFollowsController", () => {
 	const TEST_FOLLOWING_ID = 31;
 
 	const mockAuthenticatedUser = {
-		avatarUrl: "google.com",
+		avatarUrl: "https://service.photos/example",
 		email: "test@example.com",
 		firstName: "John",
 		group: mockGroup,
@@ -59,7 +59,7 @@ describe("UserFollowsController", () => {
 	};
 
 	const mockAnotherUser = {
-		avatarUrl: "google.com",
+		avatarUrl: "https://service.photos/example",
 		email: "another@example.com",
 		firstName: "Alice",
 		group: mockGroup,

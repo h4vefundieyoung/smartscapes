@@ -25,7 +25,7 @@ describe("NotificationController", () => {
 	};
 
 	const mockUser: UserAuthResponseDto = {
-		avatarUrl: "google.com",
+		avatarUrl: "https://service.photos/example",
 		email: "test@example.com",
 		firstName: "John",
 		group: {

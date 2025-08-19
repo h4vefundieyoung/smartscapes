@@ -45,7 +45,7 @@ describe("AuthService", () => {
 		const mockToken = "mock token";
 
 		const mockUserServiceResponse: UserAuthResponseDto = {
-			avatarUrl: "google.com",
+			avatarUrl: "https://service.photos/example",
 			email: signUpRequestDto.email,
 			firstName: signUpRequestDto.firstName,
 			group: mockGroup.toObject(),
@@ -114,7 +114,7 @@ describe("AuthService", () => {
 		};
 
 		const mockPasswordDetails: UserPasswordDetails = {
-			avatarUrl: "google.com",
+			avatarUrl: "https://service.photos/example",
 			email: signInRequestDto.email,
 			firstName: "John",
 			group: mockGroup.toObject(),
@@ -129,7 +129,7 @@ describe("AuthService", () => {
 		const expectedSignInResponse: UserSignInResponseDto = {
 			token: mockToken,
 			user: {
-				avatarUrl: "google.com",
+				avatarUrl: "https://service.photos/example",
 				email: signInRequestDto.email,
 				firstName: mockPasswordDetails.firstName,
 				group: mockGroup.toObject(),

@@ -2,7 +2,7 @@ import { type PointGeometry } from "../../../../libs/types/types.js";
 
 type PointsOfInterestRequestDto = {
 	description: null | string;
-	location: PointGeometry;
+	location: null | PointGeometry;
 	name: string;
 };
 

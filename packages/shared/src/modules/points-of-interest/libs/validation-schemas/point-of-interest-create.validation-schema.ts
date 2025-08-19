@@ -14,7 +14,7 @@ const pointOfInterestCreate = z
 				message: PointsOfInterestValidationMessage.DESCRIPTION_MAXIMUM_LENGTH,
 			})
 			.nullable(),
-		location: locationSchema.optional(),
+		location: locationSchema.nullable(),
 		name: z
 			.string()
 			.min(PointsOfInterestValidationRule.NAME_MIN_LENGTH, {
@@ -24,7 +24,7 @@ const pointOfInterestCreate = z
 				message: PointsOfInterestValidationMessage.NAME_MAXIMUM_LENGTH,
 			}),
 	})
-	.refine((data) => data.location !== undefined, {
+	.refine((data) => data.location !== null, {
 		message: PointsOfInterestValidationMessage.LOCATION_REQUIRED,
 		path: ["location"],
 	});

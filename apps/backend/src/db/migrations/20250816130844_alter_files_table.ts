@@ -9,7 +9,12 @@ const ColumnName = {
 	FOLDER: "folder",
 } as const;
 
-const FOLDER_VALUES = ["avatars", "pois", "reviews", "routes"];
+const FileFolderName = {
+	AVATARS: "avatars",
+	POIS: "pois",
+	REVIEWS: "reviews",
+	ROUTESL: "routes",
+};
 
 async function down(knex: Knex): Promise<void> {
 	await knex.schema.alterTable(TABLE_NAME.FILES, (table) => {
@@ -20,8 +25,11 @@ async function down(knex: Knex): Promise<void> {
 
 async function up(knex: Knex): Promise<void> {
 	await knex.schema.alterTable(TABLE_NAME.FILES, (table) => {
-		table.integer(ColumnName.ENTITY_ID).notNullable();
-		table.enu(ColumnName.FOLDER, FOLDER_VALUES).notNullable();
+		table.integer(ColumnName.ENTITY_ID).defaultTo(0).notNullable();
+		table
+			.enum(ColumnName.FOLDER, Object.values(FileFolderName))
+			.defaultTo(FileFolderName.AVATARS)
+			.notNullable();
 	});
 }
 

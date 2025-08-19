@@ -1,7 +1,7 @@
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { useCallback, useMemo } from "~/libs/hooks/hooks.js";
-import { type RowData } from "~/pages/admin-dashboard/libs/types/row-data.types.js";
+import { type RowData } from "~/pages/manage-routes/libs/types/row-data.types.js";
 
 import { createColumns } from "../helpers/helpers.js";
 

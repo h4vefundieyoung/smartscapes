@@ -3,41 +3,30 @@ import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
-	useCallback,
 	useEffect,
-	useMemo,
 	usePagination,
 } from "~/libs/hooks/hooks.js";
 import { actions } from "~/modules/points-of-interest/points-of-interest.js";
-import { createColumns } from "~/pages/admin-dashboard/libs/helpers/helpers.js";
 
+import { useColumn } from "./libs/hooks/hooks.js";
 import styles from "./styles.module.css";
 
-const DEFAULT_TOTAL_ITEMS = 0;
 const DEFAULT_TOTAL_PAGES = 1;
 
 const PointsOfInterestTable = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
+
 	const { dataStatus, meta, summary } = useAppSelector(
 		({ pointsOfInterest }) => pointsOfInterest,
 	);
-
-	const handleEdit = useCallback((id: number) => {
-		return id;
-	}, []);
-
-	const handleDelete = useCallback((id: number) => {
-		return id;
-	}, []);
-
-	const columns = useMemo(() => {
-		return createColumns(handleEdit, handleDelete);
-	}, [handleEdit, handleDelete]);
+	const columns = useColumn();
 
 	const paginationPOIS = usePagination({
 		meta,
 		queryParameterPrefix: "poi",
 	});
+
+	const { total = 0, totalPages = DEFAULT_TOTAL_PAGES } = meta ?? {};
 
 	useEffect(() => {
 		void dispatch(
@@ -56,8 +45,8 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 				data={summary}
 				loading={dataStatus === DataStatus.PENDING}
 				paginationSettings={paginationPOIS}
-				totalItems={meta?.total ?? DEFAULT_TOTAL_ITEMS}
-				totalPages={meta?.totalPages ?? DEFAULT_TOTAL_PAGES}
+				totalItems={total}
+				totalPages={totalPages}
 			/>
 		</section>
 	);

@@ -2,6 +2,7 @@ import image1 from "~/assets/images/route-details/placeholder-image-1.png";
 import image2 from "~/assets/images/route-details/placeholder-image-2.png";
 import image3 from "~/assets/images/route-details/placeholder-image-3.png";
 import { ImageGallery, Loader } from "~/libs/components/components.js";
+import { Reviews } from "~/libs/components/reviews/reviews.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -38,7 +39,7 @@ const RouteDetails = (): React.JSX.Element => {
 		return <Loader />;
 	}
 
-	const { description, name } = route as RouteGetByIdResponseDto;
+	const { description, id: routeId, name } = route as RouteGetByIdResponseDto;
 
 	return (
 		<>
@@ -46,6 +47,7 @@ const RouteDetails = (): React.JSX.Element => {
 				<h1 className={styles["label"]}>{name}</h1>
 				<ImageGallery images={[image1, image2, image3]} />
 				<p className={styles["description"]}>{description}</p>
+				<Reviews routeId={Number(routeId)} />
 			</main>
 		</>
 	);

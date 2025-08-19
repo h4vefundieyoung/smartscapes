@@ -5,7 +5,7 @@ import {
 } from "@smartscapes/shared";
 
 import { APIPath } from "~/libs/enums/enums.js";
-import { buildQueryParameters } from "~/libs/helpers/helpers.js";
+import { getUrlWithQueryString } from "~/libs/helpers/helpers.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
@@ -27,10 +27,10 @@ class RoutesApi extends BaseHTTPApi {
 	public async getAll(
 		query?: RouteFindAllOptions,
 	): Promise<APIResponse<RouteGetByIdResponseDto[]>> {
-		const queryParameters = buildQueryParameters(query ?? {});
+		const url = getUrlWithQueryString(RoutesApiPath.ROOT, query);
 
 		const response = await this.load<APIResponse<RouteGetByIdResponseDto[]>>(
-			this.getFullEndpoint(RoutesApiPath.ROOT, queryParameters),
+			this.getFullEndpoint(url, {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: false,

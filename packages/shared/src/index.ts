@@ -12,7 +12,7 @@ export {
 	LocationType,
 } from "./libs/enums/enums.js";
 export { ValidationError } from "./libs/exceptions/exceptions.js";
-export { configureString } from "./libs/helpers/helpers.js";
+export { changeStringCase, configureString } from "./libs/helpers/helpers.js";
 export { type Config } from "./libs/modules/config/config.js";
 export {
 	type HTTP,
@@ -35,6 +35,13 @@ export {
 	type ValueOf,
 } from "./libs/types/types.js";
 export { AuthApiPath, AuthExceptionMessage } from "./modules/auth/auth.js";
+export {
+	CategoriesApiPath,
+	type CategoryCreateRequestDto,
+	categoryCreateValidationSchema,
+	CategoryExceptionMessage,
+	type CategoryGetAllItemResponseDto,
+} from "./modules/categories/categories.js";
 export {
 	FileFolderName,
 	type FileMimeType,
@@ -77,12 +84,6 @@ export {
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
 } from "./modules/reviews/reviews.js";
-export {
-	RouteCategoriesApiPath,
-	RouteCategoryExceptionMessage,
-	type RouteCategoryGetAllItemResponseDto,
-	type RouteCategoryRequestDto,
-} from "./modules/route-categories/route-categories.js";
 export {
 	type RouteConstructRequestDto,
 	type RouteConstructResponseDto,

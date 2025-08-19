@@ -327,7 +327,6 @@ class PointsOfInterestController extends BaseController {
 		}>,
 	): Promise<APIHandlerResponse<PointsOfInterestResponseDto[]>> {
 		const { query = null } = options;
-
 		const { items } = await this.pointsOfInterestService.findAll(query);
 
 		return {

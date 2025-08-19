@@ -1,4 +1,10 @@
-import { APIPath, ContentType } from "~/libs/enums/enums.js";
+import {
+	ContentType,
+	type RouteFindAllOptions,
+	type RouteGetByIdResponseDto,
+} from "@smartscapes/shared";
+
+import { APIPath } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
@@ -8,7 +14,6 @@ import { RoutesApiPath } from "./libs/enums/enums.js";
 import {
 	type RouteConstructRequestDto,
 	type RouteConstructResponseDto,
-	type RouteGetByIdResponseDto,
 } from "./libs/types/types.js";
 
 type Constructor = {
@@ -32,6 +37,22 @@ class RoutesApi extends BaseHTTPApi {
 				hasAuth: true,
 				method: "POST",
 				payload: JSON.stringify(payload),
+			},
+		);
+
+		return await response.json();
+	}
+
+	public async getAll(
+		query?: RouteFindAllOptions,
+	): Promise<APIResponse<RouteGetByIdResponseDto[]>> {
+		const response = await this.load<APIResponse<RouteGetByIdResponseDto[]>>(
+			this.getFullEndpoint(RoutesApiPath.ROOT, {}),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: false,
+				method: "GET",
+				query,
 			},
 		);
 

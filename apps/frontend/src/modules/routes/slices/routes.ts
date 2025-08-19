@@ -1,9 +1,10 @@
-import { construct, getRouteById } from "./actions.js";
+import { construct, getAll, getRouteById } from "./actions.js";
 import { actions } from "./route.slice.js";
 
 const allActions = {
 	...actions,
 	construct,
+	getAll,
 	getRouteById,
 };
 

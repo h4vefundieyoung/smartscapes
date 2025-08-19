@@ -51,6 +51,7 @@ describe("AuthService", () => {
 			group: mockGroup.toObject(),
 			groupId: 2,
 			id: 1,
+			isVisibleProfile: true,
 			lastName: signUpRequestDto.lastName,
 		};
 
@@ -119,6 +120,7 @@ describe("AuthService", () => {
 			group: mockGroup.toObject(),
 			groupId: mockGroup.toObject().id,
 			id: 1,
+			isVisibleProfile: true,
 			lastName: "Doe",
 			passwordHash: "hashedPassword",
 			passwordSalt: "someSalt",
@@ -133,6 +135,7 @@ describe("AuthService", () => {
 				group: mockGroup.toObject(),
 				groupId: 2,
 				id: mockPasswordDetails.id,
+				isVisibleProfile: true,
 				lastName: mockPasswordDetails.lastName,
 			},
 		};

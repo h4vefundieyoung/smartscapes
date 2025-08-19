@@ -35,7 +35,9 @@ const getAuthenticatedUser = createAsyncThunk<
 
 const logout = createAsyncThunk<null, undefined, AsyncThunkConfig>(
 	`${sliceName}/logout`,
-	async (_payload, { extra: { storage } }) => {
+	async (_payload, { extra }) => {
+		const { storage } = extra;
+
 		await storage.drop(StorageKey.TOKEN);
 
 		return null;
@@ -51,6 +53,7 @@ const signUp = createAsyncThunk<
 
 	const user = await authApi.signUp(payload);
 	const { token } = user.data;
+
 	await storage.set(StorageKey.TOKEN, token);
 
 	return user;
@@ -65,6 +68,7 @@ const signIn = createAsyncThunk<
 
 	const user = await authApi.signIn(payload);
 	const { token } = user.data;
+
 	await storage.set(StorageKey.TOKEN, token);
 
 	return user;
@@ -81,6 +85,7 @@ const patchAuthenticatedUser = createAsyncThunk<
 	const userId = state.auth.authenticatedUser?.id as number;
 
 	const response = await authApi.patch(userId, payload);
+
 	toastNotifier.showSuccess("Profile updated");
 
 	return response;

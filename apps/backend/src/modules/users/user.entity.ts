@@ -15,6 +15,8 @@ class UserEntity implements Entity {
 
 	private id: null | number;
 
+	private isVisibleProfile: boolean;
+
 	private lastName: string;
 
 	private passwordHash: string;
@@ -28,6 +30,7 @@ class UserEntity implements Entity {
 		group,
 		groupId,
 		id,
+		isVisibleProfile,
 		lastName,
 		passwordHash,
 		passwordSalt,
@@ -38,6 +41,7 @@ class UserEntity implements Entity {
 		group: null | ReturnType<GroupEntity["toObject"]>;
 		groupId: number;
 		id: null | number;
+		isVisibleProfile: boolean;
 		lastName: string;
 		passwordHash: string;
 		passwordSalt: string;
@@ -51,6 +55,7 @@ class UserEntity implements Entity {
 		this.group = group;
 		this.groupId = groupId;
 		this.avatarUrl = avatarUrl;
+		this.isVisibleProfile = isVisibleProfile;
 	}
 
 	public static initialize({
@@ -60,6 +65,7 @@ class UserEntity implements Entity {
 		group,
 		groupId,
 		id,
+		isVisibleProfile,
 		lastName,
 		passwordHash,
 		passwordSalt,
@@ -70,6 +76,7 @@ class UserEntity implements Entity {
 		group: null | ReturnType<GroupEntity["toObject"]>;
 		groupId: number;
 		id: number;
+		isVisibleProfile: boolean;
 		lastName: string;
 		passwordHash: string;
 		passwordSalt: string;
@@ -81,6 +88,7 @@ class UserEntity implements Entity {
 			group,
 			groupId,
 			id,
+			isVisibleProfile,
 			lastName,
 			passwordHash,
 			passwordSalt,
@@ -91,6 +99,7 @@ class UserEntity implements Entity {
 		email,
 		firstName,
 		groupId,
+		isVisibleProfile,
 		lastName,
 		passwordHash,
 		passwordSalt,
@@ -98,6 +107,7 @@ class UserEntity implements Entity {
 		email: string;
 		firstName: string;
 		groupId: number;
+		isVisibleProfile: boolean;
 		lastName: string;
 		passwordHash: string;
 		passwordSalt: string;
@@ -109,6 +119,7 @@ class UserEntity implements Entity {
 			group: null,
 			groupId,
 			id: null,
+			isVisibleProfile,
 			lastName,
 			passwordHash,
 			passwordSalt,
@@ -119,6 +130,7 @@ class UserEntity implements Entity {
 		email: string;
 		firstName: string;
 		groupId: number;
+		isVisibleProfile: boolean;
 		lastName: string;
 		passwordHash: string;
 		passwordSalt: string;
@@ -127,6 +139,7 @@ class UserEntity implements Entity {
 			email: this.email,
 			firstName: this.firstName,
 			groupId: this.groupId,
+			isVisibleProfile: this.isVisibleProfile,
 			lastName: this.lastName,
 			passwordHash: this.passwordHash,
 			passwordSalt: this.passwordSalt,
@@ -140,6 +153,7 @@ class UserEntity implements Entity {
 		group: ReturnType<GroupEntity["toObject"]>;
 		groupId: number;
 		id: number;
+		isVisibleProfile: boolean;
 		lastName: string;
 	} {
 		return {
@@ -149,6 +163,7 @@ class UserEntity implements Entity {
 			group: this.group as ReturnType<GroupEntity["toObject"]>,
 			groupId: this.groupId,
 			id: this.id as number,
+			isVisibleProfile: this.isVisibleProfile,
 			lastName: this.lastName,
 		};
 	}

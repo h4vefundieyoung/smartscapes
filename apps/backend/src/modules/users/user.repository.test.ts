@@ -34,6 +34,7 @@ describe("UserRepository", () => {
 		group: mockGroup,
 		groupId: 2,
 		id: 1,
+		isVisibleProfile: true,
 		lastName: "Doe",
 		passwordHash: "hash",
 		passwordSalt: "salt",
@@ -59,6 +60,7 @@ describe("UserRepository", () => {
 			group: mockGroup,
 			groupId: 2,
 			id: 1,
+			isVisibleProfile: true,
 			lastName: "Doe",
 			passwordHash: "hash",
 			passwordSalt: "salt",
@@ -128,6 +130,7 @@ describe("UserRepository", () => {
 
 		const result = await userRepository.patch(mockUser.toObject().id, {
 			firstName: "Jane",
+			isVisibleProfile: true,
 			lastName: "Smith",
 		});
 
@@ -139,6 +142,7 @@ describe("UserRepository", () => {
 
 		const result = await userRepository.patch(NON_EXISTENT_ID, {
 			firstName: "Jane",
+			isVisibleProfile: true,
 			lastName: "Smith",
 		});
 

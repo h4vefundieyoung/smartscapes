@@ -29,6 +29,7 @@ describe("UserService", () => {
 		group: mockGroup.toObject(),
 		groupId: 2,
 		id: 1,
+		isVisibleProfile: true,
 		lastName: "Doe",
 		passwordHash: "hash",
 		passwordSalt: "salt",
@@ -46,6 +47,7 @@ describe("UserService", () => {
 			group: mockGroup.toObject(),
 			groupId: 2,
 			id: 1,
+			isVisibleProfile: true,
 			lastName: "Doe",
 			passwordHash: "hash",
 			passwordSalt: "salt",
@@ -80,6 +82,7 @@ describe("UserService", () => {
 			},
 			groupId: mockUser.toObject().groupId,
 			id: mockUser.toObject().id,
+			isVisibleProfile: true,
 			lastName: mockUser.toObject().lastName,
 		});
 	});
@@ -92,6 +95,7 @@ describe("UserService", () => {
 			group: mockGroup.toObject(),
 			groupId: 2,
 			id: 1,
+			isVisibleProfile: true,
 			lastName: "Doe",
 			passwordHash: "hash",
 			passwordSalt: "salt",
@@ -131,6 +135,7 @@ describe("UserService", () => {
 
 		const result = await userService.patch(mockUser.toObject().id, {
 			firstName: "Jane",
+			isVisibleProfile: true,
 			lastName: "Smith",
 		});
 
@@ -148,6 +153,7 @@ describe("UserService", () => {
 			async () => {
 				await userService.patch(mockUser.toObject().id, {
 					firstName: "Jane",
+					isVisibleProfile: true,
 					lastName: "Smith",
 				});
 			},

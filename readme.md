@@ -37,6 +37,7 @@ erDiagram
     varchar email
     varchar first_name
     varchar last_name
+    boolean is_visible_profile
     text password_hash
     text password_salt
     int group_id FK
@@ -71,6 +72,7 @@ erDiagram
     dateTime created_at
     dateTime updated_at
     varchar name
+    varchar description
     geometry location
   }
 
@@ -107,6 +109,19 @@ erDiagram
     dateTime updated_at
     varchar name
     varchar description
+    decimal distance
+    int duration
+    geometry geometry
+  }
+
+  planned_paths {
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    int user_id FK
+    decimal distance
+    decimal duration
+    geometry geometry
   }
 
   routes_to_pois {

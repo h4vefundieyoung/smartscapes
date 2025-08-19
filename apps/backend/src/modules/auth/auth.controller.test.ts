@@ -34,6 +34,7 @@ describe("AuthController", () => {
 		},
 		groupId: 2,
 		id: 1,
+		isVisibleProfile: true,
 		lastName: "Doe",
 	};
 
@@ -52,6 +53,7 @@ describe("AuthController", () => {
 		} as GroupItemWithPermissionsDto,
 		groupId: 2,
 		id: 1,
+		isVisibleProfile: true,
 		lastName: "Smith",
 	};
 

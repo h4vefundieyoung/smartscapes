@@ -5,7 +5,7 @@ import {
 	type FieldValues,
 } from "react-hook-form";
 
-import { Icon } from "~/libs/components/icon/icon.js";
+import { Icon } from "~/libs/components/components.js";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
 import { type IconName } from "~/libs/types/types.js";

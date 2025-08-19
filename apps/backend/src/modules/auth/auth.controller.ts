@@ -100,6 +100,8 @@ import { AuthError } from "./libs/exceptions/auth.exception.js";
  *           maxLength: 64
  *           pattern: '^[a-zA-Z\\s]+$'
  *           example: Doe
+ *         isVisibleProfile:
+ *           type: boolean
  *
  *     AuthenticatedUserPatchResponseDto:
  *        type: object
@@ -117,6 +119,8 @@ import { AuthError } from "./libs/exceptions/auth.exception.js";
  *          lastName:
  *            type: string
  *            example: Doe
+ *          isVisibleProfile:
+ *            type: boolean
  *
  *     UserAuthResponseDto:
  *       type: object
@@ -143,6 +147,8 @@ import { AuthError } from "./libs/exceptions/auth.exception.js";
  *         lastName:
  *           type: string
  *           example: Doe
+ *         isVisibleProfile:
+ *           type: boolean
  *         groupId:
  *           type: integer
  *           example: 2
@@ -199,6 +205,7 @@ import { AuthError } from "./libs/exceptions/auth.exception.js";
  *             - id
  *             - email
  *             - firstName
+ *             - isVisibleProfile
  *             - lastName
  *             - groupId
  *             - group
@@ -213,6 +220,8 @@ import { AuthError } from "./libs/exceptions/auth.exception.js";
  *             firstName:
  *               type: string
  *               example: "John"
+ *             isVisibleProfile:
+ *               type: boolean
  *             lastName:
  *               type: string
  *               example: "Doe"

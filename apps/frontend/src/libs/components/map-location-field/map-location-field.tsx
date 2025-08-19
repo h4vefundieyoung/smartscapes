@@ -1,32 +1,33 @@
-import { type PointGeometry } from "@smartscapes/shared";
 import React from "react";
-import { type Control } from "react-hook-form";
+import {
+	type Control,
+	type FieldErrors,
+	type FieldPath,
+	type FieldValues,
+} from "react-hook-form";
 
-import { Icon, MapProvider } from "~/libs/components/components.js";
+import { FieldError, MapProvider } from "~/libs/components/components.js";
 import { combineClassNames } from "~/libs/helpers/combine-class-names.helper.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
-import { type PointsOfInterestRequestDto } from "~/modules/points-of-interest/points-of-interest.js";
+import { type PointGeometry } from "~/libs/types/types.js";
 
 import { MapLocationLogic } from "./map-location-logic/map-location-logic.js";
 import styles from "./styles.module.css";
 
-type Properties = {
-	control: Control<PointsOfInterestRequestDto>;
-	errorMessage?: string;
-	label?: string;
-	name: "location";
+type Properties<T extends FieldValues> = {
+	control: Control<T, null>;
+	errors: FieldErrors<T>;
+	label: string;
+	name: FieldPath<T>;
 };
 
-const MapLocationField = ({
+const MapLocationField = <T extends FieldValues>({
 	control,
-	errorMessage,
+	errors,
 	label = "Location",
 	name,
-}: Properties): React.JSX.Element => {
-	const { field } = useFormController<PointsOfInterestRequestDto>({
-		control,
-		name,
-	});
+}: Properties<T>): React.JSX.Element => {
+	const { field } = useFormController<T>({ control, name });
 	const location = field.value as PointGeometry | undefined;
 
 	const handleLocationChange = React.useCallback(
@@ -35,6 +36,10 @@ const MapLocationField = ({
 		},
 		[field],
 	);
+	const fieldError = (errors as Record<string, { message?: string }>)[
+		name as string
+	];
+	const errorMessage = fieldError?.message;
 
 	return (
 		<div className={styles["map-field"]}>
@@ -52,12 +57,7 @@ const MapLocationField = ({
 					/>
 				</MapProvider>
 			</div>
-			{errorMessage && (
-				<span className={styles["error"]}>
-					<Icon height={24} name="error" width={24} />
-					{errorMessage}
-				</span>
-			)}
+			{errorMessage && <FieldError description={errorMessage} />}
 		</div>
 	);
 };

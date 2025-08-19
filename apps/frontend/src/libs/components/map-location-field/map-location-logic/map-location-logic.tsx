@@ -1,6 +1,12 @@
-import { LocationType, type PointGeometry } from "@smartscapes/shared";
-
-import { useEffect, useMapClient } from "~/libs/hooks/hooks.js";
+import { LocationType } from "~/libs/enums/enums.js";
+import {
+	useCallback,
+	useEffect,
+	useMapClient,
+	useRef,
+} from "~/libs/hooks/hooks.js";
+import { type MapMarker } from "~/libs/modules/map-client/libs/types/map-marker.type.js";
+import { type PointGeometry } from "~/libs/types/types.js";
 
 type Properties = {
 	location: PointGeometry | undefined;
@@ -9,39 +15,61 @@ type Properties = {
 
 const MapLocationLogic = ({ location, onLocationChange }: Properties): null => {
 	const mapClient = useMapClient();
+	const markerReference = useRef<MapMarker | null>(null);
+
+	const handleMarkerDragEnd = useCallback(
+		(coordinates: PointGeometry["coordinates"]) => {
+			onLocationChange({ coordinates, type: LocationType.POINT });
+		},
+		[onLocationChange],
+	);
+
+	const handleAddMarker = useCallback(
+		(coordinates: PointGeometry["coordinates"]) => {
+			markerReference.current = mapClient.addMarker({
+				coordinates,
+				isDraggable: true,
+				onDragEnd: handleMarkerDragEnd,
+			});
+		},
+		[mapClient, handleMarkerDragEnd],
+	);
 
 	useEffect(() => {
-		const updateForm = (coords: [number, number]): void => {
-			onLocationChange({ coordinates: coords, type: LocationType.POINT });
-		};
+		if (markerReference.current || location) {
+			return;
+		}
 
-		const offReady = mapClient.onReady(() => {
-			if (location?.coordinates) {
-				mapClient.setSelectionMarker({
-					coordinates: location.coordinates,
-					draggable: true,
-					onDragEnd: updateForm,
-				});
-			} else {
-				mapClient.clearSelectionMarker();
+		const unsubscribe = mapClient.addMapClickListener((coordinates) => {
+			if (!markerReference.current) {
+				onLocationChange({ coordinates, type: LocationType.POINT });
+				unsubscribe();
 			}
 		});
 
-		const offClick = mapClient.onClick((coords) => {
-			mapClient.setSelectionMarker({
-				coordinates: coords,
-				draggable: true,
-				onDragEnd: updateForm,
-			});
-			updateForm(coords);
-		});
-
 		return (): void => {
-			offReady();
-			offClick();
-			mapClient.clearSelectionMarker();
+			unsubscribe();
 		};
-	}, [mapClient, onLocationChange, location?.coordinates]);
+	}, [mapClient, handleAddMarker, onLocationChange, location]);
+
+	useEffect(() => {
+		if (!location && markerReference.current) {
+			markerReference.current.remove();
+			markerReference.current = null;
+
+			return;
+		}
+
+		if (!location) {
+			return;
+		}
+
+		if (markerReference.current) {
+			markerReference.current.setCoordinates(location.coordinates);
+		} else {
+			handleAddMarker(location.coordinates);
+		}
+	}, [location, handleAddMarker]);
 
 	return null;
 };

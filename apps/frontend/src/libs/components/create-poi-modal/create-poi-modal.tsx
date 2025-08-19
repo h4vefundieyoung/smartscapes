@@ -55,9 +55,10 @@ const CreatePOIModal = ({
 					name="name"
 					type="text"
 				/>
-				<MapLocationField
+				<MapLocationField<PointsOfInterestRequestDto>
 					control={control}
-					errorMessage={errors.location?.message as string}
+					errors={errors}
+					label="Location"
 					name="location"
 				/>
 				<TextArea

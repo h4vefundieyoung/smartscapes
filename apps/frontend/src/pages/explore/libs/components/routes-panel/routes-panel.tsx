@@ -29,6 +29,10 @@ const RoutesPanel = (): React.JSX.Element => {
 	}, [dispatch]);
 
 	useEffect(() => {
+		if (locationDataStatus === DataStatus.REJECTED) {
+			void dispatch(exploreActions.getRoutes());
+		}
+
 		if (locationDataStatus === DataStatus.FULFILLED && location !== null) {
 			void dispatch(
 				exploreActions.getRoutes({
@@ -39,13 +43,15 @@ const RoutesPanel = (): React.JSX.Element => {
 		}
 	}, [locationDataStatus, location, dispatch]);
 
+	const hasLocationError = Boolean(locationError);
+
 	const content = useMemo(() => {
 		if (dataStatus === DataStatus.PENDING) {
 			return <Loader />;
 		}
 
-		if (error || locationError) {
-			return <span className={styles["error"]}> {error ?? locationError}</span>;
+		if (error) {
+			return <span className={styles["error"]}>{error}</span>;
 		}
 
 		if (routes.length === 0) {
@@ -55,13 +61,22 @@ const RoutesPanel = (): React.JSX.Element => {
 		}
 
 		return (
-			<ul className={styles["list"]}>
-				{routes.map((route) => (
-					<RouteCard imageUrl={null} key={route.id} name={route.name} />
-				))}
-			</ul>
+			<>
+				{hasLocationError && (
+					<div className={styles["warning"]}>
+						<div>Location access failed: {locationError}.</div>
+						<div>Please enable geolocation to see routes near you.</div>
+					</div>
+				)}
+
+				<ul className={styles["list"]}>
+					{routes.map((route) => (
+						<RouteCard imageUrl={null} key={route.id} name={route.name} />
+					))}
+				</ul>
+			</>
 		);
-	}, [dataStatus, error, locationError, routes]);
+	}, [dataStatus, error, locationError, hasLocationError, routes]);
 
 	return (
 		<div className={styles["container"]}>

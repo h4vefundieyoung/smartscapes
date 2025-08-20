@@ -24,12 +24,15 @@ async function down(knex: Knex): Promise<void> {
 }
 
 async function up(knex: Knex): Promise<void> {
-	await knex.schema.alterTable(TABLE_NAME.FILES, (table) => {
-		table.integer(ColumnName.ENTITY_ID).defaultTo(0).notNullable();
-		table
-			.enum(ColumnName.FOLDER, Object.values(FileFolderName))
-			.defaultTo(FileFolderName.AVATARS)
-			.notNullable();
+	await knex.transaction(async (trx) => {
+		await trx.table(TABLE_NAME.FILES).del();
+
+		await trx.schema.alterTable(TABLE_NAME.FILES, (table) => {
+			table.integer(ColumnName.ENTITY_ID).notNullable();
+			table
+				.enum(ColumnName.FOLDER, Object.values(FileFolderName))
+				.notNullable();
+		});
 	});
 }
 

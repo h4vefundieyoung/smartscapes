@@ -11,6 +11,7 @@ import { type RouteModel } from "./route.model.js";
 
 class RouteRepository implements Repository {
 	private plannedPathModel: typeof PlannedPathModel;
+
 	private routesModel: typeof RouteModel;
 
 	public constructor(

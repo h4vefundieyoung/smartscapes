@@ -40,12 +40,19 @@ class RouteModel extends Model {
 	}
 
 	public createdByUserId!: number;
+
 	public description!: string;
+
 	public distance!: number;
+
 	public duration!: number;
+
 	public geometry!: LineStringGeometry;
+
 	public id!: number;
+
 	public name!: string;
+
 	public pois!: {
 		id: number;
 		visitOrder: number;

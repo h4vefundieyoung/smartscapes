@@ -21,7 +21,9 @@ type Constructor = {
 
 class AuthService {
 	private encryptionService: typeof encryption;
+
 	private tokenService: BaseToken;
+
 	private userService: UserService;
 
 	public constructor({

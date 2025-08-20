@@ -2,7 +2,9 @@ import { type Entity } from "~/libs/types/types.js";
 
 class CategoryEntity implements Entity {
 	private id: null | number;
+
 	private key: string;
+
 	private name: string;
 
 	private constructor({

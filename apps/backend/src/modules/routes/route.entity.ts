@@ -145,7 +145,7 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
-			name?: string;
+			name: string;
 			visitOrder: number;
 		}[];
 	} {
@@ -156,7 +156,11 @@ class RouteEntity implements Entity {
 			geometry: this.geometry,
 			id: this.id as number,
 			name: this.name,
-			pois: this.pois,
+			pois: this.pois as {
+				id: number;
+				name: string;
+				visitOrder: number;
+			}[],
 		};
 	}
 
@@ -169,7 +173,7 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
-			name?: string;
+			name: string;
 			visitOrder: number;
 		}[];
 	} {
@@ -180,7 +184,11 @@ class RouteEntity implements Entity {
 			duration: this.duration,
 			geometry: this.geometry,
 			name: this.name,
-			pois: this.pois,
+			pois: this.pois as {
+				id: number;
+				name: string;
+				visitOrder: number;
+			}[],
 		};
 	}
 
@@ -194,7 +202,7 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
-			name?: string;
+			name: string;
 			visitOrder: number;
 		}[];
 	} {
@@ -206,7 +214,11 @@ class RouteEntity implements Entity {
 			geometry: this.geometry,
 			id: this.id as number,
 			name: this.name,
-			pois: this.pois,
+			pois: this.pois as {
+				id: number;
+				name: string;
+				visitOrder: number;
+			}[],
 		};
 	}
 }

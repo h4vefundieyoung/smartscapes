@@ -70,6 +70,8 @@ describe("Route controller", () => {
 
 	const FIRST_POI_ID = 1;
 	const SECOND_POI_ID = 2;
+	const FIRST_NAME = "SUP Kayak Club 4 Storony";
+	const SECOND_NAME = "River Grill, Rusanivska Embankment";
 	const FIRST_VISIT_ORDER = 0;
 	const SECOND_VISIT_ORDER = 1;
 
@@ -90,8 +92,8 @@ describe("Route controller", () => {
 		id: FIRST_POI_ID,
 		name: "Test Route",
 		pois: [
-			{ id: FIRST_POI_ID, visitOrder: FIRST_VISIT_ORDER },
-			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
+			{ id: FIRST_POI_ID, name: FIRST_NAME, visitOrder: FIRST_VISIT_ORDER },
+			{ id: SECOND_POI_ID, name: SECOND_NAME, visitOrder: SECOND_VISIT_ORDER },
 		],
 	};
 

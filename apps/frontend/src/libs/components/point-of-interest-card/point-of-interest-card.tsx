@@ -8,7 +8,7 @@ import styles from "./styles.module.css";
 type Properties = {
 	id: number;
 	imageUrl?: string;
-	name: string | undefined;
+	name: string;
 };
 
 const PointOfInterestCard = ({

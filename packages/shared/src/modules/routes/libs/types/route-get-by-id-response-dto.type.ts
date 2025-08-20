@@ -10,7 +10,7 @@ type RouteGetByIdResponseDto = {
 	name: string;
 	pois: {
 		id: number;
-		name?: string;
+		name: string;
 		visitOrder: number;
 	}[];
 };

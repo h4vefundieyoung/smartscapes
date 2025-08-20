@@ -44,18 +44,19 @@ class MapClient {
 			MAP_CONTROLS_POSITION["GEOLOCATE"] as ControlPosition,
 		);
 
-		const trigger = (): ReturnType<typeof setTimeout> =>
+		const isMapLoaded = this.map.loaded();
+		const navigateToCurrentLocation = (): ReturnType<typeof setTimeout> =>
 			setTimeout(() => control.trigger(), GEOLOCATE_AUTO_TRIGGER_DELAY);
 
-		if (this.map.loaded()) {
-			trigger();
+		if (isMapLoaded) {
+			navigateToCurrentLocation();
 		} else {
-			const onLoadOnce = (): void => {
-				this.map?.off(MapEventType.LOAD, onLoadOnce);
-				trigger();
+			const handleMapLoad = (): void => {
+				this.map?.off(MapEventType.LOAD, handleMapLoad);
+				navigateToCurrentLocation();
 			};
 
-			this.map.on(MapEventType.LOAD, onLoadOnce);
+			this.map.on(MapEventType.LOAD, handleMapLoad);
 		}
 	}
 

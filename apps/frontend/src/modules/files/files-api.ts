@@ -21,18 +21,6 @@ class FileApi extends BaseHTTPApi {
 		super({ baseUrl, http, path: APIPath.FILES, storage });
 	}
 
-	public async getAllFiles(): Promise<APIResponse<FileUploadResponseDto[]>> {
-		const response = await this.load<APIResponse<FileUploadResponseDto[]>>(
-			this.getFullEndpoint(FilesApiPath.ROOT, {}),
-			{
-				hasAuth: true,
-				method: "GET",
-			},
-		);
-
-		return await response.json();
-	}
-
 	public async uploadFile(
 		payload: FileUploadRequestDto,
 	): Promise<APIResponse<FileUploadResponseDto>> {

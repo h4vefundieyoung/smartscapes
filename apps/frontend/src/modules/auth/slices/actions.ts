@@ -1,8 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { StorageKey } from "~/libs/modules/storage/storage.js";
-import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
-import { type FileUploadResponseDto } from "~/modules/files/libs/types/types.js";
+import {
+	type APIResponse,
+	type AsyncThunkConfig,
+	type FileUploadResponseDto,
+} from "~/libs/types/types.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
 	type AuthenticatedUserPatchResponseDto,

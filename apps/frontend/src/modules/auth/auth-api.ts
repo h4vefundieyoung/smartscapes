@@ -2,7 +2,10 @@ import { APIPath, ContentType } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
-import { type APIResponse } from "~/libs/types/types.js";
+import {
+	type APIResponse,
+	type FileUploadResponseDto,
+} from "~/libs/types/types.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
 	type AuthenticatedUserPatchResponseDto,
@@ -13,7 +16,6 @@ import {
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
 
-import { type FileUploadResponseDto } from "../files/libs/types/types.js";
 import { AuthApiPath } from "./libs/enums/enums.js";
 
 type Constructor = {

@@ -4,6 +4,7 @@ export { Avatar } from "./avatar/avatar.js";
 export { Button } from "./button/button.js";
 export { Checkbox } from "./checkbox/checkbox.js";
 export { CreatePOIModal } from "./create-poi-modal/create-poi-modal.js";
+export { Dropdown } from "./dropdown/dropdown.js";
 export { FieldError } from "./field-error/field-error.js";
 export { Header } from "./header/header.js";
 export { Icon } from "./icon/icon.js";

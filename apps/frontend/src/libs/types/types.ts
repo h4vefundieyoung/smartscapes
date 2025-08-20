@@ -1,5 +1,5 @@
 export { type AsyncThunkConfig } from "./async-thunk-config.type.js";
-export { type DropdownMenuItem } from "./dropdown-menu-item.type.js";
+export { type DropdownItem } from "./dropdown-item.type.js";
 export { type IconName } from "./icon-name.type.js";
 export { type Location } from "./location.type.js";
 export { type NavigationItem } from "./navigation-item.type.js";

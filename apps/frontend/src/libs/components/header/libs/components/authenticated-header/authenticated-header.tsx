@@ -1,7 +1,6 @@
 import { type JSX } from "react";
 
-import { Avatar, Icon } from "~/libs/components/components.js";
-import { DROPDOWN_MENU_ITEMS } from "~/libs/constants/constants.js";
+import { Avatar, Dropdown, Icon } from "~/libs/components/components.js";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
@@ -10,10 +9,11 @@ import {
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
+import { type DropdownItem } from "~/libs/types/types.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import { type UserAuthResponseDto } from "~/modules/users/libs/types/types.js";
 
-import { UserDropdown } from "../user-dropdown/user-dropdown.js";
+import { HEADER_DROPDOWN_ITEMS } from "../../types/types.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -33,6 +33,10 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 		setIsDropdownOpen(false);
 		void dispatch(authActions.logout());
 	}, [dispatch]);
+
+	const items: DropdownItem[] = HEADER_DROPDOWN_ITEMS.map((item) =>
+		item.label === "Log out" ? { ...item, onClick: handleLogout } : item,
+	);
 
 	const handleClickOutside = useCallback((event: MouseEvent) => {
 		if (
@@ -74,7 +78,7 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 					!isDropdownOpen && styles["hidden"],
 				)}
 			>
-				<UserDropdown items={DROPDOWN_MENU_ITEMS} onLogout={handleLogout} />
+				<Dropdown items={items} />
 			</div>
 		</div>
 	);

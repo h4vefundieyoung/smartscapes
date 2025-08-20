@@ -19,8 +19,6 @@ type Properties<T extends FieldValues> = {
 	placeholder?: string;
 };
 
-const ICON_SIZE = 24;
-
 const TextArea = <T extends FieldValues>({
 	control,
 	errors,
@@ -48,7 +46,7 @@ const TextArea = <T extends FieldValues>({
 			/>
 			{hasError && (
 				<span className={styles["error"]}>
-					<Icon height={ICON_SIZE} name="error" width={ICON_SIZE} />
+					<Icon height={24} name="error" width={24} />
 					{error}
 				</span>
 			)}

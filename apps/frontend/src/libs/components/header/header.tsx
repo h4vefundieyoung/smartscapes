@@ -17,9 +17,6 @@ type Properties = {
 	user: null | UserAuthResponseDto;
 };
 
-const LOGO_HEIGHT = 24;
-const LOGO_WIDTH = 136;
-
 const Header = ({ actions, user }: Properties): JSX.Element => {
 	const renderHeaderContent = (): JSX.Element => {
 		if (user) {
@@ -43,9 +40,9 @@ const Header = ({ actions, user }: Properties): JSX.Element => {
 					<img
 						alt="SmartScapes Logo"
 						className={styles["logo"]}
-						height={LOGO_HEIGHT}
+						height={24}
 						src={appLogo}
-						width={LOGO_WIDTH}
+						width={136}
 					/>
 				</Link>
 				{renderHeaderContent()}

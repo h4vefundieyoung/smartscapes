@@ -28,8 +28,6 @@ type Properties<T extends FieldValues> = {
 	type?: "email" | "password" | "text";
 };
 
-const ICON_SIZE = 24;
-
 const Input = <T extends FieldValues>({
 	autocomplete = "on",
 	control,
@@ -64,7 +62,7 @@ const Input = <T extends FieldValues>({
 				/>
 				{hasError && (
 					<span className={styles["error"]}>
-						<Icon height={ICON_SIZE} name="error" width={ICON_SIZE} />
+						<Icon height={24} name="error" width={24} />
 						{error as string}
 					</span>
 				)}

@@ -37,6 +37,7 @@ const MapLocationField = <T extends FieldValues>({
 		[field],
 	);
 	const error = errors[name]?.message;
+	const hasError = Boolean(error);
 
 	return (
 		<div className={styles["map-field"]}>
@@ -54,7 +55,7 @@ const MapLocationField = <T extends FieldValues>({
 					/>
 				</MapProvider>
 			</div>
-			{error && <FieldError description={error as string} />}
+			{hasError && <FieldError description={error as string} />}
 		</div>
 	);
 };

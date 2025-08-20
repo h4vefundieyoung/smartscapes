@@ -10,17 +10,15 @@ import { type PointsOfInterestService } from "~/modules/points-of-interest/point
 
 import { PointsOfInterestApiPath } from "./libs/enums/enums.js";
 import {
-	type PointsOfInterestGetPaginatedSearchQuery,
 	type PointsOfInterestPaginatedResponseDto,
+	type PointsOfInterestQueryRequest,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
-	type PointsOfInterestSearchQuery,
 } from "./libs/types/type.js";
 import {
 	pointOfInterestUpdateValidationSchema,
 	pointsOfInterestCreateValidationSchema,
-	pointsOfInterestPaginatedQueryValidationSchema,
-	pointsOfInterestSearchQueryValidationSchema,
+	pointsOfInterestQueryValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 
 /**
@@ -133,7 +131,7 @@ class PointsOfInterestController extends BaseController {
 			method: "GET",
 			path: "/",
 			validation: {
-				query: pointsOfInterestSearchQueryValidationSchema,
+				query: pointsOfInterestQueryValidationSchema,
 			},
 		});
 
@@ -143,15 +141,6 @@ class PointsOfInterestController extends BaseController {
 			path: PointsOfInterestApiPath.$ID,
 			validation: {
 				body: pointOfInterestUpdateValidationSchema,
-			},
-		});
-
-		this.addRoute({
-			handler: this.findPaginated.bind(this),
-			method: "GET",
-			path: PointsOfInterestApiPath.PAGINATED,
-			validation: {
-				query: pointsOfInterestPaginatedQueryValidationSchema,
 			},
 		});
 	}
@@ -244,9 +233,9 @@ class PointsOfInterestController extends BaseController {
 	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Points of Interest
-	 *     summary: Retrieve points of interest with optional location-based filtering
+	 *     summary: Retrieve points of interest with optional filtering and pagination
 	 *     description: |
-	 *       Get all points of interest or filter them by location.
+	 *       Get points of interest with various filtering and pagination options.
 	 *
 	 *       **Without query parameters**: Returns all points of interest
 	 *
@@ -254,6 +243,8 @@ class PointsOfInterestController extends BaseController {
 	 *       from the given coordinates (latitude/longitude)
 	 *
 	 *       **With name parameter**: Returns all points of interest searched by name
+	 *
+	 *       **With pagination parameters (page & perPage)**: Returns paginated results with metadata
 	 *     parameters:
 	 *       - in: query
 	 *         name: latitude
@@ -294,23 +285,71 @@ class PointsOfInterestController extends BaseController {
 	 *           Full or partial name to search for.
 	 *           Must be between 3 and 255 characters.
 	 *           Case-insensitive search is supported.
+	 *       - in: query
+	 *         name: page
+	 *         schema:
+	 *           type: string
+	 *           pattern: '^[1-9][0-9]*$'
+	 *           example: "1"
+	 *         description: Page number (starts from 1). Default is 1. When provided with perPage, returns paginated response.
+	 *       - in: query
+	 *         name: perPage
+	 *         schema:
+	 *           type: string
+	 *           pattern: '^[1-9][0-9]*$'
+	 *           example: "10"
+	 *         description: Number of items per page. Default is 10. When provided with page, returns paginated response.
+	 *       - in: query
+	 *         name: search
+	 *         schema:
+	 *           type: string
+	 *           minLength: 1
+	 *           maxLength: 255
+	 *           example: "Central Park"
+	 *         description: Optional search term to filter points of interest by name (used with pagination).
 	 *     responses:
 	 *       200:
 	 *         description: Successfully retrieved points of interest
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               type: object
-	 *               properties:
-	 *                 data:
-	 *                   type: array
-	 *                   items:
-	 *                     $ref: '#/components/schemas/PointsOfInterestResponseDto'
-	 *                   description: Array of points of interest
+	 *               oneOf:
+	 *                 - type: object
+	 *                   properties:
+	 *                     data:
+	 *                       type: array
+	 *                       items:
+	 *                         $ref: '#/components/schemas/PointsOfInterestResponseDto'
+	 *                   description: Array response (when pagination not used)
+	 *                 - type: object
+	 *                   properties:
+	 *                     data:
+	 *                       type: object
+	 *                       properties:
+	 *                         data:
+	 *                           type: array
+	 *                           items:
+	 *                             $ref: '#/components/schemas/PointsOfInterestResponseDto'
+	 *                         meta:
+	 *                           type: object
+	 *                           properties:
+	 *                             currentPage:
+	 *                               type: number
+	 *                               example: 1
+	 *                             itemsPerPage:
+	 *                               type: number
+	 *                               example: 10
+	 *                             total:
+	 *                               type: number
+	 *                               example: 25
+	 *                             totalPages:
+	 *                               type: number
+	 *                               example: 3
+	 *                   description: Paginated response (when page & perPage provided)
 	 *             examples:
 	 *               all_pois:
 	 *                 summary: All points of interest
-	 *                 description: Response when no location filters are provided
+	 *                 description: Response when no pagination or location filters are provided
 	 *                 value:
 	 *                   data:
 	 *                     - id: 1
@@ -336,13 +375,47 @@ class PointsOfInterestController extends BaseController {
 	 *                         type: "Point"
 	 *                         coordinates: [30.5234, 50.4501]
 	 *                       description: "A large park in New York City"
+	 *               paginated_pois:
+	 *                 summary: Paginated points of interest
+	 *                 description: Response when pagination parameters are provided
+	 *                 value:
+	 *                   data:
+	 *                     data:
+	 *                       - id: 1
+	 *                         name: "Central Park"
+	 *                         description: "A large park in New York City"
+	 *                         location:
+	 *                           type: "Point"
+	 *                           coordinates: [30.5234, 50.4501]
+	 *                       - id: 2
+	 *                         name: "Glass Bridge"
+	 *                         description: "A modern architectural marvel"
+	 *                         location:
+	 *                           type: "Point"
+	 *                           coordinates: [30.5289, 50.4553]
+	 *                     meta:
+	 *                       currentPage: 1
+	 *                       itemsPerPage: 10
+	 *                       total: 25
+	 *                       totalPages: 3
 	 */
 	public async findAll(
 		options: APIHandlerOptions<{
-			query?: PointsOfInterestSearchQuery;
+			query?: PointsOfInterestQueryRequest;
 		}>,
-	): Promise<APIHandlerResponse<PointsOfInterestResponseDto[]>> {
+	): Promise<
+		APIHandlerResponse<
+			PointsOfInterestPaginatedResponseDto | PointsOfInterestResponseDto[]
+		>
+	> {
 		const { query = null } = options;
+
+		const isPaginatedRequest = query?.page && query.perPage;
+
+		if (isPaginatedRequest) {
+			return await this.findPaginated(query);
+		}
+
 		const { items } = await this.pointsOfInterestService.findAll(query);
 
 		return {
@@ -391,96 +464,9 @@ class PointsOfInterestController extends BaseController {
 		};
 	}
 
-	/**
-	 * @swagger
-	 * /points-of-interest/paginated:
-	 *   get:
-	 *     security:
-	 *       - bearerAuth: []
-	 *     tags:
-	 *       - Points of Interest
-	 *     summary: Get paginated points of interest
-	 *     description: Retrieve points of interest with pagination support and optional search functionality
-	 *     parameters:
-	 *       - in: query
-	 *         name: page
-	 *         schema:
-	 *           type: string
-	 *           pattern: '^[1-9][0-9]*$'
-	 *           example: "1"
-	 *         description: Page number (starts from 1). Default is 1.
-	 *       - in: query
-	 *         name: perPage
-	 *         schema:
-	 *           type: string
-	 *           pattern: '^[1-9][0-9]*$'
-	 *           example: "10"
-	 *         description: Number of items per page. Default is 10.
-	 *       - in: query
-	 *         name: search
-	 *         schema:
-	 *           type: string
-	 *           minLength: 1
-	 *           maxLength: 255
-	 *           example: "Central Park"
-	 *         description: Optional search term to filter points of interest by name
-	 *     responses:
-	 *       200:
-	 *         description: Successfully retrieved paginated points of interest
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               type: object
-	 *               properties:
-	 *                 data:
-	 *                   type: object
-	 *                   properties:
-	 *                     items:
-	 *                       type: array
-	 *                       items:
-	 *                         $ref: '#/components/schemas/PointsOfInterestResponseDto'
-	 *                     meta:
-	 *                       type: object
-	 *                       properties:
-	 *                         page:
-	 *                           type: number
-	 *                           example: 1
-	 *                         perPage:
-	 *                           type: number
-	 *                           example: 10
-	 *                         total:
-	 *                           type: number
-	 *                           example: 25
-	 *                         totalPages:
-	 *                           type: number
-	 *                           example: 3
-	 *             example:
-	 *               data:
-	 *                 items:
-	 *                   - id: 1
-	 *                     name: "Central Park"
-	 *                     description: "A large park in New York City"
-	 *                     location:
-	 *                       type: "Point"
-	 *                       coordinates: [30.5234, 50.4501]
-	 *                   - id: 2
-	 *                     name: "Glass Bridge"
-	 *                     description: "A modern architectural marvel"
-	 *                     location:
-	 *                       type: "Point"
-	 *                       coordinates: [30.5289, 50.4553]
-	 *                 meta:
-	 *                   page: 1
-	 *                   perPage: 10
-	 *                   total: 25
-	 *                   totalPages: 3
-	 */
 	public async findPaginated(
-		options: APIHandlerOptions<{
-			query: PointsOfInterestGetPaginatedSearchQuery;
-		}>,
+		query: PointsOfInterestQueryRequest,
 	): Promise<APIHandlerResponse<PointsOfInterestPaginatedResponseDto>> {
-		const { query } = options;
 		const { page = DEFAULT_PAGE, perPage = DEFAULT_LIMIT, search } = query;
 
 		const response = await this.pointsOfInterestService.findPaginated({

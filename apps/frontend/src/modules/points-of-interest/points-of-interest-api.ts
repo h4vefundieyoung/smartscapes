@@ -6,8 +6,8 @@ import { type APIResponse } from "~/libs/types/types.js";
 
 import { PointsOfInterestApiPath } from "./libs/enums/enums.js";
 import {
-	type PointsOfInterestGetPaginatedSearchQuery,
 	type PointsOfInterestPaginatedResponseDto,
+	type PointsOfInterestQueryRequest,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 } from "./libs/types/types.js";
@@ -40,10 +40,10 @@ class PointOfInterestApi extends BaseHTTPApi {
 	}
 
 	public async findPaginated(
-		payload: PointsOfInterestGetPaginatedSearchQuery,
+		payload: PointsOfInterestQueryRequest,
 	): Promise<APIResponse<PointsOfInterestPaginatedResponseDto>> {
 		const response = await this.load(
-			this.getFullEndpoint(PointsOfInterestApiPath.PAGINATED, {}),
+			this.getFullEndpoint(PointsOfInterestApiPath.ROOT, {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,

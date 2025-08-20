@@ -3,7 +3,7 @@ import { type EntityPagination, type Repository } from "~/libs/types/types.js";
 import {
 	type PointsOfInterestFindAllOptions,
 	type PointsOfInterestPaginatedOptions,
-	type PointsOfInterestSearchQuery,
+	type PointsOfInterestQueryRequest,
 } from "~/modules/points-of-interest/libs/types/type.js";
 import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
 import { type PointsOfInterestModel } from "~/modules/points-of-interest/points-of-interest.model.js";
@@ -137,7 +137,7 @@ class PointsOfInterestRepository implements Repository {
 	}
 
 	public async findNearby(
-		normalizedQuery: PointsOfInterestSearchQuery,
+		normalizedQuery: PointsOfInterestQueryRequest,
 	): Promise<PointsOfInterestEntity[]> {
 		const { latitude, longitude, name, radius } = normalizedQuery;
 

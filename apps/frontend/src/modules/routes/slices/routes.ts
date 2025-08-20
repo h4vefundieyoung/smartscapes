@@ -1,12 +1,22 @@
-import { construct, getAll, getRouteById } from "./actions.js";
-import { actions } from "./route.slice.js";
-
-const allActions = {
-	...actions,
+import {
 	construct,
 	getAll,
+	getPointsOfInterest,
 	getRouteById,
+} from "./actions.js";
+import { actions as constructRouteActions } from "./construct-route.slice.js";
+import { actions as routeActions } from "./route.slice.js";
+
+const allActions = {
+	...routeActions,
+	...constructRouteActions,
+	construct,
+	getAll,
+	getPointsOfInterest,
+	getRouteById,
+	routeActions,
 };
 
 export { allActions as actions };
-export { reducer } from "./route.slice.js";
+export { reducer as constructRouteReducer } from "./construct-route.slice.js";
+export { reducer as routeReducer } from "./route.slice.js";

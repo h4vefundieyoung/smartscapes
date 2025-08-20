@@ -14,10 +14,7 @@ import {
 	useState,
 } from "~/libs/hooks/hooks.js";
 import { type SelectOption } from "~/libs/types/types.js";
-import {
-	actions as pointOfInterestActions,
-	type PointsOfInterestResponseDto,
-} from "~/modules/points-of-interest/points-of-interest.js";
+import { type PointsOfInterestResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 import { actions as routeActions } from "~/modules/routes/routes.js";
 
 import { PointOfInterestCard } from "../point-of-interest-card/point-of-interest-card.js";
@@ -35,8 +32,8 @@ const SidePanel = ({
 	pointsOfInterest,
 }: Properties): React.JSX.Element => {
 	const dispatch = useAppDispatch();
-	const { dataAll: filteredPois, dataStatus } = useAppSelector(
-		(state) => state.pointsOfInterest,
+	const { dataStatus, pointsOfInterest: filteredPois } = useAppSelector(
+		(state) => state.constructRoute,
 	);
 	const { control } = useAppForm({
 		defaultValues: { searchPoi: null },
@@ -99,7 +96,7 @@ const SidePanel = ({
 		}
 
 		void dispatch(
-			pointOfInterestActions.loadAll({ name: debouncedSearchValue }),
+			routeActions.getPointsOfInterest({ name: debouncedSearchValue }),
 		);
 	}, [debouncedSearchValue, dispatch]);
 

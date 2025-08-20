@@ -6,7 +6,7 @@ import {
 	PointsOfInterestValidationRule,
 } from "../enums/enums.js";
 
-const pointsOfInterestSearchQuery = z
+const pointsOfInterestQuery = z
 	.object({
 		latitude: z
 			.string()
@@ -54,6 +54,32 @@ const pointsOfInterestSearchQuery = z
 				PointsOfInterestValidationMessage.NAME_MAXIMUM_LENGTH,
 			)
 			.optional(),
+		page: z
+			.string()
+			.trim()
+			.transform(parseToFloat)
+			.pipe(
+				z
+					.number()
+					.min(
+						PointsOfInterestValidationRule.MIN_PAGE,
+						PointsOfInterestValidationMessage.PAGE_MUST_BE_GREATER_THAN_ZERO,
+					),
+			)
+			.optional(),
+		perPage: z
+			.string()
+			.trim()
+			.transform(parseToFloat)
+			.pipe(
+				z
+					.number()
+					.min(
+						PointsOfInterestValidationRule.MIN_PER_PAGE,
+						PointsOfInterestValidationMessage.PER_PAGE_MUST_BE_GREATER_THAN_ZERO,
+					),
+			)
+			.optional(),
 		radius: z
 			.string()
 			.transform(parseToFloat)
@@ -70,6 +96,7 @@ const pointsOfInterestSearchQuery = z
 					),
 			)
 			.optional(),
+		search: z.string().trim().optional(),
 	})
 	.refine(
 		({ latitude, longitude, radius }) =>
@@ -85,4 +112,4 @@ const pointsOfInterestSearchQuery = z
 		},
 	);
 
-export { pointsOfInterestSearchQuery };
+export { pointsOfInterestQuery };

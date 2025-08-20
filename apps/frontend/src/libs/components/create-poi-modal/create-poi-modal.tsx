@@ -9,7 +9,7 @@ import {
 } from "~/libs/components/components.js";
 import { useAppForm } from "~/libs/hooks/hooks.js";
 import {
-	pointOfInterestCreateValidationSchema,
+	pointsOfInterestCreateValidationSchema,
 	type PointsOfInterestRequestDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
@@ -33,7 +33,7 @@ const CreatePOIModal = ({
 	const { control, errors, handleReset, handleSubmit } =
 		useAppForm<CreatePOIFormValues>({
 			defaultValues: DEFAULT_CREATE_POI_PAYLOAD,
-			validationSchema: pointOfInterestCreateValidationSchema,
+			validationSchema: pointsOfInterestCreateValidationSchema,
 		});
 
 	const handleFormSubmit = (payload: CreatePOIFormValues): void => {

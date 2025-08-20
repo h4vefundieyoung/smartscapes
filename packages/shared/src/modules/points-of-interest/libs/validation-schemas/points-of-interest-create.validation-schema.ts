@@ -6,7 +6,7 @@ import {
 	PointsOfInterestValidationRule,
 } from "../enums/enums.js";
 
-const pointOfInterestCreate = z.strictObject({
+const pointsOfInterestCreate = z.strictObject({
 	description: z
 		.string()
 		.max(PointsOfInterestValidationRule.DESCRIPTION_MAX_LENGTH, {
@@ -58,4 +58,4 @@ const pointOfInterestCreate = z.strictObject({
 		}),
 });
 
-export { pointOfInterestCreate };
+export { pointsOfInterestCreate };

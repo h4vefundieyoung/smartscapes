@@ -37,7 +37,7 @@
 		justify-content: center;
 		background:
 			linear-gradient(var(--color-text-weak), var(--color-text-weak)),
-			url("../../assets/images/auth-page-background-responsive.svg");
+			url("../../assets/images/auth-page-background-responsive.jpg");
 	}
 
 	.left-panel {

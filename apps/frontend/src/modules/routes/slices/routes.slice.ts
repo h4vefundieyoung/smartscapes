@@ -9,26 +9,27 @@ import {
 } from "./../libs/types/types.js";
 import {
 	create,
-	discardCreateRouteData,
+	discardFormData,
 	getAll,
 	getRouteById,
-	restoreCreateRouteData,
+	restoreFormData,
+	updateFormData,
 } from "./actions.js";
 
 type State = {
-	createRouteFormData: null | Partial<RouteCreateRequestDto>;
-	createRouteFormDataStatus: ValueOf<typeof DataStatus>;
 	createStatus: ValueOf<typeof DataStatus>;
 	dataStatus: ValueOf<typeof DataStatus>;
+	formData: null | Partial<RouteCreateRequestDto>;
+	formDataStatus: ValueOf<typeof DataStatus>;
 	route: null | RouteGetByIdResponseDto;
 	routes: RouteGetByIdResponseDto[];
 };
 
 const initialState: State = {
-	createRouteFormData: null,
-	createRouteFormDataStatus: DataStatus.IDLE,
 	createStatus: DataStatus.IDLE,
 	dataStatus: DataStatus.IDLE,
+	formData: null,
+	formDataStatus: DataStatus.IDLE,
 	route: null,
 	routes: [],
 };
@@ -45,6 +46,7 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(create.rejected, (state) => {
 			state.createStatus = DataStatus.REJECTED;
 		});
+
 		builder.addCase(getRouteById.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
 		});
@@ -55,6 +57,7 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(getRouteById.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
 		});
+
 		builder.addCase(getAll.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
 		});
@@ -64,30 +67,32 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(getAll.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
 		});
-		builder.addCase(restoreCreateRouteData.pending, (state) => {
-			state.createRouteFormDataStatus = DataStatus.PENDING;
+
+		builder.addCase(restoreFormData.pending, (state) => {
+			state.formDataStatus = DataStatus.PENDING;
 		});
-		builder.addCase(restoreCreateRouteData.fulfilled, (state, action) => {
-			state.createRouteFormData = action.payload;
-			state.createRouteFormDataStatus = DataStatus.FULFILLED;
+		builder.addCase(restoreFormData.fulfilled, (state, action) => {
+			state.formData = action.payload;
+			state.formDataStatus = DataStatus.FULFILLED;
 		});
-		builder.addCase(restoreCreateRouteData.rejected, (state) => {
-			state.createRouteFormDataStatus = DataStatus.REJECTED;
+		builder.addCase(restoreFormData.rejected, (state) => {
+			state.formDataStatus = DataStatus.REJECTED;
 		});
-		builder.addCase(discardCreateRouteData.fulfilled, (state) => {
-			state.createRouteFormData = null;
+
+		builder.addCase(discardFormData.fulfilled, (state) => {
+			state.formData = null;
+		});
+
+		builder.addCase(updateFormData, (state, action) => {
+			state.formData = {
+				...state.formData,
+				...action.payload,
+			} as Partial<RouteCreateRequestDto>;
 		});
 	},
 	initialState,
 	name: "routes",
-	reducers: {
-		updateCreateRouteFormData: (state, action) => {
-			state.createRouteFormData = {
-				...state.createRouteFormData,
-				...action.payload,
-			} as Partial<RouteCreateRequestDto>;
-		},
-	},
+	reducers: {},
 });
 
 export { actions, name, reducer };

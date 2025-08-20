@@ -1,21 +1,23 @@
 import {
 	create,
-	discardCreateRouteData,
+	discardFormData,
 	getAll,
 	getRouteById,
-	preserveCreateRouteData,
-	restoreCreateRouteData,
+	preserveFormData,
+	restoreFormData,
+	updateFormData,
 } from "./actions.js";
 import { actions } from "./routes.slice.js";
 
 const allActions = {
 	...actions,
 	create,
-	discardCreateRouteData,
+	discardFormData,
 	getAll,
 	getRouteById,
-	preserveCreateRouteData,
-	restoreCreateRouteData,
+	preserveFormData,
+	restoreFormData,
+	updateFormData,
 };
 
 export { allActions as actions };

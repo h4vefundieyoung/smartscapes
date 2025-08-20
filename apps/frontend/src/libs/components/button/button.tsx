@@ -1,4 +1,4 @@
-import { combineClassNames } from "~/libs/helpers/combine-class-names.helper.js";
+import { combineClassNames } from "~/libs/helpers/helpers.js";
 
 import styles from "./styles.module.css";
 
@@ -19,9 +19,8 @@ const Button = ({
 }: Properties): React.JSX.Element => {
 	const buttonClass = combineClassNames(
 		styles["button"],
-		variant === "outlined"
-			? styles["button-outlined"]
-			: styles["button-primary"],
+		variant === "outlined" && styles["button-outlined"],
+		variant === "primary" && styles["button-primary"],
 	);
 
 	if (to) {

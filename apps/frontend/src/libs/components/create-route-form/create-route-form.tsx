@@ -1,4 +1,6 @@
 import { Button, Input, TextArea } from "~/libs/components/components.js";
+import { AppRoute } from "~/libs/enums/enums.js";
+import { getUrlWithQueryString } from "~/libs/helpers/helpers.js";
 import { useAppForm, useEffect, useWatch } from "~/libs/hooks/hooks.js";
 import {
 	type RouteCreateRequestDto,
@@ -14,6 +16,17 @@ type Properties = {
 	onSubmit: (data: RouteCreateRequestDto) => void;
 };
 
+const returnBackPath = getUrlWithQueryString(AppRoute.MANAGE_ROUTES, {
+	modal: "create-route",
+});
+
+const constructPagePath = getUrlWithQueryString(
+	`${AppRoute.MANAGE_ROUTES}/construct`,
+	{
+		returnTo: returnBackPath,
+	},
+);
+
 const CreateRouteForm = ({
 	createRouteFormData,
 	onFormChange,
@@ -22,7 +35,7 @@ const CreateRouteForm = ({
 	const { control, errors, handleSubmit, handleValueSet } =
 		useAppForm<RouteCreateRequestDto>({
 			defaultValues: DEFAULT_CREATE_ROUTE_PAYLOAD,
-			// validationSchema: routesCreateValidationSchema,
+			validationSchema: routesCreateValidationSchema,
 		});
 
 	const [name, description, plannedPathId] = useWatch({
@@ -74,7 +87,7 @@ const CreateRouteForm = ({
 					<div>
 						<Button
 							label="Construct"
-							to="/manage-routes/construct?returnTo=/manage-routes?modal=create-route"
+							to={constructPagePath}
 							type="button"
 							variant="outlined"
 						/>
@@ -86,7 +99,7 @@ const CreateRouteForm = ({
 					errors={errors}
 					label="Description"
 					name="description"
-					rows={5}
+					rowsCount={5}
 				/>
 
 				<div className={styles["footer"]}>

@@ -1,4 +1,4 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
@@ -40,26 +40,35 @@ const getAll = createAsyncThunk<
 	return await routesApi.getAll(options);
 });
 
-const preserveCreateRouteData = createAsyncThunk<
-	unknown,
-	Partial<RouteCreateRequestDto>,
-	AsyncThunkConfig
->("routes/preserve-create-route-data", async (payload, { extra }) => {
-	const { storage } = extra;
+const preserveFormData = createAsyncThunk<unknown, unknown, AsyncThunkConfig>(
+	"routes/preserve-form-data",
+	async (_, { extra, getState }) => {
+		const { storage } = extra;
+		const state = getState() as {
+			route: { formData: null | Partial<RouteCreateRequestDto> };
+		};
 
-	await storage.set(StorageKey.CREATE_ROUTE_FORM_DATA, JSON.stringify(payload));
-});
+		if (state.route.formData && Object.keys(state.route.formData).length > 0) {
+			await storage.set(
+				StorageKey.CREATE_ROUTE_FORM_DATA,
+				JSON.stringify(state.route.formData),
+			);
+		}
+	},
+);
 
-const restoreCreateRouteData = createAsyncThunk<
+const restoreFormData = createAsyncThunk<
 	null | Partial<RouteCreateRequestDto>,
 	unknown,
 	AsyncThunkConfig
->("routes/restore-create-route-data", async (_, { extra }) => {
+>("routes/restore-form-data", async (_, { extra }) => {
 	const { storage } = extra;
 
-	const savedData = await storage.get(StorageKey.CREATE_ROUTE_FORM_DATA);
+	const savedData = await storage.get<string>(
+		StorageKey.CREATE_ROUTE_FORM_DATA,
+	);
 
-	if (savedData && typeof savedData === "string") {
+	if (savedData) {
 		try {
 			return JSON.parse(savedData) as Partial<RouteCreateRequestDto>;
 		} catch {
@@ -72,21 +81,24 @@ const restoreCreateRouteData = createAsyncThunk<
 	return null;
 });
 
-const discardCreateRouteData = createAsyncThunk<
-	unknown,
-	unknown,
-	AsyncThunkConfig
->("routes/discard-create-route-data", async (_, { extra }) => {
-	const { storage } = extra;
+const discardFormData = createAsyncThunk<unknown, unknown, AsyncThunkConfig>(
+	"routes/discard-form-data",
+	async (_, { extra }) => {
+		const { storage } = extra;
+		await storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
+	},
+);
 
-	await storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
-});
+const updateFormData = createAction<Partial<RouteCreateRequestDto>>(
+	`${sliceName}/update-form-data`,
+);
 
 export {
 	create,
-	discardCreateRouteData,
+	discardFormData,
 	getAll,
 	getRouteById,
-	preserveCreateRouteData,
-	restoreCreateRouteData,
+	preserveFormData,
+	restoreFormData,
+	updateFormData,
 };

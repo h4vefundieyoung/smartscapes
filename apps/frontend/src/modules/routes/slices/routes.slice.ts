@@ -10,6 +10,7 @@ import {
 import {
 	create,
 	discardCreateRouteData,
+	getAll,
 	getRouteById,
 	restoreCreateRouteData,
 } from "./actions.js";
@@ -32,7 +33,7 @@ const initialState: State = {
 	routes: [],
 };
 
-const { actions, reducer } = createSlice({
+const { actions, name, reducer } = createSlice({
 	extraReducers(builder) {
 		builder.addCase(create.pending, (state) => {
 			state.createStatus = DataStatus.PENDING;
@@ -52,6 +53,15 @@ const { actions, reducer } = createSlice({
 			state.dataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(getRouteById.rejected, (state) => {
+			state.dataStatus = DataStatus.REJECTED;
+		});
+		builder.addCase(getAll.pending, (state) => {
+			state.dataStatus = DataStatus.PENDING;
+		});
+		builder.addCase(getAll.fulfilled, (state) => {
+			state.dataStatus = DataStatus.FULFILLED;
+		});
+		builder.addCase(getAll.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
 		});
 		builder.addCase(restoreCreateRouteData.pending, (state) => {
@@ -80,4 +90,4 @@ const { actions, reducer } = createSlice({
 	},
 });
 
-export { actions, reducer };
+export { actions, name, reducer };

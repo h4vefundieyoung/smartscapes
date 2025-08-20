@@ -5,8 +5,10 @@ import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 
 import {
 	type RouteCreateRequestDto,
+	type RouteFindAllOptions,
 	type RouteGetByIdResponseDto,
 } from "../libs/types/types.js";
+import { name as sliceName } from "./routes.slice.js";
 
 const create = createAsyncThunk<
 	APIResponse<RouteGetByIdResponseDto>,
@@ -26,6 +28,16 @@ const getRouteById = createAsyncThunk<
 	const { routesApi } = extra;
 
 	return routesApi.getRouteById(id);
+});
+
+const getAll = createAsyncThunk<
+	APIResponse<RouteGetByIdResponseDto[]>,
+	RouteFindAllOptions | undefined,
+	AsyncThunkConfig
+>(`${sliceName}/get-all`, async (options, { extra }) => {
+	const { routesApi } = extra;
+
+	return await routesApi.getAll(options);
 });
 
 const preserveCreateRouteData = createAsyncThunk<
@@ -73,6 +85,7 @@ const discardCreateRouteData = createAsyncThunk<
 export {
 	create,
 	discardCreateRouteData,
+	getAll,
 	getRouteById,
 	preserveCreateRouteData,
 	restoreCreateRouteData,

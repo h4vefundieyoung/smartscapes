@@ -1,6 +1,7 @@
 import {
 	create,
 	discardCreateRouteData,
+	getAll,
 	getRouteById,
 	preserveCreateRouteData,
 	restoreCreateRouteData,
@@ -11,6 +12,7 @@ const allActions = {
 	...actions,
 	create,
 	discardCreateRouteData,
+	getAll,
 	getRouteById,
 	preserveCreateRouteData,
 	restoreCreateRouteData,

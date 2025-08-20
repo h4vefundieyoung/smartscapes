@@ -2,15 +2,18 @@ import { PointsOfInterestValidationRule } from "@smartscapes/shared/src/modules/
 import { type MultiValue, type SingleValue } from "react-select";
 
 import { Button, MapProvider, Select } from "~/libs/components/components.js";
+import { DataStatus } from "~/libs/enums/data-status.enum.js";
 import {
 	useAppDispatch,
 	useAppForm,
 	useAppSelector,
 	useCallback,
+	useDebounce,
 	useEffect,
+	useMemo,
 	useState,
 } from "~/libs/hooks/hooks.js";
-import { type Coordinates, type SelectOption } from "~/libs/types/types.js";
+import { type SelectOption } from "~/libs/types/types.js";
 import {
 	actions as pointOfInterestActions,
 	type PointsOfInterestResponseDto,
@@ -22,8 +25,8 @@ import styles from "./styles.module.css";
 
 const ConstructRoute = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
-	const filteredPois = useAppSelector(
-		(state) => state.pointsOfInterest.dataAll,
+	const { dataAll: filteredPois, dataStatus } = useAppSelector(
+		(state) => state.pointsOfInterest,
 	);
 	const { control } = useAppForm({
 		defaultValues: { searchPoi: null },
@@ -32,23 +35,12 @@ const ConstructRoute = (): React.JSX.Element => {
 	const [selectedPois, setSelectedPois] = useState<
 		PointsOfInterestResponseDto[]
 	>([]);
-	const [markers, setMarkers] = useState<{ coordinates: Coordinates }[]>([]);
-	const [selectOptions, setSelectOptions] = useState<
-		SelectOption<PointsOfInterestResponseDto>[]
-	>([]);
+	const [searchValue, setSearchValue] = useState<string>("");
+	const debouncedSearchValue = useDebounce(searchValue);
 
-	const handleSelectInputChange = useCallback(
-		(value: string) => {
-			if (value.length < PointsOfInterestValidationRule.NAME_MIN_LENGTH) {
-				setSelectOptions([]);
-
-				return;
-			}
-
-			void dispatch(pointOfInterestActions.loadAll({ name: value }));
-		},
-		[dispatch],
-	);
+	const handleSelectInputChange = useCallback((value: string) => {
+		setSearchValue(value);
+	}, []);
 
 	const handleSelectChange = useCallback(
 		(
@@ -81,21 +73,35 @@ const ConstructRoute = (): React.JSX.Element => {
 		void dispatch(routeActions.construct({ poiIds }));
 	}, [dispatch, selectedPois]);
 
-	useEffect(() => {
-		const newOptions = filteredPois.map((poi) => ({
+	const selectOptions = useMemo(() => {
+		return filteredPois.map((poi) => ({
 			label: poi.name,
 			value: poi,
 		}));
-		setSelectOptions(newOptions);
 	}, [filteredPois]);
 
-	useEffect(() => {
-		const coordinates = selectedPois.map(({ location: { coordinates } }) => ({
+	const markers = useMemo(() => {
+		return selectedPois.map(({ location: { coordinates } }) => ({
 			coordinates,
 		}));
-
-		setMarkers(coordinates);
 	}, [selectedPois]);
+
+	const isLoading = dataStatus === DataStatus.PENDING;
+
+	useEffect(() => {
+		if (
+			debouncedSearchValue.length <
+				PointsOfInterestValidationRule.NAME_MIN_LENGTH ||
+			debouncedSearchValue.length >
+				PointsOfInterestValidationRule.NAME_MAX_LENGTH
+		) {
+			return;
+		}
+
+		void dispatch(
+			pointOfInterestActions.loadAll({ name: debouncedSearchValue }),
+		);
+	}, [debouncedSearchValue, dispatch]);
 
 	return (
 		<>
@@ -116,6 +122,7 @@ const ConstructRoute = (): React.JSX.Element => {
 
 						<Select
 							control={control}
+							isLoading={isLoading}
 							label="Search POI"
 							name="searchPoi"
 							onChange={handleSelectChange}

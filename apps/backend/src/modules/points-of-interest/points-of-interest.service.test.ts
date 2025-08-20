@@ -255,7 +255,7 @@ describe("PointsOfInterestService", () => {
 			search: undefined,
 		});
 
-		const expectedData = mockEntities.map((item) => item.toObject());
+		const expectedData = mockEntities.map((item) => item.toSummaryObject());
 		assert.deepStrictEqual(result.data, expectedData);
 
 		assert.deepStrictEqual(result.meta, {

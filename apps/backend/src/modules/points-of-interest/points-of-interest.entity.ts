@@ -89,6 +89,18 @@ class PointsOfInterestEntity implements Entity {
 			name: this.name,
 		};
 	}
+
+	public toSummaryObject(): {
+		createdAt: string;
+		id: number;
+		name: string;
+	} {
+		return {
+			createdAt: this.createdAt as string,
+			id: this.id as number,
+			name: this.name,
+		};
+	}
 }
 
 export { PointsOfInterestEntity };

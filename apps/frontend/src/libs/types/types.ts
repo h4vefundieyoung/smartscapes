@@ -10,6 +10,7 @@ export {
 	type Coordinates,
 	type FileUploadResponseDto,
 	type PaginationMeta,
+	type PointGeometry,
 	type ValidationSchema,
 	type ValueOf,
 } from "@smartscapes/shared";

@@ -156,8 +156,8 @@ erDiagram
 
   files {
     int id PK
-    timestamp created_at
-    timestamp updated_at
+    dateTime created_at
+    dateTime updated_at
     varchar url
     varchar content_type
     enum folder

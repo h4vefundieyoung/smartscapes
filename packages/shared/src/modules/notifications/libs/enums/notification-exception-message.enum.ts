@@ -1,7 +1,7 @@
-const ExceptionMessage = {
-	NOTIFICATION_CREATE_FAIL: "Failed to create notification",
-	NOTIFICATION_NOT_FOUND: "Notification not found.",
-	NOTIFICATION_UNAUTHORIZED: "Unauthorized access",
+const NotificationExceptionMessage = {
+	CREATE_FAIL: "Failed to create notification",
+	NOT_FOUND: "Notification not found.",
+	UNAUTHORIZED: "Unauthorized access",
 } as const;
 
-export { ExceptionMessage as NotificationExceptionMessage };
+export { NotificationExceptionMessage };

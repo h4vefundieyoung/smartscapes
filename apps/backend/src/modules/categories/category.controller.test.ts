@@ -23,15 +23,15 @@ describe("CategoryController", () => {
 		name: "Popular",
 	};
 
-	it("create should create and return new route category", async () => {
-		const routeCategoryService = {
+	it("create should create and return new category", async () => {
+		const categoryService = {
 			create: (() =>
 				Promise.resolve(mockCategory)) as CategoryService["create"],
 		} as CategoryService;
 
-		const routeCategoryController = new CategoryController(
+		const categoryController = new CategoryController(
 			mockLogger,
-			routeCategoryService,
+			categoryService,
 		);
 
 		const requestOptions = {
@@ -40,7 +40,7 @@ describe("CategoryController", () => {
 			},
 		} as APIHandlerOptions<{ body: CategoryCreateRequestDto }>;
 
-		const result = await routeCategoryController.create(requestOptions);
+		const result = await categoryController.create(requestOptions);
 
 		assert.deepStrictEqual(result, {
 			payload: { data: mockCategory },
@@ -48,20 +48,20 @@ describe("CategoryController", () => {
 		});
 	});
 
-	it("findAll should return all route categories", async () => {
-		const routeCategoryService = {
+	it("findAll should return all categories", async () => {
+		const categoryService = {
 			findAll: (() =>
 				Promise.resolve({
 					items: [mockCategory],
 				})) as CategoryService["findAll"],
 		} as CategoryService;
 
-		const routeCategoryController = new CategoryController(
+		const categoryController = new CategoryController(
 			mockLogger,
-			routeCategoryService,
+			categoryService,
 		);
 
-		const result = await routeCategoryController.findAll();
+		const result = await categoryController.findAll();
 
 		assert.deepStrictEqual(result, {
 			payload: { data: [mockCategory] },

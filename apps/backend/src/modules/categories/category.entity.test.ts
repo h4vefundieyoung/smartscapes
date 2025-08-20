@@ -4,7 +4,7 @@ import { describe, it } from "node:test";
 import { CategoryEntity } from "./category.entity.js";
 
 describe("CategoryEntity", () => {
-	it("should create new route category entity", () => {
+	it("should create new category entity", () => {
 		const categoryData = {
 			id: 1,
 			key: "popular",
@@ -19,7 +19,7 @@ describe("CategoryEntity", () => {
 		assert.ok(categoryEntity instanceof CategoryEntity);
 	});
 
-	it("should initialize new route category without id", () => {
+	it("should initialize new category without id", () => {
 		const categoryData = {
 			key: "popular",
 			name: "Popular",

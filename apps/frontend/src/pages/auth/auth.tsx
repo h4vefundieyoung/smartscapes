@@ -1,5 +1,5 @@
 import logo from "~/assets/images/logo.svg";
-import { Navigate, TextLink } from "~/libs/components/components.js";
+import { Link, Navigate } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -63,7 +63,7 @@ const Auth = (): React.JSX.Element => {
 		<main className={styles["container"]}>
 			<div className={styles["left-panel"]}>
 				<div className={styles["logo"]}>
-					<TextLink to={AppRoute.ROOT}>
+					<Link to={AppRoute.ROOT}>
 						<img
 							alt="SmartScapes"
 							className={styles["auth-logo"]}
@@ -71,7 +71,7 @@ const Auth = (): React.JSX.Element => {
 							src={logo}
 							width="136"
 						/>
-					</TextLink>
+					</Link>
 				</div>
 
 				{handleFormRender(pathname)}

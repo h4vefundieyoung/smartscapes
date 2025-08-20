@@ -3,10 +3,20 @@ import { createSlice } from "@reduxjs/toolkit";
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
-import { type RouteGetByIdResponseDto } from "./../libs/types/types.js";
-import { create, getRouteById } from "./actions.js";
+import {
+	type RouteCreateRequestDto,
+	type RouteGetByIdResponseDto,
+} from "./../libs/types/types.js";
+import {
+	create,
+	discardCreateRouteData,
+	getRouteById,
+	restoreCreateRouteData,
+} from "./actions.js";
 
 type State = {
+	createRouteFormData: null | Partial<RouteCreateRequestDto>;
+	createRouteFormDataStatus: ValueOf<typeof DataStatus>;
 	createStatus: ValueOf<typeof DataStatus>;
 	dataStatus: ValueOf<typeof DataStatus>;
 	route: null | RouteGetByIdResponseDto;
@@ -14,6 +24,8 @@ type State = {
 };
 
 const initialState: State = {
+	createRouteFormData: null,
+	createRouteFormDataStatus: DataStatus.IDLE,
 	createStatus: DataStatus.IDLE,
 	dataStatus: DataStatus.IDLE,
 	route: null,
@@ -42,10 +54,30 @@ const { actions, reducer } = createSlice({
 		builder.addCase(getRouteById.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
 		});
+		builder.addCase(restoreCreateRouteData.pending, (state) => {
+			state.createRouteFormDataStatus = DataStatus.PENDING;
+		});
+		builder.addCase(restoreCreateRouteData.fulfilled, (state, action) => {
+			state.createRouteFormData = action.payload;
+			state.createRouteFormDataStatus = DataStatus.FULFILLED;
+		});
+		builder.addCase(restoreCreateRouteData.rejected, (state) => {
+			state.createRouteFormDataStatus = DataStatus.REJECTED;
+		});
+		builder.addCase(discardCreateRouteData.fulfilled, (state) => {
+			state.createRouteFormData = null;
+		});
 	},
 	initialState,
 	name: "routes",
-	reducers: {},
+	reducers: {
+		updateCreateRouteFormData: (state, action) => {
+			state.createRouteFormData = {
+				...state.createRouteFormData,
+				...action.payload,
+			} as Partial<RouteCreateRequestDto>;
+		},
+	},
 });
 
 export { actions, reducer };

@@ -1,7 +1,6 @@
 import {
 	AppLayout,
 	Loader,
-	Modal,
 	RouterOutlet,
 } from "~/libs/components/components.js";
 import { NAVIGATION_ITEMS_GROUPS } from "~/libs/constants/constants.js";
@@ -53,7 +52,6 @@ const App = (): React.JSX.Element => {
 	return (
 		<AppLayout excludedRoutes={[AppRoute.SIGN_IN, AppRoute.SIGN_UP]}>
 			<RouterOutlet />
-			<Modal />
 		</AppLayout>
 	);
 };

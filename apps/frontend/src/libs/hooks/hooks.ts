@@ -4,7 +4,6 @@ export { useAppForm } from "./use-app-form/use-app-form.hook.js";
 export { useAppNavigate } from "./use-app-navigate/use-app-navigate.hook.js";
 export { useAppSelector } from "./use-app-selector/use-app-selector.hook.js";
 export { useMapClient } from "./use-map-client/use-map-client.hook.js";
-export { useModal } from "./use-modal/use-modal.js";
 export { useTabNavigation } from "./use-tab-navigation/use-tab-navigation.hook.js";
 export {
 	createContext,
@@ -15,5 +14,5 @@ export {
 	useRef,
 	useState,
 } from "react";
-export { useController as useFormController } from "react-hook-form";
+export { useController as useFormController, useWatch } from "react-hook-form";
 export { useLocation, useParams, useSearchParams } from "react-router";

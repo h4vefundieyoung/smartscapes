@@ -1,11 +1,6 @@
 import { type RouteCreateRequestDto } from "~/modules/routes/routes.js";
 
-type CreateRouteFormValues = Omit<
-	RouteCreateRequestDto,
-	"createdByUserId" | "plannedPathId"
->;
-
-const DEFAULT_CREATE_ROUTE_PAYLOAD: CreateRouteFormValues = {
+const DEFAULT_CREATE_ROUTE_PAYLOAD: Partial<RouteCreateRequestDto> = {
 	description: "",
 	name: "",
 	poiIds: [],

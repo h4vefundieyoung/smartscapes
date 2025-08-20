@@ -1,12 +1,10 @@
-import { Button, Input, TextArea } from "~/libs/components/components.js";
-import { DataStatus } from "~/libs/enums/enums.js";
 import {
-	useAppForm,
-	useAppSelector,
-	useEffect,
-	useRef,
-} from "~/libs/hooks/hooks.js";
-import { type ValueOf } from "~/libs/types/types.js";
+	Button,
+	Input,
+	Modal,
+	TextArea,
+} from "~/libs/components/components.js";
+import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
 import {
 	pointOfInterestCreateValidationSchema,
 	type PointsOfInterestRequestDto,
@@ -15,25 +13,20 @@ import {
 import styles from "./styles.module.css";
 
 type Properties = {
-	closeModal?: () => void;
 	defaultLatitude: number;
 	defaultLongitude: number;
+	isOpen: boolean;
+	onClose: () => void;
 	onSubmit: (values: PointsOfInterestRequestDto) => void;
 };
 
 const CreatePOIModal = ({
-	closeModal,
 	defaultLatitude,
 	defaultLongitude,
+	isOpen,
+	onClose,
 	onSubmit,
 }: Properties): React.JSX.Element => {
-	const createStatus = useAppSelector(
-		(state) => state.pointsOfInterest.createStatus,
-	);
-	const previousCreateStatusReference = useRef<ValueOf<typeof DataStatus>>(
-		DataStatus.IDLE,
-	);
-
 	const { control, errors, handleReset, handleSubmit } =
 		useAppForm<PointsOfInterestRequestDto>({
 			defaultValues: {
@@ -47,17 +40,6 @@ const CreatePOIModal = ({
 			validationSchema: pointOfInterestCreateValidationSchema,
 		});
 
-	useEffect(() => {
-		if (
-			previousCreateStatusReference.current === DataStatus.PENDING &&
-			createStatus === DataStatus.FULFILLED
-		) {
-			closeModal?.();
-		}
-
-		previousCreateStatusReference.current = createStatus;
-	}, [createStatus, closeModal]);
-
 	const handleFormSubmit = (values: PointsOfInterestRequestDto): void => {
 		onSubmit({
 			...values,
@@ -70,9 +52,16 @@ const CreatePOIModal = ({
 		handleReset();
 	};
 
+	const handleClose = useCallback((): void => {
+		handleReset();
+		onClose();
+	}, [handleReset, onClose]);
+
 	return (
-		<div>
-			<h3 className={styles["title"]}>Create new POI</h3>
+		<Modal isOpen={isOpen} onClose={handleClose}>
+			<div className={styles["header"]}>
+				<h3 className={styles["title"]}>Create new POI</h3>
+			</div>
 			<form
 				className={styles["form"]}
 				onSubmit={handleSubmit(handleFormSubmit)}
@@ -97,7 +86,7 @@ const CreatePOIModal = ({
 					</div>
 				</div>
 			</form>
-		</div>
+		</Modal>
 	);
 };
 

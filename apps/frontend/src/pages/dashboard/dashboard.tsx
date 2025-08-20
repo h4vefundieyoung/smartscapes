@@ -5,12 +5,13 @@ import {
 	Select,
 } from "~/libs/components/components.js";
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
+import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppForm,
+	useAppSelector,
 	useCallback,
 	useEffect,
-	useModal,
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
@@ -91,23 +92,25 @@ const Dashboard = (): React.JSX.Element => {
 		void loadFiles();
 	}, []);
 
+	const [isCreatePOIOpen, setIsCreatePOIOpen] = useState<boolean>(false);
+	const createStatus = useAppSelector(
+		(state) => state.pointsOfInterest.createStatus,
+	);
+	const handleModalToggle = useCallback(() => {
+		setIsCreatePOIOpen((previous) => !previous);
+	}, []);
+
 	const handleSubmit = useCallback(
 		(payload: PointsOfInterestRequestDto): void => {
 			void dispatch(poiActions.create(payload));
 		},
 		[dispatch],
 	);
-
-	const { handleModalOpen } = useModal({
-		component: (
-			<CreatePOIModal
-				defaultLatitude={DEFAULT_LATITUDE}
-				defaultLongitude={DEFAULT_LONGITUDE}
-				onSubmit={handleSubmit}
-			/>
-		),
-		queryParameter: "create-poi",
-	});
+	useEffect(() => {
+		if (createStatus === DataStatus.FULFILLED) {
+			setIsCreatePOIOpen(false);
+		}
+	}, [createStatus]);
 
 	return (
 		<main className={styles["container"]}>
@@ -152,10 +155,17 @@ const Dashboard = (): React.JSX.Element => {
 				<div className={styles["button-container"]}>
 					<Button
 						label="Create new POI"
-						onClick={handleModalOpen}
+						onClick={handleModalToggle}
 						type="button"
 					/>
 				</div>
+				<CreatePOIModal
+					defaultLatitude={DEFAULT_LATITUDE}
+					defaultLongitude={DEFAULT_LONGITUDE}
+					isOpen={isCreatePOIOpen}
+					onClose={handleModalToggle}
+					onSubmit={handleSubmit}
+				/>
 			</div>
 		</main>
 	);

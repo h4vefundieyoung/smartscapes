@@ -1,202 +1,110 @@
 import { Button, Input, TextArea } from "~/libs/components/components.js";
-import { DataStatus } from "~/libs/enums/enums.js";
-import {
-	useAppForm,
-	useAppSelector,
-	useCallback,
-	useEffect,
-	useRef,
-	useSearchParams,
-} from "~/libs/hooks/hooks.js";
-import { storage, StorageKey } from "~/libs/modules/storage/storage.js";
-import { type ValueOf } from "~/libs/types/types.js";
+import { useAppForm, useEffect, useWatch } from "~/libs/hooks/hooks.js";
 import {
 	type RouteCreateRequestDto,
 	routesCreateValidationSchema,
 } from "~/modules/routes/routes.js";
-import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
 import { DEFAULT_CREATE_ROUTE_PAYLOAD } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	closeModal?: () => void;
-	onSubmit?: (data: RouteCreateRequestDto) => void;
-	registerCleanup?: (cleanupFunction: () => void) => void;
+	createRouteFormData?: null | Partial<RouteCreateRequestDto>;
+	onFormChange?: (data: Partial<RouteCreateRequestDto>) => void;
+	onSubmit: (data: RouteCreateRequestDto) => void;
 };
 
 const CreateRouteForm = ({
-	closeModal,
+	createRouteFormData,
+	onFormChange,
 	onSubmit,
-	registerCleanup,
-}: Properties = {}): React.JSX.Element => {
-	const [searchParameters] = useSearchParams();
-	const hasBeenSubmittedReference = useRef(false);
-
-	const { authenticatedUser } = useAppSelector((state) => state.auth) as {
-		authenticatedUser: UserAuthResponseDto;
-	};
-
-	const createStatus = useAppSelector((state) => state.route.createStatus);
-	const previousCreateStatusReference = useRef<ValueOf<typeof DataStatus>>(
-		DataStatus.IDLE,
-	);
-
-	const {
-		control,
-		errors,
-		handleSubmit: handleFormSubmit,
-		handleValueSet,
-	} = useAppForm({
-		defaultValues: DEFAULT_CREATE_ROUTE_PAYLOAD,
-		validationSchema: routesCreateValidationSchema,
-	});
-
-	const plannedRouteId = searchParameters.get("plannedRouteId");
-	const isRouteConstructed = Boolean(plannedRouteId);
-
-	useEffect(() => {
-		if (
-			previousCreateStatusReference.current === DataStatus.PENDING &&
-			createStatus === DataStatus.FULFILLED
-		) {
-			closeModal?.();
-		}
-
-		previousCreateStatusReference.current = createStatus;
-	}, [createStatus, closeModal]);
-
-	useEffect(() => {
-		const loadSavedData = async (): Promise<void> => {
-			const savedData = await storage.get(StorageKey.CREATE_ROUTE_FORM_DATA);
-
-			if (!savedData) {
-				return;
-			}
-
-			try {
-				const { description, name } = JSON.parse(savedData) as {
-					description: string;
-					name: string;
-				};
-
-				if (name) {
-					handleValueSet("name", name);
-				}
-
-				if (description) {
-					handleValueSet("description", description);
-				}
-			} catch {
-				await storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
-			}
-		};
-
-		void loadSavedData();
-	}, [handleValueSet]);
-
-	useEffect(() => {
-		const subscription = control._subjects.state.subscribe({
-			next: () => {
-				const { description = "", name = "" } = control._formValues as {
-					description: string;
-					name: string;
-				};
-
-				if (name || description) {
-					void storage.set(
-						StorageKey.CREATE_ROUTE_FORM_DATA,
-						JSON.stringify({ description, name }),
-					);
-				} else {
-					void storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
-				}
-			},
+}: Properties): React.JSX.Element => {
+	const { control, errors, handleSubmit, handleValueSet } =
+		useAppForm<RouteCreateRequestDto>({
+			defaultValues: DEFAULT_CREATE_ROUTE_PAYLOAD,
+			validationSchema: routesCreateValidationSchema,
 		});
 
-		return (): void => {
-			subscription.unsubscribe();
-		};
-	}, [control]);
+	const [name, description] = useWatch({
+		control,
+		name: ["name", "description"],
+	});
 
-	const handleModalClose = useCallback((): void => {
-		if (!hasBeenSubmittedReference.current) {
-			void storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
+	const plannedPathId = useWatch({
+		control,
+		name: "plannedPathId",
+	});
+
+	useEffect(() => {
+		if (onFormChange) {
+			onFormChange({ description, name });
 		}
-	}, []);
+	}, [description, name, onFormChange]);
 
-	useEffect((): void => {
-		registerCleanup?.(handleModalClose);
-	}, [registerCleanup, handleModalClose]);
+	useEffect(() => {
+		if (createRouteFormData?.name) {
+			handleValueSet("name", createRouteFormData.name);
+		}
 
-	const handleSubmit = useCallback(
-		(data: typeof DEFAULT_CREATE_ROUTE_PAYLOAD): void => {
-			if (!onSubmit) {
-				return;
-			}
+		if (createRouteFormData?.description) {
+			handleValueSet("description", createRouteFormData.description);
+		}
 
-			const plannedRouteId = searchParameters.get("plannedRouteId");
+		if (createRouteFormData?.plannedPathId) {
+			handleValueSet("plannedPathId", createRouteFormData.plannedPathId);
+		}
 
-			const completeData: RouteCreateRequestDto = {
-				...data,
-				createdByUserId: authenticatedUser.id,
-				plannedPathId: plannedRouteId ? Number(plannedRouteId) : 0,
-			};
-
-			hasBeenSubmittedReference.current = true;
-			onSubmit(completeData);
-			void storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
-		},
-		[onSubmit, authenticatedUser.id, searchParameters],
-	);
+		if (createRouteFormData?.poiIds) {
+			handleValueSet("poiIds", createRouteFormData.poiIds);
+		}
+	}, [createRouteFormData, handleValueSet]);
 
 	return (
-		<div>
-			<h4 className={styles["title"]}>Create New Route</h4>
-			<form
-				className={styles["form"]}
-				onSubmit={handleFormSubmit(handleSubmit)}
-			>
-				<div className={styles["field"]}>
-					<Input control={control} errors={errors} label="Name" name="name" />
-				</div>
+		<>
+			<div className={styles["header"]}>
+				<h3 className={styles["title"]}>Create new route</h3>
+			</div>
+			<form className={styles["form"]} onSubmit={handleSubmit(onSubmit)}>
+				<Input
+					control={control}
+					errors={errors}
+					label="Name"
+					name="name"
+					type="text"
+				/>
 
-				<div className={styles["field"]}>
-					<div className={styles["route-section"]}>
-						<span className={styles["label"]}>Route</span>
-						{isRouteConstructed && (
-							<div>
-								<span>Route constructed</span>
-							</div>
-						)}
+				<div className={styles["route-section"]}>
+					<span className={styles["label"]}>Route</span>
+					{Boolean(plannedPathId) && (
 						<div>
-							<Button
-								label="Construct"
-								to="/routes/construct?returnTo=/routes?modal=create-route"
-								type="button"
-								variant="outlined"
-							/>
+							<span>Route constructed</span>
 						</div>
+					)}
+					<div>
+						<Button
+							label="Construct"
+							to="/routes/construct?returnTo=/routes?modal=create-route"
+							type="button"
+							variant="outlined"
+						/>
 					</div>
 				</div>
 
-				<div className={styles["field"]}>
-					<TextArea
-						control={control}
-						errors={errors}
-						label="Description"
-						name="description"
-						rows={5}
-					/>
-				</div>
+				<TextArea
+					control={control}
+					errors={errors}
+					label="Description"
+					name="description"
+					rows={5}
+				/>
 
 				<div className={styles["footer"]}>
-					<div className={styles["button-container"]}>
+					<div className={styles["action-buttons"]}>
 						<Button label="Create" type="submit" />
 					</div>
 				</div>
 			</form>
-		</div>
+		</>
 	);
 };
 

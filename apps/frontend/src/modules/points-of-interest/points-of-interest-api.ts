@@ -6,9 +6,10 @@ import { type APIResponse } from "~/libs/types/types.js";
 
 import { PointsOfInterestApiPath } from "./libs/enums/enums.js";
 import {
+	type PointsOfInterestPaginatedResponseDto,
+	type PointsOfInterestQueryRequest,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
-	type PointsOfInterestSearchQuery,
 } from "./libs/types/types.js";
 
 type Constructor = {
@@ -38,26 +39,31 @@ class PointOfInterestApi extends BaseHTTPApi {
 		return (await response.json()) as APIResponse<PointsOfInterestResponseDto>;
 	}
 
+	public async findPaginated(
+		payload: PointsOfInterestQueryRequest,
+	): Promise<APIResponse<PointsOfInterestPaginatedResponseDto>> {
+		const response = await this.load(
+			this.getFullEndpoint(PointsOfInterestApiPath.ROOT, {}),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "GET",
+				query: payload,
+			},
+		);
+
+		return (await response.json()) as APIResponse<PointsOfInterestPaginatedResponseDto>;
+	}
+
 	public async getAll(
-		query?: PointsOfInterestSearchQuery,
+		query?: PointsOfInterestQueryRequest,
 	): Promise<APIResponse<PointsOfInterestResponseDto[]>> {
-		let queryString = "";
-
-		if (query) {
-			const queryParameters = new URLSearchParams();
-
-			for (let [key, value] of Object.entries(query)) {
-				queryParameters.append(key, String(value));
-			}
-
-			queryString = `?${queryParameters.toString()}`;
-		}
-
 		const response = await this.load<
 			APIResponse<PointsOfInterestResponseDto[]>
-		>(this.getFullEndpoint(queryString, {}), {
+		>(this.getFullEndpoint(PointsOfInterestApiPath.ROOT, {}), {
 			hasAuth: true,
 			method: "GET",
+			query,
 		});
 
 		return await response.json();

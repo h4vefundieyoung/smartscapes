@@ -19,6 +19,7 @@
 .description {
 	font-size: var(--font-size-small);
 	line-height: 1.5;
+	overflow-wrap: break-word;
 }
 
 @media (width <= 1440px) {

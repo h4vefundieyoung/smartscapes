@@ -2,9 +2,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 import {
+	type PointsOfInterestPaginatedResponseDto,
+	type PointsOfInterestQueryRequest,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
-	type PointsOfInterestSearchQuery,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
 import { name as poiDetailsSliceName } from "./points-of-interest-details.slice.js";
@@ -33,9 +34,21 @@ const create = createAsyncThunk<
 	return pointOfInterest;
 });
 
+const findPaginated = createAsyncThunk<
+	APIResponse<PointsOfInterestPaginatedResponseDto>,
+	PointsOfInterestQueryRequest,
+	AsyncThunkConfig
+>(`${poiSliceName}/find-paginated-items`, async (payload, { extra }) => {
+	const { pointOfInterestApi } = extra;
+
+	const pointsOfInterest = await pointOfInterestApi.findPaginated(payload);
+
+	return pointsOfInterest;
+});
+
 const loadAll = createAsyncThunk<
 	APIResponse<PointsOfInterestResponseDto[]>,
-	PointsOfInterestSearchQuery,
+	PointsOfInterestQueryRequest,
 	AsyncThunkConfig
 >(`${poiSliceName}/load-all`, async (query, { extra }) => {
 	const { pointOfInterestApi } = extra;
@@ -43,4 +56,4 @@ const loadAll = createAsyncThunk<
 	return await pointOfInterestApi.getAll(query);
 });
 
-export { create, getById, loadAll };
+export { create, findPaginated, getById, loadAll };

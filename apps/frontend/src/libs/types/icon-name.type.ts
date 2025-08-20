@@ -1,8 +1,11 @@
 type IconName =
 	| "analytics"
 	| "arrowDown"
+	| "caretDown"
+	| "caretUp"
 	| "close"
 	| "dashboard"
+	| "edit"
 	| "error"
 	| "eye"
 	| "eyeOff"

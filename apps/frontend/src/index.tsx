@@ -18,10 +18,10 @@ import { ConstructRoute } from "./pages/construct-route/construct-route.js";
 import { Dashboard } from "./pages/dashboard/dashboard.js";
 import { Explore } from "./pages/explore/explore.js";
 import { Landing } from "./pages/landing/landing.jsx";
+import { ManageRoutes } from "./pages/manage-routes/manage-routes.js";
 import { PointsOfInterestDetails } from "./pages/points-of-interest-details/points-of-interest-details.js";
 import { Profile } from "./pages/profile/profile.js";
 import { RouteDetails } from "./pages/route-description/route-details.js";
-import { Routes } from "./pages/routes/routes.js";
 
 pwa.register();
 
@@ -73,10 +73,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 									<ProtectedRoute
 										routePermissions={[PermissionKey.MANAGE_ROUTES]}
 									>
-										<Routes />
+										<ManageRoutes />
 									</ProtectedRoute>
 								),
-								path: AppRoute.ROUTES,
+								path: AppRoute.MANAGE_ROUTES,
 							},
 							{
 								element: <ConstructRoute />,

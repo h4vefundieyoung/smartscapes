@@ -9,6 +9,8 @@ export {
 	type APIResponse,
 	type APIValidationErrorDetail,
 	type Coordinates,
+	type PaginationMeta,
+	type PointGeometry,
 	type ValidationSchema,
 	type ValueOf,
 } from "@smartscapes/shared";

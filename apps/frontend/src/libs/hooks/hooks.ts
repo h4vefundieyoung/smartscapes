@@ -5,6 +5,7 @@ export { useAppNavigate } from "./use-app-navigate/use-app-navigate.hook.js";
 export { useAppSelector } from "./use-app-selector/use-app-selector.hook.js";
 export { useDebounce } from "./use-debounce/use-debounce.hook.js";
 export { useMapClient } from "./use-map-client/use-map-client.hook.js";
+export { usePagination } from "./use-pagination/use-pagination.hook.js";
 export { useTabNavigation } from "./use-tab-navigation/use-tab-navigation.hook.js";
 export {
 	createContext,

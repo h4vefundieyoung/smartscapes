@@ -1,0 +1,24 @@
+.map-field {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	width: 100%;
+}
+
+.label-caption {
+	font-size: var(--font-size-small);
+	font-weight: var(--font-weight-regular);
+	line-height: 1.5;
+	color: var(--color-text-strong);
+}
+
+.map-section {
+	height: 420px;
+	overflow: hidden;
+	border-radius: 8px;
+}
+
+.map-section-error {
+	background-color: var(--color-fill-error-weak);
+	border: 2px solid var(--color-stroke-error-strong);
+}

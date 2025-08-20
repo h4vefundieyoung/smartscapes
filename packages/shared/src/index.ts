@@ -9,6 +9,7 @@ export {
 	AppEnvironment,
 	CommonExceptionMessage,
 	ContentType,
+	LocationType,
 } from "./libs/enums/enums.js";
 export { ValidationError } from "./libs/exceptions/exceptions.js";
 export { changeStringCase, configureString } from "./libs/helpers/helpers.js";
@@ -29,6 +30,8 @@ export {
 	type APIValidationErrorDetail,
 	type Coordinates,
 	type LineStringGeometry,
+	type PaginationMeta,
+	type PaginationQuery,
 	type PointGeometry,
 	type ValidationSchema,
 	type ValueOf,
@@ -69,13 +72,15 @@ export {
 	PermissionKey,
 } from "./modules/permission/permission.js";
 export {
-	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
 	PointsOfInterestApiPath,
+	pointsOfInterestCreateValidationSchema,
+	type PointsOfInterestPaginatedResponseDto,
+	type PointsOfInterestPaginatedSummary,
+	type PointsOfInterestQueryRequest,
+	pointsOfInterestQueryValidationSchema,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
-	type PointsOfInterestSearchQuery,
-	pointsOfInterestSearchQueryValidationSchema,
 } from "./modules/points-of-interest/points-of-interest.js";
 export {
 	type ReviewCreatePayload,

@@ -155,11 +155,11 @@ erDiagram
   }
 
   files {
-    id integer [primary key]
-    created_at timestamp
-    updated_at timestamp
-    url varchar
-    content_type varchar
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    varchar url
+    varchar content_type
   }
 
   users }|--|| groups : group_id

@@ -1,7 +1,9 @@
+import { type Coordinates } from "./types.js";
+
 type MapMarkerOptions = {
-	coordinates: [number, number];
+	coordinates: Coordinates;
 	isDraggable?: boolean;
-	onDragEnd?: (coords: [number, number]) => void;
+	onDragEnd?: (coords: Coordinates) => void;
 };
 
 export { type MapMarkerOptions };

@@ -73,7 +73,7 @@ const Select = <TFieldValues extends FieldValues, TOptionValue = string>({
 				isLoading={isLoading}
 				isMulti={isMulti}
 				name={name}
-				{...(onChange ? { onChange } : { onChange: handleChange })}
+				onChange={onChange ?? handleChange}
 				{...(onInputChange ? { onInputChange } : {})}
 				options={options as PathValue<TFieldValues, Path<TFieldValues>>}
 				placeholder={placeholder}

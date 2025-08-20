@@ -41,7 +41,6 @@ erDiagram
     text password_hash
     text password_salt
     int group_id FK
-    varchar avatarUrl
   }
 
   groups {

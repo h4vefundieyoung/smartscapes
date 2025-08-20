@@ -1,0 +1,20 @@
+.tbody {
+	width: 100%;
+	border-right: 2px solid var(--color-stroke-weak);
+}
+
+.td {
+	padding: 4px 24px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: var(--font-size-small);
+	font-weight: var(--font-weight-regular);
+	line-height: 1.5;
+	color: var(--color-text-strong);
+	white-space: nowrap;
+	border-bottom: 2px solid var(--color-stroke-weak);
+}
+
+.tbody .tr:last-child .td {
+	border-bottom: none;
+}

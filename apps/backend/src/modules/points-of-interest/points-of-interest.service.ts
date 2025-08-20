@@ -8,6 +8,8 @@ import { PointOfInterestExceptionMessage } from "./libs/enums/enums.js";
 import { PointOfInterestError } from "./libs/exceptions/exceptions.js";
 import {
 	type PointsOfInterestFindAllOptions,
+	type PointsOfInterestPaginatedOptions,
+	type PointsOfInterestPaginatedResponseDto,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 } from "./libs/types/type.js";
@@ -92,6 +94,31 @@ class PointsOfInterestService implements Service {
 		}
 
 		return item.toObject();
+	}
+
+	public async findPaginated(
+		options: PointsOfInterestPaginatedOptions,
+	): Promise<PointsOfInterestPaginatedResponseDto> {
+		const { page, perPage, search } = options;
+
+		const { items, total } =
+			await this.pointsOfInterestRepository.findPaginated({
+				page,
+				perPage,
+				search,
+			});
+
+		const totalPages = Math.ceil(total / perPage);
+
+		return {
+			data: items.map((item) => item.toSummaryObject()),
+			meta: {
+				currentPage: page,
+				itemsPerPage: perPage,
+				total,
+				totalPages,
+			},
+		};
 	}
 
 	public async patch(

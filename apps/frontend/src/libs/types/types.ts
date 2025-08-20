@@ -3,6 +3,7 @@ export { type IconName } from "./icon-name.type.js";
 export { type Location } from "./location.type.js";
 export { type NavigationItem } from "./navigation-item.type.js";
 export { type NavigationItemsGroup } from "./navigation-items-group.type.js";
+export { type SelectOption } from "./select-option.type.js";
 export {
 	type APIErrorResponse,
 	type APIResponse,

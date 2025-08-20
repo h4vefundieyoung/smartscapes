@@ -4,7 +4,6 @@ import {
 	Loader,
 	Select,
 } from "~/libs/components/components.js";
-import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -17,6 +16,7 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { HTTPError } from "~/libs/modules/http/http.js";
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
+import { type SelectOption } from "~/libs/types/types.js";
 import { fileApi } from "~/modules/files/files.js";
 import { FileFolderName } from "~/modules/files/libs/enums/enums.js";
 import { type PointsOfInterestRequestDto } from "~/modules/points-of-interest/libs/types/types.js";

@@ -19,18 +19,18 @@ const Button = ({
 	to,
 	type = "submit",
 }: Properties): React.JSX.Element => {
-	const styleList = clsx(styles["button"], styles[form], styles[color]);
+	const style = clsx(styles["button"], styles[form], styles[color]);
 
 	if (to) {
 		return (
-			<a className={styleList} href={to}>
+			<a className={style} href={to}>
 				{label}
 			</a>
 		);
 	}
 
 	return (
-		<button className={styleList} onClick={onClick} type={type}>
+		<button className={style} onClick={onClick} type={type}>
 			{label}
 		</button>
 	);

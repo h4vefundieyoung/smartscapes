@@ -39,7 +39,7 @@ const ManageRoutes = (): React.JSX.Element => {
 	};
 
 	const handleModalOpen = useCallback(() => {
-		void dispatch(routesActions.discardFormData(null));
+		void dispatch(routesActions.discardCreateRouteFormData(null));
 
 		setSearchParameters((previous) => {
 			const newParameters = new URLSearchParams(previous);
@@ -53,10 +53,10 @@ const ManageRoutes = (): React.JSX.Element => {
 		const hasData = formData && Object.keys(formData).length > 0;
 
 		if (hasData) {
-			await dispatch(routesActions.preserveFormData(null));
+			await dispatch(routesActions.preserveCreateRouteFormData(null));
 		}
 
-		await dispatch(routesActions.discardFormData(null));
+		await dispatch(routesActions.discardCreateRouteFormData(null));
 
 		setSearchParameters((previous) => {
 			const newParameters = new URLSearchParams(previous);
@@ -69,7 +69,7 @@ const ManageRoutes = (): React.JSX.Element => {
 
 	const handleFormChange = useCallback(
 		(formData: Partial<RouteCreateRequestDto>) => {
-			dispatch(routesActions.updateFormData(formData));
+			dispatch(routesActions.updateCreateRouteFormData(formData));
 		},
 		[dispatch],
 	);
@@ -89,14 +89,14 @@ const ManageRoutes = (): React.JSX.Element => {
 
 	useEffect(() => {
 		if (isModalOpen) {
-			void dispatch(routesActions.restoreFormData(null));
+			void dispatch(routesActions.restoreCreateRouteFormData(null));
 		}
 	}, [dispatch, isModalOpen]);
 
 	useEffect(() => {
 		if (plannedRouteId) {
 			dispatch(
-				routesActions.updateFormData({
+				routesActions.updateCreateRouteFormData({
 					plannedPathId: Number(plannedRouteId),
 				}),
 			);
@@ -105,7 +105,7 @@ const ManageRoutes = (): React.JSX.Element => {
 
 	useEffect(() => {
 		if (createStatus === DataStatus.FULFILLED) {
-			void dispatch(routesActions.discardFormData(null));
+			void dispatch(routesActions.discardCreateRouteFormData(null));
 
 			setSearchParameters((previous) => {
 				const newParameters = new URLSearchParams(previous);
@@ -119,7 +119,7 @@ const ManageRoutes = (): React.JSX.Element => {
 
 	useEffect(() => {
 		const saveData = (): void => {
-			void dispatch(routesActions.preserveFormData(null));
+			void dispatch(routesActions.preserveCreateRouteFormData(null));
 		};
 
 		const handleVisibilityChange = (): void => {

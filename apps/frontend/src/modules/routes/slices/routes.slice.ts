@@ -9,11 +9,11 @@ import {
 } from "./../libs/types/types.js";
 import {
 	create,
-	discardFormData,
+	discardCreateRouteFormData,
 	getAll,
 	getRouteById,
-	restoreFormData,
-	updateFormData,
+	restoreCreateRouteFormData,
+	updateCreateRouteFormData,
 } from "./actions.js";
 
 type State = {
@@ -68,22 +68,22 @@ const { actions, name, reducer } = createSlice({
 			state.dataStatus = DataStatus.REJECTED;
 		});
 
-		builder.addCase(restoreFormData.pending, (state) => {
+		builder.addCase(restoreCreateRouteFormData.pending, (state) => {
 			state.formDataStatus = DataStatus.PENDING;
 		});
-		builder.addCase(restoreFormData.fulfilled, (state, action) => {
+		builder.addCase(restoreCreateRouteFormData.fulfilled, (state, action) => {
 			state.formData = action.payload;
 			state.formDataStatus = DataStatus.FULFILLED;
 		});
-		builder.addCase(restoreFormData.rejected, (state) => {
+		builder.addCase(restoreCreateRouteFormData.rejected, (state) => {
 			state.formDataStatus = DataStatus.REJECTED;
 		});
 
-		builder.addCase(discardFormData.fulfilled, (state) => {
+		builder.addCase(discardCreateRouteFormData.fulfilled, (state) => {
 			state.formData = null;
 		});
 
-		builder.addCase(updateFormData, (state, action) => {
+		builder.addCase(updateCreateRouteFormData, (state, action) => {
 			state.formData = {
 				...state.formData,
 				...action.payload,

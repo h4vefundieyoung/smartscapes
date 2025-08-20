@@ -14,7 +14,7 @@ const create = createAsyncThunk<
 	APIResponse<RouteGetByIdResponseDto>,
 	RouteCreateRequestDto,
 	AsyncThunkConfig
->("routes/create", async (payload, { extra }) => {
+>(`${sliceName}/create`, async (payload, { extra }) => {
 	const { routesApi } = extra;
 
 	return await routesApi.create(payload);
@@ -24,7 +24,7 @@ const getRouteById = createAsyncThunk<
 	APIResponse<RouteGetByIdResponseDto>,
 	number,
 	AsyncThunkConfig
->("routes/get-route-by-id", (id, { extra }) => {
+>(`${sliceName}/get-route-by-id`, (id, { extra }) => {
 	const { routesApi } = extra;
 
 	return routesApi.getRouteById(id);
@@ -40,8 +40,12 @@ const getAll = createAsyncThunk<
 	return await routesApi.getAll(options);
 });
 
-const preserveFormData = createAsyncThunk<unknown, unknown, AsyncThunkConfig>(
-	"routes/preserve-form-data",
+const preserveCreateRouteFormData = createAsyncThunk<
+	unknown,
+	unknown,
+	AsyncThunkConfig
+>(
+	`${sliceName}/preserve-create-route-form-data`,
 	async (_, { extra, getState }) => {
 		const { storage } = extra;
 		const state = getState() as {
@@ -57,11 +61,11 @@ const preserveFormData = createAsyncThunk<unknown, unknown, AsyncThunkConfig>(
 	},
 );
 
-const restoreFormData = createAsyncThunk<
+const restoreCreateRouteFormData = createAsyncThunk<
 	null | Partial<RouteCreateRequestDto>,
 	unknown,
 	AsyncThunkConfig
->("routes/restore-form-data", async (_, { extra }) => {
+>(`${sliceName}/restore-create-route-form-data`, async (_, { extra }) => {
 	const { storage } = extra;
 
 	const savedData = await storage.get<string>(
@@ -81,24 +85,25 @@ const restoreFormData = createAsyncThunk<
 	return null;
 });
 
-const discardFormData = createAsyncThunk<unknown, unknown, AsyncThunkConfig>(
-	"routes/discard-form-data",
-	async (_, { extra }) => {
-		const { storage } = extra;
-		await storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
-	},
-);
+const discardCreateRouteFormData = createAsyncThunk<
+	unknown,
+	unknown,
+	AsyncThunkConfig
+>(`${sliceName}/discard-create-route-form-data`, async (_, { extra }) => {
+	const { storage } = extra;
+	await storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
+});
 
-const updateFormData = createAction<Partial<RouteCreateRequestDto>>(
-	`${sliceName}/update-form-data`,
+const updateCreateRouteFormData = createAction<Partial<RouteCreateRequestDto>>(
+	`${sliceName}/update-create-route-form-data`,
 );
 
 export {
 	create,
-	discardFormData,
+	discardCreateRouteFormData,
 	getAll,
 	getRouteById,
-	preserveFormData,
-	restoreFormData,
-	updateFormData,
+	preserveCreateRouteFormData,
+	restoreCreateRouteFormData,
+	updateCreateRouteFormData,
 };

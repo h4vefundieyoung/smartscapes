@@ -10,6 +10,7 @@ import { type UserService } from "~/modules/users/user.service.js";
 
 import { UsersApiPath } from "./libs/enums/enums.js";
 import {
+	type UserAuthResponseDto,
 	type UserGetByIdItemResponseDto,
 	type UserPublicProfileResponseDto,
 } from "./libs/types/types.js";
@@ -52,7 +53,7 @@ class UserController extends BaseController {
 		this.addRoute({
 			handler: this.findUserProfile.bind(this),
 			method: "GET",
-			path: "/:id/:currentUserId",
+			path: "/:id",
 		});
 	}
 
@@ -91,7 +92,7 @@ class UserController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /users/{id}/{currentUserId}:
+	 * /users/{id}:
 	 *   get:
 	 *     security:
 	 *      - bearerAuth: []
@@ -101,11 +102,6 @@ class UserController extends BaseController {
 	 *     parameters:
 	 *       - in: path
 	 *         name: id
-	 *         required: true
-	 *         schema:
-	 *           type: string
-	 *       - in: path
-	 *         name: currentUserId
 	 *         required: true
 	 *         schema:
 	 *           type: string
@@ -123,15 +119,21 @@ class UserController extends BaseController {
 
 	public async findUserProfile(
 		options: APIHandlerOptions<{
-			params: { currentUserId: string; id: string };
+			params: { id: string };
 		}>,
 	): Promise<APIHandlerResponse<UserPublicProfileResponseDto>> {
-		const id = Number(options.params.id);
-		const currentUserId = Number(options.params.currentUserId);
-		const user = await this.userService.findUserProfile({ currentUserId, id });
+		const { params, user } = options;
+		const id = Number(params.id);
+
+		const currentUserId = (user as UserAuthResponseDto).id;
+
+		const userProfile = await this.userService.findUserProfile(
+			id,
+			currentUserId,
+		);
 
 		return {
-			payload: { data: user },
+			payload: { data: userProfile },
 			status: HTTPCode.OK,
 		};
 	}

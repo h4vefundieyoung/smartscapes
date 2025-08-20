@@ -55,13 +55,11 @@ class UserApi extends BaseHTTPApi {
 
 	public async getProfile(
 		id: number,
-		currentUserId: number,
 	): Promise<APIResponse<UserPublicProfileResponseDto>> {
 		const response = await this.load<APIResponse<UserPublicProfileResponseDto>>(
-			this.getFullEndpoint(
-				`${UsersApiPath.ROOT}${id.toString()}/${currentUserId.toString()}`,
-				{},
-			),
+			this.getFullEndpoint(UsersApiPath.$USER_ID_GET_PROFILE, {
+				id: id.toString(),
+			}),
 			{
 				hasAuth: true,
 				method: "GET",

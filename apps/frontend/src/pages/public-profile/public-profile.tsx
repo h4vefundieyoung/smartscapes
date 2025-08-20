@@ -1,10 +1,5 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import {
-	Avatar,
-	Button,
-	Header,
-	Loader,
-} from "~/libs/components/components.js";
+import { Avatar, Button, Loader } from "~/libs/components/components.js";
 import {
 	useAppSelector,
 	useCallback,
@@ -28,11 +23,9 @@ const PublicProfile = (): React.JSX.Element => {
 
 	useEffect(() => {
 		if (id && authenticatedUser) {
-			void userApi
-				.getProfile(Number.parseInt(id), authenticatedUser.id)
-				.then((resp) => {
-					setUserProfile(resp.data);
-				});
+			void userApi.getProfile(Number.parseInt(id)).then((resp) => {
+				setUserProfile(resp.data);
+			});
 		}
 	}, [id, authenticatedUser]);
 
@@ -66,8 +59,6 @@ const PublicProfile = (): React.JSX.Element => {
 
 	return (
 		<div className={styles["container"]}>
-			<Header actions={[]} user={authenticatedUser} />
-
 			<main className={styles["profile-container"]}>
 				<div className={styles["profile-header"]}>
 					<div className={styles["user-info"]}>

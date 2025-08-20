@@ -1,5 +1,5 @@
+export { type MapMarkerOptions } from "./map-marker-options.type.js";
 export { type MapMarker } from "./map-marker.type.js";
-export { type MapMarkerOptions } from "./marker-options.type.js";
 export {
 	type ControlPosition,
 	type GeolocateControlOptions,

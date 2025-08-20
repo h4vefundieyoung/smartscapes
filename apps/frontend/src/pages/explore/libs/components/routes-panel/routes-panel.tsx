@@ -62,8 +62,8 @@ const RoutesPanel = (): React.JSX.Element => {
 			<>
 				{locationError?.trim() && (
 					<div className={styles["warning"]}>
-						Location access failed: {locationError}. <br />
-						Please enable geolocation to see routes near you.
+						<div>Location access failed: {locationError}.</div>
+						<div>Please enable geolocation to see routes near you.</div>
 					</div>
 				)}
 

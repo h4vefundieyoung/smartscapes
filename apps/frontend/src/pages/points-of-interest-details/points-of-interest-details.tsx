@@ -47,10 +47,6 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 						</p>
 					</>
 				)}
-				<section>
-					<h2>Routes</h2>
-					<ul />
-				</section>
 			</main>
 		</>
 	);

@@ -1,36 +1,39 @@
-import clsx from "clsx";
+import { combineClassNames } from "~/libs/helpers/helpers.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
-	btnColor?: "green" | "outline-green" | "outline-red";
-	btnType?: "filled" | "outlined";
 	label: string;
 	onClick?: () => void;
 	to?: string;
 	type?: "button" | "submit";
+	variant?: "outlined" | "outlined-danger" | "primary";
 };
 
 const Button = ({
-	btnColor: buttonColor = "green",
-	btnType: buttonType = "filled",
 	label,
 	onClick,
 	to,
 	type = "submit",
+	variant = "primary",
 }: Properties): React.JSX.Element => {
-	const style = clsx(styles["button"], styles[buttonColor], styles[buttonType]);
+	const buttonClass = combineClassNames(
+		styles["button"],
+		variant === "outlined" && styles["button-outlined"],
+		variant === "outlined-danger" && styles["outlined-danger"],
+		variant === "primary" && styles["button-primary"],
+	);
 
 	if (to) {
 		return (
-			<a className={style} href={to}>
+			<a className={buttonClass} href={to}>
 				{label}
 			</a>
 		);
 	}
 
 	return (
-		<button className={style} onClick={onClick} type={type}>
+		<button className={buttonClass} onClick={onClick} type={type}>
 			{label}
 		</button>
 	);

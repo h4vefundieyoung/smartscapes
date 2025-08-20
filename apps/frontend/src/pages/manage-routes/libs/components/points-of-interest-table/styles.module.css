@@ -6,8 +6,15 @@
 
 .title {
 	flex-shrink: 0;
-	margin: 0 0 24px;
+	margin: 0;
 	font-size: var(--font-size-h2);
 	line-height: 1.25;
 	color: var(--color-text-strong);
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 0 0 24px;
 }

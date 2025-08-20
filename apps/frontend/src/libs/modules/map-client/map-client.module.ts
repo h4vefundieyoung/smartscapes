@@ -38,47 +38,32 @@ class MapClient {
 		}
 
 		const control = new mapboxgl.GeolocateControl(GEOLOCATE_CONTROL_OPTIONS);
-
 		this.addControl(
 			MapControlId.GEOLOCATE,
 			control,
 			MAP_CONTROLS_POSITION["GEOLOCATE"] as ControlPosition,
 		);
 
-		this.map.on(MapEventType.LOAD, () => {
-			setTimeout(() => {
-				control.trigger();
-			}, GEOLOCATE_AUTO_TRIGGER_DELAY);
-		});
+		const trigger = (): ReturnType<typeof setTimeout> =>
+			setTimeout(() => control.trigger(), GEOLOCATE_AUTO_TRIGGER_DELAY);
+
+		if (this.map.loaded()) {
+			trigger();
+		} else {
+			const onLoadOnce = (): void => {
+				this.map?.off(MapEventType.LOAD, onLoadOnce);
+				trigger();
+			};
+
+			this.map.on(MapEventType.LOAD, onLoadOnce);
+		}
 	}
 
 	public addMapClickListener(
 		handler: (coords: [number, number]) => void,
 	): () => void {
 		if (!this.map) {
-			let isCancelled = false;
-			let innerCleanup: (() => void) | null = null;
-
-			const tryAttach = (): void => {
-				if (isCancelled) {
-					return;
-				}
-
-				if (this.map) {
-					innerCleanup = this.addMapClickListener(handler);
-
-					return;
-				}
-
-				requestAnimationFrame(tryAttach);
-			};
-
-			requestAnimationFrame(tryAttach);
-
-			return () => {
-				isCancelled = true;
-				innerCleanup?.();
-			};
+			return () => {};
 		}
 
 		const onMapClick = (event: mapboxgl.MapMouseEvent): void => {
@@ -104,6 +89,7 @@ class MapClient {
 		})
 			.setLngLat(coordinates)
 			.addTo(this.map);
+		marker.getElement().style.zIndex = "1000";
 
 		if (isDraggable && onDragEnd) {
 			marker.on(MapEventType.DRAG_END, () => {
@@ -180,7 +166,7 @@ class MapClient {
 		this.map.flyTo({ center, essential: true, zoom: ZOOM_LEVEL });
 	}
 
-	public init(container: HTMLElement): void {
+	public init(container: HTMLElement, options?: { onLoad?: () => void }): void {
 		if (!this.accessToken) {
 			return;
 		}
@@ -190,6 +176,10 @@ class MapClient {
 			container,
 			...MAP_OPTIONS,
 		});
+
+		if (options?.onLoad) {
+			this.map.on(MapEventType.LOAD, options.onLoad);
+		}
 
 		this.resizeObserver = new ResizeObserver(() => {
 			this.map?.resize();

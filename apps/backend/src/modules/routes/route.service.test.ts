@@ -108,10 +108,7 @@ describe("RouteService", () => {
 		name: "Test Route",
 		pois: [
 			{ id: FIRST_POI_ID, visitOrder: FIRST_VISIT_ORDER },
-			{
-				id: SECOND_POI_ID,
-				visitOrder: SECOND_VISIT_ORDER,
-			},
+			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
 		],
 	};
 
@@ -124,10 +121,7 @@ describe("RouteService", () => {
 		name: "Test Route",
 		pois: [
 			{ id: FIRST_POI_ID, visitOrder: FIRST_VISIT_ORDER },
-			{
-				id: SECOND_POI_ID,
-				visitOrder: SECOND_VISIT_ORDER,
-			},
+			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
 		],
 	};
 

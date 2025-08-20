@@ -12,6 +12,7 @@ export { Icon } from "./icon/icon.js";
 export { ImageGallery } from "./image-gallery/image-gallery.js";
 export { Input } from "./input/input.js";
 export { Loader } from "./loader/loader.js";
+export { MapLocationField } from "./map-location-field/map-location-field.js";
 export { MapContext, MapProvider } from "./map-provider/map-provider.js";
 export { Modal } from "./modal/modal.js";
 export { NumberInput } from "./number-input/number-input.js";

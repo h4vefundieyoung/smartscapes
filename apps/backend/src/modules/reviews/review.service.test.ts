@@ -67,7 +67,7 @@ describe("ReviewService", () => {
 
 	const currentUser = { firstName: "John", id: 10, lastName: "Doe" };
 
-	it("create should return new review (DTO з user)", async () => {
+	it("create should return new review", async () => {
 		const reviewEntity = ReviewEntity.initialize(mockReviewDB);
 
 		const pointsOfInterestService = createMockPointsOfInterestService();
@@ -105,7 +105,7 @@ describe("ReviewService", () => {
 		assert.deepStrictEqual(result, expected);
 	});
 
-	it("findAll should return all reviews (масив DTO)", async () => {
+	it("findAll should return all reviews", async () => {
 		const dto: ReviewGetByIdResponseDto = {
 			content: mockReviewDB.content,
 			id: mockReviewDB.id,

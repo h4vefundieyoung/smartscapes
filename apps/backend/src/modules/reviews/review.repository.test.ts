@@ -8,7 +8,7 @@ import { ReviewEntity } from "./review.entity.js";
 import { ReviewModel } from "./review.model.js";
 import { ReviewRepository } from "./review.repository.js";
 
-describe("ReviewRepository", (): void => {
+describe("ReviewRepository", () => {
 	let reviewRepository: ReviewRepository;
 	let databaseTracker: Tracker;
 
@@ -23,18 +23,18 @@ describe("ReviewRepository", (): void => {
 		userId: 42,
 	};
 
-	beforeEach((): void => {
+	beforeEach(() => {
 		const database = knex({ client: MockClient });
 		databaseTracker = createTracker(database);
 		ReviewModel.knex(database);
 		reviewRepository = new ReviewRepository(ReviewModel);
 	});
 
-	afterEach((): void => {
+	afterEach(() => {
 		databaseTracker.reset();
 	});
 
-	it("create should create and return new review", async (): Promise<void> => {
+	it("create should create and return new review", async () => {
 		const reviewEntity = ReviewEntity.initialize(mockReviewData);
 		databaseTracker.on.insert("reviews").response([reviewEntity]);
 
@@ -43,7 +43,7 @@ describe("ReviewRepository", (): void => {
 		assert.deepStrictEqual(result, reviewEntity);
 	});
 
-	it("findAll should return DTO rows with nested user", async (): Promise<void> => {
+	it("findAll should return DTO rows with nested user", async () => {
 		const rows: ReviewGetByIdResponseDto[] = [
 			{
 				content: "Test review content",
@@ -99,7 +99,7 @@ describe("ReviewRepository", (): void => {
 		}
 	});
 
-	it("findAll should apply routeId filter", async (): Promise<void> => {
+	it("findAll should apply routeId filter", async () => {
 		const filtered: ReviewGetByIdResponseDto[] = [
 			{
 				content: "By route",

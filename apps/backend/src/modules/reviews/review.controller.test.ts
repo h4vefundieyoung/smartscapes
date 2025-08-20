@@ -16,7 +16,7 @@ import {
 import { ReviewController } from "./review.controller.js";
 import { type ReviewService } from "./review.service.js";
 
-describe("ReviewController", (): void => {
+describe("ReviewController", () => {
 	const mockPermission = PermissionEntity.initialize({
 		id: 1,
 		key: "read",
@@ -31,13 +31,13 @@ describe("ReviewController", (): void => {
 	});
 
 	const mockLogger: Logger = {
-		debug: (): void => {},
-		error: (): void => {},
-		info: (): void => {},
-		warn: (): void => {},
+		debug: () => {},
+		error: () => {},
+		info: () => {},
+		warn: () => {},
 	};
 
-	const mockUser: UserAuthResponseDto = {
+	const mockUser = {
 		email: "test@example.com",
 		firstName: "John",
 		group: mockGroup.toObject(),
@@ -45,9 +45,9 @@ describe("ReviewController", (): void => {
 		id: 1,
 		isVisibleProfile: true,
 		lastName: "Doe",
-	};
+	} satisfies UserAuthResponseDto;
 
-	const mockReviewDto: ReviewGetByIdResponseDto = {
+	const mockReviewDto = {
 		content: "content",
 		id: 1,
 		likesCount: 5,
@@ -58,9 +58,9 @@ describe("ReviewController", (): void => {
 			id: mockUser.id,
 			lastName: mockUser.lastName,
 		},
-	};
+	} satisfies ReviewGetByIdResponseDto;
 
-	it("findAll should return all reviews", async (): Promise<void> => {
+	it("findAll should return all reviews", async () => {
 		const reviews: ReviewGetByIdResponseDto[] = [mockReviewDto];
 
 		const mockFindAll: ReviewService["findAll"] = () =>
@@ -84,19 +84,19 @@ describe("ReviewController", (): void => {
 		});
 	});
 
-	it("create should create a review and return it", async (): Promise<void> => {
-		const returned: ReviewGetByIdResponseDto = mockReviewDto;
+	it("create should create a review and return it", async () => {
+		const review = mockReviewDto;
 
-		const mockCreate: ReviewService["create"] = () => Promise.resolve(returned);
+		const mockCreate: ReviewService["create"] = () => Promise.resolve(review);
 
 		const reviewService = { create: mockCreate } as ReviewService;
 		const reviewController = new ReviewController(mockLogger, reviewService);
 
 		const result = await reviewController.create({
 			body: {
-				content: returned.content,
-				poiId: returned.poiId,
-				routeId: returned.routeId,
+				content: review.content,
+				poiId: review.poiId,
+				routeId: review.routeId,
 			},
 			params: {},
 			query: {},
@@ -104,7 +104,7 @@ describe("ReviewController", (): void => {
 		} as APIHandlerOptions<{ body: ReviewRequestDto }>);
 
 		assert.deepStrictEqual(result, {
-			payload: { data: returned },
+			payload: { data: review },
 			status: HTTPCode.CREATED,
 		});
 	});

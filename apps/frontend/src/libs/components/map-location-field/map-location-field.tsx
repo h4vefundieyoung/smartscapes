@@ -28,7 +28,7 @@ const MapLocationField = <T extends FieldValues>({
 	name,
 }: Properties<T>): React.JSX.Element => {
 	const { field } = useFormController<T>({ control, name });
-	const location = field.value as PointGeometry | undefined;
+	const location = field.value as PointGeometry;
 
 	const handleLocationChange = React.useCallback(
 		(next: PointGeometry) => {

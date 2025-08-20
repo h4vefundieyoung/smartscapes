@@ -9,7 +9,7 @@ import { type MapMarker } from "~/libs/modules/map-client/libs/types/map-marker.
 import { type PointGeometry } from "~/libs/types/types.js";
 
 type Properties = {
-	location: PointGeometry | undefined;
+	location?: PointGeometry;
 	onLocationChange: (next: PointGeometry) => void;
 };
 

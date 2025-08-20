@@ -12,7 +12,6 @@ import { Icon } from "../components.js";
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
-	className?: string;
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
 	label: string;

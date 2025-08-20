@@ -100,7 +100,15 @@ erDiagram
     int id PK
     dateTime created_at
     dateTime updated_at
+    int route_id FK
+    int category_id FK
+  }
+  categories{
+    int id PK
+    dateTime created_at
+    dateTime updated_at
     varchar name
+    varchar key
   }
 
   routes {
@@ -109,6 +117,20 @@ erDiagram
     dateTime updated_at
     varchar name
     varchar description
+    decimal distance
+    int duration
+    geometry geometry
+    int created_by_user_id FK
+  }
+
+  planned_paths {
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    int user_id FK
+    decimal distance
+    decimal duration
+    geometry geometry
   }
 
   routes_to_pois {
@@ -149,6 +171,8 @@ erDiagram
   routes }|--|{routes_to_pois:"route_id"
   users ||--|{ reviews : user_id
   routes ||--|{ reviews : route_id
+  routes ||--|{ route_categories : route_id
+  categories ||--|{ route_categories : category_id
   points_of_interest ||--|{ reviews : poi_id
   users ||--o{ notifications : user_id
 ```

@@ -203,4 +203,75 @@ describe("PointsOfInterestRepository", () => {
 
 		assert.strictEqual(result, false);
 	});
+
+	it("findPaginated should return correct items", async () => {
+		const mockEntities = [
+			PointsOfInterestEntity.initialize({
+				createdAt: "2025-08-14T00:00:00Z",
+				description: "Point Of Interest Test Description 1",
+				id: 1,
+				location: {
+					coordinates: TEST_COORDINATES,
+					type: "Point" as const,
+				},
+				name: "Point 1",
+				updatedAt: "2025-08-14T00:00:00Z",
+			}),
+			PointsOfInterestEntity.initialize({
+				createdAt: "2025-08-15T00:00:00Z",
+				description: "Point Of Interest Test Description 2",
+				id: 2,
+				location: {
+					coordinates: TEST_COORDINATES,
+					type: "Point" as const,
+				},
+				name: "Point 2",
+				updatedAt: "2025-08-15T00:00:00Z",
+			}),
+		];
+
+		databaseTracker.on
+			.select(DatabaseTableName.POINTS_OF_INTEREST)
+			.response(mockEntities);
+
+		const result = await pointsOfInterestRepository.findPaginated({
+			page: 1,
+			perPage: 10,
+			search: undefined,
+		});
+
+		const resultItems = result.items.map((item) => item.toObject());
+		const expectedItems = mockEntities.map((item) => item.toObject());
+
+		assert.deepStrictEqual(resultItems, expectedItems);
+	});
+
+	it("findPaginated should return correct total count", async () => {
+		const mockEntities = [
+			PointsOfInterestEntity.initialize({
+				createdAt: "2025-08-14T00:00:00Z",
+				description: "Point Of Interest Test Description 1",
+				id: 1,
+				location: {
+					coordinates: TEST_COORDINATES,
+					type: "Point" as const,
+				},
+				name: "Point 1",
+				updatedAt: "2025-08-14T00:00:00Z",
+			}),
+		];
+
+		databaseTracker.on
+			.select(DatabaseTableName.POINTS_OF_INTEREST)
+			.response(mockEntities);
+
+		const result = await pointsOfInterestRepository.findPaginated({
+			page: 1,
+			perPage: 10,
+			search: undefined,
+		});
+
+		assert.ok(typeof result.total === "number");
+		assert.ok(Array.isArray(result.items));
+	});
 });

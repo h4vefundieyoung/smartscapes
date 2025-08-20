@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.25.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.24.0...@smartscapes/shared-v1.25.0) (2025-08-19)
+
+
+### Features
+
+* **frontend:** implement explore routes block ss-270 ([#395](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/395)) ([f38da03](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/f38da03f4df623358e50c58428784970b5489dbe))
+
+## [1.24.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.23.0...@smartscapes/shared-v1.24.0) (2025-08-19)
+
+
+### Features
+
+* **backend:** filter routes by category backend ss-345 ([#364](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/364)) ([62e59c3](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/62e59c36067d9e5a3ccfec86afa54ffe6be1e0cd))
+
+## [1.23.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.22.1...@smartscapes/shared-v1.23.0) (2025-08-18)
+
+
+### Features
+
+* **frontend/backend/shared:** implement points of interest details page ss-245 ([#337](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/337)) ([26c5795](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/26c5795e69f7d5746b791b9f1276a60d24f38e10))
+
 ## [1.22.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.22.0...@smartscapes/shared-v1.22.1) (2025-08-18)
 
 

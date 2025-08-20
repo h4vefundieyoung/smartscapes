@@ -1,6 +1,6 @@
-import { type PointsOfInterestSearchQuery } from "./type.js";
+import { type PointsOfInterestQueryRequest } from "@smartscapes/shared";
 
-type PointsOfInterestFindAllOptions = PointsOfInterestSearchQuery & {
+type PointsOfInterestFindAllOptions = PointsOfInterestQueryRequest & {
 	ids?: number[];
 };
 

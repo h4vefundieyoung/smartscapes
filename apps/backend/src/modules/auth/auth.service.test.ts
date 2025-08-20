@@ -17,7 +17,7 @@ import { type FileService } from "../files/files.service.js";
 import { GroupEntity } from "../groups/group.entity.js";
 import { GroupKey } from "../groups/libs/enums/enums.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
-import { type UserDetailsWithPassword } from "../users/libs/types/user-password-details.type.js";
+import { type UserDetailsWithPassword } from "../users/libs/types/user-details-with-password.type.js";
 
 describe("AuthService", () => {
 	const signUpRequestDto: UserSignUpRequestDto = {

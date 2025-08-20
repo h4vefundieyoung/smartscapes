@@ -19,15 +19,14 @@
 }
 
 .icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	color: var(--color-icon-neutral);
 }
 
 .icon:hover {
 	color: var(--color-text-strong);
-}
-
-.icon svg {
-	display: block;
 }
 
 .button {

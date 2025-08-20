@@ -27,7 +27,6 @@
 
 .user-info {
 	display: flex;
-	flex-direction: row;
 	gap: 24px;
 	align-items: stretch;
 }
@@ -61,7 +60,6 @@
 
 .activity-label {
 	display: flex;
-	flex-direction: row;
 	align-items: center;
 	width: fit-content;
 	height: 48px;

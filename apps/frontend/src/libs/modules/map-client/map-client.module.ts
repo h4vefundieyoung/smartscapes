@@ -6,6 +6,7 @@ import {
 	GEOLOCATE_AUTO_TRIGGER_DELAY,
 	GEOLOCATE_CONTROL_OPTIONS,
 	MAP_CONTROLS_POSITION,
+	MAP_MARKER_Z_INDEX_VALUE,
 	MAP_OPTIONS,
 	MARKER_OPTIONS,
 	NAVIGATION_CONTROL_OPTIONS,
@@ -15,6 +16,7 @@ import {
 import { MapControlId, MapEventType } from "./libs/enums/enums.js";
 import {
 	type ControlPosition,
+	type Coordinates,
 	type MapControl,
 	type MapMarker,
 	type MapMarkerOptions,
@@ -90,7 +92,7 @@ class MapClient {
 		})
 			.setLngLat(coordinates)
 			.addTo(this.map);
-		marker.getElement().style.zIndex = "1000";
+		marker.getElement().style.zIndex = MAP_MARKER_Z_INDEX_VALUE;
 
 		if (isDraggable && onDragEnd) {
 			marker.on(MapEventType.DRAG_END, () => {
@@ -215,7 +217,7 @@ class MapClient {
 			remove: (): void => {
 				marker.remove();
 			},
-			setCoordinates: (coords: [number, number]): void => {
+			setCoordinates: (coords: Coordinates): void => {
 				marker.setLngLat(coords);
 			},
 		};

@@ -4,6 +4,7 @@ const AppRoute = {
 	CONTENT: "/app/content",
 	DASHBOARD: "/app/dashboard",
 	EXPLORE: "/app/explore",
+	MANAGE_ROUTES: "/app/manage-routes",
 	POINTS_OF_INTEREST: "/app/points-of-interest",
 	POINTS_OF_INTEREST_$ID: "/app/points-of-interest/:id",
 	PROFILE: "/app/profile",

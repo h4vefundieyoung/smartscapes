@@ -6,7 +6,7 @@ const NAVIGATION_ITEMS_GROUPS: NavigationItemsGroup[] = [
 		hasLabel: true,
 		items: [
 			{
-				href: AppRoute.ROUTES,
+				href: AppRoute.MANAGE_ROUTES,
 				icon: "route",
 				label: "Manage routes",
 				pagePermissions: [PermissionKey.MANAGE_ROUTES],

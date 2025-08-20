@@ -12,7 +12,7 @@ import {
 	SCALE_CONTROL_OPTIONS,
 	ZOOM_LEVEL,
 } from "./libs/constants/constants.js";
-import { MapControlId } from "./libs/enums/enums.js";
+import { MapControlId, MapEventType } from "./libs/enums/enums.js";
 import {
 	type ControlPosition,
 	type MapControl,
@@ -45,7 +45,7 @@ class MapClient {
 			MAP_CONTROLS_POSITION["GEOLOCATE"] as ControlPosition,
 		);
 
-		this.map.on("load", () => {
+		this.map.on(MapEventType.LOAD, () => {
 			setTimeout(() => {
 				control.trigger();
 			}, GEOLOCATE_AUTO_TRIGGER_DELAY);
@@ -56,11 +56,11 @@ class MapClient {
 		handler: (coords: [number, number]) => void,
 	): () => void {
 		if (!this.map) {
-			let cancelled = false;
+			let isCancelled = false;
 			let innerCleanup: (() => void) | null = null;
 
 			const tryAttach = (): void => {
-				if (cancelled) {
+				if (isCancelled) {
 					return;
 				}
 
@@ -76,7 +76,7 @@ class MapClient {
 			requestAnimationFrame(tryAttach);
 
 			return () => {
-				cancelled = true;
+				isCancelled = true;
 				innerCleanup?.();
 			};
 		}
@@ -85,10 +85,10 @@ class MapClient {
 			handler([event.lngLat.lng, event.lngLat.lat]);
 		};
 
-		this.map.on("click", onMapClick);
+		this.map.on(MapEventType.CLICK, onMapClick);
 
 		return () => {
-			this.map?.off("click", onMapClick);
+			this.map?.off(MapEventType.CLICK, onMapClick);
 		};
 	}
 	public addMarker(options: MapMarkerOptions): MapMarker | null {
@@ -106,7 +106,7 @@ class MapClient {
 			.addTo(this.map);
 
 		if (isDraggable && onDragEnd) {
-			marker.on("dragend", () => {
+			marker.on(MapEventType.DRAG_END, () => {
 				const { lat, lng } = marker.getLngLat();
 				onDragEnd([lng, lat]);
 			});

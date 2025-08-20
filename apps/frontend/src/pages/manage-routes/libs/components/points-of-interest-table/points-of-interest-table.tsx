@@ -1,13 +1,18 @@
-import { Table } from "~/libs/components/components.js";
+import { Button, CreatePOIModal, Table } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import { getFormattedDate } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppSelector,
+	useCallback,
 	useEffect,
 	usePagination,
+	useState,
 } from "~/libs/hooks/hooks.js";
-import { actions } from "~/modules/points-of-interest/points-of-interest.js";
+import {
+	actions,
+	type PointsOfInterestRequestDto,
+} from "~/modules/points-of-interest/points-of-interest.js";
 
 import { useTableColumns } from "./libs/hooks/hooks.js";
 import styles from "./styles.module.css";
@@ -16,7 +21,26 @@ const DEFAULT_TOTAL_PAGES = 1;
 
 const PointsOfInterestTable = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
+	const [isCreatePOIOpen, setIsCreatePOIOpen] = useState<boolean>(false);
 
+	const createStatus = useAppSelector(
+		(state) => state.pointsOfInterest.createStatus,
+	);
+	const handleModalToggle = useCallback(() => {
+		setIsCreatePOIOpen((previous) => !previous);
+	}, []);
+
+	const handleSubmit = useCallback(
+		(payload: PointsOfInterestRequestDto): void => {
+			void dispatch(actions.create(payload));
+		},
+		[dispatch],
+	);
+	useEffect(() => {
+		if (createStatus === DataStatus.FULFILLED) {
+			setIsCreatePOIOpen(false);
+		}
+	}, [createStatus]);
 	const { dataStatus, meta, summary } = useAppSelector(
 		({ pointsOfInterest }) => pointsOfInterest,
 	);
@@ -48,7 +72,21 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 
 	return (
 		<section className={styles["container"]}>
-			<h2 className={styles["title"]}>Points of interest</h2>
+			<div className={styles["header"]}>
+				<h2 className={styles["title"]}>Points of interest</h2>
+				<div>
+					<Button
+						label="Create POI"
+						onClick={handleModalToggle}
+						type="button"
+					/>
+				</div>
+			</div>
+			<CreatePOIModal
+				isOpen={isCreatePOIOpen}
+				onClose={handleModalToggle}
+				onSubmit={handleSubmit}
+			/>
 			<Table
 				columns={columns}
 				data={formattedSummary}

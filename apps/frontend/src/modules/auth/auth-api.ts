@@ -95,7 +95,6 @@ class AuthApi extends BaseHTTPApi {
 	}
 
 	public async uploadAvatar(
-		id: number,
 		payload: File,
 	): Promise<APIResponse<FileUploadResponseDto>> {
 		const formData = new FormData();
@@ -103,9 +102,7 @@ class AuthApi extends BaseHTTPApi {
 		formData.append("file", payload);
 
 		const response = await this.load<APIResponse<FileUploadResponseDto>>(
-			this.getFullEndpoint(AuthApiPath.AUTHENTICATED_USER_UPLOAD_AVATAR, {
-				id: id.toString(),
-			}),
+			this.getFullEndpoint(AuthApiPath.AUTHENTICATED_USER_UPLOAD_AVATAR, {}),
 			{
 				hasAuth: true,
 				method: "POST",

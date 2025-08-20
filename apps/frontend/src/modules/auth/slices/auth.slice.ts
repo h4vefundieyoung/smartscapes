@@ -10,6 +10,7 @@ import {
 	patchAuthenticatedUser,
 	signIn,
 	signUp,
+	uploadAvatar,
 } from "./actions.js";
 
 type State = {
@@ -36,6 +37,18 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(getAuthenticatedUser.rejected, (state) => {
 			state.authenticatedUser = null;
 			state.dataStatus = DataStatus.REJECTED;
+		});
+
+		builder.addCase(uploadAvatar.pending, (state) => {
+			state.dataStatus = DataStatus.PENDING;
+		});
+
+		builder.addCase(uploadAvatar.fulfilled, (state, action) => {
+			if (state.authenticatedUser) {
+				state.authenticatedUser.avatarUrl = action.payload.data.url || null;
+			}
+
+			state.dataStatus = DataStatus.FULFILLED;
 		});
 
 		builder.addCase(logout.fulfilled, (state) => {

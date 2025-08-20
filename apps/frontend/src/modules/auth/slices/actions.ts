@@ -96,14 +96,12 @@ const uploadAvatar = createAsyncThunk<
 	File,
 	AsyncThunkConfig
 >(
-	`${sliceName}/authenticated-user/upload/avatar`,
-	async (payload, { extra, getState }) => {
+	`${sliceName}/authenticated-user/upload-avatar`,
+	async (payload, { extra }) => {
 		const { authApi, toastNotifier } = extra;
-		const state = getState();
 
-		const userId = state.auth.authenticatedUser?.id as number;
+		const response = await authApi.uploadAvatar(payload);
 
-		const response = await authApi.uploadAvatar(userId, payload);
 		toastNotifier.showSuccess("Avatar updated");
 
 		return response;

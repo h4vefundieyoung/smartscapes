@@ -491,7 +491,7 @@ class AuthController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /auth/authenticated-user/{id}/upload/avatar:
+	 * /auth/authenticated-user/avatar:
 	 *   post:
 	 *     summary: Upload an avatar
 	 *     description: Upload an avatar to the authorized user
@@ -499,13 +499,6 @@ class AuthController extends BaseController {
 	 *       - Auth
 	 *     security:
 	 *       - bearerAuth: []
-	 *     parameters:
-	 *       - in: path
-	 *         name: id
-	 *         required: true
-	 *         schema:
-	 *           type: string
-	 *         description: User ID to upload an avatar
 	 *     requestBody:
 	 *       required: true
 	 *       content:
@@ -536,16 +529,16 @@ class AuthController extends BaseController {
 			body: {
 				file: MultipartFile;
 			};
-			params: {
-				id: number;
-			};
+			user: UserAuthResponseDto;
 		}>,
 	): Promise<APIHandlerResponse<FileUploadResponseDto>> {
-		const { body, params } = options;
+		const { body, user } = options;
 
-		const id = Number(params.id);
+		if (!user) {
+			throw new AuthError();
+		}
 
-		const data = await this.authService.uploadAvatar(id, body.file);
+		const data = await this.authService.uploadAvatar(user.id, body.file);
 
 		return {
 			payload: { data },

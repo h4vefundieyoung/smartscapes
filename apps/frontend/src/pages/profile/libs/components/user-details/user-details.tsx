@@ -47,7 +47,7 @@ const UserDetails = (): null | React.JSX.Element => {
 		[dispatch],
 	);
 
-	const handleButtonClick = useCallback(() => {
+	const handleTriggerFileUpload = useCallback(() => {
 		fileInputReference.current?.click();
 	}, []);
 
@@ -66,7 +66,7 @@ const UserDetails = (): null | React.JSX.Element => {
 				<UploadButton
 					color="green"
 					label="Upload avatar"
-					onClick={handleButtonClick}
+					onClick={handleTriggerFileUpload}
 				/>
 				<UploadButton color="red" label="Delete avatar" />
 				<input

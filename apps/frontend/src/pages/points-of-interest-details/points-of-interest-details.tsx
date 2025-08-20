@@ -12,6 +12,7 @@ import {
 import { actions } from "~/modules/points-of-interest/points-of-interest.js";
 import { NotFound } from "~/pages/not-found/not-found.js";
 
+import { RoutesGallery } from "./libs/components/components.js";
 import styles from "./styles.module.css";
 
 const PointsOfInterestDetails = (): React.JSX.Element => {
@@ -45,6 +46,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 						<p className={styles["description"]}>
 							{pointsOfInterestDetails.description}
 						</p>
+						<RoutesGallery routes={[pointsOfInterestDetails]} />
 					</>
 				)}
 			</main>

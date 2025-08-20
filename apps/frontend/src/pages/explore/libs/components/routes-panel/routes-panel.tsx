@@ -43,6 +43,8 @@ const RoutesPanel = (): React.JSX.Element => {
 		}
 	}, [locationDataStatus, location, dispatch]);
 
+	const hasLocationError = Boolean(locationError);
+
 	const content = useMemo(() => {
 		if (dataStatus === DataStatus.PENDING) {
 			return <Loader />;
@@ -60,7 +62,7 @@ const RoutesPanel = (): React.JSX.Element => {
 
 		return (
 			<>
-				{locationError?.trim() && (
+				{hasLocationError && (
 					<div className={styles["warning"]}>
 						<div>Location access failed: {locationError}.</div>
 						<div>Please enable geolocation to see routes near you.</div>
@@ -74,7 +76,7 @@ const RoutesPanel = (): React.JSX.Element => {
 				</ul>
 			</>
 		);
-	}, [dataStatus, error, locationError, routes]);
+	}, [dataStatus, error, locationError, hasLocationError, routes]);
 
 	return (
 		<div className={styles["container"]}>

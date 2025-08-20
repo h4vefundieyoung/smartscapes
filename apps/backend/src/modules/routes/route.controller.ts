@@ -139,7 +139,10 @@ class RouteController extends BaseController {
 			handler: this.constructRoute.bind(this),
 			method: "POST",
 			path: RoutesApiPath.CONSTRUCT,
-			preHandlers: [setRateLimit(constructRequestsPerMinute)],
+			preHandlers: [
+				setRateLimit(constructRequestsPerMinute),
+				checkHasPermission(PermissionKey.MANAGE_ROUTES),
+			],
 			validation: {
 				body: routesConstructValidationSchema,
 			},

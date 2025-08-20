@@ -1,19 +1,16 @@
 import { PointsOfInterestValidationRule } from "@smartscapes/shared/src/modules/points-of-interest/libs/enums/points-of-interest-validation-rule.js";
-import {
-	type GroupBase,
-	type OptionsOrGroups,
-	type SingleValue,
-} from "react-select";
-import AsyncSelect from "react-select/async";
+import { type MultiValue, type SingleValue } from "react-select";
 
-import { Button, MapProvider } from "~/libs/components/components.js";
+import { Button, MapProvider, Select } from "~/libs/components/components.js";
 import {
 	useAppDispatch,
+	useAppForm,
+	useAppSelector,
 	useCallback,
 	useEffect,
 	useState,
 } from "~/libs/hooks/hooks.js";
-import { type Coordinates } from "~/libs/types/types.js";
+import { type Coordinates, type SelectOption } from "~/libs/types/types.js";
 import {
 	actions as pointOfInterestActions,
 	type PointsOfInterestResponseDto,
@@ -23,52 +20,55 @@ import { actions as routeActions } from "~/modules/routes/routes.js";
 import { PointOfInterestCard } from "./libs/components/point-of-interest-card/point-of-interest-card.js";
 import styles from "./styles.module.css";
 
-type SelectOption = {
-	label: string;
-	value: PointsOfInterestResponseDto;
-};
-
 const ConstructRoute = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
+	const filteredPois = useAppSelector(
+		(state) => state.pointsOfInterest.dataAll,
+	);
+	const { control } = useAppForm({
+		defaultValues: { searchPoi: null },
+	});
 
 	const [selectedPois, setSelectedPois] = useState<
 		PointsOfInterestResponseDto[]
 	>([]);
 	const [markers, setMarkers] = useState<{ coordinates: Coordinates }[]>([]);
-	const [selectValue, setSelectValue] = useState<null | SelectOption>(null);
+	const [selectOptions, setSelectOptions] = useState<
+		SelectOption<PointsOfInterestResponseDto>[]
+	>([]);
 
-	const loadOptions = useCallback(
-		async (
-			inputValue: string,
-		): Promise<OptionsOrGroups<SelectOption, GroupBase<SelectOption>>> => {
-			if (inputValue.length < PointsOfInterestValidationRule.NAME_MIN_LENGTH) {
-				return [];
+	const handleSelectInputChange = useCallback(
+		(value: string) => {
+			if (value.length < PointsOfInterestValidationRule.NAME_MIN_LENGTH) {
+				setSelectOptions([]);
+
+				return;
 			}
 
-			const result = await dispatch(
-				pointOfInterestActions.loadAll({ name: inputValue }),
-			).unwrap();
-
-			const options = result.data.map((point) => ({
-				label: point.name,
-				value: point,
-			}));
-
-			return options;
+			void dispatch(pointOfInterestActions.loadAll({ name: value }));
 		},
 		[dispatch],
 	);
 
-	const handleChange = useCallback(
-		(option: SingleValue<SelectOption>): void => {
-			if (!option) {
+	const handleSelectChange = useCallback(
+		(
+			option:
+				| MultiValue<SelectOption<PointsOfInterestResponseDto>>
+				| SingleValue<SelectOption<PointsOfInterestResponseDto>>,
+		) => {
+			if (Array.isArray(option) || !option) {
 				return;
 			}
 
-			setSelectedPois((previous) => [...previous, option.value]);
-			setSelectValue(null);
+			const { value } = option as SelectOption<PointsOfInterestResponseDto>;
+
+			if (selectedPois.some((poi) => poi.id === value.id)) {
+				return;
+			}
+
+			setSelectedPois((previous) => [...previous, value]);
 		},
-		[],
+		[selectedPois],
 	);
 
 	const handleRemovePoiClick = useCallback((id: number): void => {
@@ -82,6 +82,14 @@ const ConstructRoute = (): React.JSX.Element => {
 	}, [dispatch, selectedPois]);
 
 	useEffect(() => {
+		const newOptions = filteredPois.map((poi) => ({
+			label: poi.name,
+			value: poi,
+		}));
+		setSelectOptions(newOptions);
+	}, [filteredPois]);
+
+	useEffect(() => {
 		const coordinates = selectedPois.map(({ location: { coordinates } }) => ({
 			coordinates,
 		}));
@@ -92,7 +100,9 @@ const ConstructRoute = (): React.JSX.Element => {
 	return (
 		<>
 			<main className={styles["main"]}>
-				<MapProvider markers={markers} />
+				<div className={styles["map"]}>
+					<MapProvider markers={markers} />
+				</div>
 				<div className={styles["container"]}>
 					<div className={styles["panel"]}>
 						<div className={styles["header"]}>
@@ -104,11 +114,13 @@ const ConstructRoute = (): React.JSX.Element => {
 							/>
 						</div>
 
-						<AsyncSelect
-							cacheOptions
-							loadOptions={loadOptions}
-							onChange={handleChange}
-							value={selectValue}
+						<Select
+							control={control}
+							label="Search POI"
+							name="searchPoi"
+							onChange={handleSelectChange}
+							onInputChange={handleSelectInputChange}
+							options={selectOptions}
 						/>
 
 						<div className={styles["body"]}>

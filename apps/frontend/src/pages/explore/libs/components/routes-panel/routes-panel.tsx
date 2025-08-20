@@ -49,7 +49,7 @@ const RoutesPanel = (): React.JSX.Element => {
 		}
 
 		if (error) {
-			return <span className={styles["error"]}> {error}</span>;
+			return <span className={styles["error"]}>{error}</span>;
 		}
 
 		if (routes.length === 0) {
@@ -59,17 +59,20 @@ const RoutesPanel = (): React.JSX.Element => {
 		}
 
 		return (
-			<ul className={styles["list"]}>
-				{locationError && (
+			<>
+				{locationError?.trim() && (
 					<div className={styles["warning"]}>
 						Location access failed: {locationError}. <br />
 						Please enable geolocation to see routes near you.
 					</div>
 				)}
-				{routes.map((route) => (
-					<RouteCard imageUrl={null} key={route.id} name={route.name} />
-				))}
-			</ul>
+
+				<ul className={styles["list"]}>
+					{routes.map((route) => (
+						<RouteCard imageUrl={null} key={route.id} name={route.name} />
+					))}
+				</ul>
+			</>
 		);
 	}, [dataStatus, error, locationError, routes]);
 

@@ -22,17 +22,12 @@ const CreateRouteForm = ({
 	const { control, errors, handleSubmit, handleValueSet } =
 		useAppForm<RouteCreateRequestDto>({
 			defaultValues: DEFAULT_CREATE_ROUTE_PAYLOAD,
-			validationSchema: routesCreateValidationSchema,
+			// validationSchema: routesCreateValidationSchema,
 		});
 
-	const [name, description] = useWatch({
+	const [name, description, plannedPathId] = useWatch({
 		control,
-		name: ["name", "description"],
-	});
-
-	const plannedPathId = useWatch({
-		control,
-		name: "plannedPathId",
+		name: ["name", "description", "plannedPathId"],
 	});
 
 	useEffect(() => {
@@ -42,20 +37,16 @@ const CreateRouteForm = ({
 	}, [description, name, onFormChange]);
 
 	useEffect(() => {
-		if (createRouteFormData?.name) {
-			handleValueSet("name", createRouteFormData.name);
-		}
+		if (createRouteFormData) {
+			for (const key of Object.keys(createRouteFormData) as Array<
+				keyof RouteCreateRequestDto
+			>) {
+				const value = createRouteFormData[key];
 
-		if (createRouteFormData?.description) {
-			handleValueSet("description", createRouteFormData.description);
-		}
-
-		if (createRouteFormData?.plannedPathId) {
-			handleValueSet("plannedPathId", createRouteFormData.plannedPathId);
-		}
-
-		if (createRouteFormData?.poiIds) {
-			handleValueSet("poiIds", createRouteFormData.poiIds);
+				if (value !== undefined) {
+					handleValueSet(key, value);
+				}
+			}
 		}
 	}, [createRouteFormData, handleValueSet]);
 

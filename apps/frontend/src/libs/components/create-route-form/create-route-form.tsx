@@ -83,7 +83,7 @@ const CreateRouteForm = ({
 					<div>
 						<Button
 							label="Construct"
-							to="/routes/construct?returnTo=/routes?modal=create-route"
+							to="/manage-routes/construct?returnTo=/manage-routes?modal=create-route"
 							type="button"
 							variant="outlined"
 						/>

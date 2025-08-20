@@ -13,7 +13,13 @@ const ManageRoutes = (): React.JSX.Element => {
 				title="Dashboard"
 			/>
 			<PointsOfInterestTable />
-			<CreateRouteModal />
+
+			<section>
+				<h2>Routes</h2>
+				<div>
+					<CreateRouteModal />
+				</div>
+			</section>
 		</main>
 	);
 };

@@ -8,7 +8,6 @@ import {
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
 
-import { FileEntity } from "../files/files.entity.js";
 import { GroupEntity } from "../groups/group.entity.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
 
@@ -88,7 +87,7 @@ class UserRepository implements Repository {
 			const { avatar } = user;
 
 			return UserEntity.initialize({
-				avatarUrl: avatar ? FileEntity.initialize(avatar).toObject().url : null,
+				avatarUrl: avatar ? avatar.url : null,
 				email: user.email,
 				firstName: user.firstName,
 				group: GroupEntity.initializeWithPermissions({
@@ -128,7 +127,7 @@ class UserRepository implements Repository {
 		const { avatar } = user;
 
 		return UserEntity.initialize({
-			avatarUrl: avatar ? FileEntity.initialize(avatar).toObject().url : null,
+			avatarUrl: avatar ? avatar.url : null,
 			email: user.email,
 			firstName: user.firstName,
 			group: GroupEntity.initializeWithPermissions({
@@ -167,7 +166,7 @@ class UserRepository implements Repository {
 		const { avatar } = user;
 
 		return UserEntity.initialize({
-			avatarUrl: avatar ? FileEntity.initialize(avatar).toObject().url : null,
+			avatarUrl: avatar ? avatar.url : null,
 			email: user.email,
 			firstName: user.firstName,
 			group: GroupEntity.initializeWithPermissions({
@@ -218,7 +217,7 @@ class UserRepository implements Repository {
 		const { avatar } = user;
 
 		return {
-			avatarUrl: avatar ? FileEntity.initialize(avatar).toObject().url : null,
+			avatarUrl: avatar ? avatar.url : null,
 			email: user.email,
 			firstName: user.firstName,
 			group: GroupEntity.initializeWithPermissions({
@@ -266,7 +265,7 @@ class UserRepository implements Repository {
 			const { avatar } = user;
 
 			return UserEntity.initialize({
-				avatarUrl: avatar ? FileEntity.initialize(avatar).toObject().url : null,
+				avatarUrl: avatar ? avatar.url : null,
 				email: user.email,
 				firstName: user.firstName,
 				group: GroupEntity.initializeWithPermissions({

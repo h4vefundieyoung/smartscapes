@@ -44,10 +44,10 @@ const { actions, name, reducer } = createSlice({
 		});
 
 		builder.addCase(uploadAvatar.fulfilled, (state, action) => {
-			if (state.authenticatedUser) {
-				state.authenticatedUser.avatarUrl = action.payload.data.url || null;
-			}
-
+			state.authenticatedUser = {
+				...state.authenticatedUser,
+				avatarUrl: action.payload.data.url,
+			} as UserAuthResponseDto;
 			state.dataStatus = DataStatus.FULFILLED;
 		});
 

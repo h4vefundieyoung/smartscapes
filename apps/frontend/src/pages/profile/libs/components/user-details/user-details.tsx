@@ -63,12 +63,16 @@ const UserDetails = (): null | React.JSX.Element => {
 			<div className={styles["user-details-avatar"]}>
 				<Avatar size={100} user={authenticatedUser} />
 				<Button
-					color="outline-green"
-					form="upload"
+					btnColor="outline-green"
+					btnType="outlined"
 					label="Upload avatar"
 					onClick={handleTriggerFileUpload}
 				/>
-				<Button color="outline-red" form="upload" label="Delete avatar" />
+				<Button
+					btnColor="outline-red"
+					btnType="outlined"
+					label="Delete avatar"
+				/>
 				<input
 					accept="image/*"
 					onChange={handleFileUpload}

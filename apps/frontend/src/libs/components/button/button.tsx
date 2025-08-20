@@ -3,8 +3,8 @@ import clsx from "clsx";
 import styles from "./styles.module.css";
 
 type Properties = {
-	color?: "green" | "outline-green" | "outline-red";
-	form?: "default" | "upload";
+	btnColor?: "green" | "outline-green" | "outline-red";
+	btnType?: "filled" | "outlined";
 	label: string;
 	onClick?: () => void;
 	to?: string;
@@ -12,14 +12,14 @@ type Properties = {
 };
 
 const Button = ({
-	color = "green",
-	form = "default",
+	btnColor: buttonColor = "green",
+	btnType: buttonType = "filled",
 	label,
 	onClick,
 	to,
 	type = "submit",
 }: Properties): React.JSX.Element => {
-	const style = clsx(styles["button"], styles[form], styles[color]);
+	const style = clsx(styles["button"], styles[buttonColor], styles[buttonType]);
 
 	if (to) {
 		return (

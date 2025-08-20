@@ -1,23 +1,25 @@
 .card {
-	padding: 14px;
+	gap: 20px;
 	background: var(--color-base);
-	border: 1px solid var(--color-stroke-weak);
-	border-radius: 12px;
 }
 
 .head {
 	display: flex;
-	gap: 10px;
+	gap: 20px;
 	align-items: center;
-	margin-bottom: 10px;
+	min-width: 171px;
+	margin-bottom: 20px;
 }
 
-.userName {
-	font-size: var(--font-size-tiny);
-	color: var(--color-text-weak);
+.username {
+	font-size: var(--font-size-small);
+	line-height: 1.5;
+	color: var(--color-text-strong);
 }
 
 .content {
-	margin: 0;
+	gap: 20px;
+	font-size: var(--font-size-small);
+	line-height: 1.5;
 	color: var(--color-text-strong);
 }

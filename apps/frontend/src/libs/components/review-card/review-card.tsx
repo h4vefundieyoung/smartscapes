@@ -29,8 +29,8 @@ const ReviewCard = ({ review }: Properties): React.JSX.Element => {
 	return (
 		<li className={styles["card"]}>
 			<div className={styles["head"]}>
-				<Avatar size={36} user={avatarUser} />
-				<div className={styles["userName"]}>
+				<Avatar size={48} user={avatarUser} />
+				<div className={styles["username"]}>
 					{review.user.firstName} {review.user.lastName}
 				</div>
 			</div>

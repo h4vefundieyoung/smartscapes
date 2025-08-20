@@ -9,11 +9,13 @@ import { create, getAll } from "./actions.js";
 type State = {
 	data: null | ReviewGetByIdResponseDto;
 	dataStatus: ValueOf<typeof DataStatus>;
+	items: ReviewGetByIdResponseDto[];
 };
 
 const initialState: State = {
 	data: null,
 	dataStatus: DataStatus.IDLE,
+	items: [],
 };
 
 const { actions, name, reducer } = createSlice({
@@ -21,7 +23,8 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(getAll.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
 		});
-		builder.addCase(getAll.fulfilled, (state) => {
+		builder.addCase(getAll.fulfilled, (state, { payload }) => {
+			state.items = payload.data;
 			state.dataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(getAll.rejected, (state) => {
@@ -32,7 +35,7 @@ const { actions, name, reducer } = createSlice({
 			state.dataStatus = DataStatus.PENDING;
 		});
 		builder.addCase(create.fulfilled, (state, { payload }) => {
-			state.data = payload.data;
+			state.items.unshift(payload.data);
 			state.dataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(create.rejected, (state) => {

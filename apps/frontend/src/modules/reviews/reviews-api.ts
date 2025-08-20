@@ -47,7 +47,7 @@ class ReviewsApi extends BaseHTTPApi {
 			this.getFullEndpoint(ReviewsApiPath.ROOT, {}),
 			{
 				contentType: ContentType.JSON,
-				hasAuth: true,
+				hasAuth: false,
 				method: "GET",
 				query,
 			},

@@ -2,7 +2,6 @@ import image1 from "~/assets/images/route-details/placeholder-image-1.png";
 import image2 from "~/assets/images/route-details/placeholder-image-2.png";
 import image3 from "~/assets/images/route-details/placeholder-image-3.png";
 import { ImageGallery, Loader } from "~/libs/components/components.js";
-import { Reviews } from "~/libs/components/reviews/reviews.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -14,6 +13,7 @@ import {
 	actions as routeActions,
 	type RouteGetByIdResponseDto,
 } from "~/modules/routes/routes.js";
+import { RouteReviews } from "~/pages/route-description/libs/components/components.js";
 
 import { NotFound } from "../not-found/not-found.js";
 import styles from "./styles.module.css";
@@ -47,7 +47,7 @@ const RouteDetails = (): React.JSX.Element => {
 				<h1 className={styles["label"]}>{name}</h1>
 				<ImageGallery images={[image1, image2, image3]} />
 				<p className={styles["description"]}>{description}</p>
-				<Reviews routeId={Number(routeId)} />
+				<RouteReviews routeId={Number(routeId)} />
 			</main>
 		</>
 	);

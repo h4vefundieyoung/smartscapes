@@ -1,8 +1,11 @@
 type IconName =
 	| "analytics"
 	| "arrowDown"
+	| "caretDown"
+	| "caretUp"
 	| "close"
 	| "dashboard"
+	| "edit"
 	| "error"
 	| "eye"
 	| "eyeOff"
@@ -11,6 +14,7 @@ type IconName =
 	| "message"
 	| "route"
 	| "tag"
+	| "trash"
 	| "user";
 
 export { type IconName };

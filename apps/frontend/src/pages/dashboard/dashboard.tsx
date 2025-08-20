@@ -1,15 +1,7 @@
-import {
-	Button,
-	CreatePOIModal,
-	Loader,
-	Select,
-} from "~/libs/components/components.js";
+import { Button, Loader, Select } from "~/libs/components/components.js";
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
-import { DataStatus } from "~/libs/enums/enums.js";
 import {
-	useAppDispatch,
 	useAppForm,
-	useAppSelector,
 	useCallback,
 	useEffect,
 	useRef,
@@ -19,8 +11,6 @@ import { HTTPError } from "~/libs/modules/http/http.js";
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { fileApi } from "~/modules/files/files.js";
 import { FileFolderName } from "~/modules/files/libs/enums/enums.js";
-import { type PointsOfInterestRequestDto } from "~/modules/points-of-interest/libs/types/types.js";
-import { actions as poiActions } from "~/modules/points-of-interest/points-of-interest.js";
 
 import { Carousel } from "../../libs/components/carousel/carousel.js";
 import styles from "./styles.module.css";
@@ -34,7 +24,6 @@ const Dashboard = (): React.JSX.Element => {
 	const [uploadedImages, setUploadedImages] = useState<string[]>([]);
 	const [isUploading, setIsUploading] = useState<boolean>(false);
 	const fileInputReference = useRef<HTMLInputElement>(null);
-	const dispatch = useAppDispatch();
 
 	const colorOptions: SelectOption<string>[] = [
 		{ label: "Red", value: "red" },
@@ -89,26 +78,6 @@ const Dashboard = (): React.JSX.Element => {
 		void loadFiles();
 	}, []);
 
-	const [isCreatePOIOpen, setIsCreatePOIOpen] = useState<boolean>(false);
-	const createStatus = useAppSelector(
-		(state) => state.pointsOfInterest.createStatus,
-	);
-	const handleModalToggle = useCallback(() => {
-		setIsCreatePOIOpen((previous) => !previous);
-	}, []);
-
-	const handleSubmit = useCallback(
-		(payload: PointsOfInterestRequestDto): void => {
-			void dispatch(poiActions.create(payload));
-		},
-		[dispatch],
-	);
-	useEffect(() => {
-		if (createStatus === DataStatus.FULFILLED) {
-			setIsCreatePOIOpen(false);
-		}
-	}, [createStatus]);
-
 	return (
 		<main className={styles["container"]}>
 			<div className={styles["components-container"]}>
@@ -149,18 +118,6 @@ const Dashboard = (): React.JSX.Element => {
 						options={colorOptions}
 					/>
 				</div>
-				<div className={styles["button-container"]}>
-					<Button
-						label="Create new POI"
-						onClick={handleModalToggle}
-						type="button"
-					/>
-				</div>
-				<CreatePOIModal
-					isOpen={isCreatePOIOpen}
-					onClose={handleModalToggle}
-					onSubmit={handleSubmit}
-				/>
 			</div>
 		</main>
 	);

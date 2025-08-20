@@ -11,6 +11,7 @@ class FileModel extends AbstractModel {
 	}
 
 	public contentType!: FileMimeType;
+
 	public url!: string;
 }
 

@@ -33,7 +33,7 @@ describe("CategoryRepository", () => {
 		databaseTracker.reset();
 	});
 
-	it("create should create and return new route category", async () => {
+	it("create should create and return new category", async () => {
 		const categoryEntity = CategoryEntity.initialize(
 			mockCategoryRepositoryCategory,
 		);
@@ -45,7 +45,7 @@ describe("CategoryRepository", () => {
 		assert.deepStrictEqual(result, categoryEntity);
 	});
 
-	it("findAll should return all route categories", async () => {
+	it("findAll should return all categories", async () => {
 		const routeCategoryEntities = [
 			CategoryEntity.initialize(mockCategoryRepositoryCategory),
 		];
@@ -57,7 +57,7 @@ describe("CategoryRepository", () => {
 		assert.deepStrictEqual(result, routeCategoryEntities);
 	});
 
-	it("findByName should return route category entity by name", async () => {
+	it("findByName should return category entity by name", async () => {
 		const categoryEntity = CategoryEntity.initialize(
 			mockCategoryRepositoryCategory,
 		);

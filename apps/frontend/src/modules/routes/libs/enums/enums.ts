@@ -1,2 +1,2 @@
-export { RoutesNotification } from "./routes-notification.enum.js";
+export { RouteNotification } from "./route-notification.enum.js";
 export { RoutesApiPath } from "@smartscapes/shared";

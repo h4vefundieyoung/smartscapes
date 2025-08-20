@@ -26,6 +26,7 @@ import {
 } from "~/modules/routes/routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
+import { ROUTE_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
@@ -36,7 +37,7 @@ const RouteDetails = (): React.JSX.Element => {
 	}));
 	const { control, errors, getValues, handleValueSet } =
 		useAppForm<RoutePatchRequestDto>({
-			defaultValues: { description: "", name: "" },
+			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
 		});
 	const dispatch = useAppDispatch();
 	const { id } = useParams<{ id: string }>();
@@ -47,8 +48,8 @@ const RouteDetails = (): React.JSX.Element => {
 	);
 
 	const handleToggleEditMode = useCallback(() => {
-		setIsEditMode(!isEditMode);
-	}, [isEditMode]);
+		setIsEditMode((isEditMode) => !isEditMode);
+	}, []);
 
 	const handlePatchRequest = useCallback(() => {
 		if (route) {

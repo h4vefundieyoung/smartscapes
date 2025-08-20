@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 
-import { RoutesNotification } from "../libs/enums/enums.js";
+import { RouteNotification } from "../libs/enums/enums.js";
 import {
 	type PatchActionPayload,
 	type RouteGetByIdResponseDto,
@@ -27,7 +27,7 @@ const patchRoute = createAsyncThunk<
 >(`${sliceName}/patch-route`, async (payload, { extra }) => {
 	const { routeApi } = extra;
 	const patchResult = await routeApi.patchRoute(payload);
-	toastNotifier.showSuccess(RoutesNotification.UPDATED);
+	toastNotifier.showSuccess(RouteNotification.UPDATED);
 
 	return patchResult;
 });

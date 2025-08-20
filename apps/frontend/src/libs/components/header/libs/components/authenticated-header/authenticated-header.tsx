@@ -1,11 +1,13 @@
 import { type JSX } from "react";
 
 import { Avatar, Dropdown, Icon } from "~/libs/components/components.js";
+import { AppRoute } from "~/libs/enums/enums.js";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useCallback,
 	useEffect,
+	useMemo,
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
@@ -13,7 +15,6 @@ import { type DropdownItem } from "~/libs/types/types.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import { type UserAuthResponseDto } from "~/modules/users/libs/types/types.js";
 
-import { HEADER_DROPDOWN_ITEMS } from "../../types/types.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -34,9 +35,20 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 		void dispatch(authActions.logout());
 	}, [dispatch]);
 
-	const items: DropdownItem[] = HEADER_DROPDOWN_ITEMS.map((item) =>
-		item.label === "Log out" ? { ...item, onClick: handleLogout } : item,
-	);
+	const items: DropdownItem[] = useMemo(() => {
+		return [
+			{
+				icon: "user",
+				label: "Profile",
+				to: AppRoute.PROFILE,
+			},
+			{
+				icon: "logout",
+				label: "Log out",
+				onClick: handleLogout,
+			},
+		];
+	}, [handleLogout]);
 
 	const handleClickOutside = useCallback((event: MouseEvent) => {
 		if (

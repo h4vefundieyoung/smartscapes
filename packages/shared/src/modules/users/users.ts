@@ -4,6 +4,8 @@ export {
 	type AuthenticatedUserPatchResponseDto,
 	type UserAuthResponseDto,
 	type UserGetByIdItemResponseDto,
+	type UserPublicProfileRequestDto,
+	type UserPublicProfileResponseDto,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
 	type UserSignUpRequestDto,

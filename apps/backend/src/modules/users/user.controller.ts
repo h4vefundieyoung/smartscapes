@@ -1,5 +1,6 @@
 import { APIPath } from "~/libs/enums/enums.js";
 import {
+	type APIHandlerOptions,
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
@@ -8,7 +9,10 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
 import { UsersApiPath } from "./libs/enums/enums.js";
-import { type UserGetByIdItemResponseDto } from "./libs/types/types.js";
+import {
+	type UserGetByIdItemResponseDto,
+	type UserPublicProfileResponseDto,
+} from "./libs/types/types.js";
 
 /**
  * @swagger
@@ -44,6 +48,12 @@ class UserController extends BaseController {
 			method: "GET",
 			path: UsersApiPath.ROOT,
 		});
+
+		this.addRoute({
+			handler: this.findUserProfile.bind(this),
+			method: "GET",
+			path: "/:id/:currentUserId",
+		});
 	}
 
 	/**
@@ -75,6 +85,53 @@ class UserController extends BaseController {
 
 		return {
 			payload: { data: items },
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /users/{id}/{currentUserId}:
+	 *   get:
+	 *     security:
+	 *      - bearerAuth: []
+	 *     tags:
+	 *       - Users
+	 *     summary: Get User profile public info by user id
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *       - in: path
+	 *         name: currentUserId
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     responses:
+	 *       200:
+	 *         description: User public profile
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                     $ref: '#/components/schemas/User'
+	 */
+
+	public async findUserProfile(
+		options: APIHandlerOptions<{
+			params: { currentUserId: string; id: string };
+		}>,
+	): Promise<APIHandlerResponse<UserPublicProfileResponseDto>> {
+		const id = Number(options.params.id);
+		const currentUserId = Number(options.params.currentUserId);
+		const user = await this.userService.findUserProfile({ currentUserId, id });
+
+		return {
+			payload: { data: user },
 			status: HTTPCode.OK,
 		};
 	}

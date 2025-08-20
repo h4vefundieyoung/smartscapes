@@ -1,0 +1,71 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	min-height: 100vh;
+}
+
+.profile-container {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	align-items: center;
+	width: 100%;
+	max-width: 750px;
+	min-height: 100%;
+	padding: 72px 20px 0;
+}
+
+.profile-header {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	width: 100%;
+	margin: 0;
+}
+
+.user-info {
+	display: flex;
+	flex-direction: row;
+	gap: 24px;
+	align-items: stretch;
+}
+
+.user-info-details {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+}
+
+.details-name {
+	font-size: var(--font-size-h3);
+	font-weight: var(--font-weight-semibold);
+	color: var(--color-text-strong);
+}
+
+.details-followers {
+	font-size: var(--font-size-small);
+	font-weight: var(--font-weight-regular);
+	color: var(--color-text-weak);
+}
+
+.follow-button-container {
+	width: fit-content;
+}
+
+.activities-container {
+	width: 100%;
+	border-bottom: 1px solid var(--color-stroke-weak);
+}
+
+.activity-label {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: fit-content;
+	height: 48px;
+	font-size: var(--font-size-small);
+	font-weight: var(--font-weight-semibold);
+	border-bottom: 2px solid var(--color-stroke-selected);
+}

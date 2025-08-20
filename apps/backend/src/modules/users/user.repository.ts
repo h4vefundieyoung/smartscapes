@@ -1,15 +1,19 @@
-import { transaction } from "objection";
+import { raw, transaction } from "objection";
 
+import { HTTPCode } from "~/libs/enums/enums.js";
 import { type Repository } from "~/libs/types/types.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
 	type UserPasswordDetails,
+	type UserPublicProfileResponseDto,
 } from "~/modules/users/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
 
 import { GroupEntity } from "../groups/group.entity.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
+import { UserExceptionMessage } from "./libs/enums/enums.js";
+import { UserError } from "./libs/exceptions/exceptions.js";
 
 class UserRepository implements Repository {
 	private userModel: typeof UserModel;
@@ -221,6 +225,53 @@ class UserRepository implements Repository {
 			lastName: user.lastName,
 			passwordHash: user.passwordHash,
 			passwordSalt: user.passwordSalt,
+		};
+	}
+
+	public async findUserProfile(
+		id: number,
+		currentUserId: number,
+	): Promise<null | UserPublicProfileResponseDto> {
+		const user = await this.userModel
+			.query()
+			.findById(id)
+			.select(
+				"users.*",
+				raw(
+					"(SELECT COUNT(*) FROM user_follows uf WHERE uf.following_id = users.id)",
+				).as("followersCount"),
+				raw(
+					`EXISTS (
+					SELECT 1
+					FROM user_follows uf2
+					WHERE uf2.following_id = users.id
+						AND uf2.follower_id = ?
+				)`,
+					[currentUserId.toString()],
+				).as("isFollowed"),
+			)
+			.first();
+
+		if (!user) {
+			return null;
+		} else if (!user.isVisibleProfile) {
+			throw new UserError({
+				message: UserExceptionMessage.USER_PROFILE_NOT_PUBLIC,
+				status: HTTPCode.FORBIDDEN,
+			});
+		}
+
+		const userProfile = user as UserModel & {
+			followersCount: number;
+			isFollowed: boolean;
+		};
+
+		return {
+			firstName: userProfile.firstName,
+			followersCount: Number(userProfile.followersCount),
+			id: userProfile.id,
+			isFollowed: Boolean(userProfile.isFollowed),
+			lastName: userProfile.lastName,
 		};
 	}
 

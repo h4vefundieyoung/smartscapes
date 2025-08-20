@@ -19,6 +19,7 @@ import { Explore } from "./pages/explore/explore.js";
 import { Landing } from "./pages/landing/landing.jsx";
 import { PointsOfInterestDetails } from "./pages/points-of-interest-details/points-of-interest-details.js";
 import { Profile } from "./pages/profile/profile.js";
+import { PublicProfile } from "./pages/public-profile/public-profile.js";
 import { RouteDetails } from "./pages/route-description/route-details.js";
 import { Routes } from "./pages/routes/routes.js";
 
@@ -66,6 +67,14 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 									</ProtectedRoute>
 								),
 								path: AppRoute.PROFILE,
+							},
+							{
+								element: (
+									<ProtectedRoute>
+										<PublicProfile />
+									</ProtectedRoute>
+								),
+								path: "/app/users/:id",
 							},
 							{
 								element: (

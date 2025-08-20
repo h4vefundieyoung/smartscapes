@@ -6,29 +6,43 @@ import {
 	type Path,
 	type PathValue,
 } from "react-hook-form";
-import ReactSelect, { type MultiValue, type SingleValue } from "react-select";
+import ReactSelect, {
+	type InputActionMeta,
+	type MultiValue,
+	type SingleValue,
+} from "react-select";
 
 import { useFormController, useMemo } from "~/libs/hooks/hooks.js";
+import { type SelectOption } from "~/libs/types/types.js";
 
 import { selectStylesConfig } from "./libs/constants/constants.js";
 import { getSelectNewValue, mapSelectValue } from "./libs/helpers/helpers.js";
-import { type SelectOption } from "./libs/types/select-option.type.js";
 import styles from "./styles.module.css";
 
 type Properties<TFieldValues extends FieldValues, TOptionValue = string> = {
 	control: Control<TFieldValues, null>;
+	isLoading?: boolean;
 	isMulti?: boolean;
 	label: string;
 	name: FieldPath<TFieldValues>;
+	onChange?: (
+		newValue:
+			| MultiValue<SelectOption<TOptionValue>>
+			| SingleValue<SelectOption<TOptionValue>>,
+	) => void;
+	onInputChange?: (newValue: string, actionMeta: InputActionMeta) => void;
 	options: SelectOption<TOptionValue>[];
 	placeholder?: string;
 };
 
 const Select = <TFieldValues extends FieldValues, TOptionValue = string>({
 	control,
+	isLoading,
 	isMulti = false,
 	label,
 	name,
+	onChange,
+	onInputChange,
 	options,
 	placeholder = "",
 }: Properties<TFieldValues, TOptionValue>): React.JSX.Element => {
@@ -56,9 +70,11 @@ const Select = <TFieldValues extends FieldValues, TOptionValue = string>({
 			<span className={styles["label-caption"]}>{label}</span>
 			<ReactSelect
 				classNames={selectStylesConfig}
+				isLoading={isLoading}
 				isMulti={isMulti}
 				name={name}
-				onChange={handleChange}
+				{...(onChange ? { onChange } : { onChange: handleChange })}
+				{...(onInputChange ? { onInputChange } : {})}
 				options={options as PathValue<TFieldValues, Path<TFieldValues>>}
 				placeholder={placeholder}
 				unstyled

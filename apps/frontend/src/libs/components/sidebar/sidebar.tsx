@@ -1,5 +1,5 @@
 import smartScapesLogo from "~/assets/images/logo.svg";
-import { Link } from "~/libs/components/components.js";
+import { TextLink } from "~/libs/components/components.js";
 import { AppRoute, KeyboardKey } from "~/libs/enums/enums.js";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 import {
@@ -60,7 +60,7 @@ const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
 					</button>
 
 					<div className={styles["logo-wrapper"]}>
-						<Link to={AppRoute.ROOT}>
+						<TextLink to={AppRoute.ROOT}>
 							<img
 								alt="SmartScapes"
 								className={styles["logo-image"]}
@@ -68,7 +68,7 @@ const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
 								src={smartScapesLogo}
 								width="136"
 							/>
-						</Link>
+						</TextLink>
 					</div>
 				</div>
 				<div className={styles["sidebar"]}>

@@ -2,6 +2,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 import {
+	type PointsOfInterestPaginatedResponseDto,
+	type PointsOfInterestQueryRequest,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
@@ -32,4 +34,16 @@ const create = createAsyncThunk<
 	return pointOfInterest;
 });
 
-export { create, getById };
+const findPaginated = createAsyncThunk<
+	APIResponse<PointsOfInterestPaginatedResponseDto>,
+	PointsOfInterestQueryRequest,
+	AsyncThunkConfig
+>(`${poiSliceName}/find-paginated-items`, async (payload, { extra }) => {
+	const { pointOfInterestApi } = extra;
+
+	const pointsOfInterest = await pointOfInterestApi.findPaginated(payload);
+
+	return pointsOfInterest;
+});
+
+export { create, findPaginated, getById };

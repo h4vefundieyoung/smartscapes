@@ -1,5 +1,61 @@
 # Changelog
 
+## [1.28.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.27.0...@smartscapes/backend-v1.28.0) (2025-08-20)
+
+
+### Features
+
+* **backend/frontend/shared:** implement admin dashboard issue ss-189 ([#370](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/370)) ([3667c79](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/3667c79969a6df4349ec690ec6b6766e253b470c))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.25.0 to 1.26.0
+
+## [1.27.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.26.0...@smartscapes/backend-v1.27.0) (2025-08-19)
+
+
+### Features
+
+* **frontend:** implement explore routes block ss-270 ([#395](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/395)) ([f38da03](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/f38da03f4df623358e50c58428784970b5489dbe))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.24.0 to 1.25.0
+
+## [1.26.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.25.3...@smartscapes/backend-v1.26.0) (2025-08-19)
+
+
+### Features
+
+* **backend:** filter routes by category backend ss-345 ([#364](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/364)) ([62e59c3](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/62e59c36067d9e5a3ccfec86afa54ffe6be1e0cd))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.23.0 to 1.24.0
+
+## [1.25.3](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.25.2...@smartscapes/backend-v1.25.3) (2025-08-19)
+
+
+### Bug Fixes
+
+* **backend:** fix routes repository queries ss-432 ([#433](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/433)) ([02a1469](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/02a1469388d9d025e45c5119879140e4890b2279))
+
+## [1.25.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.25.1...@smartscapes/backend-v1.25.2) (2025-08-18)
+
+
+### Bug Fixes
+
+* **backend:** update helmet config for swagger ss-295 ([#429](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/429)) ([f4b0a43](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/f4b0a43111afa8da9902a972e06214c42d95a20c))
+
 ## [1.25.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.25.0...@smartscapes/backend-v1.25.1) (2025-08-18)
 
 

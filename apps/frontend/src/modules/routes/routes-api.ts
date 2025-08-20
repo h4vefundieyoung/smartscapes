@@ -1,4 +1,4 @@
-import { APIPath } from "~/libs/enums/enums.js";
+import { APIPath, ContentType } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
@@ -7,6 +7,7 @@ import { type APIResponse } from "~/libs/types/types.js";
 import { RoutesApiPath } from "./libs/enums/enums.js";
 import {
 	type PatchActionPayload,
+	type RouteFindAllOptions,
 	type RouteGetByIdResponseDto,
 } from "./libs/types/types.js";
 
@@ -19,6 +20,22 @@ type Constructor = {
 class RoutesApi extends BaseHTTPApi {
 	public constructor({ baseUrl, http, storage }: Constructor) {
 		super({ baseUrl, http, path: APIPath.ROUTES, storage });
+	}
+
+	public async getAll(
+		query?: RouteFindAllOptions,
+	): Promise<APIResponse<RouteGetByIdResponseDto[]>> {
+		const response = await this.load<APIResponse<RouteGetByIdResponseDto[]>>(
+			this.getFullEndpoint(RoutesApiPath.ROOT, {}),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: false,
+				method: "GET",
+				query,
+			},
+		);
+
+		return await response.json();
 	}
 
 	public async getRouteById(
@@ -42,7 +59,7 @@ class RoutesApi extends BaseHTTPApi {
 		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
 			this.getFullEndpoint(RoutesApiPath.$ID, { id: id.toString() }),
 			{
-				contentType: "application/json",
+				contentType: ContentType.JSON,
 				hasAuth: true,
 				method: "PATCH",
 				payload: JSON.stringify(payload),

@@ -71,5 +71,6 @@ jobs:
     needs: deploy
 
     uses: ./.github/workflows/integration-tests.yml
+    secrets: inherit
 
     name: Run Integration Tests

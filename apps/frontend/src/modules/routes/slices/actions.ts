@@ -6,6 +6,7 @@ import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 import { RouteNotification } from "../libs/enums/enums.js";
 import {
 	type PatchActionPayload,
+	type RouteFindAllOptions,
 	type RouteGetByIdResponseDto,
 } from "../libs/types/types.js";
 import { name as sliceName } from "./route.slice.js";
@@ -32,4 +33,14 @@ const patchRoute = createAsyncThunk<
 	return patchResult;
 });
 
-export { getRouteById, patchRoute };
+const getAll = createAsyncThunk<
+	APIResponse<RouteGetByIdResponseDto[]>,
+	RouteFindAllOptions | undefined,
+	AsyncThunkConfig
+>(`${sliceName}/get-all`, async (options, { extra }) => {
+	const { routeApi } = extra;
+
+	return await routeApi.getAll(options);
+});
+
+export { getAll, getRouteById, patchRoute };

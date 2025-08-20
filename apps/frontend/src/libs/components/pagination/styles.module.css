@@ -1,0 +1,29 @@
+.pagination {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	margin-top: 24px;
+	font-size: var(--font-size-tiny);
+	line-height: 1.5;
+	color: var(--color-text-strong);
+}
+
+.controls {
+	display: flex;
+	gap: 32px;
+	align-items: center;
+}
+
+.page-size {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.navigation-buttons-container {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	justify-self: flex-end;
+}

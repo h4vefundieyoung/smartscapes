@@ -1,0 +1,21 @@
+.thead {
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	width: 100%;
+	background: var(--color-base);
+	border-right: 2px solid var(--color-stroke-weak);
+}
+
+.th {
+	padding: 12px 24px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: var(--font-size-small);
+	font-weight: var(--font-weight-semibold);
+	line-height: 1.5;
+	color: var(--color-text-weak);
+	white-space: nowrap;
+	outline: none;
+	background: var(--color-fill-weak);
+}

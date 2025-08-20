@@ -1,7 +1,6 @@
 import { type JSX } from "react";
 
 import { Icon, NavLink } from "~/libs/components/components.js";
-import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { useCallback } from "~/libs/hooks/hooks.js";
 import { type DropdownMenuItem } from "~/libs/types/types.js";
 
@@ -13,15 +12,7 @@ type Properties = {
 };
 
 const UserDropdown = ({ items, onLogout }: Properties): JSX.Element => {
-	const linkClassName = useCallback(
-		({ isActive }: { isActive: boolean }): string => {
-			return combineClassNames(
-				styles["link"],
-				isActive && styles["link-active"],
-			);
-		},
-		[],
-	);
+	const linkClassName = useCallback(() => styles["link"], []);
 
 	return (
 		<div className={styles["user-dropdown"]}>

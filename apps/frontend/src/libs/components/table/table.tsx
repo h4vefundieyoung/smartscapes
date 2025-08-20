@@ -17,7 +17,7 @@ import styles from "./styles.module.css";
 type Properties<T> = {
 	columns: ColumnDef<T>[];
 	data: T[];
-	loading: boolean;
+	isLoading: boolean;
 	paginationSettings: ReturnType<typeof usePagination>;
 	totalItems: number;
 	totalPages: number;
@@ -28,7 +28,7 @@ const DEFAULT_ROWS_COUNT = 5;
 const Table = <T,>({
 	columns,
 	data,
-	loading,
+	isLoading,
 	paginationSettings,
 	totalItems,
 	totalPages,
@@ -48,7 +48,7 @@ const Table = <T,>({
 		<div className={styles["wrapper"]}>
 			<div className={styles["content"]}>
 				<table className={styles["table"]}>
-					{loading ? (
+					{isLoading ? (
 						<TableSkeleton columns={columns} rowCount={rowCount} />
 					) : (
 						<>
@@ -59,7 +59,7 @@ const Table = <T,>({
 				</table>
 			</div>
 
-			{!loading && (
+			{!isLoading && (
 				<div className={styles["footer"]}>
 					<Pagination
 						paginationSettings={paginationSettings}

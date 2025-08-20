@@ -1,5 +1,6 @@
 import { Table } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
+import { getFormattedDate } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -8,7 +9,7 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { actions } from "~/modules/points-of-interest/points-of-interest.js";
 
-import { useColumn } from "./libs/hooks/hooks.js";
+import { useTableColumns } from "./libs/hooks/hooks.js";
 import styles from "./styles.module.css";
 
 const DEFAULT_TOTAL_PAGES = 1;
@@ -19,7 +20,13 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 	const { dataStatus, meta, summary } = useAppSelector(
 		({ pointsOfInterest }) => pointsOfInterest,
 	);
-	const columns = useColumn();
+
+	const formattedSummary = summary.map((item) => ({
+		...item,
+		createdAt: getFormattedDate(new Date(item.createdAt), "dd MMM yyyy"),
+	}));
+
+	const columns = useTableColumns();
 
 	const paginationPOIS = usePagination({
 		meta,
@@ -44,8 +51,8 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 			<h2 className={styles["title"]}>Points of interest</h2>
 			<Table
 				columns={columns}
-				data={summary}
-				loading={dataStatus === DataStatus.PENDING}
+				data={formattedSummary}
+				isLoading={dataStatus === DataStatus.PENDING}
 				paginationSettings={paginationPOIS}
 				totalItems={total}
 				totalPages={totalPages}

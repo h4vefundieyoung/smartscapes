@@ -16,12 +16,12 @@ type UsePaginationArguments = {
 };
 
 type UsePaginationResult = {
-	goToEnd: () => void;
-	goToNext: () => void;
-	goToPrevious: () => void;
-	goToStart: () => void;
+	handleGoToEnd: () => void;
+	handleGoToNext: () => void;
+	handleGoToPrevious: () => void;
+	handleGoToStart: () => void;
+	handlePageSizeChange: (newPageSize: number) => void;
 	onPageChange: (newPage: number) => void;
-	onPageSizeChange: (newPageSize: number) => void;
 	page: number;
 	pageSize: number;
 };
@@ -71,34 +71,34 @@ const usePagination = ({
 		[totalPages],
 	);
 
-	const onPageSizeChange = useCallback((newPageSize: number) => {
+	const handlePageSizeChange = useCallback((newPageSize: number) => {
 		setPageSize(newPageSize);
 		setPage(FIRST_PAGE);
 	}, []);
 
-	const goToStart = useCallback(() => {
+	const handleGoToStart = useCallback(() => {
 		setPage(FIRST_PAGE);
 	}, []);
 
-	const goToEnd = useCallback(() => {
+	const handleGoToEnd = useCallback(() => {
 		setPage(totalPages);
 	}, [totalPages]);
 
-	const goToNext = useCallback(() => {
+	const handleGoToNext = useCallback(() => {
 		setPage((previous) => Math.min(previous + OFFSET, totalPages));
 	}, [totalPages]);
 
-	const goToPrevious = useCallback(() => {
+	const handleGoToPrevious = useCallback(() => {
 		setPage((previous) => Math.max(previous - OFFSET, FIRST_PAGE));
 	}, []);
 
 	return {
-		goToEnd,
-		goToNext,
-		goToPrevious,
-		goToStart,
+		handleGoToEnd,
+		handleGoToNext,
+		handleGoToPrevious,
+		handleGoToStart,
+		handlePageSizeChange,
 		onPageChange,
-		onPageSizeChange,
 		page,
 		pageSize,
 	};

@@ -1,1 +1,1 @@
-export { useColumn } from "./use-column.hook.js";
+export { useTableColumns } from "./use-table-column.hook.js";

@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
-import { getFormattedDate } from "~/libs/helpers/helpers.js";
 import { type PaginationMeta, type ValueOf } from "~/libs/types/types.js";
 import {
 	type PointsOfInterestPaginatedSummary,
@@ -45,10 +44,7 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(findPaginated.fulfilled, (state, action) => {
 			const { payload } = action;
 
-			state.summary = payload.data.data.map((item) => ({
-				...item,
-				createdAt: getFormattedDate(item.createdAt, "dd MMM yyyy"),
-			}));
+			state.summary = payload.data.data;
 			state.meta = payload.data.meta;
 			state.dataStatus = DataStatus.FULFILLED;
 		});

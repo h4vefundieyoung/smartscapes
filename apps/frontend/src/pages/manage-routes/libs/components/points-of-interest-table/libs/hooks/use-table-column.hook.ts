@@ -5,7 +5,7 @@ import { type RowData } from "~/pages/manage-routes/libs/types/row-data.types.js
 
 import { createColumns } from "../helpers/helpers.js";
 
-const useColumn = (): ColumnDef<RowData>[] => {
+const useTableColumns = (): ColumnDef<RowData>[] => {
 	const handleEdit = useCallback((id: number) => {
 		return id;
 	}, []);
@@ -21,4 +21,4 @@ const useColumn = (): ColumnDef<RowData>[] => {
 	return columns;
 };
 
-export { useColumn };
+export { useTableColumns };

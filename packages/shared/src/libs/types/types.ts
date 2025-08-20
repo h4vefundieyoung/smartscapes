@@ -4,7 +4,7 @@ export { type APIValidationErrorDetail } from "./api-validation-error-detail.typ
 export { type Coordinates } from "./coordinates.type.js";
 export { type LineStringGeometry } from "./line-string-geometry.type.js";
 export { type PointGeometry } from "./location-geometry.type.js";
-export { type PaginationMeta } from "./pagination-meta-dto.type.js";
+export { type PaginationMeta } from "./pagination-meta.type.js";
 export { type PaginationQuery } from "./pagination-query.type.js";
 export { type ValidationSchema } from "./validation-schema.type.js";
 export { type ValueOf } from "./value-of.type.js";

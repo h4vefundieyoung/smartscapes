@@ -1,5 +1,5 @@
 import { NumberInput } from "~/libs/components/components.js";
-import { useCallback, type usePagination } from "~/libs/hooks/hooks.js";
+import { type usePagination } from "~/libs/hooks/hooks.js";
 
 import { NavigationButton } from "./libs/components/components.js";
 import styles from "./styles.module.css";
@@ -16,20 +16,13 @@ const Pagination = ({
 	totalPages,
 }: Properties): React.JSX.Element => {
 	const {
-		goToEnd,
-		goToNext,
-		goToPrevious,
-		goToStart,
-		onPageSizeChange,
+		handleGoToEnd,
+		handleGoToNext,
+		handleGoToPrevious,
+		handleGoToStart,
+		handlePageSizeChange,
 		pageSize,
 	} = paginationSettings;
-
-	const handlePageSizeChange = useCallback(
-		(value: number) => {
-			onPageSizeChange(value);
-		},
-		[onPageSizeChange],
-	);
 
 	const range = {
 		max: totalItems,
@@ -52,10 +45,10 @@ const Pagination = ({
 					Page {paginationSettings.page} of {totalPages}
 				</span>
 				<div className={styles["navigation-buttons-container"]}>
-					<NavigationButton label="«" onClick={goToStart} />
-					<NavigationButton label="‹" onClick={goToPrevious} />
-					<NavigationButton label="›" onClick={goToNext} />
-					<NavigationButton label="»" onClick={goToEnd} />
+					<NavigationButton label="«" onClick={handleGoToStart} />
+					<NavigationButton label="‹" onClick={handleGoToPrevious} />
+					<NavigationButton label="›" onClick={handleGoToNext} />
+					<NavigationButton label="»" onClick={handleGoToEnd} />
 				</div>
 			</div>
 		</div>

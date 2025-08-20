@@ -51,16 +51,16 @@ const NumberInput = ({
 					<IconButton
 						className={styles["button"]}
 						disabled={value >= range.max}
-						hiddenLabel="Increase value"
 						icon="caretUp"
+						label="Increase value"
 						onClick={handleIncrement}
 						size={8}
 					/>
 					<IconButton
 						className={styles["button"]}
 						disabled={value <= range.min}
-						hiddenLabel="Decrease value"
 						icon="caretDown"
+						label="Decrease value"
 						onClick={handleDecrement}
 						size={8}
 					/>

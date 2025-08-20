@@ -84,7 +84,7 @@ class RouteService implements Service {
 			pois: payload.poiIds.map((id, index) => ({
 				id,
 				visitOrder: index,
-			})) as { id: number; name: string; visitOrder: number }[],
+			})),
 		};
 
 		const { plannedPathId } = formattedPayload;

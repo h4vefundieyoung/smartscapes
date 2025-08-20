@@ -48,7 +48,7 @@ class RouteModel extends Model {
 	public name!: string;
 	public pois!: {
 		id: number;
-		name: string;
+		name?: string;
 		visitOrder: number;
 	}[];
 }

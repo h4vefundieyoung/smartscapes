@@ -115,7 +115,6 @@ const RouteDetails = (): React.JSX.Element => {
 					)}
 				</div>
 				<ImageGallery images={[image1, image2, image3]} />
-				<p className={styles["description"]}>{description}</p>
 				{isEditMode ? (
 					<TextArea
 						control={control}

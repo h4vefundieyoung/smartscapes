@@ -3,6 +3,7 @@ type IconName =
 	| "arrowDown"
 	| "caretDown"
 	| "caretUp"
+	| "check"
 	| "close"
 	| "dashboard"
 	| "edit"

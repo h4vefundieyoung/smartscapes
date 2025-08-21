@@ -14,11 +14,12 @@ type Properties = {
 };
 
 const ProfileForm = ({ onSubmit, user }: Properties): React.JSX.Element => {
-	const { firstName, isVisibleProfile, lastName } = user;
+	const { email, firstName, isVisibleProfile, lastName } = user;
 
 	const { control, errors, handleSubmit } =
 		useAppForm<AuthenticatedUserPatchRequestDto>({
 			defaultValues: {
+				email,
 				firstName,
 				isVisibleProfile,
 				lastName,
@@ -41,6 +42,14 @@ const ProfileForm = ({ onSubmit, user }: Properties): React.JSX.Element => {
 				errors={errors}
 				label="Last Name"
 				name="lastName"
+				type="text"
+			/>
+			<Input
+				control={control}
+				errors={errors}
+				label="Email"
+				name="email"
+				readonly
 				type="text"
 			/>
 			<Checkbox

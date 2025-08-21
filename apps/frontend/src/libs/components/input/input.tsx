@@ -25,6 +25,7 @@ type Properties<T extends FieldValues> = {
 	label: string;
 	name: FieldPath<T>;
 	placeholder?: string;
+	readonly?: boolean;
 	type?: "email" | "password" | "text";
 };
 
@@ -36,6 +37,7 @@ const Input = <T extends FieldValues>({
 	label,
 	name,
 	placeholder = "",
+	readonly = false,
 	type = "text",
 }: Properties<T>): React.JSX.Element => {
 	const { field } = useFormController({ control, name });
@@ -57,6 +59,7 @@ const Input = <T extends FieldValues>({
 					name={field.name}
 					onChange={field.onChange}
 					placeholder={placeholder}
+					readOnly={readonly}
 					type={type}
 					value={field.value}
 				/>

@@ -2,8 +2,7 @@
 	display: flex;
 	flex: 1;
 	flex-direction: column;
-	padding: 24px;
-	background-color: var(--color-fill-grey);
+	padding: clamp(6px, 2vw, 32px) clamp(14px, 6vw, 48px);
 }
 
 .profile-title {

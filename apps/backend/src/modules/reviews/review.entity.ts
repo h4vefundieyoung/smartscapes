@@ -2,10 +2,15 @@ import { type Entity } from "~/libs/types/types.js";
 
 class ReviewEntity implements Entity {
 	private content: string;
+
 	private id: null | number;
+
 	private likesCount: number;
+
 	private poiId: null | number;
+
 	private routeId: null | number;
+
 	private userId: number;
 
 	private constructor({

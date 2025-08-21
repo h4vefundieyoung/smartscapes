@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.27.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.27.0...@smartscapes/shared-v1.27.1) (2025-08-21)
+
+
+### Bug Fixes
+
+* **backend/frontend/shared:** align code with the criteria ss-439 ([#451](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/451)) ([a9c7fa6](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/a9c7fa69148efc86ba6e740e23de1bf44d13eca9))
+
+## [1.27.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.26.0...@smartscapes/shared-v1.27.0) (2025-08-21)
+
+
+### Features
+
+* **backend/frontend:** avatar upload ss-388 ([#431](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/431)) ([c474ac5](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c474ac585f5d02eeb3883291798194980e8be7a6))
+
 ## [1.26.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.25.0...@smartscapes/shared-v1.26.0) (2025-08-20)
 
 

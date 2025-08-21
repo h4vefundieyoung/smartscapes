@@ -177,7 +177,7 @@ class NotificationController extends BaseController {
 	> {
 		if (!options.user) {
 			throw new NotificationError({
-				message: NotificationExceptionMessage.NOTIFICATION_UNAUTHORIZED,
+				message: NotificationExceptionMessage.UNAUTHORIZED,
 				status: HTTPCode.UNAUTHORIZED,
 			});
 		}
@@ -186,7 +186,7 @@ class NotificationController extends BaseController {
 
 		if (!userId) {
 			throw new NotificationError({
-				message: NotificationExceptionMessage.NOTIFICATION_UNAUTHORIZED,
+				message: NotificationExceptionMessage.UNAUTHORIZED,
 				status: HTTPCode.UNAUTHORIZED,
 			});
 		}

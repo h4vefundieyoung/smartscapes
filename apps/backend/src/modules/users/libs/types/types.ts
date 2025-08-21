@@ -1,4 +1,4 @@
-export { type UserPasswordDetails } from "./user-password-details.type.js";
+export { type UserDetailsWithPassword } from "./user-details-with-password.type.js";
 export {
 	type AuthenticatedUserPatchRequestDto,
 	type AuthenticatedUserPatchResponseDto,

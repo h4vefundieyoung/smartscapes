@@ -11,6 +11,7 @@ import { type RouteModel } from "./route.model.js";
 
 class RouteRepository implements Repository {
 	private plannedPathModel: typeof PlannedPathModel;
+
 	private routesModel: typeof RouteModel;
 
 	public constructor(
@@ -73,17 +74,15 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
 				"routes.created_by_user_id",
-			]);
+			])
+			.modify((builder) => {
+				if (options?.name) {
+					builder.whereILike("name", `%${options.name.trim()}%`);
+				}
+			});
 
 		if (name) {
 			query.whereILike("routes.name", `%${name.trim()}%`);
-		}
-
-		if (categories?.length) {
-			query
-				.joinRelated("categories")
-				.whereIn("categories.key", categories as string[])
-				.groupBy("routes.id");
 		}
 
 		if (latitude !== undefined && longitude !== undefined) {
@@ -93,13 +92,19 @@ class RouteRepository implements Repository {
 				.select(
 					this.routesModel.raw(
 						`ST_Distance(
-						pois.location::geography,
-						ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography
+							pois.location::geography,
+							ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography
 						) as distance_points`,
 						[longitude, latitude],
 					),
 				)
 				.orderBy("distance_points", SortingOrder.ASC);
+		}
+
+		if (categories?.length) {
+			query
+				.joinRelated("categories")
+				.whereIn("categories.key", categories as string[]);
 		}
 
 		const routes = await query;

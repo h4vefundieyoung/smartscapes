@@ -3,6 +3,7 @@ import {
 	getAll,
 	getPointsOfInterest,
 	getRouteById,
+	patchRoute,
 } from "./actions.js";
 import { actions as constructRouteActions } from "./construct-route.slice.js";
 import { actions as routeActions } from "./route.slice.js";
@@ -14,6 +15,7 @@ const allActions = {
 	getAll,
 	getPointsOfInterest,
 	getRouteById,
+	patchRoute,
 	routeActions,
 };
 

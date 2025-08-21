@@ -5,8 +5,11 @@ import { type GroupKey } from "./libs/enums/enums.js";
 
 class GroupEntity implements Entity {
 	private id: null | number;
+
 	private key: ValueOf<typeof GroupKey>;
+
 	private name: string;
+
 	private permissions: null | ReturnType<PermissionEntity["toObject"]>[];
 
 	private constructor({

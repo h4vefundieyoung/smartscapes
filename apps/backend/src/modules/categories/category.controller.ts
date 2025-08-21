@@ -28,7 +28,7 @@ import { categoryCreateValidationSchema } from "./libs/validation-schemas/valida
  *           type: string
  *           example: Popular
  *
- *     RouteCategory:
+ *     Category:
  *       type: object
  *       properties:
  *         id:
@@ -42,7 +42,7 @@ class CategoryController extends BaseController {
 	private categoryService: CategoryService;
 
 	public constructor(logger: Logger, categoryService: CategoryService) {
-		super(logger, APIPath.ROUTE_CATEGORIES);
+		super(logger, APIPath.CATEGORIES);
 		this.categoryService = categoryService;
 
 		this.addRoute({
@@ -63,13 +63,13 @@ class CategoryController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /route-categories:
+	 * /categories:
 	 *   post:
 	 *     security:
 	 *       - bearerAuth: []
 	 *     tags:
-	 *       - RouteCategories
-	 *     summary: Create new route category
+	 *       - Categories
+	 *     summary: Create new category
 	 *     requestBody:
 	 *       required: true
 	 *       content:
@@ -78,7 +78,7 @@ class CategoryController extends BaseController {
 	 *             $ref: '#/components/schemas/CategoryCreateRequestDto'
 	 *     responses:
 	 *       201:
-	 *         description: New route category object
+	 *         description: New category object
 	 *         content:
 	 *           application/json:
 	 *             schema:
@@ -86,15 +86,15 @@ class CategoryController extends BaseController {
 	 *               properties:
 	 *                 data:
 	 *                   type: object
-	 *                   $ref: '#/components/schemas/RouteCategory'
+	 *                   $ref: '#/components/schemas/Category'
 	 *
 	 *   get:
 	 *     tags:
-	 *       - RouteCategories
-	 *     summary: Retrieve all route categories
+	 *       - Categories
+	 *     summary: Retrieve all categories
 	 *     responses:
 	 *       200:
-	 *         description: A list of route categories
+	 *         description: A list of categories
 	 *         content:
 	 *           application/json:
 	 *             schema:
@@ -103,7 +103,7 @@ class CategoryController extends BaseController {
 	 *                 data:
 	 *                   type: array
 	 *                   items:
-	 *                     $ref: '#/components/schemas/RouteCategory'
+	 *                     $ref: '#/components/schemas/Category'
 	 */
 
 	public async create(
@@ -123,16 +123,16 @@ class CategoryController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /route-categories:
+	 * /categories:
 	 *   get:
 	 *     security:
 	 *       - bearerAuth: []
 	 *     tags:
-	 *       - RouteCategories
-	 *     summary: Retrieve all route categories
+	 *       - Categories
+	 *     summary: Retrieve all categories
 	 *     responses:
 	 *       200:
-	 *         description: A list of route categories
+	 *         description: A list of categories
 	 *         content:
 	 *           application/json:
 	 *             schema:
@@ -141,7 +141,7 @@ class CategoryController extends BaseController {
 	 *                 data:
 	 *                   type: array
 	 *                   items:
-	 *                     $ref: '#/components/schemas/RouteCategory'
+	 *                     $ref: '#/components/schemas/Category'
 	 */
 
 	public async findAll(): Promise<

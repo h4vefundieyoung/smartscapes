@@ -10,6 +10,7 @@ type IconName =
 	| "eye"
 	| "eyeOff"
 	| "link"
+	| "logout"
 	| "map"
 	| "message"
 	| "route"

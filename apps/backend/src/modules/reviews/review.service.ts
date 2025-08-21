@@ -1,4 +1,8 @@
-import { type CollectionResult, type Service } from "~/libs/types/types.js";
+import {
+	type CollectionResult,
+	type Service,
+	type UserAuthResponseDto,
+} from "~/libs/types/types.js";
 import { ReviewEntity } from "~/modules/reviews/review.entity.js";
 import { type ReviewRepository } from "~/modules/reviews/review.repository.js";
 
@@ -28,9 +32,11 @@ class ReviewService implements Service {
 	}
 
 	public async create(
-		payload: ReviewCreatePayload & {
-			currentUser: { firstName: string; id: number; lastName: string };
-		},
+		payload: Pick<
+			UserAuthResponseDto,
+			"avatarUrl" | "firstName" | "id" | "lastName"
+		> &
+			ReviewCreatePayload,
 	): Promise<ReviewGetByIdResponseDto> {
 		if (payload.poiId) {
 			await this.ensurePoiExists(payload.poiId);
@@ -45,7 +51,7 @@ class ReviewService implements Service {
 			likesCount: 0,
 			poiId: payload.poiId ?? null,
 			routeId: payload.routeId ?? null,
-			userId: payload.currentUser.id,
+			userId: payload.userId,
 		});
 
 		const created = await this.reviewRepository.create(reviewEntity);
@@ -59,9 +65,10 @@ class ReviewService implements Service {
 			poiId: base.poiId,
 			routeId: base.routeId,
 			user: {
-				firstName: payload.currentUser.firstName,
-				id: payload.currentUser.id,
-				lastName: payload.currentUser.lastName,
+				avatarUrl: payload.avatarUrl,
+				firstName: payload.firstName,
+				id: payload.id,
+				lastName: payload.lastName,
 			},
 		};
 	}

@@ -10,7 +10,7 @@ type Properties = {
 
 const ReviewCard = ({ review }: Properties): React.JSX.Element => {
 	const avatarUser = {
-		avatarUrl: null,
+		avatarUrl: review.user.avatarUrl,
 		email: "",
 		firstName: review.user.firstName,
 		group: {
@@ -24,7 +24,7 @@ const ReviewCard = ({ review }: Properties): React.JSX.Element => {
 		isVisibleProfile: true,
 
 		lastName: review.user.lastName,
-	} satisfies UserAuthResponseDto & { avatarUrl?: null | string };
+	} satisfies UserAuthResponseDto;
 
 	return (
 		<li className={styles["card"]}>

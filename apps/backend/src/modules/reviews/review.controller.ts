@@ -66,6 +66,9 @@ import {
  *             lastName:
  *               type: string
  *               example: Kovalenko
+ *             avatarUrl:
+ *               type: string
+ *               example: null
  *
  *     ReviewGetByIdResponseDto:
  *        type: object
@@ -142,11 +145,10 @@ class ReviewController extends BaseController {
 		const authenticatedUser = user as UserAuthResponseDto;
 		const review = await this.reviewService.create({
 			...body,
-			currentUser: {
-				firstName: authenticatedUser.firstName,
-				id: authenticatedUser.id,
-				lastName: authenticatedUser.lastName,
-			},
+			avatarUrl: authenticatedUser.avatarUrl,
+			firstName: authenticatedUser.firstName,
+			id: authenticatedUser.id,
+			lastName: authenticatedUser.lastName,
 			userId: authenticatedUser.id,
 		});
 

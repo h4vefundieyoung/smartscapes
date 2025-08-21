@@ -55,6 +55,7 @@ describe("ReviewController", () => {
 		poiId: null,
 		routeId: 10,
 		user: {
+			avatarUrl: mockUser.avatarUrl,
 			firstName: mockUser.firstName,
 			id: mockUser.id,
 			lastName: mockUser.lastName,

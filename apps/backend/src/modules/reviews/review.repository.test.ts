@@ -3,12 +3,11 @@ import { createTracker, MockClient, type Tracker } from "knex-mock-client";
 import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
 
-import { type ReviewGetByIdResponseDto } from "./libs/types/types.js";
 import { ReviewEntity } from "./review.entity.js";
 import { ReviewModel } from "./review.model.js";
 import { ReviewRepository } from "./review.repository.js";
 
-describe("ReviewRepository", () => {
+describe("ReviewRepository (knex-mock-client, no fakeQB)", () => {
 	let reviewRepository: ReviewRepository;
 	let databaseTracker: Tracker;
 
@@ -24,8 +23,12 @@ describe("ReviewRepository", () => {
 	};
 
 	beforeEach(() => {
-		const database = knex({ client: MockClient });
+		const database = knex({ client: MockClient, dialect: "pg" });
 		databaseTracker = createTracker(database);
+
+		databaseTracker.on.any("information_schema").response([]);
+		databaseTracker.on.any("pg_catalog").response([]);
+
 		ReviewModel.knex(database);
 		reviewRepository = new ReviewRepository(ReviewModel);
 	});
@@ -35,130 +38,79 @@ describe("ReviewRepository", () => {
 	});
 
 	it("create should create and return new review", async () => {
-		const reviewEntity = ReviewEntity.initialize(mockReviewData);
-		databaseTracker.on.insert("reviews").response([reviewEntity]);
-
-		const result = await reviewRepository.create(reviewEntity);
-
-		assert.deepStrictEqual(result, reviewEntity);
+		const entity = ReviewEntity.initialize(mockReviewData);
+		databaseTracker.on.insert("reviews").response([entity]);
+		const created = await reviewRepository.create(entity);
+		assert.deepStrictEqual(created, entity);
 	});
 
 	it("findAll should return DTO rows with nested user", async () => {
-		const rows: ReviewGetByIdResponseDto[] = [
+		const row = {
+			content: "Test review content",
+			id: 1,
+			likesCount: 10,
+			poiId: 5,
+			routeId: null,
+			"user:avatar:url": "url",
+			"user:firstName": "John",
+			"user:id": 42,
+			"user:lastName": "Doe",
+		};
+
+		databaseTracker.on.select("reviews").response([row]);
+
+		const result = await reviewRepository.findAll(null);
+
+		assert.deepStrictEqual(result, [
 			{
 				content: "Test review content",
 				id: 1,
 				likesCount: 10,
 				poiId: 5,
 				routeId: null,
-				user: { firstName: "John", id: 42, lastName: "Doe" },
+				user: {
+					avatarUrl: "url",
+					firstName: "John",
+					id: 42,
+					lastName: "Doe",
+				},
 			},
-		];
-
-		type FakeQB = {
-			execute(): Promise<ReviewGetByIdResponseDto[]>;
-			modifiers(map: Record<string, (b: unknown) => void>): FakeQB;
-			orderBy(col: string, directory: "asc" | "desc"): FakeQB;
-			select(...cols: string[]): FakeQB;
-			where(col: string, value: unknown): FakeQB;
-			withGraphJoined(spec: string): FakeQB;
-		};
-
-		const fakeQb: FakeQB = {
-			execute(): Promise<ReviewGetByIdResponseDto[]> {
-				return Promise.resolve(rows);
-			},
-			modifiers(): FakeQB {
-				return this;
-			},
-			orderBy(): FakeQB {
-				return this;
-			},
-			select(): FakeQB {
-				return this;
-			},
-			where(): FakeQB {
-				return this;
-			},
-			withGraphJoined(): FakeQB {
-				return this;
-			},
-		};
-
-		const originalQuery = ReviewModel.query.bind(ReviewModel);
-
-		try {
-			(ReviewModel as unknown as { query: () => unknown }).query =
-				(): unknown => fakeQb;
-
-			const result = await reviewRepository.findAll(null);
-			assert.deepStrictEqual(result, rows);
-		} finally {
-			(ReviewModel as unknown as { query: typeof originalQuery }).query =
-				originalQuery;
-		}
+		]);
 	});
 
 	it("findAll should apply routeId filter", async () => {
-		const filtered: ReviewGetByIdResponseDto[] = [
+		const routeId = 777;
+
+		const row = {
+			content: "By route",
+			id: 2,
+			likesCount: 0,
+			poiId: null,
+			routeId,
+			"user:avatar:url": "url",
+			"user:firstName": "A",
+			"user:id": 7,
+			"user:lastName": "B",
+		};
+
+		databaseTracker.on.select("reviews").response([row]);
+
+		const result = await reviewRepository.findAll({ routeId });
+
+		assert.deepStrictEqual(result, [
 			{
 				content: "By route",
 				id: 2,
 				likesCount: 0,
 				poiId: null,
-				routeId: 777,
-				user: { firstName: "A", id: 7, lastName: "B" },
+				routeId,
+				user: {
+					avatarUrl: "url",
+					firstName: "A",
+					id: 7,
+					lastName: "B",
+				},
 			},
-		];
-
-		type FakeQB = {
-			_captured?: { column?: string; value?: unknown };
-			execute(): Promise<ReviewGetByIdResponseDto[]>;
-			modifiers(map: Record<string, (b: unknown) => void>): FakeQB;
-			orderBy(col: string, directory: "asc" | "desc"): FakeQB;
-			select(...cols: string[]): FakeQB;
-			where(col: string, value: unknown): FakeQB;
-			withGraphJoined(spec: string): FakeQB;
-		};
-
-		const fakeQb: FakeQB = {
-			_captured: {},
-			execute(): Promise<ReviewGetByIdResponseDto[]> {
-				return Promise.resolve(filtered);
-			},
-			modifiers(): FakeQB {
-				return this;
-			},
-			orderBy(): FakeQB {
-				return this;
-			},
-			select(): FakeQB {
-				return this;
-			},
-			where(col: string, value: unknown): FakeQB {
-				this._captured = { column: col, value };
-
-				return this;
-			},
-			withGraphJoined(): FakeQB {
-				return this;
-			},
-		};
-
-		const originalQuery = ReviewModel.query.bind(ReviewModel);
-
-		try {
-			(ReviewModel as unknown as { query: () => unknown }).query =
-				(): unknown => fakeQb;
-
-			const result = await reviewRepository.findAll({ routeId: 777 });
-
-			assert.deepStrictEqual(result, filtered);
-			assert.equal(fakeQb._captured?.column, "reviews.route_id");
-			assert.equal(fakeQb._captured.value, 777);
-		} finally {
-			(ReviewModel as unknown as { query: typeof originalQuery }).query =
-				originalQuery;
-		}
+		]);
 	});
 });

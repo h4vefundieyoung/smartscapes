@@ -1,4 +1,4 @@
-import { Model } from "objection";
+import { Model, type RelationMappings } from "objection";
 
 import {
 	AbstractModel,
@@ -6,19 +6,9 @@ import {
 } from "~/libs/modules/database/database.js";
 
 import { UserModel } from "../users/user.model.js";
+import { type UserAuthResponseDto } from "../users/users.js";
 
 class ReviewModel extends AbstractModel {
-	public static readonly relationMappings = {
-		user: {
-			join: {
-				from: `${DatabaseTableName.REVIEWS}.user_id`,
-				to: `${DatabaseTableName.USERS}.id`,
-			},
-			modelClass: UserModel,
-			relation: Model.BelongsToOneRelation,
-		},
-	};
-
 	public static override get tableName(): string {
 		return DatabaseTableName.REVIEWS;
 	}
@@ -31,9 +21,25 @@ class ReviewModel extends AbstractModel {
 
 	public routeId!: null | number;
 
-	public user!: { firstName: string; id: number; lastName: string };
+	public user!: Pick<
+		UserAuthResponseDto,
+		"avatarUrl" | "firstName" | "id" | "lastName"
+	>;
 
 	public userId!: number;
+
+	public static relationMappings(): RelationMappings {
+		return {
+			user: {
+				join: {
+					from: `${DatabaseTableName.REVIEWS}.user_id`,
+					to: `${DatabaseTableName.USERS}.id`,
+				},
+				modelClass: UserModel,
+				relation: Model.BelongsToOneRelation,
+			},
+		};
+	}
 }
 
 export { ReviewModel };

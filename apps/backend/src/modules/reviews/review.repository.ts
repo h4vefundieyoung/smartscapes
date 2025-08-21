@@ -3,6 +3,7 @@ import { ReviewEntity } from "~/modules/reviews/review.entity.js";
 import { type ReviewModel } from "~/modules/reviews/review.model.js";
 
 import {
+	type ReviewGetAllResponseDto,
 	type ReviewGetByIdResponseDto,
 	type ReviewSearchQuery,
 } from "./libs/types/types.js";
@@ -30,12 +31,21 @@ class ReviewRepository implements Repository {
 	public async findAll(
 		options: null | ReviewSearchQuery,
 	): Promise<ReviewGetByIdResponseDto[]> {
-		const q = this.reviewModel
+		const queryBuilder = this.reviewModel
 			.query()
-			.withGraphJoined("user(selectBasic)")
+			.withGraphJoined("[user(selectUser).avatar(selectAvatar)]")
 			.modifiers({
-				selectBasic(b) {
-					b.select("id", "first_name as firstName", "last_name as lastName");
+				selectAvatar(builder) {
+					builder.clearSelect().select("files.url as url");
+				},
+				selectUser(builder) {
+					builder
+						.clearSelect()
+						.select(
+							"users.id",
+							"users.first_name as firstName",
+							"users.last_name as lastName",
+						);
 				},
 			})
 			.select(
@@ -49,13 +59,26 @@ class ReviewRepository implements Repository {
 
 		const routeId = options?.routeId;
 
-		if (routeId !== undefined) {
-			q.where("reviews.route_id", routeId);
+		if (typeof routeId === "number") {
+			queryBuilder.where("reviews.route_id", routeId);
 		}
 
-		const rows = await q.execute();
+		const rows =
+			(await queryBuilder.execute()) as unknown as ReviewGetAllResponseDto[];
 
-		return rows as ReviewGetByIdResponseDto[];
+		return rows.map((item) => ({
+			content: item.content,
+			id: item.id,
+			likesCount: item.likesCount,
+			poiId: item.poiId,
+			routeId: item.routeId,
+			user: {
+				avatarUrl: item.user.avatar?.url ?? null,
+				firstName: item.user.firstName,
+				id: item.user.id,
+				lastName: item.user.lastName,
+			},
+		}));
 	}
 }
 

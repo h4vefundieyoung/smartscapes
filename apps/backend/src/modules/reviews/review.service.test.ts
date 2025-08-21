@@ -65,7 +65,12 @@ describe("ReviewService", () => {
 		userId: 10,
 	};
 
-	const currentUser = { firstName: "John", id: 10, lastName: "Doe" };
+	const currentUser = {
+		avatarUrl: null,
+		firstName: "John",
+		id: 10,
+		lastName: "Doe",
+	};
 
 	it("create should return new review", async () => {
 		const reviewEntity = ReviewEntity.initialize(mockReviewDB);
@@ -86,8 +91,11 @@ describe("ReviewService", () => {
 		);
 
 		const result = await reviewService.create({
+			avatarUrl: currentUser.avatarUrl,
 			content: mockReviewDB.content,
-			currentUser,
+			firstName: currentUser.firstName,
+			id: currentUser.id,
+			lastName: currentUser.lastName,
 			poiId: mockReviewDB.poiId,
 			routeId: mockReviewDB.routeId,
 			userId: currentUser.id,
@@ -99,7 +107,12 @@ describe("ReviewService", () => {
 			likesCount: mockReviewDB.likesCount,
 			poiId: mockReviewDB.poiId,
 			routeId: mockReviewDB.routeId,
-			user: currentUser,
+			user: {
+				avatarUrl: currentUser.avatarUrl,
+				firstName: currentUser.firstName,
+				id: currentUser.id,
+				lastName: currentUser.lastName,
+			},
 		};
 
 		assert.deepStrictEqual(result, expected);
@@ -112,7 +125,12 @@ describe("ReviewService", () => {
 			likesCount: mockReviewDB.likesCount,
 			poiId: mockReviewDB.poiId,
 			routeId: mockReviewDB.routeId,
-			user: currentUser,
+			user: {
+				avatarUrl: currentUser.avatarUrl,
+				firstName: currentUser.firstName,
+				id: currentUser.id,
+				lastName: currentUser.lastName,
+			},
 		};
 
 		const reviewRepository = {

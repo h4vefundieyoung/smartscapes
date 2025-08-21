@@ -115,11 +115,11 @@ export {
 	userRouteCreateValidationSchema,
 	type UserRouteParameters,
 	userRouteParametersValidationSchema,
+	type userRoutePatchRequestDto,
+	userRoutePatchValidationSchema,
 	type UserRouteResponseDto,
 	UserRouteStatus,
 	type UserRouteStatusType,
-	type UserRouteUpdateRequestDto,
-	userRouteUpdateValidationSchema,
 } from "./modules/user-routes/user-routes.js";
 export {
 	type AuthenticatedUserPatchRequestDto,

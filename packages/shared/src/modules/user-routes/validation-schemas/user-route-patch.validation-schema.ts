@@ -4,7 +4,7 @@ import { LocationType } from "../../../libs/enums/enums.js";
 import { coordinateSchema } from "../../../libs/validated-schemas/validated-schemas.js";
 import { UserRouteValidationMessage } from "../libs/enums/enums.js";
 
-const userRouteUpdate = z.strictObject({
+const userRoutePatch = z.strictObject({
 	actualGeometry: z.object(
 		{
 			coordinates: coordinateSchema,
@@ -23,4 +23,4 @@ const userRouteUpdate = z.strictObject({
 	}),
 });
 
-export { userRouteUpdate };
+export { userRoutePatch };

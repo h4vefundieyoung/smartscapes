@@ -32,7 +32,7 @@ class UserRouteService implements Service {
 
 		const { geometry } = await this.routeService.findById(routeId);
 
-		const createdData = UserRouteEntity.initializeNew({
+		const createdRoute = UserRouteEntity.initializeNew({
 			actualGeometry: geometry,
 			plannedGeometry: geometry,
 			routeId,
@@ -40,7 +40,7 @@ class UserRouteService implements Service {
 			userId,
 		});
 
-		const created = await this.userRouteRepository.create(createdData);
+		const created = await this.userRouteRepository.create(createdRoute);
 
 		return created.toObject();
 	}
@@ -68,13 +68,20 @@ class UserRouteService implements Service {
 		return updated.toObject();
 	}
 
+	public async getAllByUserId(userId: number): Promise<UserRouteResponseDto[]> {
+		const userRoutes =
+			await this.userRouteRepository.findRoutesByUserId(userId);
+
+		return userRoutes.map((item) => item.toObject());
+	}
+
 	public async start(payload: {
 		routeId: number;
 		userId: number;
 	}): Promise<UserRouteResponseDto> {
 		const { routeId, userId } = payload;
 
-		const userRoutes = await this.getUserRoutes(userId);
+		const userRoutes = await this.getAllByUserId(userId);
 
 		this.ensureUserIsNotOnActiveStatus(userRoutes);
 
@@ -155,13 +162,6 @@ class UserRouteService implements Service {
 		}
 
 		return result.toObject();
-	}
-
-	private async getUserRoutes(userId: number): Promise<UserRouteResponseDto[]> {
-		const userRoutes =
-			await this.userRouteRepository.findRoutesByUserId(userId);
-
-		return userRoutes.map((item) => item.toObject());
 	}
 }
 

@@ -11,13 +11,13 @@ import { UserRouteApiPath } from "./libs/enums/enum.js";
 import {
 	type UserRouteCreateRequestDto,
 	type UserRouteParameters,
+	type userRoutePatchRequestDto,
 	type UserRouteResponseDto,
-	type UserRouteUpdateRequestDto,
 } from "./libs/types/type.js";
 import {
 	userRouteCreateValidationSchema,
 	userRouteParametersValidationSchema,
-	userRouteUpdateValidationSchema,
+	userRoutePatchValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 import { type UserRouteService } from "./user-route.service.js";
 
@@ -40,18 +40,27 @@ class UserRouteController extends BaseController {
 
 		this.addRoute({
 			handler: this.finish.bind(this),
-			method: "POST",
+			method: "PATCH",
 			path: UserRouteApiPath.FINISH,
 			validation: {
-				body: userRouteUpdateValidationSchema,
+				body: userRoutePatchValidationSchema,
 				params: userRouteParametersValidationSchema,
 			},
 		});
 
 		this.addRoute({
 			handler: this.start.bind(this),
-			method: "POST",
+			method: "PATCH",
 			path: UserRouteApiPath.START,
+			validation: {
+				params: userRouteParametersValidationSchema,
+			},
+		});
+
+		this.addRoute({
+			handler: this.getAllByUserId.bind(this),
+			method: "GET",
+			path: UserRouteApiPath.$ID,
 			validation: {
 				params: userRouteParametersValidationSchema,
 			},
@@ -68,17 +77,20 @@ class UserRouteController extends BaseController {
 		const { routeId } = body;
 		const { userId } = params;
 
-		const created = await this.userRouteService.create({ routeId, userId });
+		const createdRoute = await this.userRouteService.create({
+			routeId,
+			userId,
+		});
 
 		return {
-			payload: { data: created },
+			payload: { data: createdRoute },
 			status: HTTPCode.CREATED,
 		};
 	}
 
 	public async finish(
 		options: APIHandlerOptions<{
-			body: UserRouteUpdateRequestDto;
+			body: userRoutePatchRequestDto;
 			params: UserRouteParameters;
 		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
@@ -86,34 +98,49 @@ class UserRouteController extends BaseController {
 		const { actualGeometry, routeId } = body;
 		const { userId } = params;
 
-		const updated = await this.userRouteService.finish({
+		const updatedRoute = await this.userRouteService.finish({
 			actualGeometry,
 			routeId,
 			userId,
 		});
 
 		return {
-			payload: { data: updated },
+			payload: { data: updatedRoute },
+			status: HTTPCode.OK,
+		};
+	}
+
+	public async getAllByUserId(
+		options: APIHandlerOptions<{
+			params: UserRouteParameters;
+		}>,
+	): Promise<APIHandlerResponse<UserRouteResponseDto[]>> {
+		const { userId } = options.params;
+
+		const userRoutes = await this.userRouteService.getAllByUserId(userId);
+
+		return {
+			payload: { data: userRoutes },
 			status: HTTPCode.OK,
 		};
 	}
 
 	public async start(
 		options: APIHandlerOptions<{
-			body: UserRouteUpdateRequestDto;
+			body: userRoutePatchRequestDto;
 			params: UserRouteParameters;
 		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
 		const { routeId } = options.body;
 		const { userId } = options.params;
 
-		const updated = await this.userRouteService.start({
+		const updatedRoute = await this.userRouteService.start({
 			routeId,
 			userId,
 		});
 
 		return {
-			payload: { data: updated },
+			payload: { data: updatedRoute },
 			status: HTTPCode.OK,
 		};
 	}

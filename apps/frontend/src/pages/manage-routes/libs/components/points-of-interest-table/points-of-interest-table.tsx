@@ -6,6 +6,7 @@ import {
 	useAppSelector,
 	useCallback,
 	useEffect,
+	useMemo,
 	usePagination,
 	useState,
 } from "~/libs/hooks/hooks.js";
@@ -45,10 +46,17 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 		({ pointsOfInterest }) => pointsOfInterest,
 	);
 
-	const formattedSummary = summary.map((item) => ({
-		...item,
-		createdAt: getFormattedDate(new Date(item.createdAt), "dd MMM yyyy"),
-	}));
+	const formattedSummary = useMemo(() => {
+		return summary
+			.toSorted(
+				(a, b) =>
+					new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+			)
+			.map((item) => ({
+				...item,
+				createdAt: getFormattedDate(new Date(item.createdAt), "dd MMM yyyy"),
+			}));
+	}, [summary]);
 
 	const columns = useTableColumns();
 

@@ -189,7 +189,8 @@ class PointsOfInterestRepository implements Repository {
 				if (search) {
 					builder.where("name", "ilike", `%${search}%`);
 				}
-			});
+			})
+			.orderBy("created_at", "desc");
 
 		const [total, items] = await Promise.all([
 			baseQuery.clone().resultSize(),

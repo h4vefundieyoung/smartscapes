@@ -25,12 +25,12 @@
 	border-radius: 50%;
 }
 
-.fallback-primary {
+.primary {
 	font-weight: var(--font-weight-semibold);
 	color: var(--color-text-strong);
 }
 
-.fallback-secondary {
+.secondary {
 	font-size: calc(var(--font-size-large));
 	color: var(--color-base);
 }

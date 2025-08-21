@@ -32,10 +32,7 @@ const Avatar = ({
 				/>
 			) : (
 				<span
-					className={combineClassNames(
-						styles["fallback"],
-						styles[`fallback-${variant}`],
-					)}
+					className={combineClassNames(styles["fallback"], styles[variant])}
 				>
 					{getUserInitials(firstName, lastName)}
 				</span>

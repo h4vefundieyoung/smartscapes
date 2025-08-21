@@ -66,7 +66,7 @@ const PublicProfile = (): React.JSX.Element => {
 								{`${userProfile.firstName} ${userProfile.lastName}`}
 							</div>
 							<div className={styles["details-followers"]}>
-								{`${userProfile.followersCount.toString()} `}
+								{userProfile.followersCount.toString()} &nbsp;
 								{userProfile.followersCount === ONE ? "follower" : "followers"}
 							</div>
 							<div className={styles["follow-button-container"]}>

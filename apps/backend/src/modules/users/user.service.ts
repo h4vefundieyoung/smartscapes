@@ -22,6 +22,7 @@ import {
 
 class UserService implements Service {
 	private groupService: GroupService;
+
 	private userRepository: UserRepository;
 
 	public constructor(

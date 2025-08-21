@@ -1,1 +1,1 @@
-export { RouteCategoryError } from "./route-category.exception.js";
+export { CategoryError } from "./category-error.exception.js";

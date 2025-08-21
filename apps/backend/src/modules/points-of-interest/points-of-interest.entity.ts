@@ -2,9 +2,13 @@ import { type Entity, type PointGeometry } from "~/libs/types/types.js";
 
 class PointsOfInterestEntity implements Entity {
 	private createdAt: null | string;
+
 	private description: null | string;
+
 	private id: null | number;
+
 	private location: PointGeometry;
+
 	private name: string;
 
 	private constructor({

@@ -4,7 +4,7 @@ import { type CollectionResult, type Service } from "~/libs/types/types.js";
 import { CategoryEntity } from "./category.entity.js";
 import { type CategoryRepository } from "./category.repository.js";
 import { CategoryExceptionMessage } from "./libs/enums/enums.js";
-import { RouteCategoryError } from "./libs/exceptions/exceptions.js";
+import { CategoryError } from "./libs/exceptions/exceptions.js";
 import { changeStringCase } from "./libs/helpers/helpers.js";
 import {
 	type CategoryCreateRequestDto,
@@ -25,10 +25,10 @@ class CategoryService implements Service {
 
 		const key = changeStringCase(name);
 
-		const existingRouteCategory = await this.categoryRepository.findByKey(key);
+		const existingCategory = await this.categoryRepository.findByKey(key);
 
-		if (existingRouteCategory) {
-			throw new RouteCategoryError({
+		if (existingCategory) {
+			throw new CategoryError({
 				message: CategoryExceptionMessage.ALREADY_EXISTS,
 				status: HTTPCode.CONFLICT,
 			});
@@ -55,7 +55,7 @@ class CategoryService implements Service {
 		const item = await this.categoryRepository.findByName(name);
 
 		if (!item) {
-			throw new RouteCategoryError({
+			throw new CategoryError({
 				message: CategoryExceptionMessage.NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});

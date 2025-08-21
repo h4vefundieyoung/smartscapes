@@ -14,10 +14,15 @@ class NotificationModel extends AbstractModel {
 	}
 
 	public content!: string;
+
 	public entityId!: number;
+
 	public entityType!: ValueOf<typeof NotificationEntityType>;
+
 	public notificationType!: ValueOf<typeof NotificationType>;
+
 	public readAt!: null | string;
+
 	public userId!: number;
 }
 

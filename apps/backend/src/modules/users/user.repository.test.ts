@@ -161,6 +161,7 @@ describe("UserRepository", () => {
 
 		databaseTracker.on.select("users").responseOnce([
 			{
+				"avatar:url": "https://aws/avatars/example_file.jpg",
 				firstName: "John",
 				id: userId,
 				isVisibleProfile: true,
@@ -170,6 +171,7 @@ describe("UserRepository", () => {
 
 		databaseTracker.on.select("users").responseOnce([
 			{
+				"avatar:url": "https://aws/avatars/example_file.jpg",
 				firstName: "John",
 				followersCount: 5,
 				id: userId,
@@ -181,6 +183,7 @@ describe("UserRepository", () => {
 		const result = await userRepository.getUserProfile(userId, currentUserId);
 
 		assert.deepStrictEqual(result, {
+			avatarUrl: "https://aws/avatars/example_file.jpg",
 			firstName: "John",
 			followersCount: 5,
 			id: userId,
@@ -195,6 +198,7 @@ describe("UserRepository", () => {
 
 		databaseTracker.on.select("users").responseOnce([
 			{
+				avatarUrl: "https://aws/avatars/example_file.jpg",
 				firstName: "John",
 				id: userId,
 				isVisibleProfile: false,

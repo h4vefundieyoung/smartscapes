@@ -266,9 +266,9 @@ class UserRepository implements Repository {
 			.query()
 			.findById(id)
 			.select(
-				"id",
-				"firstName",
-				"lastName",
+				"users.id",
+				"users.firstName",
+				"users.lastName",
 				this.userModel
 					.raw(
 						"(SELECT COUNT(*) FROM user_follows uf WHERE uf.following_id = users.id)",
@@ -277,15 +277,16 @@ class UserRepository implements Repository {
 				this.userModel
 					.raw(
 						`EXISTS (
-							SELECT 1
-							FROM user_follows uf2
-							WHERE uf2.following_id = users.id
-							AND uf2.follower_id = ?
-						)`,
+					SELECT 1
+					FROM user_follows uf2
+					WHERE uf2.following_id = users.id
+					AND uf2.follower_id = ?
+				)`,
 						[currentUserId],
 					)
 					.as("isFollowed"),
 			)
+			.withGraphJoined("avatar")
 			.first();
 
 		const userProfile = profileData as UserModel & {
@@ -294,6 +295,7 @@ class UserRepository implements Repository {
 		};
 
 		return {
+			avatarUrl: userProfile.avatar ? userProfile.avatar.url : null,
 			firstName: userProfile.firstName,
 			followersCount: Number(userProfile.followersCount),
 			id: userProfile.id,

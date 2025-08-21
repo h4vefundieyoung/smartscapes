@@ -34,6 +34,7 @@ describe("UserController", () => {
 	it("findAll should return all users", async () => {
 		const users = [
 			{
+				avatarUrl: "https://aws/avatars/example_file.jpg",
 				email: "test@example.com",
 				firstName: "John",
 				group: mockGroup.toObject(),
@@ -66,6 +67,7 @@ describe("UserController", () => {
 
 	it("getUserProfile should return user public profile", async () => {
 		const userProfile = {
+			avatarUrl: "https://aws/avatars/example_file.jpg",
 			firstName: "John",
 			followersCount: 5,
 			id: 1,

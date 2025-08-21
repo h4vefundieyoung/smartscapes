@@ -74,7 +74,12 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
 				"routes.created_by_user_id",
-			]);
+			])
+			.modify((builder) => {
+				if (options?.name) {
+					builder.whereILike("name", `%${options.name.trim()}%`);
+				}
+			});
 
 		if (name) {
 			query.whereILike("routes.name", `%${name.trim()}%`);

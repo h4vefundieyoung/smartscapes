@@ -1,5 +1,5 @@
 const UsersApiPath = {
-	$USER_ID_GET_PROFILE: "/:id",
+	$ID: "/:id",
 	ROOT: "/",
 } as const;
 

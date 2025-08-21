@@ -54,7 +54,7 @@ class UserController extends BaseController {
 		this.addRoute({
 			handler: this.getUserProfile.bind(this),
 			method: "GET",
-			path: UsersApiPath.$USER_ID_GET_PROFILE,
+			path: UsersApiPath.$ID,
 			validation: {
 				params: userGetProfileValidationSchema,
 			},

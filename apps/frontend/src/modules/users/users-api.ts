@@ -57,7 +57,7 @@ class UserApi extends BaseHTTPApi {
 		id: number,
 	): Promise<APIResponse<UserPublicProfileResponseDto>> {
 		const response = await this.load<APIResponse<UserPublicProfileResponseDto>>(
-			this.getFullEndpoint(UsersApiPath.$USER_ID_GET_PROFILE, {
+			this.getFullEndpoint(UsersApiPath.$ID, {
 				id: id.toString(),
 			}),
 			{

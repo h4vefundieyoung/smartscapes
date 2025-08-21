@@ -1,6 +1,6 @@
 import z from "zod";
 
-import { parseToFloat } from "../../../../libs/helpers/helpers.js";
+import { parseToInteger } from "../../../../libs/helpers/helpers.js";
 import { ReviewValidationMessage } from "../enums/review-validation-message.enum.js";
 import { ReviewValidationRule } from "../enums/review-validation-rule.enum.js";
 
@@ -8,7 +8,7 @@ const reviewSearchQuery = z.object({
 	routeId: z
 		.string()
 		.trim()
-		.transform(parseToFloat)
+		.transform(parseToInteger)
 		.pipe(
 			z
 				.number()

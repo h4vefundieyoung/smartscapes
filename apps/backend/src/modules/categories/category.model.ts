@@ -20,6 +20,7 @@ class CategoryModel extends AbstractModel {
 			relation: Model.ManyToManyRelation,
 		},
 	};
+
 	public static override get tableName(): string {
 		return DatabaseTableName.CATEGORIES;
 	}

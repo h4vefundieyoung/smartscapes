@@ -1,9 +1,12 @@
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { StorageKey } from "~/libs/modules/storage/storage.js";
+import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 
+import { RouteNotification } from "../libs/enums/enums.js";
 import {
+	type PatchActionPayload,
 	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
 	type RouteGetByIdResponseDto,
@@ -28,6 +31,18 @@ const getRouteById = createAsyncThunk<
 	const { routesApi } = extra;
 
 	return routesApi.getRouteById(id);
+});
+
+const patchRoute = createAsyncThunk<
+	APIResponse<RouteGetByIdResponseDto>,
+	PatchActionPayload,
+	AsyncThunkConfig
+>(`${sliceName}/patch-route`, async (payload, { extra }) => {
+	const { routesApi } = extra;
+	const patchResult = await routesApi.patchRoute(payload);
+	toastNotifier.showSuccess(RouteNotification.UPDATED);
+
+	return patchResult;
 });
 
 const getAll = createAsyncThunk<
@@ -103,6 +118,7 @@ export {
 	discardCreateRouteFormData,
 	getAll,
 	getRouteById,
+	patchRoute,
 	preserveCreateRouteFormData,
 	restoreCreateRouteFormData,
 	updateCreateRouteFormData,

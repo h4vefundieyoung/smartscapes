@@ -23,6 +23,7 @@
 }
 
 .label {
+	margin: 0;
 	font-size: var(--font-size-h1);
 	font-weight: var(--font-weight-semibold);
 	line-height: 1.2;
@@ -31,4 +32,23 @@
 .description {
 	margin: 0;
 	overflow-wrap: break-word;
+}
+
+.header-container {
+	display: flex;
+	column-gap: 16px;
+	align-items: flex-end;
+	justify-content: space-between;
+}
+
+.edit-button-container {
+	width: 100%;
+	max-width: 100px;
+}
+
+.edit-mode-controls {
+	display: flex;
+	gap: 8px;
+	width: 100%;
+	max-width: 200px;
 }

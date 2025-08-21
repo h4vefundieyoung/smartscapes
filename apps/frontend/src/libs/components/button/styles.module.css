@@ -68,6 +68,11 @@
 	background-color: var(--color-fill-brand-strong);
 }
 
+.outlined-danger {
+	color: var(--color-text-error);
+	border-color: var(--color-text-error);
+}
+
 @media (width <= 768px) {
 	.button {
 		font-size: var(--font-size-tiny);

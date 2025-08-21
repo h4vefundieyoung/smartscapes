@@ -13,12 +13,14 @@ class FileRepository implements Repository {
 	}
 
 	public async create(entity: FileEntity): Promise<FileEntity> {
-		const { contentType, url } = entity.toNewObject();
+		const { contentType, entityId, folder, url } = entity.toNewObject();
 
 		const file = await this.fileModel
 			.query()
 			.insert({
 				contentType,
+				entityId,
+				folder,
 				url,
 			})
 			.returning(["id", "contentType", "url", "createdAt", "updatedAt"])

@@ -7,7 +7,7 @@ type Properties = {
 	onClick?: () => void;
 	to?: string;
 	type?: "button" | "submit";
-	variant?: "outlined" | "primary";
+	variant?: "outlined" | "outlined-danger" | "primary";
 };
 
 const Button = ({
@@ -20,6 +20,7 @@ const Button = ({
 	const buttonClass = combineClassNames(
 		styles["button"],
 		variant === "outlined" && styles["button-outlined"],
+		variant === "outlined-danger" && styles["outlined-danger"],
 		variant === "primary" && styles["button-primary"],
 	);
 

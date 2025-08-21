@@ -14,6 +14,7 @@ export { routesApi };
 export {
 	type RouteCreateRequestDto,
 	type RouteGetByIdResponseDto,
+	type RoutePatchRequestDto,
 } from "./libs/types/types.js";
 export { routesCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 export { actions, reducer } from "./slices/routes.js";

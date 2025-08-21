@@ -12,6 +12,7 @@ import {
 	discardCreateRouteFormData,
 	getAll,
 	getRouteById,
+	patchRoute,
 	restoreCreateRouteFormData,
 	updateCreateRouteFormData,
 } from "./actions.js";
@@ -65,6 +66,17 @@ const { actions, name, reducer } = createSlice({
 			state.dataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(getAll.rejected, (state) => {
+			state.dataStatus = DataStatus.REJECTED;
+		});
+
+		builder.addCase(patchRoute.pending, (state) => {
+			state.dataStatus = DataStatus.PENDING;
+		});
+		builder.addCase(patchRoute.fulfilled, (state, action) => {
+			state.route = action.payload.data;
+			state.dataStatus = DataStatus.FULFILLED;
+		});
+		builder.addCase(patchRoute.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
 		});
 

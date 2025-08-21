@@ -33,8 +33,11 @@ type ConstructorParameters = {
 
 class RouteService implements Service {
 	private mapboxDirectionApi: MapboxDirectionsApi;
+
 	private plannedPathService: PlannedPathService;
+
 	private pointsOfInterestService: PointsOfInterestService;
+
 	private routesRepository: RouteRepository;
 
 	public constructor({

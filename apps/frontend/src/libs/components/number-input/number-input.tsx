@@ -41,7 +41,7 @@ const NumberInput = ({
 		[],
 	);
 
-	const appliedValue = useCallback(() => {
+	const handleAppliedValue = useCallback(() => {
 		const inputValue = Number(localValue);
 
 		if (Number.isNaN(inputValue) || !inputValue) {
@@ -65,10 +65,10 @@ const NumberInput = ({
 	const handleKeyDown = useCallback(
 		(event: React.KeyboardEvent<HTMLInputElement>) => {
 			if (event.key === "Enter") {
-				appliedValue();
+				handleAppliedValue();
 			}
 		},
-		[appliedValue],
+		[handleAppliedValue],
 	);
 
 	return (
@@ -76,7 +76,7 @@ const NumberInput = ({
 			<div className={styles["wrapper"]}>
 				<input
 					className={styles["input"]}
-					onBlur={appliedValue}
+					onBlur={handleAppliedValue}
 					onChange={handleInputChange}
 					onKeyDown={handleKeyDown}
 					style={{ width: inputWidth }}

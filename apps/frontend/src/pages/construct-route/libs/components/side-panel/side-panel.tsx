@@ -8,10 +8,8 @@ import {
 	useAppForm,
 	useAppSelector,
 	useCallback,
-	useDebounce,
-	useEffect,
+	useDebounceCallback,
 	useMemo,
-	useState,
 } from "~/libs/hooks/hooks.js";
 import { type SelectOption } from "~/libs/types/types.js";
 import { type PointsOfInterestResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
@@ -39,12 +37,16 @@ const SidePanel = ({
 		defaultValues: { searchPoi: null },
 	});
 
-	const [searchValue, setSearchValue] = useState<string>("");
-	const debouncedSearchValue = useDebounce(searchValue);
+	const handleSelectInputChange = useDebounceCallback((value: string) => {
+		if (
+			value.length < PointsOfInterestValidationRule.NAME_MIN_LENGTH ||
+			value.length > PointsOfInterestValidationRule.NAME_MAX_LENGTH
+		) {
+			return;
+		}
 
-	const handleSelectInputChange = useCallback((value: string) => {
-		setSearchValue(value);
-	}, []);
+		void dispatch(routeActions.getPointsOfInterest({ name: value }));
+	});
 
 	const handleSelectChange = useCallback(
 		(
@@ -84,21 +86,6 @@ const SidePanel = ({
 	}, [filteredPois]);
 
 	const isLoading = dataStatus === DataStatus.PENDING;
-
-	useEffect(() => {
-		if (
-			debouncedSearchValue.length <
-				PointsOfInterestValidationRule.NAME_MIN_LENGTH ||
-			debouncedSearchValue.length >
-				PointsOfInterestValidationRule.NAME_MAX_LENGTH
-		) {
-			return;
-		}
-
-		void dispatch(
-			routeActions.getPointsOfInterest({ name: debouncedSearchValue }),
-		);
-	}, [debouncedSearchValue, dispatch]);
 
 	return (
 		<div className={styles["container"]}>

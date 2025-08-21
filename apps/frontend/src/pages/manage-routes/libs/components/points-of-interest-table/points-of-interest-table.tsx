@@ -1,5 +1,5 @@
 import { Table } from "~/libs/components/components.js";
-import { DataStatus } from "~/libs/enums/enums.js";
+import { DataStatus, FormatData } from "~/libs/enums/enums.js";
 import { getFormattedDate } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
@@ -23,7 +23,10 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 
 	const formattedSummary = summary.map((item) => ({
 		...item,
-		createdAt: getFormattedDate(new Date(item.createdAt), "dd MMM yyyy"),
+		createdAt: getFormattedDate(
+			new Date(item.createdAt),
+			FormatData.DATE_DD_MM_YYYY,
+		),
 	}));
 
 	const columns = useTableColumns();

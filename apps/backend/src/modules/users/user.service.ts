@@ -40,7 +40,7 @@ class UserService implements Service {
 
 		if (existingUser) {
 			throw new UserError({
-				message: UserExceptionMessage.USER_ALLREADY_EXISTS,
+				message: UserExceptionMessage.ALREADY_EXISTS,
 				status: HTTPCode.CONFLICT,
 			});
 		}
@@ -102,7 +102,7 @@ class UserService implements Service {
 
 		if (!item) {
 			throw new UserError({
-				message: UserExceptionMessage.USER_NOT_FOUND,
+				message: UserExceptionMessage.NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}

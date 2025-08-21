@@ -52,7 +52,11 @@ class UserRouteService implements Service {
 	}): Promise<UserRouteResponseDto> {
 		const { actualGeometry, routeId, userId } = payload;
 
-		const userRoute = await this.getRoute(userId, routeId);
+		const userRoute = await this.getByRouteId(routeId);
+
+		this.ensureUserIsOwner(userRoute, userId);
+
+		await this.ensureUserIsNotOnActiveRoute(userId);
 
 		const updatedData = UserRouteEntity.initializeNew({
 			...userRoute,
@@ -69,8 +73,7 @@ class UserRouteService implements Service {
 	}
 
 	public async getAllByUserId(userId: number): Promise<UserRouteResponseDto[]> {
-		const userRoutes =
-			await this.userRouteRepository.findRoutesByUserId(userId);
+		const userRoutes = await this.userRouteRepository.findAllByUserId(userId);
 
 		return userRoutes.map((item) => item.toObject());
 	}
@@ -81,13 +84,11 @@ class UserRouteService implements Service {
 	}): Promise<UserRouteResponseDto> {
 		const { routeId, userId } = payload;
 
-		const userRoutes = await this.getAllByUserId(userId);
-
-		this.ensureUserIsNotOnActiveStatus(userRoutes);
-
-		const userRoute = this.findUserRoute(userRoutes, routeId);
+		const userRoute = await this.getByRouteId(routeId);
 
 		this.ensureUserIsOwner(userRoute, userId);
+
+		await this.ensureUserIsNotOnActiveRoute(userId);
 
 		const updatedData = UserRouteEntity.initializeNew({
 			...userRoute,
@@ -102,14 +103,11 @@ class UserRouteService implements Service {
 		return updatedRoute.toObject();
 	}
 
-	private ensureUserIsNotOnActiveStatus(
-		userRoutes: UserRouteResponseDto[],
-	): void {
-		const isAlreadyActive = userRoutes.some(
-			(route) => route.status === UserRouteStatus.ACTIVE,
-		);
+	private async ensureUserIsNotOnActiveRoute(userId: number): Promise<void> {
+		const isOnActiveRoute =
+			await this.userRouteRepository.hasActiveRoute(userId);
 
-		if (isAlreadyActive) {
+		if (isOnActiveRoute) {
 			throw new UserRouteError({
 				message: UserRouteExeptionMessage.USER_ALREADY_ON_ACTIVE_STATUS,
 				status: HTTPCode.CONFLICT,
@@ -129,11 +127,8 @@ class UserRouteService implements Service {
 		}
 	}
 
-	private findUserRoute(
-		userRoutes: UserRouteResponseDto[],
-		routeId: number,
-	): UserRouteResponseDto {
-		const userRoute = userRoutes.find((route) => route.routeId === routeId);
+	private async getByRouteId(routeId: number): Promise<UserRouteResponseDto> {
+		const userRoute = await this.userRouteRepository.findByRouteId(routeId);
 
 		if (!userRoute) {
 			throw new UserRouteError({
@@ -142,26 +137,7 @@ class UserRouteService implements Service {
 			});
 		}
 
-		return userRoute;
-	}
-
-	private async getRoute(
-		userId: number,
-		routeId: number,
-	): Promise<UserRouteResponseDto> {
-		const result = await this.userRouteRepository.getRouteByUserIdAndRouteId(
-			userId,
-			routeId,
-		);
-
-		if (!result) {
-			throw new UserRouteError({
-				message: UserRouteExeptionMessage.USER_ROUTE_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		return result.toObject();
+		return userRoute.toObject();
 	}
 }
 

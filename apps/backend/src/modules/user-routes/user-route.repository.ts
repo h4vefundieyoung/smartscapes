@@ -1,5 +1,6 @@
 import { type Repository } from "~/libs/types/types.js";
 
+import { UserRouteStatus } from "./libs/enums/enum.js";
 import { UserRouteEntity } from "./user-route.entity.js";
 import { type UserRouteModel } from "./user-route.model.js";
 
@@ -35,7 +36,7 @@ class UserRouteRepository implements Repository {
 		return UserRouteEntity.initialize(result);
 	}
 
-	public async findRoutesByUserId(userId: number): Promise<UserRouteEntity[]> {
+	public async findAllByUserId(userId: number): Promise<UserRouteEntity[]> {
 		const result = await this.userRouteModel
 			.query()
 			.where({ userId })
@@ -58,13 +59,10 @@ class UserRouteRepository implements Repository {
 		return result.map((item) => UserRouteEntity.initialize(item));
 	}
 
-	public async getRouteByUserIdAndRouteId(
-		userId: number,
-		routeId: number,
-	): Promise<null | UserRouteEntity> {
+	public async findByRouteId(routeId: number): Promise<null | UserRouteEntity> {
 		const [result] = await this.userRouteModel
 			.query()
-			.where({ routeId, userId })
+			.where({ routeId })
 			.returning([
 				"id",
 				"routeId",
@@ -82,6 +80,15 @@ class UserRouteRepository implements Repository {
 			.execute();
 
 		return result ? UserRouteEntity.initialize(result) : null;
+	}
+
+	public async hasActiveRoute(userId: number): Promise<boolean> {
+		const result = await this.userRouteModel
+			.query()
+			.where({ status: UserRouteStatus.ACTIVE, userId })
+			.execute();
+
+		return result.length > 0;
 	}
 
 	public async patch(

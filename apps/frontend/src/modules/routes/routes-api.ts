@@ -9,6 +9,7 @@ import {
 	type PatchActionPayload,
 	type PlannedPathResponseDto,
 	type RouteConstructRequestDto,
+	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
 	type RouteGetByIdResponseDto,
 } from "./libs/types/types.js";
@@ -29,6 +30,22 @@ class RoutesApi extends BaseHTTPApi {
 	): Promise<APIResponse<PlannedPathResponseDto>> {
 		const response = await this.load<APIResponse<PlannedPathResponseDto>>(
 			this.getFullEndpoint(RoutesApiPath.CONSTRUCT, {}),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "POST",
+				payload: JSON.stringify(payload),
+			},
+		);
+
+		return await response.json();
+	}
+
+	public async create(
+		payload: RouteCreateRequestDto,
+	): Promise<APIResponse<RouteGetByIdResponseDto>> {
+		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
+			this.getFullEndpoint("/", {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,

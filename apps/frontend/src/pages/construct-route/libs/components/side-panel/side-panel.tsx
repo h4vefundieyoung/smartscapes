@@ -77,7 +77,7 @@ const SidePanel = ({
 	const handleConstructClick = useCallback(() => {
 		const poiIds = pointsOfInterest.map(({ id }) => id);
 
-		void dispatch(routeActions.construct({ poiIds }));
+		void dispatch(routeActions.constructRoute({ poiIds }));
 	}, [dispatch, pointsOfInterest]);
 
 	const selectOptions = useMemo(() => {

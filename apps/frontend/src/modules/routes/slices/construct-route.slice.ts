@@ -4,13 +4,13 @@ import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 import { type PointsOfInterestResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 
-import { type RouteConstructResponseDto } from "../libs/types/types.js";
+import { type PlannedPathResponseDto } from "../libs/types/types.js";
 import { construct, getPointsOfInterest } from "./actions.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
 	pointsOfInterest: PointsOfInterestResponseDto[];
-	routeLineString: null | RouteConstructResponseDto;
+	routeLineString: null | PlannedPathResponseDto;
 };
 
 const initialState: State = {

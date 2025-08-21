@@ -7,8 +7,8 @@ import { type APIResponse } from "~/libs/types/types.js";
 import { RoutesApiPath } from "./libs/enums/enums.js";
 import {
 	type PatchActionPayload,
+	type PlannedPathResponseDto,
 	type RouteConstructRequestDto,
-	type RouteConstructResponseDto,
 	type RouteFindAllOptions,
 	type RouteGetByIdResponseDto,
 } from "./libs/types/types.js";
@@ -26,8 +26,8 @@ class RoutesApi extends BaseHTTPApi {
 
 	public async construct(
 		payload: RouteConstructRequestDto,
-	): Promise<APIResponse<RouteConstructResponseDto>> {
-		const response = await this.load<APIResponse<RouteConstructResponseDto>>(
+	): Promise<APIResponse<PlannedPathResponseDto>> {
+		const response = await this.load<APIResponse<PlannedPathResponseDto>>(
 			this.getFullEndpoint(RoutesApiPath.CONSTRUCT, {}),
 			{
 				contentType: ContentType.JSON,

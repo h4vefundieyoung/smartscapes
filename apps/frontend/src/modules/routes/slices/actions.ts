@@ -10,8 +10,8 @@ import {
 import { RouteNotification } from "../libs/enums/enums.js";
 import {
 	type PatchActionPayload,
+	type PlannedPathResponseDto,
 	type RouteConstructRequestDto,
-	type RouteConstructResponseDto,
 	type RouteFindAllOptions,
 	type RouteGetByIdResponseDto,
 } from "../libs/types/types.js";
@@ -51,7 +51,7 @@ const getAll = createAsyncThunk<
 });
 
 const construct = createAsyncThunk<
-	APIResponse<RouteConstructResponseDto>,
+	APIResponse<PlannedPathResponseDto>,
 	RouteConstructRequestDto,
 	AsyncThunkConfig
 >(`${constructRouteSliceName}/construct-route`, async (payload, { extra }) => {

@@ -3,29 +3,19 @@
 	width: 100%;
 	min-width: fit-content;
 	padding: 12px 16px;
-	font-family: Inter, sans-serif;
+	font-family: var(--font-family);
 	font-size: var(--font-size-small);
 	line-height: 1.5;
-	color: var(--color-text-inverse-strong);
+	color: inherit;
 	text-align: center;
 	text-decoration: none;
-	background-color: var(--color-fill-brand-strong);
-	border: none;
-	border-radius: 8px;
-	box-shadow:
-		0 4px 8px -2px var(--color-shadow-weak),
-		0 2px 4px -2px var(--color-shadow-strong);
-	transition: background-color 0.3s ease;
-}
-
-.button:hover {
 	cursor: pointer;
-	background-color: var(--color-fill-press);
+	border-radius: 8px;
+	transition: all 0.3s ease;
 }
 
 .button:focus-visible {
 	outline: none;
-	background-color: var(--color-fill-press);
 }
 
 .button:focus-visible::after {
@@ -38,9 +28,49 @@
 }
 
 .button:disabled {
+	cursor: not-allowed;
+	opacity: 0.3;
+}
+
+.button-primary {
+	color: var(--color-text-inverse-strong);
+	background-color: var(--color-fill-brand-strong);
+	border: none;
+	box-shadow:
+		0 4px 8px -2px var(--color-shadow-weak),
+		0 2px 4px -2px var(--color-shadow-strong);
+}
+
+.button-primary:disabled {
 	background-color: var(--color-fill-press);
 	box-shadow: none;
-	opacity: 0.3;
+}
+
+.button-primary:hover:not(:disabled),
+.button-primary:focus-visible:not(:disabled) {
+	background-color: var(--color-fill-press);
+}
+
+.button-outlined {
+	color: var(--color-fill-brand-strong);
+	background-color: transparent;
+	border: 2px solid var(--color-fill-brand-strong);
+}
+
+.button-outlined:disabled {
+	color: var(--color-fill-press);
+	border-color: var(--color-fill-press);
+}
+
+.button-outlined:hover:not(:disabled),
+.button-outlined:focus-visible:not(:disabled) {
+	color: var(--color-text-inverse-strong);
+	background-color: var(--color-fill-brand-strong);
+}
+
+.outlined-danger {
+	color: var(--color-text-error);
+	border-color: var(--color-text-error);
 }
 
 @media (width <= 768px) {

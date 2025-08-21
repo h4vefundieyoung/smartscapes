@@ -15,8 +15,8 @@ import { UserError } from "./libs/exceptions/exceptions.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
 	type AuthenticatedUserPatchResponseDto,
+	type UserDetailsWithPassword,
 	type UserGetByIdItemResponseDto,
-	type UserPasswordDetails,
 	type UserSignUpRequestDto,
 } from "./libs/types/types.js";
 
@@ -40,7 +40,7 @@ class UserService implements Service {
 
 		if (existingUser) {
 			throw new UserError({
-				message: UserExceptionMessage.USER_ALLREADY_EXISTS,
+				message: UserExceptionMessage.ALREADY_EXISTS,
 				status: HTTPCode.CONFLICT,
 			});
 		}
@@ -90,7 +90,7 @@ class UserService implements Service {
 
 	public async findPasswordDetails(
 		email: string,
-	): Promise<null | UserPasswordDetails> {
+	): Promise<null | UserDetailsWithPassword> {
 		return await this.userRepository.findPasswordDetails(email);
 	}
 
@@ -102,7 +102,7 @@ class UserService implements Service {
 
 		if (!item) {
 			throw new UserError({
-				message: UserExceptionMessage.USER_NOT_FOUND,
+				message: UserExceptionMessage.NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}

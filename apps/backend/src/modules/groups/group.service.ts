@@ -30,7 +30,7 @@ class GroupService implements Service<GroupResponseDto> {
 
 		if (!group) {
 			throw new GroupError({
-				message: GroupExceptionMessage.GROUP_NOT_FOUND,
+				message: GroupExceptionMessage.NOT_FOUND,
 				status: HTTPCode.INTERNAL_SERVER_ERROR,
 			});
 		}
@@ -51,7 +51,7 @@ class GroupService implements Service<GroupResponseDto> {
 
 		if (!group) {
 			throw new GroupError({
-				message: GroupExceptionMessage.GROUP_NOT_FOUND,
+				message: GroupExceptionMessage.NOT_FOUND,
 				status: HTTPCode.INTERNAL_SERVER_ERROR,
 			});
 		}

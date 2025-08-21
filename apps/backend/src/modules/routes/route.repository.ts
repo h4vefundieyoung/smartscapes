@@ -1,3 +1,4 @@
+import { SortingOrder } from "~/libs/enums/enums.js";
 import {
 	type Repository,
 	type TransactionOptions,
@@ -10,6 +11,7 @@ import { type RouteModel } from "./route.model.js";
 
 class RouteRepository implements Repository {
 	private plannedPathModel: typeof PlannedPathModel;
+
 	private routesModel: typeof RouteModel;
 
 	public constructor(
@@ -56,6 +58,8 @@ class RouteRepository implements Repository {
 	public async findAll(
 		options: null | RouteFindAllOptions,
 	): Promise<RouteEntity[]> {
+		const { categories, latitude, longitude, name } = options ?? {};
+
 		const query = this.routesModel
 			.query()
 			.withGraphFetched("pois")
@@ -74,22 +78,32 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
 				"routes.created_by_user_id",
-			])
-			.modify((builder) => {
-				if (options?.name) {
-					builder.whereILike("name", `%${options.name.trim()}%`);
-				}
-			});
+			]);
 
-		if (options?.name) {
-			query.whereILike("routes.name", `%${options.name.trim()}%`);
+		if (name) {
+			query.whereILike("routes.name", `%${name.trim()}%`);
 		}
 
-		if (options?.categories?.length) {
+		if (latitude !== undefined && longitude !== undefined) {
+			query
+				.joinRelated("pois")
+				.where("pois_join.visit_order", 0)
+				.select(
+					this.routesModel.raw(
+						`ST_Distance(
+							pois.location::geography,
+							ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography
+						) as distance_points`,
+						[longitude, latitude],
+					),
+				)
+				.orderBy("distance_points", SortingOrder.ASC);
+		}
+
+		if (categories?.length) {
 			query
 				.joinRelated("categories")
-				.whereIn("categories.key", options.categories as string[])
-				.groupBy("routes.id");
+				.whereIn("categories.key", categories as string[]);
 		}
 
 		const routes = await query;

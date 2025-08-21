@@ -7,106 +7,100 @@ import { CategoryEntity } from "./category.entity.js";
 import { type CategoryRepository } from "./category.repository.js";
 import { CategoryService } from "./category.service.js";
 import { CategoryExceptionMessage } from "./libs/enums/enums.js";
-import { RouteCategoryError } from "./libs/exceptions/exceptions.js";
+import { CategoryError } from "./libs/exceptions/exceptions.js";
 
 describe("CategoryService", () => {
-	const mockRouteCategory: Parameters<typeof CategoryEntity.initialize>[0] = {
+	const mockCategory: Parameters<typeof CategoryEntity.initialize>[0] = {
 		id: 1,
 		key: "popular",
 		name: "Popular",
 	};
 
-	it("create should return new route category", async () => {
-		const routeCategoryEntity = CategoryEntity.initialize(mockRouteCategory);
+	it("create should return new category", async () => {
+		const categoryEntity = CategoryEntity.initialize(mockCategory);
 
-		const routeCategoryRepository = {
+		const categoryRepository = {
 			create: (() =>
-				Promise.resolve(routeCategoryEntity)) as CategoryRepository["create"],
+				Promise.resolve(categoryEntity)) as CategoryRepository["create"],
 			findByKey: (() =>
 				Promise.resolve(null)) as CategoryRepository["findByKey"],
 		} as CategoryRepository;
 
-		const routeCategoryService = new CategoryService(routeCategoryRepository);
+		const categoryService = new CategoryService(categoryRepository);
 
-		const result = await routeCategoryService.create({
-			name: mockRouteCategory.name,
+		const result = await categoryService.create({
+			name: mockCategory.name,
 		});
 
-		assert.deepStrictEqual(result, mockRouteCategory);
+		assert.deepStrictEqual(result, mockCategory);
 	});
 
 	it("create should throw exception if category with such key already exists", async () => {
-		const routeCategoryEntity = CategoryEntity.initialize(mockRouteCategory);
+		const categoryEntity = CategoryEntity.initialize(mockCategory);
 
-		const routeCategoryRepository = {
+		const categoryRepository = {
 			create: (() =>
-				Promise.resolve(routeCategoryEntity)) as CategoryRepository["create"],
+				Promise.resolve(categoryEntity)) as CategoryRepository["create"],
 			findByKey: (() =>
-				Promise.resolve(
-					routeCategoryEntity,
-				)) as CategoryRepository["findByKey"],
+				Promise.resolve(categoryEntity)) as CategoryRepository["findByKey"],
 		} as CategoryRepository;
 
-		const routeCategoryService = new CategoryService(routeCategoryRepository);
+		const categoryService = new CategoryService(categoryRepository);
 
 		try {
-			await routeCategoryService.create({
-				name: mockRouteCategory.name,
+			await categoryService.create({
+				name: mockCategory.name,
 			});
 			assert.fail("expected exception not thrown");
 		} catch (error) {
-			assert.ok(error instanceof RouteCategoryError);
+			assert.ok(error instanceof CategoryError);
 			assert.equal(error.message, CategoryExceptionMessage.ALREADY_EXISTS);
 			assert.equal(error.status, HTTPCode.CONFLICT);
 		}
 	});
 
-	it("findAll should return all route categories", async () => {
-		const routeCategoryEntity = CategoryEntity.initialize(mockRouteCategory);
+	it("findAll should return all categories", async () => {
+		const categoryEntity = CategoryEntity.initialize(mockCategory);
 
-		const routeCategoryRepository = {
-			findAll: () => Promise.resolve([routeCategoryEntity]),
+		const categoryRepository = {
+			findAll: () => Promise.resolve([categoryEntity]),
 		} as CategoryRepository;
 
-		const routeCategoryService = new CategoryService(routeCategoryRepository);
+		const categoryService = new CategoryService(categoryRepository);
 
-		const result = await routeCategoryService.findAll();
+		const result = await categoryService.findAll();
 
-		assert.deepStrictEqual(result, { items: [routeCategoryEntity.toObject()] });
+		assert.deepStrictEqual(result, { items: [categoryEntity.toObject()] });
 	});
 
-	it("findByName should return route category with corresponding name", async () => {
-		const routeCategoryEntity = CategoryEntity.initialize(mockRouteCategory);
+	it("findByName should return category with corresponding name", async () => {
+		const categoryEntity = CategoryEntity.initialize(mockCategory);
 
-		const routeCategoryRepository = {
+		const categoryRepository = {
 			findByName: (() =>
-				Promise.resolve(
-					routeCategoryEntity,
-				)) as CategoryRepository["findByName"],
+				Promise.resolve(categoryEntity)) as CategoryRepository["findByName"],
 		} as CategoryRepository;
 
-		const routeCategoryService = new CategoryService(routeCategoryRepository);
+		const categoryService = new CategoryService(categoryRepository);
 
-		const result = await routeCategoryService.findByName(
-			mockRouteCategory.name,
-		);
+		const result = await categoryService.findByName(mockCategory.name);
 
-		assert.deepStrictEqual(result, routeCategoryEntity.toObject());
+		assert.deepStrictEqual(result, categoryEntity.toObject());
 	});
 
 	it("findByName should throw exception if no category found", async () => {
-		const routeCategoryRepository = {
+		const categoryRepository = {
 			findByName: (() =>
 				Promise.resolve(null)) as CategoryRepository["findByName"],
 		} as CategoryRepository;
 
-		const routeCategoryService = new CategoryService(routeCategoryRepository);
+		const categoryService = new CategoryService(categoryRepository);
 
 		try {
-			await routeCategoryService.findByName("Non Existent");
+			await categoryService.findByName("Non Existent");
 			assert.fail("expected exception not thrown");
 		} catch (error) {
-			assert.ok(error instanceof RouteCategoryError);
+			assert.ok(error instanceof CategoryError);
 			assert.equal(error.message, CategoryExceptionMessage.NOT_FOUND);
 			assert.equal(error.status, HTTPCode.NOT_FOUND);
 		}

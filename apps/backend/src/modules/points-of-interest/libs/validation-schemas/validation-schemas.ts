@@ -1,5 +1,5 @@
 export {
-	pointOfInterestCreateValidationSchema,
 	pointOfInterestUpdateValidationSchema,
-	pointsOfInterestSearchQueryValidationSchema,
+	pointsOfInterestCreateValidationSchema,
+	pointsOfInterestQueryValidationSchema,
 } from "@smartscapes/shared";

@@ -1,30 +1,36 @@
 import mapboxgl from "mapbox-gl";
 
 import { config } from "~/libs/modules/config/config.js";
-import { type Coordinates } from "~/libs/types/types.js";
 
 import {
 	GEOLOCATE_AUTO_TRIGGER_DELAY,
 	GEOLOCATE_CONTROL_OPTIONS,
 	MAP_CONTROLS_POSITION,
+	MAP_MARKER_Z_INDEX_VALUE,
 	MAP_OPTIONS,
 	MARKER_OPTIONS,
 	NAVIGATION_CONTROL_OPTIONS,
 	SCALE_CONTROL_OPTIONS,
 	ZOOM_LEVEL,
 } from "./libs/constants/constants.js";
-import { MapControlId } from "./libs/enums/enums.js";
+import { MapControlId, MapEventType } from "./libs/enums/enums.js";
 import {
 	type ControlPosition,
+	type Coordinates,
 	type MapControl,
+	type MapMarker,
+	type MapMarkerOptions,
 	type MapOptions,
 } from "./libs/types/types.js";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 class MapClient {
 	private accessToken: MapOptions["accessToken"];
+
 	private controls = new Map<string, MapControl>();
+
 	private map: mapboxgl.Map | null = null;
+
 	private resizeObserver: null | ResizeObserver = null;
 
 	public constructor() {
@@ -37,24 +43,83 @@ class MapClient {
 		}
 
 		const control = new mapboxgl.GeolocateControl(GEOLOCATE_CONTROL_OPTIONS);
-
 		this.addControl(
 			MapControlId.GEOLOCATE,
 			control,
 			MAP_CONTROLS_POSITION["GEOLOCATE"] as ControlPosition,
 		);
 
-		this.map.on("load", () => {
-			setTimeout(() => {
-				control.trigger();
-			}, GEOLOCATE_AUTO_TRIGGER_DELAY);
-		});
+		const isMapLoaded = this.map.loaded();
+		const navigateToCurrentLocation = (): ReturnType<typeof setTimeout> =>
+			setTimeout(() => control.trigger(), GEOLOCATE_AUTO_TRIGGER_DELAY);
+
+		if (isMapLoaded) {
+			navigateToCurrentLocation();
+		} else {
+			const handleMapLoad = (): void => {
+				this.map?.off(MapEventType.LOAD, handleMapLoad);
+				navigateToCurrentLocation();
+			};
+
+			this.map.on(MapEventType.LOAD, handleMapLoad);
+		}
 	}
 
-	public addMarkers(markers: { coordinates: Coordinates }[]): void {
-		for (const marker of markers) {
-			this.addMarker(marker.coordinates);
+	public addMapClickListener(
+		handler: (coords: [number, number]) => void,
+	): () => void {
+		if (!this.map) {
+			return () => {};
 		}
+
+		const onMapClick = (event: mapboxgl.MapMouseEvent): void => {
+			handler([event.lngLat.lng, event.lngLat.lat]);
+		};
+
+		this.map.on(MapEventType.CLICK, onMapClick);
+
+		return () => {
+			this.map?.off(MapEventType.CLICK, onMapClick);
+		};
+	}
+
+	public addMarker(options: MapMarkerOptions): MapMarker | null {
+		if (!this.map) {
+			return null;
+		}
+
+		const { coordinates, isDraggable = false, onDragEnd } = options;
+
+		const marker = new mapboxgl.Marker({
+			...MARKER_OPTIONS,
+			draggable: isDraggable,
+		})
+			.setLngLat(coordinates)
+			.addTo(this.map);
+		marker.getElement().style.zIndex = MAP_MARKER_Z_INDEX_VALUE;
+
+		if (isDraggable && onDragEnd) {
+			marker.on(MapEventType.DRAG_END, () => {
+				const { lat, lng } = marker.getLngLat();
+				onDragEnd([lng, lat]);
+			});
+		}
+
+		return this.mapMarker(marker);
+	}
+
+	public addMarkers(markers: MapMarkerOptions[]): MapMarker[] {
+		const result: MapMarker[] = [];
+
+		for (const marker of markers) {
+			const currentMarker = this.addMarker(marker);
+
+			if (currentMarker) {
+				result.push(currentMarker);
+			}
+		}
+
+		return result;
 	}
 
 	public addNavigationControl(): void {
@@ -105,15 +170,10 @@ class MapClient {
 		}
 
 		this.map.stop();
-
-		this.map.flyTo({
-			center,
-			essential: true,
-			zoom: ZOOM_LEVEL,
-		});
+		this.map.flyTo({ center, essential: true, zoom: ZOOM_LEVEL });
 	}
 
-	public init(container: HTMLElement): void {
+	public init(container: HTMLElement, options?: { onLoad?: () => void }): void {
 		if (!this.accessToken) {
 			return;
 		}
@@ -123,6 +183,10 @@ class MapClient {
 			container,
 			...MAP_OPTIONS,
 		});
+
+		if (options?.onLoad) {
+			this.map.on(MapEventType.LOAD, options.onLoad);
+		}
 
 		this.resizeObserver = new ResizeObserver(() => {
 			this.map?.resize();
@@ -152,12 +216,15 @@ class MapClient {
 		this.controls.set(id, control);
 	}
 
-	private addMarker(coordinates: Coordinates): void {
-		if (!this.map) {
-			return;
-		}
-
-		new mapboxgl.Marker(MARKER_OPTIONS).setLngLat(coordinates).addTo(this.map);
+	private mapMarker(marker: mapboxgl.Marker): MapMarker {
+		return {
+			remove: (): void => {
+				marker.remove();
+			},
+			setCoordinates: (coords: Coordinates): void => {
+				marker.setLngLat(coords);
+			},
+		};
 	}
 
 	private removeControl(id: string): void {

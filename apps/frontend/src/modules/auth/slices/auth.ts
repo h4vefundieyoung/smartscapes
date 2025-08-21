@@ -4,6 +4,7 @@ import {
 	patchAuthenticatedUser,
 	signIn,
 	signUp,
+	uploadAvatar,
 } from "./actions.js";
 import { actions } from "./auth.slice.js";
 
@@ -14,6 +15,7 @@ const allActions = {
 	patchAuthenticatedUser,
 	signIn,
 	signUp,
+	uploadAvatar,
 };
 
 export { allActions as actions };

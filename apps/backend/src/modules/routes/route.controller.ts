@@ -139,7 +139,10 @@ class RouteController extends BaseController {
 			handler: this.constructRoute.bind(this),
 			method: "POST",
 			path: RoutesApiPath.CONSTRUCT,
-			preHandlers: [setRateLimit(constructRequestsPerMinute)],
+			preHandlers: [
+				setRateLimit(constructRequestsPerMinute),
+				checkHasPermission(PermissionKey.MANAGE_ROUTES),
+			],
 			validation: {
 				body: routesConstructValidationSchema,
 			},
@@ -190,7 +193,7 @@ class RouteController extends BaseController {
 	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Route
-	 *     summary: Construct Mapbox route
+	 *     summary: Construct Mapbox route (requires manage_routes permission)
 	 *     requestBody:
 	 *       required: true
 	 *       content:
@@ -204,10 +207,12 @@ class RouteController extends BaseController {
 	 *                 type: array
 	 *                 items:
 	 *                   type: integer
-	 *                 example: [4, 1, 3]
+	 *                 minItems: 2
+	 *                 description: Array of Point of Interest IDs to construct the route through
+	 *                 example: [5, 1, 3]
 	 *     responses:
 	 *       200:
-	 *         description: Planned path created for further publishing
+	 *         description: Route constructed successfully with planned path data
 	 *         content:
 	 *           application/json:
 	 *             schema:
@@ -402,12 +407,25 @@ class RouteController extends BaseController {
 	 *       **Without query parameters**: Returns all routes.
 	 *
 	 *       **With query `name` parameter**: Returns routes whose names match the search query. Search is case-insensitive.
+	 *       **With `latitude` and `longitude`**: Sorts routes by proximity to the provided coordinates (based on their first point of interest).
 	 *     parameters:
 	 *       - in: query
 	 *         name: name
 	 *         schema:
 	 *           type: string
 	 *           example: "landscape"
+	 *       - in: query
+	 *         name: latitude
+	 *         schema:
+	 *           type: number
+	 *           format: float
+	 *           example: 49.8397
+	 *       - in: query
+	 *         name: longitude
+	 *         schema:
+	 *           type: number
+	 *           format: float
+	 *           example: 24.0297
 	 *       - in: query
 	 *         name: categories
 	 *         schema:
@@ -509,7 +527,7 @@ class RouteController extends BaseController {
 	 *      - bearerAuth: []
 	 *     tags:
 	 *       - Route
-	 *     summary: Update a route
+	 *     summary: Update a route (requires manage_routes permission)
 	 *     parameters:
 	 *       - in: path
 	 *         name: id

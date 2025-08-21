@@ -9,12 +9,21 @@
 }
 
 .user-details-avatar {
-	display: flex;
+	display: grid;
+	grid-template-rows: min-content;
+	grid-template-columns: auto 1fr;
 	gap: 16px;
-	align-items: center;
-	justify-content: center;
 	width: 100%;
 	padding: 16px 0;
+}
+
+.user-details-avatar > :first-child {
+	grid-row: 1 / span 2;
+	grid-column: 1;
+}
+
+.user-details-avatar > :not(:first-child) {
+	grid-column: 2;
 }
 
 .loader-container {

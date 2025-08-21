@@ -1,5 +1,59 @@
 # Changelog
 
+## [1.34.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.33.0...@smartscapes/frontend-v1.34.0) (2025-08-21)
+
+
+### Features
+
+* **backend/frontend:** avatar upload ss-388 ([#431](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/431)) ([c474ac5](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c474ac585f5d02eeb3883291798194980e8be7a6))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.26.0 to 1.27.0
+
+## [1.33.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.32.0...@smartscapes/frontend-v1.33.0) (2025-08-20)
+
+
+### Features
+
+* **backend/frontend/shared:** implement admin dashboard issue ss-189 ([#370](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/370)) ([3667c79](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/3667c79969a6df4349ec690ec6b6766e253b470c))
+* **frontend:** add location to create poi modal ss-359 ([#380](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/380)) ([bc2df29](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/bc2df291a05d520534d9b43a385165c097562199))
+* **frontend:** show routes without geolocation ss-453 ([#454](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/454)) ([c48684b](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c48684b2e3943cc5234160ef601d5f33cfac29b0))
+
+
+### Bug Fixes
+
+* **frontend:** long description owerflowing container on POI detail page ss-437 ([#459](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/459)) ([8f6aad9](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/8f6aad9090794861ac24a9d01fd8cbd1bbb13f5b))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.25.0 to 1.26.0
+
+## [1.32.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.31.1...@smartscapes/frontend-v1.32.0) (2025-08-19)
+
+
+### Features
+
+* **frontend:** implement explore routes block ss-270 ([#395](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/395)) ([f38da03](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/f38da03f4df623358e50c58428784970b5489dbe))
+
+
+### Bug Fixes
+
+* **frontend:** profile page back navigation ss-361 ([#444](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/444)) ([19671cb](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/19671cb3acb406a64e7ab10fceddebbc0fe92df5))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.24.0 to 1.25.0
+
 ## [1.31.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.31.0...@smartscapes/frontend-v1.31.1) (2025-08-19)
 
 

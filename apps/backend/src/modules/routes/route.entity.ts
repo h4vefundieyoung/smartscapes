@@ -2,12 +2,19 @@ import { type Entity, type LineStringGeometry } from "~/libs/types/types.js";
 
 class RouteEntity implements Entity {
 	private createdByUserId: number;
+
 	private description: null | string;
+
 	private distance: number;
+
 	private duration: number;
+
 	private geometry: LineStringGeometry;
+
 	private id: null | number;
+
 	private name: string;
+
 	private pois: {
 		id: number;
 		name?: string;

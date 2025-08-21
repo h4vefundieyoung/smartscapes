@@ -5,9 +5,13 @@ import { type FileMimeType } from "./libs/types/types.js";
 
 class FileEntity implements Entity {
 	private contentType: FileMimeType;
+
 	private entityId: number;
+
 	private folder: ValueOf<typeof FileFolderName>;
+
 	private id: null | number;
+
 	private url: string;
 
 	private constructor({

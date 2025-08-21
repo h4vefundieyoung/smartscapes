@@ -9,9 +9,13 @@ class ReviewModel extends AbstractModel {
 	}
 
 	public content!: string;
+
 	public likesCount!: number;
+
 	public poiId!: null | number;
+
 	public routeId!: null | number;
+
 	public userId!: number;
 }
 

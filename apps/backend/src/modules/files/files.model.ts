@@ -13,9 +13,11 @@ class FileModel extends AbstractModel {
 	}
 
 	public contentType!: FileMimeType;
+
 	public entityId!: number;
 
 	public folder!: ValueOf<typeof FileFolderName>;
+
 	public url!: string;
 }
 

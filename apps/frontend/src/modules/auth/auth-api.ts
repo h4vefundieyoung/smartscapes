@@ -28,6 +28,7 @@ class AuthApi extends BaseHTTPApi {
 	public constructor({ baseUrl, http, storage }: Constructor) {
 		super({ baseUrl, http, path: APIPath.AUTH, storage });
 	}
+
 	public async getAuthenticatedUser(): Promise<
 		APIResponse<UserAuthResponseDto>
 	> {

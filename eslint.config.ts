@@ -133,6 +133,7 @@ const stylisticConfig: Linter.Config = {
 		"@stylistic/js": stylisticPlugin,
 	},
 	rules: {
+		"@stylistic/js/lines-between-class-members": ["error", "always"],
 		"@stylistic/js/padding-line-between-statements": [
 			"error",
 			{

@@ -19,6 +19,7 @@ import {
 
 class FileService implements Service {
 	private awsFileService: AWSFileService;
+
 	private fileRepository: FileRepository;
 
 	public constructor(

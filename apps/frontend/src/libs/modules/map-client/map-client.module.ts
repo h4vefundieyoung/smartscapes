@@ -26,8 +26,11 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 class MapClient {
 	private accessToken: MapOptions["accessToken"];
+
 	private controls = new Map<string, MapControl>();
+
 	private map: mapboxgl.Map | null = null;
+
 	private resizeObserver: null | ResizeObserver = null;
 
 	public constructor() {
@@ -79,6 +82,7 @@ class MapClient {
 			this.map?.off(MapEventType.CLICK, onMapClick);
 		};
 	}
+
 	public addMarker(options: MapMarkerOptions): MapMarker | null {
 		if (!this.map) {
 			return null;

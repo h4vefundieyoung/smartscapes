@@ -139,7 +139,10 @@ class RouteController extends BaseController {
 			handler: this.constructRoute.bind(this),
 			method: "POST",
 			path: RoutesApiPath.CONSTRUCT,
-			preHandlers: [setRateLimit(constructRequestsPerMinute)],
+			preHandlers: [
+				setRateLimit(constructRequestsPerMinute),
+				checkHasPermission(PermissionKey.MANAGE_ROUTES),
+			],
 			validation: {
 				body: routesConstructValidationSchema,
 			},
@@ -190,7 +193,7 @@ class RouteController extends BaseController {
 	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Route
-	 *     summary: Construct Mapbox route
+	 *     summary: Construct Mapbox route (requires manage_routes permission)
 	 *     requestBody:
 	 *       required: true
 	 *       content:
@@ -204,10 +207,12 @@ class RouteController extends BaseController {
 	 *                 type: array
 	 *                 items:
 	 *                   type: integer
-	 *                 example: [4, 1, 3]
+	 *                 minItems: 2
+	 *                 description: Array of Point of Interest IDs to construct the route through
+	 *                 example: [5, 1, 3]
 	 *     responses:
 	 *       200:
-	 *         description: Planned path created for further publishing
+	 *         description: Route constructed successfully with planned path data
 	 *         content:
 	 *           application/json:
 	 *             schema:
@@ -522,7 +527,7 @@ class RouteController extends BaseController {
 	 *      - bearerAuth: []
 	 *     tags:
 	 *       - Route
-	 *     summary: Update a route
+	 *     summary: Update a route (requires manage_routes permission)
 	 *     parameters:
 	 *       - in: path
 	 *         name: id

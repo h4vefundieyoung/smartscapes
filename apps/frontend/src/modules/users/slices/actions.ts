@@ -19,7 +19,7 @@ const getUserPublicProfile = createAsyncThunk<
 });
 
 const followUser = createAsyncThunk<
-	APIResponse<null>,
+	APIResponse<boolean>,
 	{ payload: UserFollowsRequestDto; userId: number },
 	AsyncThunkConfig
 >(`${sliceName}/follow-user`, ({ payload, userId }, { extra }) => {
@@ -29,7 +29,7 @@ const followUser = createAsyncThunk<
 });
 
 const unfollowUser = createAsyncThunk<
-	APIResponse<null>,
+	APIResponse<boolean>,
 	{ followerId: number; userId: number },
 	AsyncThunkConfig
 >(`${sliceName}/unfollow-user`, ({ followerId, userId }, { extra }) => {

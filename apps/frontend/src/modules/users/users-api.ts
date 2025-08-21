@@ -25,8 +25,8 @@ class UserApi extends BaseHTTPApi {
 	public async follow(
 		id: number,
 		payload: UserFollowsRequestDto,
-	): Promise<APIResponse<null>> {
-		const response = await this.load<APIResponse<null>>(
+	): Promise<APIResponse<boolean>> {
+		const response = await this.load<APIResponse<boolean>>(
 			this.getFullEndpoint(UserFollowsApiPath.$USER_ID_FOLLOWERS, {
 				userId: id.toString(),
 			}),
@@ -72,8 +72,8 @@ class UserApi extends BaseHTTPApi {
 	public async unfollow(
 		id: number,
 		currentUserId: number,
-	): Promise<APIResponse<null>> {
-		const response = await this.load<APIResponse<null>>(
+	): Promise<APIResponse<boolean>> {
+		const response = await this.load<APIResponse<boolean>>(
 			this.getFullEndpoint(UserFollowsApiPath.$USER_ID_FOLLOWERS_$ID, {
 				id: id.toString(),
 				userId: currentUserId.toString(),

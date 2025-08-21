@@ -15,11 +15,11 @@ const createMockFollowServiceMethod = (
 	expectedFollowerId: number,
 	expectedFollowingId: number,
 ) => {
-	return (followerId: number, followingId: number): Promise<void> => {
+	return (followerId: number, followingId: number): Promise<boolean> => {
 		assert.strictEqual(followerId, expectedFollowerId);
 		assert.strictEqual(followingId, expectedFollowingId);
 
-		return Promise.resolve();
+		return Promise.resolve(true);
 	};
 };
 
@@ -93,7 +93,7 @@ describe("UserFollowsController", () => {
 		const result = await controller.follow(request);
 
 		assert.deepStrictEqual(result, {
-			payload: null,
+			payload: { data: true },
 			status: HTTPCode.OK,
 		});
 	});
@@ -151,7 +151,7 @@ describe("UserFollowsController", () => {
 		const result = await controller.unfollow(request);
 
 		assert.deepStrictEqual(result, {
-			payload: null,
+			payload: { data: true },
 			status: HTTPCode.OK,
 		});
 	});

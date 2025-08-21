@@ -10,7 +10,10 @@ class UserFollowsService {
 		this.userFollowsRepository = userFollowsRepository;
 	}
 
-	public async follow(followerId: number, followingId: number): Promise<void> {
+	public async follow(
+		followerId: number,
+		followingId: number,
+	): Promise<boolean> {
 		if (followerId === followingId) {
 			throw new UserFollowsError({
 				message: UserFollowsExceptionMessage.CANNOT_FOLLOW_SELF,
@@ -30,13 +33,13 @@ class UserFollowsService {
 			});
 		}
 
-		await this.userFollowsRepository.followUser(followerId, followingId);
+		return await this.userFollowsRepository.followUser(followerId, followingId);
 	}
 
 	public async unfollow(
 		followerId: number,
 		followingId: number,
-	): Promise<void> {
+	): Promise<boolean> {
 		if (followerId === followingId) {
 			throw new UserFollowsError({
 				message: UserFollowsExceptionMessage.CANNOT_UNFOLLOW_SELF,
@@ -55,6 +58,8 @@ class UserFollowsService {
 				status: HTTPCode.BAD_REQUEST,
 			});
 		}
+
+		return isDeleted;
 	}
 }
 

@@ -53,7 +53,7 @@ class UserController extends BaseController {
 		this.addRoute({
 			handler: this.findUserProfile.bind(this),
 			method: "GET",
-			path: "/:id",
+			path: UsersApiPath.$USER_ID_GET_PROFILE,
 		});
 	}
 

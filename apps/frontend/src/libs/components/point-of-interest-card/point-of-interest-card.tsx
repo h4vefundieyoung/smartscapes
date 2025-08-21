@@ -22,7 +22,7 @@ const PointOfInterestCard = ({
 
 	return (
 		<li className={styles["card"]}>
-			<Link to={poiDetailsLink}>
+			<Link className={styles["link"]} to={poiDetailsLink}>
 				<img
 					alt={name}
 					className={styles["image"]}

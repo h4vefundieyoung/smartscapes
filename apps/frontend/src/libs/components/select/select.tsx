@@ -7,6 +7,7 @@ import {
 	type PathValue,
 } from "react-hook-form";
 import ReactSelect, {
+	type components,
 	type InputActionMeta,
 	type MultiValue,
 	type SingleValue,
@@ -20,6 +21,8 @@ import { getSelectNewValue, mapSelectValue } from "./libs/helpers/helpers.js";
 import styles from "./styles.module.css";
 
 type Properties<TFieldValues extends FieldValues, TOptionValue = string> = {
+	additionalStyles?: Record<string, () => string>;
+	components?: Partial<typeof components>;
 	control: Control<TFieldValues, null>;
 	isLoading?: boolean;
 	isMulti?: boolean;
@@ -36,6 +39,8 @@ type Properties<TFieldValues extends FieldValues, TOptionValue = string> = {
 };
 
 const Select = <TFieldValues extends FieldValues, TOptionValue = string>({
+	additionalStyles = {},
+	components = {},
 	control,
 	isLoading,
 	isMulti = false,
@@ -69,7 +74,8 @@ const Select = <TFieldValues extends FieldValues, TOptionValue = string>({
 		<label className={styles["label"]}>
 			<span className={styles["label-caption"]}>{label}</span>
 			<ReactSelect
-				classNames={selectStylesConfig}
+				classNames={{ ...selectStylesConfig, ...additionalStyles }}
+				components={{ ...components }}
 				isLoading={isLoading}
 				isMulti={isMulti}
 				name={name}

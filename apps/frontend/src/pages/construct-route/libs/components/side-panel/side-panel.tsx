@@ -15,7 +15,9 @@ import { type SelectOption } from "~/libs/types/types.js";
 import { type PointsOfInterestResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 import { actions as routeActions } from "~/modules/routes/routes.js";
 
+import { selectStylesConfig } from "../../constants/constants.js";
 import { PointOfInterestCard } from "../point-of-interest-card/point-of-interest-card.js";
+import { SearchIcon } from "../search-icon/search-icon.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -100,6 +102,8 @@ const SidePanel = ({
 				</div>
 
 				<Select
+					additionalStyles={selectStylesConfig}
+					components={{ DropdownIndicator: SearchIcon }}
 					control={control}
 					isLoading={isLoading}
 					label="Search POI"

@@ -4,6 +4,7 @@
 	width: max-content;
 	height: 100%;
 	padding: 32px;
+	padding-bottom: 64px;
 }
 
 .panel {
@@ -29,6 +30,31 @@
 	margin: 0;
 	font-size: var(--font-size-h3);
 	line-height: 32px;
+}
+
+.select-control {
+	flex-direction: row-reverse;
+	gap: 12px;
+	padding: 12px 16px;
+	font-size: var(--font-size-small);
+	line-height: 1.5;
+	background-color: var(--color-background-base);
+	border: 1px solid var(--color-stroke-strong);
+	border-radius: 8px;
+	transition: background-color 0.3s ease;
+}
+
+.select-control:hover {
+	background-color: var(--color-fill-hover);
+}
+
+.select-control:focus-within {
+	border: 1px solid var(--color-stroke-focus);
+}
+
+.select-loading-indicator {
+	position: absolute;
+	right: 16px;
 }
 
 .body {

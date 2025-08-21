@@ -17,6 +17,7 @@ import { MapControlId, MapEventType } from "./libs/enums/enums.js";
 import {
 	type ControlPosition,
 	type Coordinates,
+	type LineStringGeometry,
 	type MapControl,
 	type MapMarker,
 	type MapMarkerOptions,
@@ -192,6 +193,57 @@ class MapClient {
 			this.map?.resize();
 		});
 		this.resizeObserver.observe(container);
+	}
+
+	public renderRoute(geometry: LineStringGeometry): void {
+		if (!this.map) {
+			return;
+		}
+
+		if (this.map.getLayer("route")) {
+			this.map.removeLayer("route");
+		}
+
+		if (this.map.getLayer("route-outline")) {
+			this.map.removeLayer("route-outline");
+		}
+
+		if (this.map.getSource("route")) {
+			this.map.removeSource("route");
+		}
+
+		this.map.addSource("route", {
+			data: { geometry, properties: {}, type: "Feature" },
+			type: "geojson",
+		});
+
+		this.map.addLayer({
+			id: "route-outline",
+			layout: {
+				"line-cap": "round",
+				"line-join": "round",
+			},
+			paint: {
+				"line-color": "#327d1c",
+				"line-width": 12,
+			},
+			source: "route",
+			type: "line",
+		});
+
+		this.map.addLayer({
+			id: "route",
+			layout: {
+				"line-cap": "round",
+				"line-join": "round",
+			},
+			paint: {
+				"line-color": "#5de372",
+				"line-width": 6,
+			},
+			source: "route",
+			type: "line",
+		});
 	}
 
 	public resize(): void {

@@ -1,11 +1,17 @@
 import { MapProvider } from "~/libs/components/components.js";
-import { useCallback, useMemo, useState } from "~/libs/hooks/hooks.js";
+import {
+	useAppSelector,
+	useCallback,
+	useMemo,
+	useState,
+} from "~/libs/hooks/hooks.js";
 import { type PointsOfInterestResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 
 import { SidePanel } from "./libs/components/side-panel/side-panel.js";
 import styles from "./styles.module.css";
 
 const ConstructRoute = (): React.JSX.Element => {
+	const { routeLineString } = useAppSelector((state) => state.constructRoute);
 	const [selectedPois, setSelectedPois] = useState<
 		PointsOfInterestResponseDto[]
 	>([]);
@@ -34,7 +40,7 @@ const ConstructRoute = (): React.JSX.Element => {
 	return (
 		<main className={styles["main"]}>
 			<div className={styles["map"]}>
-				<MapProvider markers={markers} />
+				<MapProvider markers={markers} routeLine={routeLineString?.geometry} />
 			</div>
 			<SidePanel
 				onRemovePoi={handleRemovePoi}

@@ -76,6 +76,8 @@ class RouteRepository implements Repository {
 				"routes.created_by_user_id",
 			]);
 
+		let requiresGroupBy = false;
+
 		if (name) {
 			query.whereILike("routes.name", `%${name.trim()}%`);
 		}
@@ -83,8 +85,8 @@ class RouteRepository implements Repository {
 		if (categories?.length) {
 			query
 				.joinRelated("categories")
-				.whereIn("categories.key", categories as string[])
-				.groupBy("routes.id");
+				.whereIn("categories.key", categories as string[]);
+			requiresGroupBy = true;
 		}
 
 		if (latitude !== undefined && longitude !== undefined) {
@@ -93,14 +95,19 @@ class RouteRepository implements Repository {
 				.where("pois_join.visit_order", 0)
 				.select(
 					this.routesModel.raw(
-						`ST_Distance(
-						pois.location::geography,
-						ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography
-						) as distance_points`,
+						`MIN(ST_Distance(
+							pois.location::geography,
+							ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography
+						)) as distance_points`,
 						[longitude, latitude],
 					),
 				)
 				.orderBy("distance_points", SortingOrder.ASC);
+			requiresGroupBy = true;
+		}
+
+		if (requiresGroupBy) {
+			query.groupBy("routes.id");
 		}
 
 		const routes = await query;

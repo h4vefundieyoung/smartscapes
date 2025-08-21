@@ -1,6 +1,6 @@
 export {
 	type ReviewCreatePayload,
-	type ReviewGetAllResponseDto,
+	type ReviewGetAllItemResponseDto,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
 	type ReviewSearchQuery,

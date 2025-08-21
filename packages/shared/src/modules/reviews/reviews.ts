@@ -1,7 +1,7 @@
 export { ReviewsApiPath } from "./libs/enums/enums.js";
 export {
 	type ReviewCreatePayload,
-	type ReviewGetAllResponseDto,
+	type ReviewGetAllItemResponseDto,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
 	type ReviewSearchQuery,

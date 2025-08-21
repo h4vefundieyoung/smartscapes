@@ -4,7 +4,7 @@ import { describe, it } from "node:test";
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { type RouteService } from "../routes/route.service.js";
 import {
-	type ReviewGetAllResponseDto,
+	type ReviewGetAllItemResponseDto,
 	type ReviewGetByIdResponseDto,
 } from "./libs/types/types.js";
 import { ReviewEntity } from "./review.entity.js";
@@ -132,7 +132,7 @@ describe("ReviewService", () => {
 	});
 
 	it("findAll should return all reviews", async () => {
-		const row: ReviewGetAllResponseDto = {
+		const row: ReviewGetAllItemResponseDto = {
 			content: mockReviewDB.content,
 			id: mockReviewDB.id,
 			likesCount: mockReviewDB.likesCount,

@@ -4,7 +4,7 @@ import { ReviewEntity } from "~/modules/reviews/review.entity.js";
 import { type ReviewModel } from "~/modules/reviews/review.model.js";
 
 import {
-	type ReviewGetAllResponseDto,
+	type ReviewGetAllItemResponseDto,
 	type ReviewSearchQuery,
 } from "./libs/types/types.js";
 
@@ -30,7 +30,7 @@ class ReviewRepository implements Repository {
 
 	public async findAll(
 		options: null | ReviewSearchQuery,
-	): Promise<ReviewGetAllResponseDto[]> {
+	): Promise<ReviewGetAllItemResponseDto[]> {
 		const { routeId } = options ?? {};
 
 		const queryBuilder = this.reviewModel

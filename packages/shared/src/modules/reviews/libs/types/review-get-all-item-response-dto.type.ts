@@ -1,4 +1,4 @@
-type ReviewGetAllResponseDto = {
+type ReviewGetAllItemResponseDto = {
 	content: string;
 	id: number;
 	likesCount: number;
@@ -12,4 +12,4 @@ type ReviewGetAllResponseDto = {
 	};
 };
 
-export { type ReviewGetAllResponseDto };
+export { type ReviewGetAllItemResponseDto };

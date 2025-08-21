@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { type Location } from "~/libs/types/types.js";
 
-import { routeApi } from "../../routes/routes.js";
+import { routesApi } from "../../routes/routes.js";
 import { type RouteGetByIdResponseDto } from "../libs/types/types.js";
 import { name as sliceName } from "./explore.slice.js";
 
@@ -12,7 +12,7 @@ const getRoutes = createAsyncThunk<
 	{ rejectValue: string }
 >(`${sliceName}/get-routes`, async (location, { rejectWithValue }) => {
 	try {
-		const response = await routeApi.getAll(location);
+		const response = await routesApi.getAll(location);
 
 		return response.data;
 	} catch {

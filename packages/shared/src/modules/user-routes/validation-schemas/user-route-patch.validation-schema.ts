@@ -7,7 +7,7 @@ import { UserRouteValidationMessage } from "../libs/enums/enums.js";
 const userRoutePatch = z.strictObject({
 	actualGeometry: z.object(
 		{
-			coordinates: coordinateSchema,
+			coordinates: z.array(coordinateSchema),
 			type: z.literal(LocationType.LINE_STRING, {
 				message: UserRouteValidationMessage.INVALID_LOCATION_TYPE,
 			}),

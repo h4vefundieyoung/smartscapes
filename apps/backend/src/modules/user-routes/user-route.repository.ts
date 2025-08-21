@@ -1,4 +1,7 @@
-import { type Repository } from "~/libs/types/types.js";
+import {
+	type LineStringGeometry,
+	type Repository,
+} from "~/libs/types/types.js";
 
 import { UserRouteStatus } from "./libs/enums/enum.js";
 import { UserRouteEntity } from "./user-route.entity.js";
@@ -91,7 +94,28 @@ class UserRouteRepository implements Repository {
 		return result.length > 0;
 	}
 
+	public async hasDublicateRoute(
+		userId: number,
+		geometry: LineStringGeometry,
+	): Promise<boolean> {
+		const result = await this.userRouteModel
+			.query()
+			.where("userId", userId)
+			.where((builder) =>
+				builder
+					.where("status", UserRouteStatus.ACTIVE)
+					.orWhere("status", UserRouteStatus.NOT_STARTED),
+			)
+			.whereRaw("ST_Equals(planned_geometry, ST_GeomFromGeoJSON(?))", [
+				JSON.stringify(geometry),
+			])
+			.first();
+
+		return Boolean(result);
+	}
+
 	public async patch(
+		id: number,
 		userId: number,
 		entity: UserRouteEntity,
 	): Promise<null | UserRouteEntity> {
@@ -99,7 +123,10 @@ class UserRouteRepository implements Repository {
 
 		const [updated] = await this.userRouteModel
 			.query()
-			.where({ userId })
+			.where({
+				id,
+				userId,
+			})
 			.patch(updateData)
 			.returning([
 				"id",

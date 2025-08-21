@@ -115,7 +115,7 @@ export {
 	userRouteCreateValidationSchema,
 	type UserRouteParameters,
 	userRouteParametersValidationSchema,
-	type userRoutePatchRequestDto,
+	type UserRoutePatchRequestDto,
 	userRoutePatchValidationSchema,
 	type UserRouteResponseDto,
 	UserRouteStatus,

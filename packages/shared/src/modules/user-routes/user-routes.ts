@@ -2,7 +2,7 @@ export { UserRouteApiPath, UserRouteStatus } from "./libs/enums/enums.js";
 export {
 	type UserRouteCreateRequestDto,
 	type UserRouteParameters,
-	type userRoutePatchRequestDto,
+	type UserRoutePatchRequestDto,
 	type UserRouteResponseDto,
 	type UserRouteStatusType,
 } from "./libs/types/types.js";

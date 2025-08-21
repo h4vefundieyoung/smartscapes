@@ -7,9 +7,7 @@ import {
 import { parseToFloat } from "../helpers/helpers.js";
 
 const latitudeSchema = z
-	.string()
-	.trim()
-	.transform(parseToFloat)
+	.union([z.number(), z.string().trim().transform(parseToFloat)])
 	.pipe(
 		z
 			.number()
@@ -24,9 +22,7 @@ const latitudeSchema = z
 	);
 
 const longitudeSchema = z
-	.string()
-	.trim()
-	.transform(parseToFloat)
+	.union([z.number(), z.string().trim().transform(parseToFloat)])
 	.pipe(
 		z
 			.number()

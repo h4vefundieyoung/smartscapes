@@ -32,7 +32,7 @@ class UserRouteService implements Service {
 
 		const { geometry } = await this.routeService.findById(routeId);
 
-		const createdRoute = UserRouteEntity.initializeNew({
+		const createdData = UserRouteEntity.initializeNew({
 			actualGeometry: geometry,
 			plannedGeometry: geometry,
 			routeId,
@@ -40,9 +40,11 @@ class UserRouteService implements Service {
 			userId,
 		});
 
-		const created = await this.userRouteRepository.create(createdRoute);
+		await this.ensureIsNotDublicateRoute(userId, geometry);
 
-		return created.toObject();
+		const createdRoute = await this.userRouteRepository.create(createdData);
+
+		return createdRoute.toObject();
 	}
 
 	public async finish(payload: {
@@ -56,7 +58,14 @@ class UserRouteService implements Service {
 
 		this.ensureUserIsOwner(userRoute, userId);
 
-		await this.ensureUserIsNotOnActiveRoute(userId);
+		const isNotReadyToFinish = userRoute.status !== UserRouteStatus.ACTIVE;
+
+		if (isNotReadyToFinish) {
+			throw new UserRouteError({
+				message: UserRouteExeptionMessage.ROUTE_CANNOT_BE_FINISHED,
+				status: HTTPCode.FORBIDDEN,
+			});
+		}
 
 		const updatedData = UserRouteEntity.initializeNew({
 			...userRoute,
@@ -65,6 +74,7 @@ class UserRouteService implements Service {
 		});
 
 		const updated = (await this.userRouteRepository.patch(
+			userRoute.id,
 			userId,
 			updatedData,
 		)) as UserRouteEntity;
@@ -96,11 +106,29 @@ class UserRouteService implements Service {
 		});
 
 		const updatedRoute = (await this.userRouteRepository.patch(
+			userRoute.id,
 			userId,
 			updatedData,
 		)) as UserRouteEntity;
 
 		return updatedRoute.toObject();
+	}
+
+	private async ensureIsNotDublicateRoute(
+		userId: number,
+		geometry: LineStringGeometry,
+	): Promise<void> {
+		const isDublicateRoute = await this.userRouteRepository.hasDublicateRoute(
+			userId,
+			geometry,
+		);
+
+		if (isDublicateRoute) {
+			throw new UserRouteError({
+				message: UserRouteExeptionMessage.USER_ROUTE_ALREADY_EXISTS,
+				status: HTTPCode.FORBIDDEN,
+			});
+		}
 	}
 
 	private async ensureUserIsNotOnActiveRoute(userId: number): Promise<void> {

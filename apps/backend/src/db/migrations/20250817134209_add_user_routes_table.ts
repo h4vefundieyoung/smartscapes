@@ -77,11 +77,11 @@ async function up(knex: Knex): Promise<void> {
 		CREATE OR REPLACE FUNCTION user_routes_set_timestamps()
 		RETURNS trigger AS $$
 		BEGIN
-		IF NEW.status = 'active' AND (OLD.status IS DISTINCT FROM 'active') THEN
+		IF NEW.status = 'active' AND (OLD.status IS DISTINCT FROM 'active') AND NEW.started_at IS NULL THEN
 			NEW.started_at := NOW();
 		END IF;
 
-		IF NEW.status = 'completed' AND (OLD.status IS DISTINCT FROM 'completed') THEN
+		IF NEW.status = 'completed' AND (OLD.status IS DISTINCT FROM 'completed') AND NEW.completed_at IS NULL THEN
 			NEW.completed_at := NOW();
 		END IF;
 

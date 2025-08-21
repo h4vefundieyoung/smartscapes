@@ -3,14 +3,14 @@ import { type toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier
 import { type authApi } from "~/modules/auth/auth.js";
 import { type pointOfInterestApi } from "~/modules/points-of-interest/points-of-interest.js";
 import { type reviewApi } from "~/modules/reviews/reviews.js";
-import { type routeApi } from "~/modules/routes/routes.js";
+import { type routesApi } from "~/modules/routes/routes.js";
 import { type userApi } from "~/modules/users/users.js";
 
 type ExtraArguments = {
 	authApi: typeof authApi;
 	pointOfInterestApi: typeof pointOfInterestApi;
 	reviewApi: typeof reviewApi;
-	routeApi: typeof routeApi;
+	routesApi: typeof routesApi;
 	storage: Storage;
 	toastNotifier: typeof toastNotifier;
 	userApi: typeof userApi;

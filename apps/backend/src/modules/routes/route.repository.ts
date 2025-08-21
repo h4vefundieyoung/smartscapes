@@ -76,17 +76,8 @@ class RouteRepository implements Repository {
 				"routes.created_by_user_id",
 			]);
 
-		let requiresGroupBy = false;
-
 		if (name) {
 			query.whereILike("routes.name", `%${name.trim()}%`);
-		}
-
-		if (categories?.length) {
-			query
-				.joinRelated("categories")
-				.whereIn("categories.key", categories as string[]);
-			requiresGroupBy = true;
 		}
 
 		if (latitude !== undefined && longitude !== undefined) {
@@ -95,19 +86,20 @@ class RouteRepository implements Repository {
 				.where("pois_join.visit_order", 0)
 				.select(
 					this.routesModel.raw(
-						`MIN(ST_Distance(
+						`ST_Distance(
 							pois.location::geography,
 							ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography
-						)) as distance_points`,
+						) as distance_points`,
 						[longitude, latitude],
 					),
 				)
 				.orderBy("distance_points", SortingOrder.ASC);
-			requiresGroupBy = true;
 		}
 
-		if (requiresGroupBy) {
-			query.groupBy("routes.id");
+		if (categories?.length) {
+			query
+				.joinRelated("categories")
+				.whereIn("categories.key", categories as string[]);
 		}
 
 		const routes = await query;

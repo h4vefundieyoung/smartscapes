@@ -3,8 +3,12 @@ import { createTracker, MockClient, type Tracker } from "knex-mock-client";
 import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
 
+import { HTTPCode } from "~/libs/enums/enums.js";
+
 import { GroupEntity } from "../groups/group.entity.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
+import { UserExceptionMessage } from "./libs/enums/enums.js";
+import { UserError } from "./libs/exceptions/exceptions.js";
 import { UserEntity } from "./user.entity.js";
 import { UserModel } from "./user.model.js";
 import { UserRepository } from "./user.repository.js";
@@ -143,6 +147,76 @@ describe("UserRepository", () => {
 			isVisibleProfile: true,
 			lastName: "Smith",
 		});
+
+		assert.strictEqual(result, null);
+	});
+
+	it("getUserProfile should return public profile data if profile is visible", async () => {
+		const userId = 1;
+		const currentUserId = 2;
+
+		databaseTracker.on.select("users").responseOnce([
+			{
+				firstName: "John",
+				id: userId,
+				isVisibleProfile: true,
+				lastName: "Doe",
+			},
+		]);
+
+		databaseTracker.on.select("users").responseOnce([
+			{
+				firstName: "John",
+				followersCount: 5,
+				id: userId,
+				isFollowed: true,
+				lastName: "Doe",
+			},
+		]);
+
+		const result = await userRepository.getUserProfile(userId, currentUserId);
+
+		assert.deepStrictEqual(result, {
+			firstName: "John",
+			followersCount: 5,
+			id: userId,
+			isFollowed: true,
+			lastName: "Doe",
+		});
+	});
+
+	it("getUserProfile should throw if profile is not public", async () => {
+		const userId = 1;
+		const currentUserId = 2;
+
+		databaseTracker.on.select("users").responseOnce([
+			{
+				firstName: "John",
+				id: userId,
+				isVisibleProfile: false,
+				lastName: "Doe",
+			},
+		]);
+
+		await assert.rejects(
+			() => userRepository.getUserProfile(userId, currentUserId),
+			(error: unknown) => {
+				return (
+					error instanceof UserError &&
+					error.message === UserExceptionMessage.USER_PROFILE_NOT_PUBLIC &&
+					error.status === HTTPCode.FORBIDDEN
+				);
+			},
+		);
+	});
+
+	it("getUserProfile should return null if user not found", async () => {
+		const userId = 12_345;
+		const currentUserId = 2;
+
+		databaseTracker.on.select("users").responseOnce([]);
+
+		const result = await userRepository.getUserProfile(userId, currentUserId);
 
 		assert.strictEqual(result, null);
 	});

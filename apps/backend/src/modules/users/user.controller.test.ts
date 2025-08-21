@@ -63,4 +63,48 @@ describe("UserController", () => {
 			status: HTTPCode.OK,
 		});
 	});
+
+	it("getUserProfile should return user public profile", async () => {
+		const userProfile = {
+			firstName: "John",
+			followersCount: 5,
+			id: 1,
+			isFollowed: true,
+			lastName: "Doe",
+		};
+
+		const mockGetUserProfile: UserService["getUserProfile"] = () => {
+			return Promise.resolve(userProfile);
+		};
+
+		const userService = {
+			getUserProfile: mockGetUserProfile,
+		} as UserService;
+
+		const userController = new UserController(mockLogger, userService);
+
+		const mockUser = {
+			email: "test@example.com",
+			firstName: "Test",
+			group: mockGroup.toObject(),
+			groupId: 1,
+			id: 2,
+			isVisibleProfile: true,
+			lastName: "User",
+		};
+
+		const request = {
+			body: undefined,
+			params: { id: 1 },
+			query: undefined,
+			user: mockUser,
+		};
+
+		const result = await userController.getUserProfile(request);
+
+		assert.deepStrictEqual(result, {
+			payload: { data: userProfile },
+			status: HTTPCode.OK,
+		});
+	});
 });

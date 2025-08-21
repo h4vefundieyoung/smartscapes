@@ -4,6 +4,7 @@ import { describe, it } from "node:test";
 import { GroupEntity } from "../groups/group.entity.js";
 import { type GroupService } from "../groups/group.service.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
+import { UserExceptionMessage } from "./libs/enums/enums.js";
 import { UserEntity } from "./user.entity.js";
 import { type UserRepository } from "./user.repository.js";
 import { UserService } from "./user.service.js";
@@ -155,7 +156,52 @@ describe("UserService", () => {
 				});
 			},
 			(error: unknown) => {
-				assert.strictEqual((error as Error).message, "User not found");
+				assert.strictEqual(
+					(error as Error).message,
+					UserExceptionMessage.USER_NOT_FOUND,
+				);
+
+				return true;
+			},
+		);
+	});
+
+	it("getUserProfile should return public profile data if found", async () => {
+		const userProfile = {
+			firstName: "John",
+			followersCount: 5,
+			id: 1,
+			isFollowed: true,
+			lastName: "Doe",
+		};
+
+		const userRepository = {
+			getUserProfile: () => userProfile,
+		} as unknown as UserRepository;
+
+		const userService = new UserService(userRepository, mockGroupService);
+
+		const result = await userService.getUserProfile(1, 2);
+
+		assert.deepStrictEqual(result, userProfile);
+	});
+
+	it("getUserProfile should throw error if user not found", async () => {
+		const userRepository = {
+			getUserProfile: () => null,
+		} as unknown as UserRepository;
+
+		const userService = new UserService(userRepository, mockGroupService);
+
+		await assert.rejects(
+			async () => {
+				await userService.getUserProfile(123, 2);
+			},
+			(error: unknown) => {
+				assert.strictEqual(
+					(error as Error).message,
+					UserExceptionMessage.USER_NOT_FOUND,
+				);
 
 				return true;
 			},

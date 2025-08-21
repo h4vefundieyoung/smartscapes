@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { LocationType } from "../../../../libs/enums/enums.js";
+import { coordinateSchema } from "../../../../libs/validated-schemas/validated-schemas.js";
 import {
 	PointsOfInterestValidationMessage,
 	PointsOfInterestValidationRule,
@@ -15,28 +16,7 @@ const pointsOfInterestCreate = z.strictObject({
 		.nullable(),
 	location: z.object(
 		{
-			coordinates: z.tuple([
-				z
-					.number()
-					.min(
-						PointsOfInterestValidationRule.LONGITUDE_MIN,
-						PointsOfInterestValidationMessage.LONGITUDE_MIN,
-					)
-					.max(
-						PointsOfInterestValidationRule.LONGITUDE_MAX,
-						PointsOfInterestValidationMessage.LONGITUDE_MAX,
-					),
-				z
-					.number()
-					.min(
-						PointsOfInterestValidationRule.LATITUDE_MIN,
-						PointsOfInterestValidationMessage.LATITUDE_MIN,
-					)
-					.max(
-						PointsOfInterestValidationRule.LATITUDE_MAX,
-						PointsOfInterestValidationMessage.LATITUDE_MAX,
-					),
-			]),
+			coordinates: coordinateSchema,
 			type: z.literal(LocationType.POINT, {
 				message: PointsOfInterestValidationMessage.INVALID_LOCATION_TYPE,
 			}),
@@ -47,7 +27,6 @@ const pointsOfInterestCreate = z.strictObject({
 			},
 		},
 	),
-
 	name: z
 		.string()
 		.min(PointsOfInterestValidationRule.NAME_MIN_LENGTH, {

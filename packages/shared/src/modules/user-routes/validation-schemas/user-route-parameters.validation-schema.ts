@@ -9,7 +9,7 @@ const userRouteParameters = z.object({
 		.transform(parseToFloat)
 		.pipe(
 			z.number({
-				message: UserRouteValidationMessage.INVALID_USER_ID,
+				message: UserRouteValidationMessage.USER_ID_INVALID_TYPE,
 			}),
 		),
 });

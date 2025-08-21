@@ -1,22 +1,21 @@
 import { z } from "zod";
 
-import { LocationType } from "../../../libs/enums/location-type.enum.js";
+import { LocationType } from "../../../libs/enums/enums.js";
+import { coordinateSchema } from "../../../libs/validated-schemas/validated-schemas.js";
 import { UserRouteValidationMessage } from "../libs/enums/enums.js";
 
-const TWO_COORDINATES = 2;
-
-const lineStringSchema = z.strictObject({
-	coordinates: z.array(z.tuple([z.number(), z.number()])).min(TWO_COORDINATES),
-	type: z.literal(LocationType.LINE_STRING, {
-		message: UserRouteValidationMessage.INVALID_LOCATION_TYPE,
-	}),
-});
-
 const userRouteUpdate = z.strictObject({
-	actualPath: lineStringSchema.refine(
-		(value) => value.coordinates.length >= TWO_COORDINATES,
+	actualGeometry: z.object(
 		{
-			message: UserRouteValidationMessage.INVALID_COORDINATES,
+			coordinates: coordinateSchema,
+			type: z.literal(LocationType.LINE_STRING, {
+				message: UserRouteValidationMessage.INVALID_LOCATION_TYPE,
+			}),
+		},
+		{
+			error: () => {
+				return UserRouteValidationMessage.ACTUAL_GEOMETRY_REQUIRED;
+			},
 		},
 	),
 	routeId: z.number({

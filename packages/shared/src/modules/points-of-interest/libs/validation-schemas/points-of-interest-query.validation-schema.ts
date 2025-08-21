@@ -2,46 +2,18 @@ import { z } from "zod";
 
 import { parseToFloat } from "../../../../libs/helpers/helpers.js";
 import {
+	latitudeSchema,
+	longitudeSchema,
+} from "../../../../libs/validated-schemas/validated-schemas.js";
+import {
 	PointsOfInterestValidationMessage,
 	PointsOfInterestValidationRule,
 } from "../enums/enums.js";
 
 const pointsOfInterestQuery = z
 	.object({
-		latitude: z
-			.string()
-			.trim()
-			.transform(parseToFloat)
-			.pipe(
-				z
-					.number()
-					.min(
-						PointsOfInterestValidationRule.LATITUDE_MIN,
-						PointsOfInterestValidationMessage.LATITUDE_MIN,
-					)
-					.max(
-						PointsOfInterestValidationRule.LATITUDE_MAX,
-						PointsOfInterestValidationMessage.LATITUDE_MAX,
-					),
-			)
-			.optional(),
-		longitude: z
-			.string()
-			.trim()
-			.transform(parseToFloat)
-			.pipe(
-				z
-					.number()
-					.min(
-						PointsOfInterestValidationRule.LONGITUDE_MIN,
-						PointsOfInterestValidationMessage.LONGITUDE_MIN,
-					)
-					.max(
-						PointsOfInterestValidationRule.LONGITUDE_MAX,
-						PointsOfInterestValidationMessage.LONGITUDE_MAX,
-					),
-			)
-			.optional(),
+		latitude: latitudeSchema.optional(),
+		longitude: longitudeSchema.optional(),
 		name: z
 			.string()
 			.trim()

@@ -8,4 +8,6 @@ export {
 	AppEnvironment,
 	CommonExceptionMessage,
 	ContentType,
+	LocationType,
+	PermissionKey,
 } from "@smartscapes/shared";

@@ -11,7 +11,9 @@ import {
 
 class ReviewService implements Service {
 	private pointsOfInterestService: PointsOfInterestService;
+
 	private reviewRepository: ReviewRepository;
+
 	private routeService: RouteService;
 
 	public constructor(

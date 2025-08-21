@@ -6,6 +6,9 @@ import {
 } from "../enums/enums.js";
 
 const routesCreate = z.strictObject({
+	createdByUserId: z.number({
+		message: RoutesValidationMessage.USER_ID_INVALID_TYPE,
+	}),
 	description: z
 		.string()
 		.trim()

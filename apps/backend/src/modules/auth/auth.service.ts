@@ -1,5 +1,9 @@
+import { type MultipartFile } from "@fastify/multipart";
+
 import { type encryption } from "~/libs/modules/encryption/libs/encryption.js";
 import { type BaseToken } from "~/libs/modules/token/token.js";
+import { FileFolderName } from "~/modules/files/libs/enums/enums.js";
+import { type FileUploadResponseDto } from "~/modules/files/libs/types/types.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
 	type AuthenticatedUserPatchResponseDto,
@@ -10,28 +14,36 @@ import {
 	type UserSignUpResponseDto,
 } from "~/modules/users/users.js";
 
+import { type FileService } from "../files/files.service.js";
 import { AuthExceptionMessage } from "./libs/enums/enums.js";
 import { AuthError } from "./libs/exceptions/auth.exception.js";
 
 type Constructor = {
 	encryptionService: typeof encryption;
+	fileService: FileService;
 	tokenService: BaseToken;
 	userService: UserService;
 };
 
 class AuthService {
 	private encryptionService: typeof encryption;
+
+	private fileService: FileService;
+
 	private tokenService: BaseToken;
+
 	private userService: UserService;
 
 	public constructor({
 		encryptionService,
+		fileService,
 		tokenService,
 		userService,
 	}: Constructor) {
 		this.encryptionService = encryptionService;
 		this.tokenService = tokenService;
 		this.userService = userService;
+		this.fileService = fileService;
 	}
 
 	public async patch(
@@ -72,11 +84,13 @@ class AuthService {
 		return {
 			token,
 			user: {
+				avatarUrl: user.avatarUrl,
 				email,
 				firstName: user.firstName,
 				group: user.group,
 				groupId: user.groupId,
 				id: user.id,
+				isVisibleProfile: user.isVisibleProfile,
 				lastName: user.lastName,
 			},
 		};
@@ -95,6 +109,21 @@ class AuthService {
 			token,
 			user,
 		};
+	}
+
+	public async uploadAvatar(
+		id: number,
+		file: MultipartFile,
+	): Promise<FileUploadResponseDto> {
+		const payload = {
+			entityId: id,
+			file,
+			folder: FileFolderName.AVATARS,
+		};
+
+		const avatar = await this.fileService.uploadFile(payload);
+
+		return avatar;
 	}
 }
 

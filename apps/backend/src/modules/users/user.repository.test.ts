@@ -28,11 +28,13 @@ describe("UserRepository", () => {
 	}).toObject();
 
 	const mockUser = UserEntity.initialize({
+		avatarUrl: "https://aws/avatars/example_file.jpg",
 		email: "test@example.com",
 		firstName: "John",
 		group: mockGroup,
 		groupId: 2,
 		id: 1,
+		isVisibleProfile: true,
 		lastName: "Doe",
 		passwordHash: "hash",
 		passwordSalt: "salt",
@@ -52,11 +54,13 @@ describe("UserRepository", () => {
 
 	it("create should insert and return new user", async () => {
 		const userEntity = UserEntity.initialize({
+			avatarUrl: null,
 			email: "test@example.com",
 			firstName: "John",
 			group: mockGroup,
 			groupId: 2,
 			id: 1,
+			isVisibleProfile: true,
 			lastName: "Doe",
 			passwordHash: "hash",
 			passwordSalt: "salt",
@@ -86,6 +90,8 @@ describe("UserRepository", () => {
 	it("findAll should return all users", async () => {
 		const userData = {
 			...mockUser.toObject(),
+			"avatar:id": 1,
+			"avatar:url": "https://aws/avatars/example_file.jpg",
 			"group:id": 2,
 			"group:key": "users",
 			"group:name": "Users",
@@ -98,16 +104,16 @@ describe("UserRepository", () => {
 
 		databaseTracker.on.select("users").response([userData]);
 
-		const testUser = UserEntity.initialize(userData);
-
 		const result = await userRepository.findAll();
 
-		assert.deepStrictEqual(result, [testUser]);
+		assert.deepStrictEqual(result, [mockUser]);
 	});
 
 	it("patch should update user profile", async () => {
 		const updatedUser = {
 			...mockUser.toObject(),
+			"avatar:id": 1,
+			"avatar:url": "https://aws/avatars/example_file.jpg",
 			"group:id": 2,
 			"group:key": "users",
 			"group:name": "Users",
@@ -126,6 +132,7 @@ describe("UserRepository", () => {
 
 		const result = await userRepository.patch(mockUser.toObject().id, {
 			firstName: "Jane",
+			isVisibleProfile: true,
 			lastName: "Smith",
 		});
 
@@ -137,6 +144,7 @@ describe("UserRepository", () => {
 
 		const result = await userRepository.patch(NON_EXISTENT_ID, {
 			firstName: "Jane",
+			isVisibleProfile: true,
 			lastName: "Smith",
 		});
 

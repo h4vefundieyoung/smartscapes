@@ -1,4 +1,5 @@
 const PointsOfInterestApiPath = {
+	$ID: "/:id",
 	ROOT: "/",
 } as const;
 

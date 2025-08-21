@@ -9,6 +9,7 @@ import {
 	type LineStringGeometry,
 } from "~/libs/types/types.js";
 
+import { PlannedPathModel } from "../planned-paths/planned-path.model.js";
 import { type RouteFindAllOptions } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
 import { RouteModel } from "./route.model.js";
@@ -24,6 +25,7 @@ describe("RouteRepository", () => {
 	let databaseTracker: Tracker;
 
 	const mockRoute = {
+		createdByUserId: 10,
 		description: "A test route description",
 		distance: 1.23,
 		duration: 4.56,
@@ -37,17 +39,16 @@ describe("RouteRepository", () => {
 		id: 1,
 		name: "Test Route",
 		pois: [{ id: 1, visitOrder: 1 }],
-		userId: 10,
 	};
 
 	const mockRouteList = {
+		createdByUserId: mockRoute.createdByUserId,
 		distance: mockRoute.distance,
 		duration: mockRoute.duration,
 		geometry: mockRoute.geometry,
 		id: mockRoute.id,
 		name: mockRoute.name,
 		pois: [] as { id: number; visitOrder: number }[],
-		userId: mockRoute.userId,
 	};
 
 	const createMockRouteEntity = (): RouteEntity =>
@@ -60,7 +61,7 @@ describe("RouteRepository", () => {
 
 		RouteModel.knex(database);
 
-		routesRepository = new RouteRepository(RouteModel);
+		routesRepository = new RouteRepository(RouteModel, PlannedPathModel);
 	});
 
 	afterEach(() => {
@@ -74,9 +75,15 @@ describe("RouteRepository", () => {
 		databaseTracker.on.insert(DatabaseTableName.ROUTES).response([routeObject]);
 		databaseTracker.on.insert(DatabaseTableName.ROUTES_TO_POIS).response([]);
 
-		const result = await routesRepository.create(routeEntity);
+		const result = await RouteModel.knex().transaction(async (trx) => {
+			const created = await routesRepository.create(routeEntity, {
+				transaction: trx,
+			});
 
-		assert.deepStrictEqual(structuredClone(result), routeObject);
+			return created;
+		});
+
+		assert.deepStrictEqual(result.toObject(), routeObject);
 	});
 
 	it("find should return null when route not found", async () => {
@@ -105,6 +112,7 @@ describe("RouteRepository", () => {
 		const mockRouteObject = mockRouteEntity.toObject();
 
 		const mockOptions: RouteFindAllOptions = {
+			categories: ["entertaiment", "history"],
 			name: mockRouteObject.name.toLowerCase(),
 		};
 

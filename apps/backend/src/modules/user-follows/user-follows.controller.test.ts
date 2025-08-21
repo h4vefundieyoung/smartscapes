@@ -48,20 +48,24 @@ describe("UserFollowsController", () => {
 	const TEST_FOLLOWING_ID = 31;
 
 	const mockAuthenticatedUser = {
+		avatarUrl: "https://aws/avatars/example_file.jpg",
 		email: "test@example.com",
 		firstName: "John",
 		group: mockGroup,
 		groupId: mockGroup.id,
 		id: TEST_FOLLOWER_ID,
+		isVisibleProfile: true,
 		lastName: "Doe",
 	};
 
 	const mockAnotherUser = {
+		avatarUrl: "https://aws/avatars/example_file.jpg",
 		email: "another@example.com",
 		firstName: "Alice",
 		group: mockGroup,
 		groupId: mockGroup.id,
 		id: TEST_FOLLOWING_ID,
+		isVisibleProfile: true,
 		lastName: "Smith",
 	};
 

@@ -7,7 +7,7 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
-import { type PlannedPathResponseDto } from "../planned-routes/planned-paths.js";
+import { type PlannedPathResponseDto } from "../planned-paths/planned-paths.js";
 import { RoutesApiPath } from "./libs/enums/enums.js";
 import {
 	type RouteConstructRequestDto,
@@ -77,7 +77,7 @@ import { type RouteService } from "./route.service.js";
  *               visitOrder:
  *                 type: number
  *           example: [{id: 1, visitOrder: 0}, {id: 2, visitOrder: 1}]
- *         userId:
+ *         createdByUserId:
  *           type: number
  *
  *     RouteListItem:
@@ -85,8 +85,10 @@ import { type RouteService } from "./route.service.js";
  *       properties:
  *         id:
  *           type: number
+ *           example: 1
  *         name:
  *           type: string
+ *           example: "Landscape alley"
  *         distance:
  *           type: number
  *           example: 36310.805
@@ -105,7 +107,7 @@ import { type RouteService } from "./route.service.js";
  *                 type: number
  *               visitOrder:
  *                 type: number
- *         userId:
+ *         createdByUserId:
  *           type: number
  *
  *     PlannedPath:
@@ -187,7 +189,7 @@ class RouteController extends BaseController {
 	 *     security:
 	 *       - bearerAuth: []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Construct Mapbox route
 	 *     requestBody:
 	 *       required: true
@@ -235,7 +237,7 @@ class RouteController extends BaseController {
 	 *     security:
 	 *       - bearerAuth: []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Create a new route (requires manage_routes permission)
 	 *     description: Creates a new route. Requires authentication and manage_routes permission.
 	 *     requestBody:
@@ -249,7 +251,7 @@ class RouteController extends BaseController {
 	 *               - description
 	 *               - poiIds
 	 *               - plannedPathId
-	 *               - userId
+	 *               - createdByUserId
 	 *             properties:
 	 *               name:
 	 *                 type: string
@@ -265,7 +267,7 @@ class RouteController extends BaseController {
 	 *               plannedPathId:
 	 *                 type: number
 	 *                 example: 2
-	 *               userId:
+	 *               createdByUserId:
 	 *                 type: number
 	 *                 example: 1
 	 *     responses:
@@ -326,7 +328,7 @@ class RouteController extends BaseController {
 	 *     security:
 	 *      - bearerAuth: []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Delete a route (requires manage_routes permission)
 	 *     description: Deletes an existing route. Requires authentication and manage_routes permission.
 	 *     parameters:
@@ -392,7 +394,7 @@ class RouteController extends BaseController {
 	 *     security:
 	 *      - bearerAuth:  []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Retrieve all routes with optional search by name
 	 *     description: |
 	 *       Get all routes, or only those whose names match the search query.
@@ -400,12 +402,34 @@ class RouteController extends BaseController {
 	 *       **Without query parameters**: Returns all routes.
 	 *
 	 *       **With query `name` parameter**: Returns routes whose names match the search query. Search is case-insensitive.
+	 *       **With `latitude` and `longitude`**: Sorts routes by proximity to the provided coordinates (based on their first point of interest).
 	 *     parameters:
 	 *       - in: query
 	 *         name: name
 	 *         schema:
 	 *           type: string
 	 *           example: "landscape"
+	 *       - in: query
+	 *         name: latitude
+	 *         schema:
+	 *           type: number
+	 *           format: float
+	 *           example: 49.8397
+	 *       - in: query
+	 *         name: longitude
+	 *         schema:
+	 *           type: number
+	 *           format: float
+	 *           example: 24.0297
+	 *       - in: query
+	 *         name: categories
+	 *         schema:
+	 *           type: array
+	 *           items:
+	 *             type: string
+	 *         style: form
+	 *         explode: true
+	 *         description: categories;
 	 *     responses:
 	 *       200:
 	 *         description: A list of routes
@@ -442,7 +466,7 @@ class RouteController extends BaseController {
 	 *     security:
 	 *      - bearerAuth: []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Get a route by ID
 	 *     description: Retrieves a route by its ID. Requires authentication but no special permissions.
 	 *     parameters:
@@ -497,7 +521,7 @@ class RouteController extends BaseController {
 	 *     security:
 	 *      - bearerAuth: []
 	 *     tags:
-	 *       - Routes
+	 *       - Route
 	 *     summary: Update a route
 	 *     parameters:
 	 *       - in: path

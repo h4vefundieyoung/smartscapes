@@ -1,7 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { StorageKey } from "~/libs/modules/storage/storage.js";
-import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
+import {
+	type APIResponse,
+	type AsyncThunkConfig,
+	type FileUploadResponseDto,
+} from "~/libs/types/types.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
 	type AuthenticatedUserPatchResponseDto,
@@ -34,7 +38,9 @@ const getAuthenticatedUser = createAsyncThunk<
 
 const logout = createAsyncThunk<null, undefined, AsyncThunkConfig>(
 	`${sliceName}/logout`,
-	async (_payload, { extra: { storage } }) => {
+	async (_payload, { extra }) => {
+		const { storage } = extra;
+
 		await storage.drop(StorageKey.TOKEN);
 
 		return null;
@@ -50,6 +56,7 @@ const signUp = createAsyncThunk<
 
 	const user = await authApi.signUp(payload);
 	const { token } = user.data;
+
 	await storage.set(StorageKey.TOKEN, token);
 
 	return user;
@@ -64,6 +71,7 @@ const signIn = createAsyncThunk<
 
 	const user = await authApi.signIn(payload);
 	const { token } = user.data;
+
 	await storage.set(StorageKey.TOKEN, token);
 
 	return user;
@@ -80,9 +88,34 @@ const patchAuthenticatedUser = createAsyncThunk<
 	const userId = state.auth.authenticatedUser?.id as number;
 
 	const response = await authApi.patch(userId, payload);
+
 	toastNotifier.showSuccess("Profile updated");
 
 	return response;
 });
 
-export { getAuthenticatedUser, logout, patchAuthenticatedUser, signIn, signUp };
+const uploadAvatar = createAsyncThunk<
+	APIResponse<FileUploadResponseDto>,
+	File,
+	AsyncThunkConfig
+>(
+	`${sliceName}/authenticated-user/upload-avatar`,
+	async (payload, { extra }) => {
+		const { authApi, toastNotifier } = extra;
+
+		const response = await authApi.uploadAvatar(payload);
+
+		toastNotifier.showSuccess("Avatar updated");
+
+		return response;
+	},
+);
+
+export {
+	getAuthenticatedUser,
+	logout,
+	patchAuthenticatedUser,
+	signIn,
+	signUp,
+	uploadAvatar,
+};

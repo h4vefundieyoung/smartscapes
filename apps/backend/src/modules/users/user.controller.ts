@@ -28,6 +28,8 @@ import { type UserGetByIdItemResponseDto } from "./libs/types/types.js";
  *         firstName:
  *          type: string
  *          example: John
+ *         isVisibleProfile:
+ *          type: boolean
  */
 
 class UserController extends BaseController {

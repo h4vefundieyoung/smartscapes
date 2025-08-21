@@ -25,6 +25,7 @@ describe("NotificationController", () => {
 	};
 
 	const mockUser: UserAuthResponseDto = {
+		avatarUrl: "https://aws/avatars/example_file.jpg",
 		email: "test@example.com",
 		firstName: "John",
 		group: {
@@ -46,6 +47,7 @@ describe("NotificationController", () => {
 		},
 		groupId: 2,
 		id: 42,
+		isVisibleProfile: true,
 		lastName: "Doe",
 	};
 

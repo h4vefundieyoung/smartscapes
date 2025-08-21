@@ -1,3 +1,5 @@
+import { type Knex } from "knex";
+
 import { HTTPCode } from "~/libs/enums/enums.js";
 import {
 	MapboxAPIGeometric,
@@ -6,8 +8,8 @@ import {
 } from "~/libs/modules/mapbox/mapbox.js";
 import { type CollectionResult, type Service } from "~/libs/types/types.js";
 
-import { type PlannedPathResponseDto } from "../planned-routes/libs/types/planned-path-response-dto.type.js";
-import { type PlannedPathservice } from "../planned-routes/planned-path.service.js";
+import { type PlannedPathResponseDto } from "../planned-paths/libs/types/planned-path-response-dto.type.js";
+import { type PlannedPathService } from "../planned-paths/planned-paths.js";
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
 import { RoutesError } from "./libs/exceptions/exceptions.js";
@@ -19,31 +21,35 @@ import {
 	type RoutePatchRequestDto,
 } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
+import { RouteModel } from "./route.model.js";
 import { type RouteRepository } from "./route.repository.js";
 
 type ConstructorParameters = {
 	mapboxDirectionsApi: MapboxDirectionsApi;
-	plannedPathservice: PlannedPathservice;
+	plannedPathService: PlannedPathService;
 	pointsOfInterestService: PointsOfInterestService;
 	routesRepository: RouteRepository;
 };
 
 class RouteService implements Service {
 	private mapboxDirectionApi: MapboxDirectionsApi;
-	private plannedPathservice: PlannedPathservice;
+
+	private plannedPathService: PlannedPathService;
+
 	private pointsOfInterestService: PointsOfInterestService;
+
 	private routesRepository: RouteRepository;
 
 	public constructor({
 		mapboxDirectionsApi,
-		plannedPathservice,
+		plannedPathService,
 		pointsOfInterestService,
 		routesRepository,
 	}: ConstructorParameters) {
 		this.routesRepository = routesRepository;
 		this.pointsOfInterestService = pointsOfInterestService;
 		this.mapboxDirectionApi = mapboxDirectionsApi;
-		this.plannedPathservice = plannedPathservice;
+		this.plannedPathService = plannedPathService;
 	}
 
 	public async construct(poiIds: number[]): Promise<PlannedPathResponseDto> {
@@ -66,7 +72,7 @@ class RouteService implements Service {
 			MapboxAPIGeometric.GEOJSON,
 		);
 
-		const plannedRoute = await this.plannedPathservice.create(route);
+		const plannedRoute = await this.plannedPathService.create(route);
 
 		return plannedRoute;
 	}
@@ -86,16 +92,24 @@ class RouteService implements Service {
 
 		const { plannedPathId } = formattedPayload;
 
-		const plannedRoute = await this.plannedPathservice.findById(plannedPathId);
+		const plannedRoute = await this.plannedPathService.findById(plannedPathId);
 
 		const routeEntity = RouteEntity.initializeNew({
 			...formattedPayload,
 			...plannedRoute,
 		});
 
-		const route = await this.routesRepository.create(routeEntity);
+		const route = await RouteModel.knex().transaction(
+			async (transaction: Knex.Transaction) => {
+				const createdRoute = await this.routesRepository.create(routeEntity, {
+					transaction,
+				});
 
-		await this.plannedPathservice.delete(plannedPathId);
+				await this.plannedPathService.delete(plannedPathId, { transaction });
+
+				return createdRoute;
+			},
+		);
 
 		return route.toObject();
 	}
@@ -116,12 +130,16 @@ class RouteService implements Service {
 	public async findAll(
 		options: null | RouteFindAllOptions,
 	): Promise<CollectionResult<RouteGetAllItemResponseDto>> {
+		if (options?.categories) {
+			options.categories = Array.isArray(options.categories)
+				? options.categories
+				: [options.categories];
+		}
+
 		const items = await this.routesRepository.findAll(options);
 
 		return {
-			items: items.map((item) => {
-				return item.toListObject();
-			}),
+			items: items.map((item) => item.toListObject()),
 		};
 	}
 

@@ -10,10 +10,17 @@ const pointOfInterestApi = new PointOfInterestApi({
 	storage,
 });
 
-export { pointOfInterestApi };
 export {
+	type PointsOfInterestPaginatedResponseDto,
+	type PointsOfInterestPaginatedSummary,
+	type PointsOfInterestQueryRequest,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
 } from "./libs/types/types.js";
-export { pointOfInterestCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
-export { actions, reducer } from "./slices/points-of-interest.js";
+export { pointOfInterestApi };
+export { pointsOfInterestCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
+export {
+	actions,
+	pointOfInterestDetailsReducer,
+	pointsOfInterestReducer,
+} from "./slices/points-of-interest.js";

@@ -37,6 +37,7 @@ erDiagram
     varchar email
     varchar first_name
     varchar last_name
+    boolean is_visible_profile
     text password_hash
     text password_salt
     int group_id FK
@@ -71,6 +72,7 @@ erDiagram
     dateTime created_at
     dateTime updated_at
     varchar name
+    varchar description
     geometry location
   }
 
@@ -98,7 +100,15 @@ erDiagram
     int id PK
     dateTime created_at
     dateTime updated_at
+    int route_id FK
+    int category_id FK
+  }
+  categories{
+    int id PK
+    dateTime created_at
+    dateTime updated_at
     varchar name
+    varchar key
   }
 
   routes {
@@ -108,8 +118,9 @@ erDiagram
     varchar name
     varchar description
     decimal distance
-    int duration
+    decimal duration
     geometry geometry
+    int created_by_user_id FK
   }
 
   planned_paths {
@@ -118,21 +129,8 @@ erDiagram
     dateTime updated_at
     int user_id FK
     decimal distance
-    int duration
+    decimal duration
     geometry geometry
-  }
-
-  user_routes {
-    int id PK
-    dateTime created_at
-    dateTime updated_at
-    int route_id FK
-    int user_id FK
-    geometry planned_geometry
-    geometry actual_geometry
-    dateTime started_at
-    dateTime completed_at
-    enum status
   }
 
   routes_to_pois {
@@ -157,11 +155,13 @@ erDiagram
   }
 
   files {
-    id integer [primary key]
-    created_at timestamp
-    updated_at timestamp
-    url varchar
-    content_type varchar
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    varchar url
+    varchar content_type
+    enum folder
+    int entity_id
   }
 
   users }|--|| groups : group_id
@@ -175,6 +175,8 @@ erDiagram
   routes }|--|{ user_routes : route_id
   users ||--|{ reviews : user_id
   routes ||--|{ reviews : route_id
+  routes ||--|{ route_categories : route_id
+  categories ||--|{ route_categories : category_id
   points_of_interest ||--|{ reviews : poi_id
   users ||--o{ notifications : user_id
 ```

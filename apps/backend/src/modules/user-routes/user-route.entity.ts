@@ -4,12 +4,19 @@ import { type UserRouteStatusType } from "./libs/types/type.js";
 
 class UserRouteEntity implements Entity {
 	private actualGeometry: LineStringGeometry;
+
 	private completedAt: null | string;
+
 	private id: null | number;
+
 	private plannedGeometry: LineStringGeometry;
+
 	private routeId: number;
+
 	private startedAt: null | string;
+
 	private status: null | UserRouteStatusType;
+
 	private userId: number;
 
 	private constructor({

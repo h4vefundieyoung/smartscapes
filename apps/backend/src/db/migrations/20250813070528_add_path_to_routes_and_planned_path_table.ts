@@ -4,10 +4,10 @@ const ROUTES_TABLE = "routes";
 const PLANNED_PATHS_TABLE = "planned_paths";
 
 const ColumnName = {
+	CREATED_BY_USER_ID: "created_by_user_id",
 	DISTANCE: "distance",
 	DURATION: "duration",
 	GEOMETRY: "geometry",
-	USER_ID: "user_id",
 } as const;
 
 const DECIMAL_PRECISION = 10;
@@ -30,16 +30,18 @@ async function up(knex: Knex): Promise<void> {
 		await trx.schema.alterTable(ROUTES_TABLE, (table) => {
 			table
 				.decimal(ColumnName.DISTANCE, DECIMAL_PRECISION, DECIMAL_SCALE)
-				.notNullable();
+				.notNullable()
+				.defaultTo(0);
 			table
 				.decimal(ColumnName.DURATION, DECIMAL_PRECISION, DECIMAL_SCALE)
-				.notNullable();
+				.notNullable()
+				.defaultTo(0);
 			table
 				.specificType(ColumnName.GEOMETRY, "geometry(LineString, 4326)")
-				.notNullable();
+				.nullable();
 			table
-				.integer(ColumnName.USER_ID)
-				.notNullable()
+				.integer(ColumnName.CREATED_BY_USER_ID)
+				.nullable()
 				.references("id")
 				.inTable("users")
 				.onDelete("CASCADE");

@@ -10,6 +10,7 @@ import { RouteEntity } from "./route.entity.js";
 
 describe("RouteEntity", () => {
 	const routesDataWithId = {
+		createdByUserId: 11,
 		description: "A test route description",
 		distance: 2.34,
 		duration: 7.89,
@@ -25,13 +26,17 @@ describe("RouteEntity", () => {
 			{ id: 1, visitOrder: 0 },
 			{ id: 2, visitOrder: 1 },
 		],
-		userId: 11,
 	};
 
 	it("should create new routes entity", () => {
 		const routesDataWithOutId = {
 			...routesDataWithId,
 			id: 1,
+			name: "Route 1 Test Name",
+			pois: [
+				{ id: 1, visitOrder: 0 },
+				{ id: 2, visitOrder: 1 },
+			],
 		};
 
 		const routesEntity = RouteEntity.initialize(routesDataWithOutId);

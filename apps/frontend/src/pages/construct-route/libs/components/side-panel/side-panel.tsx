@@ -8,7 +8,7 @@ import {
 	useAppForm,
 	useAppSelector,
 	useCallback,
-	useDebounceCallback,
+	useDebouncedCallback,
 	useMemo,
 } from "~/libs/hooks/hooks.js";
 import { type SelectOption } from "~/libs/types/types.js";
@@ -39,7 +39,7 @@ const SidePanel = ({
 		defaultValues: { searchPoi: null },
 	});
 
-	const handleSelectInputChange = useDebounceCallback((value: string) => {
+	const handleSelectInputChange = useDebouncedCallback((value: string) => {
 		if (
 			value.trim().length < PointsOfInterestValidationRule.NAME_MIN_LENGTH ||
 			value.trim().length > PointsOfInterestValidationRule.NAME_MAX_LENGTH

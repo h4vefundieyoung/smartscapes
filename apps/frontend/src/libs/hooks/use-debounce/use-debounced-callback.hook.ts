@@ -1,21 +1,25 @@
 import debounce, { type DebouncedFunction } from "debounce";
-import { useEffect, useMemo } from "react";
+
+import { useEffect, useMemo } from "~/libs/hooks/hooks.js";
 
 const DEBOUNCE_DELAY_MS = 300;
 
-const useDebounceCallback = <T extends unknown[]>(
+const useDebouncedCallback = <T extends unknown[]>(
 	callback: (...arguments_: T) => void,
 	delay = DEBOUNCE_DELAY_MS,
 ): DebouncedFunction<(...arguments_: T) => void> => {
-	const debounced = useMemo(() => debounce(callback, delay), [callback, delay]);
+	const debouncedFunction = useMemo(
+		() => debounce(callback, delay),
+		[callback, delay],
+	);
 
 	useEffect(() => {
 		return (): void => {
-			debounced.clear();
+			debouncedFunction.clear();
 		};
-	}, [debounced]);
+	}, [debouncedFunction]);
 
-	return debounced;
+	return debouncedFunction;
 };
 
-export { useDebounceCallback };
+export { useDebouncedCallback };

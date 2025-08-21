@@ -26,7 +26,7 @@ import {
 } from "~/modules/routes/routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
-import { RouteReviewsSection } from "./libs/components/components.js";
+import { PointOfInterestSection, RouteReviewsSection } from "./libs/components/components.js";
 import { ROUTE_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
@@ -83,8 +83,8 @@ const RouteDetails = (): React.JSX.Element => {
 	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
 		return <Loader />;
 	}
-
-	const { description, id: routeId, name } = route as RouteGetByIdResponseDto;
+  
+	const { description, id: routeId, name, pois } = route as RouteGetByIdResponseDto;
 
 	return (
 		<>
@@ -126,6 +126,7 @@ const RouteDetails = (): React.JSX.Element => {
 				) : (
 					<p className={styles["description"]}>{description}</p>
 				)}
+				<PointOfInterestSection pointOfInterests={pois} />
 			</main>
 		</>
 	);

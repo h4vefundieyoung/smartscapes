@@ -20,6 +20,7 @@ export { Modal } from "./modal/modal.js";
 export { NumberInput } from "./number-input/number-input.js";
 export { Pagination } from "./pagination/pagination.js";
 export { PasswordInput } from "./password-input/password-input.js";
+export { PointOfInterestCard } from "./point-of-interest-card/point-of-interest-card.js";
 export { ProtectedRoute } from "./protected-route/protected-route.js";
 export { ReviewCard } from "./review-card/review-card.js";
 export { RouteCard } from "./route-card/route-card.js";

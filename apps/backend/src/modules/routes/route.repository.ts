@@ -35,7 +35,7 @@ class RouteRepository implements Repository {
 		}
 
 		const result = await query
-			.insertGraph(insertData, { relate: ["pois"] })
+			.insertGraph(insertData as RouteModel, { relate: ["pois"] })
 			.returning([
 				"id",
 				"name",
@@ -64,7 +64,11 @@ class RouteRepository implements Repository {
 			.query()
 			.withGraphFetched("pois")
 			.modifyGraph("pois", (builder) => {
-				builder.select("points_of_interest.id", "routes_to_pois.visit_order");
+				builder.select(
+					"points_of_interest.id",
+					"points_of_interest.name",
+					"routes_to_pois.visit_order",
+				);
 			})
 			.select([
 				"routes.id",
@@ -77,7 +81,7 @@ class RouteRepository implements Repository {
 			])
 			.modify((builder) => {
 				if (options?.name) {
-					builder.whereILike("name", `%${options.name.trim()}%`);
+					builder.whereILike("routes.name", `%${options.name.trim()}%`);
 				}
 			});
 
@@ -115,10 +119,14 @@ class RouteRepository implements Repository {
 	public async findById(id: number): Promise<null | RouteEntity> {
 		const route = await this.routesModel
 			.query()
-			.withGraphFetched("pois(selectPoiIdOrder)")
+			.withGraphFetched("pois(selectPoi)")
 			.modifiers({
-				selectPoiIdOrder(builder) {
-					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
+				selectPoi(builder) {
+					builder.select(
+						"points_of_interest.id",
+						"points_of_interest.name",
+						"routes_to_pois.visit_order",
+					);
 				},
 			})
 			.select([
@@ -147,9 +155,9 @@ class RouteRepository implements Repository {
 		const [updatedRoute] = await this.routesModel
 			.query()
 			.patch(entity)
-			.withGraphFetched("pois(selectPoiIdOrder)")
+			.withGraphFetched("pois(selectPoi)")
 			.modifiers({
-				selectPoiIdOrder(builder) {
+				selectPoi(builder) {
 					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
 				},
 			})

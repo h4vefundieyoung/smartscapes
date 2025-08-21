@@ -47,8 +47,16 @@ const createMockRouteService = (): Partial<RouteService> => ({
 			id,
 			name: "Test Route",
 			pois: [
-				{ id: 1, visitOrder: 1 },
-				{ id: 2, visitOrder: 2 },
+				{
+					id: 1,
+					name: "SUP Kayak Club 4 Storony",
+					visitOrder: 1,
+				},
+				{
+					id: 2,
+					name: "River Grill, Rusanivska Embankment",
+					visitOrder: 2,
+				},
 			],
 		}),
 });

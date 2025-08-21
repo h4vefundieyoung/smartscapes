@@ -1,10 +1,11 @@
-import { getAll, getRouteById } from "./actions.js";
+import { getAll, getRouteById, patchRoute } from "./actions.js";
 import { actions } from "./route.slice.js";
 
 const allActions = {
 	...actions,
 	getAll,
 	getRouteById,
+	patchRoute,
 };
 
 export { allActions as actions };

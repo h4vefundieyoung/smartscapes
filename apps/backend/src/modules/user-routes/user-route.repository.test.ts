@@ -85,10 +85,16 @@ describe("UserRouteRepository", () => {
 		returning: (): typeof mockPatchReturning => mockPatchReturning,
 	};
 
+	const mockSelectReturning = {
+		execute: (): Promise<typeof mockWhereResult> =>
+			Promise.resolve(mockWhereResult),
+	};
+
 	const mockWhereWrapper = {
 		execute: (): Promise<never[]> => Promise.resolve([]),
 		patch: (): typeof mockPatchReturningWrapper => mockPatchReturningWrapper,
 		returning: (): typeof mockWhereReturning => mockWhereReturning,
+		select: (): typeof mockSelectReturning => mockSelectReturning,
 	};
 
 	const mockModel = {
@@ -96,12 +102,14 @@ describe("UserRouteRepository", () => {
 			first: () => Promise<null>;
 			insert: () => typeof mockInsertReturningWrapper;
 			patch: () => typeof mockPatchReturningWrapper;
+			select: () => typeof mockSelectReturning;
 			where: () => typeof mockWhereWrapper;
 		} => ({
 			first: (): Promise<null> => Promise.resolve(null),
 			insert: (): typeof mockInsertReturningWrapper =>
 				mockInsertReturningWrapper,
 			patch: (): typeof mockPatchReturningWrapper => mockPatchReturningWrapper,
+			select: (): typeof mockSelectReturning => mockSelectReturning,
 			where: (): typeof mockWhereWrapper => mockWhereWrapper,
 		}),
 		raw: (query: string): string => query,

@@ -1,9 +1,11 @@
-type UserPublicProfileResponseDto = {
-	firstName: string;
+import { type UserAuthResponseDto } from "./user-auth-response-dto.type.js";
+
+type UserPublicProfileResponseDto = Pick<
+	UserAuthResponseDto,
+	"firstName" | "id" | "lastName"
+> & {
 	followersCount: number;
-	id: number;
 	isFollowed: boolean;
-	lastName: string;
 };
 
 export { type UserPublicProfileResponseDto };

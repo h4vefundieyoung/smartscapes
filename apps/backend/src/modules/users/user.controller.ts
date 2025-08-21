@@ -14,6 +14,7 @@ import {
 	type UserGetByIdItemResponseDto,
 	type UserPublicProfileResponseDto,
 } from "./libs/types/types.js";
+import { userGetProfileValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 
 /**
  * @swagger
@@ -54,6 +55,9 @@ class UserController extends BaseController {
 			handler: this.getUserProfile.bind(this),
 			method: "GET",
 			path: UsersApiPath.$USER_ID_GET_PROFILE,
+			validation: {
+				params: userGetProfileValidationSchema,
+			},
 		});
 	}
 
@@ -104,7 +108,7 @@ class UserController extends BaseController {
 	 *         name: id
 	 *         required: true
 	 *         schema:
-	 *           type: string
+	 *           type: number
 	 *     responses:
 	 *       200:
 	 *         description: User public profile
@@ -119,16 +123,15 @@ class UserController extends BaseController {
 
 	public async getUserProfile(
 		options: APIHandlerOptions<{
-			params: { id: string };
+			params: { id: number };
 		}>,
 	): Promise<APIHandlerResponse<UserPublicProfileResponseDto>> {
 		const { params, user } = options;
-		const id = Number(params.id);
 
 		const currentUserId = (user as UserAuthResponseDto).id;
 
 		const userProfile = await this.userService.getUserProfile(
-			id,
+			params.id,
 			currentUserId,
 		);
 

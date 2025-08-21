@@ -22,18 +22,16 @@ const PointOfInterestCard = ({
 		onClick(id);
 	}, [id, onClick]);
 
+	const poiDetailsPath = configureString(AppRoute.POINTS_OF_INTEREST_$ID, {
+		id: String(id),
+	}) as ValueOf<typeof AppRoute>;
+
 	return (
 		<li className={styles["container"]}>
 			<span className={styles["name"]}>{name}</span>
 
-			<div className={styles["left"]}>
-				<Link
-					to={
-						configureString(AppRoute.POINTS_OF_INTEREST_$ID, {
-							id: String(id),
-						}) as ValueOf<typeof AppRoute>
-					}
-				>
+			<div className={styles["right"]}>
+				<Link to={poiDetailsPath}>
 					<div className={styles["icon"]}>
 						<Icon height={24} name="link" width={24} />
 					</div>

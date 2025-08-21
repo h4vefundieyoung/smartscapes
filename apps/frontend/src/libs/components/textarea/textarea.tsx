@@ -17,6 +17,7 @@ type Properties<T extends FieldValues> = {
 	label: string;
 	name: FieldPath<T>;
 	placeholder?: string;
+	rowsCount?: number;
 };
 
 const TextArea = <T extends FieldValues>({
@@ -25,6 +26,7 @@ const TextArea = <T extends FieldValues>({
 	label,
 	name,
 	placeholder = "",
+	rowsCount,
 }: Properties<T>): React.JSX.Element => {
 	const { field } = useFormController({ control, name });
 
@@ -42,6 +44,7 @@ const TextArea = <T extends FieldValues>({
 				name={field.name}
 				onChange={field.onChange}
 				placeholder={placeholder}
+				rows={rowsCount}
 				value={field.value ?? ""}
 			/>
 			{hasError && (

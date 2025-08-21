@@ -2,14 +2,22 @@ import { type Entity, type LineStringGeometry } from "~/libs/types/types.js";
 
 class RouteEntity implements Entity {
 	private createdByUserId: number;
+
 	private description: null | string;
+
 	private distance: number;
+
 	private duration: number;
+
 	private geometry: LineStringGeometry;
+
 	private id: null | number;
+
 	private name: string;
+
 	private pois: {
 		id: number;
+		name?: string;
 		visitOrder: number;
 	}[];
 
@@ -32,6 +40,7 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
+			name?: string;
 			visitOrder: number;
 		}[];
 	}) {
@@ -55,6 +64,7 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
+			name: string;
 			visitOrder: number;
 		}[];
 	}): RouteEntity {
@@ -87,6 +97,7 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
+			name: string;
 			visitOrder: number;
 		}[];
 	}): RouteEntity {
@@ -143,6 +154,7 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
+			name: string;
 			visitOrder: number;
 		}[];
 	} {
@@ -153,7 +165,11 @@ class RouteEntity implements Entity {
 			geometry: this.geometry,
 			id: this.id as number,
 			name: this.name,
-			pois: this.pois,
+			pois: this.pois as {
+				id: number;
+				name: string;
+				visitOrder: number;
+			}[],
 		};
 	}
 
@@ -190,6 +206,7 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
+			name: string;
 			visitOrder: number;
 		}[];
 	} {
@@ -201,7 +218,9 @@ class RouteEntity implements Entity {
 			geometry: this.geometry,
 			id: this.id as number,
 			name: this.name,
-			pois: this.pois,
+			pois: this.pois as Required<
+				Pick<RouteEntity["pois"][number], "id" | "name" | "visitOrder">
+			>[],
 		};
 	}
 }

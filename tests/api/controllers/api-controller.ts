@@ -5,6 +5,7 @@ import { POIController } from "./poi-controler.js";
 
 class ApiController {
 	public readonly auth: AuthController;
+
 	public readonly poi: POIController;
 
 	public constructor(request: APIRequestContext) {

@@ -4,7 +4,7 @@ import { HTTPCode } from "~/libs/enums/enums.js";
 import { type Repository } from "~/libs/types/types.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
-	type UserPasswordDetails,
+	type UserDetailsWithPassword,
 	type UserPublicProfileResponseDto,
 } from "~/modules/users/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
@@ -55,6 +55,7 @@ class UserRepository implements Repository {
 			>;
 
 			return UserEntity.initialize({
+				avatarUrl: null,
 				email: user.email,
 				firstName: user.firstName,
 				group: GroupEntity.initializeWithPermissions({
@@ -79,6 +80,7 @@ class UserRepository implements Repository {
 		const users = await this.userModel
 			.query()
 			.withGraphJoined("group.permissions")
+			.withGraphJoined("avatar")
 			.execute();
 
 		return users.map((user) => {
@@ -86,8 +88,10 @@ class UserRepository implements Repository {
 			const permissions = user.group?.permissions as NonNullable<
 				typeof group.permissions
 			>;
+			const { avatar } = user;
 
 			return UserEntity.initialize({
+				avatarUrl: avatar ? avatar.url : null,
 				email: user.email,
 				firstName: user.firstName,
 				group: GroupEntity.initializeWithPermissions({
@@ -113,6 +117,7 @@ class UserRepository implements Repository {
 			.query()
 			.where("email", email)
 			.withGraphJoined("group.permissions")
+			.withGraphJoined("avatar")
 			.first();
 
 		if (!user) {
@@ -123,8 +128,10 @@ class UserRepository implements Repository {
 		const permissions = user.group?.permissions as NonNullable<
 			typeof group.permissions
 		>;
+		const { avatar } = user;
 
 		return UserEntity.initialize({
+			avatarUrl: avatar ? avatar.url : null,
 			email: user.email,
 			firstName: user.firstName,
 			group: GroupEntity.initializeWithPermissions({
@@ -149,6 +156,7 @@ class UserRepository implements Repository {
 			.query()
 			.findById(id)
 			.withGraphJoined("group.permissions")
+			.withGraphJoined("avatar")
 			.first();
 
 		if (!user) {
@@ -159,8 +167,10 @@ class UserRepository implements Repository {
 		const permissions = user.group?.permissions as NonNullable<
 			typeof group.permissions
 		>;
+		const { avatar } = user;
 
 		return UserEntity.initialize({
+			avatarUrl: avatar ? avatar.url : null,
 			email: user.email,
 			firstName: user.firstName,
 			group: GroupEntity.initializeWithPermissions({
@@ -182,7 +192,7 @@ class UserRepository implements Repository {
 
 	public async findPasswordDetails(
 		email: string,
-	): Promise<null | UserPasswordDetails> {
+	): Promise<null | UserDetailsWithPassword> {
 		const user = await this.userModel
 			.query()
 			.where("email", email)
@@ -196,6 +206,7 @@ class UserRepository implements Repository {
 				"users.group_id as groupId",
 			)
 			.withGraphJoined("group.permissions")
+			.withGraphJoined("avatar")
 			.where("users.email", email)
 			.first();
 
@@ -207,8 +218,10 @@ class UserRepository implements Repository {
 		const permissions = user.group?.permissions as NonNullable<
 			typeof group.permissions
 		>;
+		const { avatar } = user;
 
 		return {
+			avatarUrl: avatar ? avatar.url : null,
 			email: user.email,
 			firstName: user.firstName,
 			group: GroupEntity.initializeWithPermissions({
@@ -307,14 +320,17 @@ class UserRepository implements Repository {
 			const user = (await UserModel.query()
 				.where("users.id", updatedRow.id)
 				.withGraphJoined("group.permissions")
+				.withGraphJoined("avatar")
 				.first()) as UserModel;
 
 			const group = user.group as NonNullable<typeof user.group>;
 			const permissions = group.permissions as NonNullable<
 				typeof group.permissions
 			>;
+			const { avatar } = user;
 
 			return UserEntity.initialize({
+				avatarUrl: avatar ? avatar.url : null,
 				email: user.email,
 				firstName: user.firstName,
 				group: GroupEntity.initializeWithPermissions({
@@ -326,6 +342,7 @@ class UserRepository implements Repository {
 					),
 				}).toObject(),
 				groupId: user.groupId,
+
 				id: user.id,
 				isVisibleProfile: user.isVisibleProfile,
 				lastName: user.lastName,

@@ -84,6 +84,7 @@ describe("UserController", () => {
 		const userController = new UserController(mockLogger, userService);
 
 		const mockUser = {
+			avatarUrl: null,
 			email: "test@example.com",
 			firstName: "Test",
 			group: mockGroup.toObject(),

@@ -24,6 +24,7 @@ describe("UserService", () => {
 	});
 
 	const mockUser = UserEntity.initialize({
+		avatarUrl: "https://aws/avatars/example_file.jpg",
 		email: "test@example.com",
 		firstName: "John",
 		group: mockGroup.toObject(),
@@ -41,6 +42,7 @@ describe("UserService", () => {
 
 	it("create should return new user", async () => {
 		const userEntity = UserEntity.initialize({
+			avatarUrl: null,
 			email: "test@example.com",
 			firstName: "John",
 			group: mockGroup.toObject(),
@@ -71,6 +73,7 @@ describe("UserService", () => {
 		});
 
 		assert.deepStrictEqual(result, {
+			avatarUrl: null,
 			email: mockUser.toObject().email,
 			firstName: mockUser.toObject().firstName,
 			group: {
@@ -88,6 +91,7 @@ describe("UserService", () => {
 
 	it("findAll should return all users", async () => {
 		const userEntity = UserEntity.initialize({
+			avatarUrl: "https://aws/avatars/example_file.jpg",
 			email: "test@example.com",
 			firstName: "John",
 			group: mockGroup.toObject(),
@@ -158,7 +162,7 @@ describe("UserService", () => {
 			(error: unknown) => {
 				assert.strictEqual(
 					(error as Error).message,
-					UserExceptionMessage.USER_NOT_FOUND,
+					UserExceptionMessage.NOT_FOUND,
 				);
 
 				return true;
@@ -200,7 +204,7 @@ describe("UserService", () => {
 			(error: unknown) => {
 				assert.strictEqual(
 					(error as Error).message,
-					UserExceptionMessage.USER_NOT_FOUND,
+					UserExceptionMessage.NOT_FOUND,
 				);
 
 				return true;

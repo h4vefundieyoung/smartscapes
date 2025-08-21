@@ -15,3 +15,8 @@ export {
 	type ValidationSchema,
 	type ValueOf,
 } from "@smartscapes/shared";
+export {
+	type Control,
+	type FieldErrors,
+	type UseFormHandleSubmit,
+} from "react-hook-form";

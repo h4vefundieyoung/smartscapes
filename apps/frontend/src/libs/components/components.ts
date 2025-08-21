@@ -5,6 +5,7 @@ export { Button } from "./button/button.js";
 export { Carousel } from "./carousel/carousel.js";
 export { Checkbox } from "./checkbox/checkbox.js";
 export { CreatePOIModal } from "./create-poi-modal/create-poi-modal.js";
+export { CreateRouteForm } from "./create-route-form/create-route-form.js";
 export { Dropdown } from "./dropdown/dropdown.js";
 export { FieldError } from "./field-error/field-error.js";
 export { Header } from "./header/header.js";

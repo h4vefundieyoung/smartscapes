@@ -7,39 +7,41 @@ import { type ReviewGetByIdResponseDto } from "../libs/types/types.js";
 import { create, getAll } from "./actions.js";
 
 type State = {
+	createStatus: ValueOf<typeof DataStatus>;
 	data: null | ReviewGetByIdResponseDto;
-	dataStatus: ValueOf<typeof DataStatus>;
+	fetchStatus: ValueOf<typeof DataStatus>;
 	items: ReviewGetByIdResponseDto[];
 };
 
 const initialState: State = {
+	createStatus: DataStatus.IDLE,
 	data: null,
-	dataStatus: DataStatus.IDLE,
+	fetchStatus: DataStatus.IDLE,
 	items: [],
 };
 
 const { actions, name, reducer } = createSlice({
 	extraReducers(builder) {
 		builder.addCase(getAll.pending, (state) => {
-			state.dataStatus = DataStatus.PENDING;
+			state.fetchStatus = DataStatus.PENDING;
 		});
 		builder.addCase(getAll.fulfilled, (state, { payload }) => {
 			state.items = payload.data;
-			state.dataStatus = DataStatus.FULFILLED;
+			state.fetchStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(getAll.rejected, (state) => {
-			state.dataStatus = DataStatus.REJECTED;
+			state.fetchStatus = DataStatus.REJECTED;
 		});
 
 		builder.addCase(create.pending, (state) => {
-			state.dataStatus = DataStatus.PENDING;
+			state.createStatus = DataStatus.PENDING;
 		});
 		builder.addCase(create.fulfilled, (state, { payload }) => {
 			state.items.unshift(payload.data);
-			state.dataStatus = DataStatus.FULFILLED;
+			state.createStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(create.rejected, (state) => {
-			state.dataStatus = DataStatus.REJECTED;
+			state.createStatus = DataStatus.REJECTED;
 		});
 	},
 	initialState,

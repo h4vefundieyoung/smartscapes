@@ -27,15 +27,11 @@ const RouteReviews = ({ routeId }: Properties): React.JSX.Element => {
 	const isAuthenticatedUser = useAppSelector(({ auth }) =>
 		Boolean(auth.authenticatedUser),
 	);
-	const items = useAppSelector((s) => s.review.items);
+	const items = useAppSelector(({ review }) => review.items);
 	const [isCreateReviewOpen, setIsCreateReviewOpen] = useState<boolean>(false);
 
-	const openModal = useCallback((): void => {
-		setIsCreateReviewOpen(true);
-	}, []);
-
-	const closeModal = useCallback((): void => {
-		setIsCreateReviewOpen(false);
+	const handleModalToggle = useCallback(() => {
+		setIsCreateReviewOpen((previous) => !previous);
 	}, []);
 
 	useEffect(() => {
@@ -55,9 +51,7 @@ const RouteReviews = ({ routeId }: Properties): React.JSX.Element => {
 			<div className={styles["header"]}>
 				<h2 className={styles["title"]}>Reviews</h2>
 				{isAuthenticatedUser && (
-					<div>
-						<Button label="Leave review" onClick={openModal} />
-					</div>
+					<Button label="Leave review" onClick={handleModalToggle} />
 				)}
 			</div>
 			<ul className={styles["list"]}>
@@ -67,7 +61,7 @@ const RouteReviews = ({ routeId }: Properties): React.JSX.Element => {
 			</ul>
 			<CreateReviewModal
 				isOpen={isCreateReviewOpen}
-				onClose={closeModal}
+				onClose={handleModalToggle}
 				onSubmit={handleCreate}
 				routeId={routeId}
 			/>

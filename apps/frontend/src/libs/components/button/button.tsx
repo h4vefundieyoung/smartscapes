@@ -1,3 +1,5 @@
+import { combineClassNames } from "~/libs/helpers/helpers.js";
+
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -5,6 +7,7 @@ type Properties = {
 	onClick?: () => void;
 	to?: string;
 	type?: "button" | "submit";
+	variant?: "outlined" | "outlined-danger" | "primary";
 };
 
 const Button = ({
@@ -12,17 +15,25 @@ const Button = ({
 	onClick,
 	to,
 	type = "submit",
+	variant = "primary",
 }: Properties): React.JSX.Element => {
+	const buttonClass = combineClassNames(
+		styles["button"],
+		variant === "outlined" && styles["button-outlined"],
+		variant === "outlined-danger" && styles["outlined-danger"],
+		variant === "primary" && styles["button-primary"],
+	);
+
 	if (to) {
 		return (
-			<a className={styles["button"]} href={to}>
+			<a className={buttonClass} href={to}>
 				{label}
 			</a>
 		);
 	}
 
 	return (
-		<button className={styles["button"]} onClick={onClick} type={type}>
+		<button className={buttonClass} onClick={onClick} type={type}>
 			{label}
 		</button>
 	);

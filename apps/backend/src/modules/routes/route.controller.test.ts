@@ -52,6 +52,7 @@ const mockDelete: RouteService["delete"] = () => {
 
 describe("Route controller", () => {
 	const mockUser = {
+		avatarUrl: "https://aws/avatars/example_file.jpg",
 		email: "test@example.com",
 		firstName: "John",
 		group: mockGroup,
@@ -59,6 +60,17 @@ describe("Route controller", () => {
 		id: 1,
 		isVisibleProfile: true,
 		lastName: "Doe",
+	};
+
+	const mockAdminUser = {
+		avatarUrl: "https://aws/avatars/example_file.jpg",
+		email: "admin@example.com",
+		firstName: "Jane",
+		group: mockAdminGroup,
+		groupId: 1,
+		id: 2,
+		isVisibleProfile: true,
+		lastName: "Admin",
 	};
 
 	const mockLogger: Logger = {
@@ -93,16 +105,6 @@ describe("Route controller", () => {
 			{ id: FIRST_POI_ID, visitOrder: FIRST_VISIT_ORDER },
 			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
 		],
-	};
-
-	const mockAdminUser = {
-		email: "admin@example.com",
-		firstName: "Alice",
-		group: mockAdminGroup,
-		groupId: 3,
-		id: 2,
-		isVisibleProfile: true,
-		lastName: "Admin",
 	};
 
 	const mockUserWithWrongPermission = {

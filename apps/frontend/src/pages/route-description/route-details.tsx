@@ -123,7 +123,6 @@ const RouteDetails = (): React.JSX.Element => {
 					)}
 				</div>
 				<ImageGallery images={[image1, image2, image3]} />
-				<RouteReviewsSection routeId={Number(routeId)} />
 				{isEditMode ? (
 					<TextArea
 						control={control}
@@ -135,6 +134,7 @@ const RouteDetails = (): React.JSX.Element => {
 					<p className={styles["description"]}>{description}</p>
 				)}
 				<PointOfInterestSection pointOfInterests={pois} />
+				<RouteReviewsSection routeId={Number(routeId)} />
 			</main>
 		</>
 	);

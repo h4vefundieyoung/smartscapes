@@ -1,13 +1,13 @@
 .card {
-	gap: 20px;
+	gap: 24px;
 	background: var(--color-base);
 }
 
 .head {
 	display: flex;
-	gap: 20px;
+	gap: 24px;
 	align-items: center;
-	margin-bottom: 20px;
+	margin-bottom: 24px;
 }
 
 .username {
@@ -17,7 +17,7 @@
 }
 
 .content {
-	gap: 20px;
+	gap: 24px;
 	font-size: var(--font-size-small);
 	line-height: 1.5;
 	color: var(--color-text-strong);

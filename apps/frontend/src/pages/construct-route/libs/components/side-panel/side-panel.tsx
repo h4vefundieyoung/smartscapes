@@ -39,8 +39,8 @@ const SidePanel = ({
 
 	const handleSelectInputChange = useDebounceCallback((value: string) => {
 		if (
-			value.length < PointsOfInterestValidationRule.NAME_MIN_LENGTH ||
-			value.length > PointsOfInterestValidationRule.NAME_MAX_LENGTH
+			value.trim().length < PointsOfInterestValidationRule.NAME_MIN_LENGTH ||
+			value.trim().length > PointsOfInterestValidationRule.NAME_MAX_LENGTH
 		) {
 			return;
 		}

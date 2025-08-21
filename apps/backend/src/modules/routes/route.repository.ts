@@ -35,7 +35,7 @@ class RouteRepository implements Repository {
 		}
 
 		const result = await query
-			.insertGraph(insertData, { relate: ["pois"] })
+			.insertGraph(insertData as RouteModel, { relate: ["pois"] })
 			.returning([
 				"id",
 				"name",

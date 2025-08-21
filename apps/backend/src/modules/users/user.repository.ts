@@ -1,4 +1,4 @@
-import { raw, transaction } from "objection";
+import { transaction } from "objection";
 
 import { HTTPCode } from "~/libs/enums/enums.js";
 import { type Repository } from "~/libs/types/types.js";
@@ -235,33 +235,47 @@ class UserRepository implements Repository {
 		const user = await this.userModel
 			.query()
 			.findById(id)
-			.select(
-				"users.*",
-				raw(
-					"(SELECT COUNT(*) FROM user_follows uf WHERE uf.following_id = users.id)",
-				).as("followersCount"),
-				raw(
-					`EXISTS (
-					SELECT 1
-					FROM user_follows uf2
-					WHERE uf2.following_id = users.id
-						AND uf2.follower_id = ?
-				)`,
-					[currentUserId.toString()],
-				).as("isFollowed"),
-			)
+			.select("id", "firstName", "lastName", "isVisibleProfile")
 			.first();
 
 		if (!user) {
 			return null;
-		} else if (!user.isVisibleProfile) {
+		}
+
+		if (!user.isVisibleProfile) {
 			throw new UserError({
 				message: UserExceptionMessage.USER_PROFILE_NOT_PUBLIC,
 				status: HTTPCode.FORBIDDEN,
 			});
 		}
 
-		const userProfile = user as UserModel & {
+		const profileData = await this.userModel
+			.query()
+			.findById(id)
+			.select(
+				"id",
+				"firstName",
+				"lastName",
+				this.userModel
+					.raw(
+						"(SELECT COUNT(*) FROM user_follows uf WHERE uf.following_id = users.id)",
+					)
+					.as("followersCount"),
+				this.userModel
+					.raw(
+						`EXISTS (
+							SELECT 1
+							FROM user_follows uf2
+							WHERE uf2.following_id = users.id
+							AND uf2.follower_id = ?
+						)`,
+						[currentUserId],
+					)
+					.as("isFollowed"),
+			)
+			.first();
+
+		const userProfile = profileData as UserModel & {
 			followersCount: number;
 			isFollowed: boolean;
 		};

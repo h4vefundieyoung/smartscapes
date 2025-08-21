@@ -1,8 +1,8 @@
 import {
 	Button,
 	Input,
-	Link,
 	PasswordInput,
+	TextLink,
 } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppForm } from "~/libs/hooks/hooks.js";
@@ -48,7 +48,8 @@ const SignInForm = ({ onSubmit }: Properties): React.JSX.Element => {
 
 			<div className={styles["sign-up-link-container"]}>
 				<p className={styles["sign-up-link-text"]}>
-					Do not have an account? <Link to={AppRoute.SIGN_UP}>Sign up</Link>
+					Do not have an account?{" "}
+					<TextLink to={AppRoute.SIGN_UP}>Sign up</TextLink>
 				</p>
 			</div>
 		</div>

@@ -26,6 +26,7 @@ import {
 } from "~/modules/routes/routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
+import { PointOfInterestSection } from "./libs/components/components.js";
 import { ROUTE_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
@@ -83,7 +84,7 @@ const RouteDetails = (): React.JSX.Element => {
 		return <Loader />;
 	}
 
-	const { description, name } = route as RouteGetByIdResponseDto;
+	const { description, name, pois } = route as RouteGetByIdResponseDto;
 
 	return (
 		<>
@@ -124,6 +125,7 @@ const RouteDetails = (): React.JSX.Element => {
 				) : (
 					<p className={styles["description"]}>{description}</p>
 				)}
+				<PointOfInterestSection pointOfInterests={pois} />
 			</main>
 		</>
 	);

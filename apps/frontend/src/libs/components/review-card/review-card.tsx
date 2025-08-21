@@ -1,6 +1,5 @@
 import { Avatar } from "~/libs/components/components.js";
 import { type ReviewGetByIdResponseDto } from "~/modules/reviews/reviews.js";
-import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
 import styles from "./styles.module.css";
 
@@ -11,20 +10,10 @@ type Properties = {
 const ReviewCard = ({ review }: Properties): React.JSX.Element => {
 	const avatarUser = {
 		avatarUrl: review.user.avatarUrl,
-		email: "",
 		firstName: review.user.firstName,
-		group: {
-			id: 0,
-			key: "users",
-			name: "Users",
-			permissions: [],
-		},
-		groupId: 0,
 		id: review.user.id,
-		isVisibleProfile: true,
-
 		lastName: review.user.lastName,
-	} satisfies UserAuthResponseDto;
+	};
 
 	return (
 		<li className={styles["card"]}>

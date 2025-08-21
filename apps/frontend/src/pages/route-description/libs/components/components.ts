@@ -1,1 +1,1 @@
-export { RouteReviews } from "./route-reviews/route-reviews.js";
+export { RouteReviewsSection } from "./route-reviews/route-reviews-section.js";

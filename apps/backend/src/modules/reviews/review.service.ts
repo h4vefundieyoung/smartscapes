@@ -46,7 +46,7 @@ class ReviewService implements Service {
 			await this.ensureRouteExists(payload.routeId);
 		}
 
-		const reviewEntity = ReviewEntity.initializeNew({
+		const createReviewEntity = ReviewEntity.initializeNew({
 			content: payload.content,
 			likesCount: 0,
 			poiId: payload.poiId ?? null,
@@ -54,16 +54,16 @@ class ReviewService implements Service {
 			userId: payload.userId,
 		});
 
-		const created = await this.reviewRepository.create(reviewEntity);
+		const reviewEntity = await this.reviewRepository.create(createReviewEntity);
 
-		const base = created.toObject();
+		const review = reviewEntity.toObject();
 
 		return {
-			content: base.content,
-			id: base.id,
-			likesCount: base.likesCount,
-			poiId: base.poiId,
-			routeId: base.routeId,
+			content: review.content,
+			id: review.id,
+			likesCount: review.likesCount,
+			poiId: review.poiId,
+			routeId: review.routeId,
 			user: {
 				avatarUrl: payload.avatarUrl,
 				firstName: payload.firstName,

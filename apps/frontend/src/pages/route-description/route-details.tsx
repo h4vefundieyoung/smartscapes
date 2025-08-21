@@ -24,9 +24,9 @@ import {
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
-import { RouteReviews } from "~/pages/route-description/libs/components/components.js";
 
 import { NotFound } from "../not-found/not-found.js";
+import { RouteReviewsSection } from "./libs/components/components.js";
 import { ROUTE_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
@@ -115,7 +115,7 @@ const RouteDetails = (): React.JSX.Element => {
 					)}
 				</div>
 				<ImageGallery images={[image1, image2, image3]} />
-				<RouteReviews routeId={Number(routeId)} />
+				<RouteReviewsSection routeId={Number(routeId)} />
 				{isEditMode ? (
 					<TextArea
 						control={control}

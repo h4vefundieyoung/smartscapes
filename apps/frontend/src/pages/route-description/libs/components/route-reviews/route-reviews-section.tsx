@@ -21,7 +21,7 @@ type Properties = {
 	routeId: number;
 };
 
-const RouteReviews = ({ routeId }: Properties): React.JSX.Element => {
+const RouteReviewsSection = ({ routeId }: Properties): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 
 	const isAuthenticatedUser = useAppSelector(({ auth }) =>
@@ -69,4 +69,4 @@ const RouteReviews = ({ routeId }: Properties): React.JSX.Element => {
 	);
 };
 
-export { RouteReviews };
+export { RouteReviewsSection };

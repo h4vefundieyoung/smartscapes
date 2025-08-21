@@ -5,6 +5,7 @@ import { useAppForm } from "~/libs/hooks/hooks.js";
 import { reviewCreateValidationSchema } from "~/modules/reviews/reviews.js";
 import { type ReviewRequestDto } from "~/modules/reviews/reviews.js";
 
+import { DEFAULT_CREATE_REVIEW_PAYLOAD } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -22,16 +23,12 @@ const CreateReviewModal = ({
 }: Properties): React.JSX.Element => {
 	const { control, errors, handleReset, handleSubmit } =
 		useAppForm<ReviewRequestDto>({
-			defaultValues: { content: "", poiId: null, routeId },
+			defaultValues: { ...DEFAULT_CREATE_REVIEW_PAYLOAD, routeId },
 			validationSchema: reviewCreateValidationSchema,
 		});
 
-	const handleFormSubmit = (values: ReviewRequestDto): void => {
-		onSubmit({
-			content: values.content.trim(),
-			poiId: null,
-			routeId,
-		});
+	const handleFormSubmit = (payload: ReviewRequestDto): void => {
+		onSubmit(payload);
 		handleReset();
 	};
 

@@ -24,7 +24,7 @@ const MapLocationLogic = ({ location, onLocationChange }: Properties): null => {
 		[onLocationChange],
 	);
 
-	const handleAddMarker = useCallback(
+	const handleSetMarker = useCallback(
 		(coordinates: PointGeometry["coordinates"]) => {
 			if (markerReference.current) {
 				markerReference.current.setCoordinates(coordinates);
@@ -43,14 +43,14 @@ const MapLocationLogic = ({ location, onLocationChange }: Properties): null => {
 
 	useEffect(() => {
 		const unsubscribe = mapClient.addMapClickListener((coordinates) => {
-			handleAddMarker(coordinates);
+			handleSetMarker(coordinates);
 			onLocationChange({ coordinates, type: LocationType.POINT });
 		});
 
 		return (): void => {
 			unsubscribe();
 		};
-	}, [mapClient, handleAddMarker, onLocationChange]);
+	}, [mapClient, handleSetMarker, onLocationChange]);
 
 	useEffect(() => {
 		if (!location && markerReference.current) {
@@ -64,8 +64,8 @@ const MapLocationLogic = ({ location, onLocationChange }: Properties): null => {
 			return;
 		}
 
-		handleAddMarker(location.coordinates);
-	}, [location, handleAddMarker]);
+		handleSetMarker(location.coordinates);
+	}, [location, handleSetMarker]);
 
 	return null;
 };

@@ -145,10 +145,12 @@ class ReviewController extends BaseController {
 		const authenticatedUser = user as UserAuthResponseDto;
 		const review = await this.reviewService.create({
 			...body,
-			avatarUrl: authenticatedUser.avatarUrl,
-			firstName: authenticatedUser.firstName,
-			id: authenticatedUser.id,
-			lastName: authenticatedUser.lastName,
+			user: {
+				avatarUrl: authenticatedUser.avatarUrl,
+				firstName: authenticatedUser.firstName,
+				id: authenticatedUser.id,
+				lastName: authenticatedUser.lastName,
+			},
 			userId: authenticatedUser.id,
 		});
 

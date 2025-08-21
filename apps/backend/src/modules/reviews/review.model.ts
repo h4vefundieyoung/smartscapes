@@ -21,10 +21,9 @@ class ReviewModel extends AbstractModel {
 
 	public routeId!: null | number;
 
-	public user!: Pick<
-		UserAuthResponseDto,
-		"avatarUrl" | "firstName" | "id" | "lastName"
-	>;
+	public user!: Pick<UserAuthResponseDto, "firstName" | "id" | "lastName"> & {
+		avatar: null | { url: null | string };
+	};
 
 	public userId!: number;
 

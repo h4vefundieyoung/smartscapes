@@ -61,7 +61,21 @@ describe("ReviewRepository (knex-mock-client, no fakeQB)", () => {
 
 		const result = await reviewRepository.findAll(null);
 
-		assert.deepStrictEqual(result, [
+		const actual = result.map((r) => ({
+			content: r.content,
+			id: r.id,
+			likesCount: r.likesCount,
+			poiId: r.poiId,
+			routeId: r.routeId,
+			user: {
+				avatar: r.user.avatar ? { url: r.user.avatar.url } : null,
+				firstName: r.user.firstName,
+				id: r.user.id,
+				lastName: r.user.lastName,
+			},
+		}));
+
+		assert.deepStrictEqual(actual, [
 			{
 				content: "Test review content",
 				id: 1,
@@ -69,7 +83,7 @@ describe("ReviewRepository (knex-mock-client, no fakeQB)", () => {
 				poiId: 5,
 				routeId: null,
 				user: {
-					avatarUrl: "url",
+					avatar: { url: "url" },
 					firstName: "John",
 					id: 42,
 					lastName: "Doe",
@@ -95,9 +109,23 @@ describe("ReviewRepository (knex-mock-client, no fakeQB)", () => {
 
 		databaseTracker.on.select("reviews").response([row]);
 
-		const result = await reviewRepository.findAll({ routeId });
+		const reviews = await reviewRepository.findAll({ routeId });
 
-		assert.deepStrictEqual(result, [
+		const actual = reviews.map((review) => ({
+			content: review.content,
+			id: review.id,
+			likesCount: review.likesCount,
+			poiId: review.poiId,
+			routeId: review.routeId,
+			user: {
+				avatar: review.user.avatar ? { url: review.user.avatar.url } : null,
+				firstName: review.user.firstName,
+				id: review.user.id,
+				lastName: review.user.lastName,
+			},
+		}));
+
+		assert.deepStrictEqual(actual, [
 			{
 				content: "By route",
 				id: 2,
@@ -105,7 +133,7 @@ describe("ReviewRepository (knex-mock-client, no fakeQB)", () => {
 				poiId: null,
 				routeId,
 				user: {
-					avatarUrl: "url",
+					avatar: { url: "url" },
 					firstName: "A",
 					id: 7,
 					lastName: "B",

@@ -32,11 +32,12 @@ class ReviewService implements Service {
 	}
 
 	public async create(
-		payload: Pick<
-			UserAuthResponseDto,
-			"avatarUrl" | "firstName" | "id" | "lastName"
-		> &
-			ReviewCreatePayload,
+		payload: ReviewCreatePayload & {
+			user: Pick<
+				UserAuthResponseDto,
+				"avatarUrl" | "firstName" | "id" | "lastName"
+			>;
+		},
 	): Promise<ReviewGetByIdResponseDto> {
 		if (payload.poiId) {
 			await this.ensurePoiExists(payload.poiId);
@@ -65,10 +66,10 @@ class ReviewService implements Service {
 			poiId: review.poiId,
 			routeId: review.routeId,
 			user: {
-				avatarUrl: payload.avatarUrl,
-				firstName: payload.firstName,
-				id: payload.id,
-				lastName: payload.lastName,
+				avatarUrl: payload.user.avatarUrl,
+				firstName: payload.user.firstName,
+				id: payload.user.id,
+				lastName: payload.user.lastName,
 			},
 		};
 	}
@@ -82,7 +83,21 @@ class ReviewService implements Service {
 			await this.ensureRouteExists(routeId);
 		}
 
-		const items = await this.reviewRepository.findAll(options);
+		const reviews = await this.reviewRepository.findAll(options);
+
+		const items: ReviewGetByIdResponseDto[] = reviews.map((review) => ({
+			content: review.content,
+			id: review.id,
+			likesCount: review.likesCount,
+			poiId: review.poiId,
+			routeId: review.routeId,
+			user: {
+				avatarUrl: review.user.avatar?.url ?? null,
+				firstName: review.user.firstName,
+				id: review.user.id,
+				lastName: review.user.lastName,
+			},
+		}));
 
 		return { items };
 	}

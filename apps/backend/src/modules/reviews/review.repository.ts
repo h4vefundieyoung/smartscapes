@@ -1,10 +1,10 @@
+import { SortingOrder } from "~/libs/enums/sorting-order.enum.js";
 import { type Repository } from "~/libs/types/types.js";
 import { ReviewEntity } from "~/modules/reviews/review.entity.js";
 import { type ReviewModel } from "~/modules/reviews/review.model.js";
 
 import {
 	type ReviewGetAllResponseDto,
-	type ReviewGetByIdResponseDto,
 	type ReviewSearchQuery,
 } from "./libs/types/types.js";
 
@@ -30,7 +30,9 @@ class ReviewRepository implements Repository {
 
 	public async findAll(
 		options: null | ReviewSearchQuery,
-	): Promise<ReviewGetByIdResponseDto[]> {
+	): Promise<ReviewGetAllResponseDto[]> {
+		const { routeId } = options ?? {};
+
 		const queryBuilder = this.reviewModel
 			.query()
 			.withGraphJoined("[user(selectUser).avatar(selectAvatar)]")
@@ -55,30 +57,13 @@ class ReviewRepository implements Repository {
 				"reviews.poi_id as poiId",
 				"reviews.route_id as routeId",
 			)
-			.orderBy("reviews.id", "desc");
-
-		const routeId = options?.routeId;
+			.orderBy("reviews.createdAt", SortingOrder.DESC);
 
 		if (typeof routeId === "number") {
 			queryBuilder.where("reviews.route_id", routeId);
 		}
 
-		const rows =
-			(await queryBuilder.execute()) as unknown as ReviewGetAllResponseDto[];
-
-		return rows.map((item) => ({
-			content: item.content,
-			id: item.id,
-			likesCount: item.likesCount,
-			poiId: item.poiId,
-			routeId: item.routeId,
-			user: {
-				avatarUrl: item.user.avatar?.url ?? null,
-				firstName: item.user.firstName,
-				id: item.user.id,
-				lastName: item.user.lastName,
-			},
-		}));
+		return await queryBuilder.execute();
 	}
 }
 

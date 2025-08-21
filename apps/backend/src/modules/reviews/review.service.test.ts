@@ -3,7 +3,10 @@ import { describe, it } from "node:test";
 
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { type RouteService } from "../routes/route.service.js";
-import { type ReviewGetByIdResponseDto } from "./libs/types/types.js";
+import {
+	type ReviewGetAllResponseDto,
+	type ReviewGetByIdResponseDto,
+} from "./libs/types/types.js";
 import { ReviewEntity } from "./review.entity.js";
 import { type ReviewRepository } from "./review.repository.js";
 import { ReviewService } from "./review.service.js";
@@ -99,13 +102,15 @@ describe("ReviewService", () => {
 		);
 
 		const result = await reviewService.create({
-			avatarUrl: currentUser.avatarUrl,
 			content: mockReviewDB.content,
-			firstName: currentUser.firstName,
-			id: currentUser.id,
-			lastName: currentUser.lastName,
 			poiId: mockReviewDB.poiId,
 			routeId: mockReviewDB.routeId,
+			user: {
+				avatarUrl: currentUser.avatarUrl,
+				firstName: currentUser.firstName,
+				id: currentUser.id,
+				lastName: currentUser.lastName,
+			},
 			userId: currentUser.id,
 		});
 
@@ -127,7 +132,21 @@ describe("ReviewService", () => {
 	});
 
 	it("findAll should return all reviews", async () => {
-		const dto: ReviewGetByIdResponseDto = {
+		const row: ReviewGetAllResponseDto = {
+			content: mockReviewDB.content,
+			id: mockReviewDB.id,
+			likesCount: mockReviewDB.likesCount,
+			poiId: mockReviewDB.poiId,
+			routeId: mockReviewDB.routeId,
+			user: {
+				avatar: null,
+				firstName: currentUser.firstName,
+				id: currentUser.id,
+				lastName: currentUser.lastName,
+			},
+		};
+
+		const expected: ReviewGetByIdResponseDto = {
 			content: mockReviewDB.content,
 			id: mockReviewDB.id,
 			likesCount: mockReviewDB.likesCount,
@@ -142,7 +161,7 @@ describe("ReviewService", () => {
 		};
 
 		const reviewRepository = {
-			findAll: (() => Promise.resolve([dto])) as ReviewRepository["findAll"],
+			findAll: (() => Promise.resolve([row])) as ReviewRepository["findAll"],
 		} as ReviewRepository;
 
 		const reviewService = new ReviewService(
@@ -153,6 +172,6 @@ describe("ReviewService", () => {
 
 		const result = await reviewService.findAll(null);
 
-		assert.deepStrictEqual(result, { items: [dto] });
+		assert.deepStrictEqual(result, { items: [expected] });
 	});
 });

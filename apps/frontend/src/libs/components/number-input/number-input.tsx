@@ -44,7 +44,7 @@ const NumberInput = ({
 	const appliedValue = useCallback(() => {
 		const inputValue = Number(localValue);
 
-		if (Number.isNaN(inputValue)) {
+		if (Number.isNaN(inputValue) || !inputValue) {
 			setLocalValue(value.toString());
 		} else {
 			let clampedValue = inputValue;

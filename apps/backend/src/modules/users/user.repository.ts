@@ -228,7 +228,7 @@ class UserRepository implements Repository {
 		};
 	}
 
-	public async findUserProfile(
+	public async getUserProfile(
 		id: number,
 		currentUserId: number,
 	): Promise<null | UserPublicProfileResponseDto> {

@@ -94,11 +94,11 @@ class UserService implements Service {
 		return await this.userRepository.findPasswordDetails(email);
 	}
 
-	public async findUserProfile(
+	public async getUserProfile(
 		id: number,
 		currentUserId: number,
 	): Promise<UserPublicProfileResponseDto> {
-		const user = await this.userRepository.findUserProfile(id, currentUserId);
+		const user = await this.userRepository.getUserProfile(id, currentUserId);
 
 		if (!user) {
 			throw new UserError({

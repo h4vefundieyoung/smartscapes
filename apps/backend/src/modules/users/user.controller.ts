@@ -51,7 +51,7 @@ class UserController extends BaseController {
 		});
 
 		this.addRoute({
-			handler: this.findUserProfile.bind(this),
+			handler: this.getUserProfile.bind(this),
 			method: "GET",
 			path: UsersApiPath.$USER_ID_GET_PROFILE,
 		});
@@ -117,7 +117,7 @@ class UserController extends BaseController {
 	 *                     $ref: '#/components/schemas/User'
 	 */
 
-	public async findUserProfile(
+	public async getUserProfile(
 		options: APIHandlerOptions<{
 			params: { id: string };
 		}>,
@@ -127,7 +127,7 @@ class UserController extends BaseController {
 
 		const currentUserId = (user as UserAuthResponseDto).id;
 
-		const userProfile = await this.userService.findUserProfile(
+		const userProfile = await this.userService.getUserProfile(
 			id,
 			currentUserId,
 		);

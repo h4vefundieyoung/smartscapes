@@ -9,8 +9,11 @@ class PlannedPathModel extends Model {
 	}
 
 	public distance!: number;
+
 	public duration!: number;
+
 	public geometry!: LineStringGeometry;
+
 	public id!: number;
 }
 

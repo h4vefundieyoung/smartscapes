@@ -10,7 +10,9 @@ class PointsOfInterestModel extends AbstractModel {
 	}
 
 	public description!: null | string;
+
 	public location!: PointGeometry;
+
 	public name!: string;
 }
 

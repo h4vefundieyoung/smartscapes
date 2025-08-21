@@ -2,7 +2,9 @@ import { type Entity } from "~/libs/types/types.js";
 
 class PermissionEntity implements Entity {
 	private id: number;
+
 	private key: string;
+
 	private name: string;
 
 	private constructor({
@@ -40,6 +42,7 @@ class PermissionEntity implements Entity {
 			name: this.name,
 		};
 	}
+
 	public toObject(): {
 		id: number;
 		key: string;

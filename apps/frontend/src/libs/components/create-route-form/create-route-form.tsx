@@ -1,19 +1,21 @@
 import { Button, Input, TextArea } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { getUrlWithQueryString } from "~/libs/helpers/helpers.js";
-import { useAppForm, useEffect, useWatch } from "~/libs/hooks/hooks.js";
 import {
-	type RouteCreateRequestDto,
-	routesCreateValidationSchema,
-} from "~/modules/routes/routes.js";
+	type Control,
+	type FieldErrors,
+	type UseFormHandleSubmit,
+} from "~/libs/types/types.js";
+import { type RouteCreateRequestDto } from "~/modules/routes/routes.js";
 
-import { DEFAULT_CREATE_ROUTE_PAYLOAD } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	createRouteFormData?: null | Partial<RouteCreateRequestDto>;
-	onFormChange?: (data: Partial<RouteCreateRequestDto>) => void;
+	control: Control<RouteCreateRequestDto>;
+	errors: FieldErrors<RouteCreateRequestDto>;
+	handleSubmit: UseFormHandleSubmit<RouteCreateRequestDto>;
 	onSubmit: (data: RouteCreateRequestDto) => void;
+	plannedRouteId: number | undefined;
 };
 
 const returnBackPath = getUrlWithQueryString(AppRoute.MANAGE_ROUTES, {
@@ -28,41 +30,12 @@ const constructPagePath = getUrlWithQueryString(
 );
 
 const CreateRouteForm = ({
-	createRouteFormData,
-	onFormChange,
+	control,
+	errors,
+	handleSubmit,
 	onSubmit,
+	plannedRouteId,
 }: Properties): React.JSX.Element => {
-	const { control, errors, handleSubmit, handleValueSet } =
-		useAppForm<RouteCreateRequestDto>({
-			defaultValues: DEFAULT_CREATE_ROUTE_PAYLOAD,
-			validationSchema: routesCreateValidationSchema,
-		});
-
-	const [name, description, plannedPathId] = useWatch({
-		control,
-		name: ["name", "description", "plannedPathId"],
-	});
-
-	useEffect(() => {
-		if (onFormChange) {
-			onFormChange({ description, name });
-		}
-	}, [description, name, onFormChange]);
-
-	useEffect(() => {
-		if (createRouteFormData) {
-			for (const key of Object.keys(createRouteFormData) as Array<
-				keyof RouteCreateRequestDto
-			>) {
-				const value = createRouteFormData[key];
-
-				if (value !== undefined) {
-					handleValueSet(key, value);
-				}
-			}
-		}
-	}, [createRouteFormData, handleValueSet]);
-
 	return (
 		<>
 			<div className={styles["header"]}>
@@ -79,7 +52,7 @@ const CreateRouteForm = ({
 
 				<div className={styles["route-section"]}>
 					<span className={styles["label"]}>Route</span>
-					{Boolean(plannedPathId) && (
+					{Boolean(plannedRouteId) && (
 						<div>
 							<span>Route constructed</span>
 						</div>

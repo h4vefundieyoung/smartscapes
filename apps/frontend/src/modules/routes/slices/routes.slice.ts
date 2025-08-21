@@ -14,7 +14,6 @@ import {
 	getRouteById,
 	patchRoute,
 	restoreCreateRouteFormData,
-	updateCreateRouteFormData,
 } from "./actions.js";
 
 type State = {
@@ -93,13 +92,6 @@ const { actions, name, reducer } = createSlice({
 
 		builder.addCase(discardCreateRouteFormData.fulfilled, (state) => {
 			state.formData = null;
-		});
-
-		builder.addCase(updateCreateRouteFormData, (state, action) => {
-			state.formData = {
-				...state.formData,
-				...action.payload,
-			} as Partial<RouteCreateRequestDto>;
 		});
 	},
 	initialState,

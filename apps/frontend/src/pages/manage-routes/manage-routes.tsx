@@ -2,6 +2,7 @@ import { Button } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
+	useAppForm,
 	useAppSelector,
 	useCallback,
 	useEffect,
@@ -10,6 +11,7 @@ import {
 import {
 	type RouteCreateRequestDto,
 	actions as routesActions,
+	routesCreateValidationSchema,
 } from "~/modules/routes/routes.js";
 import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
@@ -18,6 +20,7 @@ import {
 	DashboardHeading,
 	PointsOfInterestTable,
 } from "./libs/components/components.js";
+import { DEFAULT_CREATE_ROUTE_PAYLOAD } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 const ManageRoutes = (): React.JSX.Element => {
@@ -30,13 +33,43 @@ const ManageRoutes = (): React.JSX.Element => {
 		authenticatedUser: UserAuthResponseDto;
 	};
 
+	const { control, errors, getValues, handleReset, handleSubmit } =
+		useAppForm<RouteCreateRequestDto>({
+			defaultValues: DEFAULT_CREATE_ROUTE_PAYLOAD,
+			validationSchema: routesCreateValidationSchema,
+		});
+
 	const plannedRouteId = searchParameters.get("plannedRouteId");
+
+	const saveFormData = useCallback(async () => {
+		const currentFormData = getValues();
+		const hasData = Object.keys(currentFormData).some((key) => {
+			const value = currentFormData[key as keyof RouteCreateRequestDto];
+
+			return Boolean(value);
+		});
+
+		if (hasData) {
+			await dispatch(
+				routesActions.preserveCreateRouteFormData(currentFormData),
+			);
+		}
+	}, [dispatch, getValues]);
+
 	const isModalOpen = searchParameters.get("modal") === "create-route";
 
-	const combinedFormData = {
-		...formData,
-		...(plannedRouteId && { plannedPathId: Number(plannedRouteId) }),
-	};
+	const clearModalAndReset = useCallback(() => {
+		void dispatch(routesActions.discardCreateRouteFormData(null));
+		handleReset(DEFAULT_CREATE_ROUTE_PAYLOAD);
+
+		setSearchParameters((previous) => {
+			const newParameters = new URLSearchParams(previous);
+			newParameters.delete("modal");
+			newParameters.delete("plannedRouteId");
+
+			return newParameters;
+		});
+	}, [dispatch, handleReset, setSearchParameters]);
 
 	const handleModalOpen = useCallback(() => {
 		void dispatch(routesActions.discardCreateRouteFormData(null));
@@ -50,41 +83,21 @@ const ManageRoutes = (): React.JSX.Element => {
 	}, [setSearchParameters, dispatch]);
 
 	const handleModalClose = useCallback(async (): Promise<void> => {
-		const hasData = formData && Object.keys(formData).length > 0;
-
-		if (hasData) {
-			await dispatch(routesActions.preserveCreateRouteFormData(null));
-		}
-
-		await dispatch(routesActions.discardCreateRouteFormData(null));
-
-		setSearchParameters((previous) => {
-			const newParameters = new URLSearchParams(previous);
-			newParameters.delete("modal");
-			newParameters.delete("plannedRouteId");
-
-			return newParameters;
-		});
-	}, [setSearchParameters, dispatch, formData]);
-
-	const handleFormChange = useCallback(
-		(formData: Partial<RouteCreateRequestDto>) => {
-			dispatch(routesActions.updateCreateRouteFormData(formData));
-		},
-		[dispatch],
-	);
+		await saveFormData();
+		clearModalAndReset();
+	}, [saveFormData, clearModalAndReset]);
 
 	const handleRouteSubmit = useCallback(
 		(data: RouteCreateRequestDto): void => {
 			const submitData: RouteCreateRequestDto = {
-				...formData,
 				...data,
 				createdByUserId: authenticatedUser.id,
+				plannedPathId: Number(plannedRouteId),
 			};
 
 			void dispatch(routesActions.create(submitData));
 		},
-		[dispatch, formData, authenticatedUser.id],
+		[dispatch, authenticatedUser.id, plannedRouteId],
 	);
 
 	useEffect(() => {
@@ -94,37 +107,24 @@ const ManageRoutes = (): React.JSX.Element => {
 	}, [dispatch, isModalOpen]);
 
 	useEffect(() => {
-		if (plannedRouteId) {
-			dispatch(
-				routesActions.updateCreateRouteFormData({
-					plannedPathId: Number(plannedRouteId),
-				}),
-			);
+		if (formData) {
+			handleReset({
+				...DEFAULT_CREATE_ROUTE_PAYLOAD,
+				...formData,
+			});
 		}
-	}, [plannedRouteId, dispatch]);
+	}, [formData, handleReset]);
 
 	useEffect(() => {
 		if (createStatus === DataStatus.FULFILLED) {
-			void dispatch(routesActions.discardCreateRouteFormData(null));
-
-			setSearchParameters((previous) => {
-				const newParameters = new URLSearchParams(previous);
-				newParameters.delete("modal");
-				newParameters.delete("plannedRouteId");
-
-				return newParameters;
-			});
+			clearModalAndReset();
 		}
-	}, [createStatus, dispatch, setSearchParameters]);
+	}, [createStatus, clearModalAndReset]);
 
 	useEffect(() => {
-		const saveData = (): void => {
-			void dispatch(routesActions.preserveCreateRouteFormData(null));
-		};
-
 		const handleVisibilityChange = (): void => {
-			if (document.visibilityState === "hidden") {
-				saveData();
+			if (document.visibilityState === "hidden" && isModalOpen) {
+				void saveFormData();
 			}
 		};
 
@@ -133,7 +133,7 @@ const ManageRoutes = (): React.JSX.Element => {
 		return (): void => {
 			document.removeEventListener("visibilitychange", handleVisibilityChange);
 		};
-	}, [dispatch]);
+	}, [saveFormData, isModalOpen]);
 
 	return (
 		<main className={styles["container"]}>
@@ -152,11 +152,13 @@ const ManageRoutes = (): React.JSX.Element => {
 						type="button"
 					/>
 					<CreateRouteModal
-						formData={combinedFormData}
+						control={control}
+						errors={errors}
+						handleSubmit={handleSubmit}
 						isOpen={isModalOpen}
 						onClose={handleModalClose}
-						onFormChange={handleFormChange}
 						onSubmit={handleRouteSubmit}
+						plannedRouteId={plannedRouteId ? Number(plannedRouteId) : undefined}
 					/>
 				</div>
 			</section>

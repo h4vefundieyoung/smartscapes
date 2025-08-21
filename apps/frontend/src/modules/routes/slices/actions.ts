@@ -1,4 +1,4 @@
-import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
@@ -57,20 +57,17 @@ const getAll = createAsyncThunk<
 
 const preserveCreateRouteFormData = createAsyncThunk<
 	unknown,
-	unknown,
+	Partial<RouteCreateRequestDto>,
 	AsyncThunkConfig
 >(
 	`${sliceName}/preserve-create-route-form-data`,
-	async (_, { extra, getState }) => {
+	async (formData, { extra }) => {
 		const { storage } = extra;
-		const state = getState() as {
-			route: { formData: null | Partial<RouteCreateRequestDto> };
-		};
 
-		if (state.route.formData && Object.keys(state.route.formData).length > 0) {
+		if (Object.keys(formData).length > 0) {
 			await storage.set(
 				StorageKey.CREATE_ROUTE_FORM_DATA,
-				JSON.stringify(state.route.formData),
+				JSON.stringify(formData),
 			);
 		}
 	},
@@ -109,10 +106,6 @@ const discardCreateRouteFormData = createAsyncThunk<
 	await storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
 });
 
-const updateCreateRouteFormData = createAction<Partial<RouteCreateRequestDto>>(
-	`${sliceName}/update-create-route-form-data`,
-);
-
 export {
 	create,
 	discardCreateRouteFormData,
@@ -121,5 +114,4 @@ export {
 	patchRoute,
 	preserveCreateRouteFormData,
 	restoreCreateRouteFormData,
-	updateCreateRouteFormData,
 };

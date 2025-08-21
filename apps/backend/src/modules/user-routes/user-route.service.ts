@@ -58,14 +58,7 @@ class UserRouteService implements Service {
 
 		this.ensureUserIsOwner(userRoute, userId);
 
-		const isNotReadyToFinish = userRoute.status !== UserRouteStatus.ACTIVE;
-
-		if (isNotReadyToFinish) {
-			throw new UserRouteError({
-				message: UserRouteExeptionMessage.ROUTE_CANNOT_BE_FINISHED,
-				status: HTTPCode.FORBIDDEN,
-			});
-		}
+		this.ensureReadyToFinish(userRoute);
 
 		const updatedData = UserRouteEntity.initialize({
 			...userRoute,
@@ -127,6 +120,15 @@ class UserRouteService implements Service {
 		if (isDublicateRoute) {
 			throw new UserRouteError({
 				message: UserRouteExeptionMessage.USER_ROUTE_ALREADY_EXISTS,
+				status: HTTPCode.FORBIDDEN,
+			});
+		}
+	}
+
+	private ensureReadyToFinish(userRoute: UserRouteResponseDto): void {
+		if (userRoute.status !== UserRouteStatus.ACTIVE) {
+			throw new UserRouteError({
+				message: UserRouteExeptionMessage.ROUTE_CANNOT_BE_FINISHED,
 				status: HTTPCode.FORBIDDEN,
 			});
 		}

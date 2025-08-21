@@ -58,8 +58,6 @@ class RouteModel extends Model {
 		name: string;
 		visitOrder: number;
 	}[];
-
-	public userId!: number;
 }
 
 export { RouteModel };

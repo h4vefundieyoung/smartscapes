@@ -13,6 +13,7 @@ import Logout from "~/assets/images/icons/logout.svg?react";
 import Map from "~/assets/images/icons/map.svg?react";
 import Message from "~/assets/images/icons/message.svg?react";
 import Route from "~/assets/images/icons/route.svg?react";
+import Search from "~/assets/images/icons/search.svg?react";
 import Tag from "~/assets/images/icons/tag.svg?react";
 import Trash from "~/assets/images/icons/trash.svg?react";
 import User from "~/assets/images/icons/user.svg?react";
@@ -37,6 +38,7 @@ const iconNameToSvg: Record<
 	map: Map,
 	message: Message,
 	route: Route,
+	search: Search,
 	tag: Tag,
 	trash: Trash,
 	user: User,

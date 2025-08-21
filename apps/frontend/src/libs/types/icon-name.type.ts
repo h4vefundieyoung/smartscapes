@@ -14,6 +14,7 @@ type IconName =
 	| "map"
 	| "message"
 	| "route"
+	| "search"
 	| "tag"
 	| "trash"
 	| "user";

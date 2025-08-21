@@ -28,10 +28,10 @@ class UserRouteRepository implements Repository {
 				"startedAt",
 				"completedAt",
 				this.userRouteModel.raw(
-					"ST_AsGeoJSON(actual_geometry)::json as actualGeometry",
+					"ST_AsGeoJSON(actual_geometry)::json as actual_geometry",
 				),
 				this.userRouteModel.raw(
-					"ST_AsGeoJSON(planned_geometry)::json as plannedGeometry",
+					"ST_AsGeoJSON(planned_geometry)::json as planned_geometry",
 				),
 			])
 			.execute();
@@ -43,7 +43,7 @@ class UserRouteRepository implements Repository {
 		const result = await this.userRouteModel
 			.query()
 			.where({ userId })
-			.returning([
+			.select([
 				"id",
 				"routeId",
 				"userId",
@@ -51,10 +51,10 @@ class UserRouteRepository implements Repository {
 				"startedAt",
 				"completedAt",
 				this.userRouteModel.raw(
-					"ST_AsGeoJSON(actual_geometry)::json as actualGeometry",
+					"ST_AsGeoJSON(actual_geometry)::json as actual_geometry",
 				),
 				this.userRouteModel.raw(
-					"ST_AsGeoJSON(planned_geometry)::json as plannedGeometry",
+					"ST_AsGeoJSON(planned_geometry)::json as planned_geometry",
 				),
 			])
 			.execute();
@@ -63,10 +63,10 @@ class UserRouteRepository implements Repository {
 	}
 
 	public async findByRouteId(routeId: number): Promise<null | UserRouteEntity> {
-		const [result] = await this.userRouteModel
+		const result = await this.userRouteModel
 			.query()
 			.where({ routeId })
-			.returning([
+			.select([
 				"id",
 				"routeId",
 				"userId",
@@ -74,15 +74,15 @@ class UserRouteRepository implements Repository {
 				"startedAt",
 				"completedAt",
 				this.userRouteModel.raw(
-					"ST_AsGeoJSON(actual_geometry)::json as actualGeometry",
+					"ST_AsGeoJSON(actual_geometry)::json as actual_geometry",
 				),
 				this.userRouteModel.raw(
-					"ST_AsGeoJSON(planned_geometry)::json as plannedGeometry",
+					"ST_AsGeoJSON(planned_geometry)::json as planned_geometry",
 				),
 			])
 			.execute();
 
-		return result ? UserRouteEntity.initialize(result) : null;
+		return result[0] ? UserRouteEntity.initialize(result[0]) : null;
 	}
 
 	public async hasActiveRoute(userId: number): Promise<boolean> {
@@ -136,10 +136,10 @@ class UserRouteRepository implements Repository {
 				"startedAt",
 				"completedAt",
 				this.userRouteModel.raw(
-					"ST_AsGeoJSON(actual_geometry)::json as actualGeometry",
+					"ST_AsGeoJSON(actual_geometry)::json as actual_geometry",
 				),
 				this.userRouteModel.raw(
-					"ST_AsGeoJSON(planned_geometry)::json as plannedGeometry",
+					"ST_AsGeoJSON(planned_geometry)::json as planned_geometry",
 				),
 			])
 			.execute();

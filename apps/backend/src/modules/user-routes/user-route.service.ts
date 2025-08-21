@@ -67,7 +67,7 @@ class UserRouteService implements Service {
 			});
 		}
 
-		const updatedData = UserRouteEntity.initializeNew({
+		const updatedData = UserRouteEntity.initialize({
 			...userRoute,
 			actualGeometry,
 			status: UserRouteStatus.COMPLETED,
@@ -100,8 +100,9 @@ class UserRouteService implements Service {
 
 		await this.ensureUserIsNotOnActiveRoute(userId);
 
-		const updatedData = UserRouteEntity.initializeNew({
+		const updatedData = UserRouteEntity.initialize({
 			...userRoute,
+			actualGeometry: userRoute.plannedGeometry,
 			status: UserRouteStatus.ACTIVE,
 		});
 

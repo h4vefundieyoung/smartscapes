@@ -13,41 +13,39 @@ class CategoryRepository implements Repository {
 	public async create(entity: CategoryEntity): Promise<CategoryEntity> {
 		const { key, name } = entity.toNewObject();
 
-		const routeCategory = await this.categoryModel
+		const category = await this.categoryModel
 			.query()
 			.insert({ key, name })
 			.returning("*")
 			.execute();
 
-		return CategoryEntity.initialize(routeCategory);
+		return CategoryEntity.initialize(category);
 	}
 
 	public async findAll(): Promise<CategoryEntity[]> {
-		const routeCategories = await this.categoryModel.query().execute();
+		const categories = await this.categoryModel.query().execute();
 
-		return routeCategories.map((routeCategory) =>
-			CategoryEntity.initialize(routeCategory),
-		);
+		return categories.map((category) => CategoryEntity.initialize(category));
 	}
 
 	public async findByKey(key: string): Promise<CategoryEntity | null> {
-		const routeCategory = await this.categoryModel
+		const category = await this.categoryModel
 			.query()
 			.whereRaw("LOWER(key) LIKE ?", [`%${key.toLowerCase()}%`])
 			.first()
 			.execute();
 
-		return routeCategory ? CategoryEntity.initialize(routeCategory) : null;
+		return category ? CategoryEntity.initialize(category) : null;
 	}
 
 	public async findByName(name: string): Promise<CategoryEntity | null> {
-		const routeCategory = await this.categoryModel
+		const category = await this.categoryModel
 			.query()
 			.whereRaw("LOWER(name) LIKE ?", [`%${name.toLowerCase()}%`])
 			.first()
 			.execute();
 
-		return routeCategory ? CategoryEntity.initialize(routeCategory) : null;
+		return category ? CategoryEntity.initialize(category) : null;
 	}
 }
 

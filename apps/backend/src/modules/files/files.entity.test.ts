@@ -2,12 +2,15 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import { FileEntity } from "./files.entity.js";
+import { FileFolderName } from "./libs/enums/enums.js";
 
 const MOCK_FILE_ID = 1;
 const MOCK_FILE_URL = "https://example.com/file.jpg";
 const MOCK_CONTENT_TYPE = "image/jpg" as const;
 const MOCK_CREATED_AT = "2024-01-01T00:00:00Z";
 const MOCK_UPDATED_AT = "2024-01-01T00:00:00Z";
+const MOCK_FOLDER = FileFolderName.AVATARS;
+const MOCK_ENTITY_ID = 1;
 
 describe("FileEntity", () => {
 	describe("initialize", () => {
@@ -15,6 +18,8 @@ describe("FileEntity", () => {
 			const fileData = {
 				contentType: MOCK_CONTENT_TYPE,
 				createdAt: MOCK_CREATED_AT,
+				entityId: MOCK_ENTITY_ID,
+				folder: MOCK_FOLDER,
 				id: MOCK_FILE_ID,
 				updatedAt: MOCK_UPDATED_AT,
 				url: MOCK_FILE_URL,
@@ -32,6 +37,8 @@ describe("FileEntity", () => {
 		it("should initialize new entity without id", () => {
 			const entity = FileEntity.initializeNew({
 				contentType: MOCK_CONTENT_TYPE,
+				entityId: MOCK_ENTITY_ID,
+				folder: MOCK_FOLDER,
 				url: MOCK_FILE_URL,
 			});
 
@@ -44,6 +51,8 @@ describe("FileEntity", () => {
 		it("should return object without id", () => {
 			const entity = FileEntity.initializeNew({
 				contentType: MOCK_CONTENT_TYPE,
+				entityId: MOCK_ENTITY_ID,
+				folder: MOCK_FOLDER,
 				url: MOCK_FILE_URL,
 			});
 
@@ -60,6 +69,8 @@ describe("FileEntity", () => {
 			const fileData = {
 				contentType: MOCK_CONTENT_TYPE,
 				createdAt: MOCK_CREATED_AT,
+				entityId: MOCK_ENTITY_ID,
+				folder: MOCK_FOLDER,
 				id: MOCK_FILE_ID,
 				updatedAt: MOCK_UPDATED_AT,
 				url: MOCK_FILE_URL,

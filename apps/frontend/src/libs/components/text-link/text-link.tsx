@@ -10,10 +10,10 @@ type Properties = {
 	to: ValueOf<typeof AppRoute>;
 };
 
-const Link = ({ children, to }: Properties): React.JSX.Element => (
+const TextLink = ({ children, to }: Properties): React.JSX.Element => (
 	<NavLink className={styles["link"] as string} to={to}>
 		{children}
 	</NavLink>
 );
 
-export { Link };
+export { TextLink };

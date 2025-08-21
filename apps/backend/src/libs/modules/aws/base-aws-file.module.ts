@@ -15,7 +15,9 @@ import { AWSFileUploadError } from "./libs/exeptions/exeptions.js";
 
 class AWSFileService {
 	private bucketName: string;
+
 	private logger: Logger;
+
 	private s3Client: S3Client;
 
 	public constructor(config: Config, logger: Logger) {

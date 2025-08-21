@@ -19,6 +19,7 @@ import {
 
 class FileService implements Service {
 	private awsFileService: AWSFileService;
+
 	private fileRepository: FileRepository;
 
 	public constructor(
@@ -31,13 +32,17 @@ class FileService implements Service {
 
 	public async create(payload: {
 		contentType: FileMimeType;
+		entityId: number;
+		folder: ValueOf<typeof FileFolderName>;
 		url: string;
 	}): Promise<FileUploadResponseDto> {
-		const { contentType, url } = payload;
+		const { contentType, entityId, folder, url } = payload;
 
 		const item = await this.fileRepository.create(
 			FileEntity.initializeNew({
 				contentType,
+				entityId,
+				folder,
 				url,
 			}),
 		);
@@ -52,10 +57,12 @@ class FileService implements Service {
 	}
 
 	public async uploadFile(payload: {
+		entityId: number;
 		file: MultipartFile;
 		folder: ValueOf<typeof FileFolderName>;
 	}): Promise<FileUploadResponseDto> {
-		const { file, folder } = payload;
+		const { entityId, file, folder } = payload;
+
 		const { filename, mimetype } = file;
 
 		this.validateMimeType(mimetype as FileMimeType);
@@ -73,6 +80,8 @@ class FileService implements Service {
 		const savedFile = await this.fileRepository.create(
 			FileEntity.initializeNew({
 				contentType: mimetype as FileMimeType,
+				entityId,
+				folder,
 				url,
 			}),
 		);

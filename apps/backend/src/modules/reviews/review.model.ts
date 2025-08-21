@@ -24,10 +24,15 @@ class ReviewModel extends AbstractModel {
 	}
 
 	public content!: string;
+
 	public likesCount!: number;
+
 	public poiId!: null | number;
+
 	public routeId!: null | number;
+
 	public user!: { firstName: string; id: number; lastName: string };
+
 	public userId!: number;
 }
 

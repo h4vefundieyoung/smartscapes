@@ -10,8 +10,8 @@ import { type PointsOfInterestService } from "../points-of-interest/points-of-in
 import { type RouteService } from "../routes/route.service.js";
 import {
 	type ReviewCreatePayload,
+	type ReviewGetAllSearchQuery,
 	type ReviewGetByIdResponseDto,
-	type ReviewSearchQuery,
 } from "./libs/types/types.js";
 
 class ReviewService implements Service {
@@ -75,7 +75,7 @@ class ReviewService implements Service {
 	}
 
 	public async findAll(
-		options: null | ReviewSearchQuery,
+		options: null | ReviewGetAllSearchQuery,
 	): Promise<CollectionResult<ReviewGetByIdResponseDto>> {
 		const routeId = options?.routeId;
 

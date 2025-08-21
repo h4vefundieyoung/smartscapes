@@ -10,13 +10,13 @@ import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import { type ReviewService } from "~/modules/reviews/review.service.js";
 
 import {
+	type ReviewGetAllSearchQuery,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
-	type ReviewSearchQuery,
 } from "./libs/types/types.js";
 import {
 	reviewCreateValidationSchema,
-	reviewSearchQueryValidationSchema,
+	reviewGetAllSearchQueryValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 
 /**
@@ -96,7 +96,7 @@ class ReviewController extends BaseController {
 			method: "GET",
 			path: "/",
 			validation: {
-				query: reviewSearchQueryValidationSchema,
+				query: reviewGetAllSearchQueryValidationSchema,
 			},
 		});
 	}
@@ -202,7 +202,7 @@ class ReviewController extends BaseController {
 	 */
 	public async findAll(
 		options: APIHandlerOptions<{
-			query?: ReviewSearchQuery;
+			query?: ReviewGetAllSearchQuery;
 		}>,
 	): Promise<APIHandlerResponse<ReviewGetByIdResponseDto[]>> {
 		const { query = null } = options;

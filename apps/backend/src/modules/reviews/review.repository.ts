@@ -5,7 +5,7 @@ import { type ReviewModel } from "~/modules/reviews/review.model.js";
 
 import {
 	type ReviewGetAllItemResponseDto,
-	type ReviewSearchQuery,
+	type ReviewGetAllSearchQuery,
 } from "./libs/types/types.js";
 
 class ReviewRepository implements Repository {
@@ -29,7 +29,7 @@ class ReviewRepository implements Repository {
 	}
 
 	public async findAll(
-		options: null | ReviewSearchQuery,
+		options: null | ReviewGetAllSearchQuery,
 	): Promise<ReviewGetAllItemResponseDto[]> {
 		const { routeId } = options ?? {};
 

@@ -86,11 +86,11 @@ export {
 	type ReviewCreatePayload,
 	reviewCreateValidationSchema,
 	type ReviewGetAllItemResponseDto,
+	type ReviewGetAllSearchQuery,
+	reviewGetAllSearchQueryValidationSchema,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
 	ReviewsApiPath,
-	type ReviewSearchQuery,
-	reviewSearchQueryValidationSchema,
 } from "./modules/reviews/reviews.js";
 export {
 	type RouteConstructRequestDto,

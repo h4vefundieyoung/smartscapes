@@ -1,5 +1,5 @@
 export {
+	type ReviewGetAllSearchQuery,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
-	type ReviewSearchQuery,
 } from "@smartscapes/shared";

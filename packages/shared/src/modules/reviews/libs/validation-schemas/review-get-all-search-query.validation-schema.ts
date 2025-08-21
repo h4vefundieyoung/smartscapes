@@ -4,7 +4,7 @@ import { parseToInteger } from "../../../../libs/helpers/helpers.js";
 import { ReviewValidationMessage } from "../enums/review-validation-message.enum.js";
 import { ReviewValidationRule } from "../enums/review-validation-rule.enum.js";
 
-const reviewSearchQuery = z.object({
+const reviewGetAllSearchQuery = z.object({
 	routeId: z
 		.string()
 		.trim()
@@ -21,4 +21,4 @@ const reviewSearchQuery = z.object({
 		.optional(),
 });
 
-export { reviewSearchQuery };
+export { reviewGetAllSearchQuery };

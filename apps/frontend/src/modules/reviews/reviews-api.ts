@@ -8,9 +8,9 @@ import { type APIResponse } from "~/libs/types/types.js";
 
 import { ReviewsApiPath } from "./libs/enums/enums.js";
 import {
+	type ReviewGetAllSearchQuery,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
-	type ReviewSearchQuery,
 } from "./libs/types/types.js";
 
 type Constructor = {
@@ -41,7 +41,7 @@ class ReviewsApi extends BaseHTTPApi {
 	}
 
 	public async getAll(
-		query?: ReviewSearchQuery,
+		query?: ReviewGetAllSearchQuery,
 	): Promise<APIResponse<ReviewGetByIdResponseDto[]>> {
 		const response = await this.load<APIResponse<ReviewGetByIdResponseDto[]>>(
 			this.getFullEndpoint(ReviewsApiPath.ROOT, {}),

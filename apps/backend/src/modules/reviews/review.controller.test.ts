@@ -9,9 +9,9 @@ import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import { GroupEntity } from "../groups/group.entity.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
 import {
+	type ReviewGetAllSearchQuery,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
-	type ReviewSearchQuery,
 } from "./libs/types/types.js";
 import { ReviewController } from "./review.controller.js";
 import { type ReviewService } from "./review.service.js";
@@ -71,7 +71,7 @@ describe("ReviewController", () => {
 		const reviewService = { findAll: mockFindAll } as ReviewService;
 		const reviewController = new ReviewController(mockLogger, reviewService);
 
-		const options: APIHandlerOptions<{ query?: ReviewSearchQuery }> = {
+		const options: APIHandlerOptions<{ query?: ReviewGetAllSearchQuery }> = {
 			body: {},
 			params: {},
 			query: {},

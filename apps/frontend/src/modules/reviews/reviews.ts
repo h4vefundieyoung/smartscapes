@@ -12,9 +12,9 @@ const reviewApi = new ReviewsApi({
 
 export { reviewApi };
 export {
+	type ReviewGetAllSearchQuery,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
-	type ReviewSearchQuery,
 } from "./libs/types/types.js";
 export { reviewCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 export { actions, reducer } from "./slices/reviews.js";

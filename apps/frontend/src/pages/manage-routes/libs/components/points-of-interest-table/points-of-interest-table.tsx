@@ -1,5 +1,5 @@
 import { Button, CreatePOIModal, Table } from "~/libs/components/components.js";
-import { DataStatus } from "~/libs/enums/enums.js";
+import { DataFormat, DataStatus } from "~/libs/enums/enums.js";
 import { getFormattedDate } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
@@ -21,11 +21,19 @@ const DEFAULT_TOTAL_PAGES = 1;
 
 const PointsOfInterestTable = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
+	const columns = useTableColumns();
 	const [isCreatePOIOpen, setIsCreatePOIOpen] = useState<boolean>(false);
 
-	const createStatus = useAppSelector(
-		(state) => state.pointsOfInterest.createStatus,
+	const isCreatedPOI = useAppSelector(
+		(state) => state.pointsOfInterest.createStatus === DataStatus.FULFILLED,
 	);
+
+	const { dataStatus, meta, summary } = useAppSelector(
+		({ pointsOfInterest }) => pointsOfInterest,
+	);
+
+	const { total = 0, totalPages = DEFAULT_TOTAL_PAGES } = meta ?? {};
+
 	const handleModalToggle = useCallback(() => {
 		setIsCreatePOIOpen((previous) => !previous);
 	}, []);
@@ -36,21 +44,6 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 		},
 		[dispatch],
 	);
-	useEffect(() => {
-		if (createStatus === DataStatus.FULFILLED) {
-			setIsCreatePOIOpen(false);
-		}
-	}, [createStatus]);
-	const { dataStatus, meta, summary } = useAppSelector(
-		({ pointsOfInterest }) => pointsOfInterest,
-	);
-
-	const formattedSummary = summary.map((item) => ({
-		...item,
-		createdAt: getFormattedDate(new Date(item.createdAt), "dd MMM yyyy"),
-	}));
-
-	const columns = useTableColumns();
 
 	const paginationPOIS = usePagination({
 		meta,
@@ -59,7 +52,13 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 
 	const { page, pageSize } = paginationPOIS;
 
-	const { total = 0, totalPages = DEFAULT_TOTAL_PAGES } = meta ?? {};
+	const formattedSummary = summary.map((item) => ({
+		...item,
+		createdAt: getFormattedDate(
+			new Date(item.createdAt),
+			DataFormat.DATE_DD_MMM_YYYY,
+		),
+	}));
 
 	useEffect(() => {
 		void dispatch(
@@ -68,7 +67,13 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 				perPage: pageSize,
 			}),
 		);
-	}, [dispatch, page, pageSize]);
+	}, [dispatch, page, pageSize, isCreatePOIOpen]);
+
+	useEffect(() => {
+		if (isCreatedPOI) {
+			setIsCreatePOIOpen(false);
+		}
+	}, [isCreatedPOI]);
 
 	return (
 		<section className={styles["container"]}>

@@ -78,7 +78,11 @@ describe("RouteRepository", () => {
 
 	it("create should create and return new route", async () => {
 		const routeEntity = createMockRouteEntity();
-		const routeObject = routeEntity.toObject();
+		const routeObject = {
+			...routeEntity.toObject(),
+			id: null,
+			imagesUrl: null,
+		};
 
 		databaseTracker.on.insert(DatabaseTableName.ROUTES).response([routeObject]);
 		databaseTracker.on.insert(DatabaseTableName.ROUTES_TO_POIS).response([]);

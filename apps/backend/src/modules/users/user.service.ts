@@ -99,16 +99,35 @@ class UserService implements Service {
 		id: number,
 		currentUserId: number,
 	): Promise<UserPublicProfileResponseDto> {
-		const user = await this.userRepository.getUserProfile(id, currentUserId);
+		const existingUser = await this.findById(id);
 
-		if (!user) {
+		if (!existingUser) {
 			throw new UserError({
 				message: UserExceptionMessage.NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,
 			});
 		}
 
-		return user;
+		if (!existingUser.isVisibleProfile) {
+			throw new UserError({
+				message: UserExceptionMessage.USER_PROFILE_NOT_PUBLIC,
+				status: HTTPCode.FORBIDDEN,
+			});
+		}
+
+		const userProfile = await this.userRepository.getUserProfile(
+			id,
+			currentUserId,
+		);
+
+		if (!userProfile) {
+			throw new UserError({
+				message: UserExceptionMessage.NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return userProfile;
 	}
 
 	public async patch(

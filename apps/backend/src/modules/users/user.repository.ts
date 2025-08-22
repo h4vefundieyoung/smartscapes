@@ -1,6 +1,5 @@
 import { transaction } from "objection";
 
-import { HTTPCode } from "~/libs/enums/enums.js";
 import { type Repository } from "~/libs/types/types.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
@@ -12,8 +11,6 @@ import { type UserModel } from "~/modules/users/user.model.js";
 
 import { GroupEntity } from "../groups/group.entity.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
-import { UserExceptionMessage } from "./libs/enums/enums.js";
-import { UserError } from "./libs/exceptions/exceptions.js";
 
 class UserRepository implements Repository {
 	private userModel: typeof UserModel;
@@ -245,23 +242,6 @@ class UserRepository implements Repository {
 		id: number,
 		currentUserId: number,
 	): Promise<null | UserPublicProfileResponseDto> {
-		const user = await this.userModel
-			.query()
-			.findById(id)
-			.select("id", "firstName", "lastName", "isVisibleProfile")
-			.first();
-
-		if (!user) {
-			return null;
-		}
-
-		if (!user.isVisibleProfile) {
-			throw new UserError({
-				message: UserExceptionMessage.USER_PROFILE_NOT_PUBLIC,
-				status: HTTPCode.FORBIDDEN,
-			});
-		}
-
 		const profileData = await this.userModel
 			.query()
 			.findById(id)

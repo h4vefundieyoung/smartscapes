@@ -97,7 +97,7 @@ class FileService implements Service {
 
 		if (isFileSizeExceedsLimit) {
 			throw new FilesError({
-				message: FileExceptionMessage.FILE_SIZE_EXCEEDS_LIMIT,
+				message: FileExceptionMessage.SIZE_EXCEEDS_LIMIT,
 				status: HTTPCode.UNPROCESSED_ENTITY,
 			});
 		}
@@ -113,7 +113,7 @@ class FileService implements Service {
 
 		if (isInvalidType) {
 			throw new FilesError({
-				message: FileExceptionMessage.INVALID_FILE_TYPE,
+				message: FileExceptionMessage.INVALID_TYPE,
 				status: HTTPCode.UNPROCESSED_ENTITY,
 			});
 		}

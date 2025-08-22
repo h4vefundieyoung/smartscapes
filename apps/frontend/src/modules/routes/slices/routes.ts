@@ -1,11 +1,24 @@
-import { getAll, getRouteById } from "./actions.js";
-import { actions } from "./route.slice.js";
+import {
+	create,
+	discardCreateRouteFormData,
+	getAll,
+	getRouteById,
+	patchRoute,
+	preserveCreateRouteFormData,
+	restoreCreateRouteFormData,
+} from "./actions.js";
+import { actions } from "./routes.slice.js";
 
 const allActions = {
 	...actions,
+	create,
+	discardCreateRouteFormData,
 	getAll,
 	getRouteById,
+	patchRoute,
+	preserveCreateRouteFormData,
+	restoreCreateRouteFormData,
 };
 
 export { allActions as actions };
-export { reducer } from "./route.slice.js";
+export { reducer } from "./routes.slice.js";

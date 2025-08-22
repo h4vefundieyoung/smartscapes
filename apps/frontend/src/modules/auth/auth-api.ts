@@ -2,7 +2,10 @@ import { APIPath, ContentType } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
-import { type APIResponse } from "~/libs/types/types.js";
+import {
+	type APIResponse,
+	type FileUploadResponseDto,
+} from "~/libs/types/types.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
 	type AuthenticatedUserPatchResponseDto,
@@ -88,6 +91,25 @@ class AuthApi extends BaseHTTPApi {
 				hasAuth: false,
 				method: "POST",
 				payload: JSON.stringify(payload),
+			},
+		);
+
+		return await response.json();
+	}
+
+	public async uploadAvatar(
+		payload: File,
+	): Promise<APIResponse<FileUploadResponseDto>> {
+		const formData = new FormData();
+
+		formData.append("file", payload);
+
+		const response = await this.load<APIResponse<FileUploadResponseDto>>(
+			this.getFullEndpoint(AuthApiPath.AUTHENTICATED_USER_UPLOAD_AVATAR, {}),
+			{
+				hasAuth: true,
+				method: "POST",
+				payload: formData,
 			},
 		);
 

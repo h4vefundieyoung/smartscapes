@@ -1,8 +1,8 @@
 import {
 	Button,
 	Input,
-	Link,
 	PasswordInput,
+	TextLink,
 } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { useAppForm, useCallback } from "~/libs/hooks/hooks.js";
@@ -82,7 +82,7 @@ const SignUpForm = ({ onSubmit }: Properties): React.JSX.Element => {
 			<div>
 				<p className={styles["login-link-text"]}>
 					Already have an account?&nbsp;
-					<Link to={AppRoute.SIGN_IN}>Log in</Link>
+					<TextLink to={AppRoute.SIGN_IN}>Log in</TextLink>
 				</p>
 			</div>
 		</div>

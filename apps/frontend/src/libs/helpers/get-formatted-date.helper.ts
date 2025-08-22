@@ -1,8 +1,6 @@
 import { formatInTimeZone } from "date-fns-tz";
 
-type FormatDate = "dd MMM yyyy" | "yyyy MM dd";
-
-const getFormattedDate = (date: Date, formatDate: FormatDate): string => {
+const getFormattedDate = (date: Date, formatDate: string): string => {
 	return formatInTimeZone(date, "UTC", formatDate);
 };
 

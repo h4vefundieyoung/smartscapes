@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type PaginationMeta, type ValueOf } from "~/libs/types/types.js";
 import {
-	type PointsOfInterestPaginatedSummary,
+	type PointsOfInterestItemDto,
 	type PointsOfInterestResponseDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
@@ -14,7 +14,7 @@ type State = {
 	data: null | PointsOfInterestResponseDto;
 	dataStatus: ValueOf<typeof DataStatus>;
 	meta: null | PaginationMeta;
-	summary: PointsOfInterestPaginatedSummary[];
+	summary: PointsOfInterestItemDto[];
 };
 
 const initialState: State = {

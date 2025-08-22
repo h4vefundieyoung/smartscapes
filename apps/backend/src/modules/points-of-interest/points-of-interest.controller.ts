@@ -467,12 +467,11 @@ class PointsOfInterestController extends BaseController {
 	public async findPaginated(
 		query: PointsOfInterestQueryRequest,
 	): Promise<APIHandlerResponse<PointsOfInterestPaginatedResponseDto>> {
-		const { page = DEFAULT_PAGE, perPage = DEFAULT_LIMIT, search } = query;
+		const { page = DEFAULT_PAGE, perPage = DEFAULT_LIMIT } = query;
 
 		const response = await this.pointsOfInterestService.findPaginated({
 			page,
 			perPage,
-			search,
 		});
 
 		return {

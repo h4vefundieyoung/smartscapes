@@ -252,7 +252,7 @@ describe("PointsOfInterestService", () => {
 		const result = await pointsOfInterestService.findPaginated({
 			page: 1,
 			perPage: 10,
-			search: undefined,
+			search: "",
 		});
 
 		const expectedData = mockEntities.map((item) => item.toSummaryObject());

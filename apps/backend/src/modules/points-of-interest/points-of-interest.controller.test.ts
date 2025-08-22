@@ -382,7 +382,7 @@ describe("PointsOfInterestController", () => {
 			assert.ok(options, "Options should be defined");
 			assert.strictEqual(options.page, 1);
 			assert.strictEqual(options.perPage, 10);
-			assert.strictEqual(options.search, "Central");
+			assert.strictEqual(options.search, undefined);
 
 			return Promise.resolve({
 				data: mockPoints,

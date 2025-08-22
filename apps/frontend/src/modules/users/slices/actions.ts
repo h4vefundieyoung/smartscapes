@@ -22,20 +22,28 @@ const followUser = createAsyncThunk<
 	APIResponse<boolean>,
 	{ payload: UserFollowsRequestDto; userId: number },
 	AsyncThunkConfig
->(`${sliceName}/follow-user`, ({ payload, userId }, { extra }) => {
-	const { userApi } = extra;
+>(`${sliceName}/follow-user`, async ({ payload, userId }, { extra }) => {
+	const { toastNotifier, userApi } = extra;
 
-	return userApi.follow(userId, payload);
+	const response = await userApi.follow(userId, payload);
+
+	toastNotifier.showSuccess("You have followed this user");
+
+	return response;
 });
 
 const unfollowUser = createAsyncThunk<
 	APIResponse<boolean>,
 	{ followerId: number; userId: number },
 	AsyncThunkConfig
->(`${sliceName}/unfollow-user`, ({ followerId, userId }, { extra }) => {
-	const { userApi } = extra;
+>(`${sliceName}/unfollow-user`, async ({ followerId, userId }, { extra }) => {
+	const { toastNotifier, userApi } = extra;
 
-	return userApi.unfollow(userId, followerId);
+	const response = await userApi.unfollow(userId, followerId);
+
+	toastNotifier.showSuccess("You have unfollowed this user");
+
+	return response;
 });
 
 export { followUser, getUserPublicProfile, unfollowUser };

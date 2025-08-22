@@ -75,6 +75,7 @@ export {
 	pointOfInterestUpdateValidationSchema,
 	PointsOfInterestApiPath,
 	pointsOfInterestCreateValidationSchema,
+	type PointsOfInterestGetByIdResponseDto,
 	type PointsOfInterestPaginatedResponseDto,
 	type PointsOfInterestPaginatedSummary,
 	type PointsOfInterestQueryRequest,

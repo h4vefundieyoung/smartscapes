@@ -8,6 +8,7 @@ import { PointOfInterestExceptionMessage } from "./libs/enums/enums.js";
 import { PointOfInterestError } from "./libs/exceptions/exceptions.js";
 import {
 	type PointsOfInterestFindAllOptions,
+	type PointsOfInterestGetByIdResponseDto,
 	type PointsOfInterestPaginatedOptions,
 	type PointsOfInterestPaginatedResponseDto,
 	type PointsOfInterestRequestDto,
@@ -83,7 +84,9 @@ class PointsOfInterestService implements Service {
 		};
 	}
 
-	public async findById(id: number): Promise<PointsOfInterestResponseDto> {
+	public async findById(
+		id: number,
+	): Promise<PointsOfInterestGetByIdResponseDto> {
 		const item = await this.pointsOfInterestRepository.findById(id);
 
 		if (!item) {
@@ -93,7 +96,7 @@ class PointsOfInterestService implements Service {
 			});
 		}
 
-		return item.toObject();
+		return item.toDetailsObject();
 	}
 
 	public async findPaginated(

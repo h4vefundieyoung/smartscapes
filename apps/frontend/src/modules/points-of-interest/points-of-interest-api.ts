@@ -6,6 +6,7 @@ import { type APIResponse } from "~/libs/types/types.js";
 
 import { PointsOfInterestApiPath } from "./libs/enums/enums.js";
 import {
+	type PointsOfInterestGetByIdResponseDto,
 	type PointsOfInterestPaginatedResponseDto,
 	type PointsOfInterestQueryRequest,
 	type PointsOfInterestRequestDto,
@@ -57,14 +58,13 @@ class PointOfInterestApi extends BaseHTTPApi {
 
 	public async getById(
 		id: number,
-	): Promise<APIResponse<PointsOfInterestResponseDto>> {
-		const response = await this.load<APIResponse<PointsOfInterestResponseDto>>(
-			this.getFullEndpoint(PointsOfInterestApiPath.ROOT, String(id), {}),
-			{
-				hasAuth: false,
-				method: "GET",
-			},
-		);
+	): Promise<APIResponse<PointsOfInterestGetByIdResponseDto>> {
+		const response = await this.load<
+			APIResponse<PointsOfInterestGetByIdResponseDto>
+		>(this.getFullEndpoint(PointsOfInterestApiPath.ROOT, String(id), {}), {
+			hasAuth: false,
+			method: "GET",
+		});
 
 		return await response.json();
 	}

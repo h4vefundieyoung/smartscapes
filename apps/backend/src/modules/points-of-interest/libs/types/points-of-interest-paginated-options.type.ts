@@ -1,7 +1,7 @@
 type PointsOfInterestPaginatedOptions = {
 	page: number;
 	perPage: number;
-	search?: string | undefined;
+	search?: string;
 };
 
 export { type PointsOfInterestPaginatedOptions };

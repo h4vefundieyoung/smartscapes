@@ -17,7 +17,7 @@ import { NotFound } from "~/pages/not-found/not-found.js";
 
 import styles from "./styles.module.css";
 
-const PointsOfInterestDetails = (): null | React.JSX.Element => {
+const PointsOfInterestDetails = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const { dataStatus, pointsOfInterestDetails } = useAppSelector(
 		({ pointOfInterestDetails }) => pointOfInterestDetails,
@@ -39,7 +39,7 @@ const PointsOfInterestDetails = (): null | React.JSX.Element => {
 	}
 
 	if (!pointsOfInterestDetails) {
-		return null;
+		return <></>;
 	}
 
 	const [latitude, longitude] = pointsOfInterestDetails.location.coordinates;

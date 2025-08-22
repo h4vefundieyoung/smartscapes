@@ -7,26 +7,36 @@ type Properties = {
 };
 
 const FeatureGallery = ({ slides }: Properties): React.JSX.Element => {
-	const slideList = slides.map((slide, index) => {
+	if (slides.length === 0) {
+		return <></>;
+	}
+
+	const [firstSlide, ...otherSlides] = slides;
+
+	const renderSlide = (slide: Slide): React.ReactElement => {
 		if (slide.type === "image") {
 			return (
 				<img
 					alt="point of interest"
 					className={styles["image"]}
-					key={index}
 					src={slide.content as string}
 				/>
 			);
 		}
 
-		return (
-			<div className={styles["component"]} key={index}>
-				{slide.content}
-			</div>
-		);
-	});
+		return <div className={styles["component"]}>{slide.content}</div>;
+	};
 
-	return <section className={styles["container"]}>{slideList}</section>;
+	return (
+		<section className={styles["container"]}>
+			<div className={styles["left"]}>
+				{firstSlide && renderSlide(firstSlide)}
+			</div>
+			<div className={styles["right"]}>
+				{otherSlides.map((slide) => renderSlide(slide))}
+			</div>
+		</section>
+	);
 };
 
 export { FeatureGallery };

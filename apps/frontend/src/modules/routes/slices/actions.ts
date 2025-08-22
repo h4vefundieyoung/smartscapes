@@ -1,7 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
-import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
+import {
+	type APIResponse,
+	type AsyncThunkConfig,
+	type FileUploadResponseDto,
+} from "~/libs/types/types.js";
 
 import { RouteNotification } from "../libs/enums/enums.js";
 import {
@@ -43,4 +47,22 @@ const getAll = createAsyncThunk<
 	return await routeApi.getAll(options);
 });
 
-export { getAll, getRouteById, patchRoute };
+const uploadImage = createAsyncThunk<
+	APIResponse<FileUploadResponseDto>,
+	File,
+	AsyncThunkConfig
+>(`${sliceName}/upload-image`, async (payload, { extra, getState }) => {
+	const { routeApi, toastNotifier } = extra;
+
+	const state = getState();
+
+	const routeId = state.route.route?.id as number;
+
+	const image = await routeApi.uploadImage({ file: payload, id: routeId });
+
+	toastNotifier.showSuccess("Image was uploaded");
+
+	return image;
+});
+
+export { getAll, getRouteById, patchRoute, uploadImage };

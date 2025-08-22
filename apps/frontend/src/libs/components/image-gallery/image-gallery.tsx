@@ -1,18 +1,20 @@
 import styles from "./styles.module.css";
 
 type Properties = {
-	images: string[];
+	images: null | string[];
 };
 
 const ImageGallery = ({ images }: Properties): React.JSX.Element => {
-	const imageList = images.map((url, index) => (
-		<img
-			alt="point of interest picutre"
-			className={styles["image"]}
-			key={index}
-			src={url}
-		/>
-	));
+	const imageList = images
+		? images.map((url, index) => (
+				<img
+					alt="point of interest picutre"
+					className={styles["image"]}
+					key={index}
+					src={url}
+				/>
+			))
+		: null;
 
 	return <section className={styles["container"]}>{imageList}</section>;
 };

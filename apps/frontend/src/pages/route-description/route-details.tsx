@@ -1,6 +1,3 @@
-import image1 from "~/assets/images/route-details/placeholder-image-1.png";
-import image2 from "~/assets/images/route-details/placeholder-image-2.png";
-import image3 from "~/assets/images/route-details/placeholder-image-3.png";
 import {
 	Button,
 	ImageGallery,
@@ -17,6 +14,7 @@ import {
 	useCallback,
 	useEffect,
 	useParams,
+	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
 import {
@@ -46,6 +44,24 @@ const RouteDetails = (): React.JSX.Element => {
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
 	);
+	const fileInputReference = useRef<HTMLInputElement>(null);
+
+	const handleFileUpload = useCallback(
+		(event: React.ChangeEvent<HTMLInputElement>) => {
+			const file = event.target.files?.[0];
+
+			if (!file) {
+				return;
+			}
+
+			void dispatch(routeActions.uploadImage(file));
+		},
+		[dispatch],
+	);
+
+	const handleTriggerFileUpload = useCallback(() => {
+		fileInputReference.current?.click();
+	}, []);
 
 	const handleToggleEditMode = useCallback(() => {
 		setIsEditMode((isEditMode) => !isEditMode);
@@ -83,7 +99,7 @@ const RouteDetails = (): React.JSX.Element => {
 		return <Loader />;
 	}
 
-	const { description, name } = route as RouteGetByIdResponseDto;
+	const { description, imagesUrl, name } = route as RouteGetByIdResponseDto;
 
 	return (
 		<>
@@ -113,7 +129,19 @@ const RouteDetails = (): React.JSX.Element => {
 						</>
 					)}
 				</div>
-				<ImageGallery images={[image1, image2, image3]} />
+				<ImageGallery images={imagesUrl} />
+				{isEditMode ? (
+					<>
+						<input
+							accept="image/*"
+							onChange={handleFileUpload}
+							ref={fileInputReference}
+							style={{ display: "none" }}
+							type="file"
+						/>
+						<Button label="Upload an image" onClick={handleTriggerFileUpload} />
+					</>
+				) : null}
 				{isEditMode ? (
 					<TextArea
 						control={control}

@@ -1,4 +1,4 @@
-import { getAll, getRouteById, patchRoute } from "./actions.js";
+import { getAll, getRouteById, patchRoute, uploadImage } from "./actions.js";
 import { actions } from "./route.slice.js";
 
 const allActions = {
@@ -6,6 +6,7 @@ const allActions = {
 	getAll,
 	getRouteById,
 	patchRoute,
+	uploadImage,
 };
 
 export { allActions as actions };

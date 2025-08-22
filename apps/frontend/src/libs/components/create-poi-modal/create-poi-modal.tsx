@@ -1,54 +1,44 @@
+import React from "react";
+
 import {
 	Button,
 	Input,
+	MapLocationField,
 	Modal,
 	TextArea,
 } from "~/libs/components/components.js";
 import { useAppForm } from "~/libs/hooks/hooks.js";
 import {
-	pointOfInterestCreateValidationSchema,
+	pointsOfInterestCreateValidationSchema,
 	type PointsOfInterestRequestDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
+import {
+	type CreatePOIFormValues,
+	DEFAULT_CREATE_POI_PAYLOAD,
+} from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	defaultLatitude: number;
-	defaultLongitude: number;
 	isOpen: boolean;
 	onClose: () => void;
-	onSubmit: (values: PointsOfInterestRequestDto) => void;
+	onSubmit: (payload: PointsOfInterestRequestDto) => void;
 };
 
 const CreatePOIModal = ({
-	defaultLatitude,
-	defaultLongitude,
 	isOpen,
 	onClose,
 	onSubmit,
 }: Properties): React.JSX.Element => {
-	const { control, errors, handleSubmit } =
-		useAppForm<PointsOfInterestRequestDto>({
-			defaultValues: {
-				description: "",
-				location: {
-					coordinates: [defaultLongitude, defaultLatitude],
-					type: "Point",
-				},
-				name: "",
-			},
-			validationSchema: pointOfInterestCreateValidationSchema,
+	const { control, errors, handleReset, handleSubmit } =
+		useAppForm<CreatePOIFormValues>({
+			defaultValues: DEFAULT_CREATE_POI_PAYLOAD,
+			validationSchema: pointsOfInterestCreateValidationSchema,
 		});
 
-	const handleFormSubmit = (values: PointsOfInterestRequestDto): void => {
-		onSubmit({
-			...values,
-			description: values.description || null,
-			location: {
-				...values.location,
-				coordinates: values.location.coordinates,
-			},
-		});
+	const handleFormSubmit = (payload: CreatePOIFormValues): void => {
+		onSubmit(payload as PointsOfInterestRequestDto);
+		handleReset(DEFAULT_CREATE_POI_PAYLOAD);
 	};
 
 	return (
@@ -67,6 +57,12 @@ const CreatePOIModal = ({
 					label="Name"
 					name="name"
 					type="text"
+				/>
+				<MapLocationField
+					control={control}
+					errors={errors}
+					label="Location"
+					name="location"
 				/>
 				<TextArea
 					control={control}

@@ -3,6 +3,8 @@ import { type Entity } from "~/libs/types/types.js";
 import { type GroupEntity } from "../groups/group.entity.js";
 
 class UserEntity implements Entity {
+	private avatarUrl: null | string;
+
 	private email: string;
 
 	private firstName: string;
@@ -13,6 +15,8 @@ class UserEntity implements Entity {
 
 	private id: null | number;
 
+	private isVisibleProfile: boolean;
+
 	private lastName: string;
 
 	private passwordHash: string;
@@ -20,20 +24,24 @@ class UserEntity implements Entity {
 	private passwordSalt: string;
 
 	private constructor({
+		avatarUrl,
 		email,
 		firstName,
 		group,
 		groupId,
 		id,
+		isVisibleProfile,
 		lastName,
 		passwordHash,
 		passwordSalt,
 	}: {
+		avatarUrl: null | string;
 		email: string;
 		firstName: string;
 		group: null | ReturnType<GroupEntity["toObject"]>;
 		groupId: number;
 		id: null | number;
+		isVisibleProfile: boolean;
 		lastName: string;
 		passwordHash: string;
 		passwordSalt: string;
@@ -46,33 +54,41 @@ class UserEntity implements Entity {
 		this.passwordSalt = passwordSalt;
 		this.group = group;
 		this.groupId = groupId;
+		this.avatarUrl = avatarUrl;
+		this.isVisibleProfile = isVisibleProfile;
 	}
 
 	public static initialize({
+		avatarUrl,
 		email,
 		firstName,
 		group,
 		groupId,
 		id,
+		isVisibleProfile,
 		lastName,
 		passwordHash,
 		passwordSalt,
 	}: {
+		avatarUrl: null | string;
 		email: string;
 		firstName: string;
 		group: null | ReturnType<GroupEntity["toObject"]>;
 		groupId: number;
 		id: number;
+		isVisibleProfile: boolean;
 		lastName: string;
 		passwordHash: string;
 		passwordSalt: string;
 	}): UserEntity {
 		return new UserEntity({
+			avatarUrl,
 			email,
 			firstName,
 			group,
 			groupId,
 			id,
+			isVisibleProfile,
 			lastName,
 			passwordHash,
 			passwordSalt,
@@ -83,6 +99,7 @@ class UserEntity implements Entity {
 		email,
 		firstName,
 		groupId,
+		isVisibleProfile,
 		lastName,
 		passwordHash,
 		passwordSalt,
@@ -90,16 +107,19 @@ class UserEntity implements Entity {
 		email: string;
 		firstName: string;
 		groupId: number;
+		isVisibleProfile: boolean;
 		lastName: string;
 		passwordHash: string;
 		passwordSalt: string;
 	}): UserEntity {
 		return new UserEntity({
+			avatarUrl: null,
 			email,
 			firstName,
 			group: null,
 			groupId,
 			id: null,
+			isVisibleProfile,
 			lastName,
 			passwordHash,
 			passwordSalt,
@@ -110,6 +130,7 @@ class UserEntity implements Entity {
 		email: string;
 		firstName: string;
 		groupId: number;
+		isVisibleProfile: boolean;
 		lastName: string;
 		passwordHash: string;
 		passwordSalt: string;
@@ -118,6 +139,7 @@ class UserEntity implements Entity {
 			email: this.email,
 			firstName: this.firstName,
 			groupId: this.groupId,
+			isVisibleProfile: this.isVisibleProfile,
 			lastName: this.lastName,
 			passwordHash: this.passwordHash,
 			passwordSalt: this.passwordSalt,
@@ -125,19 +147,23 @@ class UserEntity implements Entity {
 	}
 
 	public toObject(): {
+		avatarUrl: null | string;
 		email: string;
 		firstName: string;
 		group: ReturnType<GroupEntity["toObject"]>;
 		groupId: number;
 		id: number;
+		isVisibleProfile: boolean;
 		lastName: string;
 	} {
 		return {
+			avatarUrl: this.avatarUrl,
 			email: this.email,
 			firstName: this.firstName,
 			group: this.group as ReturnType<GroupEntity["toObject"]>,
 			groupId: this.groupId,
 			id: this.id as number,
+			isVisibleProfile: this.isVisibleProfile,
 			lastName: this.lastName,
 		};
 	}

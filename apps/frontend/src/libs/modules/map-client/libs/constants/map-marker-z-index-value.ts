@@ -1,0 +1,3 @@
+const MAP_MARKER_Z_INDEX_VALUE = "1";
+
+export { MAP_MARKER_Z_INDEX_VALUE };

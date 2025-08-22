@@ -6,11 +6,13 @@ import { UserEntity } from "./user.entity.js";
 describe("UserEntity", () => {
 	it("should create new user entity", () => {
 		const userData = {
+			avatarUrl: "https://aws/avatars/example_file.jpg",
 			email: "test@example.com",
 			firstName: "John",
 			group: null,
 			groupId: 2,
 			id: 1,
+			isVisibleProfile: true,
 			lastName: "Doe",
 			passwordHash: "hash",
 			passwordSalt: "salt",
@@ -29,6 +31,7 @@ describe("UserEntity", () => {
 			firstName: "John",
 			group: null,
 			groupId: 2,
+			isVisibleProfile: true,
 			lastName: "Doe",
 			passwordHash: "hash",
 			passwordSalt: "salt",

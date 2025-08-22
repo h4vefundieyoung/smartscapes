@@ -1,8 +1,12 @@
-import { type PointGeometry } from "@smartscapes/shared";
-import React from "react";
-
-import { createContext, useEffect, useRef } from "~/libs/hooks/hooks.js";
+import {
+	createContext,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from "~/libs/hooks/hooks.js";
 import { MapClient } from "~/libs/modules/map-client/map-client.js";
+import { type Coordinates } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
@@ -10,7 +14,7 @@ const MapContext = createContext<MapClient | null>(null);
 
 type Properties = {
 	children?: React.ReactNode;
-	markers?: { coordinates: PointGeometry["coordinates"] }[];
+	markers?: { coordinates: Coordinates }[];
 };
 
 const MapProvider = ({
@@ -19,6 +23,11 @@ const MapProvider = ({
 }: Properties): React.JSX.Element => {
 	const mapClientReference = useRef(new MapClient());
 	const containerReference = useRef<HTMLDivElement>(null);
+	const [isLoaded, setIsLoaded] = useState<boolean>(false);
+
+	const handleMapLoad = useCallback(() => {
+		setIsLoaded(true);
+	}, []);
 
 	useEffect(() => {
 		const client = mapClientReference.current;
@@ -28,12 +37,13 @@ const MapProvider = ({
 			return;
 		}
 
-		client.init(container);
+		client.init(container, { onLoad: handleMapLoad });
 
 		return (): void => {
+			setIsLoaded(false);
 			client.destroy();
 		};
-	}, []);
+	}, [handleMapLoad]);
 
 	useEffect(() => {
 		const client = mapClientReference.current;
@@ -52,7 +62,7 @@ const MapProvider = ({
 		<MapContext.Provider value={mapClientReference.current}>
 			<div className={styles["map-wrapper"]}>
 				<div className={styles["map"]} ref={containerReference} />
-				<div className={styles["map-overlays"]}>{children}</div>
+				{isLoaded && <div className={styles["map-overlays"]}>{children}</div>}
 			</div>
 		</MapContext.Provider>
 	);

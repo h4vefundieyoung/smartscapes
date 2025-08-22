@@ -1,18 +1,21 @@
 import { logger } from "~/libs/modules/logger/logger.js";
 import { mapboxDirectionsApi } from "~/libs/modules/mapbox/mapbox.js";
 
+import { PlannedPathModel } from "../planned-paths/planned-path.model.js";
+import { plannedPathService } from "../planned-paths/planned-paths.js";
 import { pointsOfInterestService } from "../points-of-interest/points-of-interest.js";
-import { RoutesController } from "./routes.controller.js";
-import { RoutesModel } from "./routes.model.js";
-import { RoutesRepository } from "./routes.repository.js";
-import { RoutesService } from "./routes.service.js";
+import { RouteController } from "./route.controller.js";
+import { RouteModel } from "./route.model.js";
+import { RouteRepository } from "./route.repository.js";
+import { RouteService } from "./route.service.js";
 
-const routesRepository = new RoutesRepository(RoutesModel);
-const routesService = new RoutesService(
-	routesRepository,
-	pointsOfInterestService,
+const routesRepository = new RouteRepository(RouteModel, PlannedPathModel);
+const routeService = new RouteService({
 	mapboxDirectionsApi,
-);
-const routesController = new RoutesController(logger, routesService);
+	plannedPathService,
+	pointsOfInterestService,
+	routesRepository,
+});
+const routeController = new RouteController(logger, routeService);
 
-export { routesController, routesService };
+export { routeController, routeService };

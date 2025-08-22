@@ -1,9 +1,12 @@
 const DatabaseTableName = {
+	CATEGORIES: "categories",
+	FILES: "files",
 	GROUPS: "groups",
 	GROUPS_TO_PERMISSIONS: "groups_to_permissions",
 	MIGRATIONS: "migrations",
 	NOTIFICATIONS: "notifications",
 	PERMISSIONS: "permissions",
+	PLANNED_PATHS: "planned_paths",
 	POINTS_OF_INTEREST: "points_of_interest",
 	REVIEWS: "reviews",
 	ROUTE_CATEGORIES: "route_categories",

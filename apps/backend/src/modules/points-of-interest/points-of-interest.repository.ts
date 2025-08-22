@@ -1,11 +1,14 @@
 import { SortingOrder } from "~/libs/enums/enums.js";
-import { type Repository } from "~/libs/types/types.js";
+import { type EntityPagination, type Repository } from "~/libs/types/types.js";
 import {
 	type PointsOfInterestFindAllOptions,
-	type PointsOfInterestSearchQuery,
+	type PointsOfInterestPaginatedOptions,
+	type PointsOfInterestQueryRequest,
 } from "~/modules/points-of-interest/libs/types/type.js";
 import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
 import { type PointsOfInterestModel } from "~/modules/points-of-interest/points-of-interest.model.js";
+
+const PAGE_NUMBER_OFFSET = 1;
 
 class PointsOfInterestRepository implements Repository {
 	private pointsOfInterestModel: typeof PointsOfInterestModel;
@@ -29,6 +32,7 @@ class PointsOfInterestRepository implements Repository {
 			.returning([
 				"id",
 				"name",
+				"description",
 				"created_at",
 				"updated_at",
 				"description",
@@ -58,6 +62,7 @@ class PointsOfInterestRepository implements Repository {
 			.select([
 				"id",
 				"name",
+				"description",
 				"created_at",
 				"updated_at",
 				"description",
@@ -87,6 +92,7 @@ class PointsOfInterestRepository implements Repository {
 			.select([
 				"id",
 				"name",
+				"description",
 				"created_at",
 				"updated_at",
 				"description",
@@ -112,6 +118,7 @@ class PointsOfInterestRepository implements Repository {
 			.select([
 				"id",
 				"name",
+				"description",
 				"created_at",
 				"updated_at",
 				"description",
@@ -130,7 +137,7 @@ class PointsOfInterestRepository implements Repository {
 	}
 
 	public async findNearby(
-		normalizedQuery: PointsOfInterestSearchQuery,
+		normalizedQuery: PointsOfInterestQueryRequest,
 	): Promise<PointsOfInterestEntity[]> {
 		const { latitude, longitude, name, radius } = normalizedQuery;
 
@@ -139,6 +146,7 @@ class PointsOfInterestRepository implements Repository {
 			.select([
 				"id",
 				"name",
+				"description",
 				"created_at",
 				"updated_at",
 				"description",
@@ -167,6 +175,33 @@ class PointsOfInterestRepository implements Repository {
 			.map((point) => PointsOfInterestEntity.initialize(point));
 	}
 
+	public async findPaginated(
+		options: PointsOfInterestPaginatedOptions,
+	): Promise<EntityPagination<PointsOfInterestEntity>> {
+		const { page, perPage, search } = options;
+
+		const offset = (page - PAGE_NUMBER_OFFSET) * perPage;
+
+		const baseQuery = this.pointsOfInterestModel
+			.query()
+			.select(["id", "name", "created_at"])
+			.modify((builder) => {
+				if (search) {
+					builder.where("name", "ilike", `%${search}%`);
+				}
+			});
+
+		const [total, items] = await Promise.all([
+			baseQuery.clone().resultSize(),
+			baseQuery.clone().offset(offset).limit(perPage),
+		]);
+
+		return {
+			items: items.map((item) => PointsOfInterestEntity.initialize(item)),
+			total,
+		};
+	}
+
 	public async patch(
 		id: number,
 		entity: PointsOfInterestEntity,
@@ -184,6 +219,7 @@ class PointsOfInterestRepository implements Repository {
 			.returning([
 				"id",
 				"name",
+				"description",
 				"created_at",
 				"updated_at",
 				"description",

@@ -1,8 +1,8 @@
 export {
-	type RoutesFindAllOptions,
-	type RoutesRequestConstructDto,
-	type RoutesRequestCreateDto,
-	type RoutesRequestPatchDto,
-	type RoutesResponseConstructDto,
-	type RoutesResponseDto,
+	type RouteConstructRequestDto,
+	type RouteCreateRequestDto,
+	type RouteFindAllOptions,
+	type RouteGetAllItemResponseDto,
+	type RouteGetByIdResponseDto,
+	type RoutePatchRequestDto,
 } from "@smartscapes/shared";

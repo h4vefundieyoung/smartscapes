@@ -3,7 +3,7 @@ import { transaction } from "objection";
 import { type Repository } from "~/libs/types/types.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
-	type UserPasswordDetails,
+	type UserDetailsWithPassword,
 } from "~/modules/users/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
@@ -19,14 +19,22 @@ class UserRepository implements Repository {
 	}
 
 	public async create(entity: UserEntity): Promise<UserEntity> {
-		const { email, firstName, groupId, lastName, passwordHash, passwordSalt } =
-			entity.toNewObject();
+		const {
+			email,
+			firstName,
+			groupId,
+			isVisibleProfile,
+			lastName,
+			passwordHash,
+			passwordSalt,
+		} = entity.toNewObject();
 
 		return await transaction(this.userModel, async (UserModel) => {
 			const { id: userId } = await UserModel.query().insert({
 				email,
 				firstName,
 				groupId,
+				isVisibleProfile,
 				lastName,
 				passwordHash,
 				passwordSalt,
@@ -43,6 +51,7 @@ class UserRepository implements Repository {
 			>;
 
 			return UserEntity.initialize({
+				avatarUrl: null,
 				email: user.email,
 				firstName: user.firstName,
 				group: GroupEntity.initializeWithPermissions({
@@ -55,6 +64,7 @@ class UserRepository implements Repository {
 				}).toObject(),
 				groupId: user.groupId,
 				id: user.id,
+				isVisibleProfile: user.isVisibleProfile,
 				lastName: user.lastName,
 				passwordHash: user.passwordHash,
 				passwordSalt: user.passwordSalt,
@@ -66,6 +76,7 @@ class UserRepository implements Repository {
 		const users = await this.userModel
 			.query()
 			.withGraphJoined("group.permissions")
+			.withGraphJoined("avatar")
 			.execute();
 
 		return users.map((user) => {
@@ -73,8 +84,10 @@ class UserRepository implements Repository {
 			const permissions = user.group?.permissions as NonNullable<
 				typeof group.permissions
 			>;
+			const { avatar } = user;
 
 			return UserEntity.initialize({
+				avatarUrl: avatar ? avatar.url : null,
 				email: user.email,
 				firstName: user.firstName,
 				group: GroupEntity.initializeWithPermissions({
@@ -87,6 +100,7 @@ class UserRepository implements Repository {
 				}).toObject(),
 				groupId: user.groupId,
 				id: user.id,
+				isVisibleProfile: user.isVisibleProfile,
 				lastName: user.lastName,
 				passwordHash: user.passwordHash,
 				passwordSalt: user.passwordSalt,
@@ -99,6 +113,7 @@ class UserRepository implements Repository {
 			.query()
 			.where("email", email)
 			.withGraphJoined("group.permissions")
+			.withGraphJoined("avatar")
 			.first();
 
 		if (!user) {
@@ -109,8 +124,10 @@ class UserRepository implements Repository {
 		const permissions = user.group?.permissions as NonNullable<
 			typeof group.permissions
 		>;
+		const { avatar } = user;
 
 		return UserEntity.initialize({
+			avatarUrl: avatar ? avatar.url : null,
 			email: user.email,
 			firstName: user.firstName,
 			group: GroupEntity.initializeWithPermissions({
@@ -123,6 +140,7 @@ class UserRepository implements Repository {
 			}).toObject(),
 			groupId: user.groupId,
 			id: user.id,
+			isVisibleProfile: user.isVisibleProfile,
 			lastName: user.lastName,
 			passwordHash: user.passwordHash,
 			passwordSalt: user.passwordSalt,
@@ -134,6 +152,7 @@ class UserRepository implements Repository {
 			.query()
 			.findById(id)
 			.withGraphJoined("group.permissions")
+			.withGraphJoined("avatar")
 			.first();
 
 		if (!user) {
@@ -144,8 +163,10 @@ class UserRepository implements Repository {
 		const permissions = user.group?.permissions as NonNullable<
 			typeof group.permissions
 		>;
+		const { avatar } = user;
 
 		return UserEntity.initialize({
+			avatarUrl: avatar ? avatar.url : null,
 			email: user.email,
 			firstName: user.firstName,
 			group: GroupEntity.initializeWithPermissions({
@@ -158,6 +179,7 @@ class UserRepository implements Repository {
 			}).toObject(),
 			groupId: user.groupId,
 			id: user.id,
+			isVisibleProfile: user.isVisibleProfile,
 			lastName: user.lastName,
 			passwordHash: user.passwordHash,
 			passwordSalt: user.passwordSalt,
@@ -166,7 +188,7 @@ class UserRepository implements Repository {
 
 	public async findPasswordDetails(
 		email: string,
-	): Promise<null | UserPasswordDetails> {
+	): Promise<null | UserDetailsWithPassword> {
 		const user = await this.userModel
 			.query()
 			.where("email", email)
@@ -180,6 +202,7 @@ class UserRepository implements Repository {
 				"users.group_id as groupId",
 			)
 			.withGraphJoined("group.permissions")
+			.withGraphJoined("avatar")
 			.where("users.email", email)
 			.first();
 
@@ -191,8 +214,10 @@ class UserRepository implements Repository {
 		const permissions = user.group?.permissions as NonNullable<
 			typeof group.permissions
 		>;
+		const { avatar } = user;
 
 		return {
+			avatarUrl: avatar ? avatar.url : null,
 			email: user.email,
 			firstName: user.firstName,
 			group: GroupEntity.initializeWithPermissions({
@@ -205,6 +230,7 @@ class UserRepository implements Repository {
 			}).toObject(),
 			groupId: user.groupId,
 			id: user.id,
+			isVisibleProfile: user.isVisibleProfile,
 			lastName: user.lastName,
 			passwordHash: user.passwordHash,
 			passwordSalt: user.passwordSalt,
@@ -215,11 +241,9 @@ class UserRepository implements Repository {
 		id: number,
 		payload: AuthenticatedUserPatchRequestDto,
 	): Promise<null | UserEntity> {
-		const { firstName, lastName } = payload;
-
 		return await transaction(this.userModel, async (UserModel) => {
 			const [updatedRow] = await UserModel.query()
-				.patch({ firstName, lastName })
+				.patch(payload)
 				.where("id", "=", id)
 				.returning("*")
 				.execute();
@@ -231,14 +255,17 @@ class UserRepository implements Repository {
 			const user = (await UserModel.query()
 				.where("users.id", updatedRow.id)
 				.withGraphJoined("group.permissions")
+				.withGraphJoined("avatar")
 				.first()) as UserModel;
 
 			const group = user.group as NonNullable<typeof user.group>;
 			const permissions = group.permissions as NonNullable<
 				typeof group.permissions
 			>;
+			const { avatar } = user;
 
 			return UserEntity.initialize({
+				avatarUrl: avatar ? avatar.url : null,
 				email: user.email,
 				firstName: user.firstName,
 				group: GroupEntity.initializeWithPermissions({
@@ -250,7 +277,9 @@ class UserRepository implements Repository {
 					),
 				}).toObject(),
 				groupId: user.groupId,
+
 				id: user.id,
+				isVisibleProfile: user.isVisibleProfile,
 				lastName: user.lastName,
 				passwordHash: user.passwordHash,
 				passwordSalt: user.passwordSalt,

@@ -53,6 +53,38 @@ class BaseConfig implements Config {
 					format: String,
 				},
 			},
+			AWS: {
+				ACCESS_KEY_ID: {
+					default: null,
+					doc: "AWS Access Key ID",
+					env: "AWS_ACCESS_KEY_ID",
+					format: String,
+				},
+				MAX_FILE_SIZE_MB: {
+					default: 10,
+					doc: "Max file size in MB",
+					env: "AWS_MAX_FILE_SIZE_MB",
+					format: Number,
+				},
+				REGION: {
+					default: null,
+					doc: "AWS Region",
+					env: "AWS_REGION",
+					format: String,
+				},
+				S3_BUCKET_NAME: {
+					default: null,
+					doc: "S3 Bucket Name",
+					env: "AWS_S3_BUCKET_NAME",
+					format: String,
+				},
+				SECRET_ACCESS_KEY: {
+					default: null,
+					doc: "AWS Secret Access Key",
+					env: "AWS_SECRET_ACCESS_KEY",
+					format: String,
+				},
+			},
 			DB: {
 				CONNECTION_STRING: {
 					default: null,

@@ -31,11 +31,13 @@ describe("ReviewController", () => {
 	};
 
 	const mockUser = {
+		avatarUrl: "https://aws/avatars/example_file.jpg",
 		email: "test@example.com",
 		firstName: "John",
 		group: mockGroup.toObject(),
 		groupId: mockGroup.toObject().id,
 		id: 1,
+		isVisibleProfile: true,
 		lastName: "Doe",
 	} satisfies UserAuthResponseDto;
 

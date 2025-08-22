@@ -1,6 +1,7 @@
 import { type HTTPMethod } from "~/libs/types/types.js";
 
 import { type WhiteRoute } from "../../auth.plugin.js";
+import { checkMatchUrlPattern } from "./check-match-url-pattern.helper.js";
 
 type CheckIsWhiteRouteParameters = {
 	method: HTTPMethod;
@@ -21,21 +22,14 @@ const checkIsWhiteRoute = ({
 		return true;
 	}
 
+	const [urlWithoutQuery] = url.split("?");
+
 	return whiteRoutes.some(({ method: _method, path }) => {
 		if (_method !== method) {
 			return false;
 		}
 
-		const rootPathCritea = "/*";
-		const isRootPath = path.includes(rootPathCritea);
-
-		if (!isRootPath) {
-			return url === path;
-		}
-
-		const rootPath = path.replace(rootPathCritea, "");
-
-		return url.startsWith(rootPath);
+		return checkMatchUrlPattern(path, urlWithoutQuery as string);
 	});
 };
 

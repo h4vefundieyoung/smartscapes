@@ -23,11 +23,13 @@ describe("UserService", () => {
 	});
 
 	const mockUser = UserEntity.initialize({
+		avatarUrl: "https://aws/avatars/example_file.jpg",
 		email: "test@example.com",
 		firstName: "John",
 		group: mockGroup.toObject(),
 		groupId: 2,
 		id: 1,
+		isVisibleProfile: true,
 		lastName: "Doe",
 		passwordHash: "hash",
 		passwordSalt: "salt",
@@ -39,11 +41,13 @@ describe("UserService", () => {
 
 	it("create should return new user", async () => {
 		const userEntity = UserEntity.initialize({
+			avatarUrl: null,
 			email: "test@example.com",
 			firstName: "John",
 			group: mockGroup.toObject(),
 			groupId: 2,
 			id: 1,
+			isVisibleProfile: true,
 			lastName: "Doe",
 			passwordHash: "hash",
 			passwordSalt: "salt",
@@ -68,6 +72,7 @@ describe("UserService", () => {
 		});
 
 		assert.deepStrictEqual(result, {
+			avatarUrl: null,
 			email: mockUser.toObject().email,
 			firstName: mockUser.toObject().firstName,
 			group: {
@@ -78,17 +83,20 @@ describe("UserService", () => {
 			},
 			groupId: mockUser.toObject().groupId,
 			id: mockUser.toObject().id,
+			isVisibleProfile: true,
 			lastName: mockUser.toObject().lastName,
 		});
 	});
 
 	it("findAll should return all users", async () => {
 		const userEntity = UserEntity.initialize({
+			avatarUrl: "https://aws/avatars/example_file.jpg",
 			email: "test@example.com",
 			firstName: "John",
 			group: mockGroup.toObject(),
 			groupId: 2,
 			id: 1,
+			isVisibleProfile: true,
 			lastName: "Doe",
 			passwordHash: "hash",
 			passwordSalt: "salt",
@@ -128,6 +136,7 @@ describe("UserService", () => {
 
 		const result = await userService.patch(mockUser.toObject().id, {
 			firstName: "Jane",
+			isVisibleProfile: true,
 			lastName: "Smith",
 		});
 
@@ -145,6 +154,7 @@ describe("UserService", () => {
 			async () => {
 				await userService.patch(mockUser.toObject().id, {
 					firstName: "Jane",
+					isVisibleProfile: true,
 					lastName: "Smith",
 				});
 			},

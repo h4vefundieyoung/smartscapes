@@ -75,13 +75,13 @@ export {
 	pointOfInterestUpdateValidationSchema,
 	PointsOfInterestApiPath,
 	pointsOfInterestCreateValidationSchema,
-	type PointsOfInterestGetByIdResponseDto,
 	type PointsOfInterestPaginatedResponseDto,
 	type PointsOfInterestPaginatedSummary,
 	type PointsOfInterestQueryRequest,
 	pointsOfInterestQueryValidationSchema,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
+	type PointsOfInterestWithRoutesDto,
 } from "./modules/points-of-interest/points-of-interest.js";
 export {
 	type ReviewCreatePayload,

@@ -6,11 +6,11 @@ import { type APIResponse } from "~/libs/types/types.js";
 
 import { PointsOfInterestApiPath } from "./libs/enums/enums.js";
 import {
-	type PointsOfInterestGetByIdResponseDto,
 	type PointsOfInterestPaginatedResponseDto,
 	type PointsOfInterestQueryRequest,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
+	type PointsOfInterestWithRoutesDto,
 } from "./libs/types/types.js";
 
 type Constructor = {
@@ -58,9 +58,9 @@ class PointOfInterestApi extends BaseHTTPApi {
 
 	public async getById(
 		id: number,
-	): Promise<APIResponse<PointsOfInterestGetByIdResponseDto>> {
+	): Promise<APIResponse<PointsOfInterestWithRoutesDto>> {
 		const response = await this.load<
-			APIResponse<PointsOfInterestGetByIdResponseDto>
+			APIResponse<PointsOfInterestWithRoutesDto>
 		>(this.getFullEndpoint(PointsOfInterestApiPath.ROOT, String(id), {}), {
 			hasAuth: false,
 			method: "GET",

@@ -1,10 +1,10 @@
-import { type PointsOfInterestGetByIdResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
+import { type PointsOfInterestWithRoutesDto } from "~/modules/points-of-interest/points-of-interest.js";
 
 import { RouteCard } from "../route-card/route-card.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	routes: PointsOfInterestGetByIdResponseDto["routes"];
+	routes: PointsOfInterestWithRoutesDto["routes"];
 };
 
 const RoutesGallery = ({ routes }: Properties): React.JSX.Element => {

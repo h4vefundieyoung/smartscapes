@@ -133,7 +133,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 					name="description"
 				/>
 			) : (
-				<p className={styles["description"]}>{description}</p>
+				description && <p className={styles["description"]}>{description}</p>
 			)}
 		</main>
 	);

@@ -2,8 +2,11 @@ import { type Entity, type LineStringGeometry } from "~/libs/types/types.js";
 
 class PlannedPathEntity implements Entity {
 	private distance: number;
+
 	private duration: number;
+
 	private geometry: LineStringGeometry;
+
 	private id: null | number;
 
 	private constructor({

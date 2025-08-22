@@ -5,7 +5,7 @@ import { AppRoute } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 import { type UserAuthResponseDto } from "~/modules/users/libs/types/types.js";
 
-import { Button, Link } from "../components.js";
+import { Button, TextLink } from "../components.js";
 import { AuthenticatedHeader } from "./libs/components/authenticated-header/authenticated-header.js";
 import styles from "./styles.module.css";
 
@@ -35,7 +35,7 @@ const Header = ({ actions, user }: Properties): JSX.Element => {
 	return (
 		<header className={styles["header"]}>
 			<div className={styles["container"]}>
-				<Link to={AppRoute.ROOT}>
+				<TextLink to={AppRoute.ROOT}>
 					<span className="visually-hidden">Go to landing</span>
 					<img
 						alt="SmartScapes Logo"
@@ -44,7 +44,7 @@ const Header = ({ actions, user }: Properties): JSX.Element => {
 						src={appLogo}
 						width={136}
 					/>
-				</Link>
+				</TextLink>
 				{renderHeaderContent()}
 			</div>
 		</header>

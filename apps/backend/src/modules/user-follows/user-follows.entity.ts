@@ -2,7 +2,9 @@ import { type Entity } from "~/libs/types/types.js";
 
 class UserFollowsEntity implements Entity {
 	private followerId: number;
+
 	private followingId: number;
+
 	private id: null | number;
 
 	private constructor({

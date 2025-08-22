@@ -65,7 +65,7 @@ const MapProvider = ({
 			return;
 		}
 
-		mapClientReference.current.flyTo(center);
+		mapClientReference.current.setCenter(center);
 	}, [center]);
 
 	return (

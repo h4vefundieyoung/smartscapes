@@ -46,7 +46,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 						<p className={styles["description"]}>
 							{pointsOfInterestDetails.description}
 						</p>
-						<RoutesGallery routes={[pointsOfInterestDetails]} />
+						<RoutesGallery routes={pointsOfInterestDetails.routes} />
 					</>
 				)}
 			</main>

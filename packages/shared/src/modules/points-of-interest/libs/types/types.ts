@@ -1,3 +1,4 @@
+export { type PointsOfInterestGetByIdResponseDto } from "./points-of-interest-get-by-id-response-dto.type.js";
 export { type PointsOfInterestPaginatedResponseDto } from "./points-of-interest-paginated-response-dto.type.js";
 export { type PointsOfInterestPaginatedSummary } from "./points-of-interest-paginated-summary-dto.type.js";
 export { type PointsOfInterestQueryRequest } from "./points-of-interest-query-request.type.js";

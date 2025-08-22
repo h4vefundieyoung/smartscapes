@@ -1,4 +1,5 @@
 export {
+	type PointsOfInterestGetByIdResponseDto,
 	type PointsOfInterestPaginatedResponseDto,
 	type PointsOfInterestPaginatedSummary,
 	type PointsOfInterestQueryRequest,

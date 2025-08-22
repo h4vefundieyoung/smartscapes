@@ -90,6 +90,10 @@ import {
  *           type: string | null
  *           nullable: true
  *           example: "A large park in New York City"
+ *         routes:
+ *           type: array
+ *           nullable: true
+ *           example: [{id: 1, name: "route name"}]
  */
 
 const DEFAULT_LIMIT = 10;

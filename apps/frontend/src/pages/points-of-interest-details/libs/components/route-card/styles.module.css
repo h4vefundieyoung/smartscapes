@@ -1,4 +1,4 @@
-card {
+.card {
 	flex-shrink: 0;
 	gap: 16px;
 	width: 100%;

@@ -32,6 +32,7 @@ describe("PointsOfInterestController", () => {
 			type: "Point" as const,
 		},
 		name: "Point Of Interest Test Name",
+		routes: [],
 	};
 
 	it("findAll should return all points of interest", async () => {

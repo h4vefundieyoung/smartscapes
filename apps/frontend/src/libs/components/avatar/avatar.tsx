@@ -1,13 +1,13 @@
 import { getUserInitials } from "~/libs/helpers/helpers.js";
+import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
-import { type AvatarUserData } from "./libs/types/types.js";
 import styles from "./styles.module.css";
 
 const DEFAULT_AVATAR_SIZE = 32;
 
 type Properties = {
 	size?: number;
-	user: AvatarUserData;
+	user: Pick<UserAuthResponseDto, "avatarUrl" | "firstName" | "lastName">;
 };
 
 const Avatar = ({

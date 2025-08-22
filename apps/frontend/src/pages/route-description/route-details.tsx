@@ -19,6 +19,12 @@ import {
 	useParams,
 	useState,
 } from "~/libs/hooks/hooks.js";
+import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
+import {
+	type ReviewGetByIdResponseDto,
+	type ReviewRequestDto,
+	routeDetailsApi,
+} from "~/modules/route-details/route-details.js";
 import {
 	actions as routeActions,
 	type RouteGetByIdResponseDto,
@@ -51,6 +57,8 @@ const RouteDetails = (): React.JSX.Element => {
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
 	);
 
+	const isAuthenticatedUser = Boolean(user);
+
 	const handleToggleEditMode = useCallback(() => {
 		setIsEditMode((isEditMode) => !isEditMode);
 	}, []);
@@ -78,6 +86,32 @@ const RouteDetails = (): React.JSX.Element => {
 			handleValueSet("description", route.description);
 		}
 	}, [route, handleValueSet]);
+
+	const [reviews, setReviews] = useState<ReviewGetByIdResponseDto[]>([]);
+
+	useEffect((): void => {
+		void (async (): Promise<void> => {
+			if (!id) {
+				return;
+			}
+
+			const response = await routeDetailsApi.getAll({ routeId: Number(id) });
+			setReviews(response.data);
+		})();
+	}, [id]);
+
+	const handleCreateReview = useCallback(
+		async (payload: ReviewRequestDto): Promise<void> => {
+			try {
+				const response = await routeDetailsApi.createReview(payload);
+				setReviews((previous) => [response.data, ...previous]);
+				toastNotifier.showSuccess("Review created successfully.");
+			} catch {
+				toastNotifier.showError("Failed to create review.");
+			}
+		},
+		[],
+	);
 
 	if (dataStatus === DataStatus.REJECTED) {
 		return <NotFound />;
@@ -134,7 +168,12 @@ const RouteDetails = (): React.JSX.Element => {
 					<p className={styles["description"]}>{description}</p>
 				)}
 				<PointOfInterestSection pointOfInterests={pois} />
-				<RouteReviewsSection routeId={Number(routeId)} />
+				<RouteReviewsSection
+					isAuthenticatedUser={isAuthenticatedUser}
+					items={reviews}
+					onCreate={handleCreateReview}
+					routeId={routeId}
+				/>
 			</main>
 		</>
 	);

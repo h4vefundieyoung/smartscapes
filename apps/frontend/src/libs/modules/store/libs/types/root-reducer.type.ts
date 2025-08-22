@@ -6,7 +6,6 @@ import {
 	type pointOfInterestDetailsReducer,
 	type pointsOfInterestReducer,
 } from "~/modules/points-of-interest/points-of-interest.js";
-import { type reducer as reviewReducer } from "~/modules/reviews/reviews.js";
 import { type reducer as routeReducer } from "~/modules/routes/routes.js";
 
 type RootReducer = {
@@ -16,7 +15,6 @@ type RootReducer = {
 	location: ReturnType<typeof locationReducer>;
 	pointOfInterestDetails: ReturnType<typeof pointOfInterestDetailsReducer>;
 	pointsOfInterest: ReturnType<typeof pointsOfInterestReducer>;
-	review: ReturnType<typeof reviewReducer>;
 	route: ReturnType<typeof routeReducer>;
 };
 

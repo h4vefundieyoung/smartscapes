@@ -6,7 +6,7 @@ import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
 
-import { ReviewsApiPath } from "./libs/enums/enums.js";
+import { RoutesApiPath } from "./libs/enums/enums.js";
 import {
 	type ReviewGetAllSearchQuery,
 	type ReviewGetByIdResponseDto,
@@ -19,16 +19,16 @@ type Constructor = {
 	storage: Storage;
 };
 
-class ReviewsApi extends BaseHTTPApi {
+class RouteDetailsApi extends BaseHTTPApi {
 	public constructor({ baseUrl, http, storage }: Constructor) {
 		super({ baseUrl, http, path: APIPath.REVIEWS, storage });
 	}
 
-	public async create(
+	public async createReview(
 		payload: ReviewRequestDto,
 	): Promise<APIResponse<ReviewGetByIdResponseDto>> {
 		const response = await this.load<APIResponse<ReviewGetByIdResponseDto>>(
-			this.getFullEndpoint(ReviewsApiPath.ROOT, {}),
+			this.getFullEndpoint(RoutesApiPath.ROOT, {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,
@@ -44,7 +44,7 @@ class ReviewsApi extends BaseHTTPApi {
 		query?: ReviewGetAllSearchQuery,
 	): Promise<APIResponse<ReviewGetByIdResponseDto[]>> {
 		const response = await this.load<APIResponse<ReviewGetByIdResponseDto[]>>(
-			this.getFullEndpoint(ReviewsApiPath.ROOT, {}),
+			this.getFullEndpoint(RoutesApiPath.ROOT, {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: false,
@@ -57,4 +57,4 @@ class ReviewsApi extends BaseHTTPApi {
 	}
 }
 
-export { ReviewsApi };
+export { RouteDetailsApi };

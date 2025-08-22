@@ -2,8 +2,10 @@ import { useCallback } from "react";
 
 import { Button, Modal, TextArea } from "~/libs/components/components.js";
 import { useAppForm } from "~/libs/hooks/hooks.js";
-import { reviewCreateValidationSchema } from "~/modules/reviews/reviews.js";
-import { type ReviewRequestDto } from "~/modules/reviews/reviews.js";
+import {
+	reviewCreateValidationSchema,
+	type ReviewRequestDto,
+} from "~/modules/route-details/route-details.js";
 
 import { DEFAULT_CREATE_REVIEW_PAYLOAD } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";

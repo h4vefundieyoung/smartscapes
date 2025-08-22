@@ -18,10 +18,7 @@ import {
 	pointOfInterestDetailsReducer,
 	pointsOfInterestReducer,
 } from "~/modules/points-of-interest/points-of-interest.js";
-import {
-	reviewApi,
-	reducer as reviewReducer,
-} from "~/modules/reviews/reviews.js";
+import { routeDetailsApi } from "~/modules/route-details/route-details.js";
 import { reducer as routeReducer, routesApi } from "~/modules/routes/routes.js";
 import { userApi } from "~/modules/users/users.js";
 
@@ -41,7 +38,7 @@ class Store {
 		return {
 			authApi,
 			pointOfInterestApi,
-			reviewApi,
+			routeDetailsApi,
 			routesApi,
 			storage,
 			toastNotifier,
@@ -66,7 +63,6 @@ class Store {
 				location: locationReducer,
 				pointOfInterestDetails: pointOfInterestDetailsReducer,
 				pointsOfInterest: pointsOfInterestReducer,
-				review: reviewReducer,
 				route: routeReducer,
 			},
 		});

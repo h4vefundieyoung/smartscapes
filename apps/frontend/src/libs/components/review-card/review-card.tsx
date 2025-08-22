@@ -1,5 +1,5 @@
 import { Avatar } from "~/libs/components/components.js";
-import { type ReviewGetByIdResponseDto } from "~/modules/reviews/reviews.js";
+import { type ReviewGetByIdResponseDto } from "~/modules/route-details/route-details.js";
 
 import styles from "./styles.module.css";
 
@@ -8,17 +8,10 @@ type Properties = {
 };
 
 const ReviewCard = ({ review }: Properties): React.JSX.Element => {
-	const avatarUser = {
-		avatarUrl: review.user.avatarUrl,
-		firstName: review.user.firstName,
-		id: review.user.id,
-		lastName: review.user.lastName,
-	};
-
 	return (
 		<li className={styles["card"]}>
 			<div className={styles["head"]}>
-				<Avatar size={48} user={avatarUser} />
+				<Avatar size={48} user={review.user} />
 				<div className={styles["username"]}>
 					{review.user.firstName} {review.user.lastName}
 				</div>

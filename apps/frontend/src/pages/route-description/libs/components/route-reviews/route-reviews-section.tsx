@@ -6,44 +6,37 @@ import {
 	ReviewCard,
 } from "~/libs/components/components.js";
 import {
-	useAppDispatch,
-	useAppSelector,
-	useEffect,
-} from "~/libs/hooks/hooks.js";
-import {
-	actions as reviewActions,
+	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
-} from "~/modules/reviews/reviews.js";
+} from "~/modules/route-details/route-details.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
+	isAuthenticatedUser: boolean;
+	items: ReviewGetByIdResponseDto[];
+	onCreate: (payload: ReviewRequestDto) => void;
 	routeId: number;
 };
 
-const RouteReviewsSection = ({ routeId }: Properties): React.JSX.Element => {
-	const dispatch = useAppDispatch();
-
-	const isAuthenticatedUser = useAppSelector(({ auth }) =>
-		Boolean(auth.authenticatedUser),
-	);
-	const items = useAppSelector(({ review }) => review.items);
+const RouteReviewsSection = ({
+	isAuthenticatedUser,
+	items,
+	onCreate,
+	routeId,
+}: Properties): React.JSX.Element => {
 	const [isCreateReviewOpen, setIsCreateReviewOpen] = useState<boolean>(false);
 
 	const handleModalToggle = useCallback(() => {
 		setIsCreateReviewOpen((previous) => !previous);
 	}, []);
 
-	useEffect(() => {
-		void dispatch(reviewActions.getAll({ routeId }));
-	}, [dispatch, routeId]);
-
 	const handleCreate = useCallback(
 		(payload: ReviewRequestDto): void => {
-			void dispatch(reviewActions.create(payload)).unwrap();
+			onCreate(payload);
 			setIsCreateReviewOpen(false);
 		},
-		[dispatch],
+		[onCreate],
 	);
 
 	return (

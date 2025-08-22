@@ -90,7 +90,6 @@ export {
 	reviewGetAllSearchQueryValidationSchema,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
-	ReviewsApiPath,
 } from "./modules/reviews/reviews.js";
 export {
 	type RouteConstructRequestDto,

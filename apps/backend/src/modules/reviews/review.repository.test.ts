@@ -7,7 +7,7 @@ import { ReviewEntity } from "./review.entity.js";
 import { ReviewModel } from "./review.model.js";
 import { ReviewRepository } from "./review.repository.js";
 
-describe("ReviewRepository (knex-mock-client, no fakeQB)", () => {
+describe("ReviewRepository", () => {
 	let reviewRepository: ReviewRepository;
 	let databaseTracker: Tracker;
 

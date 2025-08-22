@@ -1,9 +1,11 @@
-import { Model } from "objection";
+import { Model, type QueryBuilder } from "objection";
 
+import { FileFolderName } from "~/libs/enums/enums.js";
 import { DatabaseTableName } from "~/libs/modules/database/database.js";
 import { type LineStringGeometry } from "~/libs/types/types.js";
 
 import { CategoryModel } from "../categories/category.model.js";
+import { FileModel } from "../files/files.model.js";
 import { PointsOfInterestModel } from "../points-of-interest/points-of-interest.model.js";
 
 class RouteModel extends Model {
@@ -19,6 +21,17 @@ class RouteModel extends Model {
 			},
 			modelClass: CategoryModel,
 			relation: Model.ManyToManyRelation,
+		},
+		images: {
+			filter: (query: QueryBuilder<FileModel>): void => {
+				query.where("folder", FileFolderName.ROUTES);
+			},
+			join: {
+				from: "routes.id",
+				to: "files.entityId",
+			},
+			modelClass: FileModel,
+			relation: this.HasManyRelation,
 		},
 		pois: {
 			join: {
@@ -50,6 +63,8 @@ class RouteModel extends Model {
 	public geometry!: LineStringGeometry;
 
 	public id!: number;
+
+	public imagesUrl!: null | string[];
 
 	public name!: string;
 

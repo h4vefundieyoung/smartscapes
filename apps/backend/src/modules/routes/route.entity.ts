@@ -13,6 +13,8 @@ class RouteEntity implements Entity {
 
 	private id: null | number;
 
+	private imagesUrl: null | string[];
+
 	private name: string;
 
 	private pois: {
@@ -27,6 +29,7 @@ class RouteEntity implements Entity {
 		duration,
 		geometry,
 		id,
+		imagesUrl,
 		name,
 		pois,
 	}: {
@@ -36,6 +39,7 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: null | number;
+		imagesUrl: null | string[];
 		name: string;
 		pois: {
 			id: number;
@@ -50,6 +54,7 @@ class RouteEntity implements Entity {
 		this.description = description;
 		this.pois = pois;
 		this.createdByUserId = createdByUserId;
+		this.imagesUrl = imagesUrl;
 	}
 
 	public static initialize(data: {
@@ -59,6 +64,7 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
+		imagesUrl: null | string[];
 		name: string;
 		pois: {
 			id: number;
@@ -72,6 +78,7 @@ class RouteEntity implements Entity {
 			duration: data.duration,
 			geometry: data.geometry,
 			id: data.id,
+			imagesUrl: data.imagesUrl,
 			name: data.name,
 			pois: data.pois,
 		});
@@ -83,6 +90,7 @@ class RouteEntity implements Entity {
 		duration,
 		geometry,
 		id,
+		imagesUrl,
 		name,
 		pois,
 	}: {
@@ -91,6 +99,7 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
+		imagesUrl: null | string[];
 		name: string;
 		pois: {
 			id: number;
@@ -104,6 +113,7 @@ class RouteEntity implements Entity {
 			duration,
 			geometry,
 			id,
+			imagesUrl,
 			name,
 			pois,
 		});
@@ -136,6 +146,7 @@ class RouteEntity implements Entity {
 			duration,
 			geometry,
 			id: null,
+			imagesUrl: null,
 			name,
 			pois,
 		});
@@ -147,6 +158,7 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
+		imagesUrl: null | string[];
 		name: string;
 		pois: {
 			id: number;
@@ -159,6 +171,7 @@ class RouteEntity implements Entity {
 			duration: this.duration,
 			geometry: this.geometry,
 			id: this.id as number,
+			imagesUrl: this.imagesUrl,
 			name: this.name,
 			pois: this.pois,
 		};
@@ -194,6 +207,7 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
+		imagesUrl: null | string[];
 		name: string;
 		pois: {
 			id: number;
@@ -207,6 +221,7 @@ class RouteEntity implements Entity {
 			duration: this.duration,
 			geometry: this.geometry,
 			id: this.id as number,
+			imagesUrl: this.imagesUrl,
 			name: this.name,
 			pois: this.pois,
 		};

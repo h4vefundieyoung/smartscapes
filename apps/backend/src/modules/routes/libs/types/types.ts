@@ -1,4 +1,5 @@
 export {
+	type FileUploadResponseDto,
 	type RouteConstructRequestDto,
 	type RouteCreateRequestDto,
 	type RouteFindAllOptions,

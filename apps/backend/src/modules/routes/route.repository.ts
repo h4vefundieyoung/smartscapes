@@ -46,7 +46,7 @@ class RouteRepository implements Repository {
 				"created_by_user_id",
 			]);
 
-		return RouteEntity.initialize(result);
+		return RouteEntity.initializeNew(result);
 	}
 
 	public async delete(id: number): Promise<boolean> {
@@ -62,9 +62,11 @@ class RouteRepository implements Repository {
 
 		const query = this.routesModel
 			.query()
-			.withGraphFetched("pois")
-			.modifyGraph("pois", (builder) => {
-				builder.select("points_of_interest.id", "routes_to_pois.visit_order");
+			.withGraphFetched("pois(selectPoiIdOrder)")
+			.modifiers({
+				selectPoiIdOrder(builder) {
+					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
+				},
 			})
 			.select([
 				"routes.id",
@@ -74,10 +76,21 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
 				"routes.created_by_user_id",
+				this.routesModel.raw(`
+				COALESCE(
+					(
+					SELECT json_agg(files.url)
+					FROM files
+					WHERE files.entity_id = routes.id
+						AND files.folder = 'routes'
+					),
+					'[]'
+				) as "imagesUrl"
+				`),
 			])
 			.modify((builder) => {
 				if (options?.name) {
-					builder.whereILike("name", `%${options.name.trim()}%`);
+					builder.whereILike("routes.name", `%${options.name.trim()}%`);
 				}
 			});
 
@@ -115,12 +128,6 @@ class RouteRepository implements Repository {
 	public async findById(id: number): Promise<null | RouteEntity> {
 		const route = await this.routesModel
 			.query()
-			.withGraphFetched("pois(selectPoiIdOrder)")
-			.modifiers({
-				selectPoiIdOrder(builder) {
-					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
-				},
-			})
 			.select([
 				"routes.id",
 				"routes.name",
@@ -129,7 +136,24 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
 				"routes.created_by_user_id",
+				this.routesModel.raw(`
+				COALESCE(
+					(
+					SELECT json_agg(files.url)
+					FROM files
+					WHERE files.entity_id = routes.id
+						AND files.folder = 'routes'
+					),
+					'[]'
+				) as "imagesUrl"
+				`),
 			])
+			.withGraphFetched("pois(selectPoiIdOrder)")
+			.modifiers({
+				selectPoiIdOrder(builder) {
+					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
+				},
+			})
 			.where("routes.id", id)
 			.first();
 

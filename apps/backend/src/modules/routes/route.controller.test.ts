@@ -100,6 +100,10 @@ describe("Route controller", () => {
 		duration: 4.56,
 		geometry: mockGeometry,
 		id: FIRST_POI_ID,
+		imagesUrl: [
+			"https://s3.amazonaws.com/test/1.png",
+			"https://s3.amazonaws.com/test/2.png",
+		],
 		name: "Test Route",
 		pois: [
 			{ id: FIRST_POI_ID, visitOrder: FIRST_VISIT_ORDER },

@@ -6,6 +6,7 @@ type RouteGetAllItemResponseDto = {
 	duration: number;
 	geometry: LineStringGeometry;
 	id: number;
+	imagesUrl: null | string[];
 	name: string;
 	pois: {
 		id: number;

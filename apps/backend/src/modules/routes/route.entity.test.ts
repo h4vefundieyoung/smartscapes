@@ -21,6 +21,10 @@ describe("RouteEntity", () => {
 			] as Coordinates[],
 			type: "LineString",
 		} satisfies LineStringGeometry,
+		imagesUrl: [
+			"https://s3.amazonaws.com/test/1.png",
+			"https://s3.amazonaws.com/test/2.png",
+		],
 		name: "Routes 2 Test Name",
 		pois: [
 			{ id: 1, visitOrder: 0 },

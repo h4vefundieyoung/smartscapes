@@ -1,3 +1,5 @@
+import { type MultipartFile } from "@fastify/multipart";
+
 import { APIPath, HTTPCode, PermissionKey } from "~/libs/enums/enums.js";
 import { checkHasPermission, setRateLimit } from "~/libs/hooks/hooks.js";
 import {
@@ -10,6 +12,7 @@ import { type PlannedPathResponseDto } from "~/modules/planned-paths/libs/types/
 
 import { RoutesApiPath } from "./libs/enums/enums.js";
 import {
+	type FileUploadResponseDto,
 	type RouteConstructRequestDto,
 	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
@@ -154,6 +157,13 @@ class RouteController extends BaseController {
 			path: RoutesApiPath.ROOT,
 			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 			validation: { body: routesCreateValidationSchema },
+		});
+
+		this.addRoute({
+			handler: this.uploadImage.bind(this),
+			method: "POST",
+			path: RoutesApiPath.$ID_IMAGE,
+			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 		});
 
 		this.addRoute({
@@ -604,6 +614,65 @@ class RouteController extends BaseController {
 
 		return {
 			payload: { data: route },
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /routes/{id}/image:
+	 *   post:
+	 *     summary: Upload an image
+	 *     description: Upload an image to the route
+	 *     tags:
+	 *       - Route
+	 *     security:
+	 *       - bearerAuth: []
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         multipart/form-data:
+	 *           schema:
+	 *             type: object
+	 *             required:
+	 *               - file
+	 *             properties:
+	 *               file:
+	 *                 type: string
+	 *                 format: binary
+	 *                 description: File to upload (image/jpeg or image/png)
+	 *     responses:
+	 *       201:
+	 *         description: Image uploaded succesfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   $ref: '#/components/schemas/FileUploadResponseDto'
+	 */
+
+	public async uploadImage(
+		options: APIHandlerOptions<{
+			body: {
+				file: MultipartFile;
+			};
+			params: { id: string };
+		}>,
+	): Promise<APIHandlerResponse<FileUploadResponseDto>> {
+		const id = Number(options.params.id);
+
+		const image = await this.routeService.uploadImage(id, options.body.file);
+
+		return {
+			payload: { data: image },
 			status: HTTPCode.OK,
 		};
 	}

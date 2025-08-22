@@ -128,9 +128,12 @@ describe("UserRouteRepository", () => {
 		});
 	});
 
-	describe("findAllByUserId", () => {
-		it("should find all routes for user", async () => {
-			const result = await repository.findAllByUserId(1);
+	describe("findMany", () => {
+		it("should find multiple routes", async () => {
+			const result = (await repository.findByFilter(
+				{ userId: 1 },
+				{ multiple: true },
+			)) as UserRouteEntity[];
 
 			assert.strictEqual(Array.isArray(result), true);
 			assert.strictEqual(result.length, 1);
@@ -139,12 +142,14 @@ describe("UserRouteRepository", () => {
 		});
 	});
 
-	describe("findByRouteId", () => {
-		it("should find route by route id", async () => {
-			const result = await repository.findByRouteId(7);
+	describe("findOne", () => {
+		it("should find single route", async () => {
+			const result = (await repository.findByFilter({
+				routeId: 7,
+			})) as UserRouteEntity;
 
 			assert.strictEqual(result instanceof UserRouteEntity, true);
-			assert.strictEqual(result?.toObject().routeId, 7);
+			assert.strictEqual(result.toObject().routeId, 7);
 		});
 	});
 });

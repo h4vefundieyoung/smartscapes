@@ -1,4 +1,5 @@
 import { HTTPCode } from "~/libs/enums/enums.js";
+import { getCurrentIsoDate } from "~/libs/helpers/helpers.js";
 import { type LineStringGeometry, type Service } from "~/libs/types/types.js";
 
 import { type RouteService } from "../routes/route.service.js";
@@ -7,7 +8,10 @@ import {
 	UserRouteStatus,
 } from "./libs/enums/enum.js";
 import { UserRouteError } from "./libs/exeptions/exeptions.js";
-import { type UserRouteResponseDto } from "./libs/types/type.js";
+import {
+	type UserRouteResponseDto,
+	type UserRouteStatusType,
+} from "./libs/types/type.js";
 import { UserRouteEntity } from "./user-route.entity.js";
 import { type UserRouteRepository } from "./user-route.repository.js";
 
@@ -40,7 +44,7 @@ class UserRouteService implements Service {
 			userId,
 		});
 
-		await this.ensureIsNotDublicateRoute(userId, geometry);
+		await this.ensureIsNotDuplicateRoute(routeId, userId);
 
 		const createdRoute = await this.userRouteRepository.create(createdData);
 
@@ -56,27 +60,31 @@ class UserRouteService implements Service {
 
 		const userRoute = await this.getByRouteId(routeId);
 
-		this.ensureUserIsOwner(userRoute, userId);
+		this.ensureUserIsOwner(userRoute.userId, userId);
 
-		this.ensureReadyToFinish(userRoute);
+		this.ensureReadyToFinish(userRoute.status);
 
 		const updatedData = UserRouteEntity.initialize({
 			...userRoute,
 			actualGeometry,
+			completedAt: getCurrentIsoDate(),
 			status: UserRouteStatus.COMPLETED,
 		});
 
-		const updated = (await this.userRouteRepository.patch(
+		const updatedRoute = (await this.userRouteRepository.patch(
 			userRoute.id,
 			userId,
 			updatedData,
 		)) as UserRouteEntity;
 
-		return updated.toObject();
+		return updatedRoute.toObject();
 	}
 
 	public async getAllByUserId(userId: number): Promise<UserRouteResponseDto[]> {
-		const userRoutes = await this.userRouteRepository.findAllByUserId(userId);
+		const userRoutes = (await this.userRouteRepository.findByFilter(
+			{ userId },
+			{ multiple: true },
+		)) as UserRouteEntity[];
 
 		return userRoutes.map((item) => item.toObject());
 	}
@@ -89,13 +97,15 @@ class UserRouteService implements Service {
 
 		const userRoute = await this.getByRouteId(routeId);
 
-		this.ensureUserIsOwner(userRoute, userId);
+		this.ensureUserIsOwner(userRoute.userId, userId);
 
 		await this.ensureUserIsNotOnActiveRoute(userId);
 
 		const updatedData = UserRouteEntity.initialize({
 			...userRoute,
 			actualGeometry: userRoute.plannedGeometry,
+			completedAt: null,
+			startedAt: getCurrentIsoDate(),
 			status: UserRouteStatus.ACTIVE,
 		});
 
@@ -108,16 +118,19 @@ class UserRouteService implements Service {
 		return updatedRoute.toObject();
 	}
 
-	private async ensureIsNotDublicateRoute(
+	private async ensureIsNotDuplicateRoute(
+		routeId: number,
 		userId: number,
-		geometry: LineStringGeometry,
 	): Promise<void> {
-		const isDublicateRoute = await this.userRouteRepository.hasDublicateRoute(
-			userId,
-			geometry,
+		const userRoutes = await this.userRouteRepository.findByFilter(
+			{
+				routeId,
+				userId,
+			},
+			{ multiple: true },
 		);
 
-		if (isDublicateRoute) {
+		if (Array.isArray(userRoutes) && userRoutes.length > 0) {
 			throw new UserRouteError({
 				message: UserRouteExeptionMessage.USER_ROUTE_ALREADY_EXISTS,
 				status: HTTPCode.FORBIDDEN,
@@ -125,8 +138,8 @@ class UserRouteService implements Service {
 		}
 	}
 
-	private ensureReadyToFinish(userRoute: UserRouteResponseDto): void {
-		if (userRoute.status !== UserRouteStatus.ACTIVE) {
+	private ensureReadyToFinish(status: UserRouteStatusType): void {
+		if (status !== UserRouteStatus.ACTIVE) {
 			throw new UserRouteError({
 				message: UserRouteExeptionMessage.ROUTE_CANNOT_BE_FINISHED,
 				status: HTTPCode.FORBIDDEN,
@@ -135,10 +148,15 @@ class UserRouteService implements Service {
 	}
 
 	private async ensureUserIsNotOnActiveRoute(userId: number): Promise<void> {
-		const isOnActiveRoute =
-			await this.userRouteRepository.hasActiveRoute(userId);
+		const userRoutes = await this.userRouteRepository.findByFilter(
+			{
+				status: UserRouteStatus.ACTIVE,
+				userId,
+			},
+			{ multiple: true },
+		);
 
-		if (isOnActiveRoute) {
+		if (Array.isArray(userRoutes) && userRoutes.length > 0) {
 			throw new UserRouteError({
 				message: UserRouteExeptionMessage.USER_ALREADY_ON_ACTIVE_STATUS,
 				status: HTTPCode.CONFLICT,
@@ -146,11 +164,8 @@ class UserRouteService implements Service {
 		}
 	}
 
-	private ensureUserIsOwner(
-		userRoute: UserRouteResponseDto,
-		userId: number,
-	): void {
-		if (userRoute.userId !== userId) {
+	private ensureUserIsOwner(userRouteUserId: number, userId: number): void {
+		if (userRouteUserId !== userId) {
 			throw new UserRouteError({
 				message: UserRouteExeptionMessage.USER_ROUTE_NOT_OWNED,
 				status: HTTPCode.FORBIDDEN,
@@ -159,7 +174,7 @@ class UserRouteService implements Service {
 	}
 
 	private async getByRouteId(routeId: number): Promise<UserRouteResponseDto> {
-		const userRoute = await this.userRouteRepository.findByRouteId(routeId);
+		const userRoute = await this.userRouteRepository.findByFilter({ routeId });
 
 		if (!userRoute) {
 			throw new UserRouteError({
@@ -168,7 +183,7 @@ class UserRouteService implements Service {
 			});
 		}
 
-		return userRoute.toObject();
+		return (userRoute as UserRouteEntity).toObject();
 	}
 }
 

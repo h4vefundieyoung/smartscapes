@@ -1,4 +1,4 @@
-import { CoordinatesValidationRule } from "./coordinates-validation-rule.js";
+import { CoordinatesValidationRule } from "./coordinates-validation-rule.enum.js";
 
 const CoordinatesValidationMessage = {
 	INVALID_COORDINATES: `Location must have at least ${String(CoordinatesValidationRule.MIN_COORDINATES_COUNT)} coordinates.`,

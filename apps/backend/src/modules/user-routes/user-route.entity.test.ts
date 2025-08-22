@@ -84,14 +84,14 @@ describe("UserRouteEntity", () => {
 	});
 
 	describe("toNewObject", () => {
-		it("should return object without id and timestamps", () => {
+		it("should return object without id", () => {
 			const entity = UserRouteEntity.initialize(mockData);
 
 			const result = entity.toNewObject();
 
 			assert.strictEqual("id" in result, false);
-			assert.strictEqual("startedAt" in result, false);
-			assert.strictEqual("completedAt" in result, false);
+			assert.strictEqual("startedAt" in result, true);
+			assert.strictEqual("completedAt" in result, true);
 			assert.strictEqual(typeof result.routeId, "number");
 			assert.strictEqual(typeof result.userId, "number");
 			assert.strictEqual(typeof result.status, "string");

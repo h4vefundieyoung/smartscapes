@@ -97,15 +97,19 @@ class UserRouteEntity implements Entity {
 
 	public toNewObject(): {
 		actualGeometry: LineStringGeometry;
+		completedAt: null | string;
 		plannedGeometry: LineStringGeometry;
 		routeId: number;
+		startedAt: null | string;
 		status: UserRouteStatusType;
 		userId: number;
 	} {
 		return {
 			actualGeometry: this.actualGeometry,
+			completedAt: this.completedAt,
 			plannedGeometry: this.plannedGeometry,
 			routeId: this.routeId,
+			startedAt: this.startedAt,
 			status: this.status as UserRouteStatusType,
 			userId: this.userId,
 		};

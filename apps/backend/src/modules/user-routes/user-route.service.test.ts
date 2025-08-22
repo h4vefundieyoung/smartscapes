@@ -34,12 +34,8 @@ describe("UserRouteService", () => {
 
 	const mockRepository = {
 		create: () => Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
-		findAllByUserId: () =>
-			Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
-		findByRouteId: () =>
-			Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
-		hasActiveRoute: () => Promise.resolve(false),
-		hasDublicateRoute: () => Promise.resolve(false),
+		findMany: () => Promise.resolve([]),
+		findOne: () => Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
 		patch: () => Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
 	} as unknown as UserRouteRepository;
 
@@ -75,7 +71,7 @@ describe("UserRouteService", () => {
 			});
 
 			const mockRepositoryWithActive = Object.assign({}, mockRepository, {
-				findByRouteId: () =>
+				findOne: () =>
 					Promise.resolve(UserRouteEntity.initialize(mockActiveRoute)),
 				patch: () =>
 					Promise.resolve(
@@ -107,15 +103,35 @@ describe("UserRouteService", () => {
 				userId: 1,
 			};
 
+			const mockRepositoryWithInactive = Object.assign({}, mockRepository, {
+				findOne: () =>
+					Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
+			}) as unknown as UserRouteRepository;
+
+			const serviceWithInactive = new UserRouteService(
+				mockRepositoryWithInactive,
+				mockRouteService,
+			);
+
 			await assert.rejects(async () => {
-				await service.finish(payload);
+				await serviceWithInactive.finish(payload);
 			}, UserRouteError);
 		});
 	});
 
 	describe("getAllByUserId", () => {
 		it("should get all routes for user", async () => {
-			const result = await service.getAllByUserId(1);
+			const mockRepositoryWithRoutes = Object.assign({}, mockRepository, {
+				findMany: () =>
+					Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
+			}) as unknown as UserRouteRepository;
+
+			const serviceWithRoutes = new UserRouteService(
+				mockRepositoryWithRoutes,
+				mockRouteService,
+			);
+
+			const result = await serviceWithRoutes.getAllByUserId(1);
 
 			assert.strictEqual(Array.isArray(result), true);
 			assert.strictEqual(result.length, 1);
@@ -131,7 +147,9 @@ describe("UserRouteService", () => {
 			};
 
 			const mockRepositoryWithActive = Object.assign({}, mockRepository, {
-				hasActiveRoute: () => Promise.resolve(false),
+				findMany: () => Promise.resolve([]),
+				findOne: () =>
+					Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
 				patch: () =>
 					Promise.resolve(
 						UserRouteEntity.initialize(
@@ -162,7 +180,10 @@ describe("UserRouteService", () => {
 			};
 
 			const mockRepositoryWithActive = Object.assign({}, mockRepository, {
-				hasActiveRoute: () => Promise.resolve(true),
+				findMany: () =>
+					Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
+				findOne: () =>
+					Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
 			}) as unknown as UserRouteRepository;
 
 			const serviceWithActive = new UserRouteService(

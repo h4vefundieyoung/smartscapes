@@ -128,7 +128,7 @@ describe("UserRouteRepository", () => {
 		});
 	});
 
-	describe("findMany", () => {
+	describe("findByFilter", () => {
 		it("should find multiple routes", async () => {
 			const result = (await repository.findByFilter(
 				{ userId: 1 },
@@ -142,7 +142,7 @@ describe("UserRouteRepository", () => {
 		});
 	});
 
-	describe("findOne", () => {
+	describe("findByFilter single", () => {
 		it("should find single route", async () => {
 			const result = (await repository.findByFilter({
 				routeId: 7,

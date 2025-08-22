@@ -13,11 +13,13 @@ import styles from "./styles.module.css";
 const MapContext = createContext<MapClient | null>(null);
 
 type Properties = {
+	center?: Coordinates;
 	children?: React.ReactNode;
 	markers?: { coordinates: Coordinates }[];
 };
 
 const MapProvider = ({
+	center,
 	children,
 	markers = [],
 }: Properties): React.JSX.Element => {
@@ -57,6 +59,14 @@ const MapProvider = ({
 
 		client.addMarkers(markers);
 	}, [markers]);
+
+	useEffect(() => {
+		if (!center) {
+			return;
+		}
+
+		mapClientReference.current.flyTo(center);
+	}, [center]);
 
 	return (
 		<MapContext.Provider value={mapClientReference.current}>

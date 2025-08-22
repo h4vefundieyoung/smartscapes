@@ -54,6 +54,7 @@ const PointsOfInterestDetails = (): null | React.JSX.Element => {
 						{
 							content: (
 								<MapProvider
+									center={[longitude, latitude]}
 									markers={[
 										{
 											coordinates: [longitude, latitude],

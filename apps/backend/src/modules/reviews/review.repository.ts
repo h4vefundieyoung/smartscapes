@@ -41,13 +41,11 @@ class ReviewRepository implements Repository {
 					builder.clearSelect().select("files.url as url");
 				},
 				selectUser(builder) {
-					builder
-						.clearSelect()
-						.select(
-							"users.id",
-							"users.first_name as firstName",
-							"users.last_name as lastName",
-						);
+					builder.select(
+						"users.id",
+						"users.first_name as firstName",
+						"users.last_name as lastName",
+					);
 				},
 			})
 			.select(
@@ -59,7 +57,7 @@ class ReviewRepository implements Repository {
 			)
 			.orderBy("reviews.createdAt", SortingOrder.DESC);
 
-		if (typeof routeId === "number") {
+		if (routeId) {
 			queryBuilder.where("reviews.route_id", routeId);
 		}
 

@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { type RouteService } from "../routes/route.service.js";
+import { type UserAuthResponseDto } from "../users/users.js";
 import {
 	type ReviewGetAllItemResponseDto,
 	type ReviewGetByIdResponseDto,
@@ -76,7 +77,10 @@ describe("ReviewService", () => {
 		userId: 10,
 	};
 
-	const currentUser = {
+	const currentUser: Pick<
+		UserAuthResponseDto,
+		"avatarUrl" | "firstName" | "id" | "lastName"
+	> = {
 		avatarUrl: null,
 		firstName: "John",
 		id: 10,

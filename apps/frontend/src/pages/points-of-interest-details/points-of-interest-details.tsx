@@ -22,6 +22,7 @@ import {
 import {
 	actions as pointOfInterestActions,
 	type PointOfInterestPatchRequestDto,
+	type PointsOfInterestResponseDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 import { NotFound } from "~/pages/not-found/not-found.js";
 
@@ -91,6 +92,9 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 		return <Loader />;
 	}
 
+	const { description, name } =
+		pointsOfInterestDetails as PointsOfInterestResponseDto;
+
 	return (
 		<main className={styles["container"]}>
 			<div className={styles["header-container"]}>
@@ -109,9 +113,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 					</>
 				) : (
 					<>
-						<h2 className={styles["header"]}>
-							{pointsOfInterestDetails?.name}
-						</h2>
+						<h2 className={styles["header"]}>{name}</h2>
 						{hasEditPermissions && (
 							<div className={styles["edit-button-container"]}>
 								<Button label="Edit" onClick={handleToggleEditMode} />
@@ -131,9 +133,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 					name="description"
 				/>
 			) : (
-				<p className={styles["description"]}>
-					{pointsOfInterestDetails?.description}
-				</p>
+				<p className={styles["description"]}>{description}</p>
 			)}
 		</main>
 	);

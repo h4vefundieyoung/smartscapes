@@ -1,5 +1,6 @@
 export { checkHasPermission } from "./check-has-permission.helper.js";
 export { combineClassNames } from "./combine-class-names.helper.js";
+export { getCssValue } from "./get-css-value.helper.js";
 export { getFormattedDate } from "./get-formatted-date.helper.js";
 export { getPermittedNavigationItems } from "./get-permitted-navigation-items.helper.js";
 export { getUrlWithQueryString } from "./get-url-with-query-string.helper.js";

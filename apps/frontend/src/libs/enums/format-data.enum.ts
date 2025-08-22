@@ -1,5 +1,5 @@
-const FormatData = {
-	DATE_DD_MM_YYYY: "dd MMM yyyy",
+const DataFormat = {
+	DATE_DD_MMM_YYYY: "dd MMM yyyy",
 };
 
-export { FormatData };
+export { DataFormat };

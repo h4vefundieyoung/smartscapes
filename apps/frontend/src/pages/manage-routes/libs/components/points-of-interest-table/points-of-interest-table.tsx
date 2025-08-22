@@ -1,5 +1,5 @@
 import { Button, CreatePOIModal, Table } from "~/libs/components/components.js";
-import { DataStatus, FormatData } from "~/libs/enums/enums.js";
+import { DataFormat, DataStatus } from "~/libs/enums/enums.js";
 import { getFormattedDate } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
@@ -56,7 +56,7 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 		...item,
 		createdAt: getFormattedDate(
 			new Date(item.createdAt),
-			FormatData.DATE_DD_MM_YYYY,
+			DataFormat.DATE_DD_MMM_YYYY,
 		),
 	}));
 

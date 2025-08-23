@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+import {
+	CoordinatesValidationMessage,
+	CoordinatesValidationRule,
+} from "../../../../libs/enums/enums.js";
 import { parseToFloat } from "../../../../libs/helpers/helpers.js";
 import {
 	PointsOfInterestValidationMessage,
@@ -16,12 +20,12 @@ const pointsOfInterestQuery = z
 				z
 					.number()
 					.min(
-						PointsOfInterestValidationRule.LATITUDE_MIN,
-						PointsOfInterestValidationMessage.LATITUDE_MIN,
+						CoordinatesValidationRule.LATITUDE_MIN,
+						CoordinatesValidationMessage.LATITUDE_MIN,
 					)
 					.max(
-						PointsOfInterestValidationRule.LATITUDE_MAX,
-						PointsOfInterestValidationMessage.LATITUDE_MAX,
+						CoordinatesValidationRule.LATITUDE_MAX,
+						CoordinatesValidationMessage.LATITUDE_MAX,
 					),
 			)
 			.optional(),
@@ -33,12 +37,12 @@ const pointsOfInterestQuery = z
 				z
 					.number()
 					.min(
-						PointsOfInterestValidationRule.LONGITUDE_MIN,
-						PointsOfInterestValidationMessage.LONGITUDE_MIN,
+						CoordinatesValidationRule.LONGITUDE_MIN,
+						CoordinatesValidationMessage.LONGITUDE_MIN,
 					)
 					.max(
-						PointsOfInterestValidationRule.LONGITUDE_MAX,
-						PointsOfInterestValidationMessage.LONGITUDE_MAX,
+						CoordinatesValidationRule.LONGITUDE_MAX,
+						CoordinatesValidationMessage.LONGITUDE_MAX,
 					),
 			)
 			.optional(),

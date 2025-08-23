@@ -4,6 +4,7 @@ export { type IconName } from "./icon-name.type.js";
 export { type Location } from "./location.type.js";
 export { type NavigationItem } from "./navigation-item.type.js";
 export { type NavigationItemsGroup } from "./navigation-items-group.type.js";
+export { type RouteLine } from "./route-line.type.js";
 export { type SelectOption } from "./select-option.type.js";
 export {
 	type APIErrorResponse,
@@ -11,6 +12,7 @@ export {
 	type APIValidationErrorDetail,
 	type Coordinates,
 	type FileUploadResponseDto,
+	type LineStringGeometry,
 	type PaginationMeta,
 	type PointGeometry,
 	type ValidationSchema,

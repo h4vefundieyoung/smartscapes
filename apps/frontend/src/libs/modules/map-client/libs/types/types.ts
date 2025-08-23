@@ -1,6 +1,5 @@
 export { type MapMarkerOptions } from "./map-marker-options.type.js";
 export { type MapMarker } from "./map-marker.type.js";
-export { type Coordinates, type LineStringGeometry } from "@smartscapes/shared";
 export {
 	type ControlPosition,
 	type GeolocateControlOptions,

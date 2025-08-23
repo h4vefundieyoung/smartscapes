@@ -2,7 +2,6 @@ import { Icon, Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { configureString } from "~/libs/helpers/helpers.js";
 import { useCallback } from "~/libs/hooks/hooks.js";
-import { type ValueOf } from "~/libs/types/types.js";
 import { type PointsOfInterestResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 
 import styles from "./styles.module.css";
@@ -24,7 +23,7 @@ const PointOfInterestCard = ({
 
 	const poiDetailsPath = configureString(AppRoute.POINTS_OF_INTEREST_$ID, {
 		id: String(id),
-	}) as ValueOf<typeof AppRoute>;
+	});
 
 	return (
 		<li className={styles["container"]}>

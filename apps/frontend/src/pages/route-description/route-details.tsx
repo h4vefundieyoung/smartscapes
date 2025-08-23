@@ -172,6 +172,7 @@ const RouteDetails = (): React.JSX.Element => {
 					<p className={styles["description"]}>{description}</p>
 				)}
 				<PointOfInterestSection pointOfInterests={pois} />
+				<PointOfInterestSection pointOfInterests={pois} />
 			</main>
 		</>
 	);

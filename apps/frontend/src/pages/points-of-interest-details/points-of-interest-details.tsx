@@ -1,9 +1,8 @@
-import image1 from "~/assets/images/route-details/placeholder-image-1.png";
 import image2 from "~/assets/images/route-details/placeholder-image-2.png";
 import image3 from "~/assets/images/route-details/placeholder-image-3.png";
 import {
 	Button,
-	ImageGallery,
+	FeatureGallery,
 	Input,
 	Loader,
 	MapProvider,
@@ -51,7 +50,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 
 	const hasEditPermissions = Boolean(
 		user &&
-		checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
+			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
 	);
 
 	const handleToggleEditMode = useCallback(() => {
@@ -151,8 +150,6 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 				]}
 			/>
 
-			<ImageGallery images={[image1, image2, image3]} />
-			
 			{isEditMode ? (
 				<TextArea
 					control={control}

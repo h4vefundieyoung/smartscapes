@@ -1,6 +1,6 @@
 import {
 	Button,
-	ImageGallery,
+	FeatureGallery,
 	Input,
 	Loader,
 	TextArea,
@@ -24,6 +24,7 @@ import {
 } from "~/modules/routes/routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
+import { PointOfInterestSection } from "./libs/components/components.js";
 import { ROUTE_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
@@ -106,7 +107,7 @@ const RouteDetails = (): React.JSX.Element => {
 		return <Loader />;
 	}
 
-	const { description, images, name } = route as RouteGetByIdResponseDto;
+	const { description, images, name, pois } = route as RouteGetByIdResponseDto;
 
 	return (
 		<>
@@ -136,12 +137,18 @@ const RouteDetails = (): React.JSX.Element => {
 						</>
 					)}
 				</div>
-				<ImageGallery
+				<FeatureGallery
 					handleDelete={handleDeleteImage}
-					images={images}
 					isEditMode={isEditMode}
+					slides={images.map((image) => {
+						return {
+							content: image.url,
+							id: image.id,
+							type: "image",
+						};
+					})}
 				/>
-				{isEditMode ? (
+				{isEditMode && (
 					<>
 						<input
 							accept="image/*"
@@ -150,9 +157,9 @@ const RouteDetails = (): React.JSX.Element => {
 							style={{ display: "none" }}
 							type="file"
 						/>
-						<Button label="Upload an image" onClick={handleTriggerFileUpload} />
+						<Button label="Upload image" onClick={handleTriggerFileUpload} />
 					</>
-				) : null}
+				)}
 				{isEditMode ? (
 					<TextArea
 						control={control}
@@ -163,6 +170,7 @@ const RouteDetails = (): React.JSX.Element => {
 				) : (
 					<p className={styles["description"]}>{description}</p>
 				)}
+				<PointOfInterestSection pointOfInterests={pois} />
 			</main>
 		</>
 	);

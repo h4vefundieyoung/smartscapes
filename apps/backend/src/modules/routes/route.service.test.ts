@@ -35,6 +35,8 @@ const FIRST_COORDINATE = 30.5234;
 const SECOND_COORDINATE = 50.4501;
 const FIRST_VISIT_ORDER = 0;
 const SECOND_VISIT_ORDER = 1;
+const FIRST_POI_NAME = "SUP Kayak Club 4 Storony";
+const SECOND_POI_NAME = "River Grill, Rusanivska Embankment";
 const FIRST_ENTITY_ID = 1;
 const SECOND_ENTITY_ID = 2;
 
@@ -121,8 +123,12 @@ describe("RouteService", () => {
 		],
 		name: "Test Route",
 		pois: [
-			{ id: FIRST_POI_ID, visitOrder: FIRST_VISIT_ORDER },
-			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
+			{ id: FIRST_POI_ID, name: FIRST_POI_NAME, visitOrder: FIRST_VISIT_ORDER },
+			{
+				id: SECOND_POI_ID,
+				name: SECOND_POI_NAME,
+				visitOrder: SECOND_VISIT_ORDER,
+			},
 		],
 	};
 
@@ -144,8 +150,12 @@ describe("RouteService", () => {
 		],
 		name: "Test Route",
 		pois: [
-			{ id: FIRST_POI_ID, visitOrder: FIRST_VISIT_ORDER },
-			{ id: SECOND_POI_ID, visitOrder: SECOND_VISIT_ORDER },
+			{ id: FIRST_POI_ID, name: FIRST_POI_NAME, visitOrder: FIRST_VISIT_ORDER },
+			{
+				id: SECOND_POI_ID,
+				name: SECOND_POI_NAME,
+				visitOrder: SECOND_VISIT_ORDER,
+			},
 		],
 	};
 

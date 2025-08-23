@@ -71,6 +71,7 @@ class RouteModel extends Model {
 
 	public pois!: {
 		id: number;
+		name: string;
 		visitOrder: number;
 	}[];
 }

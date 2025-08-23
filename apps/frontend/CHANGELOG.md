@@ -1,5 +1,44 @@
 # Changelog
 
+## [1.37.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.36.0...@smartscapes/frontend-v1.37.0) (2025-08-22)
+
+
+### Features
+
+* **backend/frontend/shared:** implement admin dashboard issue ss-189 ([#465](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/465)) ([6c01549](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/6c015496d43eaf26feda0e68bab118f5b507d25a))
+
+
+### Bug Fixes
+
+* **frontend/backend:** fix upload max size message and carousel wheel event ss-434 ([#456](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/456)) ([2e939d1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2e939d1c96ad6a969509260a156f1f66e4375beb))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.28.0 to 1.29.0
+
+## [1.36.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.35.1...@smartscapes/frontend-v1.36.0) (2025-08-21)
+
+
+### Features
+
+* **frontend/backend:** load and display pois list on route details page ss-390 ([#417](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/417)) ([adb34d0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/adb34d07f18f60ed1229abdcc02cea9c1b40e1a7))
+* **frontend:** add create route modal ss-360 ([#442](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/442)) ([5cf4420](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/5cf4420ae90e199859cbef61d6cb39e140e00c78))
+
+
+### Bug Fixes
+
+* **frontend:** apply higher z index value for sidebar then routes panel ss-485 ([#488](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/488)) ([65ae090](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/65ae090fa1a6ce2b27bda765703890ab4909fd44))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.27.1 to 1.28.0
+
 ## [1.35.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.35.0...@smartscapes/frontend-v1.35.1) (2025-08-21)
 
 

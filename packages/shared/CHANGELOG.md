@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.29.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.28.0...@smartscapes/shared-v1.29.0) (2025-08-22)
+
+
+### Features
+
+* **backend/frontend/shared:** implement admin dashboard issue ss-189 ([#465](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/465)) ([6c01549](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/6c015496d43eaf26feda0e68bab118f5b507d25a))
+
+## [1.28.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.27.1...@smartscapes/shared-v1.28.0) (2025-08-21)
+
+
+### Features
+
+* **frontend/backend:** load and display pois list on route details page ss-390 ([#417](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/417)) ([adb34d0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/adb34d07f18f60ed1229abdcc02cea9c1b40e1a7))
+
 ## [1.27.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.27.0...@smartscapes/shared-v1.27.1) (2025-08-21)
 
 

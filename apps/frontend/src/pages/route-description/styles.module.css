@@ -1,4 +1,5 @@
 /* TODO: these styles should be moved to the common layout */
+
 .container {
 	display: flex;
 	flex-direction: column;

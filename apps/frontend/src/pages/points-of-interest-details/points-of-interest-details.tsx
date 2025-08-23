@@ -1,7 +1,10 @@
-import image1 from "~/assets/images/route-details/placeholder-image-1.png";
 import image2 from "~/assets/images/route-details/placeholder-image-2.png";
 import image3 from "~/assets/images/route-details/placeholder-image-3.png";
-import { ImageGallery, Loader } from "~/libs/components/components.js";
+import {
+	FeatureGallery,
+	Loader,
+	MapProvider,
+} from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -35,24 +38,42 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 		return <Loader />;
 	}
 
+	if (!pointsOfInterestDetails) {
+		return <></>;
+	}
+
+	const [latitude, longitude] = pointsOfInterestDetails.location.coordinates;
+
 	return (
 		<>
 			<main className={styles["container"]}>
-				{pointsOfInterestDetails && (
-					<>
-						<h2 className={styles["header"]}>{pointsOfInterestDetails.name}</h2>
-						<ImageGallery
-							images={[
-								{ id: 1, url: image1 },
-								{ id: 2, url: image2 },
-								{ id: 3, url: image3 },
-							]}
-							isEditMode={false}
-						/>
-						<p className={styles["description"]}>
-							{pointsOfInterestDetails.description}
-						</p>
-					</>
+				<h2 className={styles["header"]}>{pointsOfInterestDetails.name}</h2>
+
+				<FeatureGallery
+					isEditMode={false}
+					slides={[
+						{
+							content: (
+								<MapProvider
+									center={[longitude, latitude]}
+									markers={[
+										{
+											coordinates: [longitude, latitude],
+										},
+									]}
+								/>
+							),
+							type: "component",
+						},
+						{ content: image2, id: 1, type: "image" },
+						{ content: image3, id: 2, type: "image" },
+					]}
+				/>
+
+				{pointsOfInterestDetails.description && (
+					<p className={styles["description"]}>
+						{pointsOfInterestDetails.description}
+					</p>
 				)}
 			</main>
 		</>

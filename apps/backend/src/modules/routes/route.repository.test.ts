@@ -48,7 +48,7 @@ describe("RouteRepository", () => {
 			},
 		],
 		name: "Test Route",
-		pois: [{ id: 1, visitOrder: 1 }],
+		pois: [{ id: 1, name: "Test POI", visitOrder: 1 }],
 	};
 
 	const mockRouteList = {
@@ -68,7 +68,7 @@ describe("RouteRepository", () => {
 			},
 		],
 		name: mockRoute.name,
-		pois: [] as { id: number; visitOrder: number }[],
+		pois: [] as { id: number; name: string; visitOrder: number }[],
 	};
 
 	const createMockRouteEntity = (): RouteEntity =>

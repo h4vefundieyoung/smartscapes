@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.32.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.31.0...@smartscapes/backend-v1.32.0) (2025-08-22)
+
+
+### Features
+
+* **backend/frontend/shared:** implement admin dashboard issue ss-189 ([#465](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/465)) ([6c01549](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/6c015496d43eaf26feda0e68bab118f5b507d25a))
+
+
+### Bug Fixes
+
+* **frontend/backend:** fix upload max size message and carousel wheel event ss-434 ([#456](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/456)) ([2e939d1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2e939d1c96ad6a969509260a156f1f66e4375beb))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.28.0 to 1.29.0
+
+## [1.31.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.30.0...@smartscapes/backend-v1.31.0) (2025-08-21)
+
+
+### Features
+
+* **frontend/backend:** load and display pois list on route details page ss-390 ([#417](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/417)) ([adb34d0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/adb34d07f18f60ed1229abdcc02cea9c1b40e1a7))
+
+
+### Bug Fixes
+
+* **backend:** add routes to the name in find all routes repository ss-487 ([#489](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/489)) ([61c9de5](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/61c9de5eb77f1f3487d18465c533faba9b13eb0d))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.27.1 to 1.28.0
+
 ## [1.30.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.29.0...@smartscapes/backend-v1.30.0) (2025-08-21)
 
 

@@ -10,6 +10,7 @@ import {
 import { RoutesApiPath } from "./libs/enums/enums.js";
 import {
 	type PatchActionPayload,
+	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
 	type RouteGetByIdResponseDto,
 } from "./libs/types/types.js";
@@ -23,6 +24,22 @@ type Constructor = {
 class RoutesApi extends BaseHTTPApi {
 	public constructor({ baseUrl, http, storage }: Constructor) {
 		super({ baseUrl, http, path: APIPath.ROUTES, storage });
+	}
+
+	public async create(
+		payload: RouteCreateRequestDto,
+	): Promise<APIResponse<RouteGetByIdResponseDto>> {
+		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
+			this.getFullEndpoint("/", {}),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "POST",
+				payload: JSON.stringify(payload),
+			},
+		);
+
+		return await response.json();
 	}
 
 	public async getAll(

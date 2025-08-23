@@ -494,7 +494,7 @@ class PointsOfInterestController extends BaseController {
 	 *         name: id
 	 *         required: true
 	 *         schema:
-	 *           type: integer
+	 *           type: string
 	 *     requestBody:
 	 *       required: true
 	 *       content:
@@ -510,7 +510,7 @@ class PointsOfInterestController extends BaseController {
 	 *                 nullable: true
 	 *                 example: A large park in New York City
 	 *     responses:
-	 *       '200':
+	 *        200:
 	 *         description: Point of interest updated successfully
 	 *         content:
 	 *           application/json:

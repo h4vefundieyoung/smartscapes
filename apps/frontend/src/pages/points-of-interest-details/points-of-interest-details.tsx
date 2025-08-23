@@ -6,6 +6,7 @@ import {
 	ImageGallery,
 	Input,
 	Loader,
+	MapProvider,
 	TextArea,
 } from "~/libs/components/components.js";
 import { DataStatus, PermissionKey } from "~/libs/enums/enums.js";
@@ -50,7 +51,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 
 	const hasEditPermissions = Boolean(
 		user &&
-			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
+		checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
 	);
 
 	const handleToggleEditMode = useCallback(() => {
@@ -96,6 +97,12 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 		pointsOfInterestDetails as PointsOfInterestResponseDto;
 	const hasDescription = Boolean(description);
 
+	if (!pointsOfInterestDetails) {
+		return <></>;
+	}
+
+	const [latitude, longitude] = pointsOfInterestDetails.location.coordinates;
+
 	return (
 		<main className={styles["container"]}>
 			<div className={styles["header-container"]}>
@@ -124,8 +131,28 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 				)}
 			</div>
 
-			<ImageGallery images={[image1, image2, image3]} />
+			<FeatureGallery
+				slides={[
+					{
+						content: (
+							<MapProvider
+								center={[longitude, latitude]}
+								markers={[
+									{
+										coordinates: [longitude, latitude],
+									},
+								]}
+							/>
+						),
+						type: "component",
+					},
+					{ content: image2, type: "image" },
+					{ content: image3, type: "image" },
+				]}
+			/>
 
+			<ImageGallery images={[image1, image2, image3]} />
+			
 			{isEditMode ? (
 				<TextArea
 					control={control}

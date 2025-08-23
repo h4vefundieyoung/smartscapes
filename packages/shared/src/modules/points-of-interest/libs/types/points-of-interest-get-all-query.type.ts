@@ -1,6 +1,6 @@
 import { type PaginationQuery } from "../../../../libs/types/types.js";
 
-type PointsOfInterestQueryRequest = PaginationQuery & {
+type PointsOfInterestGetAllQuery = PaginationQuery & {
 	latitude?: number;
 	longitude?: number;
 	name?: string;
@@ -8,4 +8,4 @@ type PointsOfInterestQueryRequest = PaginationQuery & {
 	search?: string;
 };
 
-export { type PointsOfInterestQueryRequest };
+export { type PointsOfInterestGetAllQuery };

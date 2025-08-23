@@ -372,7 +372,7 @@ describe("Route controller", () => {
 	});
 
 	describe("Controller Method Tests - Protected Operations", () => {
-		it("CREATE - should work correctly when called with admin user (correct permission)", async () => {
+		it("create should work correctly when called with admin user (correct permission)", async () => {
 			const createRouteMockData = {
 				body: {
 					createdByUserId: mockAdminUser.id,
@@ -404,7 +404,7 @@ describe("Route controller", () => {
 			});
 		});
 
-		it("PATCH - should work correctly when called with admin user (correct permission)", async () => {
+		it("patch should work correctly when called with admin user (correct permission)", async () => {
 			const updatedRoute = {
 				...mockRoute,
 				name: "Updated Route",
@@ -438,7 +438,7 @@ describe("Route controller", () => {
 			});
 		});
 
-		it("DELETE - should work correctly when called with admin user (correct permission)", async () => {
+		it("delete should work correctly when called with admin user (correct permission)", async () => {
 			const deleteRouteMockData = {
 				body: {},
 				params: { id: "1" },

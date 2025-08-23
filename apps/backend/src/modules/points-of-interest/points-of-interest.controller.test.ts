@@ -4,7 +4,7 @@ import { describe, it } from "node:test";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
-import { type PointsOfInterestQueryRequest } from "./libs/types/type.js";
+import { type PointsOfInterestGetAllQuery } from "./libs/types/types.js";
 import { PointsOfInterestController } from "./points-of-interest.controller.js";
 import { type PointsOfInterestService } from "./points-of-interest.service.js";
 
@@ -25,6 +25,7 @@ describe("PointsOfInterestController", () => {
 	};
 
 	const mockPointOfInterest = {
+		createdAt: "2024-01-01T00:00:00Z",
 		description: "Point Of Interest Test Description",
 		id: 1,
 		location: {
@@ -34,11 +35,21 @@ describe("PointsOfInterestController", () => {
 		name: "Point Of Interest Test Name",
 	};
 
+	const mockPaginationMeta = {
+		currentPage: 1,
+		itemsPerPage: 1,
+		total: 1,
+		totalPages: 1,
+	};
+
 	it("findAll should return all points of interest", async () => {
 		const pointsOfInterest = [mockPointOfInterest];
 
 		const mockFindAll: PointsOfInterestService["findAll"] = () => {
-			return Promise.resolve({ items: pointsOfInterest });
+			return Promise.resolve({
+				items: pointsOfInterest,
+				meta: mockPaginationMeta,
+			});
 		};
 
 		const pointsOfInterestService = {
@@ -60,6 +71,7 @@ describe("PointsOfInterestController", () => {
 		assert.deepStrictEqual(result, {
 			payload: {
 				data: pointsOfInterest,
+				meta: mockPaginationMeta,
 			},
 			status: HTTPCode.OK,
 		});
@@ -103,14 +115,17 @@ describe("PointsOfInterestController", () => {
 		const RADIUS_IN_KM = 5;
 
 		const mockFindAll: PointsOfInterestService["findAll"] = (
-			options: null | PointsOfInterestQueryRequest,
+			options: null | PointsOfInterestGetAllQuery,
 		) => {
 			assert.ok(options, "Options should be defined");
 			assert.strictEqual(Number(options.latitude), TEST_LATITUDE);
 			assert.strictEqual(Number(options.longitude), TEST_LONGITUDE);
 			assert.strictEqual(Number(options.radius), RADIUS_IN_KM);
 
-			return Promise.resolve({ items: pointsOfInterest });
+			return Promise.resolve({
+				items: pointsOfInterest,
+				meta: mockPaginationMeta,
+			});
 		};
 
 		const pointsOfInterestService = {
@@ -136,6 +151,7 @@ describe("PointsOfInterestController", () => {
 		assert.deepStrictEqual(result, {
 			payload: {
 				data: pointsOfInterest,
+				meta: mockPaginationMeta,
 			},
 			status: HTTPCode.OK,
 		});
@@ -175,7 +191,7 @@ describe("PointsOfInterestController", () => {
 		const TEST_NAME = "Point Of Interest Test Name";
 
 		const mockFindAll: PointsOfInterestService["findAll"] = (
-			options: null | PointsOfInterestQueryRequest,
+			options: null | PointsOfInterestGetAllQuery,
 		) => {
 			assert.ok(options, "Options should be defined");
 			assert.strictEqual(options.name, TEST_NAME);
@@ -184,7 +200,7 @@ describe("PointsOfInterestController", () => {
 				poi.name.toLowerCase().includes(options.name?.toLowerCase() ?? ""),
 			);
 
-			return Promise.resolve({ items: filtered });
+			return Promise.resolve({ items: filtered, meta: mockPaginationMeta });
 		};
 
 		const pointsOfInterestService = {
@@ -208,6 +224,7 @@ describe("PointsOfInterestController", () => {
 		assert.deepStrictEqual(result, {
 			payload: {
 				data: pointsOfInterest,
+				meta: mockPaginationMeta,
 			},
 			status: HTTPCode.OK,
 		});
@@ -310,26 +327,19 @@ describe("PointsOfInterestController", () => {
 			},
 		];
 
-		const mockFindPaginated: PointsOfInterestService["findPaginated"] = (
-			options,
-		) => {
+		const mockFindAll: PointsOfInterestService["findAll"] = (options) => {
 			assert.ok(options, "Options should be defined");
 			assert.strictEqual(options.page, 1);
 			assert.strictEqual(options.perPage, 10);
 
 			return Promise.resolve({
-				data: mockPoints,
-				meta: {
-					currentPage: 1,
-					itemsPerPage: 10,
-					total: mockPoints.length,
-					totalPages: 1,
-				},
+				items: mockPoints,
+				meta: mockPaginationMeta,
 			});
 		};
 
 		const pointsOfInterestService = {
-			findPaginated: mockFindPaginated,
+			findAll: mockFindAll,
 		} as PointsOfInterestService;
 
 		const controller = new PointsOfInterestController(
@@ -344,22 +354,15 @@ describe("PointsOfInterestController", () => {
 			user: null,
 		});
 
-		const expected = {
+		const expectedResult = {
 			payload: {
-				data: {
-					data: mockPoints,
-					meta: {
-						currentPage: 1,
-						itemsPerPage: 10,
-						total: mockPoints.length,
-						totalPages: 1,
-					},
-				},
+				data: mockPoints,
+				meta: mockPaginationMeta,
 			},
 			status: HTTPCode.OK,
 		};
 
-		assert.deepStrictEqual(result, expected);
+		assert.deepStrictEqual(result, expectedResult);
 	});
 
 	it("findAll should return paginated points of interest with search parameter", async () => {
@@ -376,16 +379,14 @@ describe("PointsOfInterestController", () => {
 			},
 		];
 
-		const mockFindPaginated: PointsOfInterestService["findPaginated"] = (
-			options,
-		) => {
+		const mockFindAll: PointsOfInterestService["findAll"] = (options) => {
 			assert.ok(options, "Options should be defined");
 			assert.strictEqual(options.page, 1);
 			assert.strictEqual(options.perPage, 10);
 			assert.strictEqual(options.search, "Central");
 
 			return Promise.resolve({
-				data: mockPoints,
+				items: mockPoints,
 				meta: {
 					currentPage: 1,
 					itemsPerPage: 10,
@@ -396,7 +397,7 @@ describe("PointsOfInterestController", () => {
 		};
 
 		const pointsOfInterestService = {
-			findPaginated: mockFindPaginated,
+			findAll: mockFindAll,
 		} as PointsOfInterestService;
 
 		const controller = new PointsOfInterestController(
@@ -411,21 +412,19 @@ describe("PointsOfInterestController", () => {
 			user: null,
 		});
 
-		const expected = {
+		const expectedResult = {
 			payload: {
-				data: {
-					data: mockPoints,
-					meta: {
-						currentPage: 1,
-						itemsPerPage: 10,
-						total: mockPoints.length,
-						totalPages: 1,
-					},
+				data: mockPoints,
+				meta: {
+					currentPage: 1,
+					itemsPerPage: 10,
+					total: mockPoints.length,
+					totalPages: 1,
 				},
 			},
 			status: HTTPCode.OK,
 		};
 
-		assert.deepStrictEqual(result, expected);
+		assert.deepStrictEqual(result, expectedResult);
 	});
 });

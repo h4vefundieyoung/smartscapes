@@ -4,13 +4,13 @@ import { useEffect, useMemo } from "~/libs/hooks/hooks.js";
 
 const DEBOUNCE_DELAY_MS = 300;
 
-const useDebouncedCallback = <T extends unknown[]>(
-	callback: (...arguments_: T) => void,
+const useDebouncedFunction = <T extends unknown[]>(
+	function_: (...arguments_: T) => void,
 	delay = DEBOUNCE_DELAY_MS,
 ): DebouncedFunction<(...arguments_: T) => void> => {
 	const debouncedFunction = useMemo(
-		() => debounce(callback, delay),
-		[callback, delay],
+		() => debounce(function_, delay),
+		[function_, delay],
 	);
 
 	useEffect(() => {
@@ -22,4 +22,4 @@ const useDebouncedCallback = <T extends unknown[]>(
 	return debouncedFunction;
 };
 
-export { useDebouncedCallback };
+export { useDebouncedFunction };

@@ -110,7 +110,7 @@ class UserService implements Service {
 
 		if (!existingUser.isVisibleProfile) {
 			throw new UserError({
-				message: UserExceptionMessage.USER_PROFILE_NOT_PUBLIC,
+				message: UserExceptionMessage.PROFILE_NOT_PUBLIC,
 				status: HTTPCode.FORBIDDEN,
 			});
 		}

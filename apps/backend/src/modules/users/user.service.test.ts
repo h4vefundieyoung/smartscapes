@@ -241,7 +241,7 @@ describe("UserService", () => {
 			(error: unknown) => {
 				assert.strictEqual(
 					(error as Error).message,
-					UserExceptionMessage.USER_PROFILE_NOT_PUBLIC,
+					UserExceptionMessage.PROFILE_NOT_PUBLIC,
 				);
 
 				return true;

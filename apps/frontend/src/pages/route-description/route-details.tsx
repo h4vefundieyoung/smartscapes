@@ -3,7 +3,7 @@ import image2 from "~/assets/images/route-details/placeholder-image-2.png";
 import image3 from "~/assets/images/route-details/placeholder-image-3.png";
 import {
 	Button,
-	ImageGallery,
+	FeatureGallery,
 	Input,
 	Loader,
 	TextArea,
@@ -156,7 +156,13 @@ const RouteDetails = (): React.JSX.Element => {
 						</>
 					)}
 				</div>
-				<ImageGallery images={[image1, image2, image3]} />
+				<FeatureGallery
+					slides={[
+						{ content: image1, type: "image" },
+						{ content: image2, type: "image" },
+						{ content: image3, type: "image" },
+					]}
+				/>
 				{isEditMode ? (
 					<TextArea
 						control={control}

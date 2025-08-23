@@ -60,6 +60,10 @@
 		flex-direction: column;
 	}
 
+	.delete-button {
+		max-width: 300px;
+	}
+
 	.right {
 		display: flex;
 		padding-bottom: 10px;

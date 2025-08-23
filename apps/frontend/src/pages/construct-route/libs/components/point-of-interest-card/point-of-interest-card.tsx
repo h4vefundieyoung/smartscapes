@@ -2,13 +2,13 @@ import { Icon, Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { configureString } from "~/libs/helpers/helpers.js";
 import { useCallback } from "~/libs/hooks/hooks.js";
-import { type PointsOfInterestResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
+import { type PointsOfInterestGetAllItemResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
 	onClick: (id: number) => void;
-	pointOfInterest: PointsOfInterestResponseDto;
+	pointOfInterest: PointsOfInterestGetAllItemResponseDto;
 };
 
 const PointOfInterestCard = ({

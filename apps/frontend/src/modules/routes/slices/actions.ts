@@ -2,10 +2,14 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
-import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 import {
-	type PointsOfInterestQueryRequest,
-	type PointsOfInterestResponseDto,
+	type APIResponse,
+	type AsyncThunkConfig,
+	type PaginationMeta,
+} from "~/libs/types/types.js";
+import {
+	type PointsOfInterestGetAllItemResponseDto,
+	type PointsOfInterestGetAllQuery,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
 import { RouteNotification } from "../libs/enums/enums.js";
@@ -18,35 +22,36 @@ import {
 	type RouteGetByIdResponseDto,
 } from "../libs/types/types.js";
 import { name as constructRouteSliceName } from "./construct-route.slice.js";
-import { name as routeSliceName } from "./routes.slice.js";
+import { name as routeDetailsSliceName } from "./route-details.slice.js";
+import { name as routesSliceName } from "./routes.slice.js";
 
 const create = createAsyncThunk<
 	APIResponse<RouteGetByIdResponseDto>,
 	RouteCreateRequestDto,
 	AsyncThunkConfig
->(`${routeSliceName}/create`, async (payload, { extra }) => {
+>(`${routesSliceName}/create`, async (payload, { extra }) => {
 	const { routesApi } = extra;
 
 	return await routesApi.create(payload);
 });
 
-const getRouteById = createAsyncThunk<
+const getById = createAsyncThunk<
 	APIResponse<RouteGetByIdResponseDto>,
 	number,
 	AsyncThunkConfig
->(`${routeSliceName}/get-route-by-id`, async (id, { extra }) => {
+>(`${routeDetailsSliceName}/get-by-id`, (id, { extra }) => {
 	const { routesApi } = extra;
 
-	return await routesApi.getRouteById(id);
+	return routesApi.getById(id);
 });
 
-const patchRoute = createAsyncThunk<
+const patch = createAsyncThunk<
 	APIResponse<RouteGetByIdResponseDto>,
 	PatchActionPayload,
 	AsyncThunkConfig
->(`${routeSliceName}/patch-route`, async (payload, { extra }) => {
+>(`${routeDetailsSliceName}/patch`, async (payload, { extra }) => {
 	const { routesApi } = extra;
-	const patchResult = await routesApi.patchRoute(payload);
+	const patchResult = await routesApi.patch(payload);
 	toastNotifier.showSuccess(RouteNotification.UPDATED);
 
 	return patchResult;
@@ -56,7 +61,7 @@ const getAll = createAsyncThunk<
 	APIResponse<RouteGetByIdResponseDto[]>,
 	RouteFindAllOptions | undefined,
 	AsyncThunkConfig
->(`${routeSliceName}/get-all`, async (options, { extra }) => {
+>(`${routesSliceName}/get-all`, async (options, { extra }) => {
 	const { routesApi } = extra;
 
 	return await routesApi.getAll(options);
@@ -67,7 +72,7 @@ const preserveCreateRouteFormData = createAsyncThunk<
 	Partial<RouteCreateRequestDto>,
 	AsyncThunkConfig
 >(
-	`${routeSliceName}/preserve-create-route-form-data`,
+	`${routesSliceName}/preserve-create-route-form-data`,
 	async (formData, { extra }) => {
 		const { storage } = extra;
 
@@ -84,7 +89,7 @@ const restoreCreateRouteFormData = createAsyncThunk<
 	null | Partial<RouteCreateRequestDto>,
 	unknown,
 	AsyncThunkConfig
->(`${routeSliceName}/restore-create-route-form-data`, async (_, { extra }) => {
+>(`${routesSliceName}/restore-create-route-form-data`, async (_, { extra }) => {
 	const { storage } = extra;
 
 	const savedData = await storage.get<string>(
@@ -108,7 +113,7 @@ const discardCreateRouteFormData = createAsyncThunk<
 	unknown,
 	unknown,
 	AsyncThunkConfig
->(`${routeSliceName}/discard-create-route-form-data`, async (_, { extra }) => {
+>(`${routesSliceName}/discard-create-route-form-data`, async (_, { extra }) => {
 	const { storage } = extra;
 	await storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
 });
@@ -127,24 +132,24 @@ const constructRoute = createAsyncThunk<
 	return response;
 });
 
-const getPointsOfInterest = createAsyncThunk<
-	APIResponse<PointsOfInterestResponseDto[]>,
-	PointsOfInterestQueryRequest,
+const findPointsOfInterest = createAsyncThunk<
+	APIResponse<PointsOfInterestGetAllItemResponseDto[], PaginationMeta>,
+	PointsOfInterestGetAllQuery,
 	AsyncThunkConfig
 >(`${constructRouteSliceName}/load-all`, async (query, { extra }) => {
 	const { pointOfInterestApi } = extra;
 
-	return await pointOfInterestApi.getAll(query);
+	return await pointOfInterestApi.findAll(query);
 });
 
 export {
 	constructRoute,
 	create,
 	discardCreateRouteFormData,
+	findPointsOfInterest,
 	getAll,
-	getPointsOfInterest,
-	getRouteById,
-	patchRoute,
+	getById,
+	patch,
 	preserveCreateRouteFormData,
 	restoreCreateRouteFormData,
 };

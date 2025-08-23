@@ -2,14 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
-import { type PointsOfInterestResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
+import { type PointsOfInterestGetAllItemResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 
 import { type PlannedPathResponseDto } from "../libs/types/types.js";
-import { constructRoute, getPointsOfInterest } from "./actions.js";
+import { constructRoute, findPointsOfInterest } from "./actions.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
-	pointsOfInterest: PointsOfInterestResponseDto[];
+	pointsOfInterest: PointsOfInterestGetAllItemResponseDto[];
 	routeLineString: null | PlannedPathResponseDto;
 };
 
@@ -32,14 +32,14 @@ const { actions, name, reducer } = createSlice({
 			state.dataStatus = DataStatus.REJECTED;
 		});
 
-		builder.addCase(getPointsOfInterest.fulfilled, (state, action) => {
+		builder.addCase(findPointsOfInterest.fulfilled, (state, action) => {
 			state.pointsOfInterest = action.payload.data;
 			state.dataStatus = DataStatus.FULFILLED;
 		});
-		builder.addCase(getPointsOfInterest.pending, (state) => {
+		builder.addCase(findPointsOfInterest.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
 		});
-		builder.addCase(getPointsOfInterest.rejected, (state) => {
+		builder.addCase(findPointsOfInterest.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
 			state.pointsOfInterest = [];
 		});

@@ -12,7 +12,7 @@ import {
 	useMemo,
 } from "~/libs/hooks/hooks.js";
 import { type SelectOption } from "~/libs/types/types.js";
-import { type PointsOfInterestResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
+import { type PointsOfInterestGetAllItemResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 import { actions as routeActions } from "~/modules/routes/routes.js";
 
 import { PointOfInterestCard } from "../point-of-interest-card/point-of-interest-card.js";
@@ -20,8 +20,8 @@ import styles from "./styles.module.css";
 
 type Properties = {
 	onRemovePoi: (id: number) => void;
-	onSelectPoi: (value: PointsOfInterestResponseDto) => void;
-	pointsOfInterest: PointsOfInterestResponseDto[];
+	onSelectPoi: (value: PointsOfInterestGetAllItemResponseDto) => void;
+	pointsOfInterest: PointsOfInterestGetAllItemResponseDto[];
 };
 
 const SidePanel = ({
@@ -45,20 +45,21 @@ const SidePanel = ({
 			return;
 		}
 
-		void dispatch(routeActions.getPointsOfInterest({ name: value }));
+		void dispatch(routeActions.findPointsOfInterest({ search: value }));
 	});
 
 	const handlePoiSelectChange = useCallback(
 		(
 			option:
-				| MultiValue<SelectOption<PointsOfInterestResponseDto>>
-				| SingleValue<SelectOption<PointsOfInterestResponseDto>>,
+				| MultiValue<SelectOption<PointsOfInterestGetAllItemResponseDto>>
+				| SingleValue<SelectOption<PointsOfInterestGetAllItemResponseDto>>,
 		) => {
 			if (Array.isArray(option) || !option) {
 				return;
 			}
 
-			const { value } = option as SelectOption<PointsOfInterestResponseDto>;
+			const { value } =
+				option as SelectOption<PointsOfInterestGetAllItemResponseDto>;
 
 			onSelectPoi(value);
 		},

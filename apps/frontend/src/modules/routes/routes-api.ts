@@ -73,7 +73,7 @@ class RoutesApi extends BaseHTTPApi {
 		return await response.json();
 	}
 
-	public async getRouteById(
+	public async getById(
 		id: number,
 	): Promise<APIResponse<RouteGetByIdResponseDto>> {
 		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
@@ -87,7 +87,7 @@ class RoutesApi extends BaseHTTPApi {
 		return await response.json();
 	}
 
-	public async patchRoute({
+	public async patch({
 		id,
 		payload,
 	}: PatchActionPayload): Promise<APIResponse<RouteGetByIdResponseDto>> {

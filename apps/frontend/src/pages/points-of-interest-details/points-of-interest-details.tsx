@@ -31,13 +31,15 @@ import styles from "./styles.module.css";
 const PointsOfInterestDetails = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 
-	const { poiState, user } = useAppSelector(
-		({ auth, pointOfInterestDetails }) => ({
-			poiState: pointOfInterestDetails,
-			user: auth.authenticatedUser,
-		}),
+	const authenticatedUser = useAppSelector(
+		(state) => state.auth.authenticatedUser,
 	);
-	const { dataStatus, pointsOfInterestDetails } = poiState;
+	const dataStatus = useAppSelector(
+		(state) => state.pointOfInterestDetails.dataStatus,
+	);
+	const pointOfInterest = useAppSelector(
+		(state) => state.pointOfInterestDetails.pointOfInterest,
+	);
 
 	const { control, errors, getValues, handleValueSet } =
 		useAppForm<PointOfInterestPatchRequestDto>({
@@ -48,8 +50,11 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
 	const hasEditPermissions = Boolean(
-		user &&
-			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
+		authenticatedUser &&
+			checkHasPermission(
+				[PermissionKey.MANAGE_ROUTES],
+				authenticatedUser.group.permissions,
+			),
 	);
 
 	const handleToggleEditMode = useCallback(() => {
@@ -57,31 +62,28 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 	}, []);
 
 	const handlePatchRequest = useCallback(() => {
-		if (pointsOfInterestDetails) {
+		if (pointOfInterest) {
 			const { description, name } = getValues();
 			void dispatch(
 				pointOfInterestActions.patch({
-					id: pointsOfInterestDetails.id,
+					id: pointOfInterest.id,
 					payload: { description, name },
 				}),
 			);
 			setIsEditMode(false);
 		}
-	}, [dispatch, getValues, pointsOfInterestDetails]);
+	}, [dispatch, getValues, pointOfInterest]);
 
 	useEffect(() => {
 		void dispatch(pointOfInterestActions.getById(Number(poiId)));
 	}, [dispatch, poiId]);
 
 	useEffect(() => {
-		if (pointsOfInterestDetails) {
-			handleValueSet("name", pointsOfInterestDetails.name);
-			handleValueSet(
-				"description",
-				pointsOfInterestDetails.description as string,
-			);
+		if (pointOfInterest) {
+			handleValueSet("name", pointOfInterest.name);
+			handleValueSet("description", pointOfInterest.description as string);
 		}
-	}, [pointsOfInterestDetails, handleValueSet]);
+	}, [pointOfInterest, handleValueSet]);
 
 	if (dataStatus === DataStatus.REJECTED) {
 		return <NotFound />;
@@ -91,14 +93,14 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 		return <Loader />;
 	}
 
-	if (!pointsOfInterestDetails) {
+	if (!pointOfInterest) {
 		return <></>;
 	}
 
-	const { description, name } = pointsOfInterestDetails;
+	const { description, name } = pointOfInterest;
 	const hasDescription = Boolean(description);
 
-	const [latitude, longitude] = pointsOfInterestDetails.location.coordinates;
+	const [latitude, longitude] = pointOfInterest.location.coordinates;
 
 	return (
 		<main className={styles["container"]}>

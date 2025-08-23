@@ -7,7 +7,7 @@ import {
 	useState,
 } from "~/libs/hooks/hooks.js";
 import { type RouteLine } from "~/libs/types/types.js";
-import { type PointsOfInterestResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
+import { type PointsOfInterestGetAllItemResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 
 import { SidePanel } from "./libs/components/side-panel/side-panel.js";
 import styles from "./styles.module.css";
@@ -15,12 +15,12 @@ import styles from "./styles.module.css";
 const ConstructRoute = (): React.JSX.Element => {
 	const { routeLineString } = useAppSelector((state) => state.constructRoute);
 	const [selectedPois, setSelectedPois] = useState<
-		PointsOfInterestResponseDto[]
+		PointsOfInterestGetAllItemResponseDto[]
 	>([]);
 	const [routeLine, setRouteLine] = useState<null | RouteLine>(null);
 
 	const handleSelectPoi = useCallback(
-		(value: PointsOfInterestResponseDto): void => {
+		(value: PointsOfInterestGetAllItemResponseDto): void => {
 			if (selectedPois.some((poi) => poi.id === value.id)) {
 				return;
 			}

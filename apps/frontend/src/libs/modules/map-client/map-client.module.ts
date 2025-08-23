@@ -1,6 +1,7 @@
 import mapboxgl from "mapbox-gl";
 
 import { config } from "~/libs/modules/config/config.js";
+import { type Coordinates, type RouteLine } from "~/libs/types/types.js";
 
 import {
 	GEOLOCATE_AUTO_TRIGGER_DELAY,
@@ -15,16 +16,15 @@ import {
 	ZOOM_LEVEL,
 } from "./libs/constants/constants.js";
 import { MapControlId, MapEventType } from "./libs/enums/enums.js";
+import "mapbox-gl/dist/mapbox-gl.css";
+
 import {
 	type ControlPosition,
-	type Coordinates,
-	type LineStringGeometry,
 	type MapControl,
 	type MapMarker,
 	type MapMarkerOptions,
 	type MapOptions,
 } from "./libs/types/types.js";
-import "mapbox-gl/dist/mapbox-gl.css";
 
 class MapClient {
 	private accessToken: MapOptions["accessToken"];
@@ -196,30 +196,29 @@ class MapClient {
 		this.resizeObserver.observe(container);
 	}
 
-	public renderRoute(geometry: LineStringGeometry): void {
+	public renderRoute({ geometry, id }: RouteLine): void {
 		if (!this.map) {
 			return;
 		}
 
-		if (this.map.getLayer("route")) {
-			this.map.removeLayer("route");
+		const routeId = `${id}-route`;
+
+		const source = this.map.getSource(routeId);
+		const data = { geometry, properties: {}, type: "Feature" as const };
+
+		if (source) {
+			(source as mapboxgl.GeoJSONSource).setData(data);
+
+			return;
 		}
 
-		if (this.map.getLayer("route-outline")) {
-			this.map.removeLayer("route-outline");
-		}
-
-		if (this.map.getSource("route")) {
-			this.map.removeSource("route");
-		}
-
-		this.map.addSource("route", {
-			data: { geometry, properties: {}, type: "Feature" },
+		this.map.addSource(routeId, {
+			data,
 			type: "geojson",
 		});
 
 		this.map.addLayer({
-			id: "route-outline",
+			id: `${routeId}-outline`,
 			layout: {
 				"line-cap": "round",
 				"line-join": "round",
@@ -228,12 +227,12 @@ class MapClient {
 				"line-color": MAP_LAYER_STYLES.ROUTE_OUTLINE.LINE_COLOR,
 				"line-width": MAP_LAYER_STYLES.ROUTE_OUTLINE.LINE_WIDTH,
 			},
-			source: "route",
+			source: routeId,
 			type: "line",
 		});
 
 		this.map.addLayer({
-			id: "route",
+			id: routeId,
 			layout: {
 				"line-cap": "round",
 				"line-join": "round",
@@ -242,7 +241,7 @@ class MapClient {
 				"line-color": MAP_LAYER_STYLES.ROUTE.LINE_COLOR,
 				"line-width": MAP_LAYER_STYLES.ROUTE.LINE_WIDTH,
 			},
-			source: "route",
+			source: routeId,
 			type: "line",
 		});
 	}

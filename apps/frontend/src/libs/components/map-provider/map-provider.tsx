@@ -1,5 +1,3 @@
-import { type LineStringGeometry } from "@smartscapes/shared";
-
 import {
 	createContext,
 	useCallback,
@@ -8,7 +6,7 @@ import {
 	useState,
 } from "~/libs/hooks/hooks.js";
 import { MapClient } from "~/libs/modules/map-client/map-client.js";
-import { type Coordinates } from "~/libs/types/types.js";
+import { type Coordinates, type RouteLine } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
@@ -17,7 +15,7 @@ const MapContext = createContext<MapClient | null>(null);
 type Properties = {
 	children?: React.ReactNode;
 	markers?: { coordinates: Coordinates }[];
-	routeLine?: LineStringGeometry | undefined;
+	routeLine?: null | RouteLine;
 };
 
 const MapProvider = ({
@@ -63,14 +61,14 @@ const MapProvider = ({
 	}, [markers]);
 
 	useEffect(() => {
-		if (!routeLine) {
+		if (!isLoaded || !routeLine) {
 			return;
 		}
 
 		const client = mapClientReference.current;
 
 		client.renderRoute(routeLine);
-	}, [routeLine]);
+	}, [isLoaded, routeLine]);
 
 	return (
 		<MapContext.Provider value={mapClientReference.current}>

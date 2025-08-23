@@ -2,9 +2,11 @@ import { MapProvider } from "~/libs/components/components.js";
 import {
 	useAppSelector,
 	useCallback,
+	useEffect,
 	useMemo,
 	useState,
 } from "~/libs/hooks/hooks.js";
+import { type RouteLine } from "~/libs/types/types.js";
 import { type PointsOfInterestResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 
 import { SidePanel } from "./libs/components/side-panel/side-panel.js";
@@ -15,6 +17,7 @@ const ConstructRoute = (): React.JSX.Element => {
 	const [selectedPois, setSelectedPois] = useState<
 		PointsOfInterestResponseDto[]
 	>([]);
+	const [routeLine, setRouteLine] = useState<null | RouteLine>(null);
 
 	const handleSelectPoi = useCallback(
 		(value: PointsOfInterestResponseDto): void => {
@@ -37,10 +40,18 @@ const ConstructRoute = (): React.JSX.Element => {
 		}));
 	}, [selectedPois]);
 
+	useEffect(() => {
+		if (!routeLineString) {
+			return;
+		}
+
+		setRouteLine({ geometry: routeLineString.geometry, id: "planned" });
+	}, [routeLineString]);
+
 	return (
 		<main className={styles["main"]}>
 			<div className={styles["map"]}>
-				<MapProvider markers={markers} routeLine={routeLineString?.geometry} />
+				<MapProvider markers={markers} routeLine={routeLine} />
 			</div>
 			<SidePanel
 				onRemovePoi={handleRemovePoi}

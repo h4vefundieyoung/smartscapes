@@ -53,7 +53,7 @@ class PointsOfInterestRepository implements Repository {
 	public async findAll(
 		options: null | PointsOfInterestGetAllOptions,
 	): Promise<EntityPagination<PointsOfInterestEntity>> {
-		const { ids, latitude, longitude, search, page, perPage, radius } =
+		const { ids, latitude, longitude, page, perPage, radius, search } =
 			options ?? {};
 
 		const hasLocationFilter = longitude !== undefined && latitude !== undefined;

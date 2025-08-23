@@ -1,12 +1,10 @@
 import { Button, CreatePOIModal, Table } from "~/libs/components/components.js";
-import { DataFormat, DataStatus } from "~/libs/enums/enums.js";
-import { getFormattedDate } from "~/libs/helpers/helpers.js";
+import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
 	useCallback,
 	useEffect,
-	useMemo,
 	usePagination,
 	useState,
 } from "~/libs/hooks/hooks.js";
@@ -26,10 +24,6 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 
 	const [isCreatePOIModalOpen, setIsCreatePOIModalOpen] =
 		useState<boolean>(false);
-
-	const isPOICreated = useAppSelector(
-		(state) => state.pointsOfInterest.createStatus === DataStatus.FULFILLED,
-	);
 
 	const pointsOfInterest = useAppSelector(
 		({ pointsOfInterest }) => pointsOfInterest.data,
@@ -55,16 +49,6 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 		[dispatch],
 	);
 
-	const formattedPointsOfInterest = useMemo(() => {
-		return pointsOfInterest.map((item) => ({
-			...item,
-			createdAt: getFormattedDate(
-				new Date(item.createdAt),
-				DataFormat.DATE_DD_MMM_YYYY,
-			),
-		}));
-	}, [pointsOfInterest]);
-
 	const paginationPOIS = usePagination({
 		meta: pointsOfInterestMeta,
 		queryParameterPrefix: "poi",
@@ -83,12 +67,6 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 			}),
 		);
 	}, [dispatch, page, pageSize, isCreatePOIModalOpen]);
-
-	useEffect(() => {
-		if (isPOICreated) {
-			setIsCreatePOIModalOpen(false);
-		}
-	}, [isPOICreated]);
 
 	useEffect(() => {
 		if (createPointsOfInterestStatus === DataStatus.FULFILLED) {
@@ -115,7 +93,7 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 			/>
 			<Table
 				columns={columns}
-				data={formattedPointsOfInterest}
+				data={pointsOfInterest}
 				isLoading={pointsOfInterestStatus === DataStatus.PENDING}
 				paginationSettings={paginationPOIS}
 				totalItems={total}

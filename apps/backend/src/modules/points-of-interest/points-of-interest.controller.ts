@@ -269,9 +269,9 @@ class PointsOfInterestController extends BaseController {
 	 *       **With location parameters**: Returns points of interest within specified radius
 	 *       from the given coordinates (latitude/longitude)
 	 *
-	 *       **With name parameter**: Returns all points of interest searched by name
+	 *       **With search parameter**: Returns all points of interest searched by name
 	 *
-	 *       **With pagination parameters (page & perPage)**: Returns paginated results with metadata
+	 *       **With pagination parameters (page & perPage)**: Returns paginated result
 	 *     parameters:
 	 *       - in: query
 	 *         name: latitude
@@ -304,7 +304,7 @@ class PointsOfInterestController extends BaseController {
 	 *           Default value is 5 km if not specified.
 	 *           Must be between 0.1 and 50 km.
 	 *       - in: query
-	 *         name: name
+	 *         name: search
 	 *         schema:
 	 *           type: string
 	 *           example: "Park"
@@ -326,14 +326,6 @@ class PointsOfInterestController extends BaseController {
 	 *           pattern: '^[1-9][0-9]*$'
 	 *           example: "10"
 	 *         description: Number of items per page. When provided with page, returns paginated response.
-	 *       - in: query
-	 *         name: search
-	 *         schema:
-	 *           type: string
-	 *           minLength: 1
-	 *           maxLength: 255
-	 *           example: "Central Park"
-	 *         description: Optional search term to filter points of interest by name (used with pagination).
 	 *     responses:
 	 *       200:
 	 *         description: Successfully retrieved points of interest

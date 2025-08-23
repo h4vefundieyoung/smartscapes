@@ -38,6 +38,10 @@ const apiV1 = new BaseServerApplicationApi(
 			},
 			{
 				method: "GET",
+				path: APIPath.POINTS_OF_INTEREST,
+			},
+			{
+				method: "GET",
 				path: APIPath.POINTS_OF_INTEREST_$ID,
 			},
 			{

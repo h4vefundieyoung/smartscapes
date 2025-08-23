@@ -1,7 +1,10 @@
-type CollectionResult<Item, Meta = undefined> = (Meta extends undefined
-	? object
-	: { meta: Meta }) & {
-	items: Item[];
-};
+type CollectionResult<Item, Meta = null> = Meta extends null
+	? {
+			items: Item[];
+		}
+	: {
+			items: Item[];
+			meta: Meta;
+		};
 
 export { type CollectionResult };

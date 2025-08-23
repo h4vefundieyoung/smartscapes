@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import { type Slide } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
@@ -33,7 +35,9 @@ const FeatureGallery = ({ slides }: Properties): React.JSX.Element => {
 				{firstSlide && renderSlide(firstSlide)}
 			</div>
 			<div className={styles["right"]}>
-				{otherSlides.map((slide) => renderSlide(slide))}
+				{otherSlides.map((slide, index) => (
+					<Fragment key={index}>{renderSlide(slide)}</Fragment>
+				))}
 			</div>
 		</section>
 	);

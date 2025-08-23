@@ -11,6 +11,7 @@ export {
 	type APIValidationErrorDetail,
 	type Coordinates,
 	type FileUploadResponseDto,
+	type LineStringGeometry,
 	type PaginationMeta,
 	type PointGeometry,
 	type ValidationSchema,

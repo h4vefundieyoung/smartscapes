@@ -1,4 +1,12 @@
 .container {
 	display: flex;
 	flex: 1;
+	justify-content: center;
+}
+
+.button-container {
+	align-self: flex-end;
+	width: 4rem;
+	height: 1rem;
+	margin-bottom: 5rem;
 }

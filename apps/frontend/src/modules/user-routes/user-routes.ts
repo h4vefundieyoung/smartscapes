@@ -11,11 +11,4 @@ const userRouteApi = new UserRouteApi({
 });
 
 export { userRouteApi };
-export {
-	type UserRouteCreateRequestDto,
-	type UserRoutePatchRequestDto,
-	type UserRouteResponseDto,
-	UserRouteStatus,
-	type UserRouteStatusType,
-} from "./libs/types/types.js";
 export { actions, reducer } from "./slices/user-route.js";

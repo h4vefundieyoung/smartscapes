@@ -27,7 +27,7 @@ class UserRouteApi extends BaseHTTPApi {
 		payload: UserRouteCreateRequestDto,
 	): Promise<APIResponse<UserRouteResponseDto>> {
 		const response = await this.load<APIResponse<UserRouteResponseDto>>(
-			this.getFullEndpoint(UserRouteApiPath.ROOT, {
+			this.getFullEndpoint(UserRouteApiPath.$ID, {
 				userId: userId.toString(),
 			}),
 			{

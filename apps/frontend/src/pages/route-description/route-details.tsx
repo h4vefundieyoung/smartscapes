@@ -13,6 +13,7 @@ import { checkHasPermission } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppForm,
+	useAppNavigate,
 	useAppSelector,
 	useCallback,
 	useEffect,
@@ -24,6 +25,7 @@ import {
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
+import { actions as userRouteActions } from "~/modules/user-routes/user-routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
 import { PointOfInterestSection } from "./libs/components/components.js";
@@ -31,6 +33,9 @@ import { ROUTE_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
+	const dispatch = useAppDispatch();
+	const navigate = useAppNavigate();
+	const { id } = useParams<{ id: string }>();
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
 	const { route, user } = useAppSelector(({ auth, route }) => ({
 		route: route.route,
@@ -40,9 +45,13 @@ const RouteDetails = (): React.JSX.Element => {
 		useAppForm<RoutePatchRequestDto>({
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
 		});
-	const dispatch = useAppDispatch();
-	const { id } = useParams<{ id: string }>();
-	const dataStatus = useAppSelector(({ route }) => route.dataStatus);
+
+	const routeDataStatus = useAppSelector(({ route }) => route.dataStatus);
+
+	const userRouteCreateDataStatus = useAppSelector(
+		({ userRoute }) => userRoute.createStatus,
+	);
+
 	const hasEditPermissions = Boolean(
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
@@ -72,9 +81,30 @@ const RouteDetails = (): React.JSX.Element => {
 		}
 	}, [dispatch, setIsEditMode, route, getValues]);
 
+	const handleCreateUserRoute = useCallback(() => {
+		if (!route || !user) {
+			return;
+		}
+
+		void dispatch(
+			userRouteActions.create({
+				payload: {
+					routeId: Number(id),
+				},
+				userId: user.id,
+			}),
+		);
+	}, [dispatch, id, user, route]);
+
 	useEffect(() => {
 		void dispatch(routeActions.getRouteById(Number(id)));
 	}, [dispatch, id]);
+
+	useEffect(() => {
+		if (userRouteCreateDataStatus === DataStatus.FULFILLED) {
+			navigate(AppRoute.USER_ROUTES_$ID_MAP.replace(":id", String(id)));
+		}
+	}, [userRouteCreateDataStatus, navigate, id]);
 
 	useEffect(() => {
 		if (route) {
@@ -83,11 +113,14 @@ const RouteDetails = (): React.JSX.Element => {
 		}
 	}, [route, handleValueSet]);
 
-	if (dataStatus === DataStatus.REJECTED) {
+	if (routeDataStatus === DataStatus.REJECTED) {
 		return <NotFound />;
 	}
 
-	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
+	if (
+		routeDataStatus === DataStatus.PENDING ||
+		routeDataStatus === DataStatus.IDLE
+	) {
 		return <Loader />;
 	}
 
@@ -120,10 +153,7 @@ const RouteDetails = (): React.JSX.Element => {
 							)}
 							{hasAuthUserPermissions && (
 								<div className={styles["edit-button-container"]}>
-									<Button
-										label="Start"
-										to={AppRoute.USER_ROUTES_$ID_MAP.replace(":id", String(id))}
-									/>
+									<Button label="Start" onClick={handleCreateUserRoute} />
 								</div>
 							)}
 						</>

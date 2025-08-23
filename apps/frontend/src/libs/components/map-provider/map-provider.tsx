@@ -13,12 +13,14 @@ import styles from "./styles.module.css";
 const MapContext = createContext<MapClient | null>(null);
 
 type Properties = {
+	center?: Coordinates;
 	children?: React.ReactNode;
 	markers?: { coordinates: Coordinates }[];
 	routeLine?: null | RouteLine;
 };
 
 const MapProvider = ({
+	center,
 	children,
 	markers = [],
 	routeLine,
@@ -59,6 +61,14 @@ const MapProvider = ({
 
 		client.addMarkers(markers);
 	}, [markers]);
+
+	useEffect(() => {
+		if (!center) {
+			return;
+		}
+
+		mapClientReference.current.setCenter(center);
+	}, [center]);
 
 	useEffect(() => {
 		if (!isLoaded || !routeLine) {

@@ -3,6 +3,11 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
+import {
+	type ReviewGetAllSearchQuery,
+	type ReviewGetByIdResponseDto,
+	type ReviewRequestDto,
+} from "~/modules/reviews/reviews.js";
 
 import { RouteNotification } from "../libs/enums/enums.js";
 import {
@@ -107,11 +112,36 @@ const discardCreateRouteFormData = createAsyncThunk<
 	await storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
 });
 
+const getReviews = createAsyncThunk<
+	APIResponse<ReviewGetByIdResponseDto[]>,
+	ReviewGetAllSearchQuery | undefined,
+	AsyncThunkConfig
+>(`${routeDetailsSliceName}/get-reviews`, async (options, { extra }) => {
+	const { reviewApi } = extra;
+
+	return await reviewApi.getAll(options);
+});
+
+const createReview = createAsyncThunk<
+	APIResponse<ReviewGetByIdResponseDto>,
+	ReviewRequestDto,
+	AsyncThunkConfig
+>(`${routeDetailsSliceName}/create-review`, async (payload, { extra }) => {
+	const { reviewApi, toastNotifier } = extra;
+
+	const review = await reviewApi.create(payload);
+	toastNotifier.showSuccess("Review created successfully.");
+
+	return review;
+});
+
 export {
 	create,
+	createReview,
 	discardCreateRouteFormData,
 	getAll,
 	getById,
+	getReviews,
 	patch,
 	preserveCreateRouteFormData,
 	restoreCreateRouteFormData,

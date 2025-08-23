@@ -20,7 +20,6 @@ import {
 	useState,
 } from "~/libs/hooks/hooks.js";
 import { type ReviewRequestDto } from "~/modules/reviews/reviews.js";
-import { actions as routeDetailsActions } from "~/modules/route-details/route-details.js";
 import {
 	actions as routeActions,
 	type RoutePatchRequestDto,
@@ -41,7 +40,8 @@ const RouteDetails = (): React.JSX.Element => {
 	const dataStatus = useAppSelector(
 		({ routeDetails }) => routeDetails.dataStatus,
 	);
-
+	const reviews = useAppSelector(({ routeDetails }) => routeDetails.items);
+	const isAuthenticatedUser = Boolean(user);
 	const { control, errors, getValues, handleValueSet } =
 		useAppForm<RoutePatchRequestDto>({
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
@@ -53,9 +53,6 @@ const RouteDetails = (): React.JSX.Element => {
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
 	);
-
-	const reviews = useAppSelector(({ routeDetails }) => routeDetails.items);
-	const isAuthenticatedUser = Boolean(user);
 
 	const handleToggleEditMode = useCallback(() => {
 		setIsEditMode((isEditMode) => !isEditMode);
@@ -86,16 +83,16 @@ const RouteDetails = (): React.JSX.Element => {
 	}, [route, handleValueSet]);
 
 	useEffect(() => {
-		void dispatch(routeDetailsActions.getAll({ routeId: Number(routeId) }));
+		void dispatch(routeActions.getReviews({ routeId: Number(routeId) }));
 	}, [dispatch, routeId]);
 
 	const handleCreateReview = useCallback(
 		(payload: ReviewRequestDto): void => {
-			void dispatch(routeDetailsActions.create(payload));
+			void dispatch(routeActions.createReview(payload));
 		},
 		[dispatch],
 	);
-    
+
 	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
 		return <Loader />;
 	}
@@ -108,7 +105,7 @@ const RouteDetails = (): React.JSX.Element => {
 		return <></>;
 	}
 
-	const { description, id, name, pois } = route as RouteGetByIdResponseDto;
+	const { description, id, name, pois } = route;
 
 	const hasDescription = Boolean(description);
 

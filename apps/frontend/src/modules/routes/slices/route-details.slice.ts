@@ -8,20 +8,20 @@ import { type RouteGetByIdResponseDto } from "../libs/types/types.js";
 import { createReview, getById, getReviews, patch } from "./actions.js";
 
 type State = {
-	createStatus: ValueOf<typeof DataStatus>;
 	dataStatus: ValueOf<typeof DataStatus>;
-	fetchStatus: ValueOf<typeof DataStatus>;
-	items: ReviewGetByIdResponseDto[];
 	patchStatus: ValueOf<typeof DataStatus>;
+	reviewCreateStatus: ValueOf<typeof DataStatus>;
+	reviews: ReviewGetByIdResponseDto[];
+	reviewsDataStatus: ValueOf<typeof DataStatus>;
 	route: null | RouteGetByIdResponseDto;
 };
 
 const initialState: State = {
-	createStatus: DataStatus.IDLE,
 	dataStatus: DataStatus.IDLE,
-	fetchStatus: DataStatus.IDLE,
-	items: [],
 	patchStatus: DataStatus.IDLE,
+	reviewCreateStatus: DataStatus.IDLE,
+	reviews: [],
+	reviewsDataStatus: DataStatus.IDLE,
 	route: null,
 };
 
@@ -48,26 +48,27 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(patch.rejected, (state) => {
 			state.patchStatus = DataStatus.REJECTED;
 		});
+
 		builder.addCase(getReviews.pending, (state) => {
-			state.fetchStatus = DataStatus.PENDING;
+			state.reviewsDataStatus = DataStatus.PENDING;
 		});
 		builder.addCase(getReviews.fulfilled, (state, { payload }) => {
-			state.items = payload.data;
-			state.fetchStatus = DataStatus.FULFILLED;
+			state.reviews = payload.data;
+			state.reviewsDataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(getReviews.rejected, (state) => {
-			state.fetchStatus = DataStatus.REJECTED;
+			state.reviewsDataStatus = DataStatus.REJECTED;
 		});
 
 		builder.addCase(createReview.pending, (state) => {
-			state.createStatus = DataStatus.PENDING;
+			state.reviewCreateStatus = DataStatus.PENDING;
 		});
 		builder.addCase(createReview.fulfilled, (state, { payload }) => {
-			state.items.unshift(payload.data);
-			state.createStatus = DataStatus.FULFILLED;
+			state.reviews.unshift(payload.data);
+			state.reviewCreateStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(createReview.rejected, (state) => {
-			state.createStatus = DataStatus.REJECTED;
+			state.reviewCreateStatus = DataStatus.REJECTED;
 		});
 	},
 	initialState,

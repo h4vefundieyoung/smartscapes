@@ -40,7 +40,7 @@ const RouteDetails = (): React.JSX.Element => {
 	const dataStatus = useAppSelector(
 		({ routeDetails }) => routeDetails.dataStatus,
 	);
-	const reviews = useAppSelector(({ routeDetails }) => routeDetails.items);
+	const reviews = useAppSelector(({ routeDetails }) => routeDetails.reviews);
 	const isAuthenticatedUser = Boolean(user);
 	const { control, errors, getValues, handleValueSet } =
 		useAppForm<RoutePatchRequestDto>({

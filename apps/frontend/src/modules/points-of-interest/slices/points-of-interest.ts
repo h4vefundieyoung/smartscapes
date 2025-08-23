@@ -1,4 +1,4 @@
-import { create, findPaginated, getById } from "./actions.js";
+import { create, findAll, getById, patch } from "./actions.js";
 import { actions as poiDetailsActions } from "./points-of-interest-details.slice.js";
 import { actions } from "./points-of-interest.slice.js";
 
@@ -6,8 +6,9 @@ const allActions = {
 	...actions,
 	...poiDetailsActions,
 	create,
-	findPaginated,
+	findAll,
 	getById,
+	patch,
 };
 
 export { allActions as actions };

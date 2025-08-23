@@ -1,7 +1,11 @@
+import { type PointGeometry } from "../../../../libs/types/types.js";
 import { type RouteGetByIdResponseDto } from "../../../routes/routes.js";
-import { type PointsOfInterestResponseDto } from "./points-of-interest-response-dto.type.js";
 
-type PointsOfInterestGetByIdResponseDto = PointsOfInterestResponseDto & {
+type PointsOfInterestGetByIdResponseDto = {
+	description: null | string;
+	id: number;
+	location: PointGeometry;
+	name: string;
 	routes: Pick<RouteGetByIdResponseDto, "id" | "name">[];
 };
 

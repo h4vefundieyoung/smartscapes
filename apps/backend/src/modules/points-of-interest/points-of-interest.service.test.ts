@@ -48,20 +48,24 @@ describe("PointsOfInterestService", () => {
 		);
 
 		const result = await pointsOfInterestService.create({
-			description: mockPointOfInterest.description,
+			description: mockPointOfInterest.description ?? null,
 			location: mockPointOfInterest.location,
 			name: mockPointOfInterest.name,
 		});
 
-		assert.deepStrictEqual(result, pointOfInterestEntity.toObject());
+		assert.deepStrictEqual(result, pointOfInterestEntity.toDetailsObject());
 	});
 
 	it("findAll should return all points of interest", async () => {
 		const pointOfInterestEntity = createMockEntity();
 
 		const pointsOfInterestRepository = {
-			findAll: () => Promise.resolve([pointOfInterestEntity]),
-		} as unknown as PointsOfInterestRepository;
+			findAll: (() =>
+				Promise.resolve({
+					items: [pointOfInterestEntity],
+					total: 1,
+				})) as PointsOfInterestRepository["findAll"],
+		} as PointsOfInterestRepository;
 
 		const pointsOfInterestService = new PointsOfInterestService(
 			pointsOfInterestRepository,
@@ -70,7 +74,13 @@ describe("PointsOfInterestService", () => {
 		const result = await pointsOfInterestService.findAll(null);
 
 		assert.deepStrictEqual(result, {
-			items: [pointOfInterestEntity.toObject()],
+			items: [pointOfInterestEntity.toListObject()],
+			meta: {
+				currentPage: 1,
+				itemsPerPage: 1,
+				total: 1,
+				totalPages: 1,
+			},
 		});
 	});
 
@@ -78,10 +88,11 @@ describe("PointsOfInterestService", () => {
 		const pointOfInterestEntity = createMockEntity();
 
 		const pointsOfInterestRepository = {
-			findNearby: (() =>
-				Promise.resolve([
-					pointOfInterestEntity,
-				])) as PointsOfInterestRepository["findNearby"],
+			findAll: (() =>
+				Promise.resolve({
+					items: [pointOfInterestEntity],
+					total: 1,
+				})) as PointsOfInterestRepository["findAll"],
 		} as PointsOfInterestRepository;
 
 		const pointsOfInterestService = new PointsOfInterestService(
@@ -95,7 +106,13 @@ describe("PointsOfInterestService", () => {
 		});
 
 		assert.deepStrictEqual(result, {
-			items: [pointOfInterestEntity.toObject()],
+			items: [pointOfInterestEntity.toListObject()],
+			meta: {
+				currentPage: 1,
+				itemsPerPage: 1,
+				total: 1,
+				totalPages: 1,
+			},
 		});
 	});
 
@@ -103,10 +120,11 @@ describe("PointsOfInterestService", () => {
 		const pointOfInterestEntity = createMockEntity();
 
 		const pointsOfInterestRepository = {
-			findNearby: (() =>
-				Promise.resolve([
-					pointOfInterestEntity,
-				])) as PointsOfInterestRepository["findNearby"],
+			findAll: (() =>
+				Promise.resolve({
+					items: [pointOfInterestEntity],
+					total: 1,
+				})) as PointsOfInterestRepository["findAll"],
 		} as PointsOfInterestRepository;
 
 		const pointsOfInterestService = new PointsOfInterestService(
@@ -119,7 +137,13 @@ describe("PointsOfInterestService", () => {
 		});
 
 		assert.deepStrictEqual(result, {
-			items: [pointOfInterestEntity.toObject()],
+			items: [pointOfInterestEntity.toListObject()],
+			meta: {
+				currentPage: 1,
+				itemsPerPage: 1,
+				total: 1,
+				totalPages: 1,
+			},
 		});
 	});
 
@@ -169,12 +193,12 @@ describe("PointsOfInterestService", () => {
 		);
 
 		const result = await pointsOfInterestService.patch(EXISTING_ID, {
-			description: updatedPointOfInterest.description,
+			description: updatedPointOfInterest.description ?? null,
 			location: updatedPointOfInterest.location,
 			name: updatedPointOfInterest.name,
 		});
 
-		assert.deepStrictEqual(result, pointOfInterestEntity.toObject());
+		assert.deepStrictEqual(result, pointOfInterestEntity.toDetailsObject());
 	});
 
 	it("delete should return true when point of interest deleted", async () => {
@@ -198,7 +222,7 @@ describe("PointsOfInterestService", () => {
 		assert.strictEqual(result, true);
 	});
 
-	it("findPaginated should return paginated points of interest", async () => {
+	it("findAll should return paginated points of interest", async () => {
 		const mockEntities = [
 			PointsOfInterestEntity.initialize({
 				createdAt: "2025-08-14T00:00:00Z",
@@ -242,25 +266,25 @@ describe("PointsOfInterestService", () => {
 		const totalPages = Math.ceil(mockTotal / 10);
 
 		const pointsOfInterestRepository = {
-			findPaginated: (() =>
+			findAll: (() =>
 				Promise.resolve({
 					items: mockEntities,
 					total: mockTotal,
-				})) as PointsOfInterestRepository["findPaginated"],
+				})) as PointsOfInterestRepository["findAll"],
 		} as PointsOfInterestRepository;
 
 		const pointsOfInterestService = new PointsOfInterestService(
 			pointsOfInterestRepository,
 		);
 
-		const result = await pointsOfInterestService.findPaginated({
+		const result = await pointsOfInterestService.findAll({
 			page: 1,
 			perPage: 10,
 			search: "",
 		});
 
-		const expectedData = mockEntities.map((item) => item.toSummaryObject());
-		assert.deepStrictEqual(result.data, expectedData);
+		const expectedData = mockEntities.map((item) => item.toListObject());
+		assert.deepStrictEqual(result.items, expectedData);
 
 		assert.deepStrictEqual(result.meta, {
 			currentPage: 1,

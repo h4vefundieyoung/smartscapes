@@ -1,11 +1,10 @@
 export { PointsOfInterestApiPath } from "./libs/enums/enums.js";
 export {
+	type PointOfInterestPatchRequestDto,
+	type PointsOfInterestCreateRequestDto,
+	type PointsOfInterestGetAllItemResponseDto,
+	type PointsOfInterestGetAllQuery,
 	type PointsOfInterestGetByIdResponseDto,
-	type PointsOfInterestItemDto,
-	type PointsOfInterestPaginatedResponseDto,
-	type PointsOfInterestQueryRequest,
-	type PointsOfInterestRequestDto,
-	type PointsOfInterestResponseDto,
 } from "./libs/types/types.js";
 export {
 	pointOfInterestUpdate as pointOfInterestUpdateValidationSchema,

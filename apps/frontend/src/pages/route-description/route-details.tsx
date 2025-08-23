@@ -56,6 +56,7 @@ const RouteDetails = (): React.JSX.Element => {
 			}
 
 			void dispatch(routeActions.uploadImage(file));
+			event.target.value = "";
 		},
 		[dispatch],
 	);

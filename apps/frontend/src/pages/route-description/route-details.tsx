@@ -19,12 +19,8 @@ import {
 	useParams,
 	useState,
 } from "~/libs/hooks/hooks.js";
-import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
-import {
-	type ReviewGetByIdResponseDto,
-	type ReviewRequestDto,
-	routeDetailsApi,
-} from "~/modules/route-details/route-details.js";
+import { type ReviewRequestDto } from "~/modules/reviews/reviews.js";
+import { actions as routeDetailsActions } from "~/modules/route-details/route-details.js";
 import {
 	actions as routeActions,
 	type RouteGetByIdResponseDto,
@@ -57,6 +53,7 @@ const RouteDetails = (): React.JSX.Element => {
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
 	);
 
+	const reviews = useAppSelector(({ routeDetails }) => routeDetails.items);
 	const isAuthenticatedUser = Boolean(user);
 
 	const handleToggleEditMode = useCallback(() => {
@@ -87,30 +84,15 @@ const RouteDetails = (): React.JSX.Element => {
 		}
 	}, [route, handleValueSet]);
 
-	const [reviews, setReviews] = useState<ReviewGetByIdResponseDto[]>([]);
-
-	useEffect((): void => {
-		void (async (): Promise<void> => {
-			if (!id) {
-				return;
-			}
-
-			const response = await routeDetailsApi.getAll({ routeId: Number(id) });
-			setReviews(response.data);
-		})();
-	}, [id]);
+	useEffect(() => {
+		void dispatch(routeDetailsActions.getAll({ routeId: Number(id) }));
+	}, [dispatch, id]);
 
 	const handleCreateReview = useCallback(
-		async (payload: ReviewRequestDto): Promise<void> => {
-			try {
-				const response = await routeDetailsApi.createReview(payload);
-				setReviews((previous) => [response.data, ...previous]);
-				toastNotifier.showSuccess("Review created successfully.");
-			} catch {
-				toastNotifier.showError("Failed to create review.");
-			}
+		(payload: ReviewRequestDto): void => {
+			void dispatch(routeDetailsActions.create(payload));
 		},
-		[],
+		[dispatch],
 	);
 
 	if (dataStatus === DataStatus.REJECTED) {

@@ -38,7 +38,7 @@ class ReviewRepository implements Repository {
 			.withGraphJoined("[user(selectUser).avatar(selectAvatar)]")
 			.modifiers({
 				selectAvatar(builder) {
-					builder.clearSelect().select("files.url as url");
+					builder.select("files.url as url");
 				},
 				selectUser(builder) {
 					builder.select(

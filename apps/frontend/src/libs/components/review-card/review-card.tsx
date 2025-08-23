@@ -1,5 +1,5 @@
 import { Avatar } from "~/libs/components/components.js";
-import { type ReviewGetByIdResponseDto } from "~/modules/route-details/route-details.js";
+import { type ReviewGetByIdResponseDto } from "~/modules/reviews/reviews.js";
 
 import styles from "./styles.module.css";
 

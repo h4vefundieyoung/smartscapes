@@ -1,12 +1,10 @@
-import { ContentType } from "@smartscapes/shared";
-
-import { APIPath } from "~/libs/enums/enums.js";
+import { APIPath, ContentType } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
 
-import { RoutesApiPath } from "./libs/enums/enums.js";
+import { ReviewsApiPath } from "./libs/enums/enums.js";
 import {
 	type ReviewGetAllSearchQuery,
 	type ReviewGetByIdResponseDto,
@@ -19,16 +17,16 @@ type Constructor = {
 	storage: Storage;
 };
 
-class RouteDetailsApi extends BaseHTTPApi {
+class ReviewsApi extends BaseHTTPApi {
 	public constructor({ baseUrl, http, storage }: Constructor) {
 		super({ baseUrl, http, path: APIPath.REVIEWS, storage });
 	}
 
-	public async createReview(
+	public async create(
 		payload: ReviewRequestDto,
 	): Promise<APIResponse<ReviewGetByIdResponseDto>> {
 		const response = await this.load<APIResponse<ReviewGetByIdResponseDto>>(
-			this.getFullEndpoint(RoutesApiPath.ROOT, {}),
+			this.getFullEndpoint(ReviewsApiPath.ROOT, {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,
@@ -44,7 +42,7 @@ class RouteDetailsApi extends BaseHTTPApi {
 		query?: ReviewGetAllSearchQuery,
 	): Promise<APIResponse<ReviewGetByIdResponseDto[]>> {
 		const response = await this.load<APIResponse<ReviewGetByIdResponseDto[]>>(
-			this.getFullEndpoint(RoutesApiPath.ROOT, {}),
+			this.getFullEndpoint(ReviewsApiPath.ROOT, {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: false,
@@ -57,4 +55,4 @@ class RouteDetailsApi extends BaseHTTPApi {
 	}
 }
 
-export { RouteDetailsApi };
+export { ReviewsApi };

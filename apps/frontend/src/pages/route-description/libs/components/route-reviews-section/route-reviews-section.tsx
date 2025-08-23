@@ -8,7 +8,7 @@ import {
 import {
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
-} from "~/modules/route-details/route-details.js";
+} from "~/modules/reviews/reviews.js";
 
 import styles from "./styles.module.css";
 

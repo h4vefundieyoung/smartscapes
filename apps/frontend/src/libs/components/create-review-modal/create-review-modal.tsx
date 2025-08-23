@@ -5,7 +5,7 @@ import { useAppForm } from "~/libs/hooks/hooks.js";
 import {
 	reviewCreateValidationSchema,
 	type ReviewRequestDto,
-} from "~/modules/route-details/route-details.js";
+} from "~/modules/reviews/reviews.js";
 
 import { DEFAULT_CREATE_REVIEW_PAYLOAD } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";

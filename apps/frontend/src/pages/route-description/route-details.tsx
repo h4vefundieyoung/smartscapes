@@ -85,8 +85,8 @@ const RouteDetails = (): React.JSX.Element => {
 	}, [route, handleValueSet]);
 
 	useEffect(() => {
-		void dispatch(routeDetailsActions.getAll({ routeId: Number(id) }));
-	}, [dispatch, id]);
+		void dispatch(routeDetailsActions.getAll({ routeId: Number(routeId) }));
+	}, [dispatch, routeId]);
 
 	const handleCreateReview = useCallback(
 		(payload: ReviewRequestDto): void => {
@@ -103,13 +103,7 @@ const RouteDetails = (): React.JSX.Element => {
 		return <Loader />;
 	}
 
-
-	const {
-		description,
-		id: routeId,
-		name,
-		pois,
-	} = route as RouteGetByIdResponseDto;
+	const { description, id, name, pois } = route as RouteGetByIdResponseDto;
 
 	const hasDescription = Boolean(description);
 
@@ -165,7 +159,7 @@ const RouteDetails = (): React.JSX.Element => {
 					isAuthenticatedUser={isAuthenticatedUser}
 					items={reviews}
 					onCreate={handleCreateReview}
-					routeId={routeId}
+					routeId={Number(id)}
 				/>
 			</main>
 		</>

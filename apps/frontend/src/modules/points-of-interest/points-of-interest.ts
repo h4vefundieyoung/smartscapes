@@ -11,12 +11,12 @@ const pointOfInterestApi = new PointOfInterestApi({
 });
 
 export {
+	type PointsOfInterestGetByIdResponseDto,
 	type PointsOfInterestItemDto,
 	type PointsOfInterestPaginatedResponseDto,
 	type PointsOfInterestQueryRequest,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
-	type PointsOfInterestWithRoutesDto,
 } from "./libs/types/types.js";
 export { pointOfInterestApi };
 export { pointsOfInterestCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";

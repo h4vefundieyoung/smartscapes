@@ -2,18 +2,18 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 import {
+	type PointsOfInterestGetByIdResponseDto,
 	type PointsOfInterestPaginatedResponseDto,
 	type PointsOfInterestQueryRequest,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,
-	type PointsOfInterestWithRoutesDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
 import { name as poiDetailsSliceName } from "./points-of-interest-details.slice.js";
 import { name as poiSliceName } from "./points-of-interest.slice.js";
 
 const getById = createAsyncThunk<
-	APIResponse<PointsOfInterestWithRoutesDto>,
+	APIResponse<PointsOfInterestGetByIdResponseDto>,
 	number,
 	AsyncThunkConfig
 >(`${poiDetailsSliceName}/load-by-id`, (id, { extra }) => {

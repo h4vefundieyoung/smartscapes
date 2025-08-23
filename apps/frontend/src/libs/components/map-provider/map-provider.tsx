@@ -70,7 +70,6 @@ const MapProvider = ({
 		mapClientReference.current.setCenter(center);
 	}, [center]);
 
-
 	useEffect(() => {
 		if (!isLoaded || !routeLine) {
 			return;

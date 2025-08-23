@@ -42,12 +42,12 @@ describe("GroupRepository", () => {
 	});
 
 	it("findAll should return all groups", async () => {
-		const expected = [GroupEntity.initialize(mockGroup)];
+		const expectedResult = [GroupEntity.initialize(mockGroup)];
 		tracker.on.select("groups").response([mockGroup]);
 
 		const result = await repository.findAll();
 
-		assert.deepEqual(result, expected);
+		assert.deepEqual(result, expectedResult);
 	});
 
 	it("findById should return a group by ID", async () => {

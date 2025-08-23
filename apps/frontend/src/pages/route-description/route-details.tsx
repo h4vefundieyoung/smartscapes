@@ -41,7 +41,7 @@ const RouteDetails = (): React.JSX.Element => {
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
 		});
 	const dispatch = useAppDispatch();
-	const { id } = useParams<{ id: string }>();
+	const { id: routeId } = useParams<{ id: string }>();
 	const dataStatus = useAppSelector(({ route }) => route.dataStatus);
 	const hasEditPermissions = Boolean(
 		user &&
@@ -66,8 +66,8 @@ const RouteDetails = (): React.JSX.Element => {
 	}, [dispatch, setIsEditMode, route, getValues]);
 
 	useEffect(() => {
-		void dispatch(routeActions.getRouteById(Number(id)));
-	}, [dispatch, id]);
+		void dispatch(routeActions.getRouteById(Number(routeId)));
+	}, [dispatch, routeId]);
 
 	useEffect(() => {
 		if (route) {
@@ -85,6 +85,7 @@ const RouteDetails = (): React.JSX.Element => {
 	}
 
 	const { description, name, pois } = route as RouteGetByIdResponseDto;
+	const hasDescription = Boolean(description);
 
 	return (
 		<>
@@ -123,7 +124,9 @@ const RouteDetails = (): React.JSX.Element => {
 						name="description"
 					/>
 				) : (
-					<p className={styles["description"]}>{description}</p>
+					hasDescription && (
+						<p className={styles["description"]}>{description}</p>
+					)
 				)}
 				<PointOfInterestSection pointOfInterests={pois} />
 			</main>

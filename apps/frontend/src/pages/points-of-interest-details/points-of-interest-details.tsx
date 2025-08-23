@@ -45,7 +45,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 			defaultValues: POINT_OF_INTEREST_FORM_DEFAULT_VALUES,
 		});
 
-	const { id } = useParams<{ id: string }>();
+	const { id: poiId } = useParams<{ id: string }>();
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
 	const hasEditPermissions = Boolean(
@@ -71,8 +71,8 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 	}, [dispatch, getValues, pointsOfInterestDetails]);
 
 	useEffect(() => {
-		void dispatch(pointOfInterestActions.getById(Number(id)));
-	}, [dispatch, id]);
+		void dispatch(pointOfInterestActions.getById(Number(poiId)));
+	}, [dispatch, poiId]);
 
 	useEffect(() => {
 		if (pointsOfInterestDetails) {
@@ -94,6 +94,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 
 	const { description, name } =
 		pointsOfInterestDetails as PointsOfInterestResponseDto;
+	const hasDescription = Boolean(description);
 
 	return (
 		<main className={styles["container"]}>
@@ -113,7 +114,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 					</>
 				) : (
 					<>
-						<h2 className={styles["header"]}>{name}</h2>
+						<h1 className={styles["label"]}>{name}</h1>
 						{hasEditPermissions && (
 							<div className={styles["edit-button-container"]}>
 								<Button label="Edit" onClick={handleToggleEditMode} />
@@ -133,7 +134,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 					name="description"
 				/>
 			) : (
-				description && <p className={styles["description"]}>{description}</p>
+				hasDescription && <p className={styles["description"]}>{description}</p>
 			)}
 		</main>
 	);

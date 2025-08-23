@@ -12,6 +12,7 @@ type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
 	fetchStatus: ValueOf<typeof DataStatus>;
 	items: ReviewGetByIdResponseDto[];
+	patchStatus: ValueOf<typeof DataStatus>;
 	route: null | RouteGetByIdResponseDto;
 };
 
@@ -20,6 +21,7 @@ const initialState: State = {
 	dataStatus: DataStatus.IDLE,
 	fetchStatus: DataStatus.IDLE,
 	items: [],
+	patchStatus: DataStatus.IDLE,
 	route: null,
 };
 
@@ -37,14 +39,14 @@ const { actions, name, reducer } = createSlice({
 		});
 
 		builder.addCase(patch.pending, (state) => {
-			state.dataStatus = DataStatus.PENDING;
+			state.patchStatus = DataStatus.PENDING;
 		});
 		builder.addCase(patch.fulfilled, (state, action) => {
 			state.route = action.payload.data;
-			state.dataStatus = DataStatus.FULFILLED;
+			state.patchStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(patch.rejected, (state) => {
-			state.dataStatus = DataStatus.REJECTED;
+			state.patchStatus = DataStatus.REJECTED;
 		});
 		builder.addCase(getReviews.pending, (state) => {
 			state.fetchStatus = DataStatus.PENDING;

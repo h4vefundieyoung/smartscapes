@@ -21,6 +21,7 @@ import { ManageRoutes } from "./pages/manage-routes/manage-routes.js";
 import { PointsOfInterestDetails } from "./pages/points-of-interest-details/points-of-interest-details.js";
 import { Profile } from "./pages/profile/profile.js";
 import { RouteDetails } from "./pages/route-description/route-details.js";
+import { UserRoute } from "./pages/user-route/user-route.js";
 
 pwa.register();
 
@@ -66,6 +67,10 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 									</ProtectedRoute>
 								),
 								path: AppRoute.PROFILE,
+							},
+							{
+								element: <UserRoute />,
+								path: AppRoute.USER_ROUTES_$ID_MAP,
 							},
 							{
 								element: (

@@ -8,7 +8,7 @@ import {
 	Loader,
 	TextArea,
 } from "~/libs/components/components.js";
-import { DataStatus, PermissionKey } from "~/libs/enums/enums.js";
+import { AppRoute, DataStatus, PermissionKey } from "~/libs/enums/enums.js";
 import { checkHasPermission } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
@@ -46,6 +46,13 @@ const RouteDetails = (): React.JSX.Element => {
 	const hasEditPermissions = Boolean(
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
+	);
+	const hasAuthUserPermissions = Boolean(
+		user &&
+			!checkHasPermission(
+				[PermissionKey.MANAGE_ROUTES],
+				user.group.permissions,
+			),
 	);
 
 	const handleToggleEditMode = useCallback(() => {
@@ -109,6 +116,14 @@ const RouteDetails = (): React.JSX.Element => {
 							{hasEditPermissions && (
 								<div className={styles["edit-button-container"]}>
 									<Button label="Edit" onClick={handleToggleEditMode} />
+								</div>
+							)}
+							{hasAuthUserPermissions && (
+								<div className={styles["edit-button-container"]}>
+									<Button
+										label="Start"
+										to={AppRoute.USER_ROUTES_$ID_MAP.replace(":id", String(id))}
+									/>
 								</div>
 							)}
 						</>

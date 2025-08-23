@@ -11,6 +11,7 @@ export {
 	type Coordinates,
 	type HTTPMethod,
 	type LineStringGeometry,
+	type PaginationMeta,
 	type PointGeometry,
 	type UserAuthResponseDto,
 	type ValidationSchema,

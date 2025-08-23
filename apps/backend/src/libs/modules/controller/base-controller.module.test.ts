@@ -34,6 +34,7 @@ describe("BaseController", () => {
 				Promise.resolve({
 					payload: {
 						data: {},
+						meta: {},
 					},
 					status: 201,
 				}),
@@ -53,7 +54,10 @@ describe("BaseController", () => {
 
 	it("should map handler correctly", async () => {
 		const responseStatus = HTTPCode.CREATED;
-		const responsePayload: APIResponse<{ id: number }> = { data: { id: 1 } };
+		const responsePayload: APIResponse<{ id: number }, { page: number }> = {
+			data: { id: 1 },
+			meta: { page: 1 },
+		};
 
 		const mockRequest = {
 			body: { value: 1 },

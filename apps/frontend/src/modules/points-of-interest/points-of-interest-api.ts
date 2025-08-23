@@ -6,6 +6,7 @@ import { type APIResponse } from "~/libs/types/types.js";
 
 import { PointsOfInterestApiPath } from "./libs/enums/enums.js";
 import {
+	type PatchActionPayload,
 	type PointsOfInterestPaginatedResponseDto,
 	type PointsOfInterestQueryRequest,
 	type PointsOfInterestRequestDto,
@@ -77,6 +78,23 @@ class PointOfInterestApi extends BaseHTTPApi {
 			{
 				hasAuth: false,
 				method: "GET",
+			},
+		);
+
+		return await response.json();
+	}
+
+	public async patchPointOfInterest({
+		id,
+		payload,
+	}: PatchActionPayload): Promise<APIResponse<PointsOfInterestResponseDto>> {
+		const response = await this.load<APIResponse<PointsOfInterestResponseDto>>(
+			this.getFullEndpoint(PointsOfInterestApiPath.$ID, { id: id.toString() }),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "PATCH",
+				payload: JSON.stringify(payload),
 			},
 		);
 

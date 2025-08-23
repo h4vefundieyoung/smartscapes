@@ -204,22 +204,15 @@ class PointsOfInterestRepository implements Repository {
 
 	public async patch(
 		id: number,
-		entity: PointsOfInterestEntity,
+		entity: Partial<PointsOfInterestEntity["toObject"]>,
 	): Promise<null | PointsOfInterestEntity> {
-		const { description, location, name } = entity.toNewObject();
-
 		const [updatedPointOfInterest] = await this.pointsOfInterestModel
 			.query()
-			.patch({
-				description,
-				location,
-				name,
-			})
+			.patch(entity)
 			.where("id", "=", id)
 			.returning([
 				"id",
 				"name",
-				"description",
 				"created_at",
 				"updated_at",
 				"description",

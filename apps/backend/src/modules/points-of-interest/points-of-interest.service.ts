@@ -106,7 +106,7 @@ class PointsOfInterestService implements Service {
 			await this.pointsOfInterestRepository.findPaginated({
 				page,
 				perPage,
-				search,
+				search: search as string,
 			});
 
 		const totalPages = Math.ceil(total / perPage);

@@ -11,8 +11,8 @@ const pointOfInterestApi = new PointOfInterestApi({
 });
 
 export {
+	type PointsOfInterestItemDto,
 	type PointsOfInterestPaginatedResponseDto,
-	type PointsOfInterestPaginatedSummary,
 	type PointsOfInterestQueryRequest,
 	type PointsOfInterestRequestDto,
 	type PointsOfInterestResponseDto,

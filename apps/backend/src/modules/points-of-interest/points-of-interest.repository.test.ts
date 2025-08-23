@@ -247,7 +247,7 @@ describe("PointsOfInterestRepository", () => {
 		const result = await pointsOfInterestRepository.findPaginated({
 			page: 1,
 			perPage: 10,
-			search: undefined,
+			search: "",
 		});
 
 		const resultItems = result.items.map((item) => item.toObject());
@@ -279,7 +279,7 @@ describe("PointsOfInterestRepository", () => {
 		const result = await pointsOfInterestRepository.findPaginated({
 			page: 1,
 			perPage: 10,
-			search: undefined,
+			search: "",
 		});
 
 		assert.ok(typeof result.total === "number");

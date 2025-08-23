@@ -3,11 +3,12 @@ import { type APIHandlerResponse } from "./api-handler-response.type.js";
 
 type APIHandler<
 	HandlerOptions extends APIHandlerOptions = APIHandlerOptions,
-	HandlerResponse = unknown,
+	HandlerResponsePayload = unknown,
+	HandlerResponseMeta = unknown,
 > = (
 	options: HandlerOptions,
 ) =>
-	| APIHandlerResponse<HandlerResponse>
-	| Promise<APIHandlerResponse<HandlerResponse>>;
+	| APIHandlerResponse<HandlerResponsePayload, HandlerResponseMeta>
+	| Promise<APIHandlerResponse<HandlerResponsePayload, HandlerResponseMeta>>;
 
 export { type APIHandler };

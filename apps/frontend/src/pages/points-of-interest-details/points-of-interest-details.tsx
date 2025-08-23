@@ -22,7 +22,6 @@ import {
 import {
 	actions as pointOfInterestActions,
 	type PointOfInterestPatchRequestDto,
-	type PointsOfInterestResponseDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 import { NotFound } from "~/pages/not-found/not-found.js";
 
@@ -61,7 +60,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 		if (pointsOfInterestDetails) {
 			const { description, name } = getValues();
 			void dispatch(
-				pointOfInterestActions.patchPointOfInterest({
+				pointOfInterestActions.patch({
 					id: pointsOfInterestDetails.id,
 					payload: { description, name },
 				}),
@@ -92,13 +91,12 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 		return <Loader />;
 	}
 
-	const { description, name } =
-		pointsOfInterestDetails as PointsOfInterestResponseDto;
-	const hasDescription = Boolean(description);
-
 	if (!pointsOfInterestDetails) {
 		return <></>;
 	}
+
+	const { description, name } = pointsOfInterestDetails;
+	const hasDescription = Boolean(description);
 
 	const [latitude, longitude] = pointsOfInterestDetails.location.coordinates;
 

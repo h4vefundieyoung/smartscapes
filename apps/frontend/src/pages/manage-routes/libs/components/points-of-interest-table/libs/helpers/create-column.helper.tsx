@@ -1,13 +1,15 @@
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { type PointsOfInterestItemDto } from "~/modules/points-of-interest/points-of-interest.js";
+import { DataFormat } from "~/libs/enums/enums.js";
+import { getFormattedDate } from "~/libs/helpers/helpers.js";
+import { type PointsOfInterestGetAllItemResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 
 import { ActionCell } from "../../../components.js";
 
 const createColumns = (
 	onEdit: (id: number) => void,
 	onDelete: (id: number) => void,
-): ColumnDef<PointsOfInterestItemDto>[] => [
+): ColumnDef<PointsOfInterestGetAllItemResponseDto>[] => [
 	{
 		accessorKey: "id",
 		header: "Id",
@@ -23,6 +25,12 @@ const createColumns = (
 	},
 	{
 		accessorKey: "createdAt",
+		cell: ({ row }): string => {
+			return getFormattedDate(
+				new Date(row.original.createdAt),
+				DataFormat.DATE_DD_MMM_YYYY,
+			);
+		},
 		header: "Created at",
 		size: 355,
 	},

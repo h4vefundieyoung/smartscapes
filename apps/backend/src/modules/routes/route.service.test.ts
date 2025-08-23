@@ -12,7 +12,7 @@ import {
 import { type FileService } from "../files/files.service.js";
 import { type PlannedPathService } from "../planned-paths/planned-paths.js";
 import {
-	type PointsOfInterestResponseDto,
+	type PointsOfInterestGetAllItemResponseDto,
 	type PointsOfInterestService,
 } from "../points-of-interest/points-of-interest.js";
 import { RoutesExceptionMessage } from "./libs/enums/enums.js";
@@ -46,6 +46,12 @@ const geometry: LineStringGeometry = {
 		[SECOND_COORDINATE, FIRST_COORDINATE],
 	] as Coordinates[],
 	type: "LineString",
+};
+const mockPaginationMeta = {
+	currentPage: 1,
+	itemsPerPage: 1,
+	total: 1,
+	totalPages: 1,
 };
 
 const createMockMapboxApi = (): {
@@ -159,9 +165,9 @@ describe("RouteService", () => {
 		],
 	};
 
-	const mockPoisFindAll: PointsOfInterestResponseDto[] = [
+	const mockPoisFindAll: PointsOfInterestGetAllItemResponseDto[] = [
 		{
-			description: "Description for POI 1",
+			createdAt: new Date().toISOString(),
 			id: FIRST_POI_ID,
 			location: {
 				coordinates: [FIRST_COORDINATE, SECOND_COORDINATE],
@@ -170,7 +176,7 @@ describe("RouteService", () => {
 			name: "POI 1",
 		},
 		{
-			description: "Description for POI 2",
+			createdAt: new Date().toISOString(),
 			id: SECOND_POI_ID,
 			location: {
 				coordinates: [SECOND_COORDINATE, FIRST_COORDINATE],
@@ -215,6 +221,7 @@ describe("RouteService", () => {
 			findAll: () =>
 				Promise.resolve({
 					items: mockPoisFindAll,
+					meta: mockPaginationMeta,
 				}),
 			findById: () =>
 				Promise.resolve({
@@ -291,9 +298,15 @@ describe("RouteService", () => {
 								coordinates: [FIRST_POI_ID, SECOND_POI_ID],
 								type: "Point",
 							},
-						} as unknown as PointsOfInterestResponseDto,
+						},
 					].filter(({ id }) => ids.includes(id)),
-				}),
+					meta: {
+						currentPage: 0,
+						itemsPerPage: 0,
+						total: 0,
+						totalPages: 0,
+					},
+				}) as ReturnType<PointsOfInterestService["findAll"]>,
 			findById: mock.fn(),
 		} as unknown as PointsOfInterestService;
 

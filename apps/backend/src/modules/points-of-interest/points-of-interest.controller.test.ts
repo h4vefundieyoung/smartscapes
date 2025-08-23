@@ -194,10 +194,10 @@ describe("PointsOfInterestController", () => {
 			options: null | PointsOfInterestGetAllQuery,
 		) => {
 			assert.ok(options, "Options should be defined");
-			assert.strictEqual(options.name, TEST_NAME);
+			assert.strictEqual(options.search, TEST_NAME);
 
 			const filtered = pointsOfInterest.filter((poi) =>
-				poi.name.toLowerCase().includes(options.name?.toLowerCase() ?? ""),
+				poi.name.toLowerCase().includes(options.search?.toLowerCase() ?? ""),
 			);
 
 			return Promise.resolve({ items: filtered, meta: mockPaginationMeta });
@@ -216,7 +216,7 @@ describe("PointsOfInterestController", () => {
 			body: {},
 			params: {},
 			query: {
-				name: TEST_NAME,
+				search: TEST_NAME,
 			},
 			user: null,
 		});
@@ -383,7 +383,7 @@ describe("PointsOfInterestController", () => {
 			assert.ok(options, "Options should be defined");
 			assert.strictEqual(options.page, 1);
 			assert.strictEqual(options.perPage, 10);
-			assert.strictEqual(options.search, "Central");
+			assert.strictEqual(options.search, undefined);
 
 			return Promise.resolve({
 				items: mockPoints,

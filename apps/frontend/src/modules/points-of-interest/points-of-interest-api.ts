@@ -6,9 +6,10 @@ import { type APIResponse, type PaginationMeta } from "~/libs/types/types.js";
 
 import { PointsOfInterestApiPath } from "./libs/enums/enums.js";
 import {
+	type PatchActionPayload,
 	type PointsOfInterestCreateRequestDto,
 	type PointsOfInterestGetAllItemResponseDto,
-	type PointsOfInterestGetAllQuery as PointsOfInterestGetAllQueryParameters,
+	type PointsOfInterestGetAllQuery,
 	type PointsOfInterestGetByIdResponseDto,
 } from "./libs/types/types.js";
 
@@ -39,7 +40,7 @@ class PointOfInterestApi extends BaseHTTPApi {
 	}
 
 	public async findAll(
-		payload: PointsOfInterestGetAllQueryParameters,
+		payload: PointsOfInterestGetAllQuery,
 	): Promise<
 		APIResponse<PointsOfInterestGetAllItemResponseDto[], PaginationMeta>
 	> {
@@ -64,6 +65,27 @@ class PointOfInterestApi extends BaseHTTPApi {
 			hasAuth: false,
 			method: "GET",
 		});
+
+		return await response.json();
+	}
+
+	public async patch({
+		id,
+		payload,
+	}: PatchActionPayload): Promise<
+		APIResponse<PointsOfInterestGetByIdResponseDto>
+	> {
+		const response = await this.load<
+			APIResponse<PointsOfInterestGetByIdResponseDto>
+		>(
+			this.getFullEndpoint(PointsOfInterestApiPath.$ID, { id: id.toString() }),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "PATCH",
+				payload: JSON.stringify(payload),
+			},
+		);
 
 		return await response.json();
 	}

@@ -247,6 +247,7 @@ describe("PointsOfInterestRepository", () => {
 		const result = await pointsOfInterestRepository.findAll({
 			page: 1,
 			perPage: 10,
+			search: "",
 		});
 
 		const resultItems = result.items.map((item: PointsOfInterestEntity) =>
@@ -278,6 +279,7 @@ describe("PointsOfInterestRepository", () => {
 		const result = await pointsOfInterestRepository.findAll({
 			page: 1,
 			perPage: 10,
+			search: "",
 		});
 
 		assert.ok(typeof result.total === "number");

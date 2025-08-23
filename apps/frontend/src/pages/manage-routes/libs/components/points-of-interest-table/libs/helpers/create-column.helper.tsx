@@ -1,12 +1,13 @@
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { type RowData } from "../../../../types/types.js";
+import { type PointsOfInterestGetAllItemResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
+
 import { ActionCell } from "../../../components.js";
 
 const createColumns = (
 	onEdit: (id: number) => void,
 	onDelete: (id: number) => void,
-): ColumnDef<RowData>[] => [
+): ColumnDef<PointsOfInterestGetAllItemResponseDto>[] => [
 	{
 		accessorKey: "id",
 		header: "Id",

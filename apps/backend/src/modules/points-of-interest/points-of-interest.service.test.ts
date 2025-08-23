@@ -272,6 +272,7 @@ describe("PointsOfInterestService", () => {
 		const result = await pointsOfInterestService.findAll({
 			page: 1,
 			perPage: 10,
+			search: "",
 		});
 
 		const expectedData = mockEntities.map((item) => item.toListObject());

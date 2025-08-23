@@ -440,9 +440,17 @@ class PointsOfInterestController extends BaseController {
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             $ref: '#/components/schemas/PointsOfInterestCreateRequestDto'
+	 *             type: object
+	 *             properties:
+	 *               name:
+	 *                 type: string
+	 *                 example: Central Park
+	 *               description:
+	 *                 type: string
+	 *                 nullable: true
+	 *                 example: A large park in New York City
 	 *     responses:
-	 *       200:
+	 *        200:
 	 *         description: Point of interest updated successfully
 	 *         content:
 	 *           application/json:
@@ -460,6 +468,7 @@ class PointsOfInterestController extends BaseController {
 	): Promise<APIHandlerResponse<PointsOfInterestGetByIdResponseDto>> {
 		const { body, params } = options;
 		const id = Number(params.id);
+
 		const pointOfInterest = await this.pointsOfInterestService.patch(id, body);
 
 		return {

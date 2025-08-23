@@ -3,14 +3,17 @@ import "react-toastify/dist/ReactToastify.css";
 
 import "./styles.module.css";
 
+const TOAST_AUTO_CLOSE_MS = 3000;
+const TOAST_LIMIT = 3;
+
 const ToastContainer = (): React.JSX.Element => {
 	return (
 		<LibraryToastContainer
-			autoClose={3000}
+			autoClose={TOAST_AUTO_CLOSE_MS}
 			closeOnClick
 			draggable
 			hideProgressBar={false}
-			limit={3}
+			limit={TOAST_LIMIT}
 			newestOnTop={false}
 			pauseOnFocusLoss
 			pauseOnHover

@@ -6,12 +6,14 @@ import {
 	type PaginationMeta,
 } from "~/libs/types/types.js";
 import {
+	type PatchActionPayload,
 	type PointsOfInterestCreateRequestDto,
 	type PointsOfInterestGetAllItemResponseDto,
 	type PointsOfInterestGetAllQuery,
 	type PointsOfInterestGetByIdResponseDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
+import { PointOfInterestNotification } from "../libs/enums/enums.js";
 import { name as poiDetailsSliceName } from "./points-of-interest-details.slice.js";
 import { name as poiSliceName } from "./points-of-interest.slice.js";
 
@@ -50,4 +52,17 @@ const findAll = createAsyncThunk<
 	return { data, meta };
 });
 
-export { create, findAll, getById };
+const patch = createAsyncThunk<
+	APIResponse<PointsOfInterestGetByIdResponseDto>,
+	PatchActionPayload,
+	AsyncThunkConfig
+>(`${poiSliceName}/patch-point-of-interest`, async (payload, { extra }) => {
+	const { pointOfInterestApi, toastNotifier } = extra;
+	const patchResult = await pointOfInterestApi.patch(payload);
+
+	toastNotifier.showSuccess(PointOfInterestNotification.UPDATED);
+
+	return patchResult;
+});
+
+export { create, findAll, getById, patch };

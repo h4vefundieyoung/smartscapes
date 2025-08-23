@@ -53,7 +53,7 @@ class PointsOfInterestRepository implements Repository {
 	public async findAll(
 		options: null | PointsOfInterestGetAllOptions,
 	): Promise<EntityPagination<PointsOfInterestEntity>> {
-		const { ids, latitude, longitude, name, page, perPage, radius } =
+		const { ids, latitude, longitude, search, page, perPage, radius } =
 			options ?? {};
 
 		const hasLocationFilter = longitude !== undefined && latitude !== undefined;
@@ -70,8 +70,8 @@ class PointsOfInterestRepository implements Repository {
 				),
 			])
 			.modify((builder) => {
-				if (name) {
-					builder.whereILike("name", `%${name.trim()}%`);
+				if (search) {
+					builder.whereILike("name", `%${search}%`);
 				}
 
 				if (ids) {
@@ -95,6 +95,8 @@ class PointsOfInterestRepository implements Repository {
 
 					builder.orderBy("distance", SortingOrder.ASC);
 				}
+
+				builder.orderBy("created_at", SortingOrder.DESC);
 			});
 
 		if (hasPagination) {
@@ -167,22 +169,15 @@ class PointsOfInterestRepository implements Repository {
 
 	public async patch(
 		id: number,
-		entity: PointsOfInterestEntity,
+		entity: Partial<PointsOfInterestEntity["toObject"]>,
 	): Promise<null | PointsOfInterestEntity> {
-		const { description, location, name } = entity.toNewObject();
-
 		const [updatedPointOfInterest] = await this.pointsOfInterestModel
 			.query()
-			.patch({
-				description,
-				location,
-				name,
-			})
+			.patch(entity)
 			.where("id", "=", id)
 			.returning([
 				"id",
 				"name",
-				"description",
 				"created_at",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",

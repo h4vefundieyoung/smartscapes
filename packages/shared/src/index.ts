@@ -72,6 +72,7 @@ export {
 	PermissionKey,
 } from "./modules/permission/permission.js";
 export {
+	type PointOfInterestPatchRequestDto,
 	pointOfInterestUpdateValidationSchema,
 	PointsOfInterestApiPath,
 	type PointsOfInterestCreateRequestDto,

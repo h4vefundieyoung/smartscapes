@@ -32,13 +32,17 @@ class FileService implements Service {
 
 	public async create(payload: {
 		contentType: FileMimeType;
+		entityId: number;
+		folder: ValueOf<typeof FileFolderName>;
 		url: string;
 	}): Promise<FileUploadResponseDto> {
-		const { contentType, url } = payload;
+		const { contentType, entityId, folder, url } = payload;
 
 		const item = await this.fileRepository.create(
 			FileEntity.initializeNew({
 				contentType,
+				entityId,
+				folder,
 				url,
 			}),
 		);
@@ -53,10 +57,12 @@ class FileService implements Service {
 	}
 
 	public async uploadFile(payload: {
+		entityId: number;
 		file: MultipartFile;
 		folder: ValueOf<typeof FileFolderName>;
 	}): Promise<FileUploadResponseDto> {
-		const { file, folder } = payload;
+		const { entityId, file, folder } = payload;
+
 		const { filename, mimetype } = file;
 
 		this.validateMimeType(mimetype as FileMimeType);
@@ -74,6 +80,8 @@ class FileService implements Service {
 		const savedFile = await this.fileRepository.create(
 			FileEntity.initializeNew({
 				contentType: mimetype as FileMimeType,
+				entityId,
+				folder,
 				url,
 			}),
 		);
@@ -98,7 +106,7 @@ class FileService implements Service {
 
 		if (isFileSizeExceedsLimit) {
 			throw new FilesError({
-				message: FileExceptionMessage.FILE_SIZE_EXCEEDS_LIMIT,
+				message: FileExceptionMessage.SIZE_EXCEEDS_LIMIT,
 				status: HTTPCode.UNPROCESSED_ENTITY,
 			});
 		}
@@ -114,7 +122,7 @@ class FileService implements Service {
 
 		if (isInvalidType) {
 			throw new FilesError({
-				message: FileExceptionMessage.INVALID_FILE_TYPE,
+				message: FileExceptionMessage.INVALID_TYPE,
 				status: HTTPCode.UNPROCESSED_ENTITY,
 			});
 		}

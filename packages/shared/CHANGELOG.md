@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.30.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.29.0...@smartscapes/shared-v1.30.0) (2025-08-23)
+
+
+### Features
+
+* **frontend:** feat add an ability to edit poi on poi description page ss-491 ([#503](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/503)) ([7e0d767](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/7e0d767ee1bc6d81d9a90481fbcd9b068793b305))
+
+## [1.29.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.28.0...@smartscapes/shared-v1.29.0) (2025-08-22)
+
+
+### Features
+
+* **backend/frontend/shared:** implement admin dashboard issue ss-189 ([#465](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/465)) ([6c01549](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/6c015496d43eaf26feda0e68bab118f5b507d25a))
+
+## [1.28.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.27.1...@smartscapes/shared-v1.28.0) (2025-08-21)
+
+
+### Features
+
+* **frontend/backend:** load and display pois list on route details page ss-390 ([#417](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/417)) ([adb34d0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/adb34d07f18f60ed1229abdcc02cea9c1b40e1a7))
+
+## [1.27.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.27.0...@smartscapes/shared-v1.27.1) (2025-08-21)
+
+
+### Bug Fixes
+
+* **backend/frontend/shared:** align code with the criteria ss-439 ([#451](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/451)) ([a9c7fa6](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/a9c7fa69148efc86ba6e740e23de1bf44d13eca9))
+
+## [1.27.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.26.0...@smartscapes/shared-v1.27.0) (2025-08-21)
+
+
+### Features
+
+* **backend/frontend:** avatar upload ss-388 ([#431](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/431)) ([c474ac5](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c474ac585f5d02eeb3883291798194980e8be7a6))
+
 ## [1.26.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.25.0...@smartscapes/shared-v1.26.0) (2025-08-20)
 
 

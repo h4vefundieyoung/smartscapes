@@ -12,8 +12,8 @@ import { actions as usersActions } from "~/modules/users/users.js";
 import styles from "./styles.module.css";
 
 const PublicProfile = (): React.JSX.Element => {
-	const ONE = 1;
-	const AVATAR_SIZE = 128;
+	const SINGLE_FOLLOWER_COUNT = 1;
+
 	const dispatch = useAppDispatch();
 	const { id } = useParams();
 
@@ -59,7 +59,7 @@ const PublicProfile = (): React.JSX.Element => {
 			<main className={styles["profile-container"]}>
 				<div className={styles["profile-header"]}>
 					<div className={styles["user-info"]}>
-						<Avatar size={AVATAR_SIZE} user={userProfile} />
+						<Avatar size={128} user={userProfile} />
 
 						<div className={styles["user-info-details"]}>
 							<div className={styles["details-name"]}>
@@ -67,7 +67,9 @@ const PublicProfile = (): React.JSX.Element => {
 							</div>
 							<div className={styles["details-followers"]}>
 								{userProfile.followersCount.toString()} &nbsp;
-								{userProfile.followersCount === ONE ? "follower" : "followers"}
+								{userProfile.followersCount === SINGLE_FOLLOWER_COUNT
+									? "follower"
+									: "followers"}
 							</div>
 							<div className={styles["follow-button-container"]}>
 								<Button

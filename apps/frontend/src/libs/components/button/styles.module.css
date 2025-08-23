@@ -73,6 +73,15 @@
 	border-color: var(--color-text-error);
 }
 
+.button-pressed {
+	background-color: var(--color-fill-weak);
+}
+
+.icon,
+.button:hover .icon-pressed {
+	color: var(--color-text-inverse-strong);
+}
+
 @media (width <= 768px) {
 	.button {
 		font-size: var(--font-size-tiny);

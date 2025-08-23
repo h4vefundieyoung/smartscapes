@@ -43,6 +43,7 @@ const RouteDetails = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const { id } = useParams<{ id: string }>();
 	const dataStatus = useAppSelector(({ route }) => route.dataStatus);
+	const isAuthorized = Boolean(user);
 	const hasEditPermissions = Boolean(
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
@@ -106,9 +107,20 @@ const RouteDetails = (): React.JSX.Element => {
 					) : (
 						<>
 							<h1 className={styles["label"]}>{name}</h1>
-							{hasEditPermissions && (
-								<div className={styles["edit-button-container"]}>
-									<Button label="Edit" onClick={handleToggleEditMode} />
+							{isAuthorized && (
+								<div className={styles["controls-container"]}>
+									{hasEditPermissions && (
+										<div className={styles["edit-button-container"]}>
+											<Button
+												label="Edit"
+												onClick={handleToggleEditMode}
+												variant="outlined"
+											/>
+										</div>
+									)}
+									<div className={styles["save-button-container"]}>
+										<Button icon="bookmarks" label="save route" pressed />
+									</div>
 								</div>
 							)}
 						</>

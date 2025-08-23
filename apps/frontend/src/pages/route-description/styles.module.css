@@ -42,8 +42,7 @@
 }
 
 .edit-button-container {
-	width: 100%;
-	max-width: 100px;
+	width: 100px;
 }
 
 .edit-mode-controls {
@@ -51,4 +50,10 @@
 	gap: 8px;
 	width: 100%;
 	max-width: 200px;
+}
+
+.controls-container {
+	display: flex;
+	column-gap: 16px;
+	align-items: center;
 }

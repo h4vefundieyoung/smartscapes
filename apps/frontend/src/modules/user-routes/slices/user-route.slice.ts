@@ -50,6 +50,7 @@ const { actions, name, reducer } = createSlice({
 
 		builder.addCase(start.pending, (state) => {
 			state.startStatus = DataStatus.PENDING;
+			state.createStatus = DataStatus.IDLE;
 		});
 		builder.addCase(start.fulfilled, (state, action) => {
 			const index = state.userRoutes.findIndex(

@@ -35,7 +35,7 @@ import styles from "./styles.module.css";
 const RouteDetails = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const navigate = useAppNavigate();
-	const { id } = useParams<{ id: string }>();
+	const { id: routeId } = useParams<{ id: string }>();
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
 	const { route, user } = useAppSelector(({ auth, route }) => ({
 		route: route.route,
@@ -73,13 +73,13 @@ const RouteDetails = (): React.JSX.Element => {
 			const { description, name } = getValues();
 			void dispatch(
 				routeActions.patchRoute({
-					id: route.id,
+					id: Number(routeId),
 					payload: { description, name },
 				}),
 			);
 			setIsEditMode(false);
 		}
-	}, [dispatch, setIsEditMode, route, getValues]);
+	}, [dispatch, setIsEditMode, route, getValues, routeId]);
 
 	const handleCreateUserRoute = useCallback(() => {
 		if (!route || !user) {
@@ -89,24 +89,25 @@ const RouteDetails = (): React.JSX.Element => {
 		void dispatch(
 			userRouteActions.create({
 				payload: {
-					routeId: Number(id),
+					routeId: Number(routeId),
 				},
 				userId: user.id,
 			}),
 		);
-	}, [dispatch, id, user, route]);
+	}, [dispatch, routeId, user, route]);
 
 	useEffect(() => {
 		if (routeDataStatus === DataStatus.IDLE) {
-			void dispatch(routeActions.getRouteById(Number(id)));
+			void dispatch(routeActions.getRouteById(Number(routeId)));
 		}
-	}, [dispatch, id, routeDataStatus]);
+	}, [dispatch, routeId, routeDataStatus]);
 
 	useEffect(() => {
 		if (userRouteCreateDataStatus === DataStatus.FULFILLED) {
-			navigate(AppRoute.USER_ROUTES_$ID_MAP.replace(":id", String(id)));
+			const path = AppRoute.USER_ROUTES_$ID_MAP.replace(":id", String(routeId));
+			navigate(path);
 		}
-	}, [userRouteCreateDataStatus, navigate, id]);
+	}, [userRouteCreateDataStatus, navigate, routeId]);
 
 	useEffect(() => {
 		if (route && !isEditMode) {

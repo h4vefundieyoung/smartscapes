@@ -50,18 +50,3 @@
 .follow-button-container {
 	width: fit-content;
 }
-
-.activities-container {
-	width: 100%;
-	border-bottom: 1px solid var(--color-stroke-weak);
-}
-
-.activity-label {
-	display: flex;
-	align-items: center;
-	width: fit-content;
-	height: 48px;
-	font-size: var(--font-size-small);
-	font-weight: var(--font-weight-semibold);
-	border-bottom: 2px solid var(--color-stroke-selected);
-}

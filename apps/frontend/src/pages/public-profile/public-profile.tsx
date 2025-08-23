@@ -81,12 +81,6 @@ const PublicProfile = (): React.JSX.Element => {
 						</div>
 					</div>
 				</div>
-
-				<div className={styles["activities-container"]}>
-					<div className={styles["activity-label"]}>
-						<span>Activity</span>
-					</div>
-				</div>
 			</main>
 		</div>
 	);

@@ -1,5 +1,6 @@
 import { type Repository } from "~/libs/types/types.js";
 
+import { UserRouteStatus } from "./libs/enums/enum.js";
 import { UserRouteEntity } from "./user-route.entity.js";
 import { type UserRouteModel } from "./user-route.model.js";
 
@@ -10,6 +11,15 @@ class UserRouteRepository implements Repository {
 
 	public constructor(userRouteModel: typeof UserRouteModel) {
 		this.userRouteModel = userRouteModel;
+	}
+
+	public async checkHasActiveRoute(userId: number): Promise<boolean> {
+		const [userRoute] = await this.userRouteModel
+			.query()
+			.where({ status: UserRouteStatus.ACTIVE, userId })
+			.execute();
+
+		return userRoute ? true : false;
 	}
 
 	public async create(entity: UserRouteEntity): Promise<UserRouteEntity> {
@@ -37,33 +47,9 @@ class UserRouteRepository implements Repository {
 		return UserRouteEntity.initialize(userRoute);
 	}
 
-	public async findAllByUserId(userId: number): Promise<UserRouteEntity[]> {
-		const userRoutes = await this.userRouteModel
-			.query()
-			.where({ userId })
-			.select([
-				"id",
-				"routeId",
-				"userId",
-				"status",
-				"startedAt",
-				"completedAt",
-				this.userRouteModel.raw(
-					"ST_AsGeoJSON(actual_geometry)::json as actual_geometry",
-				),
-				this.userRouteModel.raw(
-					"ST_AsGeoJSON(planned_geometry)::json as planned_geometry",
-				),
-			])
-			.execute();
-
-		return userRoutes.map((item) => UserRouteEntity.initialize(item));
-	}
-
 	public async findByFilter(
 		filters: UserRouteFilters,
-		options?: { multiple?: boolean },
-	): Promise<null | UserRouteEntity | UserRouteEntity[]> {
+	): Promise<UserRouteEntity[]> {
 		const userRoutes = await this.userRouteModel
 			.query()
 			.where(filters)
@@ -83,11 +69,7 @@ class UserRouteRepository implements Repository {
 			])
 			.execute();
 
-		if (options?.multiple) {
-			return userRoutes.map((item) => UserRouteEntity.initialize(item));
-		}
-
-		return userRoutes[0] ? UserRouteEntity.initialize(userRoutes[0]) : null;
+		return userRoutes.map((item) => UserRouteEntity.initialize(item));
 	}
 
 	public async patch(
@@ -95,15 +77,15 @@ class UserRouteRepository implements Repository {
 		userId: number,
 		entity: UserRouteEntity,
 	): Promise<null | UserRouteEntity> {
-		const updatedUserRoutes = entity.toNewObject();
+		const updatedUserData = entity.toNewObject();
 
-		const [updated] = await this.userRouteModel
+		const [updatedUserRoute] = await this.userRouteModel
 			.query()
 			.where({
 				id,
 				userId,
 			})
-			.patch(updatedUserRoutes)
+			.patch(updatedUserData)
 			.returning([
 				"id",
 				"routeId",
@@ -120,7 +102,9 @@ class UserRouteRepository implements Repository {
 			])
 			.execute();
 
-		return updated ? UserRouteEntity.initialize(updated) : null;
+		return updatedUserRoute
+			? UserRouteEntity.initialize(updatedUserRoute)
+			: null;
 	}
 }
 

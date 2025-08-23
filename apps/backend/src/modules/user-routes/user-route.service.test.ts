@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
+import { type LineStringGeometry } from "~/libs/types/types.js";
+
 import { type RouteService } from "../routes/route.service.js";
 import { UserRouteStatus } from "./libs/enums/enum.js";
 import { UserRouteError } from "./libs/exeptions/exeptions.js";
@@ -11,11 +13,11 @@ import { UserRouteService } from "./user-route.service.js";
 describe("UserRouteService", () => {
 	const mockGeometry = {
 		coordinates: [
-			[30.528_909, 50.455_232] as [number, number],
-			[30.528_209, 50.415_232] as [number, number],
+			[30.528_909, 50.455_232],
+			[30.528_209, 50.415_232],
 		],
-		type: "LineString" as const,
-	};
+		type: "LineString",
+	} as LineStringGeometry;
 
 	const mockUserRoute = {
 		actualGeometry: mockGeometry,
@@ -33,17 +35,14 @@ describe("UserRouteService", () => {
 	} as unknown as RouteService;
 
 	const mockRepository = {
+		checkHasActiveRoute: () => Promise.resolve(false),
 		create: () => Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
-		findByFilter: (filters: unknown, options?: { multiple?: boolean }) =>
-			options?.multiple
-				? Promise.resolve([])
-				: Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
+		findByFilter: () =>
+			Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
 		findMany: () => Promise.resolve([]),
 		findOne: () => Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
 		patch: () => Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
 	} as unknown as UserRouteRepository;
-
-	const service = new UserRouteService(mockRepository, mockRouteService);
 
 	describe("create", () => {
 		it("should create new user route", async () => {
@@ -52,7 +51,16 @@ describe("UserRouteService", () => {
 				userId: 1,
 			};
 
-			const result = await service.create(payload);
+			const mockRepositoryForCreate = Object.assign({}, mockRepository, {
+				findByFilter: () => Promise.resolve([]),
+			});
+
+			const serviceForCreate = new UserRouteService(
+				mockRepositoryForCreate,
+				mockRouteService,
+			);
+
+			const result = await serviceForCreate.create(payload);
 
 			assert.strictEqual(result.routeId, payload.routeId);
 			assert.strictEqual(result.userId, payload.userId);
@@ -75,10 +83,8 @@ describe("UserRouteService", () => {
 			});
 
 			const mockRepositoryWithActive = Object.assign({}, mockRepository, {
-				findByFilter: (filters: unknown, options?: { multiple?: boolean }) =>
-					options?.multiple
-						? Promise.resolve([])
-						: Promise.resolve(UserRouteEntity.initialize(mockActiveRoute)),
+				findByFilter: () =>
+					Promise.resolve([UserRouteEntity.initialize(mockActiveRoute)]),
 				findOne: () =>
 					Promise.resolve(UserRouteEntity.initialize(mockActiveRoute)),
 				patch: () =>
@@ -90,7 +96,7 @@ describe("UserRouteService", () => {
 							}),
 						),
 					),
-			}) as unknown as UserRouteRepository;
+			});
 
 			const serviceWithActive = new UserRouteService(
 				mockRepositoryWithActive,
@@ -112,13 +118,10 @@ describe("UserRouteService", () => {
 			};
 
 			const mockRepositoryWithInactive = Object.assign({}, mockRepository, {
-				findByFilter: (filters: unknown, options?: { multiple?: boolean }) =>
-					options?.multiple
-						? Promise.resolve([])
-						: Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
+				findByFilter: () => Promise.resolve([]),
 				findOne: () =>
 					Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
-			}) as unknown as UserRouteRepository;
+			});
 
 			const serviceWithInactive = new UserRouteService(
 				mockRepositoryWithInactive,
@@ -134,10 +137,8 @@ describe("UserRouteService", () => {
 	describe("getAllByUserId", () => {
 		it("should get all routes for user", async () => {
 			const mockRepositoryWithRoutes = Object.assign({}, mockRepository, {
-				findByFilter: (filters: unknown, options?: { multiple?: boolean }) =>
-					options?.multiple
-						? Promise.resolve([UserRouteEntity.initialize(mockUserRoute)])
-						: Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
+				findByFilter: () =>
+					Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
 				findMany: () =>
 					Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
 			}) as unknown as UserRouteRepository;
@@ -163,10 +164,8 @@ describe("UserRouteService", () => {
 			};
 
 			const mockRepositoryWithActive = Object.assign({}, mockRepository, {
-				findByFilter: (filters: unknown, options?: { multiple?: boolean }) =>
-					options?.multiple
-						? Promise.resolve([])
-						: Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
+				findByFilter: () =>
+					Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
 				findMany: () => Promise.resolve([]),
 				findOne: () =>
 					Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
@@ -179,7 +178,7 @@ describe("UserRouteService", () => {
 							}),
 						),
 					),
-			}) as unknown as UserRouteRepository;
+			});
 
 			const serviceWithActive = new UserRouteService(
 				mockRepositoryWithActive,
@@ -200,15 +199,12 @@ describe("UserRouteService", () => {
 			};
 
 			const mockRepositoryWithActive = Object.assign({}, mockRepository, {
-				findByFilter: (filters: unknown, options?: { multiple?: boolean }) =>
-					options?.multiple
-						? Promise.resolve([UserRouteEntity.initialize(mockUserRoute)])
-						: Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
+				checkHasActiveRoute: () => Promise.resolve(true),
 				findMany: () =>
 					Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
 				findOne: () =>
 					Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
-			}) as unknown as UserRouteRepository;
+			});
 
 			const serviceWithActive = new UserRouteService(
 				mockRepositoryWithActive,

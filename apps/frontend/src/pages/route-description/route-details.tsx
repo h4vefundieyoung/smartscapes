@@ -97,8 +97,10 @@ const RouteDetails = (): React.JSX.Element => {
 	}, [dispatch, id, user, route]);
 
 	useEffect(() => {
-		void dispatch(routeActions.getRouteById(Number(id)));
-	}, [dispatch, id]);
+		if (routeDataStatus === DataStatus.IDLE) {
+			void dispatch(routeActions.getRouteById(Number(id)));
+		}
+	}, [dispatch, id, routeDataStatus]);
 
 	useEffect(() => {
 		if (userRouteCreateDataStatus === DataStatus.FULFILLED) {
@@ -107,11 +109,11 @@ const RouteDetails = (): React.JSX.Element => {
 	}, [userRouteCreateDataStatus, navigate, id]);
 
 	useEffect(() => {
-		if (route) {
+		if (route && !isEditMode) {
 			handleValueSet("name", route.name);
 			handleValueSet("description", route.description);
 		}
-	}, [route, handleValueSet]);
+	}, [route, handleValueSet, isEditMode]);
 
 	if (routeDataStatus === DataStatus.REJECTED) {
 		return <NotFound />;

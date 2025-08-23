@@ -125,18 +125,11 @@ class PointsOfInterestService implements Service {
 		id: number,
 		payload: PointsOfInterestRequestDto,
 	): Promise<PointsOfInterestResponseDto> {
-		const { description, location, name } = payload;
+		const { name } = payload;
 
-		await this.ensureNameIsUnique(name);
+		await this.ensureNameIsUnique(name, id);
 
-		const item = await this.pointsOfInterestRepository.patch(
-			id,
-			PointsOfInterestEntity.initializeNew({
-				description,
-				location,
-				name,
-			}),
-		);
+		const item = await this.pointsOfInterestRepository.patch(id, payload);
 
 		if (!item) {
 			throw new PointOfInterestError({
@@ -148,11 +141,17 @@ class PointsOfInterestService implements Service {
 		return item.toObject();
 	}
 
-	private async ensureNameIsUnique(name: string): Promise<void> {
+	private async ensureNameIsUnique(
+		name: string,
+		currentId?: number,
+	): Promise<void> {
 		const existingPointOfInterest =
 			await this.pointsOfInterestRepository.findByName(name);
 
-		if (existingPointOfInterest) {
+		if (
+			existingPointOfInterest &&
+			existingPointOfInterest.toObject().id !== currentId
+		) {
 			throw new PointOfInterestError({
 				message: PointOfInterestExceptionMessage.NAME_ALREADY_EXISTS,
 				status: HTTPCode.CONFLICT,

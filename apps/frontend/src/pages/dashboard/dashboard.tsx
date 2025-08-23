@@ -1,12 +1,6 @@
 import { Carousel, Loader, Select } from "~/libs/components/components.js";
 import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
-import {
-	useAppDispatch,
-	useAppForm,
-	useAppSelector,
-	useEffect,
-} from "~/libs/hooks/hooks.js";
-import { actions as notificationActions } from "~/modules/notification/notification.js";
+import { useAppForm } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 
@@ -16,15 +10,6 @@ type FormValues = {
 };
 
 const Dashboard = (): React.JSX.Element => {
-	const dispatch = useAppDispatch();
-	const notifications = useAppSelector(
-		(state) => state.notification.notifications,
-	);
-
-	useEffect(() => {
-		void dispatch(notificationActions.getNotifications());
-	}, [dispatch]);
-
 	const colorOptions: SelectOption<string>[] = [
 		{ label: "Red", value: "red" },
 		{ label: "Green", value: "green" },
@@ -39,15 +24,6 @@ const Dashboard = (): React.JSX.Element => {
 		<main className={styles["container"]}>
 			<div className={styles["components-container"]}>
 				<Loader />
-				<ul>
-					{notifications.length > 0 ? (
-						notifications.map((notification) => (
-							<li key={notification.id}>{notification.content}</li>
-						))
-					) : (
-						<li>No notifications</li>
-					)}
-				</ul>
 				<div className={styles["carousel-container"]}>
 					<Carousel images={[""]} />
 				</div>

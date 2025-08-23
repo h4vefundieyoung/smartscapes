@@ -1,0 +1,32 @@
+import { Link } from "~/libs/components/components.js";
+import { AppRoute } from "~/libs/enums/enums.js";
+import { configureString, getRelativeTime } from "~/libs/helpers/helpers.js";
+
+import styles from "./styles.module.css";
+
+type Properties = {
+	content: string;
+	createdAt: string;
+	entityId: number;
+};
+
+const PopoverItem = ({
+	content,
+	createdAt,
+	entityId,
+}: Properties): React.JSX.Element => {
+	const userProfileLink = configureString(AppRoute.PUBLIC_PROFILE_$ID, {
+		id: entityId.toString(),
+	});
+
+	return (
+		<li className={styles["notification"]}>
+			<Link className={styles["link"]} to={userProfileLink}>
+				<div className={styles["time"]}>{getRelativeTime(createdAt)}</div>
+				<div className={styles["content"]}>{content}</div>
+			</Link>
+		</li>
+	);
+};
+
+export { PopoverItem };

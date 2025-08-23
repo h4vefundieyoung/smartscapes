@@ -15,6 +15,7 @@ import { type DropdownItem } from "~/libs/types/types.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import { type UserAuthResponseDto } from "~/modules/users/libs/types/types.js";
 
+import { Popover } from "./libs/components/components.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -69,6 +70,8 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 
 	return (
 		<div className={styles["user-profile-wrapper"]} ref={dropdownReference}>
+			<Popover />
+
 			<button className={styles["user-info"]} onClick={handleUserClick}>
 				<Avatar user={user} />
 				<div className={styles["name"]}>

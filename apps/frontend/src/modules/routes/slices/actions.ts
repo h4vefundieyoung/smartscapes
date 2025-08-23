@@ -65,4 +65,24 @@ const uploadImage = createAsyncThunk<
 	return image;
 });
 
-export { getAll, getRouteById, patchRoute, uploadImage };
+const deleteImage = createAsyncThunk<
+	APIResponse<{ id: number; isDeleted: boolean }>,
+	number,
+	AsyncThunkConfig
+>(`${sliceName}/delete-image`, async (id, { extra }) => {
+	const { fileApi, toastNotifier } = extra;
+
+	const response = await fileApi.delete({ id });
+
+	toastNotifier.showSuccess("Image was deleted");
+
+	return {
+		data: {
+			id,
+			isDeleted: response.data,
+		},
+		error: null,
+	};
+});
+
+export { deleteImage, getAll, getRouteById, patchRoute, uploadImage };

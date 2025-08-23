@@ -80,6 +80,13 @@ const RouteDetails = (): React.JSX.Element => {
 		}
 	}, [dispatch, setIsEditMode, route, getValues]);
 
+	const handleDeleteImage = useCallback(
+		(id: number) => {
+			void dispatch(routeActions.deleteImage(id));
+		},
+		[dispatch],
+	);
+
 	useEffect(() => {
 		void dispatch(routeActions.getRouteById(Number(id)));
 	}, [dispatch, id]);
@@ -99,7 +106,7 @@ const RouteDetails = (): React.JSX.Element => {
 		return <Loader />;
 	}
 
-	const { description, imagesUrl, name } = route as RouteGetByIdResponseDto;
+	const { description, images, name } = route as RouteGetByIdResponseDto;
 
 	return (
 		<>
@@ -129,7 +136,11 @@ const RouteDetails = (): React.JSX.Element => {
 						</>
 					)}
 				</div>
-				<ImageGallery images={imagesUrl} />
+				<ImageGallery
+					handleDelete={handleDeleteImage}
+					images={images}
+					isEditMode={isEditMode}
+				/>
 				{isEditMode ? (
 					<>
 						<input

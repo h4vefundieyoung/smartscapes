@@ -1,8 +1,15 @@
-import { getAll, getRouteById, patchRoute, uploadImage } from "./actions.js";
+import {
+	deleteImage,
+	getAll,
+	getRouteById,
+	patchRoute,
+	uploadImage,
+} from "./actions.js";
 import { actions } from "./route.slice.js";
 
 const allActions = {
 	...actions,
+	deleteImage,
 	getAll,
 	getRouteById,
 	patchRoute,

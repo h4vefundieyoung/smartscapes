@@ -12,6 +12,7 @@ import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { reducer as appReducer } from "~/modules/app/app.js";
 import { authApi, reducer as authReducer } from "~/modules/auth/auth.js";
 import { reducer as exploreReducer } from "~/modules/explore/explore.js";
+import { fileApi } from "~/modules/files/files.js";
 import { reducer as locationReducer } from "~/modules/location/location.js";
 import {
 	pointOfInterestApi,
@@ -36,6 +37,7 @@ class Store {
 	public get extraArguments(): ExtraArguments {
 		return {
 			authApi,
+			fileApi,
 			pointOfInterestApi,
 			routeApi,
 			storage,

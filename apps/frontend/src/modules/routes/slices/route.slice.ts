@@ -4,7 +4,13 @@ import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
 import { type RouteGetByIdResponseDto } from "../libs/types/types.js";
-import { getAll, getRouteById, patchRoute, uploadImage } from "./actions.js";
+import {
+	deleteImage,
+	getAll,
+	getRouteById,
+	patchRoute,
+	uploadImage,
+} from "./actions.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
@@ -33,17 +39,24 @@ const { actions, name, reducer } = createSlice({
 		});
 		builder.addCase(uploadImage.fulfilled, (state, action) => {
 			if (state.route) {
-				state.route = {
-					...state.route,
-					imagesUrl: [
-						...(state.route.imagesUrl ?? []),
-						action.payload.data.url,
-					],
-				};
+				state.route.images.push({
+					id: action.payload.data.id,
+					url: action.payload.data.url,
+				});
 			}
 
 			state.dataStatus = DataStatus.FULFILLED;
 		});
+		builder.addCase(deleteImage.fulfilled, (state, action) => {
+			if (state.route) {
+				state.route.images = state.route.images.filter(
+					(image) => image.id !== action.payload.data.id,
+				);
+			}
+
+			state.dataStatus = DataStatus.FULFILLED;
+		});
+
 		builder.addCase(patchRoute.fulfilled, (state, action) => {
 			state.route = action.payload.data;
 			state.dataStatus = DataStatus.FULFILLED;

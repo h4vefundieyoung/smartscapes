@@ -101,6 +101,7 @@ export {
 	routesCreateValidationSchema,
 	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
+	type RouteUploadImageResponseDto,
 } from "./modules/routes/routes.js";
 export {
 	UserFollowsApiPath,

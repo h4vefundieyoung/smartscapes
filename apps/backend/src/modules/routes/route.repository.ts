@@ -62,8 +62,11 @@ class RouteRepository implements Repository {
 
 		const query = this.routesModel
 			.query()
-			.withGraphFetched("pois(selectPoiIdOrder)")
+			.withGraphFetched("[pois(selectPoiIdOrder), images(selectFileIdUrl)]")
 			.modifiers({
+				selectFileIdUrl(builder) {
+					builder.select("files.id", "files.url");
+				},
 				selectPoiIdOrder(builder) {
 					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
 				},
@@ -76,17 +79,6 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
 				"routes.created_by_user_id",
-				this.routesModel.raw(`
-				COALESCE(
-					(
-					SELECT json_agg(files.url)
-					FROM files
-					WHERE files.entity_id = routes.id
-						AND files.folder = 'routes'
-					),
-					'[]'
-				) as "imagesUrl"
-				`),
 			])
 			.modify((builder) => {
 				if (options?.name) {
@@ -128,6 +120,15 @@ class RouteRepository implements Repository {
 	public async findById(id: number): Promise<null | RouteEntity> {
 		const route = await this.routesModel
 			.query()
+			.withGraphFetched("[pois(selectPoiIdOrder), images(selectFileIdUrl)]")
+			.modifiers({
+				selectFileIdUrl(builder) {
+					builder.select("files.id", "files.url");
+				},
+				selectPoiIdOrder(builder) {
+					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
+				},
+			})
 			.select([
 				"routes.id",
 				"routes.name",
@@ -136,24 +137,7 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
 				"routes.created_by_user_id",
-				this.routesModel.raw(`
-				COALESCE(
-					(
-					SELECT json_agg(files.url)
-					FROM files
-					WHERE files.entity_id = routes.id
-						AND files.folder = 'routes'
-					),
-					'[]'
-				) as "imagesUrl"
-				`),
 			])
-			.withGraphFetched("pois(selectPoiIdOrder)")
-			.modifiers({
-				selectPoiIdOrder(builder) {
-					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
-				},
-			})
 			.where("routes.id", id)
 			.first();
 

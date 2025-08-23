@@ -37,9 +37,15 @@ describe("RouteRepository", () => {
 			type: "LineString",
 		} as LineStringGeometry,
 		id: 1,
-		imagesUrl: [
-			"https://s3.amazonaws.com/test/1.png",
-			"https://s3.amazonaws.com/test/2.png",
+		images: [
+			{
+				id: 1,
+				url: "https://s3.amazonaws.com/test/1.png",
+			},
+			{
+				id: 2,
+				url: "https://s3.amazonaws.com/test/2.png",
+			},
 		],
 		name: "Test Route",
 		pois: [{ id: 1, visitOrder: 1 }],
@@ -51,9 +57,15 @@ describe("RouteRepository", () => {
 		duration: mockRoute.duration,
 		geometry: mockRoute.geometry,
 		id: mockRoute.id,
-		imagesUrl: [
-			"https://s3.amazonaws.com/test/1.png",
-			"https://s3.amazonaws.com/test/2.png",
+		images: [
+			{
+				id: 1,
+				url: "https://s3.amazonaws.com/test/1.png",
+			},
+			{
+				id: 2,
+				url: "https://s3.amazonaws.com/test/2.png",
+			},
 		],
 		name: mockRoute.name,
 		pois: [] as { id: number; visitOrder: number }[],

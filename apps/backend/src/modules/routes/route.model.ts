@@ -1,3 +1,4 @@
+import { type RouteUploadImageResponseDto } from "@smartscapes/shared";
 import { Model, type QueryBuilder } from "objection";
 
 import { FileFolderName } from "~/libs/enums/enums.js";
@@ -64,7 +65,7 @@ class RouteModel extends Model {
 
 	public id!: number;
 
-	public imagesUrl!: null | string[];
+	public images!: RouteUploadImageResponseDto[];
 
 	public name!: string;
 

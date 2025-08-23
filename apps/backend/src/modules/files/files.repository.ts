@@ -29,6 +29,12 @@ class FileRepository implements Repository {
 		return FileEntity.initialize(file);
 	}
 
+	public async delete(id: number): Promise<boolean> {
+		const isDeleted = await this.fileModel.query().deleteById(id);
+
+		return Boolean(isDeleted);
+	}
+
 	public async findAll(): Promise<FileEntity[]> {
 		const files = await this.fileModel.query().select("*").limit(FILES_LIMIT);
 

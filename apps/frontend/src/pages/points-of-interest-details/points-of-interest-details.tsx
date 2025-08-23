@@ -41,7 +41,14 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 				{pointsOfInterestDetails && (
 					<>
 						<h2 className={styles["header"]}>{pointsOfInterestDetails.name}</h2>
-						<ImageGallery images={[image1, image2, image3]} />
+						<ImageGallery
+							images={[
+								{ id: 1, url: image1 },
+								{ id: 2, url: image2 },
+								{ id: 3, url: image3 },
+							]}
+							isEditMode={false}
+						/>
 						<p className={styles["description"]}>
 							{pointsOfInterestDetails.description}
 						</p>

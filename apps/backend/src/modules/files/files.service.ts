@@ -50,6 +50,12 @@ class FileService implements Service {
 		return item.toObject();
 	}
 
+	public async delete(id: number): Promise<boolean> {
+		const isDeleted = this.fileRepository.delete(id);
+
+		return await isDeleted;
+	}
+
 	public async getAll(): Promise<FileUploadResponseDto[]> {
 		const items = await this.fileRepository.findAll();
 

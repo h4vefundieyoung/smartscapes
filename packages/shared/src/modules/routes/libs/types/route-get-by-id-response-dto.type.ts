@@ -7,7 +7,10 @@ type RouteGetByIdResponseDto = {
 	duration: number;
 	geometry: LineStringGeometry;
 	id: number;
-	imagesUrl: null | string[];
+	images: {
+		id: number;
+		url: string;
+	}[];
 	name: string;
 	pois: {
 		id: number;

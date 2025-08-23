@@ -12,13 +12,13 @@ import { type PlannedPathResponseDto } from "~/modules/planned-paths/libs/types/
 
 import { RoutesApiPath } from "./libs/enums/enums.js";
 import {
-	type FileUploadResponseDto,
 	type RouteConstructRequestDto,
 	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
 	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
+	type RouteUploadImageResponseDto,
 } from "./libs/types/types.js";
 import {
 	routesConstructValidationSchema,
@@ -666,7 +666,7 @@ class RouteController extends BaseController {
 			};
 			params: { id: string };
 		}>,
-	): Promise<APIHandlerResponse<FileUploadResponseDto>> {
+	): Promise<APIHandlerResponse<RouteUploadImageResponseDto>> {
 		const id = Number(options.params.id);
 
 		const image = await this.routeService.uploadImage(id, options.body.file);

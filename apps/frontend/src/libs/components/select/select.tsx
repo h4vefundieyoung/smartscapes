@@ -18,8 +18,8 @@ import { type IconName, type SelectOption } from "~/libs/types/types.js";
 
 import { CustomDropdownIndicator } from "./libs/components/components.js";
 import {
-	selectIconLeftStylesConfig,
-	selectStylesConfig,
+	SELECT_ICON_LEFT_STYLES_CONFIG,
+	SELECT_STYLES_CONFIG,
 } from "./libs/constants/constants.js";
 import { getSelectNewValue, mapSelectValue } from "./libs/helpers/helpers.js";
 import styles from "./styles.module.css";
@@ -95,10 +95,10 @@ const Select = <TFieldValues extends FieldValues, TOptionValue = string>({
 
 	const stylesConfig = useMemo(() => {
 		if (!iconLeft) {
-			return selectStylesConfig;
+			return SELECT_STYLES_CONFIG;
 		}
 
-		return { ...selectStylesConfig, ...selectIconLeftStylesConfig };
+		return { ...SELECT_STYLES_CONFIG, ...SELECT_ICON_LEFT_STYLES_CONFIG };
 	}, [iconLeft]);
 
 	return (

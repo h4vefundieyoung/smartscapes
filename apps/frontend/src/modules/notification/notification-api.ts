@@ -1,4 +1,4 @@
-import { APIPath, ContentType } from "~/libs/enums/enums.js";
+import { APIPath } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
@@ -18,13 +18,12 @@ class NotificationApi extends BaseHTTPApi {
 		super({ baseUrl, http, path: APIPath.NOTIFICATIONS, storage });
 	}
 
-	public async getNotifications(): Promise<
+	public async getAll(): Promise<
 		APIResponse<{ items: NotificationGetAllItemResponseDto[] }>
 	> {
 		const response = await this.load<
 			APIResponse<{ items: NotificationGetAllItemResponseDto[] }>
 		>(this.getFullEndpoint(NotificationApiPath.ROOT, {}), {
-			contentType: ContentType.JSON,
 			hasAuth: true,
 			method: "GET",
 		});

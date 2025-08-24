@@ -21,7 +21,7 @@ const NotificationsPopover = (): React.JSX.Element => {
 	);
 
 	useEffect(() => {
-		void dispatch(notificationActions.getNotifications());
+		void dispatch(notificationActions.getAll());
 	}, [dispatch]);
 
 	useEffect(() => {

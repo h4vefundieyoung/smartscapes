@@ -1,9 +1,9 @@
-import { getNotifications } from "./actions.js";
+import { getAll } from "./actions.js";
 import { actions } from "./notification.slice.js";
 
 const allActions = {
 	...actions,
-	getNotifications,
+	getAll,
 };
 
 export { allActions as actions };

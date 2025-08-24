@@ -5,14 +5,14 @@ import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 import { type NotificationGetAllItemResponseDto } from "../libs/types/types.js";
 import { name as sliceName } from "./notification.slice.js";
 
-const getNotifications = createAsyncThunk<
+const getAll = createAsyncThunk<
 	APIResponse<{ items: NotificationGetAllItemResponseDto[] }>,
 	undefined,
 	AsyncThunkConfig
->(`${sliceName}/get-notifications`, async (_, { extra }) => {
+>(`${sliceName}/get-all`, async (_, { extra }) => {
 	const { notificationApi } = extra;
 
-	return await notificationApi.getNotifications();
+	return await notificationApi.getAll();
 });
 
-export { getNotifications };
+export { getAll };

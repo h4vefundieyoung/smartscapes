@@ -1,3 +1,4 @@
+import { type ComponentProps } from "react";
 import {
 	type Control,
 	type FieldErrors,
@@ -5,23 +6,21 @@ import {
 	type FieldValues,
 } from "react-hook-form";
 
-import { Icon } from "~/libs/components/components.js";
+import { FieldError } from "~/libs/components/components.js";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
-import { type IconName } from "~/libs/types/types.js";
 
-import { InteractiveIcon, StaticIcon } from "./libs/components/components.js";
+import { InputIcon } from "./libs/components/components.js";
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
 	autocomplete?: HTMLInputElement["autocomplete"];
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
-	iconRight?: {
-		label?: string;
-		name: IconName;
-		onClick?: () => void;
-	};
+	iconRight?: Pick<
+		ComponentProps<typeof InputIcon>,
+		"label" | "name" | "onClick"
+	>;
 	label: string;
 	name: FieldPath<T>;
 	placeholder?: string;
@@ -60,26 +59,18 @@ const Input = <T extends FieldValues>({
 					type={type}
 					value={field.value}
 				/>
-				{hasError && (
-					<span className={styles["error"]}>
-						<Icon height={24} name="error" width={24} />
-						{error as string}
-					</span>
-				)}
 				{iconRight && (
 					<span className={styles["icon-right"]}>
-						{iconRight.onClick && iconRight.label ? (
-							<InteractiveIcon
-								label={iconRight.label}
-								name={iconRight.name}
-								onClick={iconRight.onClick}
-							/>
-						) : (
-							<StaticIcon {...iconRight} />
-						)}
+						<InputIcon
+							label={iconRight.label}
+							name={iconRight.name}
+							onClick={iconRight.onClick}
+							state={hasError ? "error" : "default"}
+						/>
 					</span>
 				)}
 			</span>
+			{hasError && <FieldError description={error as string} />}
 		</label>
 	);
 };

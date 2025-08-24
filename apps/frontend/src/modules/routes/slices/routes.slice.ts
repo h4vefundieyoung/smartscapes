@@ -14,6 +14,7 @@ import {
 	getRouteById,
 	patchRoute,
 	restoreCreateRouteFormData,
+	saveUserRoute,
 } from "./actions.js";
 
 type State = {
@@ -23,6 +24,7 @@ type State = {
 	formDataStatus: ValueOf<typeof DataStatus>;
 	route: null | RouteGetByIdResponseDto;
 	routes: RouteGetByIdResponseDto[];
+	saveRouteStatus: ValueOf<typeof DataStatus>;
 };
 
 const initialState: State = {
@@ -32,6 +34,7 @@ const initialState: State = {
 	formDataStatus: DataStatus.IDLE,
 	route: null,
 	routes: [],
+	saveRouteStatus: DataStatus.IDLE,
 };
 
 const { actions, name, reducer } = createSlice({
@@ -93,6 +96,22 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(discardCreateRouteFormData.fulfilled, (state) => {
 			state.formData = null;
 		});
+		builder.addCase(saveUserRoute.pending, (state) => {
+			state.saveRouteStatus = DataStatus.PENDING;
+		});
+		builder.addCase(saveUserRoute.rejected, (state) => {
+			state.saveRouteStatus = DataStatus.REJECTED;
+		});
+		builder.addCase(
+			saveUserRoute.fulfilled,
+			(state, { payload: { id, status } }) => {
+				state.saveRouteStatus = DataStatus.FULFILLED;
+
+				if (state.route) {
+					state.route.userRoute = { id, status };
+				}
+			},
+		);
 	},
 	initialState,
 	name: "routes",

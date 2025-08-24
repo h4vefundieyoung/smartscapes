@@ -10,6 +10,7 @@ import {
 	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
 	type RouteGetByIdResponseDto,
+	type UserRouteResponseDto,
 } from "../libs/types/types.js";
 import { name as sliceName } from "./routes.slice.js";
 
@@ -106,6 +107,17 @@ const discardCreateRouteFormData = createAsyncThunk<
 	await storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
 });
 
+const saveUserRoute = createAsyncThunk<
+	UserRouteResponseDto,
+	number,
+	AsyncThunkConfig
+>(`${sliceName}/save-user-route`, async (id, { extra }) => {
+	const { userRoutesApi } = extra;
+	const { data } = await userRoutesApi.saveRoute(id);
+
+	return data;
+});
+
 export {
 	create,
 	discardCreateRouteFormData,
@@ -114,4 +126,5 @@ export {
 	patchRoute,
 	preserveCreateRouteFormData,
 	restoreCreateRouteFormData,
+	saveUserRoute,
 };

@@ -57,6 +57,7 @@ const createMockRouteService = (): Partial<RouteService> => ({
 					visitOrder: 2,
 				},
 			],
+			userRoute: null,
 		}),
 });
 

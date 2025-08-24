@@ -107,6 +107,7 @@ describe("Route controller", () => {
 			{ id: FIRST_POI_ID, name: FIRST_NAME, visitOrder: FIRST_VISIT_ORDER },
 			{ id: SECOND_POI_ID, name: SECOND_NAME, visitOrder: SECOND_VISIT_ORDER },
 		],
+		userRoute: null,
 	};
 
 	const mockUserWithWrongPermission = {
@@ -142,6 +143,7 @@ describe("Route controller", () => {
 				name: mockRoute.name,
 				plannedPathId: 1,
 				poiIds: [FIRST_POI_ID, SECOND_POI_ID],
+				userRoute: null,
 			},
 			params: {},
 			query: {},
@@ -276,7 +278,7 @@ describe("Route controller", () => {
 
 		const updateRouteMockData = {
 			body: {
-				description: updatedRoute.description,
+				description: updatedRoute.description ?? "",
 				name: updatedRoute.name,
 			},
 			params: { id: "1" },
@@ -416,7 +418,7 @@ describe("Route controller", () => {
 
 			const updateRouteMockData = {
 				body: {
-					description: updatedRoute.description,
+					description: updatedRoute.description ?? "",
 					name: updatedRoute.name,
 				},
 				params: { id: "1" },

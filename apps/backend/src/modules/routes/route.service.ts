@@ -19,6 +19,7 @@ import {
 	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
+	type RoutePatchResponseDto,
 } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
 import { RouteModel } from "./route.model.js";
@@ -79,7 +80,7 @@ class RouteService implements Service {
 
 	public async create(
 		payload: RouteCreateRequestDto,
-	): Promise<RouteGetByIdResponseDto> {
+	): Promise<RoutePatchResponseDto> {
 		await this.ensurePoisExist(payload.poiIds);
 
 		const formattedPayload = {
@@ -153,13 +154,13 @@ class RouteService implements Service {
 			});
 		}
 
-		return item.toObject();
+		return item.toDetailsObject();
 	}
 
 	public async patch(
 		id: number,
 		payload: RoutePatchRequestDto,
-	): Promise<RouteGetByIdResponseDto> {
+	): Promise<RoutePatchResponseDto> {
 		const item = await this.routesRepository.patch(id, payload);
 
 		if (!item) {

@@ -116,10 +116,13 @@ class RouteRepository implements Repository {
 		return routes.map((route) => RouteEntity.initializeList(route));
 	}
 
-	public async findById(id: number): Promise<null | RouteEntity> {
+	public async findById(
+		id: number,
+		userId?: number,
+	): Promise<null | RouteEntity> {
 		const route = await this.routesModel
 			.query()
-			.withGraphFetched("pois(selectPoi)")
+			.withGraphFetched("[pois(selectPoi)]")
 			.modifiers({
 				selectPoi(builder) {
 					builder.select(
@@ -128,6 +131,15 @@ class RouteRepository implements Repository {
 						"routes_to_pois.visit_order",
 					);
 				},
+			})
+			.modify((builder) => {
+				if (userId) {
+					builder.withGraphFetched("userRoute(selectUserRoute)").modifiers({
+						selectUserRouter(builder) {
+							builder.select("user_routes.id", "user_routes.status");
+						},
+					});
+				}
 			})
 			.select([
 				"routes.id",

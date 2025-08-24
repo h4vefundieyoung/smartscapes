@@ -16,6 +16,7 @@ import {
 	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
+	type RoutePatchResponseDto,
 } from "./libs/types/types.js";
 import {
 	routesConstructValidationSchema,
@@ -317,7 +318,7 @@ class RouteController extends BaseController {
 		options: APIHandlerOptions<{
 			body: RouteCreateRequestDto;
 		}>,
-	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
+	): Promise<APIHandlerResponse<RoutePatchResponseDto>> {
 		const route = await this.routeService.create(options.body);
 
 		return {
@@ -593,7 +594,7 @@ class RouteController extends BaseController {
 			body: RoutePatchRequestDto;
 			params: { id: string };
 		}>,
-	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
+	): Promise<APIHandlerResponse<RoutePatchResponseDto>> {
 		const id = Number(options.params.id);
 		const { description, name } = options.body;
 

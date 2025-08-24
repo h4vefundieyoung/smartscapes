@@ -73,7 +73,7 @@ const RouteDetails = (): React.JSX.Element => {
 	useEffect(() => {
 		if (route) {
 			handleValueSet("name", route.name);
-			handleValueSet("description", route.description);
+			handleValueSet("description", route.description ?? "");
 		}
 	}, [route, handleValueSet]);
 

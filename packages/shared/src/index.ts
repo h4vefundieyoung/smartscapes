@@ -96,6 +96,7 @@ export {
 	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
+	type RoutePatchResponseDto,
 	RoutesApiPath,
 	routesConstructValidationSchema,
 	routesCreateValidationSchema,

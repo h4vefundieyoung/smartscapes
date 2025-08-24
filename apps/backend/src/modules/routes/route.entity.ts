@@ -1,5 +1,7 @@
 import { type Entity, type LineStringGeometry } from "~/libs/types/types.js";
 
+import { type UserRoute } from "./libs/types/types.js";
+
 class RouteEntity implements Entity {
 	private createdByUserId: number;
 
@@ -21,6 +23,8 @@ class RouteEntity implements Entity {
 		visitOrder: number;
 	}[];
 
+	private userRoute: null | UserRoute;
+
 	private constructor({
 		createdByUserId,
 		description,
@@ -30,6 +34,7 @@ class RouteEntity implements Entity {
 		id,
 		name,
 		pois,
+		userRoute,
 	}: {
 		createdByUserId: number;
 		description: null | string;
@@ -43,6 +48,7 @@ class RouteEntity implements Entity {
 			name?: string;
 			visitOrder: number;
 		}[];
+		userRoute: null | UserRoute[];
 	}) {
 		this.id = id;
 		this.distance = distance;
@@ -52,11 +58,12 @@ class RouteEntity implements Entity {
 		this.description = description;
 		this.pois = pois;
 		this.createdByUserId = createdByUserId;
+		this.userRoute = userRoute?.[0] ?? null;
 	}
 
 	public static initialize(data: {
 		createdByUserId: number;
-		description: string;
+		description: null | string;
 		distance: number;
 		duration: number;
 		geometry: LineStringGeometry;
@@ -67,6 +74,7 @@ class RouteEntity implements Entity {
 			name: string;
 			visitOrder: number;
 		}[];
+		userRoute?: UserRoute[];
 	}): RouteEntity {
 		return new RouteEntity({
 			createdByUserId: data.createdByUserId,
@@ -77,6 +85,7 @@ class RouteEntity implements Entity {
 			id: data.id,
 			name: data.name,
 			pois: data.pois,
+			userRoute: data.userRoute ?? null,
 		});
 	}
 
@@ -110,6 +119,7 @@ class RouteEntity implements Entity {
 			id,
 			name,
 			pois,
+			userRoute: null,
 		});
 	}
 
@@ -121,9 +131,10 @@ class RouteEntity implements Entity {
 		geometry,
 		name,
 		pois,
+		userRoute,
 	}: {
 		createdByUserId: number;
-		description: string;
+		description: null | string;
 		distance: number;
 		duration: number;
 		geometry: LineStringGeometry;
@@ -132,6 +143,7 @@ class RouteEntity implements Entity {
 			id: number;
 			visitOrder: number;
 		}[];
+		userRoute?: UserRoute[];
 	}): RouteEntity {
 		return new RouteEntity({
 			createdByUserId,
@@ -142,7 +154,40 @@ class RouteEntity implements Entity {
 			id: null,
 			name,
 			pois,
+			userRoute: userRoute ?? null,
 		});
+	}
+
+	public toDetailsObject(): {
+		createdByUserId: number;
+		description: null | string;
+		distance: number;
+		duration: number;
+		geometry: LineStringGeometry;
+		id: number;
+		name: string;
+		pois: {
+			id: number;
+			name: string;
+			visitOrder: number;
+		}[];
+		userRoute: null | UserRoute;
+	} {
+		return {
+			createdByUserId: this.createdByUserId,
+			description: this.description,
+			distance: this.distance,
+			duration: this.duration,
+			geometry: this.geometry,
+			id: this.id as number,
+			name: this.name,
+			pois: this.pois as {
+				id: number;
+				name: string;
+				visitOrder: number;
+			}[],
+			userRoute: this.userRoute,
+		};
 	}
 
 	public toListObject(): {
@@ -175,7 +220,7 @@ class RouteEntity implements Entity {
 
 	public toNewObject(): {
 		createdByUserId: number;
-		description: string;
+		description: null | string;
 		distance: number;
 		duration: number;
 		geometry: LineStringGeometry;
@@ -187,7 +232,7 @@ class RouteEntity implements Entity {
 	} {
 		return {
 			createdByUserId: this.createdByUserId,
-			description: this.description as string,
+			description: this.description,
 			distance: this.distance,
 			duration: this.duration,
 			geometry: this.geometry,
@@ -198,7 +243,7 @@ class RouteEntity implements Entity {
 
 	public toObject(): {
 		createdByUserId: number;
-		description: string;
+		description: null | string;
 		distance: number;
 		duration: number;
 		geometry: LineStringGeometry;
@@ -212,7 +257,7 @@ class RouteEntity implements Entity {
 	} {
 		return {
 			createdByUserId: this.createdByUserId,
-			description: this.description as string,
+			description: this.description,
 			distance: this.distance,
 			duration: this.duration,
 			geometry: this.geometry,

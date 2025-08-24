@@ -5,6 +5,8 @@ import { type LineStringGeometry } from "~/libs/types/types.js";
 
 import { CategoryModel } from "../categories/category.model.js";
 import { PointsOfInterestModel } from "../points-of-interest/points-of-interest.model.js";
+import { UserRouteModel } from "../user-routes/user-route.model.js";
+import { type UserRouteStatusType } from "./libs/types/types.js";
 
 class RouteModel extends Model {
 	public static readonly relationMappings = {
@@ -33,6 +35,14 @@ class RouteModel extends Model {
 			modelClass: PointsOfInterestModel,
 			relation: Model.ManyToManyRelation,
 		},
+		userRoute: {
+			join: {
+				from: "routes.id",
+				to: "user_routes.route_id",
+			},
+			modelClass: UserRouteModel,
+			relation: Model.HasManyRelation,
+		},
 	};
 
 	public static override get tableName(): string {
@@ -57,6 +67,11 @@ class RouteModel extends Model {
 		id: number;
 		name: string;
 		visitOrder: number;
+	}[];
+
+	public userRoute!: {
+		id: number;
+		status: UserRouteStatusType;
 	}[];
 }
 

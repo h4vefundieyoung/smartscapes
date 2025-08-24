@@ -136,7 +136,7 @@ class RouteService implements Service {
 	}
 
 	public async deleteImage(id: number): Promise<boolean> {
-		const response = await this.fileService.delete(id);
+		const response = await this.fileService.deleteFile({ id });
 
 		return response;
 	}

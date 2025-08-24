@@ -40,6 +40,16 @@ class FileRepository implements Repository {
 
 		return files.map((file) => FileEntity.initialize(file));
 	}
+
+	public async findById(id: number): Promise<FileEntity | null> {
+		const file = await this.fileModel
+			.query()
+			.select("*")
+			.where("id", id)
+			.first();
+
+		return file ? FileEntity.initialize(file) : null;
+	}
 }
 
 export { FileRepository };

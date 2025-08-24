@@ -93,19 +93,6 @@ class UserRouteService implements Service {
 		return userRoutes.map((item) => item.toObject());
 	}
 
-	public async getByRouteIdAndUserId(payload: {
-		routeId: number;
-		userId: number;
-	}): Promise<UserRouteResponseDto> {
-		const { routeId, userId } = payload;
-
-		const userRoute = await this.getByRouteId(routeId);
-
-		this.ensureUserIsOwner(userRoute.userId, userId);
-
-		return userRoute;
-	}
-
 	public async start(payload: {
 		routeId: number;
 		userId: number;

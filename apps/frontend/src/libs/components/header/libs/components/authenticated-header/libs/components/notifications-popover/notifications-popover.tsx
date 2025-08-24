@@ -13,7 +13,7 @@ import { NotificationItem } from "./libs/components/components.js";
 import styles from "./styles.module.css";
 
 const NotificationsPopover = (): React.JSX.Element => {
-	const [open, setOpen] = useState<boolean>(false);
+	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const containerReference = useRef<HTMLDivElement>(null);
 	const dispatch = useAppDispatch();
 	const notifications = useAppSelector(
@@ -25,14 +25,14 @@ const NotificationsPopover = (): React.JSX.Element => {
 	}, [dispatch]);
 
 	useEffect(() => {
-		function handleClickOutside(event: MouseEvent): void {
+		const handleClickOutside = (event: MouseEvent): void => {
 			if (
 				containerReference.current &&
 				!containerReference.current.contains(event.target as Node)
 			) {
-				setOpen(false);
+				setIsOpen(false);
 			}
-		}
+		};
 
 		document.addEventListener("mousedown", handleClickOutside);
 
@@ -42,7 +42,7 @@ const NotificationsPopover = (): React.JSX.Element => {
 	}, []);
 
 	const handleToggle = useCallback((): void => {
-		setOpen((previous) => !previous);
+		setIsOpen((previous) => !previous);
 	}, []);
 
 	return (
@@ -51,7 +51,7 @@ const NotificationsPopover = (): React.JSX.Element => {
 				<Icon height={20} name="bell" width={18} />
 			</button>
 
-			{open && (
+			{isOpen && (
 				<div className={styles["content"]}>
 					<h3 className={styles["title"]}>Notifications</h3>
 					{notifications.length > 0 ? (

@@ -18,11 +18,12 @@ const NotificationItem = ({
 	const userProfileLink = configureString(AppRoute.PUBLIC_PROFILE_$ID, {
 		id: entityId.toString(),
 	});
+	const createdDate = new Date(createdAt);
 
 	return (
 		<li className={styles["notification"]}>
 			<Link className={styles["link"]} to={userProfileLink}>
-				<div className={styles["time"]}>{getRelativeTime(createdAt)}</div>
+				<div className={styles["time"]}>{getRelativeTime(createdDate)}</div>
 				<div className={styles["content"]}>{content}</div>
 			</Link>
 		</li>

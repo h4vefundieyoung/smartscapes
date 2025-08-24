@@ -1,8 +1,8 @@
 import { formatDistanceToNow } from "date-fns";
 import { enUS } from "date-fns/locale";
 
-const getRelativeTime = (date: string): string => {
-	return formatDistanceToNow(new Date(date), {
+const getRelativeTime = (date: Date): string => {
+	return formatDistanceToNow(date, {
 		addSuffix: true,
 		locale: enUS,
 	});

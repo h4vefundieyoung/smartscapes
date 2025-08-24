@@ -29,7 +29,7 @@ const PublicProfile = (): React.JSX.Element => {
 		}
 	}, [dispatch, id]);
 
-	const handleFollowToggle = useCallback((): Promise<void> => {
+	const handleFollowToggle = useCallback((): void => {
 		if (userProfile && authenticatedUser) {
 			if (userProfile.isFollowed) {
 				void dispatch(
@@ -38,6 +38,8 @@ const PublicProfile = (): React.JSX.Element => {
 						userId: Number(id),
 					}),
 				);
+
+				return;
 			} else {
 				void dispatch(
 					usersActions.followUser({
@@ -45,10 +47,10 @@ const PublicProfile = (): React.JSX.Element => {
 						userId: authenticatedUser.id,
 					}),
 				);
+
+				return;
 			}
 		}
-
-		return Promise.resolve();
 	}, [userProfile, authenticatedUser, dispatch, id]);
 
 	if (!userProfile || !authenticatedUser || dataStatus === DataStatus.PENDING) {

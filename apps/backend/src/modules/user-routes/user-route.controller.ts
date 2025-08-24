@@ -15,7 +15,7 @@ import {
 	type UserRouteResponseDto,
 } from "./libs/types/type.js";
 import {
-	userRouteCreateValidationSchema,
+	userRouteBodyValidationSchema,
 	userRouteParametersValidationSchema,
 	userRoutePatchValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
@@ -122,7 +122,7 @@ class UserRouteController extends BaseController {
 			method: "POST",
 			path: UserRouteApiPath.$ID,
 			validation: {
-				body: userRouteCreateValidationSchema,
+				body: userRouteBodyValidationSchema,
 				params: userRouteParametersValidationSchema,
 			},
 		});
@@ -142,7 +142,7 @@ class UserRouteController extends BaseController {
 			method: "PATCH",
 			path: UserRouteApiPath.START,
 			validation: {
-				body: userRouteCreateValidationSchema,
+				body: userRouteBodyValidationSchema,
 				params: userRouteParametersValidationSchema,
 			},
 		});
@@ -152,6 +152,16 @@ class UserRouteController extends BaseController {
 			method: "GET",
 			path: UserRouteApiPath.$ID,
 			validation: {
+				params: userRouteParametersValidationSchema,
+			},
+		});
+
+		this.addRoute({
+			handler: this.getByRouteIdAndUserId.bind(this),
+			method: "POST",
+			path: UserRouteApiPath.GET_BY_ROUTE_ID,
+			validation: {
+				body: userRouteBodyValidationSchema,
 				params: userRouteParametersValidationSchema,
 			},
 		});
@@ -386,6 +396,80 @@ class UserRouteController extends BaseController {
 
 		return {
 			payload: { data: userRoutes },
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /user-routes/{userId}/get-by-route-id:
+	 *   post:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - User Routes
+	 *     summary: Get user route by route ID
+	 *     description: Get a specific user route by route ID and user ID
+	 *     parameters:
+	 *       - in: path
+	 *         name: userId
+	 *         required: true
+	 *         schema:
+	 *           type: integer
+	 *           example: 1
+	 *         description: ID of the user
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             $ref: '#/components/schemas/UserRouteCreateRequestDto'
+	 *     responses:
+	 *       200:
+	 *         description: User route retrieved successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 payload:
+	 *                   type: object
+	 *                   properties:
+	 *                     data:
+	 *                       $ref: '#/components/schemas/UserRouteResponseDto'
+	 *             example:
+	 *               payload:
+	 *                 data:
+	 *                   id: 1
+	 *                   routeId: 7
+	 *                   userId: 1
+	 *                   status: "not_started"
+	 *                   startedAt: null
+	 *                   completedAt: null
+	 *                   actualGeometry:
+	 *                     type: "LineString"
+	 *                     coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                   plannedGeometry:
+	 *                     type: "LineString"
+	 *                     coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 */
+	public async getByRouteIdAndUserId(
+		options: APIHandlerOptions<{
+			body: UserRouteCreateRequestDto;
+			params: UserRouteParameters;
+		}>,
+	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
+		const { body, params } = options;
+		const { routeId } = body;
+		const { userId } = params;
+
+		const userRoute = await this.userRouteService.getByRouteIdAndUserId({
+			routeId,
+			userId,
+		});
+
+		return {
+			payload: { data: userRoute },
 			status: HTTPCode.OK,
 		};
 	}

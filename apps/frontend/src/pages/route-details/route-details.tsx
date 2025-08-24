@@ -51,8 +51,9 @@ const RouteDetails = (): React.JSX.Element => {
 		({ routeDetails }) => routeDetails.dataStatus,
 	);
 
-	const userRouteCreateDataStatus = useAppSelector(
-		({ userRoute }) => userRoute.createStatus,
+	const isUserRouteCreated = useAppSelector(
+		({ userRouteDetails }) =>
+			userRouteDetails.createStatus === DataStatus.FULFILLED,
 	);
 
 	const hasEditPermissions = Boolean(
@@ -106,11 +107,11 @@ const RouteDetails = (): React.JSX.Element => {
 	}, [dispatch, routeId, routeDataStatus]);
 
 	useEffect(() => {
-		if (userRouteCreateDataStatus === DataStatus.FULFILLED) {
+		if (isUserRouteCreated) {
 			const path = AppRoute.USER_ROUTES_$ID_MAP.replace(":id", String(routeId));
 			navigate(path);
 		}
-	}, [userRouteCreateDataStatus, navigate, routeId]);
+	}, [isUserRouteCreated, navigate, routeId]);
 
 	useEffect(() => {
 		if (route && !isEditMode) {

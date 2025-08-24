@@ -112,8 +112,8 @@ export {
 } from "./modules/user-follows/user-follows.js";
 export {
 	UserRouteApiPath,
+	userRouteBodyValidationSchema,
 	type UserRouteCreateRequestDto,
-	userRouteCreateValidationSchema,
 	type UserRouteParameters,
 	userRouteParametersValidationSchema,
 	type UserRoutePatchRequestDto,

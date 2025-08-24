@@ -3,21 +3,17 @@ import {
 	useAppSelector,
 	useEffect,
 } from "~/libs/hooks/hooks.js";
-import { type Coordinates } from "~/libs/types/types.js";
+import { type MapMarkerOptions } from "~/libs/modules/map-client/map-client.js";
 import { actions as pointsOfInterestActions } from "~/modules/points-of-interest/points-of-interest.js";
-import { type RouteGetByIdResponseDto } from "~/modules/routes/routes.js";
+import { type RouteGetAllItemResponseDto } from "~/modules/routes/routes.js";
 
-type Marker = {
-	coordinates: Coordinates;
+type RouteMarker = {
+	coordinates: MapMarkerOptions["coordinates"];
 };
 
-type UsePoiLoaderOptions = {
-	route: null | RouteGetByIdResponseDto;
-};
-
-const useRouteMarker = ({
-	route,
-}: UsePoiLoaderOptions): { markers: Marker[] } => {
+const useRouteMarker = (
+	pois: RouteGetAllItemResponseDto["pois"],
+): RouteMarker[] => {
 	const dispatch = useAppDispatch();
 
 	const { pointsOfInterest } = useAppSelector(({ pointsOfInterest }) => ({
@@ -25,20 +21,18 @@ const useRouteMarker = ({
 	}));
 
 	useEffect(() => {
-		if (route) {
-			void dispatch(
-				pointsOfInterestActions.findAll({
-					ids: route.pois.map((poi) => poi.id),
-				}),
-			);
-		}
-	}, [route, dispatch]);
+		void dispatch(
+			pointsOfInterestActions.findAll({
+				ids: pois.map((poi) => poi.id),
+			}),
+		);
+	}, [pois, dispatch]);
 
 	const markers = pointsOfInterest
 		.map((poi) => poi.location.coordinates)
 		.map((coordinates) => ({ coordinates }));
 
-	return { markers };
+	return markers;
 };
 
 export { useRouteMarker };

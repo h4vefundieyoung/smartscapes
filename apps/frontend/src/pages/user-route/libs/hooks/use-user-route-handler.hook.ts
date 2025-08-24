@@ -9,17 +9,13 @@ type UseUserRouteHandler = {
 };
 
 const useUserRouteHandler = (
-	user: null | UserAuthResponseDto,
+	user: UserAuthResponseDto,
 	routeId: number,
-	route: null | RouteGetByIdResponseDto,
+	route: RouteGetByIdResponseDto,
 ): UseUserRouteHandler => {
 	const dispatch = useAppDispatch();
 
 	const handleStart = useCallback(() => {
-		if (!user || !route) {
-			return;
-		}
-
 		void dispatch(
 			userRouteActions.start({
 				payload: {
@@ -28,13 +24,9 @@ const useUserRouteHandler = (
 				userId: user.id,
 			}),
 		);
-	}, [dispatch, routeId, user]);
+	}, [dispatch, routeId, user.id]);
 
 	const handleFinish = useCallback(() => {
-		if (!user || !route) {
-			return;
-		}
-
 		void dispatch(
 			userRouteActions.finish({
 				payload: {
@@ -44,7 +36,7 @@ const useUserRouteHandler = (
 				userId: user.id,
 			}),
 		);
-	}, [dispatch, routeId, user, route]);
+	}, [dispatch, routeId, user.id, route.geometry]);
 
 	return {
 		handleFinish,

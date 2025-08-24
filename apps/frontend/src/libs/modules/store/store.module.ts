@@ -26,7 +26,8 @@ import {
 } from "~/modules/routes/routes.js";
 import {
 	userRouteApi,
-	reducer as userRouteReducer,
+	userRouteDetailsReducer,
+	userRouteReducer,
 } from "~/modules/user-routes/user-routes.js";
 import { userApi } from "~/modules/users/users.js";
 
@@ -75,6 +76,7 @@ class Store {
 				routeDetails: routeDetailsReducer,
 				routes: routesReducer,
 				userRoute: userRouteReducer,
+				userRouteDetails: userRouteDetailsReducer,
 			},
 		});
 	}

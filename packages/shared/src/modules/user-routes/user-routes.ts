@@ -7,7 +7,7 @@ export {
 	type UserRouteStatusType,
 } from "./libs/types/types.js";
 export {
-	userRouteCreate as userRouteCreateValidationSchema,
+	userRouteBody as userRouteBodyValidationSchema,
 	userRouteParameters as userRouteParametersValidationSchema,
 	userRoutePatch as userRoutePatchValidationSchema,
 } from "./validation-schemas/validation-schemas.js";

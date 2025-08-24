@@ -69,6 +69,7 @@ describe("UserRouteController", () => {
 				mockActiveUserRoute,
 				mockCompletedUserRoute,
 			]),
+		getByRouteIdAndUserId: () => Promise.resolve(mockUserRouteResponse),
 		start: () => Promise.resolve(mockActiveUserRoute),
 	} as unknown as UserRouteService;
 
@@ -227,6 +228,36 @@ describe("UserRouteController", () => {
 				completedRoute.completedAt,
 				"2025-08-21T16:38:11.183Z",
 			);
+		});
+	});
+
+	describe("getByRouteIdAndUserId", () => {
+		it("should get user route by route ID and user ID and return 200 status", async () => {
+			const getRequest: UserRouteCreateRequestDto = {
+				routeId: 7,
+			};
+
+			const parameters: UserRouteParameters = {
+				userId: 1,
+			};
+
+			const options: APIHandlerOptions<{
+				body: UserRouteCreateRequestDto;
+				params: UserRouteParameters;
+			}> = {
+				body: getRequest,
+				params: parameters,
+			} as APIHandlerOptions<{
+				body: UserRouteCreateRequestDto;
+				params: UserRouteParameters;
+			}>;
+
+			const result = await userRouteController.getByRouteIdAndUserId(options);
+
+			assert.strictEqual(result.status, HTTPCode.OK);
+			assert.deepStrictEqual(result.payload.data, mockUserRouteResponse);
+			assert.strictEqual(result.payload.data.routeId, getRequest.routeId);
+			assert.strictEqual(result.payload.data.userId, parameters.userId);
 		});
 	});
 });

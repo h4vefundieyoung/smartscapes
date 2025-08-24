@@ -11,7 +11,10 @@ import {
 	type routeDetailsReducer,
 	type routesReducer,
 } from "~/modules/routes/routes.js";
-import { type reducer as userRouteReducer } from "~/modules/user-routes/user-routes.js";
+import {
+	type userRouteDetailsReducer,
+	type userRouteReducer,
+} from "~/modules/user-routes/user-routes.js";
 
 type RootReducer = {
 	app: ReturnType<typeof appReducer>;
@@ -24,6 +27,7 @@ type RootReducer = {
 	routeDetails: ReturnType<typeof routeDetailsReducer>;
 	routes: ReturnType<typeof routesReducer>;
 	userRoute: ReturnType<typeof userRouteReducer>;
+	userRouteDetails: ReturnType<typeof userRouteDetailsReducer>;
 };
 
 export { type RootReducer };

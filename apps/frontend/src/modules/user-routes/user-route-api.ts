@@ -61,11 +61,31 @@ class UserRouteApi extends BaseHTTPApi {
 		return await response.json();
 	}
 
-	public async getByUserId(
+	public async getByRouteIdAndUserId(
 		userId: number,
+		payload: UserRouteCreateRequestDto,
 	): Promise<APIResponse<UserRouteResponseDto>> {
 		const response = await this.load<APIResponse<UserRouteResponseDto>>(
-			this.getFullEndpoint(UserRouteApiPath.ROOT, {
+			this.getFullEndpoint(
+				UserRouteApiPath.GET_BY_ROUTE_ID.replace(":userId", userId.toString()),
+				{},
+			),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "POST",
+				payload: JSON.stringify(payload),
+			},
+		);
+
+		return await response.json();
+	}
+
+	public async getByUserId(
+		userId: number,
+	): Promise<APIResponse<UserRouteResponseDto[]>> {
+		const response = await this.load<APIResponse<UserRouteResponseDto[]>>(
+			this.getFullEndpoint(UserRouteApiPath.$ID, {
 				userId: userId.toString(),
 			}),
 			{

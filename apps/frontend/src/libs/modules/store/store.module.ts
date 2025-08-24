@@ -20,8 +20,9 @@ import {
 } from "~/modules/points-of-interest/points-of-interest.js";
 import {
 	constructRouteReducer,
-	routeReducer,
+	routeDetailsReducer,
 	routesApi,
+	routesReducer,
 } from "~/modules/routes/routes.js";
 import {
 	userRouteApi,
@@ -71,7 +72,8 @@ class Store {
 				location: locationReducer,
 				pointOfInterestDetails: pointOfInterestDetailsReducer,
 				pointsOfInterest: pointsOfInterestReducer,
-				route: routeReducer,
+				routeDetails: routeDetailsReducer,
+				routes: routesReducer,
 				userRoute: userRouteReducer,
 			},
 		});

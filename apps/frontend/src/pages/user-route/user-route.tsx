@@ -10,7 +10,10 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { type RouteLine } from "~/libs/types/types.js";
 import { actions as routeActions } from "~/modules/routes/routes.js";
-import { UserRouteStatus } from "~/modules/user-routes/user-routes.js";
+import {
+	actions as userRouteActions,
+	UserRouteStatus,
+} from "~/modules/user-routes/user-routes.js";
 
 import { useRouteMarker, useUserRouteHandler } from "./libs/hooks/hooks.js";
 import styles from "./styles.module.css";
@@ -25,17 +28,21 @@ const UserRoute = (): React.JSX.Element => {
 	const [routeLine, setRouteLine] = useState<null | RouteLine>(null);
 	const [isStarted, setIsStarted] = useState<boolean>(false);
 
-	const { route, routeDataStatus, user, userRoute, userRouteFinishDataStatus } =
-		useAppSelector(({ auth, route, userRoute }) => ({
-			route: route.route,
-			routeDataStatus: route.dataStatus,
-			user: auth.authenticatedUser,
-			userRoute:
-				userRoute.userRoutes.find(
-					(userRoute) => userRoute.routeId === routeId,
-				) || null,
-			userRouteFinishDataStatus: userRoute.finishStatus,
-		}));
+	const {
+		route,
+		routeDataStatus,
+		user,
+		userRoute,
+		userRouteDataStatus,
+		userRouteFinishDataStatus,
+	} = useAppSelector(({ auth, routeDetails, userRoute }) => ({
+		route: routeDetails.route,
+		routeDataStatus: routeDetails.dataStatus,
+		user: auth.authenticatedUser,
+		userRoute: userRoute.userRoute,
+		userRouteDataStatus: userRoute.dataStatus,
+		userRouteFinishDataStatus: userRoute.finishStatus,
+	}));
 
 	const { markers } = useRouteMarker({ route });
 
@@ -47,9 +54,15 @@ const UserRoute = (): React.JSX.Element => {
 
 	useEffect(() => {
 		if (routeDataStatus === DataStatus.IDLE) {
-			void dispatch(routeActions.getRouteById(routeId));
+			void dispatch(routeActions.getById(routeId));
 		}
 	}, [dispatch, routeId, routeDataStatus]);
+
+	useEffect(() => {
+		if (user && userRouteDataStatus === DataStatus.IDLE) {
+			void dispatch(userRouteActions.getByUserId(user.id));
+		}
+	}, [dispatch, user, userRouteDataStatus]);
 
 	useEffect(() => {
 		if (route) {

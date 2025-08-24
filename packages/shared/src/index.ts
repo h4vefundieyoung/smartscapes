@@ -73,15 +73,15 @@ export {
 } from "./modules/permission/permission.js";
 export { type PlannedPathResponseDto } from "./modules/planned-paths/planned-paths.js";
 export {
+	type PointOfInterestPatchRequestDto,
 	pointOfInterestUpdateValidationSchema,
 	PointsOfInterestApiPath,
+	type PointsOfInterestCreateRequestDto,
 	pointsOfInterestCreateValidationSchema,
-	type PointsOfInterestItemDto,
-	type PointsOfInterestPaginatedResponseDto,
-	type PointsOfInterestQueryRequest,
+	type PointsOfInterestGetAllItemResponseDto,
+	type PointsOfInterestGetAllQuery,
+	type PointsOfInterestGetByIdResponseDto,
 	pointsOfInterestQueryValidationSchema,
-	type PointsOfInterestRequestDto,
-	type PointsOfInterestResponseDto,
 } from "./modules/points-of-interest/points-of-interest.js";
 export {
 	type ReviewCreatePayload,

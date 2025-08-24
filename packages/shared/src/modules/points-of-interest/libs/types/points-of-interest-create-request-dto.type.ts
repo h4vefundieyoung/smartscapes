@@ -1,10 +1,9 @@
 import { type PointGeometry } from "../../../../libs/types/types.js";
 
-type PointsOfInterestResponseDto = {
+type PointsOfInterestCreateRequestDto = {
 	description: null | string;
-	id: number;
 	location: PointGeometry;
 	name: string;
 };
 
-export { type PointsOfInterestResponseDto };
+export { type PointsOfInterestCreateRequestDto };

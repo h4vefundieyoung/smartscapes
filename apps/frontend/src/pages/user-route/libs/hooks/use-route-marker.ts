@@ -21,13 +21,13 @@ const useRouteMarker = ({
 	const dispatch = useAppDispatch();
 
 	const { pointsOfInterest } = useAppSelector(({ pointsOfInterest }) => ({
-		pointsOfInterest: pointsOfInterest.dataAll,
+		pointsOfInterest: pointsOfInterest.data,
 	}));
 
 	useEffect(() => {
 		if (route) {
 			void dispatch(
-				pointsOfInterestActions.loadAll({
+				pointsOfInterestActions.findAll({
 					ids: route.pois.map((poi) => poi.id),
 				}),
 			);

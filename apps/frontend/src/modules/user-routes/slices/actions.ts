@@ -22,14 +22,14 @@ const create = createAsyncThunk<
 	return result;
 });
 
-const getAllByUserId = createAsyncThunk<
-	APIResponse<UserRouteResponseDto[]>,
+const getByUserId = createAsyncThunk<
+	APIResponse<UserRouteResponseDto>,
 	number,
 	AsyncThunkConfig
->(`${sliceName}/get-all-by-user-id`, async (userId, { extra }) => {
+>(`${sliceName}/get-by-user-id`, async (userId, { extra }) => {
 	const { userRouteApi } = extra;
 
-	return await userRouteApi.getAllByUserId(userId);
+	return await userRouteApi.getByUserId(userId);
 });
 
 const start = createAsyncThunk<
@@ -56,4 +56,4 @@ const finish = createAsyncThunk<
 	return result;
 });
 
-export { create, finish, getAllByUserId, start };
+export { create, finish, getByUserId, start };

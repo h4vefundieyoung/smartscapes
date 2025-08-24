@@ -61,10 +61,10 @@ class UserRouteApi extends BaseHTTPApi {
 		return await response.json();
 	}
 
-	public async getAllByUserId(
+	public async getByUserId(
 		userId: number,
-	): Promise<APIResponse<UserRouteResponseDto[]>> {
-		const response = await this.load<APIResponse<UserRouteResponseDto[]>>(
+	): Promise<APIResponse<UserRouteResponseDto>> {
+		const response = await this.load<APIResponse<UserRouteResponseDto>>(
 			this.getFullEndpoint(UserRouteApiPath.ROOT, {
 				userId: userId.toString(),
 			}),

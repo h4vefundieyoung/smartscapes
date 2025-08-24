@@ -13,6 +13,7 @@ const routesApi = new RoutesApi({
 export { routesApi };
 export {
 	type RouteCreateRequestDto,
+	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
 } from "./libs/types/types.js";
@@ -20,5 +21,6 @@ export { routesCreateValidationSchema } from "./libs/validation-schemas/validati
 export {
 	actions,
 	constructRouteReducer,
-	routeReducer,
+	routeDetailsReducer,
+	routesReducer,
 } from "./slices/routes.js";

@@ -1,7 +1,8 @@
+export { type PatchActionPayload } from "./patch-action-payload.type.js";
 export {
-	type PointsOfInterestItemDto,
-	type PointsOfInterestPaginatedResponseDto,
-	type PointsOfInterestQueryRequest,
-	type PointsOfInterestRequestDto,
-	type PointsOfInterestResponseDto,
+	type PointOfInterestPatchRequestDto,
+	type PointsOfInterestCreateRequestDto,
+	type PointsOfInterestGetAllItemResponseDto,
+	type PointsOfInterestGetAllQuery,
+	type PointsOfInterestGetByIdResponseDto,
 } from "@smartscapes/shared";

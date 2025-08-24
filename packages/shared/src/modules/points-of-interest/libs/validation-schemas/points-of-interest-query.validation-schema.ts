@@ -107,15 +107,23 @@ const pointsOfInterestQuery = z
 	})
 	.refine(
 		({ latitude, longitude, radius }) =>
-			!radius || (Boolean(latitude) && Boolean(longitude)),
+			!radius || (latitude !== undefined && longitude !== undefined),
 		{
 			message: PointsOfInterestValidationMessage.COORDS_REQUIRED_WITH_RADIUS,
 		},
 	)
 	.refine(
-		({ latitude, longitude }) => Boolean(latitude) === Boolean(longitude),
+		({ latitude, longitude }) =>
+			(latitude !== undefined) === (longitude !== undefined),
 		{
 			message: PointsOfInterestValidationMessage.COORDS_REQUIRED_TOGETHER,
+		},
+	)
+	.refine(
+		({ page, perPage }) => (page !== undefined) === (perPage !== undefined),
+		{
+			message:
+				PointsOfInterestValidationMessage.PAGINATION_PARAMS_REQUIRED_TOGETHER,
 		},
 	);
 

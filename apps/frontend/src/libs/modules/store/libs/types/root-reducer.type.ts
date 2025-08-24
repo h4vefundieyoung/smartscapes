@@ -8,7 +8,8 @@ import {
 } from "~/modules/points-of-interest/points-of-interest.js";
 import {
 	type constructRouteReducer,
-	type routeReducer,
+	type routeDetailsReducer,
+	type routesReducer,
 } from "~/modules/routes/routes.js";
 import { type reducer as userRouteReducer } from "~/modules/user-routes/user-routes.js";
 
@@ -20,7 +21,8 @@ type RootReducer = {
 	location: ReturnType<typeof locationReducer>;
 	pointOfInterestDetails: ReturnType<typeof pointOfInterestDetailsReducer>;
 	pointsOfInterest: ReturnType<typeof pointsOfInterestReducer>;
-	route: ReturnType<typeof routeReducer>;
+	routeDetails: ReturnType<typeof routeDetailsReducer>;
+	routes: ReturnType<typeof routesReducer>;
 	userRoute: ReturnType<typeof userRouteReducer>;
 };
 

@@ -22,7 +22,6 @@ import {
 } from "~/libs/hooks/hooks.js";
 import {
 	actions as routeActions,
-	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
 import { actions as userRouteActions } from "~/modules/user-routes/user-routes.js";
@@ -37,16 +36,20 @@ const RouteDetails = (): React.JSX.Element => {
 	const navigate = useAppNavigate();
 	const { id: routeId } = useParams<{ id: string }>();
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
-	const { route, user } = useAppSelector(({ auth, route }) => ({
-		route: route.route,
-		user: auth.authenticatedUser,
-	}));
+	const route = useAppSelector(({ routeDetails }) => routeDetails.route);
+	const user = useAppSelector(({ auth }) => auth.authenticatedUser);
+	const dataStatus = useAppSelector(
+		({ routeDetails }) => routeDetails.dataStatus,
+	);
+
 	const { control, errors, getValues, handleValueSet } =
 		useAppForm<RoutePatchRequestDto>({
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
 		});
 
-	const routeDataStatus = useAppSelector(({ route }) => route.dataStatus);
+	const routeDataStatus = useAppSelector(
+		({ routeDetails }) => routeDetails.dataStatus,
+	);
 
 	const userRouteCreateDataStatus = useAppSelector(
 		({ userRoute }) => userRoute.createStatus,
@@ -72,14 +75,14 @@ const RouteDetails = (): React.JSX.Element => {
 		if (route) {
 			const { description, name } = getValues();
 			void dispatch(
-				routeActions.patchRoute({
-					id: Number(routeId),
+				routeActions.patch({
+					id: route.id,
 					payload: { description, name },
 				}),
 			);
 			setIsEditMode(false);
 		}
-	}, [dispatch, setIsEditMode, route, getValues, routeId]);
+	}, [dispatch, setIsEditMode, route, getValues]);
 
 	const handleCreateUserRoute = useCallback(() => {
 		if (!route || !user) {
@@ -98,7 +101,7 @@ const RouteDetails = (): React.JSX.Element => {
 
 	useEffect(() => {
 		if (routeDataStatus === DataStatus.IDLE) {
-			void dispatch(routeActions.getRouteById(Number(routeId)));
+			void dispatch(routeActions.getById(Number(routeId)));
 		}
 	}, [dispatch, routeId, routeDataStatus]);
 
@@ -127,7 +130,16 @@ const RouteDetails = (): React.JSX.Element => {
 		return <Loader />;
 	}
 
-	const { description, name, pois } = route as RouteGetByIdResponseDto;
+	if (dataStatus === DataStatus.REJECTED) {
+		return <NotFound />;
+	}
+
+	if (!route) {
+		return <></>;
+	}
+
+	const { description, name, pois } = route;
+	const hasDescription = Boolean(description);
 
 	return (
 		<>
@@ -150,7 +162,7 @@ const RouteDetails = (): React.JSX.Element => {
 						<>
 							<h1 className={styles["label"]}>{name}</h1>
 							{hasEditPermissions && (
-								<div className={styles["edit-button-container"]}>
+								<div>
 									<Button label="Edit" onClick={handleToggleEditMode} />
 								</div>
 							)}
@@ -177,7 +189,9 @@ const RouteDetails = (): React.JSX.Element => {
 						name="description"
 					/>
 				) : (
-					<p className={styles["description"]}>{description}</p>
+					hasDescription && (
+						<p className={styles["description"]}>{description}</p>
+					)
 				)}
 				<PointOfInterestSection pointOfInterests={pois} />
 			</main>

@@ -1,9 +1,10 @@
 .dropdown {
 	width: 100%;
-	padding: 8px 0;
+	padding: 8px;
 	background-color: var(--color-base);
 	border: 1px solid var(--color-stroke-weak);
 	border-radius: 8px;
+	box-shadow: var(--shadow-raised);
 }
 
 .list {
@@ -27,10 +28,11 @@
 	gap: 12px;
 	align-items: center;
 	width: 100%;
-	padding: 12px 24px;
+	padding: 12px;
 	color: var(--color-text-strong);
 	text-decoration: none;
 	border-left: 4px solid transparent;
+	border-radius: 8px;
 	transition:
 		background-color 0.3s ease,
 		border-left-color 0.3s ease,

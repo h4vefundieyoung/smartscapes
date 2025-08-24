@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.42.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.42.0...@smartscapes/frontend-v1.42.1) (2025-08-24)
+
+
+### Bug Fixes
+
+* **frontend:** issues with editing title and description on poi page ss-521 ([#528](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/528)) ([2c537eb](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2c537eb4b91a7a53202e68ee7c0934b2dd8dffc0))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.32.0 to 1.32.1
+
+## [1.42.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.41.0...@smartscapes/frontend-v1.42.0) (2025-08-24)
+
+
+### Features
+
+* **frontend:** adjust button styles for poi and route details page ss-1 ([#526](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/526)) ([9b6cc2f](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/9b6cc2f082f05be990c922793a9a4ee54bf10642))
+
 ## [1.41.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.40.0...@smartscapes/frontend-v1.41.0) (2025-08-24)
 
 

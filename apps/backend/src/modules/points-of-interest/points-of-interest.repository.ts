@@ -186,6 +186,7 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"created_at",
 				"updated_at",
+				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),

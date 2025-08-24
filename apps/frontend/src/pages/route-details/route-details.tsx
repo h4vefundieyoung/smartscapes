@@ -169,9 +169,11 @@ const RouteDetails = (): React.JSX.Element => {
 									src={image.url}
 								/>
 							),
-							onDelete: (): void => {
-								handleDeleteImage(image.id);
-							},
+							...(isEditMode && {
+								onDelete: (): void => {
+									handleDeleteImage(image.id);
+								},
+							}),
 						};
 					})}
 				/>

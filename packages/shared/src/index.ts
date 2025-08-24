@@ -111,6 +111,18 @@ export {
 	type UserUnfollowsParametersDto,
 } from "./modules/user-follows/user-follows.js";
 export {
+	UserRouteApiPath,
+	type UserRouteCreateRequestDto,
+	userRouteCreateValidationSchema,
+	type UserRouteParameters,
+	userRouteParametersValidationSchema,
+	type UserRoutePatchRequestDto,
+	userRoutePatchValidationSchema,
+	type UserRouteResponseDto,
+	UserRouteStatus,
+	type UserRouteStatusType,
+} from "./modules/user-routes/user-routes.js";
+export {
 	type AuthenticatedUserPatchRequestDto,
 	type AuthenticatedUserPatchResponseDto,
 	authenticatedUserPatchValidationSchema,

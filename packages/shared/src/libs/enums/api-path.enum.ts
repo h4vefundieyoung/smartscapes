@@ -8,6 +8,7 @@ const APIPath = {
 	REVIEWS: "/reviews",
 	ROUTES: "/routes",
 	ROUTES_$ID: "/routes/:id",
+	USER_ROUTES: "/user-routes",
 	USERS: "/users",
 } as const;
 

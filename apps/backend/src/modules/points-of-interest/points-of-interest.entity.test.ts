@@ -18,6 +18,7 @@ describe("PointsOfInterestEntity", () => {
 				type: "Point" as const,
 			},
 			name: "Point Of Interest Test Name",
+			routes: [],
 			updatedAt: "2024-01-01T00:00:00Z",
 		};
 

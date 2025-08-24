@@ -33,6 +33,7 @@ describe("PointsOfInterestController", () => {
 			type: "Point" as const,
 		},
 		name: "Point Of Interest Test Name",
+		routes: [],
 	};
 
 	const mockPaginationMeta = {

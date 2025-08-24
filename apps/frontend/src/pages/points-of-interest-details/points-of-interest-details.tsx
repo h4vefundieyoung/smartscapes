@@ -41,7 +41,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 		(state) => state.pointOfInterestDetails.pointOfInterest,
 	);
 
-	const { control, errors, getValues, handleValueSet } =
+	const { control, errors, getValues, handleReset } =
 		useAppForm<PointOfInterestPatchRequestDto>({
 			defaultValues: POINT_OF_INTEREST_FORM_DEFAULT_VALUES,
 		});
@@ -61,6 +61,18 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 		setIsEditMode((previous) => !previous);
 	}, []);
 
+	const handleCancel = useCallback(() => {
+		if (!pointOfInterest) {
+			return;
+		}
+
+		handleReset({
+			description: pointOfInterest.description ?? "",
+			name: pointOfInterest.name,
+		});
+		setIsEditMode(false);
+	}, [handleReset, pointOfInterest]);
+
 	const handlePatchRequest = useCallback(() => {
 		if (pointOfInterest) {
 			const { description, name } = getValues();
@@ -79,11 +91,15 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 	}, [dispatch, poiId]);
 
 	useEffect(() => {
-		if (pointOfInterest) {
-			handleValueSet("name", pointOfInterest.name);
-			handleValueSet("description", pointOfInterest.description as string);
+		if (!pointOfInterest) {
+			return;
 		}
-	}, [pointOfInterest, handleValueSet]);
+
+		handleReset({
+			description: pointOfInterest.description ?? "",
+			name: pointOfInterest.name,
+		});
+	}, [pointOfInterest, handleReset]);
 
 	if (dataStatus === DataStatus.REJECTED) {
 		return <NotFound />;
@@ -115,7 +131,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 						/>
 						<div className={styles["edit-mode-controls"]}>
 							<Button label="Save" onClick={handlePatchRequest} />
-							<Button label="Cancel" onClick={handleToggleEditMode} />
+							<Button label="Cancel" onClick={handleCancel} />
 						</div>
 					</>
 				) : (

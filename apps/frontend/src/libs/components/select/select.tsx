@@ -72,7 +72,7 @@ const Select = <TFieldValues extends FieldValues, TOptionValue = string>({
 		};
 	}, [field]);
 
-	const customComponents = useMemo(() => {
+	const components = useMemo(() => {
 		if (!iconLeft) {
 			return {};
 		}
@@ -93,7 +93,7 @@ const Select = <TFieldValues extends FieldValues, TOptionValue = string>({
 		};
 	}, [iconLeft]);
 
-	const selectStyles = useMemo(() => {
+	const stylesConfig = useMemo(() => {
 		if (!iconLeft) {
 			return selectStylesConfig;
 		}
@@ -105,8 +105,8 @@ const Select = <TFieldValues extends FieldValues, TOptionValue = string>({
 		<label className={styles["label"]}>
 			<span className={styles["label-caption"]}>{label}</span>
 			<ReactSelect
-				classNames={selectStyles}
-				components={customComponents}
+				classNames={stylesConfig}
+				components={components}
 				isLoading={isLoading}
 				isMulti={isMulti}
 				name={name}

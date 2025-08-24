@@ -11,11 +11,9 @@ const pointOfInterestApi = new PointOfInterestApi({
 });
 
 export {
-	type PatchActionPayload,
 	type PointOfInterestPatchRequestDto,
 	type PointsOfInterestCreateRequestDto,
 	type PointsOfInterestGetAllItemResponseDto,
-	type PointsOfInterestGetAllQuery,
 	type PointsOfInterestGetByIdResponseDto,
 } from "./libs/types/types.js";
 export { pointOfInterestApi };

@@ -5,15 +5,15 @@ import {
 	type AsyncThunkConfig,
 	type PaginationMeta,
 } from "~/libs/types/types.js";
+
+import { PointOfInterestNotification } from "../libs/enums/enums.js";
 import {
 	type PatchActionPayload,
 	type PointsOfInterestCreateRequestDto,
 	type PointsOfInterestGetAllItemResponseDto,
 	type PointsOfInterestGetAllQuery,
 	type PointsOfInterestGetByIdResponseDto,
-} from "~/modules/points-of-interest/points-of-interest.js";
-
-import { PointOfInterestNotification } from "../libs/enums/enums.js";
+} from "../libs/types/types.js";
 import { name as poiDetailsSliceName } from "./points-of-interest-details.slice.js";
 import { name as poiSliceName } from "./points-of-interest.slice.js";
 

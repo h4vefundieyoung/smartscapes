@@ -23,6 +23,8 @@ describe("PointsOfInterestService", () => {
 			type: "Point" as const,
 		},
 		name: "Point Of Interest Test Name",
+		routes: [],
+		updatedAt: "2024-01-01T00:00:00Z",
 	};
 
 	const createMockEntity = (): PointsOfInterestEntity =>
@@ -51,7 +53,7 @@ describe("PointsOfInterestService", () => {
 			name: mockPointOfInterest.name,
 		});
 
-		assert.deepStrictEqual(result, pointOfInterestEntity.toObject());
+		assert.deepStrictEqual(result, pointOfInterestEntity.toDetailsObject());
 	});
 
 	it("findAll should return all points of interest", async () => {
@@ -161,7 +163,7 @@ describe("PointsOfInterestService", () => {
 
 		const result = await pointsOfInterestService.findById(EXISTING_ID);
 
-		assert.deepStrictEqual(result, pointOfInterestEntity.toObject());
+		assert.deepStrictEqual(result, pointOfInterestEntity.toDetailsObject());
 	});
 
 	it("patch should return updated point of interest", async () => {
@@ -196,7 +198,7 @@ describe("PointsOfInterestService", () => {
 			name: updatedPointOfInterest.name,
 		});
 
-		assert.deepStrictEqual(result, pointOfInterestEntity.toObject());
+		assert.deepStrictEqual(result, pointOfInterestEntity.toDetailsObject());
 	});
 
 	it("delete should return true when point of interest deleted", async () => {
@@ -231,6 +233,8 @@ describe("PointsOfInterestService", () => {
 					type: "Point" as const,
 				},
 				name: "Point 1",
+				routes: [],
+				updatedAt: "2025-08-14T00:00:00Z",
 			}),
 			PointsOfInterestEntity.initialize({
 				createdAt: "2025-08-15T00:00:00Z",
@@ -241,6 +245,8 @@ describe("PointsOfInterestService", () => {
 					type: "Point" as const,
 				},
 				name: "Point 2",
+				routes: [],
+				updatedAt: "2025-08-15T00:00:00Z",
 			}),
 			PointsOfInterestEntity.initialize({
 				createdAt: "2025-08-16T00:00:00Z",
@@ -251,6 +257,8 @@ describe("PointsOfInterestService", () => {
 					type: "Point" as const,
 				},
 				name: "Point 3",
+				routes: [],
+				updatedAt: "2025-08-16T00:00:00Z",
 			}),
 		];
 

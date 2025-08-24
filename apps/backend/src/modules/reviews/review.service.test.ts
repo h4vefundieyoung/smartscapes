@@ -28,6 +28,7 @@ const createMockPointsOfInterestService =
 					type: "Point" as const,
 				},
 				name: "Test POI",
+				routes: [],
 			}),
 	});
 

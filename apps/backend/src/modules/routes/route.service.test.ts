@@ -209,6 +209,7 @@ describe("RouteService", () => {
 						type: "Point",
 					},
 					name: "Test POI",
+					routes: [],
 				}),
 		});
 

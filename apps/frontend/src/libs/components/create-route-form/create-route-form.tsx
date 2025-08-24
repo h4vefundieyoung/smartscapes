@@ -72,7 +72,6 @@ const CreateRouteForm = ({
 					errors={errors}
 					label="Description"
 					name="description"
-					rowsCount={5}
 				/>
 
 				<div className={styles["footer"]}>

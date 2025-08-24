@@ -9,12 +9,13 @@ import {
 import { FieldError, MapProvider } from "~/libs/components/components.js";
 import { combineClassNames } from "~/libs/helpers/combine-class-names.helper.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
-import { type PointGeometry } from "~/libs/types/types.js";
+import { type Coordinates, type PointGeometry } from "~/libs/types/types.js";
 
 import { MapLocationLogic } from "./map-location-logic/map-location-logic.js";
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
+	center?: Coordinates;
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
 	label: string;

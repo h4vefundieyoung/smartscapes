@@ -15,6 +15,11 @@ body {
 	background-color: var(--color-background-base);
 }
 
+button,
+a {
+	outline-color: var(--color-stroke-focus);
+}
+
 #root {
 	display: flex;
 	flex-grow: 1;
@@ -34,28 +39,28 @@ body {
 	clip-path: inset(100%);
 }
 
-::-webkit-scrollbar {
-	height: 8px;
+html {
+	scrollbar-color: var(--color-brand-1000) transparent;
+	scrollbar-width: thin;
 }
 
-::-webkit-scrollbar-thumb {
-	background: var(--color-fill-brand-strong);
-	border-radius: 8px;
+::-webkit-scrollbar {
+	width: 6px;
+	height: 6px;
+	background: transparent;
 }
 
 ::-webkit-scrollbar-track {
-	background: var(--color-background-base);
-	border-radius: 8px;
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: var(--color-brand-1000);
+	border: 2px solid transparent;
+	border-radius: 12px;
 }
 
 input::-ms-reveal,
 input::-ms-clear {
 	display: none;
-}
-
-@supports (scrollbar-width: auto) {
-	html {
-		scrollbar-color: var(--color-fill-brand-strong) var(--color-background-base);
-		scrollbar-width: auto;
-	}
 }

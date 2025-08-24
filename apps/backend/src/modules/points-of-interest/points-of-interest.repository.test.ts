@@ -33,6 +33,8 @@ describe("PointsOfInterestRepository", () => {
 			type: "Point" as const,
 		},
 		name: "Point Of Interest Test Name",
+		routes: [],
+		updatedAt: "2024-01-01T00:00:00Z",
 	};
 
 	const createMockEntity = (): PointsOfInterestEntity =>
@@ -131,11 +133,18 @@ describe("PointsOfInterestRepository", () => {
 
 		databaseTracker.on
 			.select(DatabaseTableName.POINTS_OF_INTEREST)
-			.response([pointOfInterestEntity]);
+			.response([mockPointOfInterest]);
+
+		databaseTracker.on
+			.select(DatabaseTableName.ROUTES)
+			.response([mockPointOfInterest.routes]);
 
 		const result = await pointsOfInterestRepository.findById(EXISTING_ID);
 
-		assert.deepStrictEqual(result, pointOfInterestEntity);
+		assert.deepStrictEqual(
+			result?.toDetailsObject(),
+			pointOfInterestEntity.toDetailsObject(),
+		);
 	});
 
 	it("find should return null when point of interest not found", async () => {
@@ -227,6 +236,8 @@ describe("PointsOfInterestRepository", () => {
 					type: "Point" as const,
 				},
 				name: "Point 1",
+				routes: [],
+				updatedAt: "2025-08-14T00:00:00Z",
 			}),
 			PointsOfInterestEntity.initialize({
 				createdAt: "2025-08-15T00:00:00Z",
@@ -237,6 +248,8 @@ describe("PointsOfInterestRepository", () => {
 					type: "Point" as const,
 				},
 				name: "Point 2",
+				routes: [],
+				updatedAt: "2025-08-15T00:00:00Z",
 			}),
 		];
 
@@ -269,6 +282,8 @@ describe("PointsOfInterestRepository", () => {
 					type: "Point" as const,
 				},
 				name: "Point 1",
+				routes: [],
+				updatedAt: "2025-08-14T00:00:00Z",
 			}),
 		];
 

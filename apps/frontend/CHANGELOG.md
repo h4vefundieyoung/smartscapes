@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.42.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.41.0...@smartscapes/frontend-v1.42.0) (2025-08-24)
+
+
+### Features
+
+* **frontend:** adjust button styles for poi and route details page ss-1 ([#526](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/526)) ([9b6cc2f](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/9b6cc2f082f05be990c922793a9a4ee54bf10642))
+
+## [1.41.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.40.0...@smartscapes/frontend-v1.41.0) (2025-08-24)
+
+
+### Features
+
+* **frontend:** adjust styles for common components ss-1 ([#524](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/524)) ([d4f11e7](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/d4f11e7dc36eb359b363265c629854dd72ece19d))
+
 ## [1.40.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.39.0...@smartscapes/frontend-v1.40.0) (2025-08-24)
 
 

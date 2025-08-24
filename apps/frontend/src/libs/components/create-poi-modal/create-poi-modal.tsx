@@ -71,9 +71,7 @@ const CreatePOIModal = ({
 					name="description"
 				/>
 				<div className={styles["footer"]}>
-					<div>
-						<Button label="Create" type="submit" />
-					</div>
+					<Button label="Create" type="submit" />
 				</div>
 			</form>
 		</Modal>

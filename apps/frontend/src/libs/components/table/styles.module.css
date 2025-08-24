@@ -1,16 +1,17 @@
 .wrapper {
 	display: flex;
-	flex: 1;
 	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
 	min-height: 0;
 }
 
 .content {
-	flex: 1;
 	min-height: 0;
 	contain: layout style paint;
 	overflow-y: auto;
-	border-top: 2px solid var(--color-stroke-weak);
+	border: 1px solid var(--color-stroke-weak);
+	border-radius: 4px;
 }
 
 .footer {
@@ -22,7 +23,4 @@
 	text-align: left;
 	table-layout: fixed;
 	border-collapse: collapse;
-	border: 2px solid var(--color-stroke-weak);
-	border-top: none;
-	border-right: none;
 }

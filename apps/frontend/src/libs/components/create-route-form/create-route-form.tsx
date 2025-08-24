@@ -72,13 +72,10 @@ const CreateRouteForm = ({
 					errors={errors}
 					label="Description"
 					name="description"
-					rowsCount={5}
 				/>
 
 				<div className={styles["footer"]}>
-					<div className={styles["action-buttons"]}>
-						<Button label="Create" type="submit" />
-					</div>
+					<Button label="Create" type="submit" />
 				</div>
 			</form>
 		</>

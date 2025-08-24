@@ -3,6 +3,7 @@ export { type UploadImageActionPayload } from "./upload-image-action-payload.typ
 export {
 	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
+	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
 } from "@smartscapes/shared";

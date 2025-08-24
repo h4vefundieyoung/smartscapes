@@ -1,10 +1,11 @@
 import { z } from "zod";
 
-import { parseToFloat } from "../../../../libs/helpers/helpers.js";
 import {
-	PointsOfInterestValidationMessage,
-	PointsOfInterestValidationRule,
-} from "../../../points-of-interest/libs/enums/enums.js";
+	CoordinatesValidationMessage,
+	CoordinatesValidationRule,
+} from "../../../../libs/enums/enums.js";
+import { parseToFloat } from "../../../../libs/helpers/helpers.js";
+import { PointsOfInterestValidationMessage } from "../../../points-of-interest/libs/enums/enums.js";
 import {
 	RoutesValidationMessage,
 	RoutesValidationRule,
@@ -36,12 +37,12 @@ const routesSearchQuery = z
 				z
 					.number()
 					.min(
-						PointsOfInterestValidationRule.LATITUDE_MIN,
-						PointsOfInterestValidationMessage.LATITUDE_MIN,
+						CoordinatesValidationRule.LATITUDE_MIN,
+						CoordinatesValidationMessage.LATITUDE_MIN,
 					)
 					.max(
-						PointsOfInterestValidationRule.LATITUDE_MAX,
-						PointsOfInterestValidationMessage.LATITUDE_MAX,
+						CoordinatesValidationRule.LATITUDE_MAX,
+						CoordinatesValidationMessage.LATITUDE_MAX,
 					),
 			)
 			.optional(),
@@ -53,12 +54,12 @@ const routesSearchQuery = z
 				z
 					.number()
 					.min(
-						PointsOfInterestValidationRule.LONGITUDE_MIN,
-						PointsOfInterestValidationMessage.LONGITUDE_MIN,
+						CoordinatesValidationRule.LONGITUDE_MIN,
+						CoordinatesValidationMessage.LONGITUDE_MIN,
 					)
 					.max(
-						PointsOfInterestValidationRule.LONGITUDE_MAX,
-						PointsOfInterestValidationMessage.LONGITUDE_MAX,
+						CoordinatesValidationRule.LONGITUDE_MAX,
+						CoordinatesValidationMessage.LONGITUDE_MAX,
 					),
 			)
 			.optional(),

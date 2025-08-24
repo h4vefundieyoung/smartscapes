@@ -58,22 +58,22 @@ class ReviewRepository implements Repository {
 			queryBuilder.where("reviews.route_id", routeId);
 		}
 
-		const rows = await queryBuilder.execute();
+		const reviews = await queryBuilder.execute();
 
-		return rows.map((r) =>
+		return reviews.map((review) =>
 			ReviewEntity.initializeList({
-				content: r.content,
-				id: r.id,
-				likesCount: r.likesCount,
-				poiId: r.poiId,
-				routeId: r.routeId,
+				content: review.content,
+				id: review.id,
+				likesCount: review.likesCount,
+				poiId: review.poiId,
+				routeId: review.routeId,
 				user: {
-					avatarUrl: r.user.avatar?.url ?? null,
-					firstName: r.user.firstName,
-					id: r.user.id,
-					lastName: r.user.lastName,
+					avatarUrl: review.user.avatar?.url ?? null,
+					firstName: review.user.firstName,
+					id: review.user.id,
+					lastName: review.user.lastName,
 				},
-				userId: r.userId,
+				userId: review.userId,
 			}),
 		);
 	}

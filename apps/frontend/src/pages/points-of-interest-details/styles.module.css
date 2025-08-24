@@ -30,8 +30,6 @@
 .edit-mode-controls {
 	display: flex;
 	gap: 8px;
-	width: 100%;
-	max-width: 200px;
 }
 
 @media (width <=1440px) {

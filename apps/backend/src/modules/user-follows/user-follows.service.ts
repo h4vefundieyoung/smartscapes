@@ -1,3 +1,4 @@
+import { configureString } from "~/libs/helpers/helpers.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import {
 	FollowNotificationMessage,
@@ -63,19 +64,19 @@ class UserFollowsService {
 		}
 
 		const notification: NotificationCreateRequestDto = {
-			content: FollowNotificationMessage.NOTIFICATION(
-				user.firstName,
-				user.lastName,
-			),
+			content: configureString(FollowNotificationMessage.NOTIFICATION, {
+				firstName: user.firstName,
+				lastName: user.lastName,
+			}),
 			entityId: followerId,
 			entityType: NotificationEntityType.USERS,
 			notificationType: NotificationType.USER_FOLLOWED,
 			userId: followingId,
 		};
 
-		await this.notificationService.create(notification);
-
 		await this.userFollowsRepository.followUser(followerId, followingId);
+
+		await this.notificationService.create(notification);
 	}
 
 	public async unfollow(

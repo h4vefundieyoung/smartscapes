@@ -138,7 +138,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 					<>
 						<h1 className={styles["label"]}>{name}</h1>
 						{hasEditPermissions && (
-							<div className={styles["edit-button-container"]}>
+							<div>
 								<Button label="Edit" onClick={handleToggleEditMode} />
 							</div>
 						)}

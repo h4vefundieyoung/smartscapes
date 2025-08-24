@@ -15,19 +15,21 @@
 	--color-fill-grey: hsl(162deg 10% 90% / 100%);
 	--color-text-strong: hsl(162deg 100% 8% / 90%);
 	--color-text-inverse-strong: hsl(0deg 0% 100% / 100%);
-	--color-text-weak: hsl(162deg 100% 10% / 65%);
+	--color-text-weak: hsl(162deg 100% 15% / 65%);
 	--color-text-brand: hsl(162deg 91% 25% / 100%);
 	--color-text-error: hsl(0deg 56% 50% / 100%);
 	--color-stroke-strong: hsl(162deg 100% 15% / 45%);
 	--color-stroke-selected: hsl(162deg 91% 25% / 100%);
 	--color-stroke-weak: hsl(162deg 100% 20% / 10%);
-	--color-stroke-focus: hsl(162deg 91% 25% / 100%);
-	--color-stroke-error-strong: hsl(0deg 56% 50% / 80%);
-	--color-icon-neutral: hsl(162deg 100% 15% / 45%);
+	--color-stroke-focus: hsl(162deg 91% 25% / 70%);
+	--color-stroke-error: hsl(0deg 56% 50% / 70%);
+	--color-icon-neutral: hsl(162deg 100% 15% / 60%);
 	--color-icon-error: hsl(0deg 56% 50% / 80%);
 	--color-shadow-weak: hsl(0deg 0% 0% / 3.9%);
 	--color-shadow-strong: hsl(0deg 0% 0% / 7.8%);
 	--color-base-overlay: hsl(0deg 0% 0% / 80%);
+	--shadow-raised:
+		0 2px 4px -2px hsl(0deg 0% 0% / 8%), 0 4px 8px -2px hsl(0deg 0% 0% / 4%);
 	--font-family: "Inter", sans-serif;
 	--font-size-display: 3.5rem;
 	--font-size-h1: 2.5rem;

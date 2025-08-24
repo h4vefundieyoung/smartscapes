@@ -4,6 +4,7 @@ import {
 	type TransactionOptions,
 } from "~/libs/types/types.js";
 
+import { CategoryEntity } from "../categories/category.entity.js";
 import { type PlannedPathModel } from "../planned-paths/planned-path.model.js";
 import { type RouteFindAllOptions } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
@@ -119,7 +120,10 @@ class RouteRepository implements Repository {
 	public async findById(id: number): Promise<null | RouteEntity> {
 		const route = await this.routesModel
 			.query()
-			.withGraphFetched("pois(selectPoi)")
+			.withGraphFetched("[pois(selectPoi),categories]")
+			.modifyGraph("categories", (builder) => {
+				builder.select("categories.id", "categories.key", "categories.name");
+			})
 			.modifiers({
 				selectPoi(builder) {
 					builder.select(
@@ -145,7 +149,23 @@ class RouteRepository implements Repository {
 			return null;
 		}
 
-		return RouteEntity.initialize(route);
+		return RouteEntity.initializeWithCategories({
+			categories: (route.categories ?? []).map((category) =>
+				CategoryEntity.initialize(category).toObject(),
+			),
+			createdByUserId: route.createdByUserId,
+			description: route.description,
+			distance: route.distance,
+			duration: route.duration,
+			geometry: route.geometry,
+			id: route.id,
+			name: route.name,
+			pois: route.pois.map((poi) => ({
+				id: poi.id,
+				name: poi.name,
+				visitOrder: poi.visitOrder,
+			})),
+		});
 	}
 
 	public async patch(

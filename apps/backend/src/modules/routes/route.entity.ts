@@ -1,6 +1,10 @@
 import { type Entity, type LineStringGeometry } from "~/libs/types/types.js";
 
+import { type CategoryEntity } from "../categories/category.entity.js";
+
 class RouteEntity implements Entity {
+	private categories: null | ReturnType<CategoryEntity["toObject"]>[];
+
 	private createdByUserId: number;
 
 	private description: null | string;
@@ -22,6 +26,7 @@ class RouteEntity implements Entity {
 	}[];
 
 	private constructor({
+		categories = [],
 		createdByUserId,
 		description,
 		distance,
@@ -31,6 +36,7 @@ class RouteEntity implements Entity {
 		name,
 		pois,
 	}: {
+		categories?: ReturnType<CategoryEntity["toObject"]>[];
 		createdByUserId: number;
 		description: null | string;
 		distance: number;
@@ -44,6 +50,7 @@ class RouteEntity implements Entity {
 			visitOrder: number;
 		}[];
 	}) {
+		this.categories = categories;
 		this.id = id;
 		this.distance = distance;
 		this.duration = duration;
@@ -113,6 +120,42 @@ class RouteEntity implements Entity {
 		});
 	}
 
+	public static initializeListWithCategories({
+		categories,
+		createdByUserId,
+		distance,
+		duration,
+		geometry,
+		id,
+		name,
+		pois,
+	}: {
+		categories: ReturnType<CategoryEntity["toObject"]>[];
+		createdByUserId: number;
+		distance: number;
+		duration: number;
+		geometry: LineStringGeometry;
+		id: number;
+		name: string;
+		pois: {
+			id: number;
+			name: string;
+			visitOrder: number;
+		}[];
+	}): RouteEntity {
+		return new RouteEntity({
+			categories,
+			createdByUserId,
+			description: null,
+			distance,
+			duration,
+			geometry,
+			id,
+			name,
+			pois,
+		});
+	}
+
 	public static initializeNew({
 		createdByUserId,
 		description,
@@ -142,6 +185,34 @@ class RouteEntity implements Entity {
 			id: null,
 			name,
 			pois,
+		});
+	}
+
+	public static initializeWithCategories(data: {
+		categories: ReturnType<CategoryEntity["toObject"]>[];
+		createdByUserId: number;
+		description: string;
+		distance: number;
+		duration: number;
+		geometry: LineStringGeometry;
+		id: number;
+		name: string;
+		pois: {
+			id: number;
+			name: string;
+			visitOrder: number;
+		}[];
+	}): RouteEntity {
+		return new RouteEntity({
+			categories: data.categories,
+			createdByUserId: data.createdByUserId,
+			description: data.description,
+			distance: data.distance,
+			duration: data.duration,
+			geometry: data.geometry,
+			id: data.id,
+			name: data.name,
+			pois: data.pois,
 		});
 	}
 
@@ -197,6 +268,7 @@ class RouteEntity implements Entity {
 	}
 
 	public toObject(): {
+		categories: ReturnType<CategoryEntity["toObject"]>[];
 		createdByUserId: number;
 		description: string;
 		distance: number;
@@ -211,6 +283,7 @@ class RouteEntity implements Entity {
 		}[];
 	} {
 		return {
+			categories: this.categories as ReturnType<CategoryEntity["toObject"]>[],
 			createdByUserId: this.createdByUserId,
 			description: this.description as string,
 			distance: this.distance,

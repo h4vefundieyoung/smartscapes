@@ -8,6 +8,7 @@ import {
 	Loader,
 	TextArea,
 } from "~/libs/components/components.js";
+import { TagsContainer } from "~/libs/components/tags-container/tag-container.js";
 import { DataStatus, PermissionKey } from "~/libs/enums/enums.js";
 import { checkHasPermission } from "~/libs/helpers/helpers.js";
 import {
@@ -115,6 +116,12 @@ const RouteDetails = (): React.JSX.Element => {
 					)}
 				</div>
 				<ImageGallery images={[image1, image2, image3]} />
+				{route && route.categories.length > 0 && (
+					<TagsContainer
+						labels={route.categories.map((category) => category.name)}
+					/>
+				)}
+
 				{isEditMode ? (
 					<TextArea
 						control={control}

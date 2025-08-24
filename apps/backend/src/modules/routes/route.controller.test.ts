@@ -96,6 +96,7 @@ describe("Route controller", () => {
 	};
 
 	const mockRoute: RouteGetByIdResponseDto = {
+		categories: [],
 		createdByUserId: 10,
 		description: "Test route description",
 		distance: 1.23,

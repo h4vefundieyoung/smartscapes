@@ -31,7 +31,6 @@ class PointsOfInterestRepository implements Repository {
 				"description",
 				"created_at",
 				"updated_at",
-				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -65,6 +64,7 @@ class PointsOfInterestRepository implements Repository {
 				"id",
 				"name",
 				"created_at",
+				"updated_at",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -129,18 +129,23 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"description",
 				"created_at",
+				"updated_at",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
 			])
 			.findById(id)
+			.withGraphFetched("routes")
 			.execute();
 
 		if (!pointOfInterest) {
 			return null;
 		}
 
-		return PointsOfInterestEntity.initialize(pointOfInterest);
+		const initializedPointOfInterest =
+			PointsOfInterestEntity.initialize(pointOfInterest);
+
+		return initializedPointOfInterest;
 	}
 
 	public async findByName(
@@ -153,6 +158,7 @@ class PointsOfInterestRepository implements Repository {
 				"name",
 				"description",
 				"created_at",
+				"updated_at",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -179,6 +185,7 @@ class PointsOfInterestRepository implements Repository {
 				"id",
 				"name",
 				"created_at",
+				"updated_at",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),

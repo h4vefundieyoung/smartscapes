@@ -7,7 +7,6 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import {
 	type UserRouteCreateRequestDto,
-	type UserRouteParameters,
 	type UserRoutePatchRequestDto,
 	type UserRouteResponseDto,
 } from "./libs/types/type.js";
@@ -83,19 +82,13 @@ describe("UserRouteController", () => {
 				routeId: 7,
 			};
 
-			const parameters: UserRouteParameters = {
-				userId: 1,
-			};
-
 			const options: APIHandlerOptions<{
 				body: UserRouteCreateRequestDto;
-				params: UserRouteParameters;
 			}> = {
 				body: createRequest,
-				params: parameters,
+				user: { id: 1 },
 			} as APIHandlerOptions<{
 				body: UserRouteCreateRequestDto;
-				params: UserRouteParameters;
 			}>;
 
 			const result = await userRouteController.create(options);
@@ -114,19 +107,13 @@ describe("UserRouteController", () => {
 				routeId: 7,
 			};
 
-			const parameters: UserRouteParameters = {
-				userId: 1,
-			};
-
 			const options: APIHandlerOptions<{
 				body: UserRouteCreateRequestDto;
-				params: UserRouteParameters;
 			}> = {
 				body: startRequest,
-				params: parameters,
+				user: { id: 1 },
 			} as APIHandlerOptions<{
 				body: UserRouteCreateRequestDto;
-				params: UserRouteParameters;
 			}>;
 
 			const result = await userRouteController.start(options);
@@ -155,19 +142,13 @@ describe("UserRouteController", () => {
 				routeId: 7,
 			};
 
-			const parameters: UserRouteParameters = {
-				userId: 1,
-			};
-
 			const options: APIHandlerOptions<{
 				body: UserRoutePatchRequestDto;
-				params: UserRouteParameters;
 			}> = {
 				body: finishRequest,
-				params: parameters,
+				user: { id: 1 },
 			} as APIHandlerOptions<{
 				body: UserRoutePatchRequestDto;
-				params: UserRouteParameters;
 			}>;
 
 			const result = await userRouteController.finish(options);
@@ -188,17 +169,9 @@ describe("UserRouteController", () => {
 
 	describe("getAllByUserId", () => {
 		it("should get all user routes and return 200 status with array of routes", async () => {
-			const parameters: UserRouteParameters = {
-				userId: 1,
-			};
-
-			const options: APIHandlerOptions<{
-				params: UserRouteParameters;
-			}> = {
-				params: parameters,
-			} as APIHandlerOptions<{
-				params: UserRouteParameters;
-			}>;
+			const options: APIHandlerOptions = {
+				user: { id: 1 },
+			} as APIHandlerOptions;
 
 			const result = await userRouteController.getAllByUserId(options);
 

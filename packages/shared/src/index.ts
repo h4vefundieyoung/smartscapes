@@ -113,8 +113,6 @@ export {
 	UserRouteApiPath,
 	type UserRouteCreateRequestDto,
 	userRouteCreateValidationSchema,
-	type UserRouteParameters,
-	userRouteParametersValidationSchema,
 	type UserRoutePatchRequestDto,
 	userRoutePatchValidationSchema,
 	type UserRouteResponseDto,

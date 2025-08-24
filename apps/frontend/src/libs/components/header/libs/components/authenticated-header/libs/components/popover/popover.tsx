@@ -56,12 +56,12 @@ const Popover = (): React.JSX.Element => {
 					<h3 className={styles["title"]}>Notifications</h3>
 					<ul className={styles["list"]}>
 						{notifications.length > 0 ? (
-							notifications.map((notification) => (
+							notifications.map(({ content, createdAt, entityId, id }) => (
 								<PopoverItem
-									content={notification.content}
-									createdAt={notification.createdAt}
-									entityId={notification.entityId}
-									key={notification.id}
+									content={content}
+									createdAt={createdAt}
+									entityId={entityId}
+									key={id}
 								/>
 							))
 						) : (

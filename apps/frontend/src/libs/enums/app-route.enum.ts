@@ -11,6 +11,7 @@ const AppRoute = {
 	ROOT: "/",
 	ROUTES: "/app/routes",
 	ROUTES_$ID: "/app/routes/:id",
+	ROUTES_CONSTRUCT: "/app/routes/construct",
 	SIGN_IN: "/app/sign-in",
 	SIGN_UP: "/app/sign-up",
 	USER_ROUTES_$ID_MAP: "/app/user-routes/:id/map",

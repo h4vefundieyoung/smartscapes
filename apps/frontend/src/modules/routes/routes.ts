@@ -17,4 +17,8 @@ export {
 	type RoutePatchRequestDto,
 } from "./libs/types/types.js";
 export { routesCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
-export { actions, reducer } from "./slices/routes.js";
+export {
+	actions,
+	constructRouteReducer,
+	routeReducer,
+} from "./slices/routes.js";

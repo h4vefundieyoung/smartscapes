@@ -1,24 +1,32 @@
 import {
+	constructRoute,
 	create,
 	discardCreateRouteFormData,
 	getAll,
+	getPointsOfInterest,
 	getRouteById,
 	patchRoute,
 	preserveCreateRouteFormData,
 	restoreCreateRouteFormData,
 } from "./actions.js";
-import { actions } from "./routes.slice.js";
+import { actions as constructRouteActions } from "./construct-route.slice.js";
+import { actions as routeActions } from "./routes.slice.js";
 
 const allActions = {
-	...actions,
+	...routeActions,
+	...constructRouteActions,
+	constructRoute,
 	create,
 	discardCreateRouteFormData,
 	getAll,
+	getPointsOfInterest,
 	getRouteById,
 	patchRoute,
 	preserveCreateRouteFormData,
 	restoreCreateRouteFormData,
+	routeActions,
 };
 
 export { allActions as actions };
-export { reducer } from "./routes.slice.js";
+export { reducer as constructRouteReducer } from "./construct-route.slice.js";
+export { reducer as routeReducer } from "./routes.slice.js";

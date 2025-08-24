@@ -37,6 +37,11 @@
 	box-shadow: 0 2px 8px var(--color-shadow-strong);
 }
 
+.loading-message,
+.no-options-message {
+	padding: 8px 12px;
+}
+
 .option {
 	padding: 8px 12px;
 	cursor: pointer;

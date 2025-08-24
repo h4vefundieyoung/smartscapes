@@ -7,8 +7,6 @@ import {
 } from "../../../libs/enums/enums.js";
 import { UserRouteValidationMessage } from "../libs/enums/enums.js";
 
-const MIN_LINE_STRING_COORDINATES = 2;
-
 const userRoutePatch = z.strictObject({
 	actualGeometry: z.object({
 		coordinates: z
@@ -36,8 +34,8 @@ const userRoutePatch = z.strictObject({
 						),
 				]),
 			)
-			.min(MIN_LINE_STRING_COORDINATES, {
-				message: "LineString must have at least 2 coordinates",
+			.min(CoordinatesValidationRule.MIN_COORDINATES_COUNT, {
+				message: CoordinatesValidationMessage.INVALID_COORDINATES,
 			}),
 		type: z.literal(LocationType.LINE_STRING, {
 			message: UserRouteValidationMessage.INVALID_LOCATION_TYPE,

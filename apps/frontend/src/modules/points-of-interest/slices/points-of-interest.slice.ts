@@ -7,11 +7,12 @@ import {
 	type PointsOfInterestResponseDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
-import { create, findPaginated } from "./actions.js";
+import { create, findPaginated, loadAll } from "./actions.js";
 
 type State = {
 	createStatus: ValueOf<typeof DataStatus>;
 	data: null | PointsOfInterestResponseDto;
+	dataAll: PointsOfInterestResponseDto[];
 	dataStatus: ValueOf<typeof DataStatus>;
 	meta: null | PaginationMeta;
 	summary: PointsOfInterestItemDto[];
@@ -20,6 +21,7 @@ type State = {
 const initialState: State = {
 	createStatus: DataStatus.IDLE,
 	data: null,
+	dataAll: [],
 	dataStatus: DataStatus.IDLE,
 	meta: null,
 	summary: [],
@@ -50,6 +52,17 @@ const { actions, name, reducer } = createSlice({
 		});
 		builder.addCase(findPaginated.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
+		});
+		builder.addCase(loadAll.fulfilled, (state, { payload }) => {
+			state.dataAll = payload.data;
+			state.dataStatus = DataStatus.FULFILLED;
+		});
+		builder.addCase(loadAll.pending, (state) => {
+			state.dataStatus = DataStatus.PENDING;
+		});
+		builder.addCase(loadAll.rejected, (state) => {
+			state.dataStatus = DataStatus.REJECTED;
+			state.dataAll = [];
 		});
 	},
 	initialState,

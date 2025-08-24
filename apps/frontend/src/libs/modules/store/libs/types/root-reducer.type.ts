@@ -6,12 +6,16 @@ import {
 	type pointOfInterestDetailsReducer,
 	type pointsOfInterestReducer,
 } from "~/modules/points-of-interest/points-of-interest.js";
-import { type reducer as routeReducer } from "~/modules/routes/routes.js";
+import {
+	type constructRouteReducer,
+	type routeReducer,
+} from "~/modules/routes/routes.js";
 import { type reducer as userRouteReducer } from "~/modules/user-routes/user-routes.js";
 
 type RootReducer = {
 	app: ReturnType<typeof appReducer>;
 	auth: ReturnType<typeof authReducer>;
+	constructRoute: ReturnType<typeof constructRouteReducer>;
 	explore: ReturnType<typeof exploreReducer>;
 	location: ReturnType<typeof locationReducer>;
 	pointOfInterestDetails: ReturnType<typeof pointOfInterestDetailsReducer>;

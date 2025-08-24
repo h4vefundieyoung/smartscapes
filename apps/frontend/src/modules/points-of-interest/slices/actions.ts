@@ -46,4 +46,14 @@ const findPaginated = createAsyncThunk<
 	return pointsOfInterest;
 });
 
-export { create, findPaginated, getById };
+const loadAll = createAsyncThunk<
+	APIResponse<PointsOfInterestResponseDto[]>,
+	PointsOfInterestQueryRequest,
+	AsyncThunkConfig
+>(`${poiSliceName}/load-all`, async (query, { extra }) => {
+	const { pointOfInterestApi } = extra;
+
+	return await pointOfInterestApi.getAll(query);
+});
+
+export { create, findPaginated, getById, loadAll };

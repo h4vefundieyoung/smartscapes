@@ -74,7 +74,7 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 										<PublicProfile />
 									</ProtectedRoute>
 								),
-								path: AppRoute.PUBLIC_PROFILE_$ID,
+								path: AppRoute.USERS_$ID,
 							},
 							{
 								element: (

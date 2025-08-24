@@ -244,8 +244,18 @@ class PointsOfInterestController extends BaseController {
 	 *
 	 *       **With name parameter**: Returns all points of interest searched by name
 	 *
+	 *       **With ids parameter**: Returns points of interest with specified IDs
+	 *
 	 *       **With pagination parameters (page & perPage)**: Returns paginated results with metadata
 	 *     parameters:
+	 *       - in: query
+	 *         name: ids
+	 *         schema:
+	 *           type: array
+	 *           items:
+	 *             type: integer
+	 *           example: [1, 2, 3]
+	 *         description: Array of point of interest IDs to filter by
 	 *       - in: query
 	 *         name: latitude
 	 *         schema:
@@ -398,6 +408,23 @@ class PointsOfInterestController extends BaseController {
 	 *                       itemsPerPage: 10
 	 *                       total: 25
 	 *                       totalPages: 3
+	 *               filtered_by_ids:
+	 *                 summary: Points of interest filtered by IDs
+	 *                 description: Response when ids parameter is provided
+	 *                 value:
+	 *                   data:
+	 *                     - id: 1
+	 *                       name: "Central Park"
+	 *                       description: "A large park in New York City"
+	 *                       location:
+	 *                         type: "Point"
+	 *                         coordinates: [30.5234, 50.4501]
+	 *                     - id: 3
+	 *                       name: "Museum of Modern Art"
+	 *                       description: "Contemporary art museum"
+	 *                       location:
+	 *                         type: "Point"
+	 *                         coordinates: [30.5250, 50.4520]
 	 */
 	public async findAll(
 		options: APIHandlerOptions<{

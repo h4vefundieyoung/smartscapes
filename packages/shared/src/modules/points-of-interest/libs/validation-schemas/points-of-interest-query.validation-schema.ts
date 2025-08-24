@@ -12,6 +12,7 @@ import {
 
 const pointsOfInterestQuery = z
 	.object({
+		ids: z.array(z.number()).optional(),
 		latitude: z
 			.string()
 			.trim()

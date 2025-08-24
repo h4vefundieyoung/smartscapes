@@ -11,4 +11,5 @@ const userRouteApi = new UserRouteApi({
 });
 
 export { userRouteApi };
+export { UserRouteStatus } from "./libs/enums/enums.js";
 export { actions, reducer } from "./slices/user-route.js";

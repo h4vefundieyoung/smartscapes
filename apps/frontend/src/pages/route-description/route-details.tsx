@@ -28,6 +28,7 @@ import {
 import { NotFound } from "../not-found/not-found.js";
 import { PointOfInterestSection } from "./libs/components/components.js";
 import { ROUTE_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
+import { UserRouteStatus } from "./libs/enums/enums.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
@@ -44,6 +45,7 @@ const RouteDetails = (): React.JSX.Element => {
 	const { id } = useParams<{ id: string }>();
 	const dataStatus = useAppSelector(({ route }) => route.dataStatus);
 	const isAuthorized = Boolean(user);
+	const isSaved = route?.userRoute?.status === UserRouteStatus.NOT_STARTED;
 	const hasEditPermissions = Boolean(
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
@@ -65,6 +67,12 @@ const RouteDetails = (): React.JSX.Element => {
 			setIsEditMode(false);
 		}
 	}, [dispatch, setIsEditMode, route, getValues]);
+
+	const handleSaveUserRoute = useCallback(() => {
+		if (route?.id) {
+			void dispatch(routeActions.saveUserRoute(route.id));
+		}
+	}, [route?.id, dispatch]);
 
 	useEffect(() => {
 		void dispatch(routeActions.getRouteById(Number(id)));
@@ -119,7 +127,12 @@ const RouteDetails = (): React.JSX.Element => {
 										</div>
 									)}
 									<div className={styles["save-button-container"]}>
-										<Button icon="bookmarks" label="save route" pressed />
+										<Button
+											icon="bookmarks"
+											label="save route"
+											onClick={handleSaveUserRoute}
+											pressed={isSaved}
+										/>
 									</div>
 								</div>
 							)}

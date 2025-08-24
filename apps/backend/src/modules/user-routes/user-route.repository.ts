@@ -37,6 +37,19 @@ class UserRouteRepository implements Repository {
 		return UserRouteEntity.initialize(userRoute);
 	}
 
+	public async deleteSavedRoute(
+		routeId: number,
+		userId: number,
+	): Promise<boolean> {
+		const isDeleted = await this.userRouteModel
+			.query()
+			.delete()
+			.where({ routeId, userId })
+			.execute();
+
+		return Boolean(isDeleted);
+	}
+
 	public async findAllByUserId(userId: number): Promise<UserRouteEntity[]> {
 		const userRoutes = await this.userRouteModel
 			.query()

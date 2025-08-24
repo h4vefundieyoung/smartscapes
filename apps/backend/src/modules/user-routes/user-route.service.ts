@@ -51,6 +51,25 @@ class UserRouteService implements Service {
 		return createdRoute.toObject();
 	}
 
+	public async deleteSavedRoute(
+		routeId: number,
+		userId: number,
+	): Promise<boolean> {
+		const isDeleted = await this.userRouteRepository.deleteSavedRoute(
+			routeId,
+			userId,
+		);
+
+		if (!isDeleted) {
+			throw new UserRouteError({
+				message: UserRouteExeptionMessage.USER_ROUTE_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return isDeleted;
+	}
+
 	public async finish(payload: {
 		actualGeometry: LineStringGeometry;
 		routeId: number;

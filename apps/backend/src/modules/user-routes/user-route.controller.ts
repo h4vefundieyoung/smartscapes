@@ -7,7 +7,11 @@ import {
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/libs/types/logger.type.js";
 
-import { UserRouteApiPath } from "./libs/enums/enum.js";
+import {
+	UserRouteApiPath,
+	UserRouteExeptionMessage,
+} from "./libs/enums/enum.js";
+import { UserRouteError } from "./libs/exeptions/user-route.exeption.js";
 import {
 	type UserRouteCreateRequestDto,
 	type UserRouteParameters,
@@ -155,6 +159,12 @@ class UserRouteController extends BaseController {
 				params: userRouteParametersValidationSchema,
 			},
 		});
+
+		this.addRoute({
+			handler: this.delete.bind(this),
+			method: "DELETE",
+			path: "/:id",
+		});
 	}
 
 	/**
@@ -297,6 +307,32 @@ class UserRouteController extends BaseController {
 		return {
 			payload: { data: createdRoute },
 			status: HTTPCode.CREATED,
+		};
+	}
+
+	public async delete({
+		params,
+		user,
+	}: APIHandlerOptions<{ params: { id: string } }>): Promise<
+		APIHandlerResponse<boolean>
+	> {
+		const routeId = Number(params.id);
+
+		if (!routeId) {
+			throw new UserRouteError({
+				message: UserRouteExeptionMessage.INVALID_ID,
+				status: HTTPCode.UNPROCESSED_ENTITY,
+			});
+		}
+
+		const isDeleted = await this.userRouteService.deleteSavedRoute(
+			routeId,
+			user?.id as number,
+		);
+
+		return {
+			payload: { data: isDeleted },
+			status: HTTPCode.OK,
 		};
 	}
 

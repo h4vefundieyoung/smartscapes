@@ -79,7 +79,13 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 								path: AppRoute.MANAGE_ROUTES,
 							},
 							{
-								element: <ConstructRoute />,
+								element: (
+									<ProtectedRoute
+										routePermissions={[PermissionKey.MANAGE_ROUTES]}
+									>
+										<ConstructRoute />
+									</ProtectedRoute>
+								),
 								path: AppRoute.ROUTES_CONSTRUCT,
 							},
 						],

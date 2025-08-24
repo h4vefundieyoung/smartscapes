@@ -13,6 +13,7 @@ const routesApi = new RoutesApi({
 export { routesApi };
 export {
 	type RouteCreateRequestDto,
+	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
 } from "./libs/types/types.js";

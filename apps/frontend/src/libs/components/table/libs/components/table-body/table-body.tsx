@@ -8,11 +8,11 @@ type Properties<T> = {
 
 const TableBody = <T,>({ table }: Properties<T>): React.JSX.Element => {
 	return (
-		<tbody className={styles["tbody"]}>
+		<tbody className={styles["body"]}>
 			{table.getRowModel().rows.map((row) => (
-				<tr className={styles["tr"]} key={row.id}>
+				<tr className={styles["row"]} key={row.id}>
 					{row.getVisibleCells().map((cell) => (
-						<td className={styles["td"]} key={cell.id}>
+						<td className={styles["cell"]} key={cell.id}>
 							{flexRender(cell.column.columnDef.cell, cell.getContext())}
 						</td>
 					))}

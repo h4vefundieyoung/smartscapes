@@ -7,7 +7,7 @@
 	display: flex;
 	gap: 12px;
 	align-items: center;
-	padding: 12px 24px;
+	padding: 16px 24px;
 	color: var(--color-text-strong);
 	text-decoration: none;
 	border-left: 4px solid transparent;
@@ -20,7 +20,7 @@
 .link:hover {
 	color: var(--color-text-strong);
 	cursor: pointer;
-	background-color: var(--color-fill-weaker);
+	background-color: var(--color-fill-hover);
 }
 
 .link-active {

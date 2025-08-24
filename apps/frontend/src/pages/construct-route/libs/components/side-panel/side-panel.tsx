@@ -15,9 +15,7 @@ import { type SelectOption } from "~/libs/types/types.js";
 import { type PointsOfInterestResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 import { actions as routeActions } from "~/modules/routes/routes.js";
 
-import { selectStylesConfig } from "../../constants/constants.js";
 import { PointOfInterestCard } from "../point-of-interest-card/point-of-interest-card.js";
-import { SearchIcon } from "../search-icon/search-icon.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -36,7 +34,7 @@ const SidePanel = ({
 		(state) => state.constructRoute,
 	);
 	const { control } = useAppForm({
-		defaultValues: { searchPoi: null },
+		defaultValues: { poiName: null },
 	});
 
 	const handleSelectInputChange = useDebouncedFunction((value: string) => {
@@ -50,7 +48,7 @@ const SidePanel = ({
 		void dispatch(routeActions.getPointsOfInterest({ name: value }));
 	});
 
-	const handleSelectChange = useCallback(
+	const handlePoiSelectChange = useCallback(
 		(
 			option:
 				| MultiValue<SelectOption<PointsOfInterestResponseDto>>
@@ -80,7 +78,7 @@ const SidePanel = ({
 		void dispatch(routeActions.constructRoute({ poiIds }));
 	}, [dispatch, pointsOfInterest]);
 
-	const selectOptions = useMemo(() => {
+	const poiSelectOptions = useMemo(() => {
 		return filteredPois.map((poi) => ({
 			label: poi.name,
 			value: poi,
@@ -102,15 +100,14 @@ const SidePanel = ({
 				</div>
 
 				<Select
-					additionalStyles={selectStylesConfig}
-					components={{ DropdownIndicator: SearchIcon }}
 					control={control}
+					iconLeft="search"
 					isLoading={isLoading}
 					label="Search POI"
-					name="searchPoi"
-					onChange={handleSelectChange}
+					name="poiName"
+					onChange={handlePoiSelectChange}
 					onInputChange={handleSelectInputChange}
-					options={selectOptions}
+					options={poiSelectOptions}
 				/>
 
 				<div className={styles["body"]}>

@@ -39,7 +39,7 @@ class PointsOfInterestService implements Service {
 			}),
 		);
 
-		return item.toObject();
+		return item.toDetailsObject();
 	}
 
 	public async delete(id: number): Promise<boolean> {
@@ -98,7 +98,7 @@ class PointsOfInterestService implements Service {
 			});
 		}
 
-		return item.toObject();
+		return item.toDetailsObject();
 	}
 
 	public async patch(
@@ -118,7 +118,7 @@ class PointsOfInterestService implements Service {
 			});
 		}
 
-		return item.toObject();
+		return item.toDetailsObject();
 	}
 
 	private async ensureNameIsUnique(

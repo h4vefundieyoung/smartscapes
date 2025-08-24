@@ -54,20 +54,20 @@ const Popover = (): React.JSX.Element => {
 			{open && (
 				<div className={styles["content"]}>
 					<h3 className={styles["title"]}>Notifications</h3>
-					<ul className={styles["list"]}>
-						{notifications.length > 0 ? (
-							notifications.map(({ content, createdAt, entityId, id }) => (
+					{notifications.length > 0 ? (
+						<ul className={styles["list"]}>
+							{notifications.map(({ content, createdAt, entityId, id }) => (
 								<PopoverItem
 									content={content}
 									createdAt={createdAt}
 									entityId={entityId}
 									key={id}
 								/>
-							))
-						) : (
-							<li className={styles["empty"]}>No notifications</li>
-						)}
-					</ul>
+							))}
+						</ul>
+					) : (
+						<div className={styles["empty"]}>No notifications</div>
+					)}
 				</div>
 			)}
 		</div>

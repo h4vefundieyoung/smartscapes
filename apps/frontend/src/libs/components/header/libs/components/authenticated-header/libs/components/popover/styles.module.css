@@ -51,7 +51,7 @@
 }
 
 .empty {
-	margin: 50px 0;
+	margin: 50px 10px;
 	font-weight: var(--font-weight-medium);
 	color: var(--color-text-strong);
 	text-align: center;

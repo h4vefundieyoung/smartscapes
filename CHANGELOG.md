@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.48.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.47.0...v1.48.0) (2025-08-23)
+
+
+### Features
+
+* **backend/frontend/shared:** merge pois find all endpoints into one ss-189 ([#515](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/515)) ([a5ce3e2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/a5ce3e25681babba3462a05e6b55ca71c0e3ab59))
+* **frontend:** add separate data status for route-details patch ss-517 ([#520](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/520)) ([59c045a](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/59c045aa2a9d905b1c9ee27b4dedd0caddf53c0a))
+
+## [1.47.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.46.0...v1.47.0) (2025-08-23)
+
+
+### Features
+
+* **frontend:** display first image as a map for poi details page ss-449 ([#502](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/502)) ([67e3e15](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/67e3e15ca7ce6510f11a730311796702700c74da))
+* **frontend:** feat add an ability to edit poi on poi description page ss-491 ([#503](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/503)) ([7e0d767](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/7e0d767ee1bc6d81d9a90481fbcd9b068793b305))
+
+## [1.46.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.45.0...v1.46.0) (2025-08-22)
+
+
+### Features
+
+* **backend/frontend/shared:** implement admin dashboard issue ss-189 ([#465](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/465)) ([6c01549](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/6c015496d43eaf26feda0e68bab118f5b507d25a))
+
+
+### Bug Fixes
+
+* **frontend/backend:** fix upload max size message and carousel wheel event ss-434 ([#456](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/456)) ([2e939d1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2e939d1c96ad6a969509260a156f1f66e4375beb))
+
 ## [1.45.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.44.1...v1.45.0) (2025-08-21)
 
 

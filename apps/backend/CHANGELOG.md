@@ -1,5 +1,52 @@
 # Changelog
 
+## [1.34.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.33.0...@smartscapes/backend-v1.34.0) (2025-08-23)
+
+
+### Features
+
+* **backend/frontend/shared:** merge pois find all endpoints into one ss-189 ([#515](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/515)) ([a5ce3e2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/a5ce3e25681babba3462a05e6b55ca71c0e3ab59))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.30.0 to 1.31.0
+
+## [1.33.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.32.0...@smartscapes/backend-v1.33.0) (2025-08-23)
+
+
+### Features
+
+* **frontend:** feat add an ability to edit poi on poi description page ss-491 ([#503](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/503)) ([7e0d767](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/7e0d767ee1bc6d81d9a90481fbcd9b068793b305))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.29.0 to 1.30.0
+
+## [1.32.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.31.0...@smartscapes/backend-v1.32.0) (2025-08-22)
+
+
+### Features
+
+* **backend/frontend/shared:** implement admin dashboard issue ss-189 ([#465](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/465)) ([6c01549](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/6c015496d43eaf26feda0e68bab118f5b507d25a))
+
+
+### Bug Fixes
+
+* **frontend/backend:** fix upload max size message and carousel wheel event ss-434 ([#456](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/456)) ([2e939d1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2e939d1c96ad6a969509260a156f1f66e4375beb))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.28.0 to 1.29.0
+
 ## [1.31.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.30.0...@smartscapes/backend-v1.31.0) (2025-08-21)
 
 

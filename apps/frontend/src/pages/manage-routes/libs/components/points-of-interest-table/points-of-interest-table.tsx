@@ -1,6 +1,5 @@
 import { Button, CreatePOIModal, Table } from "~/libs/components/components.js";
-import { DataFormat, DataStatus } from "~/libs/enums/enums.js";
-import { getFormattedDate } from "~/libs/helpers/helpers.js";
+import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -11,7 +10,7 @@ import {
 } from "~/libs/hooks/hooks.js";
 import {
 	actions,
-	type PointsOfInterestRequestDto,
+	type PointsOfInterestCreateRequestDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
 import { useTableColumns } from "./libs/hooks/hooks.js";
@@ -22,58 +21,58 @@ const DEFAULT_TOTAL_PAGES = 1;
 const PointsOfInterestTable = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const columns = useTableColumns();
-	const [isCreatePOIOpen, setIsCreatePOIOpen] = useState<boolean>(false);
 
-	const isCreatedPOI = useAppSelector(
-		(state) => state.pointsOfInterest.createStatus === DataStatus.FULFILLED,
+	const [isCreatePOIModalOpen, setIsCreatePOIModalOpen] =
+		useState<boolean>(false);
+
+	const pointsOfInterest = useAppSelector(
+		({ pointsOfInterest }) => pointsOfInterest.data,
 	);
-
-	const { dataStatus, meta, summary } = useAppSelector(
-		({ pointsOfInterest }) => pointsOfInterest,
+	const pointsOfInterestMeta = useAppSelector(
+		({ pointsOfInterest }) => pointsOfInterest.meta,
 	);
-
-	const { total = 0, totalPages = DEFAULT_TOTAL_PAGES } = meta ?? {};
+	const pointsOfInterestStatus = useAppSelector(
+		({ pointsOfInterest }) => pointsOfInterest.dataStatus,
+	);
+	const createPointsOfInterestStatus = useAppSelector(
+		({ pointsOfInterest }) => pointsOfInterest.createStatus,
+	);
 
 	const handleModalToggle = useCallback(() => {
-		setIsCreatePOIOpen((previous) => !previous);
+		setIsCreatePOIModalOpen((previous) => !previous);
 	}, []);
 
 	const handleSubmit = useCallback(
-		(payload: PointsOfInterestRequestDto): void => {
+		(payload: PointsOfInterestCreateRequestDto): void => {
 			void dispatch(actions.create(payload));
 		},
 		[dispatch],
 	);
 
 	const paginationPOIS = usePagination({
-		meta,
+		meta: pointsOfInterestMeta,
 		queryParameterPrefix: "poi",
 	});
 
 	const { page, pageSize } = paginationPOIS;
 
-	const formattedSummary = summary.map((item) => ({
-		...item,
-		createdAt: getFormattedDate(
-			new Date(item.createdAt),
-			DataFormat.DATE_DD_MMM_YYYY,
-		),
-	}));
+	const { total = 0, totalPages = DEFAULT_TOTAL_PAGES } =
+		pointsOfInterestMeta ?? {};
 
 	useEffect(() => {
 		void dispatch(
-			actions.findPaginated({
+			actions.findAll({
 				page,
 				perPage: pageSize,
 			}),
 		);
-	}, [dispatch, page, pageSize, isCreatePOIOpen]);
+	}, [dispatch, page, pageSize, isCreatePOIModalOpen]);
 
 	useEffect(() => {
-		if (isCreatedPOI) {
-			setIsCreatePOIOpen(false);
+		if (createPointsOfInterestStatus === DataStatus.FULFILLED) {
+			setIsCreatePOIModalOpen(false);
 		}
-	}, [isCreatedPOI]);
+	}, [createPointsOfInterestStatus]);
 
 	return (
 		<section className={styles["container"]}>
@@ -88,14 +87,14 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 				</div>
 			</div>
 			<CreatePOIModal
-				isOpen={isCreatePOIOpen}
+				isOpen={isCreatePOIModalOpen}
 				onClose={handleModalToggle}
 				onSubmit={handleSubmit}
 			/>
 			<Table
 				columns={columns}
-				data={formattedSummary}
-				isLoading={dataStatus === DataStatus.PENDING}
+				data={pointsOfInterest}
+				isLoading={pointsOfInterestStatus === DataStatus.PENDING}
 				paginationSettings={paginationPOIS}
 				totalItems={total}
 				totalPages={totalPages}

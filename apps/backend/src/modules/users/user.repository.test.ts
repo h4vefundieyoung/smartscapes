@@ -162,6 +162,7 @@ describe("UserRepository", () => {
 				followersCount: 5,
 				id: userId,
 				isFollowed: true,
+				isVisibleProfile: true,
 				lastName: "Doe",
 			},
 		]);
@@ -174,6 +175,7 @@ describe("UserRepository", () => {
 			followersCount: 5,
 			id: userId,
 			isFollowed: true,
+			isVisibleProfile: true,
 			lastName: "Doe",
 		});
 	});

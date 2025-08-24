@@ -72,6 +72,7 @@ describe("UserController", () => {
 			followersCount: 5,
 			id: 1,
 			isFollowed: true,
+			isVisibleProfile: true,
 			lastName: "Doe",
 		};
 

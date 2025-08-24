@@ -249,6 +249,7 @@ class UserRepository implements Repository {
 				"users.id",
 				"users.firstName",
 				"users.lastName",
+				"users.isVisibleProfile",
 				this.userModel
 					.raw(
 						"(SELECT COUNT(*) FROM user_follows uf WHERE uf.following_id = users.id)",
@@ -269,17 +270,24 @@ class UserRepository implements Repository {
 			.withGraphJoined("avatar")
 			.first();
 
+		if (!profileData) {
+			return null;
+		}
+
 		const userProfile = profileData as UserModel & {
 			followersCount: number;
 			isFollowed: boolean;
 		};
 
+		const { avatar } = userProfile;
+
 		return {
-			avatarUrl: userProfile.avatar ? userProfile.avatar.url : null,
+			avatarUrl: avatar ? avatar.url : null,
 			firstName: userProfile.firstName,
 			followersCount: Number(userProfile.followersCount),
 			id: userProfile.id,
 			isFollowed: Boolean(userProfile.isFollowed),
+			isVisibleProfile: Boolean(userProfile.isVisibleProfile),
 			lastName: userProfile.lastName,
 		};
 	}

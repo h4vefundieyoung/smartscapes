@@ -176,6 +176,7 @@ describe("UserService", () => {
 			followersCount: 5,
 			id: 1,
 			isFollowed: true,
+			isVisibleProfile: true,
 			lastName: "Doe",
 		};
 
@@ -236,12 +237,12 @@ describe("UserService", () => {
 
 		await assert.rejects(
 			async () => {
-				await userService.getUserProfile(1, 2);
+				await userService.getUserProfile(123, 2);
 			},
 			(error: unknown) => {
 				assert.strictEqual(
 					(error as Error).message,
-					UserExceptionMessage.PROFILE_NOT_PUBLIC,
+					UserExceptionMessage.NOT_FOUND,
 				);
 
 				return true;

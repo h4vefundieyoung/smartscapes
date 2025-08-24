@@ -99,28 +99,12 @@ class UserService implements Service {
 		id: number,
 		currentUserId: number,
 	): Promise<UserPublicProfileResponseDto> {
-		const existingUser = await this.findById(id);
-
-		if (!existingUser) {
-			throw new UserError({
-				message: UserExceptionMessage.NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		if (!existingUser.isVisibleProfile) {
-			throw new UserError({
-				message: UserExceptionMessage.PROFILE_NOT_PUBLIC,
-				status: HTTPCode.FORBIDDEN,
-			});
-		}
-
 		const userProfile = await this.userRepository.getUserProfile(
 			id,
 			currentUserId,
 		);
 
-		if (!userProfile) {
+		if (!userProfile || !userProfile.isVisibleProfile) {
 			throw new UserError({
 				message: UserExceptionMessage.NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,

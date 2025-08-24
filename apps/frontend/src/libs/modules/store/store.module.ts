@@ -19,7 +19,11 @@ import {
 	pointOfInterestDetailsReducer,
 	pointsOfInterestReducer,
 } from "~/modules/points-of-interest/points-of-interest.js";
-import { reducer as routeReducer, routesApi } from "~/modules/routes/routes.js";
+import {
+	routeDetailsReducer,
+	routesApi,
+	routesReducer,
+} from "~/modules/routes/routes.js";
 import { userApi } from "~/modules/users/users.js";
 
 import { type ExtraArguments, type RootReducer } from "./libs/types/types.js";
@@ -63,7 +67,8 @@ class Store {
 				location: locationReducer,
 				pointOfInterestDetails: pointOfInterestDetailsReducer,
 				pointsOfInterest: pointsOfInterestReducer,
-				route: routeReducer,
+				routeDetails: routeDetailsReducer,
+				routes: routesReducer,
 			},
 		});
 	}

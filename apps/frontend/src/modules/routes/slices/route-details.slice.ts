@@ -2,47 +2,69 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
-import { type PointsOfInterestGetByIdResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 
-import { getById, patch } from "./actions.js";
+import { type RouteGetByIdResponseDto } from "../libs/types/types.js";
+import { deleteImage, getById, patch, uploadImage } from "./actions.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
 	patchStatus: ValueOf<typeof DataStatus>;
-	pointOfInterest: null | PointsOfInterestGetByIdResponseDto;
+	route: null | RouteGetByIdResponseDto;
 };
 
 const initialState: State = {
 	dataStatus: DataStatus.IDLE,
 	patchStatus: DataStatus.IDLE,
-	pointOfInterest: null,
+	route: null,
 };
 
 const { actions, name, reducer } = createSlice({
 	extraReducers(builder) {
-		builder.addCase(getById.fulfilled, (state, action) => {
-			state.dataStatus = DataStatus.FULFILLED;
-			state.pointOfInterest = action.payload.data;
-		});
 		builder.addCase(getById.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
+		});
+		builder.addCase(getById.fulfilled, (state, action) => {
+			state.route = action.payload.data;
+			state.dataStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(getById.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
 		});
+
 		builder.addCase(patch.pending, (state) => {
 			state.patchStatus = DataStatus.PENDING;
 		});
 		builder.addCase(patch.fulfilled, (state, action) => {
-			state.pointOfInterest = action.payload.data;
+			state.route = action.payload.data;
 			state.patchStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(patch.rejected, (state) => {
 			state.patchStatus = DataStatus.REJECTED;
 		});
+
+		builder.addCase(deleteImage.fulfilled, (state, action) => {
+			if (state.route) {
+				state.route.images = state.route.images.filter(
+					(image) => image.id !== action.payload.data.id,
+				);
+			}
+
+			state.dataStatus = DataStatus.FULFILLED;
+		});
+
+		builder.addCase(uploadImage.fulfilled, (state, action) => {
+			if (state.route) {
+				state.route.images.push({
+					id: action.payload.data.id,
+					url: action.payload.data.url,
+				});
+			}
+
+			state.dataStatus = DataStatus.FULFILLED;
+		});
 	},
 	initialState,
-	name: "point-of-interest-details",
+	name: "route-details",
 	reducers: {},
 });
 

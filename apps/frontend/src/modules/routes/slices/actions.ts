@@ -14,36 +14,38 @@ import {
 	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
 	type RouteGetByIdResponseDto,
+	type UploadImageActionPayload,
 } from "../libs/types/types.js";
-import { name as sliceName } from "./routes.slice.js";
+import { name as routeDetailsSliceName } from "./route-details.slice.js";
+import { name as routesSliceName } from "./routes.slice.js";
 
 const create = createAsyncThunk<
 	APIResponse<RouteGetByIdResponseDto>,
 	RouteCreateRequestDto,
 	AsyncThunkConfig
->(`${sliceName}/create`, async (payload, { extra }) => {
+>(`${routesSliceName}/create`, async (payload, { extra }) => {
 	const { routesApi } = extra;
 
 	return await routesApi.create(payload);
 });
 
-const getRouteById = createAsyncThunk<
+const getById = createAsyncThunk<
 	APIResponse<RouteGetByIdResponseDto>,
 	number,
 	AsyncThunkConfig
->(`${sliceName}/get-route-by-id`, (id, { extra }) => {
+>(`${routeDetailsSliceName}/get-by-id`, (id, { extra }) => {
 	const { routesApi } = extra;
 
-	return routesApi.getRouteById(id);
+	return routesApi.getById(id);
 });
 
-const patchRoute = createAsyncThunk<
+const patch = createAsyncThunk<
 	APIResponse<RouteGetByIdResponseDto>,
 	PatchActionPayload,
 	AsyncThunkConfig
->(`${sliceName}/patch-route`, async (payload, { extra }) => {
+>(`${routeDetailsSliceName}/patch`, async (payload, { extra }) => {
 	const { routesApi } = extra;
-	const patchResult = await routesApi.patchRoute(payload);
+	const patchResult = await routesApi.patch(payload);
 	toastNotifier.showSuccess(RouteNotification.UPDATED);
 
 	return patchResult;
@@ -53,7 +55,7 @@ const getAll = createAsyncThunk<
 	APIResponse<RouteGetByIdResponseDto[]>,
 	RouteFindAllOptions | undefined,
 	AsyncThunkConfig
->(`${sliceName}/get-all`, async (options, { extra }) => {
+>(`${routesSliceName}/get-all`, async (options, { extra }) => {
 	const { routesApi } = extra;
 
 	return await routesApi.getAll(options);
@@ -61,16 +63,14 @@ const getAll = createAsyncThunk<
 
 const uploadImage = createAsyncThunk<
 	APIResponse<FileUploadResponseDto>,
-	File,
+	UploadImageActionPayload,
 	AsyncThunkConfig
->(`${sliceName}/upload-image`, async (payload, { extra, getState }) => {
+>(`${routesSliceName}/upload-image`, async (payload, { extra }) => {
 	const { routesApi, toastNotifier } = extra;
 
-	const state = getState();
+	const { file, id } = payload;
 
-	const routeId = state.route.route?.id as number;
-
-	const image = await routesApi.uploadImage({ file: payload, id: routeId });
+	const image = await routesApi.uploadImage({ file, id });
 
 	toastNotifier.showSuccess("Image was uploaded");
 
@@ -81,7 +81,7 @@ const deleteImage = createAsyncThunk<
 	APIResponse<{ id: number; isDeleted: boolean }>,
 	number,
 	AsyncThunkConfig
->(`${sliceName}/delete-image`, async (id, { extra }) => {
+>(`${routesSliceName}/delete-image`, async (id, { extra }) => {
 	const { fileApi, toastNotifier } = extra;
 
 	const response = await fileApi.delete({ id });
@@ -102,7 +102,7 @@ const preserveCreateRouteFormData = createAsyncThunk<
 	Partial<RouteCreateRequestDto>,
 	AsyncThunkConfig
 >(
-	`${sliceName}/preserve-create-route-form-data`,
+	`${routesSliceName}/preserve-create-route-form-data`,
 	async (formData, { extra }) => {
 		const { storage } = extra;
 
@@ -119,7 +119,7 @@ const restoreCreateRouteFormData = createAsyncThunk<
 	null | Partial<RouteCreateRequestDto>,
 	unknown,
 	AsyncThunkConfig
->(`${sliceName}/restore-create-route-form-data`, async (_, { extra }) => {
+>(`${routesSliceName}/restore-create-route-form-data`, async (_, { extra }) => {
 	const { storage } = extra;
 
 	const savedData = await storage.get<string>(
@@ -143,7 +143,7 @@ const discardCreateRouteFormData = createAsyncThunk<
 	unknown,
 	unknown,
 	AsyncThunkConfig
->(`${sliceName}/discard-create-route-form-data`, async (_, { extra }) => {
+>(`${routesSliceName}/discard-create-route-form-data`, async (_, { extra }) => {
 	const { storage } = extra;
 	await storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
 });
@@ -153,8 +153,8 @@ export {
 	deleteImage,
 	discardCreateRouteFormData,
 	getAll,
-	getRouteById,
-	patchRoute,
+	getById,
+	patch,
 	preserveCreateRouteFormData,
 	restoreCreateRouteFormData,
 	uploadImage,

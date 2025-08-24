@@ -3,26 +3,29 @@ import {
 	deleteImage,
 	discardCreateRouteFormData,
 	getAll,
-	getRouteById,
-	patchRoute,
+	getById,
+	patch,
 	preserveCreateRouteFormData,
 	restoreCreateRouteFormData,
 	uploadImage,
 } from "./actions.js";
-import { actions } from "./routes.slice.js";
+import { actions as routeDetailsActions } from "./route-details.slice.js";
+import { actions as routesActions } from "./routes.slice.js";
 
 const allActions = {
-	...actions,
+	...routesActions,
+	...routeDetailsActions,
 	create,
 	deleteImage,
 	discardCreateRouteFormData,
 	getAll,
-	getRouteById,
-	patchRoute,
+	getById,
+	patch,
 	preserveCreateRouteFormData,
 	restoreCreateRouteFormData,
 	uploadImage,
 };
 
 export { allActions as actions };
-export { reducer } from "./routes.slice.js";
+export { reducer as routeDetailsReducer } from "./route-details.slice.js";
+export { reducer as routesReducer } from "./routes.slice.js";

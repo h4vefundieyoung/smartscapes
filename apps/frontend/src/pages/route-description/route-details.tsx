@@ -19,7 +19,6 @@ import {
 } from "~/libs/hooks/hooks.js";
 import {
 	actions as routeActions,
-	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
 
@@ -30,17 +29,19 @@ import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
-	const { route, user } = useAppSelector(({ auth, route }) => ({
-		route: route.route,
-		user: auth.authenticatedUser,
-	}));
+	const route = useAppSelector(({ routeDetails }) => routeDetails.route);
+	const user = useAppSelector(({ auth }) => auth.authenticatedUser);
+	const dataStatus = useAppSelector(
+		({ routeDetails }) => routeDetails.dataStatus,
+	);
+
 	const { control, errors, getValues, handleValueSet } =
 		useAppForm<RoutePatchRequestDto>({
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
 		});
 	const dispatch = useAppDispatch();
 	const { id: routeId } = useParams<{ id: string }>();
-	const dataStatus = useAppSelector(({ route }) => route.dataStatus);
+
 	const hasEditPermissions = Boolean(
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
@@ -55,10 +56,12 @@ const RouteDetails = (): React.JSX.Element => {
 				return;
 			}
 
-			void dispatch(routeActions.uploadImage(file));
+			void dispatch(
+				routeActions.uploadImage({ file, id: route?.id as number }),
+			);
 			event.target.value = "";
 		},
-		[dispatch],
+		[dispatch, route],
 	);
 
 	const handleTriggerFileUpload = useCallback(() => {
@@ -73,7 +76,7 @@ const RouteDetails = (): React.JSX.Element => {
 		if (route) {
 			const { description, name } = getValues();
 			void dispatch(
-				routeActions.patchRoute({
+				routeActions.patch({
 					id: route.id,
 					payload: { description, name },
 				}),
@@ -90,7 +93,7 @@ const RouteDetails = (): React.JSX.Element => {
 	);
 
 	useEffect(() => {
-		void dispatch(routeActions.getRouteById(Number(routeId)));
+		void dispatch(routeActions.getById(Number(routeId)));
 	}, [dispatch, routeId]);
 
 	useEffect(() => {
@@ -100,15 +103,19 @@ const RouteDetails = (): React.JSX.Element => {
 		}
 	}, [route, handleValueSet]);
 
-	if (dataStatus === DataStatus.REJECTED) {
-		return <NotFound />;
-	}
-
 	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
 		return <Loader />;
 	}
 
-	const { description, images, name, pois } = route as RouteGetByIdResponseDto;
+	if (dataStatus === DataStatus.REJECTED) {
+		return <NotFound />;
+	}
+
+	if (!route) {
+		return <></>;
+	}
+
+	const { description, images, name, pois } = route;
 	const hasDescription = Boolean(description);
 
 	return (

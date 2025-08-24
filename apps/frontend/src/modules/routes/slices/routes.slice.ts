@@ -9,30 +9,24 @@ import {
 } from "./../libs/types/types.js";
 import {
 	create,
-	deleteImage,
 	discardCreateRouteFormData,
 	getAll,
-	getRouteById,
-	patchRoute,
 	restoreCreateRouteFormData,
-	uploadImage,
 } from "./actions.js";
 
 type State = {
+	createRouteFormData: null | Partial<RouteCreateRequestDto>;
 	createStatus: ValueOf<typeof DataStatus>;
 	dataStatus: ValueOf<typeof DataStatus>;
-	formData: null | Partial<RouteCreateRequestDto>;
-	formDataStatus: ValueOf<typeof DataStatus>;
-	route: null | RouteGetByIdResponseDto;
+	restoreCreateRouteFormStatus: ValueOf<typeof DataStatus>;
 	routes: RouteGetByIdResponseDto[];
 };
 
 const initialState: State = {
+	createRouteFormData: null,
 	createStatus: DataStatus.IDLE,
 	dataStatus: DataStatus.IDLE,
-	formData: null,
-	formDataStatus: DataStatus.IDLE,
-	route: null,
+	restoreCreateRouteFormStatus: DataStatus.IDLE,
 	routes: [],
 };
 
@@ -49,17 +43,6 @@ const { actions, name, reducer } = createSlice({
 			state.createStatus = DataStatus.REJECTED;
 		});
 
-		builder.addCase(getRouteById.pending, (state) => {
-			state.dataStatus = DataStatus.PENDING;
-		});
-		builder.addCase(getRouteById.fulfilled, (state, action) => {
-			state.route = action.payload.data;
-			state.dataStatus = DataStatus.FULFILLED;
-		});
-		builder.addCase(getRouteById.rejected, (state) => {
-			state.dataStatus = DataStatus.REJECTED;
-		});
-
 		builder.addCase(getAll.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
 		});
@@ -70,50 +53,19 @@ const { actions, name, reducer } = createSlice({
 			state.dataStatus = DataStatus.REJECTED;
 		});
 
-		builder.addCase(patchRoute.pending, (state) => {
-			state.dataStatus = DataStatus.PENDING;
-		});
-		builder.addCase(uploadImage.fulfilled, (state, action) => {
-			if (state.route) {
-				state.route.images.push({
-					id: action.payload.data.id,
-					url: action.payload.data.url,
-				});
-			}
-
-			state.dataStatus = DataStatus.FULFILLED;
-		});
-		builder.addCase(deleteImage.fulfilled, (state, action) => {
-			if (state.route) {
-				state.route.images = state.route.images.filter(
-					(image) => image.id !== action.payload.data.id,
-				);
-			}
-
-			state.dataStatus = DataStatus.FULFILLED;
-		});
-
-		builder.addCase(patchRoute.fulfilled, (state, action) => {
-			state.route = action.payload.data;
-			state.dataStatus = DataStatus.FULFILLED;
-		});
-		builder.addCase(patchRoute.rejected, (state) => {
-			state.dataStatus = DataStatus.REJECTED;
-		});
-
 		builder.addCase(restoreCreateRouteFormData.pending, (state) => {
-			state.formDataStatus = DataStatus.PENDING;
+			state.restoreCreateRouteFormStatus = DataStatus.PENDING;
 		});
 		builder.addCase(restoreCreateRouteFormData.fulfilled, (state, action) => {
-			state.formData = action.payload;
-			state.formDataStatus = DataStatus.FULFILLED;
+			state.createRouteFormData = action.payload;
+			state.restoreCreateRouteFormStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(restoreCreateRouteFormData.rejected, (state) => {
-			state.formDataStatus = DataStatus.REJECTED;
+			state.restoreCreateRouteFormStatus = DataStatus.REJECTED;
 		});
 
 		builder.addCase(discardCreateRouteFormData.fulfilled, (state) => {
-			state.formData = null;
+			state.createRouteFormData = null;
 		});
 	},
 	initialState,

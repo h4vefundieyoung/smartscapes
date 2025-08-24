@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import { type Slide } from "~/libs/types/types.js";
 
 import { Button } from "../components.js";
@@ -53,7 +55,9 @@ const FeatureGallery = ({
 				{firstSlide && renderSlide(firstSlide)}
 			</div>
 			<div className={styles["right"]}>
-				{otherSlides.map((slide) => renderSlide(slide))}
+				{otherSlides.map((slide, index) => (
+					<Fragment key={index}>{renderSlide(slide)}</Fragment>
+				))}
 			</div>
 		</section>
 	);

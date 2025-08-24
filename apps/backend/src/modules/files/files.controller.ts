@@ -89,6 +89,32 @@ class FilesController extends BaseController {
 		});
 	}
 
+	/**
+	 * @swagger
+	 * /files/{id}:
+	 *   delete:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags: [Files]
+	 *     summary: Delete a file
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     responses:
+	 *       200:
+	 *         description: File deleted successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: boolean
+	 */
+
 	public async delete(
 		options: APIHandlerOptions<{
 			params: { id: number };
@@ -134,32 +160,6 @@ class FilesController extends BaseController {
 			status: HTTPCode.OK,
 		};
 	}
-
-	/**
-	 * @swagger
-	 * /files/{id}:
-	 *   delete:
-	 *     security:
-	 *       - bearerAuth: []
-	 *     tags: [Files]
-	 *     summary: Delete a file
-	 *     parameters:
-	 *       - in: path
-	 *         name: id
-	 *         required: true
-	 *         schema:
-	 *           type: string
-	 *     responses:
-	 *       200:
-	 *         description: File deleted successfully
-	 *         content:
-	 *           application/json:
-	 *             schema:
-	 *               type: object
-	 *               properties:
-	 *                 data:
-	 *                   type: boolean
-	 */
 
 	/**
 	 * @swagger

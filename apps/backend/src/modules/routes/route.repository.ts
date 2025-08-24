@@ -62,12 +62,12 @@ class RouteRepository implements Repository {
 
 		const query = this.routesModel
 			.query()
-			.withGraphFetched("[pois(selectPoiIdOrder), images(selectFileIdUrl)]")
+			.withGraphFetched("[pois(selectPoiData), images(selectFileData)]")
 			.modifiers({
-				selectFileIdUrl(builder) {
+				selectFileData(builder) {
 					builder.select("files.id", "files.url");
 				},
-				selectPoiIdOrder(builder) {
+				selectPoiData(builder) {
 					builder.select(
 						"points_of_interest.id",
 						"points_of_interest.name",
@@ -124,9 +124,9 @@ class RouteRepository implements Repository {
 	public async findById(id: number): Promise<null | RouteEntity> {
 		const route = await this.routesModel
 			.query()
-			.withGraphFetched("[pois(selectPoi), images(selectFileIdUrl)]")
+			.withGraphFetched("[pois(selectPoi), images(selectFileData)]")
 			.modifiers({
-				selectFileIdUrl(builder) {
+				selectFileData(builder) {
 					builder.select("files.id", "files.url");
 				},
 				selectPoi(builder) {
@@ -163,9 +163,9 @@ class RouteRepository implements Repository {
 		const [updatedRoute] = await this.routesModel
 			.query()
 			.patch(entity)
-			.withGraphFetched("[pois(selectPoi), images(selectFileIdUrl)]")
+			.withGraphFetched("[pois(selectPoi), images(selectFileData)]")
 			.modifiers({
-				selectFileIdUrl(builder) {
+				selectFileData(builder) {
 					builder.select("files.id", "files.url");
 				},
 				selectPoi(builder) {

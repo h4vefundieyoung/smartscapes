@@ -29,21 +29,24 @@
 
 .arrow-down {
 	display: flex;
-	color: var(--color-fill-press);
-	transition: transform 0.2s ease-in-out;
-}
-
-.arrow-down.open {
-	transform: rotate(180deg);
+	color: var(--color-brand-1000);
 }
 
 .dropdown-container {
 	position: absolute;
-	top: 70px;
+	top: 64px;
+	right: 0;
 	z-index: 3;
-	width: 100%;
+	display: none;
+	min-width: 200px;
 }
 
-.hidden {
-	display: none;
+.dropdown-container-open {
+	display: block;
+}
+
+@media (width <=768px) {
+	.name {
+		display: none;
+	}
 }

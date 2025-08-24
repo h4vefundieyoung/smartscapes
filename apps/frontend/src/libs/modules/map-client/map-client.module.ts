@@ -3,7 +3,6 @@ import mapboxgl from "mapbox-gl";
 import { config } from "~/libs/modules/config/config.js";
 
 import {
-	GEOLOCATE_AUTO_TRIGGER_DELAY,
 	GEOLOCATE_CONTROL_OPTIONS,
 	MAP_CONTROLS_POSITION,
 	MAP_MARKER_Z_INDEX_VALUE,
@@ -50,15 +49,13 @@ class MapClient {
 		);
 
 		const isMapLoaded = this.map.loaded();
-		const navigateToCurrentLocation = (): ReturnType<typeof setTimeout> =>
-			setTimeout(() => control.trigger(), GEOLOCATE_AUTO_TRIGGER_DELAY);
 
 		if (isMapLoaded) {
-			navigateToCurrentLocation();
+			control.trigger();
 		} else {
 			const handleMapLoad = (): void => {
 				this.map?.off(MapEventType.LOAD, handleMapLoad);
-				navigateToCurrentLocation();
+				control.trigger();
 			};
 
 			this.map.on(MapEventType.LOAD, handleMapLoad);

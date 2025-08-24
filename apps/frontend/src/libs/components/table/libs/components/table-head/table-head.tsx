@@ -8,12 +8,12 @@ type Properties<T> = {
 
 const TableHead = <T,>({ table }: Properties<T>): React.JSX.Element => {
 	return (
-		<thead className={styles["thead"]}>
+		<thead className={styles["head"]}>
 			{table.getHeaderGroups().map((headerGroup) => (
-				<tr className={styles["tr"]} key={headerGroup.id}>
+				<tr key={headerGroup.id}>
 					{headerGroup.headers.map((header) => (
 						<th
-							className={styles["th"]}
+							className={styles["cell"]}
 							key={header.id}
 							style={{ width: header.getSize() }}
 						>

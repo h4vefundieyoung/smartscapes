@@ -7,7 +7,10 @@ import {
 	type pointOfInterestDetailsReducer,
 	type pointsOfInterestReducer,
 } from "~/modules/points-of-interest/points-of-interest.js";
-import { type reducer as routeReducer } from "~/modules/routes/routes.js";
+import {
+	type routeDetailsReducer,
+	type routesReducer,
+} from "~/modules/routes/routes.js";
 
 type RootReducer = {
 	app: ReturnType<typeof appReducer>;
@@ -17,7 +20,8 @@ type RootReducer = {
 	notification: ReturnType<typeof notificationReducer>;
 	pointOfInterestDetails: ReturnType<typeof pointOfInterestDetailsReducer>;
 	pointsOfInterest: ReturnType<typeof pointsOfInterestReducer>;
-	route: ReturnType<typeof routeReducer>;
+	routeDetails: ReturnType<typeof routeDetailsReducer>;
+	routes: ReturnType<typeof routesReducer>;
 };
 
 export { type RootReducer };

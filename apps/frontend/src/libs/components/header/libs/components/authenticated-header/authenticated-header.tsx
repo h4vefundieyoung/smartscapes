@@ -74,15 +74,10 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 
 			<button className={styles["user-info"]} onClick={handleUserClick}>
 				<Avatar user={user} />
-				<div className={styles["name"]}>
+				<span className={styles["name"]}>
 					{user.firstName} {user.lastName}
-				</div>
-				<span
-					className={combineClassNames(
-						styles["arrow-down"],
-						isDropdownOpen && styles["open"],
-					)}
-				>
+				</span>
+				<span className={styles["arrow-down"]}>
 					<Icon height={16} name="arrowDown" width={16} />
 				</span>
 			</button>
@@ -90,7 +85,7 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 			<div
 				className={combineClassNames(
 					styles["dropdown-container"],
-					!isDropdownOpen && styles["hidden"],
+					isDropdownOpen && styles["dropdown-container-open"],
 				)}
 			>
 				<Dropdown items={items} />

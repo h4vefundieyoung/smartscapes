@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-import { LocationType } from "../../../../libs/enums/enums.js";
+import {
+	CoordinatesValidationMessage,
+	CoordinatesValidationRule,
+	LocationType,
+} from "../../../../libs/enums/enums.js";
 import {
 	PointsOfInterestValidationMessage,
 	PointsOfInterestValidationRule,
@@ -21,22 +25,22 @@ const pointOfInterestUpdate = z
 				z
 					.number()
 					.min(
-						PointsOfInterestValidationRule.LONGITUDE_MIN,
-						PointsOfInterestValidationMessage.LONGITUDE_MIN,
+						CoordinatesValidationRule.LONGITUDE_MIN,
+						CoordinatesValidationMessage.LONGITUDE_MIN,
 					)
 					.max(
-						PointsOfInterestValidationRule.LONGITUDE_MAX,
-						PointsOfInterestValidationMessage.LONGITUDE_MAX,
+						CoordinatesValidationRule.LONGITUDE_MAX,
+						CoordinatesValidationMessage.LONGITUDE_MAX,
 					),
 				z
 					.number()
 					.min(
-						PointsOfInterestValidationRule.LATITUDE_MIN,
-						PointsOfInterestValidationMessage.LATITUDE_MIN,
+						CoordinatesValidationRule.LATITUDE_MIN,
+						CoordinatesValidationMessage.LATITUDE_MIN,
 					)
 					.max(
-						PointsOfInterestValidationRule.LATITUDE_MAX,
-						PointsOfInterestValidationMessage.LATITUDE_MAX,
+						CoordinatesValidationRule.LATITUDE_MAX,
+						CoordinatesValidationMessage.LATITUDE_MAX,
 					),
 			]),
 			type: z.literal(LocationType.POINT, {

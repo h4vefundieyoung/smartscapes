@@ -10,6 +10,7 @@ import { pointsOfInterestController } from "~/modules/points-of-interest/points-
 import { reviewController } from "~/modules/reviews/reviews.js";
 import { routeController } from "~/modules/routes/routes.js";
 import { userFollowsController } from "~/modules/user-follows/user-follows.js";
+import { userRouteController } from "~/modules/user-routes/user-routes.js";
 import { userController } from "~/modules/users/users.js";
 
 import { BaseServerApplicationApi } from "./base-server-application-api.js";
@@ -38,6 +39,10 @@ const apiV1 = new BaseServerApplicationApi(
 			},
 			{
 				method: "GET",
+				path: APIPath.POINTS_OF_INTEREST,
+			},
+			{
+				method: "GET",
 				path: APIPath.POINTS_OF_INTEREST_$ID,
 			},
 		],
@@ -51,6 +56,7 @@ const apiV1 = new BaseServerApplicationApi(
 	...routeController.routes,
 	...userController.routes,
 	...userFollowsController.routes,
+	...userRouteController.routes,
 );
 
 const serverApplication = new BaseServerApplication({

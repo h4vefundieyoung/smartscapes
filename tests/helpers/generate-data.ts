@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import {
-	type PointsOfInterestRequestDto,
+	type PointsOfInterestCreateRequestDto,
 	type UserSignUpRequestDto,
 } from "@smartscapes/shared";
 
@@ -18,7 +18,7 @@ const createRandomUser = (): UserSignUpRequestDto => {
 	};
 };
 
-const generateRandomPoi = (): PointsOfInterestRequestDto => {
+const generateRandomPoi = (): PointsOfInterestCreateRequestDto => {
 	return {
 		description: faker.lorem.sentence(),
 		location: {

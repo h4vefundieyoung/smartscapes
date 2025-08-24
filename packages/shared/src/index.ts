@@ -72,15 +72,15 @@ export {
 	PermissionKey,
 } from "./modules/permission/permission.js";
 export {
+	type PointOfInterestPatchRequestDto,
 	pointOfInterestUpdateValidationSchema,
 	PointsOfInterestApiPath,
+	type PointsOfInterestCreateRequestDto,
 	pointsOfInterestCreateValidationSchema,
-	type PointsOfInterestPaginatedResponseDto,
-	type PointsOfInterestPaginatedSummary,
-	type PointsOfInterestQueryRequest,
+	type PointsOfInterestGetAllItemResponseDto,
+	type PointsOfInterestGetAllQuery,
+	type PointsOfInterestGetByIdResponseDto,
 	pointsOfInterestQueryValidationSchema,
-	type PointsOfInterestRequestDto,
-	type PointsOfInterestResponseDto,
 } from "./modules/points-of-interest/points-of-interest.js";
 export {
 	type ReviewCreatePayload,

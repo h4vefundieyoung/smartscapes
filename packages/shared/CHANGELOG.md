@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.31.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.30.0...@smartscapes/shared-v1.31.0) (2025-08-23)
+
+
+### Features
+
+* **backend/frontend/shared:** merge pois find all endpoints into one ss-189 ([#515](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/515)) ([a5ce3e2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/a5ce3e25681babba3462a05e6b55ca71c0e3ab59))
+
+## [1.30.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.29.0...@smartscapes/shared-v1.30.0) (2025-08-23)
+
+
+### Features
+
+* **frontend:** feat add an ability to edit poi on poi description page ss-491 ([#503](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/503)) ([7e0d767](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/7e0d767ee1bc6d81d9a90481fbcd9b068793b305))
+
+## [1.29.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.28.0...@smartscapes/shared-v1.29.0) (2025-08-22)
+
+
+### Features
+
+* **backend/frontend/shared:** implement admin dashboard issue ss-189 ([#465](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/465)) ([6c01549](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/6c015496d43eaf26feda0e68bab118f5b507d25a))
+
 ## [1.28.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.27.1...@smartscapes/shared-v1.28.0) (2025-08-21)
 
 

@@ -13,6 +13,7 @@ import {
 const pointsOfInterestCreate = z.strictObject({
 	description: z
 		.string()
+		.trim()
 		.max(PointsOfInterestValidationRule.DESCRIPTION_MAX_LENGTH, {
 			message: PointsOfInterestValidationMessage.DESCRIPTION_MAXIMUM_LENGTH,
 		})

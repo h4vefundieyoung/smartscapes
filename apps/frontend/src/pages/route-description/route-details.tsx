@@ -3,7 +3,7 @@ import image2 from "~/assets/images/route-details/placeholder-image-2.png";
 import image3 from "~/assets/images/route-details/placeholder-image-3.png";
 import {
 	Button,
-	ImageGallery,
+	FeatureGallery,
 	Input,
 	Loader,
 	TextArea,
@@ -21,7 +21,6 @@ import {
 } from "~/libs/hooks/hooks.js";
 import {
 	actions as routeActions,
-	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
 
@@ -32,17 +31,19 @@ import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
-	const { route, user } = useAppSelector(({ auth, route }) => ({
-		route: route.route,
-		user: auth.authenticatedUser,
-	}));
+	const route = useAppSelector(({ routeDetails }) => routeDetails.route);
+	const user = useAppSelector(({ auth }) => auth.authenticatedUser);
+	const dataStatus = useAppSelector(
+		({ routeDetails }) => routeDetails.dataStatus,
+	);
+
 	const { control, errors, getValues, handleValueSet } =
 		useAppForm<RoutePatchRequestDto>({
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
 		});
 	const dispatch = useAppDispatch();
-	const { id } = useParams<{ id: string }>();
-	const dataStatus = useAppSelector(({ route }) => route.dataStatus);
+	const { id: routeId } = useParams<{ id: string }>();
+
 	const hasEditPermissions = Boolean(
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
@@ -56,7 +57,7 @@ const RouteDetails = (): React.JSX.Element => {
 		if (route) {
 			const { description, name } = getValues();
 			void dispatch(
-				routeActions.patchRoute({
+				routeActions.patch({
 					id: route.id,
 					payload: { description, name },
 				}),
@@ -66,8 +67,8 @@ const RouteDetails = (): React.JSX.Element => {
 	}, [dispatch, setIsEditMode, route, getValues]);
 
 	useEffect(() => {
-		void dispatch(routeActions.getRouteById(Number(id)));
-	}, [dispatch, id]);
+		void dispatch(routeActions.getById(Number(routeId)));
+	}, [dispatch, routeId]);
 
 	useEffect(() => {
 		if (route) {
@@ -76,15 +77,20 @@ const RouteDetails = (): React.JSX.Element => {
 		}
 	}, [route, handleValueSet]);
 
-	if (dataStatus === DataStatus.REJECTED) {
-		return <NotFound />;
-	}
-
 	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
 		return <Loader />;
 	}
 
-	const { description, name, pois } = route as RouteGetByIdResponseDto;
+	if (dataStatus === DataStatus.REJECTED) {
+		return <NotFound />;
+	}
+
+	if (!route) {
+		return <></>;
+	}
+
+	const { description, name, pois } = route;
+	const hasDescription = Boolean(description);
 
 	return (
 		<>
@@ -114,7 +120,13 @@ const RouteDetails = (): React.JSX.Element => {
 						</>
 					)}
 				</div>
-				<ImageGallery images={[image1, image2, image3]} />
+				<FeatureGallery
+					slides={[
+						{ content: image1, type: "image" },
+						{ content: image2, type: "image" },
+						{ content: image3, type: "image" },
+					]}
+				/>
 				{isEditMode ? (
 					<TextArea
 						control={control}
@@ -123,7 +135,9 @@ const RouteDetails = (): React.JSX.Element => {
 						name="description"
 					/>
 				) : (
-					<p className={styles["description"]}>{description}</p>
+					hasDescription && (
+						<p className={styles["description"]}>{description}</p>
+					)
 				)}
 				<PointOfInterestSection pointOfInterests={pois} />
 			</main>

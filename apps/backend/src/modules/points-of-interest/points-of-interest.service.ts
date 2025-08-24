@@ -1,18 +1,21 @@
 import { METERS_IN_KM } from "~/libs/constants/constants.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
-import { type CollectionResult, type Service } from "~/libs/types/types.js";
-import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
-import { type PointsOfInterestRepository } from "~/modules/points-of-interest/points-of-interest.repository.js";
+import {
+	type CollectionResult,
+	type PaginationMeta,
+	type Service,
+} from "~/libs/types/types.js";
 
 import { PointOfInterestExceptionMessage } from "./libs/enums/enums.js";
 import { PointOfInterestError } from "./libs/exceptions/exceptions.js";
 import {
-	type PointsOfInterestFindAllOptions,
-	type PointsOfInterestPaginatedOptions,
-	type PointsOfInterestPaginatedResponseDto,
-	type PointsOfInterestRequestDto,
-	type PointsOfInterestResponseDto,
-} from "./libs/types/type.js";
+	type PointsOfInterestCreateRequestDto,
+	type PointsOfInterestGetAllItemResponseDto,
+	type PointsOfInterestGetAllOptions,
+	type PointsOfInterestGetByIdResponseDto,
+} from "./libs/types/types.js";
+import { PointsOfInterestEntity } from "./points-of-interest.entity.js";
+import { type PointsOfInterestRepository } from "./points-of-interest.repository.js";
 
 class PointsOfInterestService implements Service {
 	private pointsOfInterestRepository: PointsOfInterestRepository;
@@ -22,8 +25,8 @@ class PointsOfInterestService implements Service {
 	}
 
 	public async create(
-		payload: PointsOfInterestRequestDto,
-	): Promise<PointsOfInterestResponseDto> {
+		payload: PointsOfInterestCreateRequestDto,
+	): Promise<PointsOfInterestGetByIdResponseDto> {
 		await this.ensureNameIsUnique(payload.name);
 
 		const { description, location, name } = payload;
@@ -53,37 +56,39 @@ class PointsOfInterestService implements Service {
 	}
 
 	public async findAll(
-		options: null | PointsOfInterestFindAllOptions,
-	): Promise<CollectionResult<PointsOfInterestResponseDto>> {
-		const hasLocationFilter =
-			options && Boolean(options.latitude) && Boolean(options.longitude);
-
-		if (!hasLocationFilter) {
-			const items = await this.pointsOfInterestRepository.findAll(options);
-
-			return {
-				items: items.map((item) => item.toObject()),
-			};
-		}
-
+		options: null | PointsOfInterestGetAllOptions,
+	): Promise<
+		CollectionResult<PointsOfInterestGetAllItemResponseDto, PaginationMeta>
+	> {
 		const DEFAULT_SEARCH_RADIUS_KM = 5;
+		const DEFAULT_PAGE = 1;
 
-		const { radius = DEFAULT_SEARCH_RADIUS_KM } = options;
+		const { page, perPage, radius = DEFAULT_SEARCH_RADIUS_KM } = options ?? {};
 
 		const searchParameters = {
 			...options,
 			radius: radius * METERS_IN_KM,
 		};
 
-		const items =
-			await this.pointsOfInterestRepository.findNearby(searchParameters);
+		const { items, total } =
+			await this.pointsOfInterestRepository.findAll(searchParameters);
+
+		const totalPages = Math.ceil(total / (perPage ?? total));
 
 		return {
-			items: items.map((item) => item.toObject()),
+			items: items.map((item) => item.toListObject()),
+			meta: {
+				currentPage: page ?? DEFAULT_PAGE,
+				itemsPerPage: perPage ?? total,
+				total,
+				totalPages,
+			},
 		};
 	}
 
-	public async findById(id: number): Promise<PointsOfInterestResponseDto> {
+	public async findById(
+		id: number,
+	): Promise<PointsOfInterestGetByIdResponseDto> {
 		const item = await this.pointsOfInterestRepository.findById(id);
 
 		if (!item) {
@@ -96,47 +101,15 @@ class PointsOfInterestService implements Service {
 		return item.toObject();
 	}
 
-	public async findPaginated(
-		options: PointsOfInterestPaginatedOptions,
-	): Promise<PointsOfInterestPaginatedResponseDto> {
-		const { page, perPage, search } = options;
-
-		const { items, total } =
-			await this.pointsOfInterestRepository.findPaginated({
-				page,
-				perPage,
-				search,
-			});
-
-		const totalPages = Math.ceil(total / perPage);
-
-		return {
-			data: items.map((item) => item.toSummaryObject()),
-			meta: {
-				currentPage: page,
-				itemsPerPage: perPage,
-				total,
-				totalPages,
-			},
-		};
-	}
-
 	public async patch(
 		id: number,
-		payload: PointsOfInterestRequestDto,
-	): Promise<PointsOfInterestResponseDto> {
-		const { description, location, name } = payload;
+		payload: PointsOfInterestCreateRequestDto,
+	): Promise<PointsOfInterestGetByIdResponseDto> {
+		const { name } = payload;
 
-		await this.ensureNameIsUnique(name);
+		await this.ensureNameIsUnique(name, id);
 
-		const item = await this.pointsOfInterestRepository.patch(
-			id,
-			PointsOfInterestEntity.initializeNew({
-				description,
-				location,
-				name,
-			}),
-		);
+		const item = await this.pointsOfInterestRepository.patch(id, payload);
 
 		if (!item) {
 			throw new PointOfInterestError({
@@ -148,11 +121,17 @@ class PointsOfInterestService implements Service {
 		return item.toObject();
 	}
 
-	private async ensureNameIsUnique(name: string): Promise<void> {
+	private async ensureNameIsUnique(
+		name: string,
+		currentId?: number,
+	): Promise<void> {
 		const existingPointOfInterest =
 			await this.pointsOfInterestRepository.findByName(name);
 
-		if (existingPointOfInterest) {
+		if (
+			existingPointOfInterest &&
+			existingPointOfInterest.toObject().id !== currentId
+		) {
 			throw new PointOfInterestError({
 				message: PointOfInterestExceptionMessage.NAME_ALREADY_EXISTS,
 				status: HTTPCode.CONFLICT,

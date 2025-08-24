@@ -184,7 +184,13 @@ const RouteDetails = (): React.JSX.Element => {
 							style={{ display: "none" }}
 							type="file"
 						/>
-						<Button label="Upload image" onClick={handleTriggerFileUpload} />
+						<div style={{ maxWidth: 150 }}>
+							<Button
+								label="Upload image"
+								onClick={handleTriggerFileUpload}
+								variant="outlined"
+							/>
+						</div>
 					</>
 				)}
 				{isEditMode ? (

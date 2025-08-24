@@ -2,7 +2,7 @@ import { Fragment } from "react";
 
 import { type Slide } from "~/libs/types/types.js";
 
-import { Button } from "../components.js";
+import { Icon } from "../components.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -21,8 +21,9 @@ const FeatureGallery = ({ slides }: Properties): React.JSX.Element => {
 			<div className={styles["image-wrapper"]}>
 				{slide.content}
 				{slide.onDelete && (
-					<div className={styles["delete-button"]}>
-						<Button label="Delete image" onClick={slide.onDelete} />
+					/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
+					<div className={styles["delete-icon"]} onClick={slide.onDelete}>
+						<Icon height={18} name="trash" width={16} />
 					</div>
 				)}
 			</div>

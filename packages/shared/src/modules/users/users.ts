@@ -12,7 +12,7 @@ export {
 } from "./libs/types/types.js";
 export {
 	authenticatedUserPatch as authenticatedUserPatchValidationSchema,
-	userGetProfile as userGetProfileValidationSchema,
+	userGetProfileParameters as userGetProfileParametersValidationSchema,
 	userSignIn as userSignInValidationSchema,
 	userSignUp as userSignUpValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";

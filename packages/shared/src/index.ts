@@ -116,7 +116,7 @@ export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetByIdItemResponseDto,
-	userGetProfileValidationSchema,
+	userGetProfileParametersValidationSchema,
 	type UserPublicProfileResponseDto,
 	UsersApiPath,
 	type UserSignInRequestDto,

@@ -14,7 +14,7 @@ import {
 	type UserGetByIdItemResponseDto,
 	type UserPublicProfileResponseDto,
 } from "./libs/types/types.js";
-import { userGetProfileValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
+import { userGetProfileParametersValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 
 /**
  * @swagger
@@ -56,7 +56,7 @@ class UserController extends BaseController {
 			method: "GET",
 			path: UsersApiPath.$ID,
 			validation: {
-				params: userGetProfileValidationSchema,
+				params: userGetProfileParametersValidationSchema,
 			},
 		});
 	}

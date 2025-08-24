@@ -61,7 +61,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 		setIsEditMode((previous) => !previous);
 	}, []);
 
-	const handleCancel = useCallback(() => {
+	const handleResetFormValues = useCallback(() => {
 		if (!pointOfInterest) {
 			return;
 		}
@@ -70,8 +70,11 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 			description: pointOfInterest.description ?? "",
 			name: pointOfInterest.name,
 		});
-		setIsEditMode(false);
 	}, [handleReset, pointOfInterest]);
+	const handleCancel = useCallback(() => {
+		handleResetFormValues();
+		setIsEditMode(false);
+	}, [handleResetFormValues]);
 
 	const handlePatchRequest = useCallback(() => {
 		if (pointOfInterest) {
@@ -91,15 +94,8 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 	}, [dispatch, poiId]);
 
 	useEffect(() => {
-		if (!pointOfInterest) {
-			return;
-		}
-
-		handleReset({
-			description: pointOfInterest.description ?? "",
-			name: pointOfInterest.name,
-		});
-	}, [pointOfInterest, handleReset]);
+		handleResetFormValues();
+	}, [handleResetFormValues]);
 
 	if (dataStatus === DataStatus.REJECTED) {
 		return <NotFound />;

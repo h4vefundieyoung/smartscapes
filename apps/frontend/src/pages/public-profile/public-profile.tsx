@@ -63,9 +63,9 @@ const PublicProfile = (): React.JSX.Element => {
 						<Avatar size={128} user={userProfile} />
 
 						<div className={styles["user-info-details"]}>
-							<div className={styles["details-name"]}>
+							<h1 className={styles["details-name"]}>
 								{`${userProfile.firstName} ${userProfile.lastName}`}
-							</div>
+							</h1>
 							<div className={styles["details-followers"]}>
 								{userProfile.followersCount.toString()} &nbsp;
 								{userProfile.followersCount === SINGLE_FOLLOWER_COUNT

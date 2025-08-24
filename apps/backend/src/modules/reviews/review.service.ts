@@ -83,23 +83,11 @@ class ReviewService implements Service {
 			await this.ensureRouteExists(routeId);
 		}
 
-		const reviews = await this.reviewRepository.findAll(options);
+		const items = await this.reviewRepository.findAll(options);
 
-		const items: ReviewGetByIdResponseDto[] = reviews.map((review) => ({
-			content: review.content,
-			id: review.id,
-			likesCount: review.likesCount,
-			poiId: review.poiId,
-			routeId: review.routeId,
-			user: {
-				avatarUrl: review.user.avatar?.url ?? null,
-				firstName: review.user.firstName,
-				id: review.user.id,
-				lastName: review.user.lastName,
-			},
-		}));
-
-		return { items };
+		return {
+			items: items.map((item) => item.toListObject()),
+		};
 	}
 
 	private async ensurePoiExists(id: number): Promise<void> {

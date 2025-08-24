@@ -4,10 +4,7 @@ import { describe, it } from "node:test";
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { type RouteService } from "../routes/route.service.js";
 import { type UserAuthResponseDto } from "../users/users.js";
-import {
-	type ReviewGetAllItemResponseDto,
-	type ReviewGetByIdResponseDto,
-} from "./libs/types/types.js";
+import { type ReviewGetByIdResponseDto } from "./libs/types/types.js";
 import { ReviewEntity } from "./review.entity.js";
 import { type ReviewRepository } from "./review.repository.js";
 import { ReviewService } from "./review.service.js";
@@ -136,7 +133,7 @@ describe("ReviewService", () => {
 	});
 
 	it("findAll should return all reviews", async () => {
-		const row: ReviewGetAllItemResponseDto = {
+		const row = {
 			content: mockReviewDB.content,
 			id: mockReviewDB.id,
 			likesCount: mockReviewDB.likesCount,
@@ -164,8 +161,24 @@ describe("ReviewService", () => {
 			},
 		};
 
+		const rowEntity = ReviewEntity.initializeList({
+			content: row.content,
+			id: row.id,
+			likesCount: row.likesCount,
+			poiId: row.poiId,
+			routeId: row.routeId,
+			user: {
+				avatarUrl: expected.user.avatarUrl,
+				firstName: row.user.firstName,
+				id: row.user.id,
+				lastName: row.user.lastName,
+			},
+			userId: currentUser.id,
+		});
+
 		const reviewRepository = {
-			findAll: (() => Promise.resolve([row])) as ReviewRepository["findAll"],
+			findAll: (() =>
+				Promise.resolve([rowEntity])) as ReviewRepository["findAll"],
 		} as ReviewRepository;
 
 		const reviewService = new ReviewService(

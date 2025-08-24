@@ -3,10 +3,7 @@ import { type Repository } from "~/libs/types/types.js";
 import { ReviewEntity } from "~/modules/reviews/review.entity.js";
 import { type ReviewModel } from "~/modules/reviews/review.model.js";
 
-import {
-	type ReviewGetAllItemResponseDto,
-	type ReviewGetAllSearchQuery,
-} from "./libs/types/types.js";
+import { type ReviewGetAllSearchQuery } from "./libs/types/types.js";
 
 class ReviewRepository implements Repository {
 	private reviewModel: typeof ReviewModel;
@@ -30,7 +27,7 @@ class ReviewRepository implements Repository {
 
 	public async findAll(
 		options: null | ReviewGetAllSearchQuery,
-	): Promise<ReviewGetAllItemResponseDto[]> {
+	): Promise<ReviewEntity[]> {
 		const { routeId } = options ?? {};
 
 		const queryBuilder = this.reviewModel
@@ -61,7 +58,24 @@ class ReviewRepository implements Repository {
 			queryBuilder.where("reviews.route_id", routeId);
 		}
 
-		return await queryBuilder.execute();
+		const rows = await queryBuilder.execute();
+
+		return rows.map((r) =>
+			ReviewEntity.initializeList({
+				content: r.content,
+				id: r.id,
+				likesCount: r.likesCount,
+				poiId: r.poiId,
+				routeId: r.routeId,
+				user: {
+					avatarUrl: r.user.avatar?.url ?? null,
+					firstName: r.user.firstName,
+					id: r.user.id,
+					lastName: r.user.lastName,
+				},
+				userId: r.userId,
+			}),
+		);
 	}
 }
 

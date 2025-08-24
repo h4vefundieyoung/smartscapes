@@ -55,25 +55,14 @@ describe("ReviewRepository", () => {
 			"user:firstName": "John",
 			"user:id": 42,
 			"user:lastName": "Doe",
+			userId: 42,
 		};
 
 		databaseTracker.on.select("reviews").response([row]);
 
-		const result = await reviewRepository.findAll(null);
+		const reviews = await reviewRepository.findAll(null);
 
-		const actual = result.map((r) => ({
-			content: r.content,
-			id: r.id,
-			likesCount: r.likesCount,
-			poiId: r.poiId,
-			routeId: r.routeId,
-			user: {
-				avatar: r.user.avatar ? { url: r.user.avatar.url } : null,
-				firstName: r.user.firstName,
-				id: r.user.id,
-				lastName: r.user.lastName,
-			},
-		}));
+		const actual = reviews.map((review) => review.toListObject());
 
 		assert.deepStrictEqual(actual, [
 			{
@@ -83,7 +72,7 @@ describe("ReviewRepository", () => {
 				poiId: 5,
 				routeId: null,
 				user: {
-					avatar: { url: "url" },
+					avatarUrl: "url",
 					firstName: "John",
 					id: 42,
 					lastName: "Doe",
@@ -105,25 +94,14 @@ describe("ReviewRepository", () => {
 			"user:firstName": "A",
 			"user:id": 7,
 			"user:lastName": "B",
+			userId: 7,
 		};
 
 		databaseTracker.on.select("reviews").response([row]);
 
 		const reviews = await reviewRepository.findAll({ routeId });
 
-		const actual = reviews.map((review) => ({
-			content: review.content,
-			id: review.id,
-			likesCount: review.likesCount,
-			poiId: review.poiId,
-			routeId: review.routeId,
-			user: {
-				avatar: review.user.avatar ? { url: review.user.avatar.url } : null,
-				firstName: review.user.firstName,
-				id: review.user.id,
-				lastName: review.user.lastName,
-			},
-		}));
+		const actual = reviews.map((review) => review.toListObject());
 
 		assert.deepStrictEqual(actual, [
 			{
@@ -133,7 +111,7 @@ describe("ReviewRepository", () => {
 				poiId: null,
 				routeId,
 				user: {
-					avatar: { url: "url" },
+					avatarUrl: "url",
 					firstName: "A",
 					id: 7,
 					lastName: "B",

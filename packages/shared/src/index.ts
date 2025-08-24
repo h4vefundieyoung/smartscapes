@@ -85,7 +85,6 @@ export {
 export {
 	type ReviewCreatePayload,
 	reviewCreateValidationSchema,
-	type ReviewGetAllItemResponseDto,
 	type ReviewGetAllSearchQuery,
 	reviewGetAllSearchQueryValidationSchema,
 	type ReviewGetByIdResponseDto,

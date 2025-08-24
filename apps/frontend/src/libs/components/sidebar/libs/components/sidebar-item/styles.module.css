@@ -12,9 +12,9 @@
 	text-decoration: none;
 	border-left: 4px solid transparent;
 	transition:
-		background-color 0.4s ease,
-		border-left-color 0.4s ease,
-		color 0.4s ease;
+		background-color 0.3s ease,
+		border-left-color 0.3s ease,
+		color 0.2s ease;
 }
 
 .link:hover {
@@ -31,6 +31,15 @@
 .icon {
 	display: flex;
 	color: var(--color-icon-neutral);
+	transition: color 0.2s ease;
+}
+
+.link-active .icon {
+	color: var(--color-brand-1000);
+}
+
+.link:hover .icon {
+	color: var(--color-brand-1000);
 }
 
 .label {
@@ -43,5 +52,21 @@
 @container sidebar-item (max-width: 80px) {
 	.link {
 		gap: 0;
+	}
+}
+
+@media (width <=480px) {
+	.item {
+		flex: 1;
+		container: none;
+	}
+
+	.link {
+		justify-content: center;
+		border-left: none;
+	}
+
+	.link-active {
+		border-bottom: 4px solid var(--color-stroke-selected);
 	}
 }

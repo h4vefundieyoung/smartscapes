@@ -10,7 +10,7 @@ type Properties = {
 	entityId: number;
 };
 
-const PopoverItem = ({
+const NotificationItem = ({
 	content,
 	createdAt,
 	entityId,
@@ -29,4 +29,4 @@ const PopoverItem = ({
 	);
 };
 
-export { PopoverItem };
+export { NotificationItem };

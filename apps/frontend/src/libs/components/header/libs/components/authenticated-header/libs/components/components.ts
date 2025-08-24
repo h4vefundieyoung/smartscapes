@@ -1,1 +1,1 @@
-export { Popover } from "./popover/popover.js";
+export { NotificationsPopover } from "./notifications-popover/notifications-popover.js";

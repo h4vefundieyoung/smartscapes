@@ -9,12 +9,12 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { actions as notificationActions } from "~/modules/notification/notification.js";
 
-import { PopoverItem } from "./libs/components/components.js";
+import { NotificationItem } from "./libs/components/components.js";
 import styles from "./styles.module.css";
 
-const Popover = (): React.JSX.Element => {
+const NotificationsPopover = (): React.JSX.Element => {
 	const [open, setOpen] = useState<boolean>(false);
-	const reference = useRef<HTMLDivElement>(null);
+	const containerReference = useRef<HTMLDivElement>(null);
 	const dispatch = useAppDispatch();
 	const notifications = useAppSelector(
 		(state) => state.notification.notifications,
@@ -27,8 +27,8 @@ const Popover = (): React.JSX.Element => {
 	useEffect(() => {
 		function handleClickOutside(event: MouseEvent): void {
 			if (
-				reference.current &&
-				!reference.current.contains(event.target as Node)
+				containerReference.current &&
+				!containerReference.current.contains(event.target as Node)
 			) {
 				setOpen(false);
 			}
@@ -46,7 +46,7 @@ const Popover = (): React.JSX.Element => {
 	}, []);
 
 	return (
-		<div className={styles["container"]} ref={reference}>
+		<div className={styles["container"]} ref={containerReference}>
 			<button className={styles["button"]} onClick={handleToggle}>
 				<Icon height={20} name="bell" width={18} />
 			</button>
@@ -57,7 +57,7 @@ const Popover = (): React.JSX.Element => {
 					{notifications.length > 0 ? (
 						<ul className={styles["list"]}>
 							{notifications.map(({ content, createdAt, entityId, id }) => (
-								<PopoverItem
+								<NotificationItem
 									content={content}
 									createdAt={createdAt}
 									entityId={entityId}
@@ -74,4 +74,4 @@ const Popover = (): React.JSX.Element => {
 	);
 };
 
-export { Popover };
+export { NotificationsPopover };

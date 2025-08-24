@@ -82,9 +82,9 @@ const deleteImage = createAsyncThunk<
 	number,
 	AsyncThunkConfig
 >(`${routesSliceName}/delete-image`, async (id, { extra }) => {
-	const { fileApi, toastNotifier } = extra;
+	const { routesApi, toastNotifier } = extra;
 
-	const response = await fileApi.delete({ id });
+	const response = await routesApi.deleteImage(id);
 
 	toastNotifier.showSuccess("Image was deleted");
 

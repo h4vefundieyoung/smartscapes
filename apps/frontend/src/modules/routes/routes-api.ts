@@ -13,6 +13,7 @@ import {
 	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
 	type RouteGetByIdResponseDto,
+	type UploadImageActionPayload,
 } from "./libs/types/types.js";
 
 type Constructor = {
@@ -36,6 +37,18 @@ class RoutesApi extends BaseHTTPApi {
 				hasAuth: true,
 				method: "POST",
 				payload: JSON.stringify(payload),
+			},
+		);
+
+		return await response.json();
+	}
+
+	public async deleteImage(id: number): Promise<APIResponse<boolean>> {
+		const response = await this.load<APIResponse<boolean>>(
+			this.getFullEndpoint(RoutesApiPath.$ID_IMAGE, { id: id.toString() }),
+			{
+				hasAuth: true,
+				method: "DELETE",
 			},
 		);
 
@@ -89,10 +102,9 @@ class RoutesApi extends BaseHTTPApi {
 		return await response.json();
 	}
 
-	public async uploadImage(payload: {
-		file: File;
-		id: number;
-	}): Promise<APIResponse<FileUploadResponseDto>> {
+	public async uploadImage(
+		payload: UploadImageActionPayload,
+	): Promise<APIResponse<FileUploadResponseDto>> {
 		const { file, id } = payload;
 
 		const formData = new FormData();

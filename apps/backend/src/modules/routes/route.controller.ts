@@ -167,6 +167,13 @@ class RouteController extends BaseController {
 		});
 
 		this.addRoute({
+			handler: this.deleteImage.bind(this),
+			method: "DELETE",
+			path: RoutesApiPath.$ID_IMAGE,
+			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
+		});
+
+		this.addRoute({
 			handler: this.delete.bind(this),
 			method: "DELETE",
 			path: RoutesApiPath.$ID,
@@ -459,17 +466,17 @@ class RouteController extends BaseController {
 	 *                     $ref: '#/components/schemas/RouteListItem'
 	 * */
 
-	public async findAll(
+	public async deleteImage(
 		options: APIHandlerOptions<{
-			query?: RouteFindAllOptions;
+			params: { id: number };
 		}>,
-	): Promise<APIHandlerResponse<RouteGetAllItemResponseDto[]>> {
-		const { query = null } = options;
+	): Promise<APIHandlerResponse<boolean>> {
+		const id = Number(options.params.id);
 
-		const { items } = await this.routeService.findAll(query);
+		const isDeleted = await this.routeService.deleteImage(id);
 
 		return {
-			payload: { data: items },
+			payload: { data: isDeleted },
 			status: HTTPCode.OK,
 		};
 	}
@@ -516,15 +523,17 @@ class RouteController extends BaseController {
 	 *                       example: "Unauthorized access"
 	 */
 
-	public async findById(
-		options: APIHandlerOptions<{ params: { id: string } }>,
-	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
-		const id = Number(options.params.id);
+	public async findAll(
+		options: APIHandlerOptions<{
+			query?: RouteFindAllOptions;
+		}>,
+	): Promise<APIHandlerResponse<RouteGetAllItemResponseDto[]>> {
+		const { query = null } = options;
 
-		const route = await this.routeService.findById(id);
+		const { items } = await this.routeService.findAll(query);
 
 		return {
-			payload: { data: route },
+			payload: { data: items },
 			status: HTTPCode.OK,
 		};
 	}
@@ -598,19 +607,12 @@ class RouteController extends BaseController {
 	 *                       example: "You don't have permission to perform this action."
 	 */
 
-	public async patch(
-		options: APIHandlerOptions<{
-			body: RoutePatchRequestDto;
-			params: { id: string };
-		}>,
+	public async findById(
+		options: APIHandlerOptions<{ params: { id: string } }>,
 	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
 		const id = Number(options.params.id);
-		const { description, name } = options.body;
 
-		const route = await this.routeService.patch(id, {
-			description,
-			name,
-		});
+		const route = await this.routeService.findById(id);
 
 		return {
 			payload: { data: route },
@@ -657,6 +659,52 @@ class RouteController extends BaseController {
 	 *               properties:
 	 *                 data:
 	 *                   $ref: '#/components/schemas/FileUploadResponseDto'
+	 */
+
+	public async patch(
+		options: APIHandlerOptions<{
+			body: RoutePatchRequestDto;
+			params: { id: string };
+		}>,
+	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
+		const id = Number(options.params.id);
+		const { description, name } = options.body;
+
+		const route = await this.routeService.patch(id, {
+			description,
+			name,
+		});
+
+		return {
+			payload: { data: route },
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /files/{id}/image:
+	 *   delete:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags: [Files]
+	 *     summary: Delete a file
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     responses:
+	 *       200:
+	 *         description: File deleted successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: boolean
 	 */
 
 	public async uploadImage(

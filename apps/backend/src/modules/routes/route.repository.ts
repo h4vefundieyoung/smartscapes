@@ -46,7 +46,8 @@ class RouteRepository implements Repository {
 				"created_by_user_id",
 			]);
 
-		return RouteEntity.initializeNew(result);
+		// eslint-disable-next-line @typescript-eslint/no-misused-spread
+		return RouteEntity.initialize({ ...result, images: [] });
 	}
 
 	public async delete(id: number): Promise<boolean> {

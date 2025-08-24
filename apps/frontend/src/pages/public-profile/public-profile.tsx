@@ -20,7 +20,8 @@ const PublicProfile = (): React.JSX.Element => {
 	const authenticatedUser = useAppSelector(
 		({ auth }) => auth.authenticatedUser,
 	);
-	const { dataStatus, userProfile } = useAppSelector(({ users }) => users);
+	const dataStatus = useAppSelector(({ users }) => users.dataStatus);
+	const userProfile = useAppSelector(({ users }) => users.userProfile);
 
 	useEffect(() => {
 		if (id) {
@@ -28,26 +29,26 @@ const PublicProfile = (): React.JSX.Element => {
 		}
 	}, [dispatch, id]);
 
-	const handleFollowToggle = useCallback(async (): Promise<void> => {
-		if (!userProfile || !authenticatedUser) {
-			return;
-		}
-
-		await (userProfile.isFollowed
-			? dispatch(
+	const handleFollowToggle = useCallback((): Promise<void> => {
+		if (userProfile && authenticatedUser) {
+			if (userProfile.isFollowed) {
+				void dispatch(
 					usersActions.unfollowUser({
 						followerId: authenticatedUser.id,
 						userId: Number(id),
 					}),
-				)
-			: dispatch(
+				);
+			} else {
+				void dispatch(
 					usersActions.followUser({
-						payload: {
-							followingId: Number(id),
-						},
+						followingId: Number(id),
 						userId: authenticatedUser.id,
 					}),
-				));
+				);
+			}
+		}
+
+		return Promise.resolve();
 	}, [userProfile, authenticatedUser, dispatch, id]);
 
 	if (!userProfile || !authenticatedUser || dataStatus === DataStatus.PENDING) {

@@ -2,10 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 
-import {
-	type UserFollowsRequestDto,
-	type UserPublicProfileResponseDto,
-} from "../libs/types/types.js";
+import { type UserPublicProfileResponseDto } from "../libs/types/types.js";
 import { name as sliceName } from "./users.slice.js";
 
 const getUserPublicProfile = createAsyncThunk<
@@ -20,12 +17,12 @@ const getUserPublicProfile = createAsyncThunk<
 
 const followUser = createAsyncThunk<
 	APIResponse<boolean>,
-	{ payload: UserFollowsRequestDto; userId: number },
+	{ followingId: number; userId: number },
 	AsyncThunkConfig
->(`${sliceName}/follow-user`, async ({ payload, userId }, { extra }) => {
+>(`${sliceName}/follow-user`, async ({ followingId, userId }, { extra }) => {
 	const { toastNotifier, userApi } = extra;
 
-	const response = await userApi.follow(userId, payload);
+	const response = await userApi.follow(userId, followingId);
 
 	toastNotifier.showSuccess("You have followed this user");
 

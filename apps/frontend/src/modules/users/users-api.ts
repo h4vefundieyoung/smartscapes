@@ -24,7 +24,7 @@ class UserApi extends BaseHTTPApi {
 
 	public async follow(
 		id: number,
-		payload: UserFollowsRequestDto,
+		followingId: number,
 	): Promise<APIResponse<boolean>> {
 		const response = await this.load<APIResponse<boolean>>(
 			this.getFullEndpoint(UserFollowsApiPath.$USER_ID_FOLLOWERS, {
@@ -34,7 +34,7 @@ class UserApi extends BaseHTTPApi {
 				contentType: ContentType.JSON,
 				hasAuth: true,
 				method: "POST",
-				payload: JSON.stringify(payload),
+				payload: JSON.stringify({ followingId } as UserFollowsRequestDto),
 			},
 		);
 

@@ -27,11 +27,13 @@ const ManageRoutes = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const [searchParameters, setSearchParameters] = useSearchParams();
 
-	const formData = useAppSelector((state) => state.route.formData);
-	const createStatus = useAppSelector((state) => state.route.createStatus);
-	const { authenticatedUser } = useAppSelector((state) => state.auth) as {
-		authenticatedUser: UserAuthResponseDto;
-	};
+	const createRouteFormData = useAppSelector(
+		({ routes }) => routes.createRouteFormData,
+	);
+	const createStatus = useAppSelector(({ routes }) => routes.createStatus);
+	const authenticatedUser = useAppSelector(
+		(state) => state.auth.authenticatedUser,
+	) as UserAuthResponseDto;
 
 	const { control, errors, getValues, handleReset, handleSubmit } =
 		useAppForm<RouteCreateRequestDto>({
@@ -107,13 +109,13 @@ const ManageRoutes = (): React.JSX.Element => {
 	}, [dispatch, isModalOpen]);
 
 	useEffect(() => {
-		if (formData) {
+		if (createRouteFormData) {
 			handleReset({
 				...DEFAULT_CREATE_ROUTE_PAYLOAD,
-				...formData,
+				...createRouteFormData,
 			});
 		}
-	}, [formData, handleReset]);
+	}, [createRouteFormData, handleReset]);
 
 	useEffect(() => {
 		if (createStatus === DataStatus.FULFILLED) {

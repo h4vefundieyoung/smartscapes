@@ -601,7 +601,7 @@ describe("Route controller", () => {
 			const hasDeleteRoute = controller.routes.some(
 				(route) => route.method === "DELETE" && route.path.endsWith("/:id"),
 			);
-			const hasPatchRoute = controller.routes.some(
+			const haspatch = controller.routes.some(
 				(route) => route.method === "PATCH" && route.path.endsWith("/:id"),
 			);
 			const hasGetAllRoute = controller.routes.some(
@@ -613,7 +613,7 @@ describe("Route controller", () => {
 
 			assert.ok(hasCreateRoute, "Should have CREATE route configured");
 			assert.ok(hasDeleteRoute, "Should have DELETE route configured");
-			assert.ok(hasPatchRoute, "Should have PATCH route configured");
+			assert.ok(haspatch, "Should have PATCH route configured");
 			assert.ok(hasGetAllRoute, "Should have GET all route configured");
 			assert.ok(hasGetByIdRoute, "Should have GET by ID route configured");
 		});

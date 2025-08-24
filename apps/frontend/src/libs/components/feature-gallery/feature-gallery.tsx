@@ -6,47 +6,27 @@ import { Button } from "../components.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	handleDelete?: (id: number) => void;
-	isEditMode: boolean;
 	slides: Slide[];
 };
 
-const FeatureGallery = ({
-	handleDelete,
-	isEditMode,
-	slides,
-}: Properties): React.JSX.Element => {
+const FeatureGallery = ({ slides }: Properties): React.JSX.Element => {
 	if (slides.length === 0) {
 		return <></>;
 	}
 
-	const handleClick = (id: number) => (): void => {
-		if (handleDelete) {
-			handleDelete(id);
-		}
-	};
-
 	const [firstSlide, ...otherSlides] = slides;
 
 	const renderSlide = (slide: Slide): React.ReactElement => {
-		if (slide.type === "image") {
-			return (
-				<div className={styles["image-wrapper"]}>
-					<img
-						alt="point of interest"
-						className={styles["image"]}
-						src={slide.content as string}
-					/>
-					{isEditMode && slide.id && (
-						<div className={styles["delete-button"]}>
-							<Button label="Delete image" onClick={handleClick(slide.id)} />
-						</div>
-					)}
-				</div>
-			);
-		}
-
-		return <div className={styles["component"]}>{slide.content}</div>;
+		return (
+			<div className={styles["image-wrapper"]}>
+				{slide.content}
+				{slide.onDelete && (
+					<div className={styles["delete-button"]}>
+						<Button label="Delete image" onClick={slide.onDelete} />
+					</div>
+				)}
+			</div>
+		);
 	};
 
 	return (

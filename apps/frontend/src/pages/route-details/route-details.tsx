@@ -147,13 +147,18 @@ const RouteDetails = (): React.JSX.Element => {
 					)}
 				</div>
 				<FeatureGallery
-					handleDelete={handleDeleteImage}
-					isEditMode={isEditMode}
 					slides={images.map((image) => {
 						return {
-							content: image.url,
-							id: image.id,
-							type: "image",
+							content: (
+								<img
+									alt="point of interest"
+									className={styles["image"]}
+									src={image.url}
+								/>
+							),
+							onDelete: (): void => {
+								handleDeleteImage(image.id);
+							},
 						};
 					})}
 				/>
@@ -181,7 +186,6 @@ const RouteDetails = (): React.JSX.Element => {
 						<p className={styles["description"]}>{description}</p>
 					)
 				)}
-				<PointOfInterestSection pointOfInterests={pois} />
 				<PointOfInterestSection pointOfInterests={pois} />
 			</main>
 		</>

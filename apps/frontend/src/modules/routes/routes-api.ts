@@ -45,7 +45,7 @@ class RoutesApi extends BaseHTTPApi {
 
 	public async deleteImage(id: number): Promise<APIResponse<boolean>> {
 		const response = await this.load<APIResponse<boolean>>(
-			this.getFullEndpoint(RoutesApiPath.$ID_IMAGE, { id: id.toString() }),
+			this.getFullEndpoint(RoutesApiPath.$ID_IMAGES, { id: id.toString() }),
 			{
 				hasAuth: true,
 				method: "DELETE",
@@ -112,7 +112,7 @@ class RoutesApi extends BaseHTTPApi {
 		formData.append("file", file);
 
 		const response = await this.load<APIResponse<FileUploadResponseDto>>(
-			this.getFullEndpoint(RoutesApiPath.$ID_IMAGE, { id: id.toString() }),
+			this.getFullEndpoint(RoutesApiPath.$ID_IMAGES, { id: id.toString() }),
 			{
 				hasAuth: true,
 				method: "POST",

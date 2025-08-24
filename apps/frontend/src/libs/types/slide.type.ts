@@ -1,7 +1,6 @@
 type Slide = {
-	content: React.ReactNode | string;
-	id?: number;
-	type: "component" | "image";
+	content: React.ReactNode;
+	onDelete?: () => void;
 };
 
 export { type Slide };

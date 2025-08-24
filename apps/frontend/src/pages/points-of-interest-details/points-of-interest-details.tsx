@@ -131,7 +131,6 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 			</div>
 
 			<FeatureGallery
-				isEditMode={false}
 				slides={[
 					{
 						content: (
@@ -144,10 +143,9 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 								]}
 							/>
 						),
-						type: "component",
 					},
-					{ content: image2, id: 1, type: "image" },
-					{ content: image3, id: 2, type: "image" },
+					{ content: image2 },
+					{ content: image3 },
 				]}
 			/>
 

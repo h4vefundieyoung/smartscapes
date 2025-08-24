@@ -1,6 +1,6 @@
 const RoutesApiPath = {
 	$ID: "/:id",
-	$ID_IMAGE: "/:id/image",
+	$ID_IMAGES: "/:id/image",
 	CONSTRUCT: "/construct",
 	ROOT: "/",
 } as const;

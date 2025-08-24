@@ -162,14 +162,14 @@ class RouteController extends BaseController {
 		this.addRoute({
 			handler: this.uploadImage.bind(this),
 			method: "POST",
-			path: RoutesApiPath.$ID_IMAGE,
+			path: RoutesApiPath.$ID_IMAGES,
 			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 		});
 
 		this.addRoute({
 			handler: this.deleteImage.bind(this),
 			method: "DELETE",
-			path: RoutesApiPath.$ID_IMAGE,
+			path: RoutesApiPath.$ID_IMAGES,
 			preHandlers: [checkHasPermission(PermissionKey.MANAGE_ROUTES)],
 		});
 

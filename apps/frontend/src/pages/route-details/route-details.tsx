@@ -78,7 +78,11 @@ const RouteDetails = (): React.JSX.Element => {
 	}, [route, handleValueSet]);
 
 	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
-		return <Loader />;
+		return (
+			<div className={styles["loader-container"]}>
+				<Loader />
+			</div>
+		);
 	}
 
 	if (dataStatus === DataStatus.REJECTED) {

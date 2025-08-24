@@ -90,7 +90,11 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 	}
 
 	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
-		return <Loader />;
+		return (
+			<div className={styles["loader-container"]}>
+				<Loader />
+			</div>
+		);
 	}
 
 	if (!pointOfInterest) {

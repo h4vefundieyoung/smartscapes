@@ -18,6 +18,7 @@ export { MapLocationField } from "./map-location-field/map-location-field.js";
 export { MapContext, MapProvider } from "./map-provider/map-provider.js";
 export { Modal } from "./modal/modal.js";
 export { NumberInput } from "./number-input/number-input.js";
+export { PageHeading } from "./page-heading/page-heading.js";
 export { Pagination } from "./pagination/pagination.js";
 export { PasswordInput } from "./password-input/password-input.js";
 export { PointOfInterestCard } from "./point-of-interest-card/point-of-interest-card.js";

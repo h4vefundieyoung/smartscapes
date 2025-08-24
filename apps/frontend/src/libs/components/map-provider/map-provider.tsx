@@ -13,7 +13,7 @@ import styles from "./styles.module.css";
 const MapContext = createContext<MapClient | null>(null);
 
 type Properties = {
-	center?: Coordinates | undefined;
+	center?: Coordinates;
 	children?: React.ReactNode;
 	markers?: { coordinates: Coordinates }[];
 };

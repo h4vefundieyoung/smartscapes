@@ -46,13 +46,13 @@ const UserRoute = (): React.JSX.Element => {
 	);
 
 	useEffect(() => {
-		if (routeDataStatus === DataStatus.IDLE && routeId) {
+		if (routeDataStatus === DataStatus.IDLE) {
 			void dispatch(routeActions.getRouteById(routeId));
 		}
 	}, [dispatch, routeId, routeDataStatus]);
 
 	useEffect(() => {
-		if (route?.geometry) {
+		if (route) {
 			setRouteLine({
 				geometry: route.geometry,
 				id: String(route.id),
@@ -83,19 +83,9 @@ const UserRoute = (): React.JSX.Element => {
 		return <div>Route not found</div>;
 	}
 
-	const [centerCoordinates] = route.geometry.coordinates;
-
-	if (!centerCoordinates) {
-		return <div>Invalid route coordinates</div>;
-	}
-
 	return (
 		<div className={styles["container"]}>
-			<MapProvider
-				center={centerCoordinates}
-				markers={markers}
-				routeLine={routeLine}
-			>
+			<MapProvider markers={markers} routeLine={routeLine}>
 				<div className={styles["button-container"]}>
 					{isStarted ? (
 						<Button label="Finish" onClick={handleFinish} />

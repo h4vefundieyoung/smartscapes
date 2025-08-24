@@ -7,7 +7,6 @@ import { RoutesPanel } from "./libs/components/routes-panel/routes-panel.js";
 import { mockPOIs } from "./mock-pois.js";
 import styles from "./styles.module.css";
 
-// TODO: Dummy component to use useMapClient and silence unused export warning, delete it as soon as possible
 const DummyMapClientUser = (): null => {
 	const mapClient = useMapClient();
 

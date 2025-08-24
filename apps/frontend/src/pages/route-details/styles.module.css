@@ -44,3 +44,17 @@
 		padding: 40px 32px;
 	}
 }
+
+@media (width <= 1440px) {
+	.container {
+		max-width: 1000px;
+		padding: 80px 48px;
+	}
+}
+
+@media (width <=768px) {
+	.container {
+		max-width: none;
+		padding: 40px 32px;
+	}
+}

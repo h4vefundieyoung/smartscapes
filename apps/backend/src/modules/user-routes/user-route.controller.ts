@@ -1,0 +1,467 @@
+import { APIPath } from "~/libs/enums/enums.js";
+import { BaseController } from "~/libs/modules/controller/base-controller.module.js";
+import {
+	type APIHandlerOptions,
+	type APIHandlerResponse,
+} from "~/libs/modules/controller/libs/types/types.js";
+import { HTTPCode } from "~/libs/modules/http/http.js";
+import { type Logger } from "~/libs/modules/logger/libs/types/logger.type.js";
+
+import { UserRouteApiPath } from "./libs/enums/enum.js";
+import {
+	type UserRouteCreateRequestDto,
+	type UserRouteParameters,
+	type UserRoutePatchRequestDto,
+	type UserRouteResponseDto,
+} from "./libs/types/type.js";
+import {
+	userRouteCreateValidationSchema,
+	userRouteParametersValidationSchema,
+	userRoutePatchValidationSchema,
+} from "./libs/validation-schemas/validation-schemas.js";
+import { type UserRouteService } from "./user-route.service.js";
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     UserRouteGeometry:
+ *       type: object
+ *       required:
+ *         - coordinates
+ *         - type
+ *       properties:
+ *         coordinates:
+ *           type: array
+ *           items:
+ *             type: array
+ *             items:
+ *               type: number
+ *             minItems: 2
+ *             maxItems: 2
+ *           minItems: 2
+ *           example: [[30.528909, 50.455232], [30.528209, 50.415232]]
+ *         type:
+ *           type: string
+ *           enum: ["LineString"]
+ *           example: "LineString"
+ *
+ *     UserRouteCreateRequestDto:
+ *       type: object
+ *       required:
+ *         - routeId
+ *       properties:
+ *         routeId:
+ *           type: integer
+ *           example: 7
+ *           description: ID of the route to track
+ *
+ *     UserRoutePatchRequestDto:
+ *       type: object
+ *       required:
+ *         - routeId
+ *         - actualGeometry
+ *       properties:
+ *         routeId:
+ *           type: integer
+ *           example: 7
+ *           description: ID of the route being finished
+ *         actualGeometry:
+ *           $ref: '#/components/schemas/UserRouteGeometry'
+ *
+ *     UserRouteResponseDto:
+ *       type: object
+ *       required:
+ *         - id
+ *         - routeId
+ *         - userId
+ *         - status
+ *         - startedAt
+ *         - completedAt
+ *         - actualGeometry
+ *         - plannedGeometry
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         routeId:
+ *           type: integer
+ *           example: 7
+ *         userId:
+ *           type: integer
+ *           example: 1
+ *         status:
+ *           type: string
+ *           enum: ["not_started", "active", "completed", "cancelled", "expired"]
+ *           example: "not_started"
+ *         startedAt:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *           example: null
+ *         completedAt:
+ *           type: string
+ *           format: date-time
+ *           nullable: true
+ *           example: null
+ *         actualGeometry:
+ *           $ref: '#/components/schemas/UserRouteGeometry'
+ *         plannedGeometry:
+ *           $ref: '#/components/schemas/UserRouteGeometry'
+ */
+
+class UserRouteController extends BaseController {
+	private userRouteService: UserRouteService;
+
+	public constructor(logger: Logger, userRouteService: UserRouteService) {
+		super(logger, APIPath.USER_ROUTES);
+		this.userRouteService = userRouteService;
+
+		this.addRoute({
+			handler: this.create.bind(this),
+			method: "POST",
+			path: UserRouteApiPath.$ID,
+			validation: {
+				body: userRouteCreateValidationSchema,
+				params: userRouteParametersValidationSchema,
+			},
+		});
+
+		this.addRoute({
+			handler: this.finish.bind(this),
+			method: "PATCH",
+			path: UserRouteApiPath.FINISH,
+			validation: {
+				body: userRoutePatchValidationSchema,
+				params: userRouteParametersValidationSchema,
+			},
+		});
+
+		this.addRoute({
+			handler: this.start.bind(this),
+			method: "PATCH",
+			path: UserRouteApiPath.START,
+			validation: {
+				body: userRouteCreateValidationSchema,
+				params: userRouteParametersValidationSchema,
+			},
+		});
+
+		this.addRoute({
+			handler: this.getAllByUserId.bind(this),
+			method: "GET",
+			path: UserRouteApiPath.$ID,
+			validation: {
+				params: userRouteParametersValidationSchema,
+			},
+		});
+	}
+
+	/**
+	 * @swagger
+	 * /user-routes/{userId}:
+	 *   post:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - User Routes
+	 *     summary: Create a new user route
+	 *     description: Create a new user route for tracking user's journey through a specific route
+	 *     parameters:
+	 *       - in: path
+	 *         name: userId
+	 *         required: true
+	 *         schema:
+	 *           type: integer
+	 *           example: 1
+	 *         description: ID of the user creating the route
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             $ref: '#/components/schemas/UserRouteCreateRequestDto'
+	 *     responses:
+	 *       201:
+	 *         description: User route created successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 payload:
+	 *                   type: object
+	 *                   properties:
+	 *                     data:
+	 *                       $ref: '#/components/schemas/UserRouteResponseDto'
+	 *             example:
+	 *               payload:
+	 *                 data:
+	 *                   id: 1
+	 *                   routeId: 7
+	 *                   userId: 1
+	 *                   status: "not_started"
+	 *                   startedAt: null
+	 *                   completedAt: null
+	 *                   actualGeometry:
+	 *                     type: "LineString"
+	 *                     coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                   plannedGeometry:
+	 *                     type: "LineString"
+	 *                     coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *   get:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - User Routes
+	 *     summary: Get all user routes
+	 *     description: Get all user routes for a specific user including their status, timestamps, and geometry information
+	 *     parameters:
+	 *       - in: path
+	 *         name: userId
+	 *         required: true
+	 *         schema:
+	 *           type: integer
+	 *           example: 1
+	 *         description: ID of the user whose routes to retrieve
+	 *     responses:
+	 *       200:
+	 *         description: User routes retrieved successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 payload:
+	 *                   type: object
+	 *                   properties:
+	 *                     data:
+	 *                       type: array
+	 *                       items:
+	 *                         $ref: '#/components/schemas/UserRouteResponseDto'
+	 *             example:
+	 *               payload:
+	 *                 data:
+	 *                   - id: 1
+	 *                     routeId: 7
+	 *                     userId: 1
+	 *                     status: "not_started"
+	 *                     startedAt: null
+	 *                     completedAt: null
+	 *                     actualGeometry:
+	 *                       type: "LineString"
+	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                     plannedGeometry:
+	 *                       type: "LineString"
+	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                   - id: 2
+	 *                     routeId: 8
+	 *                     userId: 1
+	 *                     status: "active"
+	 *                     startedAt: "2025-08-21T16:37:51.437Z"
+	 *                     completedAt: null
+	 *                     actualGeometry:
+	 *                       type: "LineString"
+	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                     plannedGeometry:
+	 *                       type: "LineString"
+	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                   - id: 3
+	 *                     routeId: 9
+	 *                     userId: 1
+	 *                     status: "completed"
+	 *                     startedAt: "2025-08-21T16:37:51.437Z"
+	 *                     completedAt: "2025-08-21T16:38:11.183Z"
+	 *                     actualGeometry:
+	 *                       type: "LineString"
+	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                     plannedGeometry:
+	 *                       type: "LineString"
+	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 */
+	public async create(
+		options: APIHandlerOptions<{
+			body: UserRouteCreateRequestDto;
+			params: UserRouteParameters;
+		}>,
+	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
+		const { body, params } = options;
+		const { routeId } = body;
+		const { userId } = params;
+
+		const createdRoute = await this.userRouteService.create({
+			routeId,
+			userId,
+		});
+
+		return {
+			payload: { data: createdRoute },
+			status: HTTPCode.CREATED,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /user-routes/{userId}/finish:
+	 *   patch:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - User Routes
+	 *     summary: Finish a user route
+	 *     description: Finish a user route by providing the actual geometry traveled and updating status to completed
+	 *     parameters:
+	 *       - in: path
+	 *         name: userId
+	 *         required: true
+	 *         schema:
+	 *           type: integer
+	 *           example: 1
+	 *         description: ID of the user finishing the route
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             $ref: '#/components/schemas/UserRoutePatchRequestDto'
+	 *     responses:
+	 *       200:
+	 *         description: User route finished successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 payload:
+	 *                   type: object
+	 *                   properties:
+	 *                     data:
+	 *                       $ref: '#/components/schemas/UserRouteResponseDto'
+	 *             example:
+	 *               payload:
+	 *                 data:
+	 *                   id: 1
+	 *                   routeId: 7
+	 *                   userId: 1
+	 *                   status: "completed"
+	 *                   startedAt: "2025-08-21T16:37:51.437Z"
+	 *                   completedAt: "2025-08-21T16:38:11.183Z"
+	 *                   actualGeometry:
+	 *                     type: "LineString"
+	 *                     coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                   plannedGeometry:
+	 *                     type: "LineString"
+	 *                     coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 */
+	public async finish(
+		options: APIHandlerOptions<{
+			body: UserRoutePatchRequestDto;
+			params: UserRouteParameters;
+		}>,
+	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
+		const { body, params } = options;
+		const { actualGeometry, routeId } = body;
+		const { userId } = params;
+
+		const updatedRoute = await this.userRouteService.finish({
+			actualGeometry,
+			routeId,
+			userId,
+		});
+
+		return {
+			payload: { data: updatedRoute },
+			status: HTTPCode.OK,
+		};
+	}
+
+	public async getAllByUserId(
+		options: APIHandlerOptions<{
+			params: UserRouteParameters;
+		}>,
+	): Promise<APIHandlerResponse<UserRouteResponseDto[]>> {
+		const { userId } = options.params;
+
+		const userRoutes = await this.userRouteService.getAllByUserId(userId);
+
+		return {
+			payload: { data: userRoutes },
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /user-routes/{userId}/start:
+	 *   patch:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - User Routes
+	 *     summary: Start a user route
+	 *     description: Start a user route by changing status from not_started to active and setting started_at timestamp
+	 *     parameters:
+	 *       - in: path
+	 *         name: userId
+	 *         required: true
+	 *         schema:
+	 *           type: integer
+	 *           example: 1
+	 *         description: ID of the user starting the route
+	 *     requestBody:
+	 *       required: true
+	 *       content:
+	 *         application/json:
+	 *           schema:
+	 *             $ref: '#/components/schemas/UserRouteCreateRequestDto'
+	 *     responses:
+	 *       200:
+	 *         description: User route started successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 payload:
+	 *                   type: object
+	 *                   properties:
+	 *                     data:
+	 *                       $ref: '#/components/schemas/UserRouteResponseDto'
+	 *             example:
+	 *               payload:
+	 *                 data:
+	 *                   id: 1
+	 *                   routeId: 7
+	 *                   userId: 1
+	 *                   status: "active"
+	 *                   startedAt: "2025-08-21T16:37:51.437Z"
+	 *                   completedAt: null
+	 *                   actualGeometry:
+	 *                     type: "LineString"
+	 *                     coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                   plannedGeometry:
+	 *                     type: "LineString"
+	 *                     coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 */
+	public async start(
+		options: APIHandlerOptions<{
+			body: UserRouteCreateRequestDto;
+			params: UserRouteParameters;
+		}>,
+	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
+		const { routeId } = options.body;
+		const { userId } = options.params;
+
+		const updatedRoute = await this.userRouteService.start({
+			routeId,
+			userId,
+		});
+
+		return {
+			payload: { data: updatedRoute },
+			status: HTTPCode.OK,
+		};
+	}
+}
+
+export { UserRouteController };

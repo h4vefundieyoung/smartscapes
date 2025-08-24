@@ -118,7 +118,7 @@ erDiagram
     varchar name
     varchar description
     decimal distance
-    int duration
+    decimal duration
     geometry geometry
     int created_by_user_id FK
   }
@@ -164,6 +164,19 @@ erDiagram
     int entity_id
   }
 
+    user_routes {
+    int id PK
+    dateTime created_at
+    dateTime updated_at
+    int user_id FK
+    int route_id FK
+    enum status
+    dateTime started_at
+    dateTime completed_at
+    geometry planned_geometry
+    geometry actual_geometry
+  }
+
   users }|--|| groups : group_id
   groups ||--|{ groups_to_permissions : group_id
   permissions ||--|{ groups_to_permissions : permission_id
@@ -171,12 +184,15 @@ erDiagram
   users ||--|{ user_follows : following_id
   points_of_interest }|--|{routes_to_pois:"poi_id"
   routes }|--|{routes_to_pois:"route_id"
+  users ||--|{ user_routes : user_id
+  routes ||--|{ user_routes : route_id
   users ||--|{ reviews : user_id
   routes ||--|{ reviews : route_id
   routes ||--|{ route_categories : route_id
   categories ||--|{ route_categories : category_id
   points_of_interest ||--|{ reviews : poi_id
   users ||--o{ notifications : user_id
+
 ```
 
 ## 5. Architecture

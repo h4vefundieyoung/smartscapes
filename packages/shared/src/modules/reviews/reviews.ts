@@ -1,6 +1,11 @@
+export { ReviewsApiPath } from "./libs/enums/enums.js";
 export {
 	type ReviewCreatePayload,
+	type ReviewGetAllSearchQuery,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
 } from "./libs/types/types.js";
-export { reviewCreate as reviewCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
+export {
+	reviewCreate as reviewCreateValidationSchema,
+	reviewGetAllSearchQuery as reviewGetAllSearchQueryValidationSchema,
+} from "./libs/validation-schemas/validation-schemas.js";

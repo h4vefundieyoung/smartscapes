@@ -12,6 +12,11 @@ import {
 	type PointsOfInterestGetAllItemResponseDto,
 	type PointsOfInterestGetAllQuery,
 } from "~/modules/points-of-interest/points-of-interest.js";
+import {
+	type ReviewGetAllSearchQuery,
+	type ReviewGetByIdResponseDto,
+	type ReviewRequestDto,
+} from "~/modules/reviews/reviews.js";
 
 import { RouteNotification } from "../libs/enums/enums.js";
 import {
@@ -156,6 +161,28 @@ const discardCreateRouteFormData = createAsyncThunk<
 	await storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
 });
 
+const getReviews = createAsyncThunk<
+	APIResponse<ReviewGetByIdResponseDto[]>,
+	ReviewGetAllSearchQuery | undefined,
+	AsyncThunkConfig
+>(`${routeDetailsSliceName}/get-reviews`, async (options, { extra }) => {
+	const { reviewApi } = extra;
+
+	return await reviewApi.getAll(options);
+});
+
+const createReview = createAsyncThunk<
+	APIResponse<ReviewGetByIdResponseDto>,
+	ReviewRequestDto,
+	AsyncThunkConfig
+>(`${routeDetailsSliceName}/create-review`, async (payload, { extra }) => {
+	const { reviewApi, toastNotifier } = extra;
+
+	const review = await reviewApi.create(payload);
+	toastNotifier.showSuccess("Review created successfully.");
+
+	return review;
+});
 const constructRoute = createAsyncThunk<
 	APIResponse<PlannedPathResponseDto>,
 	RouteConstructRequestDto,
@@ -183,11 +210,13 @@ const findPointsOfInterest = createAsyncThunk<
 export {
 	constructRoute,
 	create,
+	createReview,
 	deleteImage,
 	discardCreateRouteFormData,
 	findPointsOfInterest,
 	getAll,
 	getById,
+	getReviews,
 	patch,
 	preserveCreateRouteFormData,
 	restoreCreateRouteFormData,

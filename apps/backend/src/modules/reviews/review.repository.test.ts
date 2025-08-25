@@ -23,12 +23,13 @@ describe("ReviewRepository", () => {
 	};
 
 	beforeEach(() => {
-		const database = knex({ client: MockClient });
-
+		const database = knex({ client: MockClient, dialect: "pg" });
 		databaseTracker = createTracker(database);
 
-		ReviewModel.knex(database);
+		databaseTracker.on.any("information_schema").response([]);
+		databaseTracker.on.any("pg_catalog").response([]);
 
+		ReviewModel.knex(database);
 		reviewRepository = new ReviewRepository(ReviewModel);
 	});
 
@@ -37,22 +38,85 @@ describe("ReviewRepository", () => {
 	});
 
 	it("create should create and return new review", async () => {
-		const reviewEntity = ReviewEntity.initialize(mockReviewData);
-
-		databaseTracker.on.insert("reviews").response([reviewEntity]);
-
-		const result = await reviewRepository.create(reviewEntity);
-
-		assert.deepStrictEqual(result, reviewEntity);
+		const entity = ReviewEntity.initialize(mockReviewData);
+		databaseTracker.on.insert("reviews").response([entity]);
+		const created = await reviewRepository.create(entity);
+		assert.deepStrictEqual(created, entity);
 	});
 
-	it("findAll should return all reviews", async () => {
-		const reviewEntities = [ReviewEntity.initialize(mockReviewData)];
+	it("findAll should return DTO rows with nested user", async () => {
+		const row = {
+			content: "Test review content",
+			id: 1,
+			likesCount: 10,
+			poiId: 5,
+			routeId: null,
+			"user:avatar:url": "url",
+			"user:firstName": "John",
+			"user:id": 42,
+			"user:lastName": "Doe",
+			userId: 42,
+		};
 
-		databaseTracker.on.select("reviews").response(reviewEntities);
+		databaseTracker.on.select("reviews").response([row]);
 
-		const result = await reviewRepository.findAll();
+		const reviews = await reviewRepository.findAll(null);
 
-		assert.deepStrictEqual(result, reviewEntities);
+		const actual = reviews.map((review) => review.toListObject());
+
+		assert.deepStrictEqual(actual, [
+			{
+				content: "Test review content",
+				id: 1,
+				likesCount: 10,
+				poiId: 5,
+				routeId: null,
+				user: {
+					avatarUrl: "url",
+					firstName: "John",
+					id: 42,
+					lastName: "Doe",
+				},
+			},
+		]);
+	});
+
+	it("findAll should apply routeId filter", async () => {
+		const routeId = 777;
+
+		const row = {
+			content: "By route",
+			id: 2,
+			likesCount: 0,
+			poiId: null,
+			routeId,
+			"user:avatar:url": "url",
+			"user:firstName": "A",
+			"user:id": 7,
+			"user:lastName": "B",
+			userId: 7,
+		};
+
+		databaseTracker.on.select("reviews").response([row]);
+
+		const reviews = await reviewRepository.findAll({ routeId });
+
+		const actual = reviews.map((review) => review.toListObject());
+
+		assert.deepStrictEqual(actual, [
+			{
+				content: "By route",
+				id: 2,
+				likesCount: 0,
+				poiId: null,
+				routeId,
+				user: {
+					avatarUrl: "url",
+					firstName: "A",
+					id: 7,
+					lastName: "B",
+				},
+			},
+		]);
 	});
 });

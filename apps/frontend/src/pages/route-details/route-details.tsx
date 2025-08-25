@@ -213,7 +213,7 @@ const RouteDetails = (): React.JSX.Element => {
 							style={{ display: "none" }}
 							type="file"
 						/>
-						<div style={{ maxWidth: 150 }}>
+						<div className={styles["upload-button"]}>
 							<Button
 								label="Upload image"
 								onClick={handleTriggerFileUpload}

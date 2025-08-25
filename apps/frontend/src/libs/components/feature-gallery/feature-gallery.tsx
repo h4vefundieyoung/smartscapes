@@ -21,10 +21,9 @@ const FeatureGallery = ({ slides }: Properties): React.JSX.Element => {
 			<div className={styles["slide-wrapper"]}>
 				{slide.content}
 				{slide.onDelete && (
-					/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
-					<div className={styles["delete-icon"]} onClick={slide.onDelete}>
+					<button className={styles["delete-icon"]} onClick={slide.onDelete}>
 						<Icon height={18} name="trash" width={16} />
-					</div>
+					</button>
 				)}
 			</div>
 		);

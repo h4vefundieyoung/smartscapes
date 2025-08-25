@@ -1,3 +1,7 @@
+.upload-button {
+	max-width: max-content;
+}
+
 .image {
 	display: block;
 	width: 100%;

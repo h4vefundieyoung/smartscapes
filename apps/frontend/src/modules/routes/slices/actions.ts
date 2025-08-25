@@ -3,12 +3,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import {
-	type ReviewGetAllSearchQuery,
-	type ReviewGetByIdResponseDto,
-	type ReviewRequestDto,
-} from "~/modules/reviews/reviews.js";
-
-import {
 	type APIResponse,
 	type AsyncThunkConfig,
 	type PaginationMeta,
@@ -17,6 +11,11 @@ import {
 	type PointsOfInterestGetAllItemResponseDto,
 	type PointsOfInterestGetAllQuery,
 } from "~/modules/points-of-interest/points-of-interest.js";
+import {
+	type ReviewGetAllSearchQuery,
+	type ReviewGetByIdResponseDto,
+	type ReviewRequestDto,
+} from "~/modules/reviews/reviews.js";
 
 import { RouteNotification } from "../libs/enums/enums.js";
 import {
@@ -145,7 +144,7 @@ const createReview = createAsyncThunk<
 	toastNotifier.showSuccess("Review created successfully.");
 
 	return review;
-
+});
 const constructRoute = createAsyncThunk<
 	APIResponse<PlannedPathResponseDto>,
 	RouteConstructRequestDto,

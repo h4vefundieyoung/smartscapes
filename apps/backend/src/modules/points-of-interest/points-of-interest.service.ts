@@ -56,7 +56,8 @@ class PointsOfInterestService implements Service {
 		const details = poi.toDetailsObject();
 
 		if (details.routes.length > 0) {
-			const routeName = details.routes[0]?.name ?? "unknown";
+			const [route] = details.routes;
+			const routeName = route?.name ?? "unknown";
 
 			throw new PointOfInterestError({
 				message: configureString(

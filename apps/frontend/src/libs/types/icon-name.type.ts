@@ -4,6 +4,7 @@ type IconName =
 	| "bell"
 	| "caretDown"
 	| "caretUp"
+	| "category"
 	| "close"
 	| "dashboard"
 	| "edit"

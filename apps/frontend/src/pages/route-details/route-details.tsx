@@ -3,6 +3,7 @@ import {
 	FeatureGallery,
 	Input,
 	Loader,
+	MapProvider,
 	TextArea,
 } from "~/libs/components/components.js";
 import { DataStatus, PermissionKey } from "~/libs/enums/enums.js";
@@ -182,8 +183,20 @@ const RouteDetails = (): React.JSX.Element => {
 					)}
 				</div>
 				<FeatureGallery
-					slides={images.map((image) => {
-						return {
+					slides={[
+						{
+							content: (
+								<MapProvider
+									center={[0, 0]}
+									markers={[
+										{
+											coordinates: [0, 0],
+										},
+									]}
+								/>
+							),
+						},
+						...images.map((image) => ({
 							content: (
 								<img
 									alt="point of interest"
@@ -196,9 +209,10 @@ const RouteDetails = (): React.JSX.Element => {
 									handleDeleteImage(image.id);
 								},
 							}),
-						};
-					})}
+						})),
+					]}
 				/>
+
 				{isEditMode && (
 					<>
 						<input

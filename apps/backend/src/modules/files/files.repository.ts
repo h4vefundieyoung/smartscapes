@@ -44,7 +44,13 @@ class FileRepository implements Repository {
 	public async findById(id: number): Promise<FileEntity | null> {
 		const file = await this.fileModel
 			.query()
-			.select("*")
+			.select(
+				"files.id",
+				"files.url",
+				"files.folder",
+				"files.entityId",
+				"files.contentType",
+			)
 			.where("id", id)
 			.first();
 

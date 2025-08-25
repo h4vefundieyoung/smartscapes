@@ -1,6 +1,6 @@
-import { type RouteUploadImageResponseDto } from "@smartscapes/shared";
-
 import { type Entity, type LineStringGeometry } from "~/libs/types/types.js";
+
+import { type RouteUploadImageResponseDto } from "./libs/types/types.js";
 
 class RouteEntity implements Entity {
 	private createdByUserId: number;

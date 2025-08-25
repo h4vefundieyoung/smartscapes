@@ -2,15 +2,26 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
-import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
+import {
+	type APIResponse,
+	type AsyncThunkConfig,
+	type PaginationMeta,
+} from "~/libs/types/types.js";
+import {
+	type PointsOfInterestGetAllItemResponseDto,
+	type PointsOfInterestGetAllQuery,
+} from "~/modules/points-of-interest/points-of-interest.js";
 
 import { RouteNotification } from "../libs/enums/enums.js";
 import {
 	type PatchActionPayload,
+	type PlannedPathResponseDto,
+	type RouteConstructRequestDto,
 	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
 	type RouteGetByIdResponseDto,
 } from "../libs/types/types.js";
+import { name as constructRouteSliceName } from "./construct-route.slice.js";
 import { name as routeDetailsSliceName } from "./route-details.slice.js";
 import { name as routesSliceName } from "./routes.slice.js";
 
@@ -107,9 +118,35 @@ const discardCreateRouteFormData = createAsyncThunk<
 	await storage.drop(StorageKey.CREATE_ROUTE_FORM_DATA);
 });
 
+const constructRoute = createAsyncThunk<
+	APIResponse<PlannedPathResponseDto>,
+	RouteConstructRequestDto,
+	AsyncThunkConfig
+>(`${constructRouteSliceName}/construct-route`, async (payload, { extra }) => {
+	const { routesApi, toastNotifier } = extra;
+
+	const response = await routesApi.construct(payload);
+
+	toastNotifier.showSuccess("Route constructed successfully");
+
+	return response;
+});
+
+const findPointsOfInterest = createAsyncThunk<
+	APIResponse<PointsOfInterestGetAllItemResponseDto[], PaginationMeta>,
+	PointsOfInterestGetAllQuery,
+	AsyncThunkConfig
+>(`${constructRouteSliceName}/load-all`, async (query, { extra }) => {
+	const { pointOfInterestApi } = extra;
+
+	return await pointOfInterestApi.findAll(query);
+});
+
 export {
+	constructRoute,
 	create,
 	discardCreateRouteFormData,
+	findPointsOfInterest,
 	getAll,
 	getById,
 	patch,

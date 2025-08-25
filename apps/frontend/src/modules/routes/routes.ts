@@ -20,6 +20,7 @@ export {
 export { routesCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 export {
 	actions,
+	constructRouteReducer,
 	routeDetailsReducer,
 	routesReducer,
 } from "./slices/routes.js";

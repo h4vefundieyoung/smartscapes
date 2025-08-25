@@ -2,13 +2,15 @@ import { combineClassNames } from "~/libs/helpers/helpers.js";
 
 import styles from "../../styles.module.css";
 
-const selectStylesConfig = {
+const SELECT_STYLES_CONFIG = {
 	clearIndicator: (): string => styles["clear-indicator"] as string,
 	control: (): string => styles["control"] as string,
+	loadingMessage: (): string => styles["loading-message"] as string,
 	menu: (): string => styles["menu"] as string,
 	multiValue: (): string => styles["multi-value"] as string,
 	multiValueLabel: (): string => styles["multi-value-label"] as string,
 	multiValueRemove: (): string => styles["multi-value-remove"] as string,
+	noOptionsMessage: (): string => styles["no-options-message"] as string,
 	option: ({
 		isFocused,
 		isSelected,
@@ -25,4 +27,4 @@ const selectStylesConfig = {
 	singleValue: (): string => styles["single-value"] as string,
 };
 
-export { selectStylesConfig };
+export { SELECT_STYLES_CONFIG };

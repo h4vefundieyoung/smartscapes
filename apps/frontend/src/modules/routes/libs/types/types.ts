@@ -4,5 +4,4 @@ export {
 	type RouteFindAllOptions,
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
-	type UserRouteResponseDto,
 } from "@smartscapes/shared";

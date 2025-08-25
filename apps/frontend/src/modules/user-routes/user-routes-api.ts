@@ -1,4 +1,4 @@
-import { APIPath } from "~/libs/enums/enums.js";
+import { APIPath, ContentType } from "~/libs/enums/enums.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
@@ -18,14 +18,34 @@ class UserRoutesApi extends BaseHTTPApi {
 		super({ baseUrl, http, path: APIPath.USER_ROUTES, storage });
 	}
 
-	public async saveRoute(
-		id: number,
-	): Promise<APIResponse<UserRouteResponseDto>> {
-		const response = await this.load<APIResponse<UserRouteResponseDto>>(
-			this.getFullEndpoint(UserRouteApiPath.$ID, { id: id.toString() }),
+	public async deleteRoute(id: number): Promise<APIResponse<boolean>> {
+		const response = await this.load<APIResponse<boolean>>(
+			this.getFullEndpoint(UserRouteApiPath.$ID, { userId: id.toString() }),
 			{
 				hasAuth: true,
+				method: "DELETE",
+			},
+		);
+
+		return await response.json();
+	}
+
+	public async saveRoute({
+		routeId,
+		userId,
+	}: {
+		routeId: number;
+		userId: number;
+	}): Promise<APIResponse<UserRouteResponseDto>> {
+		const response = await this.load<APIResponse<UserRouteResponseDto>>(
+			this.getFullEndpoint(UserRouteApiPath.$ID, { userId: userId.toString() }),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
 				method: "POST",
+				payload: JSON.stringify({
+					routeId,
+				}),
 			},
 		);
 

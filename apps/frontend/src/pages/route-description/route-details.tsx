@@ -24,6 +24,7 @@ import {
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
+import { actions as userRoutesActions } from "~/modules/user-routes/user-routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
 import { PointOfInterestSection } from "./libs/components/components.js";
@@ -69,8 +70,16 @@ const RouteDetails = (): React.JSX.Element => {
 	}, [dispatch, setIsEditMode, route, getValues]);
 
 	const handleSaveUserRoute = useCallback(() => {
+		if (route?.id && user?.id) {
+			void dispatch(
+				userRoutesActions.saveUserRoute({ routeId: route.id, userId: user.id }),
+			);
+		}
+	}, [route?.id, dispatch, user?.id]);
+
+	const handleDeleteUserRoute = useCallback(() => {
 		if (route?.id) {
-			void dispatch(routeActions.saveUserRoute(route.id));
+			void dispatch(userRoutesActions.deleteUserRoute(route.id));
 		}
 	}, [route?.id, dispatch]);
 
@@ -130,7 +139,9 @@ const RouteDetails = (): React.JSX.Element => {
 										<Button
 											icon="bookmarks"
 											label="save route"
-											onClick={handleSaveUserRoute}
+											onClick={
+												isSaved ? handleDeleteUserRoute : handleSaveUserRoute
+											}
 											pressed={isSaved}
 										/>
 									</div>

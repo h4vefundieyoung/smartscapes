@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
+import { actions as userRoutesActions } from "../../user-routes/user-routes.js";
 import {
 	type RouteCreateRequestDto,
 	type RouteGetByIdResponseDto,
@@ -14,7 +15,6 @@ import {
 	getRouteById,
 	patchRoute,
 	restoreCreateRouteFormData,
-	saveUserRoute,
 } from "./actions.js";
 
 type State = {
@@ -96,14 +96,14 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(discardCreateRouteFormData.fulfilled, (state) => {
 			state.formData = null;
 		});
-		builder.addCase(saveUserRoute.pending, (state) => {
+		builder.addCase(userRoutesActions.saveUserRoute.pending, (state) => {
 			state.saveRouteStatus = DataStatus.PENDING;
 		});
-		builder.addCase(saveUserRoute.rejected, (state) => {
+		builder.addCase(userRoutesActions.saveUserRoute.rejected, (state) => {
 			state.saveRouteStatus = DataStatus.REJECTED;
 		});
 		builder.addCase(
-			saveUserRoute.fulfilled,
+			userRoutesActions.saveUserRoute.fulfilled,
 			(state, { payload: { id, status } }) => {
 				state.saveRouteStatus = DataStatus.FULFILLED;
 
@@ -112,6 +112,19 @@ const { actions, name, reducer } = createSlice({
 				}
 			},
 		);
+		builder.addCase(userRoutesActions.deleteUserRoute.pending, (state) => {
+			state.saveRouteStatus = DataStatus.PENDING;
+		});
+		builder.addCase(userRoutesActions.deleteUserRoute.rejected, (state) => {
+			state.saveRouteStatus = DataStatus.REJECTED;
+		});
+		builder.addCase(userRoutesActions.deleteUserRoute.fulfilled, (state) => {
+			state.saveRouteStatus = DataStatus.FULFILLED;
+
+			if (state.route) {
+				state.route.userRoute = null;
+			}
+		});
 	},
 	initialState,
 	name: "routes",

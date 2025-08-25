@@ -163,7 +163,7 @@ class UserRouteController extends BaseController {
 		this.addRoute({
 			handler: this.delete.bind(this),
 			method: "DELETE",
-			path: "/:id",
+			path: UserRouteApiPath.$ID,
 		});
 	}
 
@@ -313,10 +313,10 @@ class UserRouteController extends BaseController {
 	public async delete({
 		params,
 		user,
-	}: APIHandlerOptions<{ params: { id: string } }>): Promise<
+	}: APIHandlerOptions<{ params: UserRouteParameters }>): Promise<
 		APIHandlerResponse<boolean>
 	> {
-		const routeId = Number(params.id);
+		const routeId = Number(params.userId);
 
 		if (!routeId) {
 			throw new UserRouteError({

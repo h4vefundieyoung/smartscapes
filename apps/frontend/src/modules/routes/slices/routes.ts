@@ -6,7 +6,6 @@ import {
 	patchRoute,
 	preserveCreateRouteFormData,
 	restoreCreateRouteFormData,
-	saveUserRoute,
 } from "./actions.js";
 import { actions } from "./routes.slice.js";
 
@@ -19,7 +18,6 @@ const allActions = {
 	patchRoute,
 	preserveCreateRouteFormData,
 	restoreCreateRouteFormData,
-	saveUserRoute,
 };
 
 export { allActions as actions };

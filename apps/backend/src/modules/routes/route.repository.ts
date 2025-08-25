@@ -44,10 +44,10 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(geometry)::json as geometry"),
 				"created_by_user_id",
+				this.routesModel.raw("'[]'::json as images"),
 			]);
 
-		// eslint-disable-next-line @typescript-eslint/no-misused-spread
-		return RouteEntity.initialize({ ...result, images: [] });
+		return RouteEntity.initialize(result);
 	}
 
 	public async delete(id: number): Promise<boolean> {

@@ -7,7 +7,7 @@ import {
 } from "../../../libs/enums/enums.js";
 import { UserRouteValidationMessage } from "../libs/enums/enums.js";
 
-const userRoutePatch = z.strictObject({
+const userRouteFinish = z.strictObject({
 	actualGeometry: z.object({
 		coordinates: z
 			.array(
@@ -46,4 +46,4 @@ const userRoutePatch = z.strictObject({
 	}),
 });
 
-export { userRoutePatch };
+export { userRouteFinish };

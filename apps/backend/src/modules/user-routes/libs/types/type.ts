@@ -1,7 +1,8 @@
 export {
 	type UserRouteCreateRequestDto,
+	type UserRouteFinishRequestDto,
 	type UserRouteParameters,
-	type UserRoutePatchRequestDto,
 	type UserRouteResponseDto,
+	type UserRouteStartRequestDto,
 	type UserRouteStatusType,
 } from "@smartscapes/shared";

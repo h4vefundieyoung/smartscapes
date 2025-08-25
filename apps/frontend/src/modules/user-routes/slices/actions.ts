@@ -7,11 +7,11 @@ import { name as sliceName } from "./user-routes.slice.js";
 
 const saveUserRoute = createAsyncThunk<
 	UserRouteResponseDto,
-	{ routeId: number; userId: number },
+	number,
 	AsyncThunkConfig
->(`${sliceName}/save-user-route`, async (payload, { extra }) => {
+>(`${sliceName}/save-user-route`, async (routeId, { extra }) => {
 	const { userRoutesApi } = extra;
-	const { data } = await userRoutesApi.saveRoute(payload);
+	const { data } = await userRoutesApi.saveRoute(routeId);
 
 	return data;
 });

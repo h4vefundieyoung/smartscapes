@@ -20,7 +20,7 @@ class UserRoutesApi extends BaseHTTPApi {
 
 	public async deleteRoute(id: number): Promise<APIResponse<boolean>> {
 		const response = await this.load<APIResponse<boolean>>(
-			this.getFullEndpoint(UserRouteApiPath.$ID, { userId: id.toString() }),
+			this.getFullEndpoint(UserRouteApiPath.$ID, { id: id.toString() }),
 			{
 				hasAuth: true,
 				method: "DELETE",
@@ -30,22 +30,16 @@ class UserRoutesApi extends BaseHTTPApi {
 		return await response.json();
 	}
 
-	public async saveRoute({
-		routeId,
-		userId,
-	}: {
-		routeId: number;
-		userId: number;
-	}): Promise<APIResponse<UserRouteResponseDto>> {
+	public async saveRoute(
+		routeId: number,
+	): Promise<APIResponse<UserRouteResponseDto>> {
 		const response = await this.load<APIResponse<UserRouteResponseDto>>(
-			this.getFullEndpoint(UserRouteApiPath.$ID, { userId: userId.toString() }),
+			this.getFullEndpoint(UserRouteApiPath.ROOT, {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,
 				method: "POST",
-				payload: JSON.stringify({
-					routeId,
-				}),
+				payload: JSON.stringify({ routeId }),
 			},
 		);
 

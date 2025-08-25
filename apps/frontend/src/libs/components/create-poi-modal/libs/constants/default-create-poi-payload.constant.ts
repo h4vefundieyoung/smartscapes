@@ -1,10 +1,10 @@
-import { type PointsOfInterestRequestDto } from "~/modules/points-of-interest/points-of-interest.js";
+import { type PointsOfInterestCreateRequestDto } from "~/modules/points-of-interest/points-of-interest.js";
 
 type CreatePOIFormValues = Pick<
-	PointsOfInterestRequestDto,
+	PointsOfInterestCreateRequestDto,
 	"description" | "name"
 > & {
-	location: null | PointsOfInterestRequestDto["location"];
+	location: null | PointsOfInterestCreateRequestDto["location"];
 };
 
 const DEFAULT_CREATE_POI_PAYLOAD: CreatePOIFormValues = {

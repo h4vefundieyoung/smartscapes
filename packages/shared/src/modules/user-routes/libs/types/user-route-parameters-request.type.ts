@@ -1,5 +1,5 @@
 type UserRouteParameters = {
-	userId: number;
+	id: number;
 };
 
 export { type UserRouteParameters };

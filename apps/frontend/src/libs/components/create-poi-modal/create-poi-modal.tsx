@@ -9,8 +9,8 @@ import {
 } from "~/libs/components/components.js";
 import { useAppForm } from "~/libs/hooks/hooks.js";
 import {
+	type PointsOfInterestCreateRequestDto,
 	pointsOfInterestCreateValidationSchema,
-	type PointsOfInterestRequestDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
 import {
@@ -22,7 +22,7 @@ import styles from "./styles.module.css";
 type Properties = {
 	isOpen: boolean;
 	onClose: () => void;
-	onSubmit: (payload: PointsOfInterestRequestDto) => void;
+	onSubmit: (payload: PointsOfInterestCreateRequestDto) => void;
 };
 
 const CreatePOIModal = ({
@@ -37,7 +37,7 @@ const CreatePOIModal = ({
 		});
 
 	const handleFormSubmit = (payload: CreatePOIFormValues): void => {
-		onSubmit(payload as PointsOfInterestRequestDto);
+		onSubmit(payload as PointsOfInterestCreateRequestDto);
 		handleReset(DEFAULT_CREATE_POI_PAYLOAD);
 	};
 
@@ -71,9 +71,7 @@ const CreatePOIModal = ({
 					name="description"
 				/>
 				<div className={styles["footer"]}>
-					<div>
-						<Button label="Create" type="submit" />
-					</div>
+					<Button label="Create" type="submit" />
 				</div>
 			</form>
 		</Modal>

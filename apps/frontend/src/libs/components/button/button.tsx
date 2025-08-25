@@ -6,16 +6,18 @@ import { type IconName } from "~/libs/types/types.js";
 import styles from "./styles.module.css";
 
 type Properties = {
+	disabled?: boolean;
 	icon?: IconName;
 	label: string;
 	onClick?: () => void;
 	pressed?: boolean;
 	to?: string;
 	type?: "button" | "submit";
-	variant?: "outlined" | "outlined-danger" | "primary";
+	variant?: "outlined" | "outlined-danger" | "primary" | "secondary";
 };
 
 const Button = ({
+	disabled = false,
 	icon,
 	label,
 	onClick,
@@ -29,6 +31,7 @@ const Button = ({
 		variant === "outlined" && styles["button-outlined"],
 		variant === "outlined-danger" && styles["outlined-danger"],
 		variant === "primary" && styles["button-primary"],
+		variant === "secondary" && styles["button-secondary"],
 		pressed && styles["button-pressed"],
 	);
 
@@ -55,7 +58,12 @@ const Button = ({
 	}
 
 	return (
-		<button className={buttonClass} onClick={onClick} type={type}>
+		<button
+			className={buttonClass}
+			disabled={disabled}
+			onClick={onClick}
+			type={type}
+		>
 			{buttonContent}
 		</button>
 	);

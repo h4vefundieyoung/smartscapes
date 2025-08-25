@@ -30,11 +30,26 @@
 	border: 1px solid var(--color-stroke-focus);
 }
 
+.control-icon-left {
+	flex-direction: row-reverse;
+	gap: 12px;
+}
+
+.loading-indicator-icon-left {
+	position: absolute;
+	right: 16px;
+}
+
 .menu {
 	z-index: 3;
 	background-color: var(--color-base);
 	border-radius: 8px;
 	box-shadow: 0 2px 8px var(--color-shadow-strong);
+}
+
+.loading-message,
+.no-options-message {
+	padding: 8px 12px;
 }
 
 .option {

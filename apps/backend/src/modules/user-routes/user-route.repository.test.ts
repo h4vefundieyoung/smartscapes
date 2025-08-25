@@ -132,10 +132,7 @@ describe("UserRouteRepository", () => {
 
 	describe("findByFilter", () => {
 		it("should find multiple routes", async () => {
-			const result = (await repository.findByFilter(
-				{ userId: 1 },
-				{ multiple: true },
-			)) as UserRouteEntity[];
+			const result = await repository.findByFilter({ userId: 1 });
 
 			assert.strictEqual(Array.isArray(result), true);
 			assert.strictEqual(result.length, 1);
@@ -146,12 +143,11 @@ describe("UserRouteRepository", () => {
 
 	describe("findByFilter single", () => {
 		it("should find single route", async () => {
-			const result = (await repository.findByFilter({
-				routeId: 7,
-			})) as UserRouteEntity;
+			const result = await repository.findByFilter({ routeId: 7 });
 
-			assert.strictEqual(result instanceof UserRouteEntity, true);
-			assert.strictEqual(result.toObject().routeId, 7);
+			assert.strictEqual(result.length, 1);
+			assert.strictEqual(result[0] instanceof UserRouteEntity, true);
+			assert.strictEqual(result[0]?.toObject().routeId, 7);
 		});
 	});
 

@@ -33,6 +33,7 @@ describe("PointsOfInterestRepository", () => {
 			type: "Point" as const,
 		},
 		name: "Point Of Interest Test Name",
+		routes: [],
 		updatedAt: "2024-01-01T00:00:00Z",
 	};
 
@@ -78,39 +79,52 @@ describe("PointsOfInterestRepository", () => {
 
 		const result = await pointsOfInterestRepository.findAll(null);
 
-		assert.deepStrictEqual(result, pointOfInterestEntities);
-	});
+		const expectedResult = {
+			items: pointOfInterestEntities,
+			total: pointOfInterestEntities.length,
+		};
 
-	it("findNearby should return nearby points of interest", async () => {
+		assert.deepStrictEqual(result, expectedResult);
+	});
+	it("findAll should return nearby points of interest when location provided", async () => {
 		const pointOfInterestEntities = [createMockEntity()];
 
 		databaseTracker.on
 			.select(DatabaseTableName.POINTS_OF_INTEREST)
 			.response(pointOfInterestEntities);
 
-		const result = await pointsOfInterestRepository.findNearby({
+		const result = await pointsOfInterestRepository.findAll({
 			latitude: TEST_LATITUDE,
 			longitude: TEST_LONGITUDE,
 			radius: 5,
 		});
 
-		assert.deepStrictEqual(result, pointOfInterestEntities);
+		const expectedResult = {
+			items: pointOfInterestEntities,
+			total: pointOfInterestEntities.length,
+		};
+
+		assert.deepStrictEqual(result, expectedResult);
 	});
 
-	it("findNearby should use default radius when not provided", async () => {
+	it("findAll should use default radius when not provided", async () => {
 		const pointOfInterestEntities = [createMockEntity()];
 
 		databaseTracker.on
 			.select(DatabaseTableName.POINTS_OF_INTEREST)
 			.response(pointOfInterestEntities);
 
-		const result = await pointsOfInterestRepository.findNearby({
+		const result = await pointsOfInterestRepository.findAll({
 			latitude: TEST_LATITUDE,
 			longitude: TEST_LONGITUDE,
-			radius: 5,
 		});
 
-		assert.deepStrictEqual(result, pointOfInterestEntities);
+		const expectedResult = {
+			items: pointOfInterestEntities,
+			total: pointOfInterestEntities.length,
+		};
+
+		assert.deepStrictEqual(result, expectedResult);
 	});
 
 	it("find should return point of interest by id", async () => {
@@ -119,11 +133,18 @@ describe("PointsOfInterestRepository", () => {
 
 		databaseTracker.on
 			.select(DatabaseTableName.POINTS_OF_INTEREST)
-			.response([pointOfInterestEntity]);
+			.response([mockPointOfInterest]);
+
+		databaseTracker.on
+			.select(DatabaseTableName.ROUTES)
+			.response([mockPointOfInterest.routes]);
 
 		const result = await pointsOfInterestRepository.findById(EXISTING_ID);
 
-		assert.deepStrictEqual(result, pointOfInterestEntity);
+		assert.deepStrictEqual(
+			result?.toDetailsObject(),
+			pointOfInterestEntity.toDetailsObject(),
+		);
 	});
 
 	it("find should return null when point of interest not found", async () => {
@@ -204,7 +225,7 @@ describe("PointsOfInterestRepository", () => {
 		assert.strictEqual(result, false);
 	});
 
-	it("findPaginated should return correct items", async () => {
+	it("findAll with pagination should return correct items", async () => {
 		const mockEntities = [
 			PointsOfInterestEntity.initialize({
 				createdAt: "2025-08-14T00:00:00Z",
@@ -215,6 +236,7 @@ describe("PointsOfInterestRepository", () => {
 					type: "Point" as const,
 				},
 				name: "Point 1",
+				routes: [],
 				updatedAt: "2025-08-14T00:00:00Z",
 			}),
 			PointsOfInterestEntity.initialize({
@@ -226,6 +248,7 @@ describe("PointsOfInterestRepository", () => {
 					type: "Point" as const,
 				},
 				name: "Point 2",
+				routes: [],
 				updatedAt: "2025-08-15T00:00:00Z",
 			}),
 		];
@@ -234,19 +257,21 @@ describe("PointsOfInterestRepository", () => {
 			.select(DatabaseTableName.POINTS_OF_INTEREST)
 			.response(mockEntities);
 
-		const result = await pointsOfInterestRepository.findPaginated({
+		const result = await pointsOfInterestRepository.findAll({
 			page: 1,
 			perPage: 10,
-			search: undefined,
+			search: "",
 		});
 
-		const resultItems = result.items.map((item) => item.toObject());
+		const resultItems = result.items.map((item: PointsOfInterestEntity) =>
+			item.toObject(),
+		);
 		const expectedItems = mockEntities.map((item) => item.toObject());
 
 		assert.deepStrictEqual(resultItems, expectedItems);
 	});
 
-	it("findPaginated should return correct total count", async () => {
+	it("findAll with pagination should return correct total count", async () => {
 		const mockEntities = [
 			PointsOfInterestEntity.initialize({
 				createdAt: "2025-08-14T00:00:00Z",
@@ -257,6 +282,7 @@ describe("PointsOfInterestRepository", () => {
 					type: "Point" as const,
 				},
 				name: "Point 1",
+				routes: [],
 				updatedAt: "2025-08-14T00:00:00Z",
 			}),
 		];
@@ -265,10 +291,10 @@ describe("PointsOfInterestRepository", () => {
 			.select(DatabaseTableName.POINTS_OF_INTEREST)
 			.response(mockEntities);
 
-		const result = await pointsOfInterestRepository.findPaginated({
+		const result = await pointsOfInterestRepository.findAll({
 			page: 1,
 			perPage: 10,
-			search: undefined,
+			search: "",
 		});
 
 		assert.ok(typeof result.total === "number");

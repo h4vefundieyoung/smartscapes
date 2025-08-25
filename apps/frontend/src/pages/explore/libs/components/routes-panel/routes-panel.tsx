@@ -2,56 +2,39 @@ import React from "react";
 
 import { Loader, RouteCard } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
-import {
-	useAppDispatch,
-	useAppSelector,
-	useEffect,
-	useMemo,
-} from "~/libs/hooks/hooks.js";
-import { actions as exploreActions } from "~/modules/explore/explore.js";
-import { actions as locationActions } from "~/modules/location/location.js";
+import { useMemo } from "~/libs/hooks/hooks.js";
+import { type ValueOf } from "~/libs/types/types.js";
+import { type RouteGetAllItemResponseDto } from "~/modules/routes/routes.js";
 
 import styles from "./styles.module.css";
 
-const RoutesPanel = (): React.JSX.Element => {
-	const dispatch = useAppDispatch();
-	const dataStatus = useAppSelector((state) => state.explore.dataStatus);
-	const error = useAppSelector((state) => state.explore.error);
-	const routes = useAppSelector((state) => state.explore.routes);
-	const locationError = useAppSelector((state) => state.location.locationError);
-	const locationDataStatus = useAppSelector(
-		(state) => state.location.dataStatus,
-	);
-	const location = useAppSelector((state) => state.location.location);
+type Properties = {
+	locationDataStatus: ValueOf<typeof DataStatus>;
+	routes: RouteGetAllItemResponseDto[];
+	routesDataStatus: ValueOf<typeof DataStatus>;
+	routesError: null | string;
+};
 
-	useEffect(() => {
-		void dispatch(locationActions.getCurrentUserLocation());
-	}, [dispatch]);
-
-	useEffect(() => {
-		if (locationDataStatus === DataStatus.REJECTED) {
-			void dispatch(exploreActions.getRoutes());
-		}
-
-		if (locationDataStatus === DataStatus.FULFILLED && location !== null) {
-			void dispatch(
-				exploreActions.getRoutes({
-					latitude: location.latitude,
-					longitude: location.longitude,
-				}),
-			);
-		}
-	}, [locationDataStatus, location, dispatch]);
-
-	const hasLocationError = Boolean(locationError);
+const RoutesPanel = ({
+	locationDataStatus,
+	routes,
+	routesDataStatus,
+	routesError,
+}: Properties): React.JSX.Element => {
+	const hasLocationError = locationDataStatus === DataStatus.REJECTED;
+	const isRoutesLoading = routesDataStatus === DataStatus.PENDING;
 
 	const content = useMemo(() => {
-		if (dataStatus === DataStatus.PENDING) {
-			return <Loader />;
+		if (isRoutesLoading) {
+			return (
+				<div className={styles["loader-container"]}>
+					<Loader />
+				</div>
+			);
 		}
 
-		if (error) {
-			return <span className={styles["error"]}>{error}</span>;
+		if (routesError) {
+			return <span className={styles["error"]}>{routesError}</span>;
 		}
 
 		if (routes.length === 0) {
@@ -64,8 +47,7 @@ const RoutesPanel = (): React.JSX.Element => {
 			<>
 				{hasLocationError && (
 					<div className={styles["warning"]}>
-						<div>Location access failed: {locationError}.</div>
-						<div>Please enable geolocation to see routes near you.</div>
+						Please enable geolocation to see routes near you.
 					</div>
 				)}
 
@@ -76,7 +58,7 @@ const RoutesPanel = (): React.JSX.Element => {
 				</ul>
 			</>
 		);
-	}, [dataStatus, error, locationError, hasLocationError, routes]);
+	}, [isRoutesLoading, routesError, hasLocationError, routes]);
 
 	return (
 		<div className={styles["container"]}>

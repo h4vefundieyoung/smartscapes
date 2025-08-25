@@ -1,5 +1,5 @@
-export { type PointsOfInterestPaginatedResponseDto } from "./points-of-interest-paginated-response-dto.type.js";
-export { type PointsOfInterestPaginatedSummary } from "./points-of-interest-paginated-summary-dto.type.js";
-export { type PointsOfInterestQueryRequest } from "./points-of-interest-query-request.type.js";
-export { type PointsOfInterestRequestDto } from "./points-of-interest-request-dto.type.js";
-export { type PointsOfInterestResponseDto } from "./points-of-interest-response-dto.type.js";
+export { type PointOfInterestPatchRequestDto } from "./point-of-interest-patch-request-dto.type.js";
+export { type PointsOfInterestCreateRequestDto } from "./points-of-interest-create-request-dto.type.js";
+export { type PointsOfInterestGetAllItemResponseDto } from "./points-of-interest-get-all-item-response-dto.type.js";
+export { type PointsOfInterestGetAllQuery } from "./points-of-interest-get-all-query.type.js";
+export { type PointsOfInterestGetByIdResponseDto } from "./points-of-interest-get-by-id-response-dto.type.js";

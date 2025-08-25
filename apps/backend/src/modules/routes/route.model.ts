@@ -1,4 +1,4 @@
-import { Model } from "objection";
+import { Model, type RelationMappings } from "objection";
 
 import { DatabaseTableName } from "~/libs/modules/database/database.js";
 import { type LineStringGeometry } from "~/libs/types/types.js";
@@ -9,7 +9,37 @@ import { UserRouteModel } from "../user-routes/user-route.model.js";
 import { type UserRouteStatusType } from "./libs/types/types.js";
 
 class RouteModel extends Model {
-	public static readonly relationMappings = {
+	public static override get tableName(): string {
+		return DatabaseTableName.ROUTES;
+	}
+
+	public createdByUserId!: number;
+
+	public description!: string;
+
+	public distance!: number;
+
+	public duration!: number;
+
+	public geometry!: LineStringGeometry;
+
+	public id!: number;
+
+	public name!: string;
+
+	public pois!: {
+		id: number;
+		name: string;
+		visitOrder: number;
+	}[];
+
+	public userRoute!: {
+		id: number;
+		status: UserRouteStatusType;
+		userId: number;
+	}[];
+
+	public static readonly relationMappings = (): RelationMappings => ({
 		categories: {
 			join: {
 				from: "routes.id",
@@ -43,37 +73,7 @@ class RouteModel extends Model {
 			modelClass: UserRouteModel,
 			relation: Model.HasManyRelation,
 		},
-	};
-
-	public static override get tableName(): string {
-		return DatabaseTableName.ROUTES;
-	}
-
-	public createdByUserId!: number;
-
-	public description!: string;
-
-	public distance!: number;
-
-	public duration!: number;
-
-	public geometry!: LineStringGeometry;
-
-	public id!: number;
-
-	public name!: string;
-
-	public pois!: {
-		id: number;
-		name: string;
-		visitOrder: number;
-	}[];
-
-	public userRoute!: {
-		id: number;
-		status: UserRouteStatusType;
-		userId: number;
-	}[];
+	});
 }
 
 export { RouteModel };

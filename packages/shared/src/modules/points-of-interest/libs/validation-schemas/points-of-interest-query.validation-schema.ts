@@ -1,10 +1,10 @@
 import { z } from "zod";
 
-import { parseToFloat } from "../../../../libs/helpers/helpers.js";
 import {
-	latitudeSchema,
-	longitudeSchema,
-} from "../../../../libs/validated-schemas/validated-schemas.js";
+	CoordinatesValidationMessage,
+	CoordinatesValidationRule,
+} from "../../../../libs/enums/enums.js";
+import { parseToFloat } from "../../../../libs/helpers/helpers.js";
 import {
 	PointsOfInterestValidationMessage,
 	PointsOfInterestValidationRule,
@@ -12,8 +12,40 @@ import {
 
 const pointsOfInterestQuery = z
 	.object({
-		latitude: latitudeSchema.optional(),
-		longitude: longitudeSchema.optional(),
+		latitude: z
+			.string()
+			.trim()
+			.transform(parseToFloat)
+			.pipe(
+				z
+					.number()
+					.min(
+						CoordinatesValidationRule.LATITUDE_MIN,
+						CoordinatesValidationMessage.LATITUDE_MIN,
+					)
+					.max(
+						CoordinatesValidationRule.LATITUDE_MAX,
+						CoordinatesValidationMessage.LATITUDE_MAX,
+					),
+			)
+			.optional(),
+		longitude: z
+			.string()
+			.trim()
+			.transform(parseToFloat)
+			.pipe(
+				z
+					.number()
+					.min(
+						CoordinatesValidationRule.LONGITUDE_MIN,
+						CoordinatesValidationMessage.LONGITUDE_MIN,
+					)
+					.max(
+						CoordinatesValidationRule.LONGITUDE_MAX,
+						CoordinatesValidationMessage.LONGITUDE_MAX,
+					),
+			)
+			.optional(),
 		name: z
 			.string()
 			.trim()
@@ -72,15 +104,23 @@ const pointsOfInterestQuery = z
 	})
 	.refine(
 		({ latitude, longitude, radius }) =>
-			!radius || (Boolean(latitude) && Boolean(longitude)),
+			!radius || (latitude !== undefined && longitude !== undefined),
 		{
 			message: PointsOfInterestValidationMessage.COORDS_REQUIRED_WITH_RADIUS,
 		},
 	)
 	.refine(
-		({ latitude, longitude }) => Boolean(latitude) === Boolean(longitude),
+		({ latitude, longitude }) =>
+			(latitude !== undefined) === (longitude !== undefined),
 		{
 			message: PointsOfInterestValidationMessage.COORDS_REQUIRED_TOGETHER,
+		},
+	)
+	.refine(
+		({ page, perPage }) => (page !== undefined) === (perPage !== undefined),
+		{
+			message:
+				PointsOfInterestValidationMessage.PAGINATION_PARAMS_REQUIRED_TOGETHER,
 		},
 	);
 

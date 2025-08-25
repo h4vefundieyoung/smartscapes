@@ -1,5 +1,6 @@
 import { type Repository } from "~/libs/types/types.js";
 
+import { UserRouteStatus } from "./libs/enums/enum.js";
 import { UserRouteEntity } from "./user-route.entity.js";
 import { type UserRouteModel } from "./user-route.model.js";
 
@@ -10,6 +11,15 @@ class UserRouteRepository implements Repository {
 
 	public constructor(userRouteModel: typeof UserRouteModel) {
 		this.userRouteModel = userRouteModel;
+	}
+
+	public async checkHasActiveRoute(userId: number): Promise<boolean> {
+		const [userRoute] = await this.userRouteModel
+			.query()
+			.where({ status: UserRouteStatus.ACTIVE, userId })
+			.execute();
+
+		return userRoute ? true : false;
 	}
 
 	public async create(entity: UserRouteEntity): Promise<UserRouteEntity> {
@@ -37,14 +47,11 @@ class UserRouteRepository implements Repository {
 		return UserRouteEntity.initialize(userRoute);
 	}
 
-	public async deleteSavedRoute(
-		routeId: number,
-		userId: number,
-	): Promise<boolean> {
+	public async deleteSavedRoute(id: number, userId: number): Promise<boolean> {
 		const isDeleted = await this.userRouteModel
 			.query()
 			.delete()
-			.where({ routeId, userId })
+			.where({ id, userId })
 			.execute();
 
 		return Boolean(isDeleted);
@@ -75,8 +82,7 @@ class UserRouteRepository implements Repository {
 
 	public async findByFilter(
 		filters: UserRouteFilters,
-		options?: { multiple?: boolean },
-	): Promise<null | UserRouteEntity | UserRouteEntity[]> {
+	): Promise<UserRouteEntity[]> {
 		const userRoutes = await this.userRouteModel
 			.query()
 			.where(filters)
@@ -96,11 +102,7 @@ class UserRouteRepository implements Repository {
 			])
 			.execute();
 
-		if (options?.multiple) {
-			return userRoutes.map((item) => UserRouteEntity.initialize(item));
-		}
-
-		return userRoutes[0] ? UserRouteEntity.initialize(userRoutes[0]) : null;
+		return userRoutes.map((item) => UserRouteEntity.initialize(item));
 	}
 
 	public async patch(
@@ -108,15 +110,14 @@ class UserRouteRepository implements Repository {
 		userId: number,
 		entity: UserRouteEntity,
 	): Promise<null | UserRouteEntity> {
-		const updatedUserRoutes = entity.toNewObject();
-
-		const [updated] = await this.userRouteModel
+		const updatedUserData = entity.toNewObject();
+		const [updatedUserRoute] = await this.userRouteModel
 			.query()
 			.where({
 				id,
 				userId,
 			})
-			.patch(updatedUserRoutes)
+			.patch(updatedUserData)
 			.returning([
 				"id",
 				"routeId",
@@ -133,7 +134,9 @@ class UserRouteRepository implements Repository {
 			])
 			.execute();
 
-		return updated ? UserRouteEntity.initialize(updated) : null;
+		return updatedUserRoute
+			? UserRouteEntity.initialize(updatedUserRoute)
+			: null;
 	}
 }
 

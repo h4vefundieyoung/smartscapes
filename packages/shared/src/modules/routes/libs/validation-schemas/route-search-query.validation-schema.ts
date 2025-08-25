@@ -1,9 +1,10 @@
 import { z } from "zod";
 
 import {
-	latitudeSchema,
-	longitudeSchema,
-} from "../../../../libs/validated-schemas/validated-schemas.js";
+	CoordinatesValidationMessage,
+	CoordinatesValidationRule,
+} from "../../../../libs/enums/enums.js";
+import { parseToFloat } from "../../../../libs/helpers/helpers.js";
 import { PointsOfInterestValidationMessage } from "../../../points-of-interest/libs/enums/enums.js";
 import {
 	RoutesValidationMessage,
@@ -28,8 +29,40 @@ const routesSearchQuery = z
 			.union([categoryKey, z.array(categoryKey)])
 			.transform((value) => (Array.isArray(value) ? value : [value]))
 			.optional(),
-		latitude: latitudeSchema.optional(),
-		longitude: longitudeSchema.optional(),
+		latitude: z
+			.string()
+			.trim()
+			.transform(parseToFloat)
+			.pipe(
+				z
+					.number()
+					.min(
+						CoordinatesValidationRule.LATITUDE_MIN,
+						CoordinatesValidationMessage.LATITUDE_MIN,
+					)
+					.max(
+						CoordinatesValidationRule.LATITUDE_MAX,
+						CoordinatesValidationMessage.LATITUDE_MAX,
+					),
+			)
+			.optional(),
+		longitude: z
+			.string()
+			.trim()
+			.transform(parseToFloat)
+			.pipe(
+				z
+					.number()
+					.min(
+						CoordinatesValidationRule.LONGITUDE_MIN,
+						CoordinatesValidationMessage.LONGITUDE_MIN,
+					)
+					.max(
+						CoordinatesValidationRule.LONGITUDE_MAX,
+						CoordinatesValidationMessage.LONGITUDE_MAX,
+					),
+			)
+			.optional(),
 		name: z
 			.string()
 			.trim()

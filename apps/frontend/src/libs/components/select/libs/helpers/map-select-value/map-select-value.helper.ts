@@ -1,4 +1,4 @@
-import { type SelectOption } from "../../types/types.js";
+import { type SelectOption } from "~/libs/types/types.js";
 
 const mapSelectValue = <TOptionValue>(
 	rawValue: TOptionValue[],

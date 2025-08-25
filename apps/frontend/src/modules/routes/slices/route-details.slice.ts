@@ -1,0 +1,112 @@
+import { createSlice } from "@reduxjs/toolkit";
+
+import { DataStatus } from "~/libs/enums/enums.js";
+import { type ValueOf } from "~/libs/types/types.js";
+import { type ReviewGetByIdResponseDto } from "~/modules/reviews/reviews.js";
+
+import { actions as userRoutesActions } from "../../user-routes/user-routes.js";
+import { type RouteGetByIdResponseDto } from "../libs/types/types.js";
+import { createReview, getById, getReviews, patch } from "./actions.js";
+
+type State = {
+	dataStatus: ValueOf<typeof DataStatus>;
+	patchStatus: ValueOf<typeof DataStatus>;
+	reviewCreateStatus: ValueOf<typeof DataStatus>;
+	reviews: ReviewGetByIdResponseDto[];
+	reviewsDataStatus: ValueOf<typeof DataStatus>;
+	route: null | RouteGetByIdResponseDto;
+	saveRouteStatus: ValueOf<typeof DataStatus>;
+};
+
+const initialState: State = {
+	dataStatus: DataStatus.IDLE,
+	patchStatus: DataStatus.IDLE,
+	reviewCreateStatus: DataStatus.IDLE,
+	reviews: [],
+	reviewsDataStatus: DataStatus.IDLE,
+	route: null,
+	saveRouteStatus: DataStatus.IDLE,
+};
+
+const { actions, name, reducer } = createSlice({
+	extraReducers(builder) {
+		builder.addCase(getById.pending, (state) => {
+			state.dataStatus = DataStatus.PENDING;
+		});
+		builder.addCase(getById.fulfilled, (state, action) => {
+			state.route = action.payload.data;
+			state.dataStatus = DataStatus.FULFILLED;
+		});
+		builder.addCase(getById.rejected, (state) => {
+			state.dataStatus = DataStatus.REJECTED;
+		});
+
+		builder.addCase(patch.pending, (state) => {
+			state.patchStatus = DataStatus.PENDING;
+		});
+		builder.addCase(patch.fulfilled, (state, action) => {
+			state.route = action.payload.data;
+			state.patchStatus = DataStatus.FULFILLED;
+		});
+		builder.addCase(patch.rejected, (state) => {
+			state.patchStatus = DataStatus.REJECTED;
+		});
+
+		builder.addCase(getReviews.pending, (state) => {
+			state.reviewsDataStatus = DataStatus.PENDING;
+		});
+		builder.addCase(getReviews.fulfilled, (state, { payload }) => {
+			state.reviews = payload.data;
+			state.reviewsDataStatus = DataStatus.FULFILLED;
+		});
+		builder.addCase(getReviews.rejected, (state) => {
+			state.reviewsDataStatus = DataStatus.REJECTED;
+		});
+
+		builder.addCase(createReview.pending, (state) => {
+			state.reviewCreateStatus = DataStatus.PENDING;
+		});
+		builder.addCase(createReview.fulfilled, (state, { payload }) => {
+			state.reviews.unshift(payload.data);
+			state.reviewCreateStatus = DataStatus.FULFILLED;
+		});
+		builder.addCase(createReview.rejected, (state) => {
+			state.reviewCreateStatus = DataStatus.REJECTED;
+		});
+		builder.addCase(userRoutesActions.saveUserRoute.pending, (state) => {
+			state.saveRouteStatus = DataStatus.PENDING;
+		});
+		builder.addCase(userRoutesActions.saveUserRoute.rejected, (state) => {
+			state.saveRouteStatus = DataStatus.REJECTED;
+		});
+
+		builder.addCase(
+			userRoutesActions.saveUserRoute.fulfilled,
+			(state, { payload: { id, status } }) => {
+				state.saveRouteStatus = DataStatus.FULFILLED;
+
+				if (state.route) {
+					state.route.userRoute = { id, status };
+				}
+			},
+		);
+		builder.addCase(userRoutesActions.deleteUserRoute.pending, (state) => {
+			state.saveRouteStatus = DataStatus.PENDING;
+		});
+		builder.addCase(userRoutesActions.deleteUserRoute.rejected, (state) => {
+			state.saveRouteStatus = DataStatus.REJECTED;
+		});
+		builder.addCase(userRoutesActions.deleteUserRoute.fulfilled, (state) => {
+			state.saveRouteStatus = DataStatus.FULFILLED;
+
+			if (state.route) {
+				state.route.userRoute = null;
+			}
+		});
+	},
+	initialState,
+	name: "route-details",
+	reducers: {},
+});
+
+export { actions, name, reducer };

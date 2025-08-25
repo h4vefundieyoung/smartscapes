@@ -1,5 +1,5 @@
-export { GEOLOCATE_AUTO_TRIGGER_DELAY } from "./geolocate-auto-trigger-delay.constant.js";
 export { GEOLOCATE_CONTROL_OPTIONS } from "./geolocate-control-options.constant.js";
+export { MAP_LAYER_STYLES } from "./layer-styles.constant.js";
 export { MAP_CONTROLS_POSITION } from "./map-controls-position.constant.js";
 export { MAP_MARKER_Z_INDEX_VALUE } from "./map-marker-z-index-value.js";
 export { MAP_OPTIONS } from "./map-options.constant.js";

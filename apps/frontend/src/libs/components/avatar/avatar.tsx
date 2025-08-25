@@ -7,7 +7,7 @@ const DEFAULT_AVATAR_SIZE = 32;
 
 type Properties = {
 	size?: number;
-	user: UserAuthResponseDto;
+	user: Pick<UserAuthResponseDto, "avatarUrl" | "firstName" | "lastName">;
 };
 
 const Avatar = ({

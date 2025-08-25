@@ -71,6 +71,7 @@ export {
 	type PermissionItemDto,
 	PermissionKey,
 } from "./modules/permission/permission.js";
+export { type PlannedPathResponseDto } from "./modules/planned-paths/planned-paths.js";
 export {
 	type PointOfInterestPatchRequestDto,
 	pointOfInterestUpdateValidationSchema,
@@ -85,8 +86,11 @@ export {
 export {
 	type ReviewCreatePayload,
 	reviewCreateValidationSchema,
+	type ReviewGetAllSearchQuery,
+	reviewGetAllSearchQueryValidationSchema,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
+	ReviewsApiPath,
 } from "./modules/reviews/reviews.js";
 export {
 	type RouteConstructRequestDto,
@@ -126,6 +130,8 @@ export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetByIdItemResponseDto,
+	userGetProfileParametersValidationSchema,
+	type UserPublicProfileResponseDto,
 	UsersApiPath,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,

@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.55.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.54.0...v1.55.0) (2025-08-25)
+
+
+### Features
+
+* **frontend/backend:** create and display follow notification ss-438 ([#522](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/522)) ([49f60f6](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/49f60f6a3b4fa87da3525311909c1fd6526b5e12))
+
+
+### Bug Fixes
+
+* **backend:** fix user routes request ss-534 ([#538](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/538)) ([86b0af4](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/86b0af4876e43d79ec249f221e5555f58c00d427))
+* **frontend:** add styles to prevent long review overflowing ss-540 ([#541](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/541)) ([aa19db9](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/aa19db9fdddb1949515afc8ea47d17b5ec1b94a7))
+
+## [1.54.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.53.0...v1.54.0) (2025-08-25)
+
+
+### Features
+
+* **frontend/backend/shared:** add an ability to leave a review comment for the route ss-389 ([#461](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/461)) ([5d24796](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/5d24796c92442dc692d03605f91657ec60b36a1e))
+
+## [1.53.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.52.0...v1.53.0) (2025-08-25)
+
+
+### Features
+
+* **frontend/backend/shared:** add user profile page and follow feature ss-402 ([#457](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/457)) ([15f325c](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/15f325cddd64c275054f9865f7775932250b108d))
+* **frontend:** add construct route page ss-340 ([#436](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/436)) ([1a86a4c](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/1a86a4c2c828c968a392be5aa1588b53126b6d6a))
+
+## [1.52.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.51.1...v1.52.0) (2025-08-24)
+
+
+### Features
+
+* **frontend:** add tabs navigation for mobile ss-1 ([#531](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/531)) ([0c46748](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/0c4674832233aae6d8fccdc2cafba4ab510f53b2))
+
 ## [1.51.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.51.0...v1.51.1) (2025-08-24)
 
 

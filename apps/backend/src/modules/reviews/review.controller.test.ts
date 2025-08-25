@@ -1,12 +1,18 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
+import { type APIHandlerOptions } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserAuthResponseDto } from "~/libs/types/types.js";
 
 import { GroupEntity } from "../groups/group.entity.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
+import {
+	type ReviewGetAllSearchQuery,
+	type ReviewGetByIdResponseDto,
+	type ReviewRequestDto,
+} from "./libs/types/types.js";
 import { ReviewController } from "./review.controller.js";
 import { type ReviewService } from "./review.service.js";
 
@@ -23,6 +29,7 @@ describe("ReviewController", () => {
 		name: "Users",
 		permissions: [mockPermission.toObject()],
 	});
+
 	const mockLogger: Logger = {
 		debug: () => {},
 		error: () => {},
@@ -41,29 +48,37 @@ describe("ReviewController", () => {
 		lastName: "Doe",
 	} satisfies UserAuthResponseDto;
 
-	const mockReview = {
+	const mockReviewDto = {
 		content: "content",
 		id: 1,
 		likesCount: 5,
 		poiId: null,
 		routeId: 10,
-		userId: mockUser.id,
-	};
+		user: {
+			avatarUrl: mockUser.avatarUrl,
+			firstName: mockUser.firstName,
+			id: mockUser.id,
+			lastName: mockUser.lastName,
+		},
+	} satisfies ReviewGetByIdResponseDto;
 
 	it("findAll should return all reviews", async () => {
-		const reviews = [mockReview];
+		const reviews: ReviewGetByIdResponseDto[] = [mockReviewDto];
 
-		const mockFindAll: ReviewService["findAll"] = () => {
-			return Promise.resolve({ items: reviews });
-		};
+		const mockFindAll: ReviewService["findAll"] = () =>
+			Promise.resolve({ items: reviews });
 
-		const reviewService = {
-			findAll: mockFindAll,
-		} as ReviewService;
-
+		const reviewService = { findAll: mockFindAll } as ReviewService;
 		const reviewController = new ReviewController(mockLogger, reviewService);
 
-		const result = await reviewController.findAll();
+		const options: APIHandlerOptions<{ query?: ReviewGetAllSearchQuery }> = {
+			body: {},
+			params: {},
+			query: {},
+			user: mockUser,
+		};
+
+		const result = await reviewController.findAll(options);
 
 		assert.deepStrictEqual(result, {
 			payload: { data: reviews },
@@ -72,16 +87,11 @@ describe("ReviewController", () => {
 	});
 
 	it("create should create a review and return it", async () => {
-		const review = mockReview;
+		const review = mockReviewDto;
 
-		const mockCreate: ReviewService["create"] = () => {
-			return Promise.resolve(review);
-		};
+		const mockCreate: ReviewService["create"] = () => Promise.resolve(review);
 
-		const reviewService = {
-			create: mockCreate,
-		} as ReviewService;
-
+		const reviewService = { create: mockCreate } as ReviewService;
 		const reviewController = new ReviewController(mockLogger, reviewService);
 
 		const result = await reviewController.create({
@@ -92,8 +102,8 @@ describe("ReviewController", () => {
 			},
 			params: {},
 			query: {},
-			user: mockUser,
-		});
+			user: {},
+		} as APIHandlerOptions<{ body: ReviewRequestDto }>);
 
 		assert.deepStrictEqual(result, {
 			payload: { data: review },

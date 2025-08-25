@@ -28,6 +28,7 @@
 	--color-shadow-weak: hsl(0deg 0% 0% / 3.9%);
 	--color-shadow-strong: hsl(0deg 0% 0% / 7.8%);
 	--color-base-overlay: hsl(0deg 0% 0% / 80%);
+	--color-route-line: hsl(129deg 71% 63% / 100%);
 	--shadow-raised:
 		0 2px 4px -2px hsl(0deg 0% 0% / 8%), 0 4px 8px -2px hsl(0deg 0% 0% / 4%);
 	--font-family: "Inter", sans-serif;
@@ -40,9 +41,11 @@
 	--font-size-tiny: 0.875rem;
 	--font-size-large: 2.25rem;
 	--font-weight-regular: 400;
+	--font-weight-medium: 500;
 	--font-weight-semibold: 600;
 	--font-weight-bold: 700;
 	--width-sidebar-collapsed: 74px;
 	--width-sidebar-expanded: 320px;
+	--tabs-navigation-height: 56px;
 	--landing-container-width: 1264px;
 }

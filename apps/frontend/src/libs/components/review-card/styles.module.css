@@ -1,0 +1,28 @@
+.card {
+	gap: 24px;
+	min-width: 0;
+	background: var(--color-base);
+}
+
+.head {
+	display: flex;
+	gap: 24px;
+	align-items: center;
+	margin-bottom: 24px;
+}
+
+.username {
+	font-size: var(--font-size-small);
+	line-height: 1.5;
+	color: var(--color-text-strong);
+}
+
+.content {
+	gap: 24px;
+	max-width: 750px;
+	font-size: var(--font-size-small);
+	line-height: 1.5;
+	color: var(--color-text-strong);
+	overflow-wrap: break-word;
+	white-space: pre-wrap;
+}

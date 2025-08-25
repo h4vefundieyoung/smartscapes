@@ -79,7 +79,7 @@ class UserFollowsController extends BaseController {
 			body: UserFollowsRequestDto;
 			params: UserFollowsParametersDto;
 		}>,
-	): Promise<APIHandlerResponse> {
+	): Promise<APIHandlerResponse<boolean>> {
 		const { body, params, user } = options;
 
 		const followingId = Number(body.followingId);
@@ -93,10 +93,13 @@ class UserFollowsController extends BaseController {
 			});
 		}
 
-		await this.userFollowsService.follow(followerId, followingId);
+		const isFollowed = await this.userFollowsService.follow(
+			followerId,
+			followingId,
+		);
 
 		return {
-			payload: null,
+			payload: { data: isFollowed },
 			status: HTTPCode.OK,
 		};
 	}
@@ -134,7 +137,7 @@ class UserFollowsController extends BaseController {
 		options: APIHandlerOptions<{
 			params: UserUnfollowsParametersDto;
 		}>,
-	): Promise<APIHandlerResponse> {
+	): Promise<APIHandlerResponse<boolean>> {
 		const { params, user } = options;
 
 		const followingId = Number(params.id);
@@ -148,10 +151,13 @@ class UserFollowsController extends BaseController {
 			});
 		}
 
-		await this.userFollowsService.unfollow(followerId, followingId);
+		const isUnfollowed = await this.userFollowsService.unfollow(
+			followerId,
+			followingId,
+		);
 
 		return {
-			payload: null,
+			payload: { data: isUnfollowed },
 			status: HTTPCode.OK,
 		};
 	}

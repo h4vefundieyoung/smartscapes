@@ -19,13 +19,17 @@ import {
 	useParams,
 	useState,
 } from "~/libs/hooks/hooks.js";
+import { type ReviewRequestDto } from "~/modules/reviews/reviews.js";
 import {
 	actions as routeActions,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
-import { PointOfInterestSection } from "./libs/components/components.js";
+import {
+	PointOfInterestSection,
+	RouteReviewsSection,
+} from "./libs/components/components.js";
 import { ROUTE_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
@@ -37,6 +41,8 @@ const RouteDetails = (): React.JSX.Element => {
 		({ routeDetails }) => routeDetails.dataStatus,
 	);
 
+	const reviews = useAppSelector(({ routeDetails }) => routeDetails.reviews);
+	const isAuthenticatedUser = Boolean(user);
 	const { control, errors, getValues, handleReset } =
 		useAppForm<RoutePatchRequestDto>({
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
@@ -90,8 +96,23 @@ const RouteDetails = (): React.JSX.Element => {
 		handleResetFormValues();
 	}, [handleResetFormValues]);
 
+	useEffect(() => {
+		void dispatch(routeActions.getReviews({ routeId: Number(routeId) }));
+	}, [dispatch, routeId]);
+
+	const handleCreateReview = useCallback(
+		(payload: ReviewRequestDto): void => {
+			void dispatch(routeActions.createReview(payload));
+		},
+		[dispatch],
+	);
+
 	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
-		return <Loader />;
+		return (
+			<div className={styles["loader-container"]}>
+				<Loader />
+			</div>
+		);
 	}
 
 	if (dataStatus === DataStatus.REJECTED) {
@@ -102,7 +123,8 @@ const RouteDetails = (): React.JSX.Element => {
 		return <></>;
 	}
 
-	const { description, name, pois } = route;
+	const { description, id, name, pois } = route;
+
 	const hasDescription = Boolean(description);
 
 	return (
@@ -153,6 +175,12 @@ const RouteDetails = (): React.JSX.Element => {
 					)
 				)}
 				<PointOfInterestSection pointOfInterests={pois} />
+				<RouteReviewsSection
+					isAuthenticatedUser={isAuthenticatedUser}
+					items={reviews}
+					onCreate={handleCreateReview}
+					routeId={Number(id)}
+				/>
 			</main>
 		</>
 	);

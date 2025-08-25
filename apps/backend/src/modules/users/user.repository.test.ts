@@ -150,4 +150,33 @@ describe("UserRepository", () => {
 
 		assert.strictEqual(result, null);
 	});
+
+	it("getUserProfile should return public profile data", async () => {
+		const userId = 1;
+		const currentUserId = 2;
+
+		databaseTracker.on.select("users").responseOnce([
+			{
+				"avatar:url": "https://aws/avatars/example_file.jpg",
+				firstName: "John",
+				followersCount: 5,
+				id: userId,
+				isFollowed: true,
+				isVisibleProfile: true,
+				lastName: "Doe",
+			},
+		]);
+
+		const result = await userRepository.getUserProfile(userId, currentUserId);
+
+		assert.deepStrictEqual(result, {
+			avatarUrl: "https://aws/avatars/example_file.jpg",
+			firstName: "John",
+			followersCount: 5,
+			id: userId,
+			isFollowed: true,
+			isVisibleProfile: true,
+			lastName: "Doe",
+		});
+	});
 });

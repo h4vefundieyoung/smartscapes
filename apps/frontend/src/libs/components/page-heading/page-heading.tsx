@@ -5,10 +5,7 @@ type Properties = {
 	title: string;
 };
 
-const DashboardHeading = ({
-	subtitle,
-	title,
-}: Properties): React.JSX.Element => {
+const PageHeading = ({ subtitle, title }: Properties): React.JSX.Element => {
 	return (
 		<div className={styles["heading"]}>
 			<h1 className={styles["title"]}>{title}</h1>
@@ -17,4 +14,4 @@ const DashboardHeading = ({
 	);
 };
 
-export { DashboardHeading };
+export { PageHeading };

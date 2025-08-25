@@ -1,10 +1,12 @@
 import mapboxgl from "mapbox-gl";
 
 import { config } from "~/libs/modules/config/config.js";
+import { type Coordinates, type RouteLine } from "~/libs/types/types.js";
 
 import {
 	GEOLOCATE_CONTROL_OPTIONS,
 	MAP_CONTROLS_POSITION,
+	MAP_LAYER_STYLES,
 	MAP_MARKER_Z_INDEX_VALUE,
 	MAP_OPTIONS,
 	MARKER_OPTIONS,
@@ -13,15 +15,15 @@ import {
 	ZOOM_LEVEL,
 } from "./libs/constants/constants.js";
 import { MapControlId, MapEventType } from "./libs/enums/enums.js";
+import "mapbox-gl/dist/mapbox-gl.css";
+
 import {
 	type ControlPosition,
-	type Coordinates,
 	type MapControl,
 	type MapMarker,
 	type MapMarkerOptions,
 	type MapOptions,
 } from "./libs/types/types.js";
-import "mapbox-gl/dist/mapbox-gl.css";
 
 class MapClient {
 	private accessToken: MapOptions["accessToken"];
@@ -189,6 +191,56 @@ class MapClient {
 			this.map?.resize();
 		});
 		this.resizeObserver.observe(container);
+	}
+
+	public renderRoute({ geometry, id }: RouteLine): void {
+		if (!this.map) {
+			return;
+		}
+
+		const routeId = `${id}-route`;
+
+		const source = this.map.getSource(routeId);
+		const data = { geometry, properties: {}, type: "Feature" as const };
+
+		if (source) {
+			(source as mapboxgl.GeoJSONSource).setData(data);
+
+			return;
+		}
+
+		this.map.addSource(routeId, {
+			data,
+			type: "geojson",
+		});
+
+		this.map.addLayer({
+			id: `${routeId}-outline`,
+			layout: {
+				"line-cap": "round",
+				"line-join": "round",
+			},
+			paint: {
+				"line-color": MAP_LAYER_STYLES.ROUTE_OUTLINE.LINE_COLOR,
+				"line-width": MAP_LAYER_STYLES.ROUTE_OUTLINE.LINE_WIDTH,
+			},
+			source: routeId,
+			type: "line",
+		});
+
+		this.map.addLayer({
+			id: routeId,
+			layout: {
+				"line-cap": "round",
+				"line-join": "round",
+			},
+			paint: {
+				"line-color": MAP_LAYER_STYLES.ROUTE.LINE_COLOR,
+				"line-width": MAP_LAYER_STYLES.ROUTE.LINE_WIDTH,
+			},
+			source: routeId,
+			type: "line",
+		});
 	}
 
 	public resize(): void {

@@ -1,4 +1,5 @@
 import { Icon } from "~/libs/components/components.js";
+import { EventListenerType } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
@@ -14,7 +15,7 @@ import styles from "./styles.module.css";
 
 const NotificationsPopover = (): React.JSX.Element => {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
-	const containerReference = useRef<HTMLDivElement>(null);
+	const containerReference = useRef<HTMLDivElement | null>(null);
 	const dispatch = useAppDispatch();
 	const notifications = useAppSelector(
 		(state) => state.notification.notifications,
@@ -34,10 +35,13 @@ const NotificationsPopover = (): React.JSX.Element => {
 			}
 		};
 
-		document.addEventListener("mousedown", handleClickOutside);
+		document.addEventListener(EventListenerType.MOUSEDOWN, handleClickOutside);
 
 		return (): void => {
-			document.removeEventListener("mousedown", handleClickOutside);
+			document.removeEventListener(
+				EventListenerType.MOUSEDOWN,
+				handleClickOutside,
+			);
 		};
 	}, []);
 

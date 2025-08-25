@@ -185,16 +185,7 @@ const RouteDetails = (): React.JSX.Element => {
 				<FeatureGallery
 					slides={[
 						{
-							content: (
-								<MapProvider
-									center={[0, 0]}
-									markers={[
-										{
-											coordinates: [0, 0],
-										},
-									]}
-								/>
-							),
+							content: <MapProvider />,
 						},
 						...images.map((image) => ({
 							content: (

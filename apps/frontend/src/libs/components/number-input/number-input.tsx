@@ -12,9 +12,8 @@ type Properties = {
 	value: number;
 };
 
+const MIN_INPUT_WIDTH_CH = 2;
 const STEP_VALUE = 1;
-const MIN_INPUT_WIDTH = 16;
-const CHAR_WIDTH = 8;
 
 const NumberInput = ({
 	onChange,
@@ -22,16 +21,17 @@ const NumberInput = ({
 	value,
 }: Properties): React.JSX.Element => {
 	const [localValue, setLocalValue] = useState<string>(value.toString());
-	const inputWidth = Math.max(localValue.length * CHAR_WIDTH, MIN_INPUT_WIDTH);
 
 	const handleIncrement = useCallback((): void => {
 		const newValue = Math.min(value + STEP_VALUE, range.max);
 		onChange(newValue);
+		setLocalValue(String(newValue));
 	}, [onChange, value, range.max]);
 
 	const handleDecrement = useCallback((): void => {
 		const newValue = Math.max(value - STEP_VALUE, range.min);
 		onChange(newValue);
+		setLocalValue(String(newValue));
 	}, [onChange, value, range.min]);
 
 	const handleInputChange = useCallback(
@@ -42,25 +42,9 @@ const NumberInput = ({
 	);
 
 	const handleAppliedValue = useCallback(() => {
-		const inputValue = Number(localValue);
-
-		if (Number.isNaN(inputValue) || !inputValue) {
-			setLocalValue(value.toString());
-		} else {
-			let clampedValue = inputValue;
-
-			if (inputValue > range.max) {
-				clampedValue = range.max;
-			}
-
-			if (inputValue < range.min) {
-				clampedValue = range.min;
-			}
-
-			onChange(clampedValue);
-			setLocalValue(clampedValue.toString());
-		}
-	}, [localValue, onChange, range.max, range.min, value]);
+		onChange(Number(localValue));
+		setLocalValue(String(Number(localValue)));
+	}, [localValue, onChange]);
 
 	const handleKeyDown = useCallback(
 		(event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -71,6 +55,9 @@ const NumberInput = ({
 		[handleAppliedValue],
 	);
 
+	const { length } = localValue;
+	const inputWidthCh = `${Math.max(length, MIN_INPUT_WIDTH_CH).toString()}ch`;
+
 	return (
 		<div className={styles["container"]}>
 			<div className={styles["wrapper"]}>
@@ -79,7 +66,7 @@ const NumberInput = ({
 					onBlur={handleAppliedValue}
 					onChange={handleInputChange}
 					onKeyDown={handleKeyDown}
-					style={{ width: inputWidth }}
+					style={{ width: inputWidthCh }}
 					type="number"
 					value={localValue}
 				/>

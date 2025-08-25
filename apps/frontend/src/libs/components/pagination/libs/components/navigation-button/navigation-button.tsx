@@ -1,20 +1,20 @@
 import styles from "./styles.module.css";
 
 type Properties = {
-	disabled?: boolean;
+	isDisabled?: boolean;
 	label: string;
 	onClick: () => void;
 };
 
 const NavigationButton = ({
-	disabled = false,
+	isDisabled = false,
 	label,
 	onClick,
 }: Properties): React.JSX.Element => {
 	return (
 		<button
 			className={styles["pagination-button"]}
-			disabled={disabled}
+			disabled={isDisabled}
 			onClick={onClick}
 		>
 			{label}

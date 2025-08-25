@@ -47,22 +47,22 @@ const Pagination = ({
 				</span>
 				<div className={styles["navigation-buttons-container"]}>
 					<NavigationButton
-						disabled={page <= range.min}
+						isDisabled={page <= range.min}
 						label="«"
 						onClick={handleGoToStart}
 					/>
 					<NavigationButton
-						disabled={page <= range.min}
+						isDisabled={page <= range.min}
 						label="‹"
 						onClick={handleGoToPrevious}
 					/>
 					<NavigationButton
-						disabled={page >= totalPages}
+						isDisabled={page >= totalPages}
 						label="›"
 						onClick={handleGoToNext}
 					/>
 					<NavigationButton
-						disabled={page >= totalPages}
+						isDisabled={page >= totalPages}
 						label="»"
 						onClick={handleGoToEnd}
 					/>

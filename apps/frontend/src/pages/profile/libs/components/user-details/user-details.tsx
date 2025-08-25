@@ -62,7 +62,7 @@ const UserDetails = (): null | React.JSX.Element => {
 	return (
 		<div className={styles["user-details-container"]}>
 			<div className={styles["user-details-avatar"]}>
-				<Avatar size={128} user={authenticatedUser} variant="secondary" />
+				<Avatar size={128} user={authenticatedUser} variant="large" />
 				<div className={styles["user-upload-buttons"]}>
 					<Button
 						label="Upload avatar"

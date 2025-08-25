@@ -83,7 +83,7 @@
 	color: var(--color-icon-error);
 }
 
-.input[readonly] {
+.input-readonly {
 	color: var(--color-text-weak);
 	cursor: default;
 	background-color: var(--color-fill-grey);

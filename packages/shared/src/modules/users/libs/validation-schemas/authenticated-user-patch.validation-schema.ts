@@ -3,11 +3,9 @@ import { z } from "zod";
 import { checkIsLatinLetter } from "../../../../libs/helpers/helpers.js";
 import { UserValidationMessage } from "../enums/user-validation-message.enum.js";
 import { UserValidationRule } from "../enums/user-validation-rule.enum.js";
-import { userEmailValidationSchema } from "./user-email.validation-schema.js";
 
 const authenticatedUserPatch = z
 	.object({
-		email: userEmailValidationSchema,
 		firstName: z
 			.string()
 			.trim()
@@ -43,12 +41,8 @@ const authenticatedUserPatch = z
 			})
 			.optional(),
 	})
-	.refine(
-		(data) =>
-			data.firstName || data.lastName || data.isVisibleProfile || data.email,
-		{
-			message: UserValidationMessage.ONE_FIELD_REQUIRED,
-		},
-	);
+	.refine((data) => Object.keys(data).length > 0, {
+		message: UserValidationMessage.ONE_FIELD_REQUIRED,
+	});
 
 export { authenticatedUserPatch };

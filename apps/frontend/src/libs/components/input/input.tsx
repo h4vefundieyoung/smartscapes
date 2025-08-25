@@ -21,10 +21,10 @@ type Properties<T extends FieldValues> = {
 		ComponentProps<typeof InputIcon>,
 		"label" | "name" | "onClick"
 	>;
+	isReadonly?: boolean;
 	label: string;
 	name: FieldPath<T>;
 	placeholder?: string;
-	readonly?: boolean;
 	type?: "email" | "password" | "text";
 };
 
@@ -33,10 +33,10 @@ const Input = <T extends FieldValues>({
 	control,
 	errors,
 	iconRight,
+	isReadonly = false,
 	label,
 	name,
 	placeholder = "",
-	readonly = false,
 	type = "text",
 }: Properties<T>): React.JSX.Element => {
 	const { field } = useFormController({ control, name });
@@ -54,11 +54,12 @@ const Input = <T extends FieldValues>({
 						styles["input"],
 						hasError && styles["input-error"],
 						iconRight && styles["input-right-icon-space"],
+						isReadonly && styles["input-readonly"],
 					)}
 					name={field.name}
 					onChange={field.onChange}
 					placeholder={placeholder}
-					readOnly={readonly}
+					readOnly={isReadonly}
 					type={type}
 					value={field.value}
 				/>

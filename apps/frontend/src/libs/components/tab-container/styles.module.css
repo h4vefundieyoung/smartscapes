@@ -9,7 +9,7 @@
 .tab-navigation {
 	display: flex;
 	align-items: center;
-	margin-bottom: 43px;
+	margin-bottom: 48px;
 	border-bottom: 1px solid var(--color-stroke-weak);
 }
 

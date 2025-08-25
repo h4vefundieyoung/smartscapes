@@ -25,12 +25,12 @@
 	border-radius: 50%;
 }
 
-.primary {
+.small {
 	font-weight: var(--font-weight-semibold);
 	color: var(--color-text-strong);
 }
 
-.secondary {
-	font-size: calc(var(--font-size-large));
+.large {
+	font-size: calc(var(--font-size-h1));
 	color: var(--color-base);
 }

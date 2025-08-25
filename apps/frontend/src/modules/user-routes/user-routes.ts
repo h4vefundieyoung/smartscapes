@@ -15,5 +15,5 @@ export { UserRouteStatus } from "./libs/enums/enums.js";
 export {
 	actions,
 	userRouteDetailsReducer,
-	userRouteReducer,
-} from "./slices/user-route.js";
+	userRoutesReducer,
+} from "./slices/user-routes.js";

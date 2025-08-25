@@ -1,29 +1,45 @@
 import { DataStatus } from "~/libs/enums/enums.js";
-import { useAppSelector } from "~/libs/hooks/hooks.js";
-import { UserRouteStatus } from "~/modules/user-routes/user-routes.js";
+import {
+	useAppDispatch,
+	useAppSelector,
+	useEffect,
+} from "~/libs/hooks/hooks.js";
+import {
+	actions as userRouteActions,
+	UserRouteStatus,
+} from "~/modules/user-routes/user-routes.js";
 
 type UseUserRouteStateReturn = {
-	isRouteLoading: boolean;
 	isUserRouteActive: boolean;
 	isUserRouteCompleted: boolean;
+	isUserRouteLoading: boolean;
 };
 
-const useUserRouteState = (): UseUserRouteStateReturn => {
-	const { isRouteLoading, userRouteDetails } = useAppSelector(
-		({ routeDetails, userRouteDetails }) => ({
-			isRouteLoading: routeDetails.dataStatus === DataStatus.PENDING,
+const useUserRouteState = (routeId: number): UseUserRouteStateReturn => {
+	const dispatch = useAppDispatch();
+
+	const { userRouteDetails, userRouteDetailsDataStatus } = useAppSelector(
+		({ userRouteDetails }) => ({
 			userRouteDetails: userRouteDetails.userRouteDetails,
+			userRouteDetailsDataStatus: userRouteDetails.userRouteDetailsDataStatus,
 		}),
 	);
 
+	useEffect(() => {
+		if (!userRouteDetails && userRouteDetailsDataStatus === DataStatus.IDLE) {
+			void dispatch(userRouteActions.getByRouteIdAndUserId({ routeId }));
+		}
+	}, [dispatch, routeId, userRouteDetails, userRouteDetailsDataStatus]);
+
+	const isUserRouteLoading = userRouteDetailsDataStatus === DataStatus.PENDING;
 	const isUserRouteActive = userRouteDetails?.status === UserRouteStatus.ACTIVE;
 	const isUserRouteCompleted =
 		userRouteDetails?.status === UserRouteStatus.COMPLETED;
 
 	return {
-		isRouteLoading,
 		isUserRouteActive,
 		isUserRouteCompleted,
+		isUserRouteLoading,
 	};
 };
 

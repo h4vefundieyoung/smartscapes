@@ -32,7 +32,7 @@ import {
 import {
 	userRouteApi,
 	userRouteDetailsReducer,
-	userRouteReducer,
+	userRoutesReducer,
 } from "~/modules/user-routes/user-routes.js";
 import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
 
@@ -83,8 +83,8 @@ class Store {
 				pointsOfInterest: pointsOfInterestReducer,
 				routeDetails: routeDetailsReducer,
 				routes: routesReducer,
-				userRoute: userRouteReducer,
 				userRouteDetails: userRouteDetailsReducer,
+				userRoutes: userRoutesReducer,
 				users: usersReducer,
 			},
 		});

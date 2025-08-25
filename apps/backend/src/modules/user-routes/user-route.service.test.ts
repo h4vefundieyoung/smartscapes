@@ -173,7 +173,10 @@ describe("UserRouteService", () => {
 				mockRouteService,
 			);
 
-			const result = await serviceWithRoute.getByRouteIdAndUserId(payload);
+			const result = await serviceWithRoute.getByRouteIdAndUserId(
+				payload.routeId,
+				payload.userId,
+			);
 
 			assert.strictEqual(result.routeId, payload.routeId);
 			assert.strictEqual(result.userId, payload.userId);
@@ -187,8 +190,7 @@ describe("UserRouteService", () => {
 			};
 
 			const mockRepositoryWithRoute = Object.assign({}, mockRepository, {
-				findByFilter: () =>
-					Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
+				findByFilter: () => Promise.resolve([]),
 			}) as unknown as UserRouteRepository;
 
 			const serviceWithRoute = new UserRouteService(
@@ -197,7 +199,10 @@ describe("UserRouteService", () => {
 			);
 
 			await assert.rejects(async () => {
-				await serviceWithRoute.getByRouteIdAndUserId(payload);
+				await serviceWithRoute.getByRouteIdAndUserId(
+					payload.routeId,
+					payload.userId,
+				);
 			}, UserRouteError);
 		});
 	});

@@ -130,9 +130,18 @@ class UserRouteController extends BaseController {
 		});
 
 		this.addRoute({
-			handler: this.getAllByUserId.bind(this),
+			handler: this.getAll.bind(this),
 			method: "GET",
 			path: UserRouteApiPath.ROOT,
+		});
+
+		this.addRoute({
+			handler: this.getByRouteId.bind(this),
+			method: "GET",
+			path: UserRouteApiPath.GET,
+			validation: {
+				query: userRouteQueryValidationSchema,
+			},
 		});
 	}
 
@@ -344,7 +353,7 @@ class UserRouteController extends BaseController {
 	 *                       type: "LineString"
 	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
 	 */
-	public async getAllByUserId(
+	public async getAll(
 		options: APIHandlerOptions,
 	): Promise<APIHandlerResponse<UserRouteResponseDto[]>> {
 		const { user } = options;
@@ -354,6 +363,73 @@ class UserRouteController extends BaseController {
 
 		return {
 			payload: { data: userRoutes },
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /user-routes/get:
+	 *   get:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - User Routes
+	 *     summary: Get user route by route ID
+	 *     description: Get a specific user route by route ID for the authenticated user. User ID is derived from JWT token.
+	 *     parameters:
+	 *       - in: query
+	 *         name: routeId
+	 *         required: true
+	 *         schema:
+	 *           type: integer
+	 *         description: ID of the route to retrieve
+	 *         example: 7
+	 *     responses:
+	 *       200:
+	 *         description: User route retrieved successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 payload:
+	 *                   type: object
+	 *                   properties:
+	 *                     data:
+	 *                       $ref: '#/components/schemas/UserRouteResponseDto'
+	 *             example:
+	 *               payload:
+	 *                 data:
+	 *                   id: 1
+	 *                   routeId: 7
+	 *                   userId: 1
+	 *                   status: "active"
+	 *                   startedAt: "2025-08-21T16:37:51.437Z"
+	 *                   completedAt: null
+	 *                   actualGeometry:
+	 *                     type: "LineString"
+	 *                     coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                   plannedGeometry:
+	 *                     type: "LineString"
+	 *                     coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 */
+	public async getByRouteId(
+		options: APIHandlerOptions<{
+			query: UserRouteQueryRequestDto;
+		}>,
+	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
+		const { query, user } = options;
+		const { routeId } = query;
+		const { id: userId } = user as UserAuthResponseDto;
+
+		const userRoute = await this.userRouteService.getByRouteIdAndUserId(
+			routeId,
+			userId,
+		);
+
+		return {
+			payload: { data: userRoute },
 			status: HTTPCode.OK,
 		};
 	}

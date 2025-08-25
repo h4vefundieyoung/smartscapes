@@ -74,7 +74,7 @@ class UserRouteApi extends BaseHTTPApi {
 		query: UserRouteQueryRequestDto,
 	): Promise<APIResponse<UserRouteResponseDto>> {
 		const response = await this.load<APIResponse<UserRouteResponseDto>>(
-			this.getFullEndpoint(UserRouteApiPath.ROOT, {}),
+			this.getFullEndpoint(UserRouteApiPath.GET, {}),
 			{
 				hasAuth: true,
 				method: "GET",

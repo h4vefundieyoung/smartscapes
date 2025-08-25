@@ -9,7 +9,7 @@ import {
 	type UserRouteResponseDto,
 } from "../libs/types/types.js";
 import { name as detailsSliceName } from "./user-route-details.slice.js";
-import { name as sliceName } from "./user-route.slice.js";
+import { name as sliceName } from "./user-routes.slice.js";
 
 const create = createAsyncThunk<
 	APIResponse<UserRouteResponseDto>,

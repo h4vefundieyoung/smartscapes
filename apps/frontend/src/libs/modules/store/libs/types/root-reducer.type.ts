@@ -14,7 +14,7 @@ import {
 } from "~/modules/routes/routes.js";
 import {
 	type userRouteDetailsReducer,
-	type userRouteReducer,
+	type userRoutesReducer,
 } from "~/modules/user-routes/user-routes.js";
 import { type reducer as usersReducer } from "~/modules/users/users.js";
 
@@ -29,8 +29,8 @@ type RootReducer = {
 	pointsOfInterest: ReturnType<typeof pointsOfInterestReducer>;
 	routeDetails: ReturnType<typeof routeDetailsReducer>;
 	routes: ReturnType<typeof routesReducer>;
-	userRoute: ReturnType<typeof userRouteReducer>;
 	userRouteDetails: ReturnType<typeof userRouteDetailsReducer>;
+	userRoutes: ReturnType<typeof userRoutesReducer>;
 	users: ReturnType<typeof usersReducer>;
 };
 

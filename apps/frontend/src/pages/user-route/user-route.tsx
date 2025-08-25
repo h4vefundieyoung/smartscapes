@@ -4,6 +4,7 @@ import { type LineStringGeometry } from "~/libs/types/types.js";
 
 import {
 	useRouteMapData,
+	useRouteState,
 	useUserRouteHandler,
 	useUserRouteNavigation,
 	useUserRouteState,
@@ -24,8 +25,9 @@ const mockActualGeometry: LineStringGeometry = {
 const UserRoute = (): React.JSX.Element => {
 	const { routeId } = useParams<{ routeId: string }>();
 
-	const { isRouteLoading, isUserRouteActive, isUserRouteCompleted } =
-		useUserRouteState();
+	const { isRouteLoading } = useRouteState();
+	const { isUserRouteActive, isUserRouteCompleted, isUserRouteLoading } =
+		useUserRouteState(Number(routeId));
 
 	const { handleFinish, handleStart } = useUserRouteHandler(
 		Number(routeId),
@@ -36,9 +38,11 @@ const UserRoute = (): React.JSX.Element => {
 
 	useUserRouteNavigation({ isUserRouteCompleted });
 
+	const isLoading = isRouteLoading || isUserRouteLoading;
+
 	return (
 		<div className={styles["container"]}>
-			{isRouteLoading ? (
+			{isLoading ? (
 				<div className={styles["loader-container"]}>
 					<Loader />
 				</div>

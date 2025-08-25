@@ -20,7 +20,7 @@ describe("UserFollowsService", () => {
 					false,
 				)) as UserFollowsRepository["checkIsUserFollowing"],
 			followUser: (() =>
-				Promise.resolve()) as UserFollowsRepository["followUser"],
+				Promise.resolve(true)) as UserFollowsRepository["followUser"],
 			unfollowUser: (() =>
 				Promise.resolve(
 					Boolean(DELETED_COUNT_ONE),
@@ -47,7 +47,7 @@ describe("UserFollowsService", () => {
 			checkIsUserFollowing: (() =>
 				Promise.resolve(true)) as UserFollowsRepository["checkIsUserFollowing"],
 			followUser: (() =>
-				Promise.resolve()) as UserFollowsRepository["followUser"],
+				Promise.resolve(false)) as UserFollowsRepository["followUser"],
 			unfollowUser: (() =>
 				Promise.resolve(
 					Boolean(DELETED_COUNT_ONE),
@@ -76,7 +76,7 @@ describe("UserFollowsService", () => {
 					false,
 				)) as UserFollowsRepository["checkIsUserFollowing"],
 			followUser: (() =>
-				Promise.resolve()) as UserFollowsRepository["followUser"],
+				Promise.resolve(true)) as UserFollowsRepository["followUser"],
 			unfollowUser: (() =>
 				Promise.resolve(
 					Boolean(DELETED_COUNT_ONE),
@@ -95,7 +95,7 @@ describe("UserFollowsService", () => {
 					false,
 				)) as UserFollowsRepository["checkIsUserFollowing"],
 			followUser: (() =>
-				Promise.resolve()) as UserFollowsRepository["followUser"],
+				Promise.resolve(false)) as UserFollowsRepository["followUser"],
 			unfollowUser: (() =>
 				Promise.resolve(
 					Boolean(DELETED_COUNT_ONE),
@@ -124,7 +124,7 @@ describe("UserFollowsService", () => {
 					false,
 				)) as UserFollowsRepository["checkIsUserFollowing"],
 			followUser: (() =>
-				Promise.resolve()) as UserFollowsRepository["followUser"],
+				Promise.resolve(false)) as UserFollowsRepository["followUser"],
 			unfollowUser: (() =>
 				Promise.resolve(
 					Boolean(DELETED_COUNT_NONE),
@@ -148,7 +148,7 @@ describe("UserFollowsService", () => {
 			checkIsUserFollowing: (() =>
 				Promise.resolve(true)) as UserFollowsRepository["checkIsUserFollowing"],
 			followUser: (() =>
-				Promise.resolve()) as UserFollowsRepository["followUser"],
+				Promise.resolve(true)) as UserFollowsRepository["followUser"],
 			unfollowUser: (() =>
 				Promise.resolve(
 					Boolean(DELETED_COUNT_ONE),

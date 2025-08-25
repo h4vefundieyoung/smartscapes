@@ -1,5 +1,41 @@
 # Changelog
 
+## [1.44.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.43.0...@smartscapes/frontend-v1.44.0) (2025-08-25)
+
+
+### Features
+
+* **frontend/backend/shared:** add user profile page and follow feature ss-402 ([#457](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/457)) ([15f325c](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/15f325cddd64c275054f9865f7775932250b108d))
+* **frontend:** add construct route page ss-340 ([#436](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/436)) ([1a86a4c](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/1a86a4c2c828c968a392be5aa1588b53126b6d6a))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.32.1 to 1.33.0
+
+## [1.43.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.42.1...@smartscapes/frontend-v1.43.0) (2025-08-24)
+
+
+### Features
+
+* **frontend:** add tabs navigation for mobile ss-1 ([#531](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/531)) ([0c46748](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/0c4674832233aae6d8fccdc2cafba4ab510f53b2))
+
+## [1.42.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.42.0...@smartscapes/frontend-v1.42.1) (2025-08-24)
+
+
+### Bug Fixes
+
+* **frontend:** issues with editing title and description on poi page ss-521 ([#528](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/528)) ([2c537eb](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2c537eb4b91a7a53202e68ee7c0934b2dd8dffc0))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.32.0 to 1.32.1
+
 ## [1.42.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.41.0...@smartscapes/frontend-v1.42.0) (2025-08-24)
 
 

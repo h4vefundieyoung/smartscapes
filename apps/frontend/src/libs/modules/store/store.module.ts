@@ -20,11 +20,12 @@ import {
 } from "~/modules/points-of-interest/points-of-interest.js";
 import { reviewApi } from "~/modules/reviews/reviews.js";
 import {
+	constructRouteReducer,
 	routeDetailsReducer,
 	routesApi,
 	routesReducer,
 } from "~/modules/routes/routes.js";
-import { userApi } from "~/modules/users/users.js";
+import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
 
 import { type ExtraArguments, type RootReducer } from "./libs/types/types.js";
 import { handleErrorMiddleware } from "./middlewares/middlewares.js";
@@ -63,12 +64,14 @@ class Store {
 			reducer: {
 				app: appReducer,
 				auth: authReducer,
+				constructRoute: constructRouteReducer,
 				explore: exploreReducer,
 				location: locationReducer,
 				pointOfInterestDetails: pointOfInterestDetailsReducer,
 				pointsOfInterest: pointsOfInterestReducer,
 				routeDetails: routeDetailsReducer,
 				routes: routesReducer,
+				users: usersReducer,
 			},
 		});
 	}

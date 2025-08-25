@@ -1,4 +1,4 @@
-import { type LineStringGeometry } from "~/libs/types/types.js";
+import { type LineStringGeometry } from "../../../libs/types/types.js";
 
 type PlannedPathResponseDto = {
 	distance: number;

@@ -77,9 +77,14 @@ class UserFollowsService {
 			userId: followingId,
 		};
 
+		const isFollowed = await this.userFollowsRepository.followUser(
+			followerId,
+			followingId,
+		);
+
 		await this.notificationService.create(notification);
 
-		return await this.userFollowsRepository.followUser(followerId, followingId);
+		return isFollowed;
 	}
 
 	public async unfollow(

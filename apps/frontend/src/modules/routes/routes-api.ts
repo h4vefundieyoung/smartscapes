@@ -7,6 +7,9 @@ import { type APIResponse } from "~/libs/types/types.js";
 import { RoutesApiPath } from "./libs/enums/enums.js";
 import {
 	type PatchActionPayload,
+	type PlannedPathResponseDto,
+	type RouteConstructRequestDto,
+	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
 	type RouteGetByIdResponseDto,
 } from "./libs/types/types.js";
@@ -20,6 +23,38 @@ type Constructor = {
 class RoutesApi extends BaseHTTPApi {
 	public constructor({ baseUrl, http, storage }: Constructor) {
 		super({ baseUrl, http, path: APIPath.ROUTES, storage });
+	}
+
+	public async construct(
+		payload: RouteConstructRequestDto,
+	): Promise<APIResponse<PlannedPathResponseDto>> {
+		const response = await this.load<APIResponse<PlannedPathResponseDto>>(
+			this.getFullEndpoint(RoutesApiPath.CONSTRUCT, {}),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "POST",
+				payload: JSON.stringify(payload),
+			},
+		);
+
+		return await response.json();
+	}
+
+	public async create(
+		payload: RouteCreateRequestDto,
+	): Promise<APIResponse<RouteGetByIdResponseDto>> {
+		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
+			this.getFullEndpoint("/", {}),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "POST",
+				payload: JSON.stringify(payload),
+			},
+		);
+
+		return await response.json();
 	}
 
 	public async getAll(
@@ -38,7 +73,7 @@ class RoutesApi extends BaseHTTPApi {
 		return await response.json();
 	}
 
-	public async getRouteById(
+	public async getById(
 		id: number,
 	): Promise<APIResponse<RouteGetByIdResponseDto>> {
 		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
@@ -52,7 +87,7 @@ class RoutesApi extends BaseHTTPApi {
 		return await response.json();
 	}
 
-	public async patchRoute({
+	public async patch({
 		id,
 		payload,
 	}: PatchActionPayload): Promise<APIResponse<RouteGetByIdResponseDto>> {

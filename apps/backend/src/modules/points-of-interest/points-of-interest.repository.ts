@@ -1,10 +1,6 @@
 import { SortingOrder } from "~/libs/enums/enums.js";
 import { type EntityPagination, type Repository } from "~/libs/types/types.js";
-import {
-	type PointsOfInterestFindAllOptions,
-	type PointsOfInterestPaginatedOptions,
-	type PointsOfInterestQueryRequest,
-} from "~/modules/points-of-interest/libs/types/type.js";
+import { type PointsOfInterestGetAllOptions } from "~/modules/points-of-interest/libs/types/types.js";
 import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
 import { type PointsOfInterestModel } from "~/modules/points-of-interest/points-of-interest.model.js";
 
@@ -35,7 +31,6 @@ class PointsOfInterestRepository implements Repository {
 				"description",
 				"created_at",
 				"updated_at",
-				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -55,35 +50,75 @@ class PointsOfInterestRepository implements Repository {
 	}
 
 	public async findAll(
-		options: null | PointsOfInterestFindAllOptions,
-	): Promise<PointsOfInterestEntity[]> {
-		const pointsOfInterest = await this.pointsOfInterestModel
+		options: null | PointsOfInterestGetAllOptions,
+	): Promise<EntityPagination<PointsOfInterestEntity>> {
+		const { ids, latitude, longitude, page, perPage, radius, search } =
+			options ?? {};
+
+		const hasLocationFilter = longitude !== undefined && latitude !== undefined;
+		const hasPagination = page !== undefined && perPage !== undefined;
+
+		const baseQuery = this.pointsOfInterestModel
 			.query()
 			.select([
 				"id",
 				"name",
-				"description",
 				"created_at",
 				"updated_at",
-				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
 			])
 			.modify((builder) => {
-				if (options?.ids) {
-					builder.whereIn("id", options.ids);
+				if (search) {
+					builder.whereILike("name", `%${search}%`);
 				}
 
-				if (options?.name) {
-					builder.whereILike("name", `%${options.name.trim()}%`);
+				if (ids) {
+					builder.whereIn("id", ids);
 				}
-			})
-			.execute();
 
-		return pointsOfInterest.map((point) =>
-			PointsOfInterestEntity.initialize(point),
-		);
+				if (hasLocationFilter) {
+					builder.select(
+						this.pointsOfInterestModel.raw(
+							"ST_Distance(location::geography, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography) as distance",
+							[longitude, latitude],
+						),
+					);
+
+					if (radius) {
+						builder.whereRaw(
+							"ST_DWithin(location::geography, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography, ?)",
+							[longitude, latitude, radius],
+						);
+					}
+
+					builder.orderBy("distance", SortingOrder.ASC);
+				}
+
+				builder.orderBy("created_at", SortingOrder.DESC);
+			});
+
+		if (hasPagination) {
+			const offset = (page - PAGE_NUMBER_OFFSET) * perPage;
+
+			const [total, items] = await Promise.all([
+				baseQuery.clone().resultSize(),
+				baseQuery.clone().offset(offset).limit(perPage),
+			]);
+
+			return {
+				items: items.map((item) => PointsOfInterestEntity.initialize(item)),
+				total,
+			};
+		}
+
+		const items = await baseQuery.execute();
+
+		return {
+			items: items.map((item) => PointsOfInterestEntity.initialize(item)),
+			total: items.length,
+		};
 	}
 
 	public async findById(id: number): Promise<null | PointsOfInterestEntity> {
@@ -95,19 +130,22 @@ class PointsOfInterestRepository implements Repository {
 				"description",
 				"created_at",
 				"updated_at",
-				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
 			])
 			.findById(id)
+			.withGraphFetched("routes")
 			.execute();
 
 		if (!pointOfInterest) {
 			return null;
 		}
 
-		return PointsOfInterestEntity.initialize(pointOfInterest);
+		const initializedPointOfInterest =
+			PointsOfInterestEntity.initialize(pointOfInterest);
+
+		return initializedPointOfInterest;
 	}
 
 	public async findByName(
@@ -121,7 +159,6 @@ class PointsOfInterestRepository implements Repository {
 				"description",
 				"created_at",
 				"updated_at",
-				"description",
 				this.pointsOfInterestModel.raw(
 					"ST_AsGeoJSON(location)::json as location",
 				),
@@ -136,91 +173,17 @@ class PointsOfInterestRepository implements Repository {
 		return PointsOfInterestEntity.initialize(pointOfInterest);
 	}
 
-	public async findNearby(
-		normalizedQuery: PointsOfInterestQueryRequest,
-	): Promise<PointsOfInterestEntity[]> {
-		const { latitude, longitude, name, radius } = normalizedQuery;
-
-		const pointsOfInterest = await this.pointsOfInterestModel
-			.query()
-			.select([
-				"id",
-				"name",
-				"description",
-				"created_at",
-				"updated_at",
-				"description",
-				this.pointsOfInterestModel.raw(
-					"ST_AsGeoJSON(location)::json as location",
-				),
-				this.pointsOfInterestModel.raw(
-					"ST_Distance(location::geography, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography) as distance",
-					[longitude, latitude],
-				),
-			])
-			.whereRaw(
-				"ST_DWithin(location::geography, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography, ?)",
-				[longitude, latitude, radius],
-			)
-			.orderBy("distance", SortingOrder.ASC)
-			.modify((builder) => {
-				if (name) {
-					builder.whereILike("name", `%${name.trim()}%`);
-				}
-			})
-			.execute();
-
-		return pointsOfInterest
-			.filter(Boolean)
-			.map((point) => PointsOfInterestEntity.initialize(point));
-	}
-
-	public async findPaginated(
-		options: PointsOfInterestPaginatedOptions,
-	): Promise<EntityPagination<PointsOfInterestEntity>> {
-		const { page, perPage, search } = options;
-
-		const offset = (page - PAGE_NUMBER_OFFSET) * perPage;
-
-		const baseQuery = this.pointsOfInterestModel
-			.query()
-			.select(["id", "name", "created_at"])
-			.modify((builder) => {
-				if (search) {
-					builder.where("name", "ilike", `%${search}%`);
-				}
-			})
-			.orderBy("created_at", "desc");
-
-		const [total, items] = await Promise.all([
-			baseQuery.clone().resultSize(),
-			baseQuery.clone().offset(offset).limit(perPage),
-		]);
-
-		return {
-			items: items.map((item) => PointsOfInterestEntity.initialize(item)),
-			total,
-		};
-	}
-
 	public async patch(
 		id: number,
-		entity: PointsOfInterestEntity,
+		entity: Partial<PointsOfInterestEntity["toObject"]>,
 	): Promise<null | PointsOfInterestEntity> {
-		const { description, location, name } = entity.toNewObject();
-
 		const [updatedPointOfInterest] = await this.pointsOfInterestModel
 			.query()
-			.patch({
-				description,
-				location,
-				name,
-			})
+			.patch(entity)
 			.where("id", "=", id)
 			.returning([
 				"id",
 				"name",
-				"description",
 				"created_at",
 				"updated_at",
 				"description",

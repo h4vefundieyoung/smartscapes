@@ -23,8 +23,6 @@ type Properties<T> = {
 	totalPages: number;
 };
 
-const DEFAULT_ROWS_COUNT = 5;
-
 const Table = <T,>({
 	columns,
 	data,
@@ -39,17 +37,15 @@ const Table = <T,>({
 		getCoreRowModel: getCoreRowModel(),
 	});
 
-	const rowCount =
-		paginationSettings.pageSize > 0
-			? paginationSettings.pageSize
-			: DEFAULT_ROWS_COUNT;
-
 	return (
 		<div className={styles["wrapper"]}>
 			<div className={styles["content"]}>
 				<table className={styles["table"]}>
 					{isLoading ? (
-						<TableSkeleton columns={columns} rowCount={rowCount} />
+						<TableSkeleton
+							columns={columns}
+							rowCount={paginationSettings.pageSize}
+						/>
 					) : (
 						<>
 							<TableHead table={table} />
@@ -59,15 +55,13 @@ const Table = <T,>({
 				</table>
 			</div>
 
-			{!isLoading && (
-				<div className={styles["footer"]}>
-					<Pagination
-						paginationSettings={paginationSettings}
-						totalItems={totalItems}
-						totalPages={totalPages}
-					/>
-				</div>
-			)}
+			<div className={styles["footer"]}>
+				<Pagination
+					paginationSettings={paginationSettings}
+					totalItems={totalItems}
+					totalPages={totalPages}
+				/>
+			</div>
 		</div>
 	);
 };

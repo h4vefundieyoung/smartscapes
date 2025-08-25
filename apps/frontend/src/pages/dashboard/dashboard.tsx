@@ -1,6 +1,6 @@
 import { Carousel, Loader, Select } from "~/libs/components/components.js";
-import { type SelectOption } from "~/libs/components/select/libs/types/types.js";
 import { useAppForm } from "~/libs/hooks/hooks.js";
+import { type SelectOption } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 

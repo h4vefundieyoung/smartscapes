@@ -4,15 +4,23 @@ import { storage } from "~/libs/modules/storage/storage.js";
 
 import { RoutesApi } from "./routes-api.js";
 
-const routeApi = new RoutesApi({
+const routesApi = new RoutesApi({
 	baseUrl: config.ENV.API.ORIGIN_URL,
 	http,
 	storage,
 });
 
-export { routeApi };
+export { routesApi };
 export {
+	type RouteCreateRequestDto,
+	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
 } from "./libs/types/types.js";
-export { actions, reducer } from "./slices/routes.js";
+export { routesCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
+export {
+	actions,
+	constructRouteReducer,
+	routeDetailsReducer,
+	routesReducer,
+} from "./slices/routes.js";

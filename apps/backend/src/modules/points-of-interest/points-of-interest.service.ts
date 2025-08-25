@@ -57,7 +57,7 @@ class PointsOfInterestService implements Service {
 
 		if (details.routes.length > 0) {
 			const [route] = details.routes;
-			const routeName = route?.name ?? "unknown";
+			const routeName = (route as { name: string }).name;
 
 			throw new PointOfInterestError({
 				message: configureString(

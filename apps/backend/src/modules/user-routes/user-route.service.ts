@@ -58,7 +58,7 @@ class UserRouteService implements Service {
 	}): Promise<UserRouteResponseDto> {
 		const { actualGeometry, routeId, userId } = payload;
 
-		const userRoute = await this.getByRouteId(routeId);
+		const userRoute = await this.getByRouteIdAndUserId(routeId, userId);
 
 		this.ensureUserIsOwner(userRoute.userId, userId);
 
@@ -93,17 +93,23 @@ class UserRouteService implements Service {
 		return userRoutes.map((item) => item.toObject());
 	}
 
-	public async getByRouteIdAndUserId(payload: {
-		routeId: number;
-		userId: number;
-	}): Promise<UserRouteResponseDto> {
-		const { routeId, userId } = payload;
+	public async getByRouteIdAndUserId(
+		routeId: number,
+		userId: number,
+	): Promise<UserRouteResponseDto> {
+		const [userRoute] = await this.userRouteRepository.findByFilter({
+			routeId,
+			userId,
+		});
 
-		const userRoute = await this.getByRouteId(routeId);
+		if (!userRoute) {
+			throw new UserRouteError({
+				message: UserRouteExeptionMessage.USER_ROUTE_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
 
-		this.ensureUserIsOwner(userRoute.userId, userId);
-
-		return userRoute;
+		return userRoute.toObject();
 	}
 
 	public async start(payload: {
@@ -112,7 +118,7 @@ class UserRouteService implements Service {
 	}): Promise<UserRouteResponseDto> {
 		const { routeId, userId } = payload;
 
-		const userRoute = await this.getByRouteId(routeId);
+		const userRoute = await this.getByRouteIdAndUserId(routeId, userId);
 
 		this.ensureUserIsOwner(userRoute.userId, userId);
 
@@ -187,21 +193,6 @@ class UserRouteService implements Service {
 				status: HTTPCode.FORBIDDEN,
 			});
 		}
-	}
-
-	private async getByRouteId(routeId: number): Promise<UserRouteResponseDto> {
-		const [userRoute] = await this.userRouteRepository.findByFilter({
-			routeId,
-		});
-
-		if (!userRoute) {
-			throw new UserRouteError({
-				message: UserRouteExeptionMessage.USER_ROUTE_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		return userRoute.toObject();
 	}
 }
 

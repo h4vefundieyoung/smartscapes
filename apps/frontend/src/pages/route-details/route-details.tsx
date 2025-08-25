@@ -42,7 +42,7 @@ const RouteDetails = (): React.JSX.Element => {
 		({ routeDetails }) => routeDetails.dataStatus,
 	);
 
-	const { control, errors, getValues, handleValueSet } =
+	const { control, errors, getValues, handleReset } =
 		useAppForm<RoutePatchRequestDto>({
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
 		});
@@ -71,6 +71,22 @@ const RouteDetails = (): React.JSX.Element => {
 	const handleToggleEditMode = useCallback(() => {
 		setIsEditMode((isEditMode) => !isEditMode);
 	}, []);
+
+	const handleResetFormValues = useCallback(() => {
+		if (!route) {
+			return;
+		}
+
+		handleReset({
+			description: route.description,
+			name: route.name,
+		});
+	}, [handleReset, route]);
+
+	const handleCancel = useCallback(() => {
+		handleResetFormValues();
+		setIsEditMode(false);
+	}, [handleResetFormValues]);
 
 	const handlePatchRequest = useCallback(() => {
 		if (route) {
@@ -114,11 +130,8 @@ const RouteDetails = (): React.JSX.Element => {
 	}, [isUserRouteCreated, navigate, routeId]);
 
 	useEffect(() => {
-		if (route && !isEditMode) {
-			handleValueSet("name", route.name);
-			handleValueSet("description", route.description);
-		}
-	}, [route, handleValueSet, isEditMode]);
+		handleResetFormValues();
+	}, [handleResetFormValues]);
 
 	if (routeDataStatus === DataStatus.REJECTED) {
 		return <NotFound />;
@@ -156,7 +169,7 @@ const RouteDetails = (): React.JSX.Element => {
 							/>
 							<div className={styles["edit-mode-controls"]}>
 								<Button label="Save" onClick={handlePatchRequest} />
-								<Button label="Cancel" onClick={handleToggleEditMode} />
+								<Button label="Cancel" onClick={handleCancel} />
 							</div>
 						</>
 					) : (

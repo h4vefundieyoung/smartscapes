@@ -65,6 +65,7 @@ class RouteService implements Service {
 		}
 
 		const coordinates = items.map(({ location }) => location.coordinates);
+		console.log({ coordinates, items, poiIds });
 
 		const route = await this.mapboxDirectionApi.getRoute(
 			MapboxAPIProfile.WALKING,

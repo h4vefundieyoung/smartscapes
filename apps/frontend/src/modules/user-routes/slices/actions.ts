@@ -5,8 +5,9 @@ import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 
 import {
 	type UserRouteCreateRequestDto,
-	type UserRoutePatchRequestDto,
+	type UserRouteGetItemRequestDto,
 	type UserRouteResponseDto,
+	type UserRouteStartRequestDto,
 } from "../libs/types/types.js";
 import { name as detailsSliceName } from "./user-route-details.slice.js";
 import { name as sliceName } from "./user-route.slice.js";
@@ -30,7 +31,7 @@ const getAllByUserId = createAsyncThunk<
 >(`${sliceName}/get-by-user-id`, async (userId, { extra }) => {
 	const { userRouteApi } = extra;
 
-	return await userRouteApi.getByUserId(userId);
+	return await userRouteApi.getAllByUserId(userId);
 });
 
 const start = createAsyncThunk<

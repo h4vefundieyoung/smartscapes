@@ -112,13 +112,15 @@ export {
 } from "./modules/user-follows/user-follows.js";
 export {
 	UserRouteApiPath,
-	userRouteBodyValidationSchema,
 	type UserRouteCreateRequestDto,
-	type UserRouteParameters,
-	userRouteParametersValidationSchema,
-	type UserRoutePatchRequestDto,
-	userRoutePatchValidationSchema,
+	userRouteCreateValidationSchema,
+	type UserRouteFinishRequestDto,
+	userRouteFinishValidationSchema,
+	type UserRouteGetItemRequestDto,
+	userRouteGetItemValidationSchema,
 	type UserRouteResponseDto,
+	type UserRouteStartRequestDto,
+	userRouteStartValidationSchema,
 	UserRouteStatus,
 	type UserRouteStatusType,
 } from "./modules/user-routes/user-routes.js";

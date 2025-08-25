@@ -6,18 +6,19 @@ import {
 } from "~/libs/modules/controller/libs/types/types.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/libs/types/logger.type.js";
+import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
 import { UserRouteApiPath } from "./libs/enums/enum.js";
 import {
 	type UserRouteCreateRequestDto,
-	type UserRouteParameters,
-	type UserRoutePatchRequestDto,
+	type UserRouteFinishRequestDto,
 	type UserRouteResponseDto,
+	type UserRouteStartRequestDto,
 } from "./libs/types/type.js";
 import {
 	userRouteCreateValidationSchema,
-	userRouteParametersValidationSchema,
-	userRoutePatchValidationSchema,
+	userRouteFinishValidationSchema,
+	userRouteStartValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 import { type UserRouteService } from "./user-route.service.js";
 
@@ -56,7 +57,17 @@ import { type UserRouteService } from "./user-route.service.js";
  *           example: 7
  *           description: ID of the route to track
  *
- *     UserRoutePatchRequestDto:
+ *     UserRouteStartRequestDto:
+ *       type: object
+ *       required:
+ *         - routeId
+ *       properties:
+ *         routeId:
+ *           type: integer
+ *           example: 7
+ *           description: ID of the route to start
+ *
+ *     UserRouteFinishRequestDto:
  *       type: object
  *       required:
  *         - routeId
@@ -120,10 +131,9 @@ class UserRouteController extends BaseController {
 		this.addRoute({
 			handler: this.create.bind(this),
 			method: "POST",
-			path: UserRouteApiPath.$ID,
+			path: UserRouteApiPath.ROOT,
 			validation: {
 				body: userRouteCreateValidationSchema,
-				params: userRouteParametersValidationSchema,
 			},
 		});
 
@@ -132,8 +142,7 @@ class UserRouteController extends BaseController {
 			method: "PATCH",
 			path: UserRouteApiPath.FINISH,
 			validation: {
-				body: userRoutePatchValidationSchema,
-				params: userRouteParametersValidationSchema,
+				body: userRouteFinishValidationSchema,
 			},
 		});
 
@@ -142,39 +151,27 @@ class UserRouteController extends BaseController {
 			method: "PATCH",
 			path: UserRouteApiPath.START,
 			validation: {
-				body: userRouteCreateValidationSchema,
-				params: userRouteParametersValidationSchema,
+				body: userRouteStartValidationSchema,
 			},
 		});
 
 		this.addRoute({
 			handler: this.getAllByUserId.bind(this),
 			method: "GET",
-			path: UserRouteApiPath.$ID,
-			validation: {
-				params: userRouteParametersValidationSchema,
-			},
+			path: UserRouteApiPath.ROOT,
 		});
 	}
 
 	/**
 	 * @swagger
-	 * /user-routes/{userId}:
+	 * /user-routes:
 	 *   post:
 	 *     security:
 	 *       - bearerAuth: []
 	 *     tags:
 	 *       - User Routes
 	 *     summary: Create a new user route
-	 *     description: Create a new user route for tracking user's journey through a specific route
-	 *     parameters:
-	 *       - in: path
-	 *         name: userId
-	 *         required: true
-	 *         schema:
-	 *           type: integer
-	 *           example: 1
-	 *         description: ID of the user creating the route
+	 *     description: Create a new user route for tracking user's journey through a specific route. User ID is derived from JWT token.
 	 *     requestBody:
 	 *       required: true
 	 *       content:
@@ -215,15 +212,7 @@ class UserRouteController extends BaseController {
 	 *     tags:
 	 *       - User Routes
 	 *     summary: Get all user routes
-	 *     description: Get all user routes for a specific user including their status, timestamps, and geometry information
-	 *     parameters:
-	 *       - in: path
-	 *         name: userId
-	 *         required: true
-	 *         schema:
-	 *           type: integer
-	 *           example: 1
-	 *         description: ID of the user whose routes to retrieve
+	 *     description: Get all user routes for the authenticated user including their status, timestamps, and geometry information. User ID is derived from JWT token.
 	 *     responses:
 	 *       200:
 	 *         description: User routes retrieved successfully
@@ -282,12 +271,11 @@ class UserRouteController extends BaseController {
 	public async create(
 		options: APIHandlerOptions<{
 			body: UserRouteCreateRequestDto;
-			params: UserRouteParameters;
 		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
-		const { body, params } = options;
+		const { body, user } = options;
 		const { routeId } = body;
-		const { userId } = params;
+		const { id: userId } = user as UserAuthResponseDto;
 
 		const createdRoute = await this.userRouteService.create({
 			routeId,
@@ -302,28 +290,20 @@ class UserRouteController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /user-routes/{userId}/finish:
+	 * /user-routes/finish:
 	 *   patch:
 	 *     security:
 	 *       - bearerAuth: []
 	 *     tags:
 	 *       - User Routes
 	 *     summary: Finish a user route
-	 *     description: Finish a user route by providing the actual geometry traveled and updating status to completed
-	 *     parameters:
-	 *       - in: path
-	 *         name: userId
-	 *         required: true
-	 *         schema:
-	 *           type: integer
-	 *           example: 1
-	 *         description: ID of the user finishing the route
+	 *     description: Finish a user route by providing the actual geometry traveled and updating status to completed. User ID is derived from JWT token.
 	 *     requestBody:
 	 *       required: true
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             $ref: '#/components/schemas/UserRoutePatchRequestDto'
+	 *             $ref: '#/components/schemas/UserRouteFinishRequestDto'
 	 *     responses:
 	 *       200:
 	 *         description: User route finished successfully
@@ -355,13 +335,12 @@ class UserRouteController extends BaseController {
 	 */
 	public async finish(
 		options: APIHandlerOptions<{
-			body: UserRoutePatchRequestDto;
-			params: UserRouteParameters;
+			body: UserRouteFinishRequestDto;
 		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
-		const { body, params } = options;
+		const { body, user } = options;
 		const { actualGeometry, routeId } = body;
-		const { userId } = params;
+		const { id: userId } = user as UserAuthResponseDto;
 
 		const updatedRoute = await this.userRouteService.finish({
 			actualGeometry,
@@ -376,11 +355,10 @@ class UserRouteController extends BaseController {
 	}
 
 	public async getAllByUserId(
-		options: APIHandlerOptions<{
-			params: UserRouteParameters;
-		}>,
+		options: APIHandlerOptions,
 	): Promise<APIHandlerResponse<UserRouteResponseDto[]>> {
-		const { userId } = options.params;
+		const { user } = options;
+		const { id: userId } = user as UserAuthResponseDto;
 
 		const userRoutes = await this.userRouteService.getAllByUserId(userId);
 
@@ -392,28 +370,20 @@ class UserRouteController extends BaseController {
 
 	/**
 	 * @swagger
-	 * /user-routes/{userId}/start:
+	 * /user-routes/start:
 	 *   patch:
 	 *     security:
 	 *       - bearerAuth: []
 	 *     tags:
 	 *       - User Routes
 	 *     summary: Start a user route
-	 *     description: Start a user route by changing status from not_started to active and setting started_at timestamp
-	 *     parameters:
-	 *       - in: path
-	 *         name: userId
-	 *         required: true
-	 *         schema:
-	 *           type: integer
-	 *           example: 1
-	 *         description: ID of the user starting the route
+	 *     description: Start a user route by changing status from not_started to active and setting started_at timestamp. User ID is derived from JWT token.
 	 *     requestBody:
 	 *       required: true
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             $ref: '#/components/schemas/UserRouteCreateRequestDto'
+	 *             $ref: '#/components/schemas/UserRouteStartRequestDto'
 	 *     responses:
 	 *       200:
 	 *         description: User route started successfully
@@ -445,12 +415,12 @@ class UserRouteController extends BaseController {
 	 */
 	public async start(
 		options: APIHandlerOptions<{
-			body: UserRouteCreateRequestDto;
-			params: UserRouteParameters;
+			body: UserRouteStartRequestDto;
 		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
-		const { routeId } = options.body;
-		const { userId } = options.params;
+		const { body, user } = options;
+		const { id: userId } = user as UserAuthResponseDto;
+		const { routeId } = body;
 
 		const updatedRoute = await this.userRouteService.start({
 			routeId,

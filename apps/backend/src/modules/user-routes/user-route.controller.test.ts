@@ -7,9 +7,9 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import {
 	type UserRouteCreateRequestDto,
-	type UserRouteParameters,
-	type UserRoutePatchRequestDto,
+	type UserRouteFinishRequestDto,
 	type UserRouteResponseDto,
+	type UserRouteStartRequestDto,
 } from "./libs/types/type.js";
 import { UserRouteController } from "./user-route.controller.js";
 import { type UserRouteService } from "./user-route.service.js";
@@ -83,19 +83,13 @@ describe("UserRouteController", () => {
 				routeId: 7,
 			};
 
-			const parameters: UserRouteParameters = {
-				userId: 1,
-			};
-
 			const options: APIHandlerOptions<{
 				body: UserRouteCreateRequestDto;
-				params: UserRouteParameters;
 			}> = {
 				body: createRequest,
-				params: parameters,
+				user: { id: 1 },
 			} as APIHandlerOptions<{
 				body: UserRouteCreateRequestDto;
-				params: UserRouteParameters;
 			}>;
 
 			const result = await userRouteController.create(options);
@@ -110,23 +104,17 @@ describe("UserRouteController", () => {
 
 	describe("start", () => {
 		it("should start a user route and return 200 status with active status", async () => {
-			const startRequest: UserRouteCreateRequestDto = {
+			const startRequest: UserRouteStartRequestDto = {
 				routeId: 7,
 			};
 
-			const parameters: UserRouteParameters = {
-				userId: 1,
-			};
-
 			const options: APIHandlerOptions<{
-				body: UserRouteCreateRequestDto;
-				params: UserRouteParameters;
+				body: UserRouteStartRequestDto;
 			}> = {
 				body: startRequest,
-				params: parameters,
+				user: { id: 1 },
 			} as APIHandlerOptions<{
-				body: UserRouteCreateRequestDto;
-				params: UserRouteParameters;
+				body: UserRouteStartRequestDto;
 			}>;
 
 			const result = await userRouteController.start(options);
@@ -144,7 +132,7 @@ describe("UserRouteController", () => {
 
 	describe("finish", () => {
 		it("should finish a user route and return 200 status with completed status", async () => {
-			const finishRequest: UserRoutePatchRequestDto = {
+			const finishRequest: UserRouteFinishRequestDto = {
 				actualGeometry: {
 					coordinates: [
 						[30.528_909, 50.455_232],
@@ -155,19 +143,13 @@ describe("UserRouteController", () => {
 				routeId: 7,
 			};
 
-			const parameters: UserRouteParameters = {
-				userId: 1,
-			};
-
 			const options: APIHandlerOptions<{
-				body: UserRoutePatchRequestDto;
-				params: UserRouteParameters;
+				body: UserRouteFinishRequestDto;
 			}> = {
 				body: finishRequest,
-				params: parameters,
+				user: { id: 1 },
 			} as APIHandlerOptions<{
-				body: UserRoutePatchRequestDto;
-				params: UserRouteParameters;
+				body: UserRouteFinishRequestDto;
 			}>;
 
 			const result = await userRouteController.finish(options);
@@ -188,17 +170,9 @@ describe("UserRouteController", () => {
 
 	describe("getAllByUserId", () => {
 		it("should get all user routes and return 200 status with array of routes", async () => {
-			const parameters: UserRouteParameters = {
-				userId: 1,
-			};
-
-			const options: APIHandlerOptions<{
-				params: UserRouteParameters;
-			}> = {
-				params: parameters,
-			} as APIHandlerOptions<{
-				params: UserRouteParameters;
-			}>;
+			const options: APIHandlerOptions = {
+				user: { id: 1 },
+			} as APIHandlerOptions;
 
 			const result = await userRouteController.getAllByUserId(options);
 

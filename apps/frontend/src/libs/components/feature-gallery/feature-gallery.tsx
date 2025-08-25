@@ -21,7 +21,10 @@ const FeatureGallery = ({ slides }: Properties): React.JSX.Element => {
 			<div className={styles["slide-wrapper"]}>
 				{slide.content}
 				{slide.onDelete && (
-					<button className={styles["delete-icon"]} onClick={slide.onDelete}>
+					<button
+						className={styles["delete-icon-wrapper"]}
+						onClick={slide.onDelete}
+					>
 						<Icon height={18} name="trash" width={16} />
 					</button>
 				)}

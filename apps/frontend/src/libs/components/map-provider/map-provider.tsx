@@ -6,7 +6,7 @@ import {
 	useState,
 } from "~/libs/hooks/hooks.js";
 import { MapClient } from "~/libs/modules/map-client/map-client.js";
-import { type Coordinates } from "~/libs/types/types.js";
+import { type Coordinates, type RouteLine } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
@@ -16,12 +16,14 @@ type Properties = {
 	center?: Coordinates;
 	children?: React.ReactNode;
 	markers?: { coordinates: Coordinates }[];
+	routeLine?: null | RouteLine;
 };
 
 const MapProvider = ({
 	center,
 	children,
 	markers = [],
+	routeLine,
 }: Properties): React.JSX.Element => {
 	const mapClientReference = useRef(new MapClient());
 	const containerReference = useRef<HTMLDivElement>(null);
@@ -67,6 +69,16 @@ const MapProvider = ({
 
 		mapClientReference.current.setCenter(center);
 	}, [center]);
+
+	useEffect(() => {
+		if (!isLoaded || !routeLine) {
+			return;
+		}
+
+		const client = mapClientReference.current;
+
+		client.renderRoute(routeLine);
+	}, [isLoaded, routeLine]);
 
 	return (
 		<MapContext.Provider value={mapClientReference.current}>

@@ -2,6 +2,7 @@ export { type AuthenticatedUserPatchRequestDto } from "./authenticated-user-patc
 export { type AuthenticatedUserPatchResponseDto } from "./authenticated-user-patch-response-dto.type.js";
 export { type UserAuthResponseDto } from "./user-auth-response-dto.type.js";
 export { type UserGetByIdItemResponseDto } from "./user-get-by-id-item-response-dto.type.js";
+export { type UserPublicProfileResponseDto } from "./user-public-profile-response-dto.type.js";
 export { type UserSignInRequestDto } from "./user-sign-in-request-dto.type.js";
 export { type UserSignInResponseDto } from "./user-sign-in-response-dto.type.js";
 export { type UserSignUpRequestDto } from "./user-sign-up-request-dto.type.js";

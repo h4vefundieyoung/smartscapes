@@ -5,6 +5,7 @@ import { type APIHandlerOptions } from "~/libs/modules/controller/controller.js"
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
+import { UserRouteError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserRouteCreateRequestDto,
 	type UserRouteParameters,
@@ -62,6 +63,7 @@ describe("UserRouteController", () => {
 
 	const mockUserRouteService = {
 		create: () => Promise.resolve(mockUserRouteResponse),
+		deleteSavedRoute: () => Promise.resolve(true),
 		finish: () => Promise.resolve(mockCompletedUserRoute),
 		getAllByUserId: () =>
 			Promise.resolve([
@@ -227,6 +229,52 @@ describe("UserRouteController", () => {
 				completedRoute.completedAt,
 				"2025-08-21T16:38:11.183Z",
 			);
+		});
+	});
+
+	describe("delete", () => {
+		it("should throw for wrong id param", async () => {
+			const parameters: UserRouteParameters = {
+				userId: Number.NaN,
+			};
+
+			const options: APIHandlerOptions<{
+				params: UserRouteParameters;
+			}> = {
+				params: parameters,
+			} as APIHandlerOptions<{
+				params: UserRouteParameters;
+			}>;
+
+			try {
+				await userRouteController.delete(options);
+				assert.fail();
+			} catch (error) {
+				assert.equal(error instanceof UserRouteError, true);
+				assert.equal(
+					(error as UserRouteError).status,
+					HTTPCode.UNPROCESSED_ENTITY,
+				);
+			}
+		});
+
+		it("should delete user route", async () => {
+			const parameters: UserRouteParameters = {
+				userId: 1,
+			};
+
+			const options: APIHandlerOptions<{
+				params: UserRouteParameters;
+			}> = {
+				params: parameters,
+			} as APIHandlerOptions<{
+				params: UserRouteParameters;
+			}>;
+
+			const response = await userRouteController.delete(options);
+
+			assert.equal(response.status, HTTPCode.OK);
+			assert.equal(response.payload.data, true);
 		});
 	});
 });

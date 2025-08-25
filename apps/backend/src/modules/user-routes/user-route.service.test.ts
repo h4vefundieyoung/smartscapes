@@ -1,9 +1,10 @@
+import { HTTPCode } from "@smartscapes/shared";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
 import { type RouteService } from "../routes/route.service.js";
 import { UserRouteStatus } from "./libs/enums/enum.js";
-import { UserRouteError } from "./libs/exeptions/exeptions.js";
+import { UserRouteError } from "./libs/exceptions/exceptions.js";
 import { UserRouteEntity } from "./user-route.entity.js";
 import { type UserRouteRepository } from "./user-route.repository.js";
 import { UserRouteService } from "./user-route.service.js";
@@ -152,6 +153,46 @@ describe("UserRouteService", () => {
 			assert.strictEqual(Array.isArray(result), true);
 			assert.strictEqual(result.length, 1);
 			assert.strictEqual(result[0]?.userId, 1);
+		});
+	});
+
+	describe("deleteSavedRoute", () => {
+		const USER_ROUTE_ID = 1;
+		const USER_ID = 1;
+
+		it("delete should delete existing route successfully", async () => {
+			const mockUserRoutesRepository = Object.assign({}, mockRepository, {
+				deleteSavedRoute: () => Promise.resolve(true),
+			}) as unknown as UserRouteRepository;
+			const mockUserRoutesService = new UserRouteService(
+				mockUserRoutesRepository,
+				mockRouteService,
+			);
+
+			const result = await mockUserRoutesService.deleteSavedRoute(
+				USER_ROUTE_ID,
+				USER_ROUTE_ID,
+			);
+
+			assert.strictEqual(result, true);
+		});
+
+		it("delete should throw an error when trying to delete non-existent route", async () => {
+			const mockUserRoutesRepository = Object.assign({}, mockRepository, {
+				deleteSavedRoute: () => Promise.resolve(false),
+			}) as unknown as UserRouteRepository;
+			const mockUserRoutesService = new UserRouteService(
+				mockUserRoutesRepository,
+				mockRouteService,
+			);
+
+			try {
+				await mockUserRoutesService.deleteSavedRoute(USER_ROUTE_ID, USER_ID);
+				assert.fail();
+			} catch (error) {
+				assert.equal(error instanceof UserRouteError, true);
+				assert.equal((error as UserRouteError).status, HTTPCode.NOT_FOUND);
+			}
 		});
 	});
 

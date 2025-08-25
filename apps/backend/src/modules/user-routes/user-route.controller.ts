@@ -11,7 +11,7 @@ import {
 	UserRouteApiPath,
 	UserRouteExeptionMessage,
 } from "./libs/enums/enum.js";
-import { UserRouteError } from "./libs/exeptions/user-route.exeption.js";
+import { UserRouteError } from "./libs/exceptions/user-route.exception.js";
 import {
 	type UserRouteCreateRequestDto,
 	type UserRouteParameters,

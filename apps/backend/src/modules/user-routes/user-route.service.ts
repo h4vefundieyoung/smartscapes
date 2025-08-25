@@ -7,7 +7,7 @@ import {
 	UserRouteExeptionMessage,
 	UserRouteStatus,
 } from "./libs/enums/enum.js";
-import { UserRouteError } from "./libs/exeptions/exeptions.js";
+import { UserRouteError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserRouteResponseDto,
 	type UserRouteStatusType,

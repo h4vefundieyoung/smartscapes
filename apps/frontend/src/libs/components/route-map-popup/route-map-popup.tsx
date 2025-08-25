@@ -1,7 +1,8 @@
-import React, { useCallback } from "react";
+import React from "react";
 
 import { IconButton } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
+import { useCallback } from "~/libs/hooks/hooks.js";
 import { type RouteGetAllItemResponseDto } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";

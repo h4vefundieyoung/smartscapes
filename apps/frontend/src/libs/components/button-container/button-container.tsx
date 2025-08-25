@@ -1,4 +1,6 @@
-import { type ReactNode, useCallback } from "react";
+import { type ReactNode } from "react";
+
+import { useCallback } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 

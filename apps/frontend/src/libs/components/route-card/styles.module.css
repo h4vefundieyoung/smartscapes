@@ -11,22 +11,6 @@
 	transform: translateY(-2px);
 }
 
-.route-content {
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
-	width: 100%;
-	transition:
-		transform 0.2s ease,
-		box-shadow 0.2s ease;
-}
-
-.route-content:hover {
-	background-color: var(--color-fill-hover);
-	box-shadow: 0 4px 12px var(--color-fill-hover);
-	transform: translateY(-2px);
-}
-
 .image {
 	align-items: center;
 	object-fit: cover;

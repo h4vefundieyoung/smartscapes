@@ -18,7 +18,7 @@ const FeatureGallery = ({ slides }: Properties): React.JSX.Element => {
 
 	const renderSlide = (slide: Slide): React.ReactElement => {
 		return (
-			<div className={styles["image-wrapper"]}>
+			<div className={styles["slide-wrapper"]}>
 				{slide.content}
 				{slide.onDelete && (
 					/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */

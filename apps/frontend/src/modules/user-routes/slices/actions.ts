@@ -4,21 +4,20 @@ import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 
 import {
-	type UserRouteCreateRequestDto,
-	type UserRouteGetItemRequestDto,
+	type UserRouteFinishRequestDto,
+	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
-	type UserRouteStartRequestDto,
 } from "../libs/types/types.js";
 import { name as detailsSliceName } from "./user-route-details.slice.js";
 import { name as sliceName } from "./user-route.slice.js";
 
 const create = createAsyncThunk<
 	APIResponse<UserRouteResponseDto>,
-	{ payload: UserRouteCreateRequestDto; userId: number },
+	UserRouteQueryRequestDto,
 	AsyncThunkConfig
->(`${detailsSliceName}/create`, async ({ payload, userId }, { extra }) => {
+>(`${detailsSliceName}/create`, async ({ routeId }, { extra }) => {
 	const { userRouteApi } = extra;
-	const result = await userRouteApi.create(userId, payload);
+	const result = await userRouteApi.create({ routeId });
 	toastNotifier.showSuccess("User route created successfully");
 
 	return result;
@@ -26,21 +25,21 @@ const create = createAsyncThunk<
 
 const getAllByUserId = createAsyncThunk<
 	APIResponse<UserRouteResponseDto[]>,
-	number,
+	UserRouteQueryRequestDto,
 	AsyncThunkConfig
->(`${sliceName}/get-by-user-id`, async (userId, { extra }) => {
+>(`${sliceName}/get-by-user-id`, async ({ routeId }, { extra }) => {
 	const { userRouteApi } = extra;
 
-	return await userRouteApi.getAllByUserId(userId);
+	return await userRouteApi.getAllByUserId({ routeId });
 });
 
 const start = createAsyncThunk<
 	APIResponse<UserRouteResponseDto>,
-	{ payload: UserRouteCreateRequestDto; userId: number },
+	UserRouteQueryRequestDto,
 	AsyncThunkConfig
->(`${detailsSliceName}/start`, async ({ payload, userId }, { extra }) => {
+>(`${detailsSliceName}/start`, async ({ routeId }, { extra }) => {
 	const { userRouteApi } = extra;
-	const result = await userRouteApi.start(userId, payload);
+	const result = await userRouteApi.start({ routeId });
 	toastNotifier.showSuccess("User route started successfully");
 
 	return result;
@@ -48,11 +47,11 @@ const start = createAsyncThunk<
 
 const finish = createAsyncThunk<
 	APIResponse<UserRouteResponseDto>,
-	{ payload: UserRoutePatchRequestDto; userId: number },
+	{ payload: UserRouteFinishRequestDto; query: UserRouteQueryRequestDto },
 	AsyncThunkConfig
->(`${detailsSliceName}/finish`, async ({ payload, userId }, { extra }) => {
+>(`${detailsSliceName}/finish`, async ({ payload, query }, { extra }) => {
 	const { userRouteApi } = extra;
-	const result = await userRouteApi.finish(userId, payload);
+	const result = await userRouteApi.finish(payload, query);
 	toastNotifier.showSuccess("User route finished successfully");
 
 	return result;
@@ -60,14 +59,14 @@ const finish = createAsyncThunk<
 
 const getByRouteIdAndUserId = createAsyncThunk<
 	APIResponse<UserRouteResponseDto>,
-	{ payload: UserRouteCreateRequestDto; userId: number },
+	UserRouteQueryRequestDto,
 	AsyncThunkConfig
 >(
 	`${detailsSliceName}/get-by-route-id-and-user-id`,
-	async ({ payload, userId }, { extra }) => {
+	async ({ routeId }, { extra }) => {
 		const { userRouteApi } = extra;
 
-		return await userRouteApi.getByRouteIdAndUserId(userId, payload);
+		return await userRouteApi.getByRouteId({ routeId });
 	},
 );
 

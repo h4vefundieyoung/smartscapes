@@ -1,4 +1,4 @@
-import { Button } from "~/libs/components/components.js";
+import { Button, PageHeading } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
@@ -17,7 +17,6 @@ import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
 import {
 	CreateRouteModal,
-	DashboardHeading,
 	PointsOfInterestTable,
 } from "./libs/components/components.js";
 import { DEFAULT_CREATE_ROUTE_PAYLOAD } from "./libs/constants/constants.js";
@@ -139,7 +138,7 @@ const ManageRoutes = (): React.JSX.Element => {
 
 	return (
 		<main className={styles["container"]}>
-			<DashboardHeading
+			<PageHeading
 				subtitle="Manage points of interest and routes."
 				title="Manage routes"
 			/>

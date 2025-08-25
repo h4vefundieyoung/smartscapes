@@ -12,11 +12,9 @@ import {
 	actions as userRouteActions,
 	UserRouteStatus,
 } from "~/modules/user-routes/user-routes.js";
-import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
 type UseUserRouteStateProperties = {
 	routeId: number;
-	user: UserAuthResponseDto;
 };
 
 type UseUserRouteStateReturn = {
@@ -28,7 +26,6 @@ type UseUserRouteStateReturn = {
 
 const useUserRouteState = ({
 	routeId,
-	user,
 }: UseUserRouteStateProperties): UseUserRouteStateReturn => {
 	const dispatch = useAppDispatch();
 
@@ -51,13 +48,10 @@ const useUserRouteState = ({
 
 		void dispatch(
 			userRouteActions.getByRouteIdAndUserId({
-				payload: {
-					routeId,
-				},
-				userId: user.id,
+				routeId,
 			}),
 		);
-	}, [dispatch, isRouteNotLoaded, routeId, user.id]);
+	}, [dispatch, isRouteNotLoaded, routeId]);
 
 	return {
 		isRouteLoading,

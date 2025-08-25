@@ -1,5 +1,5 @@
 const UserRouteApiPath = {
-	$ID: "/:routeId",
+	CREATE: "/create",
 	FINISH: "/finish",
 	ROOT: "/",
 	START: "/start",

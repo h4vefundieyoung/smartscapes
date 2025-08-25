@@ -86,8 +86,11 @@ export {
 export {
 	type ReviewCreatePayload,
 	reviewCreateValidationSchema,
+	type ReviewGetAllSearchQuery,
+	reviewGetAllSearchQueryValidationSchema,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
+	ReviewsApiPath,
 } from "./modules/reviews/reviews.js";
 export {
 	type RouteConstructRequestDto,
@@ -102,6 +105,7 @@ export {
 	routesCreateValidationSchema,
 	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
+	type RouteUploadImageResponseDto,
 } from "./modules/routes/routes.js";
 export {
 	UserFollowsApiPath,
@@ -112,15 +116,11 @@ export {
 } from "./modules/user-follows/user-follows.js";
 export {
 	UserRouteApiPath,
-	type UserRouteCreateRequestDto,
-	userRouteCreateValidationSchema,
 	type UserRouteFinishRequestDto,
 	userRouteFinishValidationSchema,
-	type UserRouteGetItemRequestDto,
-	userRouteGetItemValidationSchema,
+	type UserRouteQueryRequestDto,
+	userRouteQueryValidationSchema,
 	type UserRouteResponseDto,
-	type UserRouteStartRequestDto,
-	userRouteStartValidationSchema,
 	UserRouteStatus,
 	type UserRouteStatusType,
 } from "./modules/user-routes/user-routes.js";
@@ -131,6 +131,8 @@ export {
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetByIdItemResponseDto,
+	userGetProfileParametersValidationSchema,
+	type UserPublicProfileResponseDto,
 	UsersApiPath,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,

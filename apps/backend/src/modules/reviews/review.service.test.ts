@@ -3,6 +3,8 @@ import { describe, it } from "node:test";
 
 import { type PointsOfInterestService } from "../points-of-interest/points-of-interest.service.js";
 import { type RouteService } from "../routes/route.service.js";
+import { type UserAuthResponseDto } from "../users/users.js";
+import { type ReviewGetByIdResponseDto } from "./libs/types/types.js";
 import { ReviewEntity } from "./review.entity.js";
 import { type ReviewRepository } from "./review.repository.js";
 import { ReviewService } from "./review.service.js";
@@ -45,6 +47,16 @@ const createMockRouteService = (): Partial<RouteService> => ({
 				type: "LineString" as const,
 			},
 			id,
+			images: [
+				{
+					id: 1,
+					url: "https://s3.amazonaws.com/test/1.png",
+				},
+				{
+					id: 2,
+					url: "https://s3.amazonaws.com/test/2.png",
+				},
+			],
 			name: "Test Route",
 			pois: [
 				{
@@ -62,7 +74,7 @@ const createMockRouteService = (): Partial<RouteService> => ({
 });
 
 describe("ReviewService", () => {
-	const mockReview: Parameters<typeof ReviewEntity.initialize>[0] = {
+	const mockReviewDB: Parameters<typeof ReviewEntity.initialize>[0] = {
 		content: "Great route!",
 		createdAt: "2025-07-26T12:00:00Z",
 		id: 1,
@@ -73,8 +85,19 @@ describe("ReviewService", () => {
 		userId: 10,
 	};
 
+	const currentUser: Pick<
+		UserAuthResponseDto,
+		"avatarUrl" | "firstName" | "id" | "lastName"
+	> = {
+		avatarUrl: null,
+		firstName: "John",
+		id: 10,
+		lastName: "Doe",
+	};
+
 	it("create should return new review", async () => {
-		const reviewEntity = ReviewEntity.initialize(mockReview);
+		const reviewEntity = ReviewEntity.initialize(mockReviewDB);
+
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const routeService = createMockRouteService();
 
@@ -91,27 +114,82 @@ describe("ReviewService", () => {
 		);
 
 		const result = await reviewService.create({
-			content: mockReview.content,
-			poiId: mockReview.poiId ?? null,
-			routeId: mockReview.routeId ?? null,
-			userId: mockReview.userId,
+			content: mockReviewDB.content,
+			poiId: mockReviewDB.poiId,
+			routeId: mockReviewDB.routeId,
+			user: {
+				avatarUrl: currentUser.avatarUrl,
+				firstName: currentUser.firstName,
+				id: currentUser.id,
+				lastName: currentUser.lastName,
+			},
+			userId: currentUser.id,
 		});
 
-		assert.deepStrictEqual(result, {
-			content: mockReview.content,
-			id: mockReview.id,
-			likesCount: mockReview.likesCount,
-			poiId: mockReview.poiId,
-			routeId: mockReview.routeId,
-			userId: mockReview.userId,
-		});
+		const expected: ReviewGetByIdResponseDto = {
+			content: mockReviewDB.content,
+			id: mockReviewDB.id,
+			likesCount: mockReviewDB.likesCount,
+			poiId: mockReviewDB.poiId,
+			routeId: mockReviewDB.routeId,
+			user: {
+				avatarUrl: currentUser.avatarUrl,
+				firstName: currentUser.firstName,
+				id: currentUser.id,
+				lastName: currentUser.lastName,
+			},
+		};
+
+		assert.deepStrictEqual(result, expected);
 	});
 
 	it("findAll should return all reviews", async () => {
-		const reviewEntity = ReviewEntity.initialize(mockReview);
+		const row = {
+			content: mockReviewDB.content,
+			id: mockReviewDB.id,
+			likesCount: mockReviewDB.likesCount,
+			poiId: mockReviewDB.poiId,
+			routeId: mockReviewDB.routeId,
+			user: {
+				avatar: null,
+				firstName: currentUser.firstName,
+				id: currentUser.id,
+				lastName: currentUser.lastName,
+			},
+		};
+
+		const expected: ReviewGetByIdResponseDto = {
+			content: mockReviewDB.content,
+			id: mockReviewDB.id,
+			likesCount: mockReviewDB.likesCount,
+			poiId: mockReviewDB.poiId,
+			routeId: mockReviewDB.routeId,
+			user: {
+				avatarUrl: currentUser.avatarUrl,
+				firstName: currentUser.firstName,
+				id: currentUser.id,
+				lastName: currentUser.lastName,
+			},
+		};
+
+		const rowEntity = ReviewEntity.initializeList({
+			content: row.content,
+			id: row.id,
+			likesCount: row.likesCount,
+			poiId: row.poiId,
+			routeId: row.routeId,
+			user: {
+				avatarUrl: expected.user.avatarUrl,
+				firstName: row.user.firstName,
+				id: row.user.id,
+				lastName: row.user.lastName,
+			},
+			userId: currentUser.id,
+		});
 
 		const reviewRepository = {
-			findAll: () => Promise.resolve([reviewEntity]),
+			findAll: (() =>
+				Promise.resolve([rowEntity])) as ReviewRepository["findAll"],
 		} as ReviewRepository;
 
 		const reviewService = new ReviewService(
@@ -120,10 +198,8 @@ describe("ReviewService", () => {
 			createMockRouteService() as RouteService,
 		);
 
-		const result = await reviewService.findAll();
+		const result = await reviewService.findAll(null);
 
-		assert.deepStrictEqual(result, {
-			items: [reviewEntity.toObject()],
-		});
+		assert.deepStrictEqual(result, { items: [expected] });
 	});
 });

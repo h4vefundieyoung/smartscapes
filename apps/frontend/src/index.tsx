@@ -21,6 +21,7 @@ import { Landing } from "./pages/landing/landing.jsx";
 import { ManageRoutes } from "./pages/manage-routes/manage-routes.js";
 import { PointsOfInterestDetails } from "./pages/points-of-interest-details/points-of-interest-details.js";
 import { Profile } from "./pages/profile/profile.js";
+import { PublicProfile } from "./pages/public-profile/public-profile.js";
 import { RouteDetails } from "./pages/route-details/route-details.js";
 import { UserRoute } from "./pages/user-route/user-route.js";
 
@@ -70,8 +71,20 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 								path: AppRoute.PROFILE,
 							},
 							{
-								element: <UserRoute />,
+								element: (
+									<ProtectedRoute>
+										<UserRoute />
+									</ProtectedRoute>
+								),
 								path: AppRoute.USER_ROUTES_$ID_MAP,
+							},
+							{
+								element: (
+									<ProtectedRoute>
+										<PublicProfile />
+									</ProtectedRoute>
+								),
+								path: AppRoute.USERS_$ID,
 							},
 							{
 								element: (
@@ -84,7 +97,13 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 								path: AppRoute.MANAGE_ROUTES,
 							},
 							{
-								element: <ConstructRoute />,
+								element: (
+									<ProtectedRoute
+										routePermissions={[PermissionKey.MANAGE_ROUTES]}
+									>
+										<ConstructRoute />
+									</ProtectedRoute>
+								),
 								path: AppRoute.ROUTES_CONSTRUCT,
 							},
 						],

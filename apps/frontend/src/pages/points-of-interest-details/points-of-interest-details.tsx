@@ -102,7 +102,11 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 	}
 
 	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
-		return <Loader />;
+		return (
+			<div className={styles["loader-container"]}>
+				<Loader />
+			</div>
+		);
 	}
 
 	if (!pointOfInterest) {
@@ -155,10 +159,25 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 								]}
 							/>
 						),
-						type: "component",
 					},
-					{ content: image2, type: "image" },
-					{ content: image3, type: "image" },
+					{
+						content: (
+							<img
+								alt="point of interest"
+								className={styles["image"]}
+								src={image2}
+							/>
+						),
+					},
+					{
+						content: (
+							<img
+								alt="point of interest"
+								className={styles["image"]}
+								src={image3}
+							/>
+						),
+					},
 				]}
 			/>
 

@@ -1,40 +1,38 @@
-import image1 from "~/assets/images/route-details/placeholder-image-1.png";
-import image2 from "~/assets/images/route-details/placeholder-image-2.png";
-import image3 from "~/assets/images/route-details/placeholder-image-3.png";
 import {
 	Button,
 	FeatureGallery,
 	Input,
 	Loader,
+	MapProvider,
 	TextArea,
 } from "~/libs/components/components.js";
-import { AppRoute, DataStatus, PermissionKey } from "~/libs/enums/enums.js";
+import { DataStatus, PermissionKey } from "~/libs/enums/enums.js";
 import { checkHasPermission } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppForm,
-	useAppNavigate,
 	useAppSelector,
 	useCallback,
 	useEffect,
 	useParams,
+	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
+import { type ReviewRequestDto } from "~/modules/reviews/reviews.js";
 import {
 	actions as routeActions,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
-import { actions as userRouteActions } from "~/modules/user-routes/user-routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
-import { PointOfInterestSection } from "./libs/components/components.js";
+import {
+	PointOfInterestSection,
+	RouteReviewsSection,
+} from "./libs/components/components.js";
 import { ROUTE_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
-	const dispatch = useAppDispatch();
-	const navigate = useAppNavigate();
-	const { id: routeId } = useParams<{ id: string }>();
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
 	const route = useAppSelector(({ routeDetails }) => routeDetails.route);
 	const user = useAppSelector(({ auth }) => auth.authenticatedUser);
@@ -42,31 +40,40 @@ const RouteDetails = (): React.JSX.Element => {
 		({ routeDetails }) => routeDetails.dataStatus,
 	);
 
+	const reviews = useAppSelector(({ routeDetails }) => routeDetails.reviews);
+	const isAuthenticatedUser = Boolean(user);
 	const { control, errors, getValues, handleReset } =
 		useAppForm<RoutePatchRequestDto>({
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
 		});
-
-	const routeDataStatus = useAppSelector(
-		({ routeDetails }) => routeDetails.dataStatus,
-	);
-
-	const isUserRouteCreated = useAppSelector(
-		({ userRouteDetails }) =>
-			userRouteDetails.createStatus === DataStatus.FULFILLED,
-	);
+	const dispatch = useAppDispatch();
+	const { id: routeId } = useParams<{ id: string }>();
 
 	const hasEditPermissions = Boolean(
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
 	);
-	const hasAuthUserPermissions = Boolean(
-		user &&
-			!checkHasPermission(
-				[PermissionKey.MANAGE_ROUTES],
-				user.group.permissions,
-			),
+	const fileInputReference = useRef<HTMLInputElement | null>(null);
+
+	const handleFileUpload = useCallback(
+		(event: React.ChangeEvent<HTMLInputElement>) => {
+			const file = event.target.files?.[0];
+
+			if (!file) {
+				return;
+			}
+
+			void dispatch(
+				routeActions.uploadImage({ file, id: route?.id as number }),
+			);
+			event.target.value = "";
+		},
+		[dispatch, route],
 	);
+
+	const handleTriggerFileUpload = useCallback(() => {
+		fileInputReference.current?.click();
+	}, []);
 
 	const handleToggleEditMode = useCallback(() => {
 		setIsEditMode((isEditMode) => !isEditMode);
@@ -101,47 +108,38 @@ const RouteDetails = (): React.JSX.Element => {
 		}
 	}, [dispatch, setIsEditMode, route, getValues]);
 
-	const handleCreateUserRoute = useCallback(() => {
-		if (!route || !user) {
-			return;
-		}
-
-		void dispatch(
-			userRouteActions.create({
-				payload: {
-					routeId: Number(routeId),
-				},
-				userId: user.id,
-			}),
-		);
-	}, [dispatch, routeId, user, route]);
+	const handleDeleteImage = useCallback(
+		(id: number) => {
+			void dispatch(routeActions.deleteImage(id));
+		},
+		[dispatch],
+	);
 
 	useEffect(() => {
-		if (routeDataStatus === DataStatus.IDLE) {
-			void dispatch(routeActions.getById(Number(routeId)));
-		}
-	}, [dispatch, routeId, routeDataStatus]);
-
-	useEffect(() => {
-		if (isUserRouteCreated) {
-			const path = AppRoute.USER_ROUTES_$ID_MAP.replace(":id", String(routeId));
-			navigate(path);
-		}
-	}, [isUserRouteCreated, navigate, routeId]);
+		void dispatch(routeActions.getById(Number(routeId)));
+	}, [dispatch, routeId]);
 
 	useEffect(() => {
 		handleResetFormValues();
 	}, [handleResetFormValues]);
 
-	if (routeDataStatus === DataStatus.REJECTED) {
-		return <NotFound />;
-	}
+	useEffect(() => {
+		void dispatch(routeActions.getReviews({ routeId: Number(routeId) }));
+	}, [dispatch, routeId]);
 
-	if (
-		routeDataStatus === DataStatus.PENDING ||
-		routeDataStatus === DataStatus.IDLE
-	) {
-		return <Loader />;
+	const handleCreateReview = useCallback(
+		(payload: ReviewRequestDto): void => {
+			void dispatch(routeActions.createReview(payload));
+		},
+		[dispatch],
+	);
+
+	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
+		return (
+			<div className={styles["loader-container"]}>
+				<Loader />
+			</div>
+		);
 	}
 
 	if (dataStatus === DataStatus.REJECTED) {
@@ -152,7 +150,8 @@ const RouteDetails = (): React.JSX.Element => {
 		return <></>;
 	}
 
-	const { description, name, pois } = route;
+	const { description, id, images, name, pois } = route;
+
 	const hasDescription = Boolean(description);
 
 	return (
@@ -180,21 +179,49 @@ const RouteDetails = (): React.JSX.Element => {
 									<Button label="Edit" onClick={handleToggleEditMode} />
 								</div>
 							)}
-							{hasAuthUserPermissions && (
-								<div className={styles["edit-button-container"]}>
-									<Button label="Start" onClick={handleCreateUserRoute} />
-								</div>
-							)}
 						</>
 					)}
 				</div>
 				<FeatureGallery
 					slides={[
-						{ content: image1, type: "image" },
-						{ content: image2, type: "image" },
-						{ content: image3, type: "image" },
+						{
+							content: <MapProvider />,
+						},
+						...images.map((image) => ({
+							content: (
+								<img
+									alt="point of interest"
+									className={styles["image"]}
+									src={image.url}
+								/>
+							),
+							...(isEditMode && {
+								onDelete: (): void => {
+									handleDeleteImage(image.id);
+								},
+							}),
+						})),
 					]}
 				/>
+
+				{isEditMode && (
+					<>
+						<input
+							accept="image/*"
+							onChange={handleFileUpload}
+							ref={fileInputReference}
+							style={{ display: "none" }}
+							type="file"
+						/>
+						<div className={styles["upload-button"]}>
+							<Button
+								label="Upload image"
+								onClick={handleTriggerFileUpload}
+								variant="outlined"
+							/>
+						</div>
+					</>
+				)}
 				{isEditMode ? (
 					<TextArea
 						control={control}
@@ -208,6 +235,12 @@ const RouteDetails = (): React.JSX.Element => {
 					)
 				)}
 				<PointOfInterestSection pointOfInterests={pois} />
+				<RouteReviewsSection
+					isAuthenticatedUser={isAuthenticatedUser}
+					items={reviews}
+					onCreate={handleCreateReview}
+					routeId={Number(id)}
+				/>
 			</main>
 		</>
 	);

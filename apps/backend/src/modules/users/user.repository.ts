@@ -4,6 +4,7 @@ import { type Repository } from "~/libs/types/types.js";
 import {
 	type AuthenticatedUserPatchRequestDto,
 	type UserDetailsWithPassword,
+	type UserPublicProfileResponseDto,
 } from "~/modules/users/libs/types/types.js";
 import { UserEntity } from "~/modules/users/user.entity.js";
 import { type UserModel } from "~/modules/users/user.model.js";
@@ -234,6 +235,60 @@ class UserRepository implements Repository {
 			lastName: user.lastName,
 			passwordHash: user.passwordHash,
 			passwordSalt: user.passwordSalt,
+		};
+	}
+
+	public async getUserProfile(
+		id: number,
+		currentUserId: number,
+	): Promise<null | UserPublicProfileResponseDto> {
+		const profileData = await this.userModel
+			.query()
+			.findById(id)
+			.select(
+				"users.id",
+				"users.firstName",
+				"users.lastName",
+				"users.isVisibleProfile",
+				this.userModel
+					.raw(
+						"(SELECT COUNT(*) FROM user_follows uf WHERE uf.following_id = users.id)",
+					)
+					.as("followersCount"),
+				this.userModel
+					.raw(
+						`EXISTS (
+					SELECT 1
+					FROM user_follows uf2
+					WHERE uf2.following_id = users.id
+					AND uf2.follower_id = ?
+				)`,
+						[currentUserId],
+					)
+					.as("isFollowed"),
+			)
+			.withGraphJoined("avatar")
+			.first();
+
+		if (!profileData) {
+			return null;
+		}
+
+		const userProfile = profileData as UserModel & {
+			followersCount: number;
+			isFollowed: boolean;
+		};
+
+		const { avatar } = userProfile;
+
+		return {
+			avatarUrl: avatar ? avatar.url : null,
+			firstName: userProfile.firstName,
+			followersCount: Number(userProfile.followersCount),
+			id: userProfile.id,
+			isFollowed: Boolean(userProfile.isFollowed),
+			isVisibleProfile: Boolean(userProfile.isVisibleProfile),
+			lastName: userProfile.lastName,
 		};
 	}
 

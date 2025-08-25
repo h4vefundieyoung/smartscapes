@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.34.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.34.0...@smartscapes/shared-v1.34.1) (2025-08-25)
+
+
+### Bug Fixes
+
+* **backend:** fix user routes request ss-534 ([#538](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/538)) ([86b0af4](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/86b0af4876e43d79ec249f221e5555f58c00d427))
+
+## [1.34.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.33.0...@smartscapes/shared-v1.34.0) (2025-08-25)
+
+
+### Features
+
+* **frontend/backend/shared:** add an ability to leave a review comment for the route ss-389 ([#461](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/461)) ([5d24796](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/5d24796c92442dc692d03605f91657ec60b36a1e))
+
+## [1.33.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.32.1...@smartscapes/shared-v1.33.0) (2025-08-25)
+
+
+### Features
+
+* **frontend/backend/shared:** add user profile page and follow feature ss-402 ([#457](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/457)) ([15f325c](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/15f325cddd64c275054f9865f7775932250b108d))
+* **frontend:** add construct route page ss-340 ([#436](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/436)) ([1a86a4c](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/1a86a4c2c828c968a392be5aa1588b53126b6d6a))
+
 ## [1.32.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.32.0...@smartscapes/shared-v1.32.1) (2025-08-24)
 
 

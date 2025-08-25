@@ -6,11 +6,9 @@ import { type APIResponse } from "~/libs/types/types.js";
 
 import { UserRouteApiPath } from "./libs/enums/enums.js";
 import {
-	type UserRouteCreateRequestDto,
 	type UserRouteFinishRequestDto,
-	type UserRouteGetItemRequestDto,
+	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
-	type UserRouteStartRequestDto,
 } from "./libs/types/types.js";
 
 type Constructor = {
@@ -25,15 +23,15 @@ class UserRouteApi extends BaseHTTPApi {
 	}
 
 	public async create(
-		payload: UserRouteCreateRequestDto,
+		query: UserRouteQueryRequestDto,
 	): Promise<APIResponse<UserRouteResponseDto>> {
 		const response = await this.load<APIResponse<UserRouteResponseDto>>(
-			this.getFullEndpoint(UserRouteApiPath.ROOT, {}),
+			this.getFullEndpoint(UserRouteApiPath.CREATE, {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,
 				method: "POST",
-				payload: JSON.stringify(payload),
+				query,
 			},
 		);
 
@@ -42,6 +40,7 @@ class UserRouteApi extends BaseHTTPApi {
 
 	public async finish(
 		payload: UserRouteFinishRequestDto,
+		query: UserRouteQueryRequestDto,
 	): Promise<APIResponse<UserRouteResponseDto>> {
 		const response = await this.load<APIResponse<UserRouteResponseDto>>(
 			this.getFullEndpoint(UserRouteApiPath.FINISH, {}),
@@ -50,6 +49,23 @@ class UserRouteApi extends BaseHTTPApi {
 				hasAuth: true,
 				method: "PATCH",
 				payload: JSON.stringify(payload),
+				query,
+			},
+		);
+
+		return await response.json();
+	}
+
+	public async getAllByUserId(
+		query: UserRouteQueryRequestDto,
+	): Promise<APIResponse<UserRouteResponseDto[]>> {
+		const response = await this.load<APIResponse<UserRouteResponseDto[]>>(
+			this.getFullEndpoint(UserRouteApiPath.ROOT, {}),
+			{
+				contentType: ContentType.JSON,
+				hasAuth: true,
+				method: "GET",
+				query,
 			},
 		);
 
@@ -57,16 +73,15 @@ class UserRouteApi extends BaseHTTPApi {
 	}
 
 	public async getByRouteId(
-		payload: UserRouteGetItemRequestDto,
+		query: UserRouteQueryRequestDto,
 	): Promise<APIResponse<UserRouteResponseDto>> {
 		const response = await this.load<APIResponse<UserRouteResponseDto>>(
-			this.getFullEndpoint(UserRouteApiPath.$ID, {
-				routeId: payload.routeId.toString(),
-			}),
+			this.getFullEndpoint(UserRouteApiPath.ROOT, {}),
 			{
 				contentType: ContentType.JSON,
 				hasAuth: true,
 				method: "GET",
+				query,
 			},
 		);
 
@@ -74,7 +89,7 @@ class UserRouteApi extends BaseHTTPApi {
 	}
 
 	public async start(
-		payload: UserRouteStartRequestDto,
+		query: UserRouteQueryRequestDto,
 	): Promise<APIResponse<UserRouteResponseDto>> {
 		const response = await this.load<APIResponse<UserRouteResponseDto>>(
 			this.getFullEndpoint(UserRouteApiPath.START, {}),
@@ -82,7 +97,7 @@ class UserRouteApi extends BaseHTTPApi {
 				contentType: ContentType.JSON,
 				hasAuth: true,
 				method: "PATCH",
-				payload: JSON.stringify(payload),
+				query,
 			},
 		);
 

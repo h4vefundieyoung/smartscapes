@@ -66,7 +66,7 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 				perPage: pageSize,
 			}),
 		);
-	}, [dispatch, page, pageSize, isCreatePOIModalOpen]);
+	}, [dispatch, page, pageSize]);
 
 	useEffect(() => {
 		if (createPointsOfInterestStatus === DataStatus.FULFILLED) {

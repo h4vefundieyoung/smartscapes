@@ -1,7 +1,6 @@
 import { useAppDispatch, useCallback } from "~/libs/hooks/hooks.js";
-import { type RouteGetByIdResponseDto } from "~/modules/routes/routes.js";
+import { type LineStringGeometry } from "~/libs/types/types.js";
 import { actions as userRouteActions } from "~/modules/user-routes/user-routes.js";
-import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
 type UseUserRouteHandler = {
 	handleFinish: () => void;
@@ -9,34 +8,27 @@ type UseUserRouteHandler = {
 };
 
 const useUserRouteHandler = (
-	user: UserAuthResponseDto,
 	routeId: number,
-	route: RouteGetByIdResponseDto,
+	actualGeometry: LineStringGeometry,
 ): UseUserRouteHandler => {
 	const dispatch = useAppDispatch();
 
 	const handleStart = useCallback(() => {
 		void dispatch(
 			userRouteActions.start({
-				payload: {
-					routeId,
-				},
-				userId: user.id,
+				routeId,
 			}),
 		);
-	}, [dispatch, routeId, user.id]);
+	}, [dispatch, routeId]);
 
 	const handleFinish = useCallback(() => {
 		void dispatch(
 			userRouteActions.finish({
-				payload: {
-					actualGeometry: route.geometry,
-					routeId,
-				},
-				userId: user.id,
+				payload: { actualGeometry },
+				query: { routeId },
 			}),
 		);
-	}, [dispatch, routeId, user.id, route.geometry]);
+	}, [dispatch, routeId, actualGeometry]);
 
 	return {
 		handleFinish,

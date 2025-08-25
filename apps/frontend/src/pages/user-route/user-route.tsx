@@ -1,6 +1,6 @@
 import { Button, Loader, MapProvider } from "~/libs/components/components.js";
-import { useAppSelector, useParams } from "~/libs/hooks/hooks.js";
-import { type UserAuthResponseDto } from "~/modules/users/users.js";
+import { useParams } from "~/libs/hooks/hooks.js";
+import { type LineStringGeometry } from "~/libs/types/types.js";
 
 import {
 	useRouteMarker,
@@ -10,20 +10,27 @@ import {
 } from "./libs/hooks/hooks.js";
 import styles from "./styles.module.css";
 
+const LATITUDE = 50.455;
+const LONGITUDE = 30.528;
+
+const mockActualGeometry: LineStringGeometry = {
+	coordinates: [
+		[LONGITUDE, LATITUDE],
+		[LONGITUDE, LATITUDE],
+	],
+	type: "LineString",
+};
+
 const UserRoute = (): React.JSX.Element => {
 	const { id } = useParams<{ id: string }>();
 	const routeId = Number(id);
-	const user = useAppSelector(
-		({ auth }) => auth.authenticatedUser,
-	) as UserAuthResponseDto;
 
 	const { isRouteLoading, isUserRouteActive, isUserRouteCompleted, route } =
-		useUserRouteState({ routeId, user });
+		useUserRouteState({ routeId });
 
 	const { handleFinish, handleStart } = useUserRouteHandler(
-		user,
 		routeId,
-		route,
+		mockActualGeometry,
 	);
 
 	const markers = useRouteMarker(route.pois);

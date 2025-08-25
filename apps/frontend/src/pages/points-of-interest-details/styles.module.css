@@ -27,6 +27,13 @@
 	justify-content: space-between;
 }
 
+.loader-container {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	justify-content: center;
+}
+
 .edit-mode-controls {
 	display: flex;
 	gap: 8px;

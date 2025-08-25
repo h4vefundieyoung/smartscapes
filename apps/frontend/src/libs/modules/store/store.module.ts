@@ -19,6 +19,7 @@ import {
 	pointsOfInterestReducer,
 } from "~/modules/points-of-interest/points-of-interest.js";
 import {
+	constructRouteReducer,
 	routeDetailsReducer,
 	routesApi,
 	routesReducer,
@@ -61,6 +62,7 @@ class Store {
 			reducer: {
 				app: appReducer,
 				auth: authReducer,
+				constructRoute: constructRouteReducer,
 				explore: exploreReducer,
 				location: locationReducer,
 				pointOfInterestDetails: pointOfInterestDetailsReducer,

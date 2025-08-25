@@ -20,57 +20,59 @@ const NumberInput = ({
 	range,
 	value,
 }: Properties): React.JSX.Element => {
-	const [localValue, setLocalValue] = useState<string>(value.toString());
+	const [localValue, setLocalValue] = useState<string>(String(value));
 
-	const updateValue = useCallback(
-		(newValue: number): void => {
-			onChange(newValue);
-			setLocalValue(String(newValue));
-		},
-		[onChange],
-	);
-
-	const handleIncrement = useCallback((): void => {
-		const newValue = Math.min(value + STEP_VALUE, range.max);
-		updateValue(newValue);
-	}, [value, range.max, updateValue]);
-
-	const handleDecrement = useCallback((): void => {
-		const newValue = Math.max(value - STEP_VALUE, range.min);
-		updateValue(newValue);
-	}, [value, range.min, updateValue]);
-
-	const handleInputChange = useCallback(
-		(event: React.ChangeEvent<HTMLInputElement>) => {
-			setLocalValue(event.target.value);
-		},
-		[],
-	);
-
-	const handleAppliedValue = useCallback(() => {
-		updateValue(Number(localValue));
-	}, [localValue, updateValue]);
-
-	const handleKeyDown = useCallback(
-		(event: React.KeyboardEvent<HTMLInputElement>) => {
-			if (event.key === "Enter") {
-				handleAppliedValue();
+	const handleValueChange = useCallback(
+		(newValue: number) => {
+			if (newValue >= range.min && newValue <= range.max) {
+				onChange(newValue);
+				setLocalValue(String(newValue));
 			}
 		},
-		[handleAppliedValue],
+		[onChange, range.min, range.max],
 	);
 
-	const { length } = localValue;
-	const inputWidthCh = `${Math.max(length, MIN_INPUT_WIDTH_CH).toString()}ch`;
+	const handleIncrement = useCallback(() => {
+		handleValueChange(value + STEP_VALUE);
+	}, [value, handleValueChange]);
+
+	const handleDecrement = useCallback(() => {
+		handleValueChange(value - STEP_VALUE);
+	}, [value, handleValueChange]);
+
+	const handleInput = useCallback(
+		(event: React.FormEvent<HTMLInputElement>) => {
+			const input = event.currentTarget.value;
+
+			if (!/^\d*$/.test(input)) {
+				event.preventDefault();
+
+				return;
+			}
+
+			setLocalValue(input);
+
+			const numberValue = Number(input);
+
+			if (numberValue >= range.min && numberValue <= range.max) {
+				onChange(numberValue);
+			}
+		},
+		[onChange, range.min, range.max],
+	);
+
+	const inputWidthCh =
+		Math.max(localValue.length, MIN_INPUT_WIDTH_CH).toString() + "ch";
 
 	return (
 		<div className={styles["container"]}>
 			<div className={styles["wrapper"]}>
 				<input
 					className={styles["input"]}
-					onBlur={handleAppliedValue}
-					onChange={handleInputChange}
-					onKeyDown={handleKeyDown}
+					max={range.max}
+					min={range.min}
+					onInput={handleInput}
+					step={STEP_VALUE}
 					style={{ width: inputWidthCh }}
 					type="number"
 					value={localValue}

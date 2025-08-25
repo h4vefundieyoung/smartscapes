@@ -9,6 +9,7 @@ import {
 	type UserRouteCreateRequestDto,
 	type UserRouteFinishRequestDto,
 	type UserRouteResponseDto,
+	type UserRouteStartRequestDto,
 } from "./libs/types/type.js";
 import { UserRouteController } from "./user-route.controller.js";
 import { type UserRouteService } from "./user-route.service.js";
@@ -103,17 +104,17 @@ describe("UserRouteController", () => {
 
 	describe("start", () => {
 		it("should start a user route and return 200 status with active status", async () => {
-			const startRequest: UserRouteCreateRequestDto = {
+			const startRequest: UserRouteStartRequestDto = {
 				routeId: 7,
 			};
 
 			const options: APIHandlerOptions<{
-				body: UserRouteCreateRequestDto;
+				body: UserRouteStartRequestDto;
 			}> = {
 				body: startRequest,
 				user: { id: 1 },
 			} as APIHandlerOptions<{
-				body: UserRouteCreateRequestDto;
+				body: UserRouteStartRequestDto;
 			}>;
 
 			const result = await userRouteController.start(options);

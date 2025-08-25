@@ -22,17 +22,23 @@ const NumberInput = ({
 }: Properties): React.JSX.Element => {
 	const [localValue, setLocalValue] = useState<string>(value.toString());
 
+	const updateValue = useCallback(
+		(newValue: number): void => {
+			onChange(newValue);
+			setLocalValue(String(newValue));
+		},
+		[onChange],
+	);
+
 	const handleIncrement = useCallback((): void => {
 		const newValue = Math.min(value + STEP_VALUE, range.max);
-		onChange(newValue);
-		setLocalValue(String(newValue));
-	}, [onChange, value, range.max]);
+		updateValue(newValue);
+	}, [value, range.max, updateValue]);
 
 	const handleDecrement = useCallback((): void => {
 		const newValue = Math.max(value - STEP_VALUE, range.min);
-		onChange(newValue);
-		setLocalValue(String(newValue));
-	}, [onChange, value, range.min]);
+		updateValue(newValue);
+	}, [value, range.min, updateValue]);
 
 	const handleInputChange = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,9 +48,8 @@ const NumberInput = ({
 	);
 
 	const handleAppliedValue = useCallback(() => {
-		onChange(Number(localValue));
-		setLocalValue(String(Number(localValue)));
-	}, [localValue, onChange]);
+		updateValue(Number(localValue));
+	}, [localValue, updateValue]);
 
 	const handleKeyDown = useCallback(
 		(event: React.KeyboardEvent<HTMLInputElement>) => {

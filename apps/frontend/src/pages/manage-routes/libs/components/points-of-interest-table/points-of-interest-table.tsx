@@ -66,7 +66,7 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 				perPage: pageSize,
 			}),
 		);
-	}, [dispatch, page, pageSize, isCreatePOIModalOpen]);
+	}, [dispatch, page, pageSize]);
 
 	useEffect(() => {
 		if (createPointsOfInterestStatus === DataStatus.FULFILLED) {
@@ -91,14 +91,16 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 				onClose={handleModalToggle}
 				onSubmit={handleSubmit}
 			/>
-			<Table
-				columns={columns}
-				data={pointsOfInterest}
-				isLoading={pointsOfInterestStatus === DataStatus.PENDING}
-				paginationSettings={paginationPOIS}
-				totalItems={total}
-				totalPages={totalPages}
-			/>
+			<div className={styles["table-container"]}>
+				<Table
+					columns={columns}
+					data={pointsOfInterest}
+					isLoading={pointsOfInterestStatus === DataStatus.PENDING}
+					paginationSettings={paginationPOIS}
+					totalItems={total}
+					totalPages={totalPages}
+				/>
+			</div>
 		</section>
 	);
 };

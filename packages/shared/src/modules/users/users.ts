@@ -4,6 +4,7 @@ export {
 	type AuthenticatedUserPatchResponseDto,
 	type UserAuthResponseDto,
 	type UserGetByIdItemResponseDto,
+	type UserPublicProfileResponseDto,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
 	type UserSignUpRequestDto,
@@ -11,6 +12,7 @@ export {
 } from "./libs/types/types.js";
 export {
 	authenticatedUserPatch as authenticatedUserPatchValidationSchema,
+	userGetProfileParameters as userGetProfileParametersValidationSchema,
 	userSignIn as userSignInValidationSchema,
 	userSignUp as userSignUpValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";

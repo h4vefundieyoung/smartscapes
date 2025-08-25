@@ -1,0 +1,3 @@
+const DEFAULT_ROWS_COUNT = 7;
+
+export { DEFAULT_ROWS_COUNT };

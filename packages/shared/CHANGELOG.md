@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.34.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.33.0...@smartscapes/shared-v1.34.0) (2025-08-25)
+
+
+### Features
+
+* **frontend/backend/shared:** add an ability to leave a review comment for the route ss-389 ([#461](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/461)) ([5d24796](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/5d24796c92442dc692d03605f91657ec60b36a1e))
+
+## [1.33.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.32.1...@smartscapes/shared-v1.33.0) (2025-08-25)
+
+
+### Features
+
+* **frontend/backend/shared:** add user profile page and follow feature ss-402 ([#457](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/457)) ([15f325c](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/15f325cddd64c275054f9865f7775932250b108d))
+* **frontend:** add construct route page ss-340 ([#436](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/436)) ([1a86a4c](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/1a86a4c2c828c968a392be5aa1588b53126b6d6a))
+
+## [1.32.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.32.0...@smartscapes/shared-v1.32.1) (2025-08-24)
+
+
+### Bug Fixes
+
+* **frontend:** issues with editing title and description on poi page ss-521 ([#528](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/528)) ([2c537eb](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2c537eb4b91a7a53202e68ee7c0934b2dd8dffc0))
+
+## [1.32.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.31.0...@smartscapes/shared-v1.32.0) (2025-08-24)
+
+
+### Features
+
+* **backend/frontend/shared:** routes list ss-403 ([#494](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/494)) ([2732e7e](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2732e7eaac50163deeea3e387343507247d121d7))
+* **frontend:** user routes flow ss-347 ([#490](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/490)) ([4e44d46](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/4e44d46e04d506aab9c03b9ef17cd497917060fe))
+
 ## [1.31.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.30.0...@smartscapes/shared-v1.31.0) (2025-08-23)
 
 

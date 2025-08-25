@@ -1,0 +1,9 @@
+.main {
+	position: relative;
+	display: flex;
+	flex-grow: 1;
+}
+
+.map {
+	flex-grow: 1;
+}

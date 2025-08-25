@@ -39,6 +39,18 @@
 	box-shadow: var(--shadow-raised);
 }
 
+.button-secondary {
+	color: var(--color-text-weak);
+	background-color: var(--color-brand-200);
+	border: none;
+}
+
+.button-secondary:hover {
+	color: var(--color-text-inverse-strong);
+	background-color: var(--color-brand-800);
+	box-shadow: none;
+}
+
 .button-primary:disabled {
 	background-color: var(--color-fill-press);
 	box-shadow: none;

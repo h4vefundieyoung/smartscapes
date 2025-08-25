@@ -1,6 +1,6 @@
 import { type MultiValue, type SingleValue } from "react-select";
 
-import { type SelectOption } from "../../types/types.js";
+import { type SelectOption } from "~/libs/types/types.js";
 
 const isMultiValue = <T>(
 	value: MultiValue<SelectOption<T>> | SingleValue<SelectOption<T>>,

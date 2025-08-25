@@ -7,7 +7,7 @@ type Properties = {
 	onClick?: () => void;
 	to?: string;
 	type?: "button" | "submit";
-	variant?: "outlined" | "outlined-danger" | "primary";
+	variant?: "outlined" | "outlined-danger" | "primary" | "secondary";
 };
 
 const Button = ({
@@ -22,6 +22,7 @@ const Button = ({
 		variant === "outlined" && styles["button-outlined"],
 		variant === "outlined-danger" && styles["outlined-danger"],
 		variant === "primary" && styles["button-primary"],
+		variant === "secondary" && styles["button-secondary"],
 	);
 
 	if (to) {

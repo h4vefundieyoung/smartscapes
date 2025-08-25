@@ -76,7 +76,7 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 										<UserRoute />
 									</ProtectedRoute>
 								),
-								path: AppRoute.USER_ROUTES_$ID_MAP,
+								path: AppRoute.USER_ROUTES_$ROUTE_ID_MAP,
 							},
 							{
 								element: (

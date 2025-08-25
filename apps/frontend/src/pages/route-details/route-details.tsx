@@ -6,11 +6,12 @@ import {
 	MapProvider,
 	TextArea,
 } from "~/libs/components/components.js";
-import { DataStatus, PermissionKey } from "~/libs/enums/enums.js";
+import { AppRoute, DataStatus, PermissionKey } from "~/libs/enums/enums.js";
 import { checkHasPermission } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppForm,
+	useAppNavigate,
 	useAppSelector,
 	useCallback,
 	useEffect,
@@ -23,6 +24,7 @@ import {
 	actions as routeActions,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
+import { actions as userRouteActions } from "~/modules/user-routes/user-routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
 import {
@@ -39,6 +41,10 @@ const RouteDetails = (): React.JSX.Element => {
 	const dataStatus = useAppSelector(
 		({ routeDetails }) => routeDetails.dataStatus,
 	);
+	const isRouteCreated = useAppSelector(
+		({ userRouteDetails }) =>
+			userRouteDetails.createStatus === DataStatus.FULFILLED,
+	);
 
 	const reviews = useAppSelector(({ routeDetails }) => routeDetails.reviews);
 	const isAuthenticatedUser = Boolean(user);
@@ -47,11 +53,20 @@ const RouteDetails = (): React.JSX.Element => {
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
 		});
 	const dispatch = useAppDispatch();
+	const navigate = useAppNavigate();
 	const { id: routeId } = useParams<{ id: string }>();
 
 	const hasEditPermissions = Boolean(
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
+	);
+
+	const hasStartPermission = Boolean(
+		user &&
+			!checkHasPermission(
+				[PermissionKey.MANAGE_ROUTES],
+				user.group.permissions,
+			),
 	);
 	const fileInputReference = useRef<HTMLInputElement | null>(null);
 
@@ -78,6 +93,10 @@ const RouteDetails = (): React.JSX.Element => {
 	const handleToggleEditMode = useCallback(() => {
 		setIsEditMode((isEditMode) => !isEditMode);
 	}, []);
+
+	const handleStart = useCallback(() => {
+		void dispatch(userRouteActions.create({ routeId: Number(routeId) }));
+	}, [dispatch, routeId]);
 
 	const handleResetFormValues = useCallback(() => {
 		if (!route) {
@@ -126,6 +145,14 @@ const RouteDetails = (): React.JSX.Element => {
 	useEffect(() => {
 		void dispatch(routeActions.getReviews({ routeId: Number(routeId) }));
 	}, [dispatch, routeId]);
+
+	useEffect(() => {
+		if (isRouteCreated) {
+			navigate(
+				AppRoute.USER_ROUTES_$ROUTE_ID_MAP.replace(":routeId", String(routeId)),
+			);
+		}
+	}, [isRouteCreated, navigate, routeId, route]);
 
 	const handleCreateReview = useCallback(
 		(payload: ReviewRequestDto): void => {
@@ -177,6 +204,11 @@ const RouteDetails = (): React.JSX.Element => {
 							{hasEditPermissions && (
 								<div>
 									<Button label="Edit" onClick={handleToggleEditMode} />
+								</div>
+							)}
+							{hasStartPermission && (
+								<div>
+									<Button label="Start" onClick={handleStart} />
 								</div>
 							)}
 						</>

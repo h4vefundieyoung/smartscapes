@@ -3,7 +3,7 @@ import { useParams } from "~/libs/hooks/hooks.js";
 import { type LineStringGeometry } from "~/libs/types/types.js";
 
 import {
-	useRouteMarker,
+	useRouteMapData,
 	useUserRouteHandler,
 	useUserRouteNavigation,
 	useUserRouteState,
@@ -22,34 +22,28 @@ const mockActualGeometry: LineStringGeometry = {
 };
 
 const UserRoute = (): React.JSX.Element => {
-	const { id } = useParams<{ id: string }>();
-	const routeId = Number(id);
+	const { routeId } = useParams<{ routeId: string }>();
 
-	const { isRouteLoading, isUserRouteActive, isUserRouteCompleted, route } =
-		useUserRouteState({ routeId });
+	const { isRouteLoading, isUserRouteActive, isUserRouteCompleted } =
+		useUserRouteState();
 
 	const { handleFinish, handleStart } = useUserRouteHandler(
-		routeId,
+		Number(routeId),
 		mockActualGeometry,
 	);
 
-	const markers = useRouteMarker(route.pois);
-
-	const routeLine = {
-		geometry: route.geometry,
-		id: String(route.id),
-	};
+	const { markers, routeLine } = useRouteMapData(Number(routeId));
 
 	useUserRouteNavigation({ isUserRouteCompleted });
 
 	return (
 		<div className={styles["container"]}>
-			<MapProvider markers={markers} routeLine={routeLine}>
-				{isRouteLoading ? (
-					<div className={styles["loader-container"]}>
-						<Loader />
-					</div>
-				) : (
+			{isRouteLoading ? (
+				<div className={styles["loader-container"]}>
+					<Loader />
+				</div>
+			) : (
+				<MapProvider markers={markers} routeLine={routeLine}>
 					<div className={styles["button-container"]}>
 						{isUserRouteActive ? (
 							<Button label="Finish" onClick={handleFinish} />
@@ -57,8 +51,8 @@ const UserRoute = (): React.JSX.Element => {
 							<Button label="Start" onClick={handleStart} />
 						)}
 					</div>
-				)}
-			</MapProvider>
+				</MapProvider>
+			)}
 		</div>
 	);
 };

@@ -28,7 +28,6 @@ class UserRouteApi extends BaseHTTPApi {
 		const response = await this.load<APIResponse<UserRouteResponseDto>>(
 			this.getFullEndpoint(UserRouteApiPath.CREATE, {}),
 			{
-				contentType: ContentType.JSON,
 				hasAuth: true,
 				method: "POST",
 				query,
@@ -62,7 +61,6 @@ class UserRouteApi extends BaseHTTPApi {
 		const response = await this.load<APIResponse<UserRouteResponseDto[]>>(
 			this.getFullEndpoint(UserRouteApiPath.ROOT, {}),
 			{
-				contentType: ContentType.JSON,
 				hasAuth: true,
 				method: "GET",
 				query,
@@ -78,7 +76,6 @@ class UserRouteApi extends BaseHTTPApi {
 		const response = await this.load<APIResponse<UserRouteResponseDto>>(
 			this.getFullEndpoint(UserRouteApiPath.ROOT, {}),
 			{
-				contentType: ContentType.JSON,
 				hasAuth: true,
 				method: "GET",
 				query,
@@ -94,7 +91,6 @@ class UserRouteApi extends BaseHTTPApi {
 		const response = await this.load<APIResponse<UserRouteResponseDto>>(
 			this.getFullEndpoint(UserRouteApiPath.START, {}),
 			{
-				contentType: ContentType.JSON,
 				hasAuth: true,
 				method: "PATCH",
 				query,

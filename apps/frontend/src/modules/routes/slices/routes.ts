@@ -20,6 +20,7 @@ const allActions = {
 	...routeDetailsActions,
 	...constructRouteActions,
 	constructRoute,
+	...constructRouteActions,
 	create,
 	deleteImage,
 	discardCreateRouteFormData,

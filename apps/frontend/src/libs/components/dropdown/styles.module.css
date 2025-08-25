@@ -31,12 +31,11 @@
 	padding: 12px;
 	color: var(--color-text-strong);
 	text-decoration: none;
-	border-left: 4px solid transparent;
 	border-radius: 8px;
 	transition:
 		background-color 0.3s ease,
 		border-left-color 0.3s ease,
-		color 0.3s ease;
+		color 0.2s ease;
 }
 
 .label,
@@ -57,4 +56,10 @@
 .icon {
 	display: flex;
 	color: var(--color-icon-neutral);
+	transition: color 0.2s ease;
+}
+
+.link:hover .icon,
+.button:hover .icon {
+	color: var(--color-brand-1000);
 }

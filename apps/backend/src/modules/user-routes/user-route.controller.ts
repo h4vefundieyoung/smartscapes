@@ -310,6 +310,47 @@ class UserRouteController extends BaseController {
 		};
 	}
 
+	/**
+	 * @swagger
+	 * /user-routes/{id}
+	 *   delete:
+	 *     security:
+	 *      - bearerAuth: []
+	 *     tags:
+	 *       - User route
+	 *     summary: Delete saved user route
+	 *     description: Deletes a route that previously was saved by user.
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     responses:
+	 *       200:
+	 *         description: Route deleted successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: boolean
+	 *       401:
+	 *         description: Unauthorized - Authentication required
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: "Unauthorized access"
+	 */
+
 	public async delete({
 		params,
 		user,

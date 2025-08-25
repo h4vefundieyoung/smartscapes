@@ -313,6 +313,7 @@ describe("PointsOfInterestService", () => {
 						type: "LineString",
 					},
 					id: 1,
+					images: [],
 					name: "Test Route",
 					pois: [],
 				},

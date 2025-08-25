@@ -1,4 +1,8 @@
-import { type CollectionResult, type Service } from "~/libs/types/types.js";
+import {
+	type CollectionResult,
+	type Service,
+	type UserAuthResponseDto,
+} from "~/libs/types/types.js";
 import { ReviewEntity } from "~/modules/reviews/review.entity.js";
 import { type ReviewRepository } from "~/modules/reviews/review.repository.js";
 
@@ -6,6 +10,7 @@ import { type PointsOfInterestService } from "../points-of-interest/points-of-in
 import { type RouteService } from "../routes/route.service.js";
 import {
 	type ReviewCreatePayload,
+	type ReviewGetAllSearchQuery,
 	type ReviewGetByIdResponseDto,
 } from "./libs/types/types.js";
 
@@ -27,7 +32,12 @@ class ReviewService implements Service {
 	}
 
 	public async create(
-		payload: ReviewCreatePayload,
+		payload: ReviewCreatePayload & {
+			user: Pick<
+				UserAuthResponseDto,
+				"avatarUrl" | "firstName" | "id" | "lastName"
+			>;
+		},
 	): Promise<ReviewGetByIdResponseDto> {
 		if (payload.poiId) {
 			await this.ensurePoiExists(payload.poiId);
@@ -37,7 +47,7 @@ class ReviewService implements Service {
 			await this.ensureRouteExists(payload.routeId);
 		}
 
-		const reviewEntity = ReviewEntity.initializeNew({
+		const createReviewEntity = ReviewEntity.initializeNew({
 			content: payload.content,
 			likesCount: 0,
 			poiId: payload.poiId ?? null,
@@ -45,16 +55,38 @@ class ReviewService implements Service {
 			userId: payload.userId,
 		});
 
-		const item = await this.reviewRepository.create(reviewEntity);
+		const reviewEntity = await this.reviewRepository.create(createReviewEntity);
 
-		return item.toObject();
-	}
-
-	public async findAll(): Promise<CollectionResult<ReviewGetByIdResponseDto>> {
-		const items = await this.reviewRepository.findAll();
+		const review = reviewEntity.toObject();
 
 		return {
-			items: items.map((items) => items.toObject()),
+			content: review.content,
+			id: review.id,
+			likesCount: review.likesCount,
+			poiId: review.poiId,
+			routeId: review.routeId,
+			user: {
+				avatarUrl: payload.user.avatarUrl,
+				firstName: payload.user.firstName,
+				id: payload.user.id,
+				lastName: payload.user.lastName,
+			},
+		};
+	}
+
+	public async findAll(
+		options: null | ReviewGetAllSearchQuery,
+	): Promise<CollectionResult<ReviewGetByIdResponseDto>> {
+		const routeId = options?.routeId;
+
+		if (routeId !== undefined) {
+			await this.ensureRouteExists(routeId);
+		}
+
+		const items = await this.reviewRepository.findAll(options);
+
+		return {
+			items: items.map((item) => item.toListObject()),
 		};
 	}
 

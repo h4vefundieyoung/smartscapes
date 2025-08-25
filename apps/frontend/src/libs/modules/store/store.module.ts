@@ -18,6 +18,7 @@ import {
 	pointOfInterestDetailsReducer,
 	pointsOfInterestReducer,
 } from "~/modules/points-of-interest/points-of-interest.js";
+import { reviewApi } from "~/modules/reviews/reviews.js";
 import {
 	constructRouteReducer,
 	routeDetailsReducer,
@@ -42,6 +43,7 @@ class Store {
 		return {
 			authApi,
 			pointOfInterestApi,
+			reviewApi,
 			routesApi,
 			storage,
 			toastNotifier,

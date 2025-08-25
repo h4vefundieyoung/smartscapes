@@ -113,9 +113,11 @@ export {
 	UserRouteApiPath,
 	type UserRouteCreateRequestDto,
 	userRouteCreateValidationSchema,
-	type UserRoutePatchRequestDto,
-	userRoutePatchValidationSchema,
+	type UserRouteFinishRequestDto,
+	userRouteFinishValidationSchema,
 	type UserRouteResponseDto,
+	type UserRouteStartRequestDto,
+	userRouteStartValidationSchema,
 	UserRouteStatus,
 	type UserRouteStatusType,
 } from "./modules/user-routes/user-routes.js";

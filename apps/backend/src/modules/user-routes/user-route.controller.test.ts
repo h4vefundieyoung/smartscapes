@@ -7,7 +7,7 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import {
 	type UserRouteCreateRequestDto,
-	type UserRoutePatchRequestDto,
+	type UserRouteFinishRequestDto,
 	type UserRouteResponseDto,
 } from "./libs/types/type.js";
 import { UserRouteController } from "./user-route.controller.js";
@@ -131,7 +131,7 @@ describe("UserRouteController", () => {
 
 	describe("finish", () => {
 		it("should finish a user route and return 200 status with completed status", async () => {
-			const finishRequest: UserRoutePatchRequestDto = {
+			const finishRequest: UserRouteFinishRequestDto = {
 				actualGeometry: {
 					coordinates: [
 						[30.528_909, 50.455_232],
@@ -143,12 +143,12 @@ describe("UserRouteController", () => {
 			};
 
 			const options: APIHandlerOptions<{
-				body: UserRoutePatchRequestDto;
+				body: UserRouteFinishRequestDto;
 			}> = {
 				body: finishRequest,
 				user: { id: 1 },
 			} as APIHandlerOptions<{
-				body: UserRoutePatchRequestDto;
+				body: UserRouteFinishRequestDto;
 			}>;
 
 			const result = await userRouteController.finish(options);

@@ -11,12 +11,14 @@ import { type UserAuthResponseDto } from "~/modules/users/users.js";
 import { UserRouteApiPath } from "./libs/enums/enum.js";
 import {
 	type UserRouteCreateRequestDto,
-	type UserRoutePatchRequestDto,
+	type UserRouteFinishRequestDto,
 	type UserRouteResponseDto,
+	type UserRouteStartRequestDto,
 } from "./libs/types/type.js";
 import {
 	userRouteCreateValidationSchema,
-	userRoutePatchValidationSchema,
+	userRouteFinishValidationSchema,
+	userRouteStartValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 import { type UserRouteService } from "./user-route.service.js";
 
@@ -55,7 +57,17 @@ import { type UserRouteService } from "./user-route.service.js";
  *           example: 7
  *           description: ID of the route to track
  *
- *     UserRoutePatchRequestDto:
+ *     UserRouteStartRequestDto:
+ *       type: object
+ *       required:
+ *         - routeId
+ *       properties:
+ *         routeId:
+ *           type: integer
+ *           example: 7
+ *           description: ID of the route to start
+ *
+ *     UserRouteFinishRequestDto:
  *       type: object
  *       required:
  *         - routeId
@@ -130,7 +142,7 @@ class UserRouteController extends BaseController {
 			method: "PATCH",
 			path: UserRouteApiPath.FINISH,
 			validation: {
-				body: userRoutePatchValidationSchema,
+				body: userRouteFinishValidationSchema,
 			},
 		});
 
@@ -139,7 +151,7 @@ class UserRouteController extends BaseController {
 			method: "PATCH",
 			path: UserRouteApiPath.START,
 			validation: {
-				body: userRouteCreateValidationSchema,
+				body: userRouteStartValidationSchema,
 			},
 		});
 
@@ -291,7 +303,7 @@ class UserRouteController extends BaseController {
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             $ref: '#/components/schemas/UserRoutePatchRequestDto'
+	 *             $ref: '#/components/schemas/UserRouteFinishRequestDto'
 	 *     responses:
 	 *       200:
 	 *         description: User route finished successfully
@@ -323,7 +335,7 @@ class UserRouteController extends BaseController {
 	 */
 	public async finish(
 		options: APIHandlerOptions<{
-			body: UserRoutePatchRequestDto;
+			body: UserRouteFinishRequestDto;
 		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
 		const { body, user } = options;
@@ -371,7 +383,7 @@ class UserRouteController extends BaseController {
 	 *       content:
 	 *         application/json:
 	 *           schema:
-	 *             $ref: '#/components/schemas/UserRouteCreateRequestDto'
+	 *             $ref: '#/components/schemas/UserRouteStartRequestDto'
 	 *     responses:
 	 *       200:
 	 *         description: User route started successfully
@@ -403,7 +415,7 @@ class UserRouteController extends BaseController {
 	 */
 	public async start(
 		options: APIHandlerOptions<{
-			body: UserRouteCreateRequestDto;
+			body: UserRouteStartRequestDto;
 		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
 		const { body, user } = options;

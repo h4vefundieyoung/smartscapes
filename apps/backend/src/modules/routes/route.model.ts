@@ -38,7 +38,7 @@ class RouteModel extends Model {
 		userRoute: {
 			join: {
 				from: "routes.id",
-				to: "user_routes.route_id",
+				to: "user_routes.routeId",
 			},
 			modelClass: UserRouteModel,
 			relation: Model.HasManyRelation,
@@ -72,6 +72,7 @@ class RouteModel extends Model {
 	public userRoute!: {
 		id: number;
 		status: UserRouteStatusType;
+		userId: number;
 	}[];
 }
 

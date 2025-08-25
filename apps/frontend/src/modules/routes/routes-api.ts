@@ -61,7 +61,7 @@ class RoutesApi extends BaseHTTPApi {
 		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
 			this.getFullEndpoint(`${RoutesApiPath.ROOT}${id.toString()}`, {}),
 			{
-				hasAuth: false,
+				hasAuth: true,
 				method: "GET",
 			},
 		);

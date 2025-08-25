@@ -117,7 +117,7 @@ class RouteRepository implements Repository {
 	}
 
 	public async findById(
-		id: number,
+		routeId: number,
 		userId?: number,
 	): Promise<null | RouteEntity> {
 		const route = await this.routesModel
@@ -134,9 +134,15 @@ class RouteRepository implements Repository {
 			})
 			.modify((builder) => {
 				if (userId) {
-					builder.withGraphFetched("userRoute(selectUserRoute)").modifiers({
-						selectUserRouter(builder) {
-							builder.select("user_routes.id", "user_routes.status");
+					builder.withGraphFetched("userRoute(filtered)").modifiers({
+						filtered(builder) {
+							builder
+								.select(
+									"user_routes.id",
+									"user_routes.status",
+									"user_routes.user_id",
+								)
+								.where("user_routes.user_id", userId);
 						},
 					});
 				}
@@ -150,7 +156,7 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
 				"routes.created_by_user_id",
 			])
-			.where("routes.id", id)
+			.where("routes.id", routeId)
 			.first();
 
 		if (!route) {

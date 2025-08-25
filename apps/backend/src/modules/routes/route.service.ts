@@ -144,8 +144,11 @@ class RouteService implements Service {
 		};
 	}
 
-	public async findById(id: number): Promise<RouteGetByIdResponseDto> {
-		const item = await this.routesRepository.findById(id);
+	public async findById(
+		routeId: number,
+		userId?: number,
+	): Promise<RouteGetByIdResponseDto> {
+		const item = await this.routesRepository.findById(routeId, userId);
 
 		if (!item) {
 			throw new RoutesError({

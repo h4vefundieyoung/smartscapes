@@ -507,12 +507,15 @@ class RouteController extends BaseController {
 	 *                       example: "Unauthorized access"
 	 */
 
-	public async findById(
-		options: APIHandlerOptions<{ params: { id: string } }>,
-	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
-		const id = Number(options.params.id);
+	public async findById({
+		params,
+		user,
+	}: APIHandlerOptions<{ params: { id: string } }>): Promise<
+		APIHandlerResponse<RouteGetByIdResponseDto>
+	> {
+		const routeId = Number(params.id);
 
-		const route = await this.routeService.findById(id);
+		const route = await this.routeService.findById(routeId, user?.id);
 
 		return {
 			payload: { data: route },

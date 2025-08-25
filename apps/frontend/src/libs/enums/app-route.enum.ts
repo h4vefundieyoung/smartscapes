@@ -14,6 +14,7 @@ const AppRoute = {
 	ROUTES_CONSTRUCT: "/app/manage-routes/construct",
 	SIGN_IN: "/app/sign-in",
 	SIGN_UP: "/app/sign-up",
+	USERS_$ID: "/app/users/:id",
 } as const;
 
 export { AppRoute };

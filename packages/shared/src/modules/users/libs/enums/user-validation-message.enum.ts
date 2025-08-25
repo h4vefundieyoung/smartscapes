@@ -11,6 +11,7 @@ const UserValidationMessage = {
 	FIRST_NAME_MAXIMUM_LENGTH: `First name must be at most ${String(UserValidationRule.MAX_LENGTH)} characters long`,
 	FIRST_NAME_MINIMUM_LENGTH: `First name must be at least ${String(UserValidationRule.FIRST_NAME_MINIMUM_LENGTH)} characters long.`,
 	FIRST_NAME_REQUIRED: "First name is required.",
+	ID_INVALID: "ID must be a number.",
 	LAST_NAME_INVALID: "Last name must contain only Latin letters.",
 	LAST_NAME_MAXIMUM_LENGTH: `Last name must be at most ${String(UserValidationRule.MAX_LENGTH)} characters long.`,
 	LAST_NAME_MINIMUM_LENGTH: `Last name must be at least ${String(UserValidationRule.LAST_NAME_MINIMUM_LENGTH)} characters long.`,

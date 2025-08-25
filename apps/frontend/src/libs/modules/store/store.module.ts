@@ -24,7 +24,7 @@ import {
 	routesApi,
 	routesReducer,
 } from "~/modules/routes/routes.js";
-import { userApi } from "~/modules/users/users.js";
+import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
 
 import { type ExtraArguments, type RootReducer } from "./libs/types/types.js";
 import { handleErrorMiddleware } from "./middlewares/middlewares.js";
@@ -69,6 +69,7 @@ class Store {
 				pointsOfInterest: pointsOfInterestReducer,
 				routeDetails: routeDetailsReducer,
 				routes: routesReducer,
+				users: usersReducer,
 			},
 		});
 	}

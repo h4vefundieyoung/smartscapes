@@ -1,4 +1,5 @@
 const UserRouteApiPath = {
+	CREATE: "/create",
 	FINISH: "/finish",
 	ROOT: "/",
 	START: "/start",

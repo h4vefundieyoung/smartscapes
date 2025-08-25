@@ -6,10 +6,9 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import {
-	type UserRouteCreateRequestDto,
 	type UserRouteFinishRequestDto,
+	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
-	type UserRouteStartRequestDto,
 } from "./libs/types/type.js";
 import { UserRouteController } from "./user-route.controller.js";
 import { type UserRouteService } from "./user-route.service.js";
@@ -79,17 +78,13 @@ describe("UserRouteController", () => {
 
 	describe("create", () => {
 		it("should create a new user route and return 201 status", async () => {
-			const createRequest: UserRouteCreateRequestDto = {
-				routeId: 7,
-			};
-
 			const options: APIHandlerOptions<{
-				body: UserRouteCreateRequestDto;
+				query: UserRouteQueryRequestDto;
 			}> = {
-				body: createRequest,
+				query: { routeId: 7 },
 				user: { id: 1 },
 			} as APIHandlerOptions<{
-				body: UserRouteCreateRequestDto;
+				query: UserRouteQueryRequestDto;
 			}>;
 
 			const result = await userRouteController.create(options);
@@ -104,17 +99,13 @@ describe("UserRouteController", () => {
 
 	describe("start", () => {
 		it("should start a user route and return 200 status with active status", async () => {
-			const startRequest: UserRouteStartRequestDto = {
-				routeId: 7,
-			};
-
 			const options: APIHandlerOptions<{
-				body: UserRouteStartRequestDto;
+				query: UserRouteQueryRequestDto;
 			}> = {
-				body: startRequest,
+				query: { routeId: 7 },
 				user: { id: 1 },
 			} as APIHandlerOptions<{
-				body: UserRouteStartRequestDto;
+				query: UserRouteQueryRequestDto;
 			}>;
 
 			const result = await userRouteController.start(options);
@@ -140,16 +131,18 @@ describe("UserRouteController", () => {
 					],
 					type: "LineString",
 				},
-				routeId: 7,
 			};
 
 			const options: APIHandlerOptions<{
 				body: UserRouteFinishRequestDto;
+				query: UserRouteQueryRequestDto;
 			}> = {
 				body: finishRequest,
+				query: { routeId: 7 },
 				user: { id: 1 },
 			} as APIHandlerOptions<{
 				body: UserRouteFinishRequestDto;
+				query: { routeId: number };
 			}>;
 
 			const result = await userRouteController.finish(options);

@@ -17,9 +17,10 @@ import styles from "./styles.module.css";
 
 const UserDetails = (): null | React.JSX.Element => {
 	const dispatch = useAppDispatch();
-	const { authenticatedUser } = useAppSelector((state) => state.auth) as {
-		authenticatedUser: UserAuthResponseDto;
-	};
+	const authenticatedUser = useAppSelector(
+		({ auth }) => auth.authenticatedUser,
+	) as UserAuthResponseDto;
+
 	const fileInputReference = useRef<HTMLInputElement>(null);
 
 	const isLoading = useAppSelector(

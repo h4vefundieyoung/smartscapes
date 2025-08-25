@@ -1,5 +1,150 @@
 # Changelog
 
+## [1.37.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.36.0...@smartscapes/backend-v1.37.0) (2025-08-25)
+
+
+### Features
+
+* **frontend/backend/shared:** add an ability to leave a review comment for the route ss-389 ([#461](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/461)) ([5d24796](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/5d24796c92442dc692d03605f91657ec60b36a1e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.33.0 to 1.34.0
+
+## [1.36.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.35.1...@smartscapes/backend-v1.36.0) (2025-08-25)
+
+
+### Features
+
+* **frontend/backend/shared:** add user profile page and follow feature ss-402 ([#457](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/457)) ([15f325c](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/15f325cddd64c275054f9865f7775932250b108d))
+* **frontend:** add construct route page ss-340 ([#436](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/436)) ([1a86a4c](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/1a86a4c2c828c968a392be5aa1588b53126b6d6a))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.32.1 to 1.33.0
+
+## [1.35.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.35.0...@smartscapes/backend-v1.35.1) (2025-08-24)
+
+
+### Bug Fixes
+
+* **frontend:** issues with editing title and description on poi page ss-521 ([#528](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/528)) ([2c537eb](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2c537eb4b91a7a53202e68ee7c0934b2dd8dffc0))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.32.0 to 1.32.1
+
+## [1.35.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.34.0...@smartscapes/backend-v1.35.0) (2025-08-24)
+
+
+### Features
+
+* **backend/frontend/shared:** routes list ss-403 ([#494](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/494)) ([2732e7e](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2732e7eaac50163deeea3e387343507247d121d7))
+* **frontend:** user routes flow ss-347 ([#490](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/490)) ([4e44d46](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/4e44d46e04d506aab9c03b9ef17cd497917060fe))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.31.0 to 1.32.0
+
+## [1.34.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.33.0...@smartscapes/backend-v1.34.0) (2025-08-23)
+
+
+### Features
+
+* **backend/frontend/shared:** merge pois find all endpoints into one ss-189 ([#515](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/515)) ([a5ce3e2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/a5ce3e25681babba3462a05e6b55ca71c0e3ab59))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.30.0 to 1.31.0
+
+## [1.33.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.32.0...@smartscapes/backend-v1.33.0) (2025-08-23)
+
+
+### Features
+
+* **frontend:** feat add an ability to edit poi on poi description page ss-491 ([#503](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/503)) ([7e0d767](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/7e0d767ee1bc6d81d9a90481fbcd9b068793b305))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.29.0 to 1.30.0
+
+## [1.32.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.31.0...@smartscapes/backend-v1.32.0) (2025-08-22)
+
+
+### Features
+
+* **backend/frontend/shared:** implement admin dashboard issue ss-189 ([#465](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/465)) ([6c01549](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/6c015496d43eaf26feda0e68bab118f5b507d25a))
+
+
+### Bug Fixes
+
+* **frontend/backend:** fix upload max size message and carousel wheel event ss-434 ([#456](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/456)) ([2e939d1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2e939d1c96ad6a969509260a156f1f66e4375beb))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.28.0 to 1.29.0
+
+## [1.31.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.30.0...@smartscapes/backend-v1.31.0) (2025-08-21)
+
+
+### Features
+
+* **frontend/backend:** load and display pois list on route details page ss-390 ([#417](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/417)) ([adb34d0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/adb34d07f18f60ed1229abdcc02cea9c1b40e1a7))
+
+
+### Bug Fixes
+
+* **backend:** add routes to the name in find all routes repository ss-487 ([#489](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/489)) ([61c9de5](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/61c9de5eb77f1f3487d18465c533faba9b13eb0d))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.27.1 to 1.28.0
+
+## [1.30.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.29.0...@smartscapes/backend-v1.30.0) (2025-08-21)
+
+
+### Features
+
+* **frontend:** extend route details page with edit feature ss-398 ([#445](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/445)) ([fc6cb39](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/fc6cb390439c80c643b9d3d3788ab9f7baaed3f1))
+
+
+### Bug Fixes
+
+* **backend/frontend/shared:** align code with the criteria ss-439 ([#451](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/451)) ([a9c7fa6](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/a9c7fa69148efc86ba6e740e23de1bf44d13eca9))
+* **backend:** fix permission to construct path ss-441 ([#467](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/467)) ([2c210c3](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2c210c3d27a8b7f5293877e740e6c37dd60fd620))
+* **backend:** route-find-all fix ss-455 ([#471](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/471)) ([d7cdf3b](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/d7cdf3bb44c62758181c3fdc2e1376f39de0213f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.27.0 to 1.27.1
+
 ## [1.29.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.28.0...@smartscapes/backend-v1.29.0) (2025-08-21)
 
 

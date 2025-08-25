@@ -10,10 +10,12 @@ type IconName =
 	| "error"
 	| "eye"
 	| "eyeOff"
+	| "link"
 	| "logout"
 	| "map"
 	| "message"
 	| "route"
+	| "search"
 	| "tag"
 	| "trash"
 	| "user";

@@ -5,10 +5,11 @@ import {
 	type FieldValues,
 } from "react-hook-form";
 
+import { FieldError } from "~/libs/components/components.js";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
 import { useFormController } from "~/libs/hooks/hooks.js";
 
-import { Icon } from "../components.js";
+import { DEFAULT_ROWS_COUNT } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 type Properties<T extends FieldValues> = {
@@ -17,6 +18,7 @@ type Properties<T extends FieldValues> = {
 	label: string;
 	name: FieldPath<T>;
 	placeholder?: string;
+	rowsCount?: number;
 };
 
 const TextArea = <T extends FieldValues>({
@@ -25,6 +27,7 @@ const TextArea = <T extends FieldValues>({
 	label,
 	name,
 	placeholder = "",
+	rowsCount = DEFAULT_ROWS_COUNT,
 }: Properties<T>): React.JSX.Element => {
 	const { field } = useFormController({ control, name });
 
@@ -42,14 +45,10 @@ const TextArea = <T extends FieldValues>({
 				name={field.name}
 				onChange={field.onChange}
 				placeholder={placeholder}
+				rows={rowsCount}
 				value={field.value ?? ""}
 			/>
-			{hasError && (
-				<span className={styles["error"]}>
-					<Icon height={24} name="error" width={24} />
-					{error}
-				</span>
-			)}
+			{hasError && <FieldError description={error as string} />}
 		</label>
 	);
 };

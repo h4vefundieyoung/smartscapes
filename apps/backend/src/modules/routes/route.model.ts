@@ -1,4 +1,4 @@
-import { Model } from "objection";
+import { Model, type RelationMappings } from "objection";
 
 import { DatabaseTableName } from "~/libs/modules/database/database.js";
 import { type LineStringGeometry } from "~/libs/types/types.js";
@@ -7,7 +7,31 @@ import { CategoryModel } from "../categories/category.model.js";
 import { PointsOfInterestModel } from "../points-of-interest/points-of-interest.model.js";
 
 class RouteModel extends Model {
-	public static readonly relationMappings = {
+	public static override get tableName(): string {
+		return DatabaseTableName.ROUTES;
+	}
+
+	public createdByUserId!: number;
+
+	public description!: string;
+
+	public distance!: number;
+
+	public duration!: number;
+
+	public geometry!: LineStringGeometry;
+
+	public id!: number;
+
+	public name!: string;
+
+	public pois!: {
+		id: number;
+		name: string;
+		visitOrder: number;
+	}[];
+
+	public static readonly relationMappings = (): RelationMappings => ({
 		categories: {
 			join: {
 				from: "routes.id",
@@ -33,30 +57,7 @@ class RouteModel extends Model {
 			modelClass: PointsOfInterestModel,
 			relation: Model.ManyToManyRelation,
 		},
-	};
-
-	public static override get tableName(): string {
-		return DatabaseTableName.ROUTES;
-	}
-
-	public createdByUserId!: number;
-
-	public description!: string;
-
-	public distance!: number;
-
-	public duration!: number;
-
-	public geometry!: LineStringGeometry;
-
-	public id!: number;
-
-	public name!: string;
-
-	public pois!: {
-		id: number;
-		visitOrder: number;
-	}[];
+	});
 }
 
 export { RouteModel };

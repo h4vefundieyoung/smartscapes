@@ -4,6 +4,7 @@ import { describe, it } from "node:test";
 import { GroupEntity } from "../groups/group.entity.js";
 import { type GroupService } from "../groups/group.service.js";
 import { PermissionEntity } from "../permission/permission.entity.js";
+import { UserExceptionMessage } from "./libs/enums/enums.js";
 import { UserEntity } from "./user.entity.js";
 import { type UserRepository } from "./user.repository.js";
 import { UserService } from "./user.service.js";
@@ -159,7 +160,90 @@ describe("UserService", () => {
 				});
 			},
 			(error: unknown) => {
-				assert.strictEqual((error as Error).message, "User not found");
+				assert.strictEqual(
+					(error as Error).message,
+					UserExceptionMessage.NOT_FOUND,
+				);
+
+				return true;
+			},
+		);
+	});
+
+	it("getUserProfile should return public profile data if found", async () => {
+		const userProfile = {
+			firstName: "John",
+			followersCount: 5,
+			id: 1,
+			isFollowed: true,
+			isVisibleProfile: true,
+			lastName: "Doe",
+		};
+
+		const userRepository = {
+			findById: () => mockUser,
+			getUserProfile: () => userProfile,
+		} as unknown as UserRepository;
+
+		const userService = new UserService(userRepository, mockGroupService);
+
+		const result = await userService.getUserProfile(1, 2);
+
+		assert.deepStrictEqual(result, userProfile);
+	});
+
+	it("getUserProfile should throw error if user not found", async () => {
+		const userRepository = {
+			findById: () => null,
+			getUserProfile: () => null,
+		} as unknown as UserRepository;
+
+		const userService = new UserService(userRepository, mockGroupService);
+
+		await assert.rejects(
+			async () => {
+				await userService.getUserProfile(123, 2);
+			},
+			(error: unknown) => {
+				assert.strictEqual(
+					(error as Error).message,
+					UserExceptionMessage.NOT_FOUND,
+				);
+
+				return true;
+			},
+		);
+	});
+
+	it("getUserProfile should throw error if user profile not", async () => {
+		const nonPublicUser = UserEntity.initialize({
+			avatarUrl: "https://aws/avatars/example_file.jpg",
+			email: "test@example.com",
+			firstName: "John",
+			group: mockGroup.toObject(),
+			groupId: 2,
+			id: 1,
+			isVisibleProfile: false,
+			lastName: "Doe",
+			passwordHash: "hash",
+			passwordSalt: "salt",
+		});
+		const userRepository = {
+			findById: () => nonPublicUser,
+			getUserProfile: () => null,
+		} as unknown as UserRepository;
+
+		const userService = new UserService(userRepository, mockGroupService);
+
+		await assert.rejects(
+			async () => {
+				await userService.getUserProfile(123, 2);
+			},
+			(error: unknown) => {
+				assert.strictEqual(
+					(error as Error).message,
+					UserExceptionMessage.NOT_FOUND,
+				);
 
 				return true;
 			},

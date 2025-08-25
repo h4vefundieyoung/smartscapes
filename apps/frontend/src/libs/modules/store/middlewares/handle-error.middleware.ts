@@ -26,10 +26,13 @@ const handleError = ({
 					return next(action);
 				}
 
-				toastNotifier.showError(
+				const errorMessage =
 					action.error.message ??
-						CommonExceptionMessage.COMMON_EXCEPTION_MESSAGE,
-				);
+					CommonExceptionMessage.COMMON_EXCEPTION_MESSAGE;
+				const notificationMessage =
+					typeof action.payload === "string" ? action.payload : errorMessage;
+
+				toastNotifier.showError(notificationMessage);
 			}
 
 			return next(action);

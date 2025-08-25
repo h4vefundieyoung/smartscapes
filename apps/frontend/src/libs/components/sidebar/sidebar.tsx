@@ -73,13 +73,7 @@ const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
 				</div>
 				<div className={styles["sidebar"]}>
 					{navigationItemsGroups.map(({ hasLabel, items, name }) => (
-						<div
-							className={combineClassNames(
-								styles["group"],
-								hasLabel && styles["shifted"],
-							)}
-							key={name}
-						>
+						<div className={styles["group"]} key={name}>
 							{hasLabel && (
 								<div
 									className={combineClassNames(

@@ -24,8 +24,14 @@ const MapLocationLogic = ({ location, onLocationChange }: Properties): null => {
 		[onLocationChange],
 	);
 
-	const handleAddMarker = useCallback(
+	const handleSetMarker = useCallback(
 		(coordinates: PointGeometry["coordinates"]) => {
+			if (markerReference.current) {
+				markerReference.current.setCoordinates(coordinates);
+
+				return;
+			}
+
 			markerReference.current = mapClient.addMarker({
 				coordinates,
 				isDraggable: true,
@@ -36,21 +42,15 @@ const MapLocationLogic = ({ location, onLocationChange }: Properties): null => {
 	);
 
 	useEffect(() => {
-		if (markerReference.current || location) {
-			return;
-		}
-
 		const unsubscribe = mapClient.addMapClickListener((coordinates) => {
-			if (!markerReference.current) {
-				onLocationChange({ coordinates, type: LocationType.POINT });
-				unsubscribe();
-			}
+			handleSetMarker(coordinates);
+			onLocationChange({ coordinates, type: LocationType.POINT });
 		});
 
 		return (): void => {
 			unsubscribe();
 		};
-	}, [mapClient, handleAddMarker, onLocationChange, location]);
+	}, [mapClient, handleSetMarker, onLocationChange]);
 
 	useEffect(() => {
 		if (!location && markerReference.current) {
@@ -64,12 +64,8 @@ const MapLocationLogic = ({ location, onLocationChange }: Properties): null => {
 			return;
 		}
 
-		if (markerReference.current) {
-			markerReference.current.setCoordinates(location.coordinates);
-		} else {
-			handleAddMarker(location.coordinates);
-		}
-	}, [location, handleAddMarker]);
+		handleSetMarker(location.coordinates);
+	}, [location, handleSetMarker]);
 
 	return null;
 };

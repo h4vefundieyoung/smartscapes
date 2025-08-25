@@ -1,0 +1,30 @@
+.section {
+	margin-top: 20px;
+}
+
+.header {
+	display: flex;
+	gap: 32px;
+	align-items: center;
+	justify-content: flex-start;
+	max-width: 296px;
+	margin-bottom: 32px;
+}
+
+.title {
+	margin: 0;
+	font-size: var(--font-size-h2);
+	line-height: 1.3;
+}
+
+.list {
+	display: grid;
+	gap: 32px;
+	padding: 0;
+	list-style: none;
+}
+
+.info {
+	margin-bottom: 8px;
+	color: var(--color-text-weak);
+}

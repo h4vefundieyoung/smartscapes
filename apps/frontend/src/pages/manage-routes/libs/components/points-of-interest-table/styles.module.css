@@ -1,7 +1,6 @@
 .container {
 	display: flex;
 	flex-direction: column;
-	height: 575px;
 }
 
 .title {
@@ -14,7 +13,13 @@
 
 .header {
 	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
 	align-items: center;
 	justify-content: space-between;
 	margin: 0 0 24px;
+}
+
+.table-container {
+	height: 675px;
 }

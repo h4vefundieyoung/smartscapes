@@ -1,0 +1,26 @@
+.icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	aspect-ratio: 1;
+	padding: 0;
+	color: var(--color-icon-neutral);
+	transition:
+		color 0.2s ease,
+		background-color 0.2s ease;
+}
+
+.icon-error {
+	color: var(--color-icon-error);
+}
+
+.icon-button {
+	cursor: pointer;
+	background-color: transparent;
+	border: none;
+	border-radius: 8px;
+}
+
+.icon-button:hover {
+	background-color: var(--color-fill-hover);
+}

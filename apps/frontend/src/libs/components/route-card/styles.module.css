@@ -2,33 +2,48 @@
 	display: flex;
 	flex-shrink: 0;
 	flex-direction: column;
-	gap: 16px;
 	width: 100%;
 	max-width: 390px;
 }
 
-.route-card .image {
+.route-content {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	width: 100%;
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+.route-content:hover {
+	background-color: var(--color-fill-hover);
+	box-shadow: 0 4px 12px var(--color-fill-hover);
+	transform: translateY(-2px);
+}
+
+.image {
 	align-items: center;
 	object-fit: cover;
 }
 
-.route-card .image-placeholder {
+.image-placeholder {
 	background-color: var(--color-fill-grey);
 }
 
-.route-card .image,
-.route-card .image-placeholder {
+.image,
+.image-placeholder {
 	height: 240px;
 	border-radius: 8px;
 }
 
-.route-card .data {
+.data {
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
 }
 
-.route-card .label {
+.label {
 	margin: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;

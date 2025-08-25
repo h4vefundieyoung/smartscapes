@@ -1,4 +1,5 @@
 import mapboxgl from "mapbox-gl";
+import { createRoot } from "react-dom/client";
 
 import { config } from "~/libs/modules/config/config.js";
 
@@ -8,6 +9,7 @@ import {
 	MAP_CONTROLS_POSITION,
 	MAP_MARKER_Z_INDEX_VALUE,
 	MAP_OPTIONS,
+	MAP_POPUP_OPTIONS,
 	MARKER_OPTIONS,
 	NAVIGATION_CONTROL_OPTIONS,
 	SCALE_CONTROL_OPTIONS,
@@ -21,6 +23,7 @@ import {
 	type MapMarker,
 	type MapMarkerOptions,
 	type MapOptions,
+	type ReactElement,
 } from "./libs/types/types.js";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -218,6 +221,19 @@ class MapClient {
 
 	private mapMarker(marker: mapboxgl.Marker): MapMarker {
 		return {
+			addPopup: (content: ReactElement): void => {
+				const popupDiv = document.createElement("div");
+				const popup = new mapboxgl.Popup(MAP_POPUP_OPTIONS).setDOMContent(
+					popupDiv,
+				);
+
+				marker.setPopup(popup);
+
+				marker.getElement().style.cursor = "pointer";
+
+				const root = createRoot(popupDiv);
+				root.render(content);
+			},
 			remove: (): void => {
 				marker.remove();
 			},

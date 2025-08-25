@@ -9,6 +9,7 @@ type IconName =
 	| "error"
 	| "eye"
 	| "eyeOff"
+	| "link"
 	| "logout"
 	| "map"
 	| "message"

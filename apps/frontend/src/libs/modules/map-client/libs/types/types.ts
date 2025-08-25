@@ -10,3 +10,4 @@ export {
 	type NavigationControlOptions,
 	type ScaleControlOptions,
 } from "mapbox-gl";
+export { type ReactElement } from "react";

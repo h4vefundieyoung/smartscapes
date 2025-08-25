@@ -4,15 +4,6 @@
 	flex-grow: 1;
 }
 
-.routes-container {
-	position: absolute;
-	top: 32px;
-	bottom: 64px;
-	left: 32px;
-	z-index: 2;
-	max-height: 100%;
-}
-
 .container {
 	flex-grow: 1;
 }

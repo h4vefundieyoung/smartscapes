@@ -4,6 +4,7 @@
 	gap: 24px;
 	height: 100%;
 	padding: 24px 32px;
+	margin: 32px;
 	background-color: var(--color-base);
 	border: 1px solid var(--color-stroke-weak);
 	border-radius: 16px;

@@ -1,6 +1,7 @@
 export { AppLayout } from "./app-layout/app-layout.js";
 export { App } from "./app/app.js";
 export { Avatar } from "./avatar/avatar.js";
+export { ButtonContainer } from "./button-container/button-container.js";
 export { Button } from "./button/button.js";
 export { Carousel } from "./carousel/carousel.js";
 export { Checkbox } from "./checkbox/checkbox.js";
@@ -23,6 +24,7 @@ export { PasswordInput } from "./password-input/password-input.js";
 export { PointOfInterestCard } from "./point-of-interest-card/point-of-interest-card.js";
 export { ProtectedRoute } from "./protected-route/protected-route.js";
 export { RouteCard } from "./route-card/route-card.js";
+export { RouteMapPopup } from "./route-map-popup/route-map-popup.js";
 export { RouterProvider } from "./router-provider/router-provider.js";
 export { Select } from "./select/select.js";
 export { TabContainer } from "./tab-container/tab-container.js";

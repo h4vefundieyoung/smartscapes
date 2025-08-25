@@ -1,13 +1,21 @@
 import React from "react";
 
-import { Loader, RouteCard } from "~/libs/components/components.js";
+import {
+	Loader,
+	RouteCard,
+	RouteMapPopup,
+} from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
+	useCallback,
 	useEffect,
+	useMapClient,
 	useMemo,
+	useRef,
 } from "~/libs/hooks/hooks.js";
+import { type MapMarker } from "~/libs/modules/map-client/libs/types/types.js";
 import { actions as exploreActions } from "~/modules/explore/explore.js";
 import { actions as locationActions } from "~/modules/location/location.js";
 
@@ -23,6 +31,9 @@ const RoutesPanel = (): React.JSX.Element => {
 		(state) => state.location.dataStatus,
 	);
 	const location = useAppSelector((state) => state.location.location);
+
+	const mapClient = useMapClient();
+	const currentMarkerReference = useRef<MapMarker | null>(null);
 
 	useEffect(() => {
 		void dispatch(locationActions.getCurrentUserLocation());
@@ -42,6 +53,52 @@ const RoutesPanel = (): React.JSX.Element => {
 			);
 		}
 	}, [locationDataStatus, location, dispatch]);
+
+	useEffect(() => {
+		return (): void => {
+			if (currentMarkerReference.current) {
+				currentMarkerReference.current.remove();
+				currentMarkerReference.current = null;
+			}
+		};
+	}, []);
+
+	const handleRouteCardClick = useCallback(
+		(routeId: number) => (): void => {
+			const route = routes.find((r) => r.id === routeId);
+
+			if (!route || route.geometry.coordinates.length === 0) {
+				return;
+			}
+
+			const [firstCoordinate] = route.geometry.coordinates;
+
+			if (firstCoordinate) {
+				const [longitude, latitude] = firstCoordinate;
+
+				if (longitude && latitude) {
+					if (currentMarkerReference.current) {
+						currentMarkerReference.current.remove();
+						currentMarkerReference.current = null;
+					}
+
+					mapClient.flyTo([longitude, latitude]);
+
+					const newMarker = mapClient.addMarker({
+						coordinates: [longitude, latitude],
+					});
+
+					if (newMarker) {
+						newMarker.addPopup(<RouteMapPopup route={route} />);
+						currentMarkerReference.current = newMarker;
+					} else {
+						currentMarkerReference.current = null;
+					}
+				}
+			}
+		},
+		[routes, mapClient],
+	);
 
 	const hasLocationError = Boolean(locationError);
 
@@ -71,12 +128,24 @@ const RoutesPanel = (): React.JSX.Element => {
 
 				<ul className={styles["list"]}>
 					{routes.map((route) => (
-						<RouteCard imageUrl={null} key={route.id} name={route.name} />
+						<RouteCard
+							imageUrl={null}
+							key={route.id}
+							name={route.name}
+							onClick={handleRouteCardClick(route.id)}
+						/>
 					))}
 				</ul>
 			</>
 		);
-	}, [dataStatus, error, locationError, hasLocationError, routes]);
+	}, [
+		dataStatus,
+		error,
+		locationError,
+		hasLocationError,
+		routes,
+		handleRouteCardClick,
+	]);
 
 	return (
 		<div className={styles["container"]}>

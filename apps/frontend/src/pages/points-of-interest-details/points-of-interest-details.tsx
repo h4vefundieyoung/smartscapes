@@ -160,8 +160,24 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 							/>
 						),
 					},
-					{ content: image2 },
-					{ content: image3 },
+					{
+						content: (
+							<img
+								alt="point of interest"
+								className={styles["image"]}
+								src={image2}
+							/>
+						),
+					},
+					{
+						content: (
+							<img
+								alt="point of interest"
+								className={styles["image"]}
+								src={image3}
+							/>
+						),
+					},
 				]}
 			/>
 

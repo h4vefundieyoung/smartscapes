@@ -1,6 +1,6 @@
 import { type ReactElement } from "react";
 
-import { type Coordinates } from "./types.js";
+import { type Coordinates } from "~/libs/types/types.js";
 
 type MapMarker = {
 	addPopup(content: ReactElement): void;

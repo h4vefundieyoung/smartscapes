@@ -2,12 +2,12 @@ import React, { useCallback } from "react";
 
 import { IconButton } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
-import { type RouteGetByIdResponseDto } from "~/modules/explore/libs/types/types.js";
+import { type RouteGetAllItemResponseDto } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
-	route: RouteGetByIdResponseDto;
+	route: RouteGetAllItemResponseDto;
 };
 
 const RouteMapPopup = ({ route }: Properties): React.JSX.Element => {

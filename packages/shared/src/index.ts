@@ -71,22 +71,26 @@ export {
 	type PermissionItemDto,
 	PermissionKey,
 } from "./modules/permission/permission.js";
+export { type PlannedPathResponseDto } from "./modules/planned-paths/planned-paths.js";
 export {
+	type PointOfInterestPatchRequestDto,
 	pointOfInterestUpdateValidationSchema,
 	PointsOfInterestApiPath,
+	type PointsOfInterestCreateRequestDto,
 	pointsOfInterestCreateValidationSchema,
-	type PointsOfInterestPaginatedResponseDto,
-	type PointsOfInterestPaginatedSummary,
-	type PointsOfInterestQueryRequest,
+	type PointsOfInterestGetAllItemResponseDto,
+	type PointsOfInterestGetAllQuery,
+	type PointsOfInterestGetByIdResponseDto,
 	pointsOfInterestQueryValidationSchema,
-	type PointsOfInterestRequestDto,
-	type PointsOfInterestResponseDto,
 } from "./modules/points-of-interest/points-of-interest.js";
 export {
 	type ReviewCreatePayload,
 	reviewCreateValidationSchema,
+	type ReviewGetAllSearchQuery,
+	reviewGetAllSearchQueryValidationSchema,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
+	ReviewsApiPath,
 } from "./modules/reviews/reviews.js";
 export {
 	type RouteConstructRequestDto,
@@ -101,6 +105,7 @@ export {
 	routesCreateValidationSchema,
 	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
+	type RouteUploadImageResponseDto,
 } from "./modules/routes/routes.js";
 export {
 	UserFollowsApiPath,
@@ -110,12 +115,24 @@ export {
 	type UserUnfollowsParametersDto,
 } from "./modules/user-follows/user-follows.js";
 export {
+	UserRouteApiPath,
+	type UserRouteFinishRequestDto,
+	userRouteFinishValidationSchema,
+	type UserRouteQueryRequestDto,
+	userRouteQueryValidationSchema,
+	type UserRouteResponseDto,
+	UserRouteStatus,
+	type UserRouteStatusType,
+} from "./modules/user-routes/user-routes.js";
+export {
 	type AuthenticatedUserPatchRequestDto,
 	type AuthenticatedUserPatchResponseDto,
 	authenticatedUserPatchValidationSchema,
 	type UserAuthResponseDto,
 	UserExceptionMessage,
 	type UserGetByIdItemResponseDto,
+	userGetProfileParametersValidationSchema,
+	type UserPublicProfileResponseDto,
 	UsersApiPath,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,

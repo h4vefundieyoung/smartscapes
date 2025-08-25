@@ -21,13 +21,13 @@
 
 .skeleton-header .skeleton-line {
 	width: 80%;
-	height: 18px;
+	height: 24px;
 	background-color: var(--color-fill-grey);
 }
 
 .skeleton-cell .skeleton-line {
 	width: 100%;
-	height: 34px;
+	height: 32px;
 }
 
 .skeleton-cell:nth-child(1) .skeleton-line {
@@ -42,26 +42,26 @@
 	width: 85%;
 }
 
-.th,
-.td {
+.header-cell,
+.cell {
 	padding: 12px 24px;
 	font-size: var(--font-size-small);
 	line-height: 1.5;
-	border-bottom: 2px solid var(--color-stroke-weak);
+	border-bottom: 1px solid var(--color-stroke-weak);
 }
 
-.th {
+.header-cell {
 	font-weight: var(--font-weight-semibold);
 	color: var(--color-text-weak);
 	outline: none;
 	background: var(--color-fill-weak);
 }
 
-.td {
+.cell {
 	font-weight: var(--font-weight-regular);
 	color: var(--color-text-strong);
 }
 
-.tbody .tr:last-child .td {
+.row:last-child .cell {
 	border-bottom: none;
 }

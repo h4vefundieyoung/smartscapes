@@ -2,8 +2,14 @@
 	display: inline-flex;
 	gap: 8px;
 	align-items: center;
+	margin-top: 4px;
 	font-size: var(--font-size-tiny);
-	font-weight: var(--font-weight-semibold);
 	line-height: 1.4;
 	color: var(--color-text-error);
+}
+
+.icon {
+	display: flex;
+	align-items: center;
+	color: var(--color-icon-error);
 }

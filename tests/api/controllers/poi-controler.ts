@@ -1,5 +1,5 @@
 import { type APIRequestContext, type APIResponse } from "@playwright/test";
-import { type PointsOfInterestRequestDto } from "@smartscapes/shared";
+import { type PointsOfInterestCreateRequestDto } from "@smartscapes/shared";
 
 import { APIPath } from "../../consts/api-path.js";
 
@@ -7,7 +7,7 @@ class POIController {
 	public constructor(private request: APIRequestContext) {}
 
 	public async createPoi(
-		poiRequestDto: PointsOfInterestRequestDto,
+		poiRequestDto: PointsOfInterestCreateRequestDto,
 		accessToken: string,
 	): Promise<APIResponse> {
 		return await this.request.post(APIPath.POI, {
@@ -62,7 +62,7 @@ class POIController {
 
 	public async updatePoi(
 		id: number,
-		poiRequestDto: PointsOfInterestRequestDto,
+		poiRequestDto: PointsOfInterestCreateRequestDto,
 		accessToken: string,
 	): Promise<APIResponse> {
 		return await this.request.patch(`${APIPath.POI}/${String(id)}`, {

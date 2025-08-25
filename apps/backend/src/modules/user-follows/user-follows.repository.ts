@@ -25,11 +25,13 @@ class UserFollowsRepository {
 	public async followUser(
 		followerId: number,
 		followingId: number,
-	): Promise<void> {
-		await this.userFollowsModel.query().insert({
+	): Promise<boolean> {
+		const user = await this.userFollowsModel.query().insert({
 			followerId,
 			followingId,
 		});
+
+		return Boolean(user);
 	}
 
 	public async unfollowUser(

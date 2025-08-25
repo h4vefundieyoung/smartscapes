@@ -15,6 +15,7 @@ import { type DropdownItem } from "~/libs/types/types.js";
 import { actions as authActions } from "~/modules/auth/auth.js";
 import { type UserAuthResponseDto } from "~/modules/users/libs/types/types.js";
 
+import { NotificationsPopover } from "./libs/components/components.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -69,17 +70,14 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 
 	return (
 		<div className={styles["user-profile-wrapper"]} ref={dropdownReference}>
+			<NotificationsPopover />
+
 			<button className={styles["user-info"]} onClick={handleUserClick}>
 				<Avatar user={user} />
-				<div className={styles["name"]}>
+				<span className={styles["name"]}>
 					{user.firstName} {user.lastName}
-				</div>
-				<span
-					className={combineClassNames(
-						styles["arrow-down"],
-						isDropdownOpen && styles["open"],
-					)}
-				>
+				</span>
+				<span className={styles["arrow-down"]}>
 					<Icon height={16} name="arrowDown" width={16} />
 				</span>
 			</button>
@@ -87,7 +85,7 @@ const AuthenticatedHeader = ({ user }: Properties): JSX.Element => {
 			<div
 				className={combineClassNames(
 					styles["dropdown-container"],
-					!isDropdownOpen && styles["hidden"],
+					isDropdownOpen && styles["dropdown-container-open"],
 				)}
 			>
 				<Dropdown items={items} />

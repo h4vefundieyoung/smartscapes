@@ -14,12 +14,22 @@ import { authApi, reducer as authReducer } from "~/modules/auth/auth.js";
 import { reducer as exploreReducer } from "~/modules/explore/explore.js";
 import { reducer as locationReducer } from "~/modules/location/location.js";
 import {
+	notificationApi,
+	reducer as notificationReducer,
+} from "~/modules/notification/notification.js";
+import {
 	pointOfInterestApi,
 	pointOfInterestDetailsReducer,
 	pointsOfInterestReducer,
 } from "~/modules/points-of-interest/points-of-interest.js";
-import { reducer as routeReducer, routesApi } from "~/modules/routes/routes.js";
-import { userApi } from "~/modules/users/users.js";
+import { reviewApi } from "~/modules/reviews/reviews.js";
+import {
+	constructRouteReducer,
+	routeDetailsReducer,
+	routesApi,
+	routesReducer,
+} from "~/modules/routes/routes.js";
+import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
 
 import { type ExtraArguments, type RootReducer } from "./libs/types/types.js";
 import { handleErrorMiddleware } from "./middlewares/middlewares.js";
@@ -36,7 +46,9 @@ class Store {
 	public get extraArguments(): ExtraArguments {
 		return {
 			authApi,
+			notificationApi,
 			pointOfInterestApi,
+			reviewApi,
 			routesApi,
 			storage,
 			toastNotifier,
@@ -57,11 +69,15 @@ class Store {
 			reducer: {
 				app: appReducer,
 				auth: authReducer,
+				constructRoute: constructRouteReducer,
 				explore: exploreReducer,
 				location: locationReducer,
+				notification: notificationReducer,
 				pointOfInterestDetails: pointOfInterestDetailsReducer,
 				pointsOfInterest: pointsOfInterestReducer,
-				route: routeReducer,
+				routeDetails: routeDetailsReducer,
+				routes: routesReducer,
+				users: usersReducer,
 			},
 		});
 	}

@@ -1,1 +1,1 @@
-export { UsersApiPath } from "@smartscapes/shared";
+export { UserFollowsApiPath, UsersApiPath } from "@smartscapes/shared";

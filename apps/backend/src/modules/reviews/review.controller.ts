@@ -10,10 +10,14 @@ import { type UserAuthResponseDto } from "~/libs/types/types.js";
 import { type ReviewService } from "~/modules/reviews/review.service.js";
 
 import {
+	type ReviewGetAllSearchQuery,
 	type ReviewGetByIdResponseDto,
 	type ReviewRequestDto,
 } from "./libs/types/types.js";
-import { reviewCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
+import {
+	reviewCreateValidationSchema,
+	reviewGetAllSearchQueryValidationSchema,
+} from "./libs/validation-schemas/validation-schemas.js";
 
 /**
  * @swagger
@@ -50,8 +54,21 @@ import { reviewCreateValidationSchema } from "./libs/validation-schemas/validati
  *         routeId:
  *           type: integer
  *           nullable: true
- *         userId:
- *           type: integer
+ *         user:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: integer
+ *               example: 7
+ *             firstName:
+ *               type: string
+ *               example: Anna
+ *             lastName:
+ *               type: string
+ *               example: Kovalenko
+ *             avatarUrl:
+ *               type: string
+ *               example: null
  *
  *     ReviewGetByIdResponseDto:
  *        type: object
@@ -78,6 +95,9 @@ class ReviewController extends BaseController {
 			handler: this.findAll.bind(this),
 			method: "GET",
 			path: "/",
+			validation: {
+				query: reviewGetAllSearchQueryValidationSchema,
+			},
 		});
 	}
 
@@ -125,6 +145,12 @@ class ReviewController extends BaseController {
 		const authenticatedUser = user as UserAuthResponseDto;
 		const review = await this.reviewService.create({
 			...body,
+			user: {
+				avatarUrl: authenticatedUser.avatarUrl,
+				firstName: authenticatedUser.firstName,
+				id: authenticatedUser.id,
+				lastName: authenticatedUser.lastName,
+			},
 			userId: authenticatedUser.id,
 		});
 
@@ -142,7 +168,15 @@ class ReviewController extends BaseController {
 	 *       - bearerAuth: []
 	 *     tags:
 	 *       - Reviews
-	 *     summary: Retrieve all reviews
+	 *     summary: Retrieve reviews (optionally filter by routeId)
+	 *     parameters:
+	 *       - in: query
+	 *         name: routeId
+	 *         schema:
+	 *           type: integer
+	 *           minimum: 1
+	 *         required: false
+	 *         description: Return only reviews for the specified route
 	 *     responses:
 	 *       200:
 	 *         description: A list of reviews
@@ -155,11 +189,25 @@ class ReviewController extends BaseController {
 	 *                   type: array
 	 *                   items:
 	 *                     $ref: '#/components/schemas/Review'
+	 *       404:
+	 *        description: Route was not found
+	 *        content:
+	 *          application/json:
+	 *            schema:
+	 *              type: object
+	 *              properties:
+	 *                message:
+	 *                  type: string
+	 *                  example: "A route with the specified ID was not found."
 	 */
-	public async findAll(): Promise<
-		APIHandlerResponse<ReviewGetByIdResponseDto[]>
-	> {
-		const { items } = await this.reviewService.findAll();
+	public async findAll(
+		options: APIHandlerOptions<{
+			query?: ReviewGetAllSearchQuery;
+		}>,
+	): Promise<APIHandlerResponse<ReviewGetByIdResponseDto[]>> {
+		const { query = null } = options;
+
+		const { items } = await this.reviewService.findAll(query);
 
 		return {
 			payload: { data: items },

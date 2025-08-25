@@ -13,8 +13,10 @@ const useCarouselWheelEvent = (
 			event.preventDefault();
 
 			if (carouselReference.element.current) {
+				const deltaX = event.deltaX === 0 ? event.deltaY : event.deltaX;
+
 				carouselReference.velocity.current -=
-					event.deltaX * CAROUSEL_CONFIG.WHEEL_MULTIPLIER;
+					deltaX * CAROUSEL_CONFIG.WHEEL_MULTIPLIER;
 
 				if (!carouselReference.momentumID.current) {
 					startMomentum();

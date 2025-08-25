@@ -17,6 +17,7 @@ import {
 	type AuthenticatedUserPatchResponseDto,
 	type UserDetailsWithPassword,
 	type UserGetByIdItemResponseDto,
+	type UserPublicProfileResponseDto,
 	type UserSignUpRequestDto,
 } from "./libs/types/types.js";
 
@@ -92,6 +93,25 @@ class UserService implements Service {
 		email: string,
 	): Promise<null | UserDetailsWithPassword> {
 		return await this.userRepository.findPasswordDetails(email);
+	}
+
+	public async getUserProfile(
+		id: number,
+		currentUserId: number,
+	): Promise<UserPublicProfileResponseDto> {
+		const userProfile = await this.userRepository.getUserProfile(
+			id,
+			currentUserId,
+		);
+
+		if (!userProfile || !userProfile.isVisibleProfile) {
+			throw new UserError({
+				message: UserExceptionMessage.NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return userProfile;
 	}
 
 	public async patch(

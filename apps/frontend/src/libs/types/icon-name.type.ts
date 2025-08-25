@@ -1,6 +1,7 @@
 type IconName =
 	| "analytics"
 	| "arrowDown"
+	| "bell"
 	| "caretDown"
 	| "caretUp"
 	| "close"
@@ -14,6 +15,7 @@ type IconName =
 	| "map"
 	| "message"
 	| "route"
+	| "search"
 	| "tag"
 	| "trash"
 	| "user";

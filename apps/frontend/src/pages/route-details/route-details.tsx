@@ -46,7 +46,7 @@ const RouteDetails = (): React.JSX.Element => {
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
 	);
-	const fileInputReference = useRef<HTMLInputElement>(null);
+	const fileInputReference = useRef<HTMLInputElement | null>(null);
 
 	const handleFileUpload = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {

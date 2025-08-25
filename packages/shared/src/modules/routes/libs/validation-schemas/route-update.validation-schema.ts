@@ -9,6 +9,7 @@ const MINIMUM_FIELDS_TO_UPDATE = 1;
 
 const routesUpdate = z
 	.strictObject({
+		categories: z.array(z.number().int().positive()),
 		description: z
 			.string()
 			.trim()

@@ -42,7 +42,7 @@ export {
 	type CategoryCreateRequestDto,
 	categoryCreateValidationSchema,
 	CategoryExceptionMessage,
-	type CategoryGetAllItemResponseDto,
+	type CategoryGetItemResponseDto,
 } from "./modules/categories/categories.js";
 export {
 	FileFolderName,

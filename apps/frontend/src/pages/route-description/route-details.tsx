@@ -6,6 +6,7 @@ import {
 	ImageGallery,
 	Input,
 	Loader,
+	Select,
 	TextArea,
 } from "~/libs/components/components.js";
 import { TagsContainer } from "~/libs/components/tags-container/tag-container.js";
@@ -20,6 +21,7 @@ import {
 	useParams,
 	useState,
 } from "~/libs/hooks/hooks.js";
+import { actions as categoriesActions } from "~/modules/categories/categories.js";
 import {
 	actions as routeActions,
 	type RouteGetByIdResponseDto,
@@ -33,10 +35,13 @@ import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
-	const { route, user } = useAppSelector(({ auth, route }) => ({
-		route: route.route,
-		user: auth.authenticatedUser,
-	}));
+	const { categories, route, user } = useAppSelector(
+		({ auth, categories, route }) => ({
+			categories: categories.categories,
+			route: route.route,
+			user: auth.authenticatedUser,
+		}),
+	);
 	const { control, errors, getValues, handleValueSet } =
 		useAppForm<RoutePatchRequestDto>({
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
@@ -59,7 +64,7 @@ const RouteDetails = (): React.JSX.Element => {
 			void dispatch(
 				routeActions.patchRoute({
 					id: route.id,
-					payload: { description, name },
+					payload: { categories: getValues("categories"), description, name },
 				}),
 			);
 			setIsEditMode(false);
@@ -74,8 +79,18 @@ const RouteDetails = (): React.JSX.Element => {
 		if (route) {
 			handleValueSet("name", route.name);
 			handleValueSet("description", route.description);
+			handleValueSet(
+				"categories",
+				route.categories.map((category) => category.id),
+			);
 		}
 	}, [route, handleValueSet]);
+
+	useEffect(() => {
+		if (isEditMode) {
+			void dispatch(categoriesActions.getAll());
+		}
+	}, [isEditMode, dispatch]);
 
 	if (dataStatus === DataStatus.REJECTED) {
 		return <NotFound />;
@@ -116,12 +131,27 @@ const RouteDetails = (): React.JSX.Element => {
 					)}
 				</div>
 				<ImageGallery images={[image1, image2, image3]} />
-				{route && route.categories.length > 0 && (
-					<TagsContainer
-						labels={route.categories.map((category) => category.name)}
+				{isEditMode ? (
+					<Select
+						control={control}
+						isMulti
+						label="Categories"
+						name="categories"
+						options={categories.map((category) => ({
+							label: category.name,
+							original: category.id,
+							value: category.id,
+						}))}
+						placeholder="Select categories"
 					/>
+				) : (
+					route &&
+					route.categories.length > 0 && (
+						<TagsContainer
+							labels={route.categories.map((category) => category.name)}
+						/>
+					)
 				)}
-
 				{isEditMode ? (
 					<TextArea
 						control={control}

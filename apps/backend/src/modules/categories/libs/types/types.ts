@@ -1,4 +1,4 @@
 export {
 	type CategoryCreateRequestDto,
-	type CategoryGetAllItemResponseDto,
+	type CategoryGetItemResponseDto,
 } from "@smartscapes/shared";

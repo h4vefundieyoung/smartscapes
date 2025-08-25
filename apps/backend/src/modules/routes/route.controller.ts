@@ -595,9 +595,10 @@ class RouteController extends BaseController {
 		}>,
 	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
 		const id = Number(options.params.id);
-		const { description, name } = options.body;
+		const { categories, description, name } = options.body;
 
 		const route = await this.routeService.patch(id, {
+			categories,
 			description,
 			name,
 		});

@@ -4,7 +4,7 @@ import { describe, it } from "node:test";
 
 import { type APIHandlerOptions } from "~/libs/modules/controller/controller.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
-import { type CategoryGetAllItemResponseDto } from "~/modules/categories/categories.js";
+import { type CategoryGetItemResponseDto } from "~/modules/categories/categories.js";
 
 import { CategoryController } from "./category.controller.js";
 import { type CategoryService } from "./category.service.js";
@@ -18,8 +18,9 @@ describe("CategoryController", () => {
 		warn: () => {},
 	};
 
-	const mockCategory: CategoryGetAllItemResponseDto = {
+	const mockCategory: CategoryGetItemResponseDto = {
 		id: 1,
+		key: "popular",
 		name: "Popular",
 	};
 

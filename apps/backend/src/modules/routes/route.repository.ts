@@ -1,3 +1,5 @@
+import { transaction } from "objection";
+
 import { SortingOrder } from "~/libs/enums/enums.js";
 import {
 	type Repository,
@@ -172,28 +174,61 @@ class RouteRepository implements Repository {
 		id: number,
 		entity: Partial<RouteEntity["toObject"]>,
 	): Promise<null | RouteEntity> {
-		const [updatedRoute] = await this.routesModel
-			.query()
-			.patch(entity)
-			.withGraphFetched("pois(selectPoi)")
-			.modifiers({
-				selectPoi(builder) {
-					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
-				},
-			})
-			.where({ id })
-			.returning([
-				"id",
-				"name",
-				"description",
-				this.routesModel.raw("to_json(distance)::json as distance"),
-				this.routesModel.raw("to_json(duration)::json as duration"),
-				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
-				"routes.created_by_user_id",
-			])
-			.execute();
+		const { categories, ...patchData } = entity as Partial<
+			RouteEntity["toObject"] & { categories?: number[] }
+		>;
 
-		return updatedRoute ? RouteEntity.initialize(updatedRoute) : null;
+		return await transaction(this.routesModel, async (RouteModel) => {
+			await RouteModel.query().patch(patchData).where({ id });
+
+			if (categories) {
+				await RouteModel.relatedQuery("categories").for(id).unrelate();
+
+				if (categories.length > 0) {
+					await RouteModel.relatedQuery("categories")
+						.for(id)
+						.relate(categories);
+				}
+			}
+
+			const routeWithRelations = await RouteModel.query()
+				.withGraphFetched("[pois(selectPoi),categories]")
+				.modifyGraph("categories", (builder) => {
+					builder.select("categories.id", "categories.key", "categories.name");
+				})
+				.modifiers({
+					selectPoi(builder) {
+						builder.select(
+							"points_of_interest.id",
+							"routes_to_pois.visit_order",
+						);
+					},
+				})
+				.where("routes.id", id)
+				.first();
+
+			if (!routeWithRelations) {
+				return null;
+			}
+
+			return RouteEntity.initializeWithCategories({
+				categories: (routeWithRelations.categories ?? []).map((category) =>
+					CategoryEntity.initialize(category).toObject(),
+				),
+				createdByUserId: routeWithRelations.createdByUserId,
+				description: routeWithRelations.description,
+				distance: routeWithRelations.distance,
+				duration: routeWithRelations.duration,
+				geometry: routeWithRelations.geometry,
+				id: routeWithRelations.id,
+				name: routeWithRelations.name,
+				pois: routeWithRelations.pois.map((poi) => ({
+					id: poi.id,
+					name: poi.name,
+					visitOrder: poi.visitOrder,
+				})),
+			});
+		});
 	}
 }
 

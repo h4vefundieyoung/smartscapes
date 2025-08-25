@@ -158,6 +158,7 @@ describe("RouteService", () => {
 	];
 
 	const mockPatchPayload = {
+		categories: [],
 		description: "Updated description",
 		name: "Updated Route",
 	};

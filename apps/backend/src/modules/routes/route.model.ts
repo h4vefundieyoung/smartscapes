@@ -17,7 +17,7 @@ class RouteModel extends Model {
 				},
 				to: "categories.id",
 			},
-			modelClass: CategoryModel,
+			modelClass: (): typeof CategoryModel => CategoryModel,
 			relation: Model.ManyToManyRelation,
 		},
 		pois: {

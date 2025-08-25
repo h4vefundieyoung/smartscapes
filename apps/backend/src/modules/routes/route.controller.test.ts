@@ -277,6 +277,7 @@ describe("Route controller", () => {
 
 		const updateRouteMockData = {
 			body: {
+				categories: [],
 				description: updatedRoute.description,
 				name: updatedRoute.name,
 			},
@@ -417,6 +418,7 @@ describe("Route controller", () => {
 
 			const updateRouteMockData = {
 				body: {
+					categories: updatedRoute.categories.map((category) => category.id),
 					description: updatedRoute.description,
 					name: updatedRoute.name,
 				},

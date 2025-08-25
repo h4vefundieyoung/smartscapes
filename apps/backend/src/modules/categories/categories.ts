@@ -10,4 +10,4 @@ const categoryService = new CategoryService(categoryRepository);
 const categoryController = new CategoryController(logger, categoryService);
 
 export { categoryController };
-export { type CategoryGetAllItemResponseDto } from "./libs/types/types.js";
+export { type CategoryGetItemResponseDto } from "./libs/types/types.js";

@@ -2,8 +2,13 @@ import { type Entity, type LineStringGeometry } from "~/libs/types/types.js";
 
 import {
 	type RouteUploadImageResponseDto,
-	type UserRoute,
+	type UserRouteStatusType,
 } from "./libs/types/types.js";
+
+type SavedUserRoute = {
+	id: number;
+	status: UserRouteStatusType;
+};
 
 class RouteEntity implements Entity {
 	private createdByUserId: number;
@@ -28,7 +33,7 @@ class RouteEntity implements Entity {
 		visitOrder: number;
 	}[];
 
-	private userRoute: null | UserRoute;
+	private savedUserRoute: null | SavedUserRoute;
 
 	private constructor({
 		createdByUserId,
@@ -40,7 +45,7 @@ class RouteEntity implements Entity {
 		images,
 		name,
 		pois,
-		userRoute,
+		savedUserRoute,
 	}: {
 		createdByUserId: number;
 		description: null | string;
@@ -55,7 +60,7 @@ class RouteEntity implements Entity {
 			name?: string;
 			visitOrder: number;
 		}[];
-		userRoute: null | UserRoute[];
+		savedUserRoute: null | SavedUserRoute[];
 	}) {
 		this.id = id;
 		this.distance = distance;
@@ -65,7 +70,7 @@ class RouteEntity implements Entity {
 		this.description = description;
 		this.pois = pois;
 		this.createdByUserId = createdByUserId;
-		this.userRoute = userRoute?.[0] ?? null;
+		this.savedUserRoute = savedUserRoute?.[0] ?? null;
 		this.images = images;
 	}
 
@@ -83,7 +88,7 @@ class RouteEntity implements Entity {
 			name: string;
 			visitOrder: number;
 		}[];
-		userRoute?: UserRoute[];
+		savedUserRoute?: SavedUserRoute[];
 	}): RouteEntity {
 		return new RouteEntity({
 			createdByUserId: data.createdByUserId,
@@ -95,7 +100,7 @@ class RouteEntity implements Entity {
 			images: data.images,
 			name: data.name,
 			pois: data.pois,
-			userRoute: data.userRoute ?? null,
+			savedUserRoute: data.savedUserRoute ?? null,
 		});
 	}
 
@@ -132,7 +137,7 @@ class RouteEntity implements Entity {
 			images,
 			name,
 			pois,
-			userRoute: null,
+			savedUserRoute: null,
 		});
 	}
 
@@ -144,7 +149,7 @@ class RouteEntity implements Entity {
 		geometry,
 		name,
 		pois,
-		userRoute,
+		savedUserRoute,
 	}: {
 		createdByUserId: number;
 		description: null | string;
@@ -156,7 +161,7 @@ class RouteEntity implements Entity {
 			id: number;
 			visitOrder: number;
 		}[];
-		userRoute?: UserRoute[];
+		savedUserRoute?: SavedUserRoute[];
 	}): RouteEntity {
 		return new RouteEntity({
 			createdByUserId,
@@ -168,7 +173,7 @@ class RouteEntity implements Entity {
 			images: [],
 			name,
 			pois,
-			userRoute: userRoute ?? null,
+			savedUserRoute: savedUserRoute ?? null,
 		});
 	}
 
@@ -186,7 +191,7 @@ class RouteEntity implements Entity {
 			name: string;
 			visitOrder: number;
 		}[];
-		userRoute: null | UserRoute;
+		savedUserRoute: null | SavedUserRoute;
 	} {
 		return {
 			createdByUserId: this.createdByUserId,
@@ -202,7 +207,7 @@ class RouteEntity implements Entity {
 				name: string;
 				visitOrder: number;
 			}[],
-			userRoute: this.userRoute,
+			savedUserRoute: this.savedUserRoute,
 		};
 	}
 

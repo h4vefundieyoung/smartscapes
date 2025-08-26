@@ -376,7 +376,10 @@ describe("RouteService", () => {
 
 		const result = await routeService.findById(EXISTING_ID);
 
-		assert.deepStrictEqual(result, { ...mockRouteIdResponse, userRoute: null });
+		assert.deepStrictEqual(result, {
+			...mockRouteIdResponse,
+			savedUserRoute: null,
+		});
 	});
 
 	it("findById should throw an error when route does not exist", async () => {

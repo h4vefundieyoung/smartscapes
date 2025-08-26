@@ -26,9 +26,7 @@ const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {
 		const { headers, url } = request;
 		const method = request.method as HTTPMethod;
 
-		const isWhiteListRoute = checkIsWhiteRoute({ method, url, whiteRoutes });
-
-		const parseToken = async (): Promise<void> => {
+		const authorizeUser = async (): Promise<void> => {
 			if (!headers.authorization) {
 				throw new AuthError();
 			}
@@ -47,17 +45,15 @@ const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {
 			request.user = user;
 		};
 
-		if (isWhiteListRoute) {
-			try {
-				await parseToken();
+		try {
+			await authorizeUser();
+		} catch (error) {
+			const isWhiteListRoute = checkIsWhiteRoute({ method, url, whiteRoutes });
 
-				return;
-			} catch {
-				return;
+			if (!isWhiteListRoute) {
+				throw error;
 			}
 		}
-
-		await parseToken();
 	};
 
 	app.decorateRequest("user", null);

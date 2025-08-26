@@ -1,6 +1,6 @@
 export {
+	type UserRouteDeleteParameters,
 	type UserRouteFinishRequestDto,
-	type UserRouteParameters,
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
 	type UserRouteStatusType,

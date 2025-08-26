@@ -82,7 +82,7 @@
 	border-color: var(--color-text-error);
 }
 
-.button-pressed {
+.button-ghost {
 	color: var(--color-fill-brand-strong);
 	background-color: var(--color-fill-weak);
 }

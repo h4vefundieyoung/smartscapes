@@ -151,7 +151,7 @@ describe("UserRouteRepository", () => {
 		});
 	});
 
-	describe("deleteSavedRoute", () => {
+	describe("delete", () => {
 		const DATABASE = "user_routes";
 		const DELETED_COUNT = 5;
 		const EXISTING_ID = 1;

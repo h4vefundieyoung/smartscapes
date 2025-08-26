@@ -54,7 +54,7 @@ const RouteDetails = (): React.JSX.Element => {
 		});
 
 	const isAuthorized = Boolean(user);
-	const isSaved = route?.userRoute?.status === UserRouteStatus.NOT_STARTED;
+	const isSaved = route?.savedUserRoute?.status === UserRouteStatus.NOT_STARTED;
 	const isSaving = saveStatus === DataStatus.PENDING;
 	const hasEditPermissions = Boolean(
 		user &&
@@ -122,10 +122,10 @@ const RouteDetails = (): React.JSX.Element => {
 	}, [route?.id, dispatch]);
 
 	const handleDeleteUserRoute = useCallback(() => {
-		if (route?.userRoute?.id) {
-			void dispatch(userRoutesActions.deleteUserRoute(route.userRoute.id));
+		if (route?.savedUserRoute?.id) {
+			void dispatch(userRoutesActions.deleteUserRoute(route.savedUserRoute.id));
 		}
-	}, [route?.userRoute?.id, dispatch]);
+	}, [route?.savedUserRoute?.id, dispatch]);
 
 	const handleDeleteImage = useCallback(
 		(id: number) => {
@@ -205,13 +205,13 @@ const RouteDetails = (): React.JSX.Element => {
 							{isAuthorized && (
 								<div className={styles["save-button-container"]}>
 									<Button
-										icon="bookmarks"
+										icon="bookmark"
 										isDisabled={isSaving}
-										isPressed={isSaved}
 										label="save route"
 										onClick={
 											isSaved ? handleDeleteUserRoute : handleSaveUserRoute
 										}
+										variant={isSaved ? "ghost" : "primary"}
 									/>
 								</div>
 							)}

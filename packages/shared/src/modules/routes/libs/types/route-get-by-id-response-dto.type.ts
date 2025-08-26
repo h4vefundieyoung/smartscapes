@@ -16,7 +16,7 @@ type RouteGetByIdResponseDto = {
 		name: string;
 		visitOrder: number;
 	}[];
-	userRoute: null | Pick<UserRouteResponseDto, "id" | "status">;
+	savedUserRoute: null | Pick<UserRouteResponseDto, "id" | "status">;
 };
 
 export { type RouteGetByIdResponseDto };

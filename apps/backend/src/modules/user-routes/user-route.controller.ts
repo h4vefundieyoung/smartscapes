@@ -10,8 +10,8 @@ import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
 import { UserRouteApiPath } from "./libs/enums/enum.js";
 import {
+	type UserRouteDeleteParameters,
 	type UserRouteFinishRequestDto,
-	type UserRouteParameters,
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
 } from "./libs/types/type.js";
@@ -259,7 +259,7 @@ class UserRouteController extends BaseController {
 	public async delete({
 		params,
 		user,
-	}: APIHandlerOptions<{ params: UserRouteParameters }>): Promise<
+	}: APIHandlerOptions<{ params: UserRouteDeleteParameters }>): Promise<
 		APIHandlerResponse<boolean>
 	> {
 		const routeId = Number(params.id);

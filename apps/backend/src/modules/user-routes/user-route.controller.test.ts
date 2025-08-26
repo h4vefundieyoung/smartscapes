@@ -6,8 +6,8 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import {
+	type UserRouteDeleteParameters,
 	type UserRouteFinishRequestDto,
-	type UserRouteParameters,
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
 } from "./libs/types/type.js";
@@ -201,16 +201,16 @@ describe("UserRouteController", () => {
 
 	describe("delete", () => {
 		it("should delete user route", async () => {
-			const parameters: UserRouteParameters = {
+			const parameters: UserRouteDeleteParameters = {
 				id: 1,
 			};
 
 			const options: APIHandlerOptions<{
-				params: UserRouteParameters;
+				params: UserRouteDeleteParameters;
 			}> = {
 				params: parameters,
 			} as APIHandlerOptions<{
-				params: UserRouteParameters;
+				params: UserRouteDeleteParameters;
 			}>;
 
 			const response = await userRouteController.delete(options);

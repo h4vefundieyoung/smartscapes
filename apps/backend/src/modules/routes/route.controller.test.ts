@@ -117,7 +117,7 @@ describe("Route controller", () => {
 			{ id: FIRST_POI_ID, name: FIRST_NAME, visitOrder: FIRST_VISIT_ORDER },
 			{ id: SECOND_POI_ID, name: SECOND_NAME, visitOrder: SECOND_VISIT_ORDER },
 		],
-		userRoute: null,
+		savedUserRoute: null,
 	};
 
 	const mockUserWithWrongPermission = {

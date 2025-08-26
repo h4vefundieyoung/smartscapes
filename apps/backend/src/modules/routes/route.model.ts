@@ -38,7 +38,7 @@ class RouteModel extends Model {
 		visitOrder: number;
 	}[];
 
-	public userRoute!: {
+	public savedUserRoute!: {
 		id: number;
 		status: UserRouteStatusType;
 		userId: number;
@@ -81,7 +81,7 @@ class RouteModel extends Model {
 			modelClass: PointsOfInterestModel,
 			relation: Model.ManyToManyRelation,
 		},
-		userRoute: {
+		savedUserRoute: {
 			join: {
 				from: "routes.id",
 				to: "user_routes.routeId",

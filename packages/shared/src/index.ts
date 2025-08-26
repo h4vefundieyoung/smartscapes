@@ -117,13 +117,11 @@ export {
 } from "./modules/user-follows/user-follows.js";
 export {
 	UserRouteApiPath,
+	type UserRouteDeleteParameters,
 	userRouteDeleteValidationSchema,
 	type UserRouteFinishRequestDto,
 	userRouteFinishValidationSchema,
-	type UserRouteParameters,
-	userRouteParametersValidationSchema,
 	type UserRoutePatchRequestDto,
-	userRoutePatchValidationSchema,
 	type UserRouteQueryRequestDto,
 	userRouteQueryValidationSchema,
 	type UserRouteResponseDto,

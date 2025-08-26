@@ -93,7 +93,7 @@ const { actions, name, reducer } = createSlice({
 				state.saveRouteStatus = DataStatus.FULFILLED;
 
 				if (state.route) {
-					state.route.userRoute = { id, status };
+					state.route.savedUserRoute = { id, status };
 				}
 			},
 		);
@@ -107,7 +107,7 @@ const { actions, name, reducer } = createSlice({
 			state.saveRouteStatus = DataStatus.FULFILLED;
 
 			if (state.route) {
-				state.route.userRoute = null;
+				state.route.savedUserRoute = null;
 			}
 		});
 

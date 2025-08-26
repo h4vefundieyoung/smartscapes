@@ -1,4 +1,3 @@
-export { type UserRoute } from "./user-route.js";
 export {
 	type FileUploadResponseDto,
 	type RouteConstructRequestDto,

@@ -1,7 +1,5 @@
 import { z } from "zod";
 
-import { LocationType } from "../../../../libs/enums/enums.js";
-import { coordinateSchema } from "../../../../libs/validated-schemas/validated-schemas.js";
 import {
 	PointsOfInterestValidationMessage,
 	PointsOfInterestValidationRule,
@@ -17,12 +15,6 @@ const pointOfInterestUpdate = z
 				message: PointsOfInterestValidationMessage.DESCRIPTION_MAXIMUM_LENGTH,
 			})
 			.nullable(),
-		location: z.object({
-			coordinates: coordinateSchema,
-			type: z.literal(LocationType.POINT, {
-				message: PointsOfInterestValidationMessage.INVALID_LOCATION_TYPE,
-			}),
-		}),
 		name: z
 			.string()
 			.min(PointsOfInterestValidationRule.NAME_MIN_LENGTH, {

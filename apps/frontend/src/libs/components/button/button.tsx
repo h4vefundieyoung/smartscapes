@@ -8,31 +8,30 @@ import styles from "./styles.module.css";
 type Properties = {
 	icon?: IconName;
 	isDisabled?: boolean;
-	isPressed?: boolean;
 	label: string;
 	onClick?: () => void;
 	to?: string;
 	type?: "button" | "submit";
-	variant?: "outlined" | "outlined-danger" | "primary" | "secondary";
+	variant?: "ghost" | "outlined" | "outlined-danger" | "primary" | "secondary";
 };
 
 const Button = ({
 	icon,
 	isDisabled = false,
-	isPressed,
 	label,
 	onClick,
 	to,
 	type = "submit",
 	variant = "primary",
 }: Properties): React.JSX.Element => {
+	const isGhostVariant = variant === "ghost";
 	const buttonClass = combineClassNames(
 		styles["button"],
 		variant === "outlined" && styles["button-outlined"],
 		variant === "outlined-danger" && styles["outlined-danger"],
 		variant === "primary" && styles["button-primary"],
 		variant === "secondary" && styles["button-secondary"],
-		isPressed && styles["button-pressed"],
+		isGhostVariant && styles["button-ghost"],
 	);
 
 	const buttonContent = useMemo(
@@ -40,13 +39,15 @@ const Button = ({
 			<>
 				<span className={icon && "visually-hidden"}>{label}</span>
 				{icon && (
-					<span className={isPressed ? styles["icon-pressed"] : styles["icon"]}>
+					<span
+						className={isGhostVariant ? styles["icon-pressed"] : styles["icon"]}
+					>
 						<Icon height={20} name={icon} width={20} />
 					</span>
 				)}
 			</>
 		),
-		[icon, isPressed, label],
+		[icon, label, isGhostVariant],
 	);
 
 	if (to) {

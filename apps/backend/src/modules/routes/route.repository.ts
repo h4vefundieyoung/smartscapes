@@ -5,6 +5,7 @@ import {
 } from "~/libs/types/types.js";
 
 import { type PlannedPathModel } from "../planned-paths/planned-path.model.js";
+import { UserRouteStatus } from "./libs/enums/enums.js";
 import { type RouteFindAllOptions } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
 import { type RouteModel } from "./route.model.js";
@@ -151,7 +152,8 @@ class RouteRepository implements Repository {
 									"user_routes.status",
 									"user_routes.user_id",
 								)
-								.where("user_routes.user_id", userId);
+								.where("user_routes.user_id", userId)
+								.andWhere("user_routes.status", UserRouteStatus.NOT_STARTED);
 						},
 					});
 				}

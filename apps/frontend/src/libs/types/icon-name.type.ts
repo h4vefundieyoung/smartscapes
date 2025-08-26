@@ -2,7 +2,7 @@ type IconName =
 	| "analytics"
 	| "arrowDown"
 	| "bell"
-	| "bookmarks"
+	| "bookmark"
 	| "caretDown"
 	| "caretUp"
 	| "close"

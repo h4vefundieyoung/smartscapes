@@ -37,13 +37,16 @@ import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
-	const { categories, route, user } = useAppSelector(
-		({ auth, categories, routeDetails }) => ({
-			categories: categories.categories,
-			route: routeDetails.route,
-			user: auth.authenticatedUser,
-		}),
-	);
+
+	const { user } = useAppSelector(({ auth }) => ({
+		user: auth.authenticatedUser,
+	}));
+	const { route } = useAppSelector(({ routeDetails }) => ({
+		route: routeDetails.route,
+	}));
+	const { categories } = useAppSelector(({ categories }) => ({
+		categories: categories.categories,
+	}));
 
 	const dataStatus = useAppSelector(
 		({ routeDetails }) => routeDetails.dataStatus,

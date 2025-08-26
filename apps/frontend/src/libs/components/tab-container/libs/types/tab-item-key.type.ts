@@ -1,3 +1,3 @@
-type TabItemKey = "my-reviews" | "user-details";
+type TabItemKey = "history" | "my-reviews" | "saved-routes" | "user-details";
 
 export { type TabItemKey };

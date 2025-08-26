@@ -32,6 +32,7 @@ describe("UserRouteController", () => {
 			type: "LineString",
 		},
 		routeId: 7,
+		routeName: "Landscape alley",
 		startedAt: null,
 		status: "not_started",
 		userId: 1,

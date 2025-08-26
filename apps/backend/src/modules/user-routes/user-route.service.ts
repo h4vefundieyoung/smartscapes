@@ -34,12 +34,13 @@ class UserRouteService implements Service {
 	}): Promise<UserRouteResponseDto> {
 		const { routeId, userId } = payload;
 
-		const { geometry } = await this.routeService.findById(routeId);
+		const { geometry, name } = await this.routeService.findById(routeId);
 
 		const createdData = UserRouteEntity.initializeNew({
 			actualGeometry: geometry,
 			plannedGeometry: geometry,
 			routeId,
+			routeName: name,
 			status: UserRouteStatus.NOT_STARTED,
 			userId,
 		});

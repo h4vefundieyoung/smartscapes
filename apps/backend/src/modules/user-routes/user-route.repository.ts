@@ -53,8 +53,9 @@ class UserRouteRepository implements Repository {
 		const userRoutes = await this.userRouteModel
 			.query()
 			.where(filters)
+			.withGraphJoined("routes")
 			.select([
-				"id",
+				"user_routes.id as id",
 				"routeId",
 				"userId",
 				"status",
@@ -66,6 +67,7 @@ class UserRouteRepository implements Repository {
 				this.userRouteModel.raw(
 					"ST_AsGeoJSON(planned_geometry)::json as planned_geometry",
 				),
+				"name as routeName",
 			])
 			.execute();
 

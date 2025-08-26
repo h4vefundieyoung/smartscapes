@@ -29,6 +29,11 @@ import {
 	routesApi,
 	routesReducer,
 } from "~/modules/routes/routes.js";
+import {
+	userRouteApi,
+	userRouteDetailsReducer,
+	userRoutesReducer,
+} from "~/modules/user-routes/user-routes.js";
 import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
 
 import { type ExtraArguments, type RootReducer } from "./libs/types/types.js";
@@ -53,6 +58,7 @@ class Store {
 			storage,
 			toastNotifier,
 			userApi,
+			userRouteApi,
 		};
 	}
 
@@ -77,6 +83,8 @@ class Store {
 				pointsOfInterest: pointsOfInterestReducer,
 				routeDetails: routeDetailsReducer,
 				routes: routesReducer,
+				userRouteDetails: userRouteDetailsReducer,
+				userRoutes: userRoutesReducer,
 				users: usersReducer,
 			},
 		});

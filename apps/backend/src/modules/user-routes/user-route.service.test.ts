@@ -25,6 +25,7 @@ describe("UserRouteService", () => {
 		id: 1,
 		plannedGeometry: mockGeometry,
 		routeId: 7,
+		routeName: "Landscape alley",
 		startedAt: null,
 		status: UserRouteStatus.NOT_STARTED,
 		userId: 1,

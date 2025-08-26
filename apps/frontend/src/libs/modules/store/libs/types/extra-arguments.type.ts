@@ -5,6 +5,7 @@ import { type notificationApi } from "~/modules/notification/notification.js";
 import { type pointOfInterestApi } from "~/modules/points-of-interest/points-of-interest.js";
 import { type reviewApi } from "~/modules/reviews/reviews.js";
 import { type routesApi } from "~/modules/routes/routes.js";
+import { type userRouteApi } from "~/modules/user-routes/user-routes.js";
 import { type userApi } from "~/modules/users/users.js";
 
 type ExtraArguments = {
@@ -16,6 +17,7 @@ type ExtraArguments = {
 	storage: Storage;
 	toastNotifier: typeof toastNotifier;
 	userApi: typeof userApi;
+	userRouteApi: typeof userRouteApi;
 };
 
 export { type ExtraArguments };

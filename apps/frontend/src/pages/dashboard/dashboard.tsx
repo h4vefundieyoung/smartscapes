@@ -1,48 +1,45 @@
-import { Carousel, Loader, Select } from "~/libs/components/components.js";
-import { useAppForm } from "~/libs/hooks/hooks.js";
-import { type SelectOption } from "~/libs/types/types.js";
+import { Carousel, TabContainer } from "~/libs/components/components.js";
+import {
+	useAppDispatch,
+	useEffect,
+	useTabNavigation,
+} from "~/libs/hooks/hooks.js";
+import { actions as userRoutesActions } from "~/modules/user-routes/user-routes.js";
 
+import { DASHBOARD_TABS } from "./libs/constants/dashboard-tabs.constant.js";
 import styles from "./styles.module.css";
 
-type FormValues = {
-	multiColors: string[];
-	singleColor: null | string;
-};
-
 const Dashboard = (): React.JSX.Element => {
-	const colorOptions: SelectOption<string>[] = [
-		{ label: "Red", value: "red" },
-		{ label: "Green", value: "green" },
-		{ label: "Blue", value: "blue" },
-	];
+	const dispatch = useAppDispatch();
 
-	const { control } = useAppForm<FormValues>({
-		defaultValues: { multiColors: [], singleColor: null },
-	});
+	useEffect(() => {
+		void dispatch(userRoutesActions.getAllForCurrentUser());
+	}, [dispatch]);
+
+	const initialTabId = DASHBOARD_TABS[0]?.id ?? "";
+
+	const { activeTabId, handleTabChange } = useTabNavigation(
+		initialTabId,
+		"dashboard-tab",
+	);
 
 	return (
 		<main className={styles["container"]}>
 			<div className={styles["components-container"]}>
-				<Loader />
-				<div className={styles["carousel-container"]}>
-					<Carousel images={[""]} />
+				<div className={styles["text"]}>
+					<h1 className={styles["label"]}>Dashboard</h1>
+					<p className={styles["description"]}>
+						Start saved routes and review your route history
+					</p>
 				</div>
-				<div className={styles["select-container"]}>
-					<Select
-						control={control}
-						label="Single select"
-						name="singleColor"
-						options={colorOptions}
-					/>
-					<Select
-						control={control}
-						isMulti
-						label="Multi select"
-						name="multiColors"
-						options={colorOptions}
-					/>
-				</div>
+
+				<TabContainer
+					activeTabId={activeTabId}
+					onTabChange={handleTabChange}
+					tabsData={DASHBOARD_TABS}
+				/>
 			</div>
+			<Carousel images={[""]} />
 		</main>
 	);
 };

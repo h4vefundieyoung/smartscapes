@@ -49,9 +49,12 @@ const RoutesPanel = ({
 
 	const handleRouteCardClick = useCallback(
 		(routeId: number) => (): void => {
-			const route = routes.find((r) => r.id === routeId);
+			const route = routes.find((route) => route.id === routeId);
 
-			if (!route || route.geometry.coordinates.length === 0) {
+			if (
+				!route?.geometry.coordinates ||
+				route.geometry.coordinates.length === 0
+			) {
 				return;
 			}
 

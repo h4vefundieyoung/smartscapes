@@ -1,11 +1,10 @@
 .container {
 	position: absolute;
 	inset: 0;
-	z-index: 3;
+	z-index: 2;
 	width: max-content;
 	height: 100%;
 	padding: 32px;
-	padding-bottom: 64px;
 }
 
 .panel {
@@ -35,6 +34,7 @@
 
 .body {
 	display: flex;
+	flex: 1;
 	flex-direction: column;
 	gap: 16px;
 	overflow: hidden;
@@ -53,4 +53,9 @@
 	padding: 0;
 	margin: 0;
 	overflow-y: auto;
+}
+
+.footer {
+	align-self: flex-end;
+	margin-left: auto;
 }

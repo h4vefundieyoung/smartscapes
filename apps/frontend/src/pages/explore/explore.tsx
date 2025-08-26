@@ -1,3 +1,4 @@
+import { type RouteGetAllItemResponseDto } from "@smartscapes/shared";
 import React from "react";
 
 import { MapProvider } from "~/libs/components/components.js";
@@ -48,7 +49,7 @@ const Explore = (): React.JSX.Element => {
 			<div className={styles["routes-container"]}>
 				<RoutesPanel
 					locationDataStatus={locationDataStatus}
-					routes={routes}
+					routes={routes as RouteGetAllItemResponseDto[]}
 					routesDataStatus={routesDataStatus}
 					routesError={routesError}
 				/>

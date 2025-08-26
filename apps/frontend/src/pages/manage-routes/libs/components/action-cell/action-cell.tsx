@@ -7,7 +7,7 @@ import styles from "./styles.module.css";
 
 type ActionCellProperties = {
 	id: number;
-	onDelete: (id: number) => void;
+	onDelete?: (id: number) => void;
 	onEdit: (id: number) => void;
 };
 
@@ -17,8 +17,10 @@ const ActionCell = memo(({ id, onDelete, onEdit }: ActionCellProperties) => {
 	}, [id, onEdit]);
 
 	const handleDeleteClick = useCallback(() => {
-		onDelete(id);
+		onDelete?.(id);
 	}, [id, onDelete]);
+
+	const hasDelete = Boolean(onDelete);
 
 	return (
 		<div className={styles["actions-cell"]}>
@@ -31,15 +33,17 @@ const ActionCell = memo(({ id, onDelete, onEdit }: ActionCellProperties) => {
 				<Icon height={24} name="edit" width={24} />
 				<span className="visually-hidden">Edit</span>
 			</button>
-			<button
-				aria-label="Delete"
-				className={styles["icon-button"]}
-				onClick={handleDeleteClick}
-				type="button"
-			>
-				<Icon height={24} name="trash" width={24} />
-				<span className="visually-hidden">Delete</span>
-			</button>
+			{hasDelete && (
+				<button
+					aria-label="Delete"
+					className={styles["icon-button"]}
+					onClick={handleDeleteClick}
+					type="button"
+				>
+					<Icon height={24} name="trash" width={24} />
+					<span className="visually-hidden">Delete</span>
+				</button>
+			)}
 		</div>
 	);
 });

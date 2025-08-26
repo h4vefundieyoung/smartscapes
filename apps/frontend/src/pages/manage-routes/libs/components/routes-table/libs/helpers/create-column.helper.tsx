@@ -1,14 +1,13 @@
-import { type RouteGetAllItemResponseDto } from "@smartscapes/shared";
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { DataFormat } from "~/libs/enums/enums.js";
 import { getFormattedDate } from "~/libs/helpers/helpers.js";
+import { type RouteGetAllItemResponseDto } from "~/modules/routes/routes.js";
 
 import { ActionCell } from "../../../components.js";
 
 const createColumns = (
 	onEdit: (id: number) => void,
-	onDelete: (id: number) => void,
 ): ColumnDef<RouteGetAllItemResponseDto>[] => [
 	{
 		accessorKey: "id",
@@ -35,9 +34,7 @@ const createColumns = (
 		size: 355,
 	},
 	{
-		cell: ({ row }) => (
-			<ActionCell id={row.original.id} onDelete={onDelete} onEdit={onEdit} />
-		),
+		cell: ({ row }) => <ActionCell id={row.original.id} onEdit={onEdit} />,
 		header: "Actions",
 		id: "actions",
 		size: 144,

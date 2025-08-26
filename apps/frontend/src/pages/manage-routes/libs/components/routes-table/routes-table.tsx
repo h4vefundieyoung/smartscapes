@@ -40,11 +40,17 @@ const RoutesTable = (): React.JSX.Element => {
 		(state) => state.auth.authenticatedUser,
 	) as UserAuthResponseDto;
 
-	const { control, errors, getValues, handleReset, handleSubmit } =
-		useAppForm<RouteCreateRequestDto>({
-			defaultValues: DEFAULT_CREATE_ROUTE_PAYLOAD,
-			validationSchema: routesCreateValidationSchema,
-		});
+	const {
+		control,
+		errors,
+		getValues,
+		handleReset,
+		handleSubmit,
+		handleValueSet,
+	} = useAppForm<RouteCreateRequestDto>({
+		defaultValues: DEFAULT_CREATE_ROUTE_PAYLOAD,
+		validationSchema: routesCreateValidationSchema,
+	});
 
 	const plannedRouteId = searchParameters.get("plannedRouteId");
 
@@ -138,13 +144,18 @@ const RoutesTable = (): React.JSX.Element => {
 				...createRouteFormData,
 			});
 		}
-	}, [createRouteFormData, handleReset]);
+
+		if (authenticatedUser.id) {
+			handleValueSet("createdByUserId", authenticatedUser.id);
+		}
+	}, [createRouteFormData, handleReset, authenticatedUser.id, handleValueSet]);
 
 	useEffect(() => {
 		if (createStatus === DataStatus.FULFILLED) {
 			clearModalAndReset();
+			dispatch(routesActions.resetCreateStatus());
 		}
-	}, [createStatus, clearModalAndReset]);
+	}, [dispatch, createStatus, clearModalAndReset]);
 
 	useEffect(() => {
 		const handleVisibilityChange = (): void => {

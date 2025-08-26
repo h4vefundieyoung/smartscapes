@@ -57,7 +57,7 @@ const finish = createAsyncThunk<
 	return result;
 });
 
-const getByRouteIdAndUserId = createAsyncThunk<
+const getByRouteId = createAsyncThunk<
 	APIResponse<UserRouteResponseDto>,
 	UserRouteQueryRequestDto,
 	AsyncThunkConfig
@@ -70,4 +70,4 @@ const getByRouteIdAndUserId = createAsyncThunk<
 	},
 );
 
-export { create, finish, getAllByUserId, getByRouteIdAndUserId, start };
+export { create, finish, getAllByUserId, getByRouteId, start };

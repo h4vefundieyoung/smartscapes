@@ -25,16 +25,22 @@ const useUserRouteState = (routeId: number): UseUserRouteStateReturn => {
 		}),
 	);
 
-	useEffect(() => {
-		if (!userRouteDetails && userRouteDetailsDataStatus === DataStatus.IDLE) {
-			void dispatch(userRouteActions.getByRouteIdAndUserId({ routeId }));
-		}
-	}, [dispatch, routeId, userRouteDetails, userRouteDetailsDataStatus]);
-
 	const isUserRouteLoading = userRouteDetailsDataStatus === DataStatus.PENDING;
 	const isUserRouteActive = userRouteDetails?.status === UserRouteStatus.ACTIVE;
 	const isUserRouteCompleted =
 		userRouteDetails?.status === UserRouteStatus.COMPLETED;
+
+	useEffect(() => {
+		if (!userRouteDetails && userRouteDetailsDataStatus === DataStatus.IDLE) {
+			void dispatch(userRouteActions.getByRouteId({ routeId }));
+		}
+	}, [dispatch, routeId, userRouteDetails, userRouteDetailsDataStatus]);
+
+	useEffect(() => {
+		if (isUserRouteActive) {
+			void dispatch(userRouteActions.startTrackingRoute());
+		}
+	}, [dispatch, userRouteDetails?.status]);
 
 	return {
 		isUserRouteActive,

@@ -1,6 +1,5 @@
 import { Button, Loader, MapProvider } from "~/libs/components/components.js";
 import { useParams } from "~/libs/hooks/hooks.js";
-import { type LineStringGeometry } from "~/libs/types/types.js";
 
 import {
 	useRouteMapProperties,
@@ -11,17 +10,6 @@ import {
 } from "./libs/hooks/hooks.js";
 import styles from "./styles.module.css";
 
-const LATITUDE = 50.415;
-const LONGITUDE = 30.418;
-
-const mockActualGeometry: LineStringGeometry = {
-	coordinates: [
-		[LONGITUDE, LATITUDE],
-		[LONGITUDE, LATITUDE],
-	],
-	type: "LineString",
-};
-
 const UserRoute = (): React.JSX.Element => {
 	const { routeId } = useParams<{ routeId: string }>();
 
@@ -29,10 +17,7 @@ const UserRoute = (): React.JSX.Element => {
 	const { isUserRouteActive, isUserRouteCompleted, isUserRouteLoading } =
 		useUserRouteState(Number(routeId));
 
-	const { handleFinish, handleStart } = useUserRouteHandler(
-		Number(routeId),
-		mockActualGeometry,
-	);
+	const { handleFinish, handleStart } = useUserRouteHandler(Number(routeId));
 
 	const mapProperties = useRouteMapProperties(Number(routeId));
 

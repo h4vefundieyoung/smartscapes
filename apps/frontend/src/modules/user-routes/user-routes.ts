@@ -12,6 +12,7 @@ const userRouteApi = new UserRouteApi({
 
 export { userRouteApi };
 export { UserRouteStatus } from "./libs/enums/enums.js";
+export { getActualCoordinatesFromStorage } from "./libs/helpers/helpers.js";
 export {
 	actions,
 	userRouteDetailsReducer,

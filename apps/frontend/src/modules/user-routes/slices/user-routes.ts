@@ -2,20 +2,28 @@ import {
 	create,
 	finish,
 	getAllByUserId,
-	getByRouteIdAndUserId,
+	getByRouteId,
 	start,
 } from "./actions.js";
+import {
+	addPointToActualPath,
+	startTrackingRoute,
+	stopTrackingRoute,
+} from "./tracking-actions.js";
 import { actions as userRouteDetailsActions } from "./user-route-details.slice.js";
 import { actions as userRouteActions } from "./user-routes.slice.js";
 
 const allActions = {
 	...userRouteActions,
 	...userRouteDetailsActions,
+	addPointToActualPath,
 	create,
 	finish,
 	getAllByUserId,
-	getByRouteIdAndUserId,
+	getByRouteId,
 	start,
+	startTrackingRoute,
+	stopTrackingRoute,
 };
 
 export { allActions as actions };

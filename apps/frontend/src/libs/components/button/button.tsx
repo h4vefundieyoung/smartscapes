@@ -66,6 +66,7 @@ const Button = ({
 			type={type}
 		>
 			{buttonContent}
+			{label}
 		</button>
 	);
 };

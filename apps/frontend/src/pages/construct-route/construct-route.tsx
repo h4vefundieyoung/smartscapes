@@ -47,14 +47,18 @@ const ConstructRoute = (): React.JSX.Element => {
 		return { geometry: routeLineString.geometry, id: "planned" };
 	}, [routeLineString]);
 
+	const plannedRouteId = routeLineString?.id ?? null;
+
 	return (
 		<main className={styles["main"]}>
 			<div className={styles["map"]}>
 				<MapProvider markers={markers} routeLine={routeLine} />
 			</div>
 			<SidePanel
+				isSaveDisabled={!routeLineString}
 				onRemovePoi={handleRemovePoi}
 				onSelectPoi={handleSelectPoi}
+				plannedRouteId={plannedRouteId}
 				pointsOfInterest={selectedPois}
 			/>
 		</main>

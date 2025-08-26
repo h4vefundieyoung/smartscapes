@@ -90,7 +90,11 @@ const { actions, name, reducer } = createSlice({
 	},
 	initialState,
 	name: "routes",
-	reducers: {},
+	reducers: {
+		resetCreateStatus(state) {
+			state.createStatus = DataStatus.IDLE;
+		},
+	},
 });
 
 export { actions, name, reducer };

@@ -1,5 +1,6 @@
 .label {
-	margin: 0;
+	margin: 0 0 12px;
+	text-align: start;
 }
 
 .route-container {
@@ -7,7 +8,6 @@
 	width: 100%;
 	max-width: 500px;
 	min-height: 350px;
-	margin-top: 50px;
 	cursor: pointer;
 	outline: none;
 	background: none;

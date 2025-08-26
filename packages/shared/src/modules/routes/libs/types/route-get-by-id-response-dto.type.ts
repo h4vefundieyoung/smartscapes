@@ -2,6 +2,7 @@ import { type LineStringGeometry } from "../../../../libs/types/types.js";
 import { type FileUploadResponseDto } from "../../../files/libs/types/types.js";
 
 type RouteGetByIdResponseDto = {
+	createdAt: null | string;
 	createdByUserId: number;
 	description: string;
 	distance: number;

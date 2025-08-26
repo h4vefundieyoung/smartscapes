@@ -10,6 +10,7 @@ import { RouteEntity } from "./route.entity.js";
 
 describe("RouteEntity", () => {
 	const routesDataWithId = {
+		createdAt: "2024-01-01T00:00:00Z",
 		createdByUserId: 11,
 		description: "A test route description",
 		distance: 2.34,

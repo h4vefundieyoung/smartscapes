@@ -1,5 +1,6 @@
 import { SortingOrder } from "~/libs/enums/enums.js";
 import {
+	type EntityPagination,
 	type Repository,
 	type TransactionOptions,
 } from "~/libs/types/types.js";
@@ -9,6 +10,7 @@ import { type RouteFindAllOptions } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
 import { type RouteModel } from "./route.model.js";
 
+const PAGE_NUMBER_OFFSET = 1;
 class RouteRepository implements Repository {
 	private plannedPathModel: typeof PlannedPathModel;
 
@@ -40,6 +42,7 @@ class RouteRepository implements Repository {
 				"id",
 				"name",
 				"description",
+				"created_at",
 				this.routesModel.raw("to_json(distance)::json as distance"),
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(geometry)::json as geometry"),
@@ -58,8 +61,12 @@ class RouteRepository implements Repository {
 
 	public async findAll(
 		options: null | RouteFindAllOptions,
-	): Promise<RouteEntity[]> {
-		const { categories, latitude, longitude, name } = options ?? {};
+	): Promise<EntityPagination<RouteEntity>> {
+		const { categories, latitude, longitude, name, page, perPage } =
+			options ?? {};
+
+		const hasLocationFilter = longitude !== undefined && latitude !== undefined;
+		const hasPagination = page !== undefined && perPage !== undefined;
 
 		const query = this.routesModel
 			.query()
@@ -84,18 +91,13 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
 				"routes.created_by_user_id",
-			])
-			.modify((builder) => {
-				if (options?.name) {
-					builder.whereILike("routes.name", `%${options.name.trim()}%`);
-				}
-			});
+			]);
 
 		if (name) {
 			query.whereILike("routes.name", `%${name.trim()}%`);
 		}
 
-		if (latitude !== undefined && longitude !== undefined) {
+		if (hasLocationFilter) {
 			query
 				.joinRelated("pois")
 				.where("pois_join.visit_order", 0)
@@ -117,9 +119,26 @@ class RouteRepository implements Repository {
 				.whereIn("categories.key", categories as string[]);
 		}
 
-		const routes = await query;
+		if (hasPagination) {
+			const offset = (page - PAGE_NUMBER_OFFSET) * perPage;
 
-		return routes.map((route) => RouteEntity.initializeList(route));
+			const [total, items] = await Promise.all([
+				query.clone().resultSize(),
+				query.clone().offset(offset).limit(perPage),
+			]);
+
+			return {
+				items: items.map((item) => RouteEntity.initialize(item)),
+				total,
+			};
+		}
+
+		const items = await query;
+
+		return {
+			items: items.map((item) => RouteEntity.initialize(item)),
+			total: items.length,
+		};
 	}
 
 	public async findById(id: number): Promise<null | RouteEntity> {

@@ -3,33 +3,43 @@ import { type MultiValue, type SingleValue } from "react-select";
 
 import { Button, Select } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/data-status.enum.js";
+import { getUrlWithQueryString } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppForm,
+	useAppNavigate,
 	useAppSelector,
 	useCallback,
 	useDebouncedFunction,
 	useMemo,
+	useSearchParams,
 } from "~/libs/hooks/hooks.js";
 import { type SelectOption } from "~/libs/types/types.js";
 import { type PointsOfInterestGetAllItemResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 import { actions as routeActions } from "~/modules/routes/routes.js";
+import { preserveCreateRouteFormData } from "~/modules/routes/slices/actions.js";
 
 import { PointOfInterestCard } from "../point-of-interest-card/point-of-interest-card.js";
 import styles from "./styles.module.css";
 
 type Properties = {
+	isSaveDisabled: boolean;
 	onRemovePoi: (id: number) => void;
 	onSelectPoi: (value: PointsOfInterestGetAllItemResponseDto) => void;
+	plannedRouteId: null | number;
 	pointsOfInterest: PointsOfInterestGetAllItemResponseDto[];
 };
 
 const SidePanel = ({
+	isSaveDisabled,
 	onRemovePoi,
 	onSelectPoi,
+	plannedRouteId,
 	pointsOfInterest,
 }: Properties): React.JSX.Element => {
 	const dispatch = useAppDispatch();
+	const navigate = useAppNavigate();
+	const [searchParameters] = useSearchParams();
 	const { dataStatus, pointsOfInterest: filteredPois } = useAppSelector(
 		(state) => state.constructRoute,
 	);
@@ -73,11 +83,34 @@ const SidePanel = ({
 		[onRemovePoi],
 	);
 
-	const handleConstructClick = useCallback(() => {
+	const handleBuildClick = useCallback(() => {
 		const poiIds = pointsOfInterest.map(({ id }) => id);
-
 		void dispatch(routeActions.constructRoute({ poiIds }));
 	}, [dispatch, pointsOfInterest]);
+
+	const handleSaveClick = useCallback(() => {
+		const route = searchParameters.get("returnTo");
+
+		if (!route || !plannedRouteId) {
+			return;
+		}
+
+		const poiIds = pointsOfInterest.map(({ id }) => id);
+
+		void dispatch(
+			preserveCreateRouteFormData({ plannedPathId: plannedRouteId, poiIds }),
+		);
+
+		const [path, query = ""] = route.split("?");
+		const existingQuery = Object.fromEntries(new URLSearchParams(query));
+
+		const targetUrl = getUrlWithQueryString(String(path), {
+			...existingQuery,
+			plannedRouteId,
+		});
+
+		navigate(targetUrl);
+	}, [dispatch, plannedRouteId, pointsOfInterest, searchParameters, navigate]);
 
 	const poiSelectOptions = useMemo(() => {
 		return filteredPois.map((poi) => ({
@@ -94,8 +127,9 @@ const SidePanel = ({
 				<div className={styles["header"]}>
 					<h2 className={styles["title"]}>Construct route</h2>
 					<Button
-						label="Construct"
-						onClick={handleConstructClick}
+						isDisabled={isSaveDisabled}
+						label="Save"
+						onClick={handleSaveClick}
 						type="button"
 					/>
 				</div>
@@ -122,6 +156,9 @@ const SidePanel = ({
 							/>
 						))}
 					</ul>
+				</div>
+				<div className={styles["footer"]}>
+					<Button label="Build path" onClick={handleBuildClick} type="button" />
 				</div>
 			</div>
 		</div>

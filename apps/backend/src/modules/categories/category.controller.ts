@@ -11,7 +11,7 @@ import { type CategoryService } from "~/modules/categories/category.service.js";
 import { CategoriesApiPath } from "./libs/enums/enums.js";
 import {
 	type CategoryCreateRequestDto,
-	type CategoryGetItemResponseDto,
+	type CategoryGetAllItemResponseDto,
 } from "./libs/types/types.js";
 import { categoryCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 
@@ -110,7 +110,7 @@ class CategoryController extends BaseController {
 		options: APIHandlerOptions<{
 			body: CategoryCreateRequestDto;
 		}>,
-	): Promise<APIHandlerResponse<CategoryGetItemResponseDto>> {
+	): Promise<APIHandlerResponse<CategoryGetAllItemResponseDto>> {
 		const { body } = options;
 
 		const item = await this.categoryService.create(body);
@@ -145,7 +145,7 @@ class CategoryController extends BaseController {
 	 */
 
 	public async findAll(): Promise<
-		APIHandlerResponse<CategoryGetItemResponseDto[]>
+		APIHandlerResponse<CategoryGetAllItemResponseDto[]>
 	> {
 		const { items } = await this.categoryService.findAll();
 

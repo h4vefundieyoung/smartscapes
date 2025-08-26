@@ -8,7 +8,7 @@ import { CategoryError } from "./libs/exceptions/exceptions.js";
 import { changeStringCase } from "./libs/helpers/helpers.js";
 import {
 	type CategoryCreateRequestDto,
-	type CategoryGetItemResponseDto,
+	type CategoryGetAllItemResponseDto,
 } from "./libs/types/types.js";
 
 class CategoryService implements Service {
@@ -20,7 +20,7 @@ class CategoryService implements Service {
 
 	public async create(
 		payload: CategoryCreateRequestDto,
-	): Promise<CategoryGetItemResponseDto> {
+	): Promise<CategoryGetAllItemResponseDto> {
 		const { name } = payload;
 
 		const key = changeStringCase(name);
@@ -42,14 +42,16 @@ class CategoryService implements Service {
 	}
 
 	public async findAll(): Promise<
-		CollectionResult<CategoryGetItemResponseDto>
+		CollectionResult<CategoryGetAllItemResponseDto>
 	> {
 		const items = await this.categoryRepository.findAll();
 
 		return { items: items.map((item) => item.toObject()) };
 	}
 
-	public async findByName(name: string): Promise<CategoryGetItemResponseDto> {
+	public async findByName(
+		name: string,
+	): Promise<CategoryGetAllItemResponseDto> {
 		const item = await this.categoryRepository.findByName(name);
 
 		if (!item) {

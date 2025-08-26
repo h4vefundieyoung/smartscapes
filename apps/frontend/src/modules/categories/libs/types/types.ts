@@ -1,1 +1,1 @@
-export { type CategoryGetItemResponseDto } from "@smartscapes/shared";
+export { type CategoryGetAllItemResponseDto } from "@smartscapes/shared";

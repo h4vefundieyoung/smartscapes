@@ -4,7 +4,7 @@ import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
 
-import { type CategoryGetItemResponseDto } from "./categories.js";
+import { type CategoryGetAllItemResponseDto } from "./categories.js";
 
 type Constructor = {
 	baseUrl: string;
@@ -17,15 +17,14 @@ class CategoriesApi extends BaseHTTPApi {
 		super({ baseUrl, http, path: APIPath.CATEGORIES, storage });
 	}
 
-	public async getAll(): Promise<APIResponse<CategoryGetItemResponseDto[]>> {
-		const response = await this.load<APIResponse<CategoryGetItemResponseDto[]>>(
-			this.getFullEndpoint("/", {}),
-			{
-				contentType: ContentType.JSON,
-				hasAuth: false,
-				method: "GET",
-			},
-		);
+	public async getAll(): Promise<APIResponse<CategoryGetAllItemResponseDto[]>> {
+		const response = await this.load<
+			APIResponse<CategoryGetAllItemResponseDto[]>
+		>(this.getFullEndpoint("/", {}), {
+			contentType: ContentType.JSON,
+			hasAuth: false,
+			method: "GET",
+		});
 
 		return await response.json();
 	}

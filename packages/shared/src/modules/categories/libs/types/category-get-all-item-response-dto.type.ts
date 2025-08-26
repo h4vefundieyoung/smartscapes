@@ -1,7 +1,7 @@
-type CategoryGetItemResponseDto = {
+type CategoryGetAllItemResponseDto = {
 	id: number;
 	key: string;
 	name: string;
 };
 
-export { type CategoryGetItemResponseDto };
+export { type CategoryGetAllItemResponseDto };

@@ -20,7 +20,6 @@ type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
 	restoreCreateRouteFormStatus: ValueOf<typeof DataStatus>;
 	routes: RouteGetByIdResponseDto[];
-	saveRouteStatus: ValueOf<typeof DataStatus>;
 };
 
 const initialState: State = {
@@ -29,7 +28,6 @@ const initialState: State = {
 	dataStatus: DataStatus.IDLE,
 	restoreCreateRouteFormStatus: DataStatus.IDLE,
 	routes: [],
-	saveRouteStatus: DataStatus.IDLE,
 };
 
 const { actions, name, reducer } = createSlice({

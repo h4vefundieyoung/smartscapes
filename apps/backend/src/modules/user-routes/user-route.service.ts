@@ -157,18 +157,11 @@ class UserRouteService implements Service {
 			userId,
 		});
 
-		if (Array.isArray(userRoutes) && userRoutes.length > 0) {
-			const userRoutes = await this.userRouteRepository.findByFilter({
-				routeId,
-				userId,
+		if (userRoutes.length > 0) {
+			throw new UserRouteError({
+				message: UserRouteExeptionMessage.USER_ROUTE_ALREADY_EXISTS,
+				status: HTTPCode.FORBIDDEN,
 			});
-
-			if (userRoutes.length > 0) {
-				throw new UserRouteError({
-					message: UserRouteExeptionMessage.USER_ROUTE_ALREADY_EXISTS,
-					status: HTTPCode.FORBIDDEN,
-				});
-			}
 		}
 	}
 
@@ -182,21 +175,14 @@ class UserRouteService implements Service {
 	}
 
 	private async ensureUserIsNotOnActiveRoute(userId: number): Promise<void> {
-		const userRoutes = await this.userRouteRepository.findByFilter({
-			status: UserRouteStatus.ACTIVE,
-			userId,
-		});
+		const hasActiveRoute =
+			await this.userRouteRepository.checkHasActiveRoute(userId);
 
-		if (Array.isArray(userRoutes) && userRoutes.length > 0) {
-			const hasActiveRoute =
-				await this.userRouteRepository.checkHasActiveRoute(userId);
-
-			if (hasActiveRoute) {
-				throw new UserRouteError({
-					message: UserRouteExeptionMessage.USER_ALREADY_ON_ACTIVE_STATUS,
-					status: HTTPCode.CONFLICT,
-				});
-			}
+		if (hasActiveRoute) {
+			throw new UserRouteError({
+				message: UserRouteExeptionMessage.USER_ALREADY_ON_ACTIVE_STATUS,
+				status: HTTPCode.CONFLICT,
+			});
 		}
 	}
 

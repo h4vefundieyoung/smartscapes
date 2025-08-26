@@ -205,13 +205,13 @@ const RouteDetails = (): React.JSX.Element => {
 							{isAuthorized && (
 								<div className={styles["save-button-container"]}>
 									<Button
-										disabled={isSaving}
 										icon="bookmarks"
+										isDisabled={isSaving}
+										isPressed={isSaved}
 										label="save route"
 										onClick={
 											isSaved ? handleDeleteUserRoute : handleSaveUserRoute
 										}
-										pressed={isSaved}
 									/>
 								</div>
 							)}

@@ -6,22 +6,22 @@ import { type IconName } from "~/libs/types/types.js";
 import styles from "./styles.module.css";
 
 type Properties = {
-	disabled?: boolean;
 	icon?: IconName;
+	isDisabled?: boolean;
+	isPressed?: boolean;
 	label: string;
 	onClick?: () => void;
-	pressed?: boolean;
 	to?: string;
 	type?: "button" | "submit";
 	variant?: "outlined" | "outlined-danger" | "primary" | "secondary";
 };
 
 const Button = ({
-	disabled = false,
 	icon,
+	isDisabled = false,
+	isPressed,
 	label,
 	onClick,
-	pressed,
 	to,
 	type = "submit",
 	variant = "primary",
@@ -32,7 +32,7 @@ const Button = ({
 		variant === "outlined-danger" && styles["outlined-danger"],
 		variant === "primary" && styles["button-primary"],
 		variant === "secondary" && styles["button-secondary"],
-		pressed && styles["button-pressed"],
+		isPressed && styles["button-pressed"],
 	);
 
 	const buttonContent = useMemo(
@@ -40,13 +40,13 @@ const Button = ({
 			<>
 				<span className={icon && "visually-hidden"}>{label}</span>
 				{icon && (
-					<span className={pressed ? styles["icon-pressed"] : styles["icon"]}>
+					<span className={isPressed ? styles["icon-pressed"] : styles["icon"]}>
 						<Icon height={20} name={icon} width={20} />
 					</span>
 				)}
 			</>
 		),
-		[icon, pressed, label],
+		[icon, isPressed, label],
 	);
 
 	if (to) {
@@ -60,7 +60,7 @@ const Button = ({
 	return (
 		<button
 			className={buttonClass}
-			disabled={disabled}
+			disabled={isDisabled}
 			onClick={onClick}
 			type={type}
 		>

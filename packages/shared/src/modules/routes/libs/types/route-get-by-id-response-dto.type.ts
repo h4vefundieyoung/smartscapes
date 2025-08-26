@@ -1,6 +1,6 @@
 import { type LineStringGeometry } from "../../../../libs/types/types.js";
 import { type FileUploadResponseDto } from "../../../files/libs/types/types.js";
-import { type UserRouteStatusType } from "../../../user-routes/user-routes.js";
+import { type UserRouteResponseDto } from "../../../user-routes/user-routes.js";
 
 type RouteGetByIdResponseDto = {
 	createdByUserId: number;
@@ -16,10 +16,7 @@ type RouteGetByIdResponseDto = {
 		name: string;
 		visitOrder: number;
 	}[];
-	userRoute: null | {
-		id: number;
-		status: UserRouteStatusType;
-	};
+	userRoute: null | Pick<UserRouteResponseDto, "id" | "status">;
 };
 
 export { type RouteGetByIdResponseDto };

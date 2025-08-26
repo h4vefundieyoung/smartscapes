@@ -3,6 +3,7 @@ import { type MultiValue, type SingleValue } from "react-select";
 
 import { Button, Select } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/data-status.enum.js";
+import { getUrlWithQueryString } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppForm,
@@ -101,10 +102,14 @@ const SidePanel = ({
 		);
 
 		const [path, query = ""] = route.split("?");
-		const newSearchParameters = new URLSearchParams(query);
-		newSearchParameters.set("plannedRouteId", String(plannedRouteId));
+		const existingQuery = Object.fromEntries(new URLSearchParams(query));
 
-		navigate(`${String(path)}?${newSearchParameters.toString()}`);
+		const targetUrl = getUrlWithQueryString(String(path), {
+			...existingQuery,
+			plannedRouteId,
+		});
+
+		navigate(targetUrl);
 	}, [dispatch, plannedRouteId, pointsOfInterest, searchParameters, navigate]);
 
 	const poiSelectOptions = useMemo(() => {

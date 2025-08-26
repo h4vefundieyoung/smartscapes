@@ -101,10 +101,10 @@ const SidePanel = ({
 		);
 
 		const [path, query = ""] = route.split("?");
-		const searchParameters_ = new URLSearchParams(query);
-		searchParameters_.set("plannedRouteId", String(plannedRouteId));
+		const newSearchParameters = new URLSearchParams(query);
+		newSearchParameters.set("plannedRouteId", String(plannedRouteId));
 
-		navigate(`${String(path)}?${searchParameters_.toString()}`);
+		navigate(`${String(path)}?${newSearchParameters.toString()}`);
 	}, [dispatch, plannedRouteId, pointsOfInterest, searchParameters, navigate]);
 
 	const poiSelectOptions = useMemo(() => {

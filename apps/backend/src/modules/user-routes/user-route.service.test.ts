@@ -173,10 +173,10 @@ describe("UserRouteService", () => {
 				mockRouteService,
 			);
 
-			const result = await serviceWithRoute.getByRouteIdAndUserId(
-				payload.routeId,
-				payload.userId,
-			);
+			const result = await serviceWithRoute.getRouteByFilter({
+				routeId: payload.routeId,
+				userId: payload.userId,
+			});
 
 			assert.strictEqual(result.routeId, payload.routeId);
 			assert.strictEqual(result.userId, payload.userId);
@@ -199,10 +199,10 @@ describe("UserRouteService", () => {
 			);
 
 			await assert.rejects(async () => {
-				await serviceWithRoute.getByRouteIdAndUserId(
-					payload.routeId,
-					payload.userId,
-				);
+				await serviceWithRoute.getRouteByFilter({
+					routeId: payload.routeId,
+					userId: payload.userId,
+				});
 			}, UserRouteError);
 		});
 	});

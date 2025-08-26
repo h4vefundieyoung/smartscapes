@@ -423,10 +423,10 @@ class UserRouteController extends BaseController {
 		const { routeId } = query;
 		const { id: userId } = user as UserAuthResponseDto;
 
-		const userRoute = await this.userRouteService.getByRouteIdAndUserId(
+		const userRoute = await this.userRouteService.getRouteByFilter({
 			routeId,
 			userId,
-		);
+		});
 
 		return {
 			payload: { data: userRoute },

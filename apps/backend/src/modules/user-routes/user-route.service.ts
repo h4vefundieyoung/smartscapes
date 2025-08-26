@@ -9,6 +9,7 @@ import {
 } from "./libs/enums/enum.js";
 import { UserRouteError } from "./libs/exeptions/exeptions.js";
 import {
+	type UserRouteFilter,
 	type UserRouteResponseDto,
 	type UserRouteStatusType,
 } from "./libs/types/type.js";
@@ -34,6 +35,10 @@ class UserRouteService implements Service {
 	}): Promise<UserRouteResponseDto> {
 		const { routeId, userId } = payload;
 
+		await this.ensureUserIsNotOnActiveRoute(userId);
+
+		await this.ensureIsNotDuplicateRoute(routeId, userId);
+
 		const { geometry } = await this.routeService.findById(routeId);
 
 		const createdData = UserRouteEntity.initializeNew({
@@ -43,9 +48,6 @@ class UserRouteService implements Service {
 			status: UserRouteStatus.NOT_STARTED,
 			userId,
 		});
-
-		await this.ensureIsNotDuplicateRoute(routeId, userId);
-
 		const createdRoute = await this.userRouteRepository.create(createdData);
 
 		return createdRoute.toObject();
@@ -58,7 +60,10 @@ class UserRouteService implements Service {
 	}): Promise<UserRouteResponseDto> {
 		const { actualGeometry, routeId, userId } = payload;
 
-		const userRoute = await this.getByRouteIdAndUserId(routeId, userId);
+		const userRoute = await this.getRouteByFilter({
+			routeId,
+			userId,
+		});
 
 		this.ensureUserIsOwner(userRoute.userId, userId);
 
@@ -93,14 +98,10 @@ class UserRouteService implements Service {
 		return userRoutes.map((item) => item.toObject());
 	}
 
-	public async getByRouteIdAndUserId(
-		routeId: number,
-		userId: number,
+	public async getRouteByFilter(
+		filters: UserRouteFilter,
 	): Promise<UserRouteResponseDto> {
-		const [userRoute] = await this.userRouteRepository.findByFilter({
-			routeId,
-			userId,
-		});
+		const [userRoute] = await this.userRouteRepository.findByFilter(filters);
 
 		if (!userRoute) {
 			throw new UserRouteError({
@@ -118,7 +119,10 @@ class UserRouteService implements Service {
 	}): Promise<UserRouteResponseDto> {
 		const { routeId, userId } = payload;
 
-		const userRoute = await this.getByRouteIdAndUserId(routeId, userId);
+		const userRoute = await this.getRouteByFilter({
+			routeId,
+			userId,
+		});
 
 		this.ensureUserIsOwner(userRoute.userId, userId);
 
@@ -154,6 +158,7 @@ class UserRouteService implements Service {
 	): Promise<void> {
 		const userRoutes = await this.userRouteRepository.findByFilter({
 			routeId,
+			status: UserRouteStatus.NOT_STARTED,
 			userId,
 		});
 

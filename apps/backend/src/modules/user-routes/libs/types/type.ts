@@ -1,3 +1,4 @@
+export { type UserRouteFilter } from "./user-route.filter.type.js";
 export {
 	type UserRouteFinishRequestDto,
 	type UserRouteQueryRequestDto,

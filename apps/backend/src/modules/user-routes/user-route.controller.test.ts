@@ -68,7 +68,7 @@ describe("UserRouteController", () => {
 				mockActiveUserRoute,
 				mockCompletedUserRoute,
 			]),
-		getByRouteIdAndUserId: () => Promise.resolve(mockUserRouteResponse),
+		getRouteByFilter: () => Promise.resolve(mockUserRouteResponse),
 		start: () => Promise.resolve(mockActiveUserRoute),
 	} as unknown as UserRouteService;
 

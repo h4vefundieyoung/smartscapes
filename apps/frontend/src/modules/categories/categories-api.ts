@@ -6,6 +6,7 @@ import { type APIResponse, type PaginationMeta } from "~/libs/types/types.js";
 
 import { CategoriesApiPath } from "./libs/enums/enums.js";
 import {
+	type CategoryCreateRequestDto,
 	type CategoryGetAllItemResponseDto,
 	type PaginationQuery,
 } from "./libs/types/types.js";
@@ -19,6 +20,21 @@ type Constructor = {
 class CategoriesApi extends BaseHTTPApi {
 	public constructor({ baseUrl, http, storage }: Constructor) {
 		super({ baseUrl, http, path: APIPath.CATEGORIES, storage });
+	}
+
+	public async create(
+		payload: CategoryCreateRequestDto,
+	): Promise<APIResponse<CategoryGetAllItemResponseDto>> {
+		const response = await this.load<
+			APIResponse<CategoryGetAllItemResponseDto>
+		>(this.getFullEndpoint(CategoriesApiPath.ROOT, {}), {
+			contentType: ContentType.JSON,
+			hasAuth: true,
+			method: "POST",
+			payload: JSON.stringify(payload),
+		});
+
+		return await response.json();
 	}
 
 	public async getAll(

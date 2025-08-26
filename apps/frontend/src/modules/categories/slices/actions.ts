@@ -7,10 +7,24 @@ import {
 } from "~/libs/types/types.js";
 
 import {
+	type CategoryCreateRequestDto,
 	type CategoryGetAllItemResponseDto,
 	type PaginationQuery,
 } from "../libs/types/types.js";
 import { name as sliceName } from "./categories.slice.js";
+
+const create = createAsyncThunk<
+	APIResponse<CategoryGetAllItemResponseDto>,
+	CategoryCreateRequestDto,
+	AsyncThunkConfig
+>(`${sliceName}/create`, async (payload, { extra }) => {
+	const { categoriesApi, toastNotifier } = extra;
+
+	const category = await categoriesApi.create(payload);
+	toastNotifier.showSuccess("Category created successfully");
+
+	return category;
+});
 
 const getAll = createAsyncThunk<
 	APIResponse<CategoryGetAllItemResponseDto[], PaginationMeta>,
@@ -24,4 +38,4 @@ const getAll = createAsyncThunk<
 	return { data, meta };
 });
 
-export { getAll };
+export { create, getAll };

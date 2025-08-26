@@ -22,7 +22,7 @@ class CategoriesApi extends BaseHTTPApi {
 			this.getFullEndpoint("/", {}),
 			{
 				contentType: ContentType.JSON,
-				hasAuth: true,
+				hasAuth: false,
 				method: "GET",
 			},
 		);

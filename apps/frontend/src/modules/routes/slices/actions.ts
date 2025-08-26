@@ -36,8 +36,10 @@ const create = createAsyncThunk<
 	AsyncThunkConfig
 >(`${routesSliceName}/create`, async (payload, { extra }) => {
 	const { routesApi } = extra;
+	const route = await routesApi.create(payload);
+	toastNotifier.showSuccess(RouteNotification.CREATED);
 
-	return await routesApi.create(payload);
+	return route;
 });
 
 const getById = createAsyncThunk<

@@ -16,6 +16,7 @@ import {
 import { type SelectOption } from "~/libs/types/types.js";
 import { type PointsOfInterestGetAllItemResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 import { actions as routeActions } from "~/modules/routes/routes.js";
+import { preserveCreateRouteFormData } from "~/modules/routes/slices/actions.js";
 
 import { PointOfInterestCard } from "../point-of-interest-card/point-of-interest-card.js";
 import styles from "./styles.module.css";
@@ -93,13 +94,18 @@ const SidePanel = ({
 			return;
 		}
 
+		const poiIds = pointsOfInterest.map(({ id }) => id);
+
+		void dispatch(
+			preserveCreateRouteFormData({ plannedPathId: plannedRouteId, poiIds }),
+		);
+
 		const [path, query = ""] = route.split("?");
 		const searchParameters_ = new URLSearchParams(query);
-
 		searchParameters_.set("plannedRouteId", String(plannedRouteId));
 
 		navigate(`${String(path)}?${searchParameters_.toString()}`);
-	}, [plannedRouteId, searchParameters, navigate]);
+	}, [dispatch, plannedRouteId, pointsOfInterest, searchParameters, navigate]);
 
 	const poiSelectOptions = useMemo(() => {
 		return filteredPois.map((poi) => ({

@@ -3,17 +3,18 @@ import {
 	useAppSelector,
 	useEffect,
 } from "~/libs/hooks/hooks.js";
-import { type MapMarkerOptions } from "~/libs/modules/map-client/map-client.js";
 import { type RouteLine } from "~/libs/types/route-line.type.js";
+import { type Coordinates } from "~/libs/types/types.js";
 import { actions as pointsOfInterestActions } from "~/modules/points-of-interest/points-of-interest.js";
 import { actions as routeDetailsActions } from "~/modules/routes/routes.js";
 
-type MapData = {
-	markers: { coordinates: MapMarkerOptions["coordinates"] }[];
+type MapProperties = {
+	center: Coordinates;
+	markers: { coordinates: Coordinates }[];
 	routeLine: RouteLine;
 };
 
-const useRouteMapData = (routeId: number): MapData => {
+const useRouteMapProperties = (routeId: number): MapProperties | null => {
 	const dispatch = useAppDispatch();
 
 	const { pointsOfInterest, route } = useAppSelector(
@@ -43,13 +44,26 @@ const useRouteMapData = (routeId: number): MapData => {
 		coordinates: poi.location.coordinates,
 	}));
 
+	if (!route || markers.length === 0) {
+		return null;
+	}
+
+	const center = markers[0]?.coordinates;
+
+	const routeLine: RouteLine = {
+		geometry: route.geometry,
+		id: String(routeId),
+	};
+
+	if (!center) {
+		return null;
+	}
+
 	return {
+		center,
 		markers,
-		routeLine: {
-			geometry: route?.geometry ?? { coordinates: [], type: "LineString" },
-			id: String(routeId),
-		},
+		routeLine,
 	};
 };
 
-export { useRouteMapData };
+export { useRouteMapProperties };

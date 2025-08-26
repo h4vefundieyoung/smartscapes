@@ -3,7 +3,7 @@ import { useParams } from "~/libs/hooks/hooks.js";
 import { type LineStringGeometry } from "~/libs/types/types.js";
 
 import {
-	useRouteMapData,
+	useRouteMapProperties,
 	useRouteState,
 	useUserRouteHandler,
 	useUserRouteNavigation,
@@ -11,8 +11,8 @@ import {
 } from "./libs/hooks/hooks.js";
 import styles from "./styles.module.css";
 
-const LATITUDE = 50.455;
-const LONGITUDE = 30.528;
+const LATITUDE = 50.415;
+const LONGITUDE = 30.418;
 
 const mockActualGeometry: LineStringGeometry = {
 	coordinates: [
@@ -34,7 +34,7 @@ const UserRoute = (): React.JSX.Element => {
 		mockActualGeometry,
 	);
 
-	const { markers, routeLine } = useRouteMapData(Number(routeId));
+	const mapProperties = useRouteMapProperties(Number(routeId));
 
 	useUserRouteNavigation({ isUserRouteCompleted });
 
@@ -42,12 +42,12 @@ const UserRoute = (): React.JSX.Element => {
 
 	return (
 		<div className={styles["container"]}>
-			{isLoading ? (
+			{isLoading || !mapProperties ? (
 				<div className={styles["loader-container"]}>
 					<Loader />
 				</div>
 			) : (
-				<MapProvider markers={markers} routeLine={routeLine}>
+				<MapProvider {...mapProperties}>
 					<div className={styles["button-container"]}>
 						{isUserRouteActive ? (
 							<Button label="Finish" onClick={handleFinish} />

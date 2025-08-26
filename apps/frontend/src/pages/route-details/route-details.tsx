@@ -50,13 +50,25 @@ const RouteDetails = (): React.JSX.Element => {
 	);
 
 	const reviews = useAppSelector(({ routeDetails }) => routeDetails.reviews);
+
 	const isAuthenticatedUser = Boolean(user);
+
 	const { control, errors, getValues, handleReset, handleValueSet } =
 		useAppForm<RoutePatchRequestDto>({
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
 		});
 	const dispatch = useAppDispatch();
 	const { id: routeId } = useParams<{ id: string }>();
+	const [categoriesOptions, setCategoriesOptions] = useState<
+		{ label: string; value: number }[]
+	>([]);
+	useEffect(() => {
+		const options = categories.map((category) => ({
+			label: category.name,
+			value: category.id,
+		}));
+		setCategoriesOptions(options);
+	}, [categories]);
 
 	const hasEditPermissions = Boolean(
 		user &&
@@ -225,11 +237,7 @@ const RouteDetails = (): React.JSX.Element => {
 						isMulti
 						label="Categories"
 						name="categories"
-						options={categories.map((category) => ({
-							label: category.name,
-							original: category.id,
-							value: category.id,
-						}))}
+						options={categoriesOptions}
 						placeholder="Select categories"
 					/>
 				) : (

@@ -1,4 +1,4 @@
-import { TabContainer } from "~/libs/components/components.js";
+import { PageHeading, TabContainer } from "~/libs/components/components.js";
 import { useTabNavigation } from "~/libs/hooks/hooks.js";
 
 import { PROFILE_TABS } from "./libs/constants/constants.js";
@@ -13,7 +13,10 @@ const Profile = (): React.JSX.Element => {
 
 	return (
 		<main className={styles["profile-container"]}>
-			<h1 className={styles["profile-title"]}>Profile</h1>
+			<PageHeading
+				subtitle="Update your profile and manage reviews."
+				title="Profile"
+			/>
 			<TabContainer
 				activeTabId={activeTabId}
 				onTabChange={handleTabChange}

@@ -1,6 +1,7 @@
 import {
 	Button,
 	FeatureGallery,
+	IconButton,
 	Input,
 	Loader,
 	MapProvider,
@@ -18,6 +19,7 @@ import {
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
+import { actions } from "~/modules/points-of-interest/slices/points-of-interest.js";
 import { type ReviewRequestDto } from "~/modules/reviews/reviews.js";
 import {
 	actions as routeActions,
@@ -30,6 +32,7 @@ import {
 	RouteReviewsSection,
 } from "./libs/components/components.js";
 import { ROUTE_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
+import { getGoogleMapsUrl } from "./libs/helpers/helpers.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
@@ -54,6 +57,19 @@ const RouteDetails = (): React.JSX.Element => {
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
 	);
 	const fileInputReference = useRef<HTMLInputElement | null>(null);
+
+	const handleOpenGoogleMaps = useCallback(
+		(poiId: number) => {
+			return async (): Promise<void> => {
+				const { data } = await dispatch(actions.getById(poiId)).unwrap();
+				const [lng, lat] = data.location.coordinates;
+
+				const googleMapsUrl = getGoogleMapsUrl(lat, lng);
+				window.open(googleMapsUrl, "_blank");
+			};
+		},
+		[dispatch],
+	);
 
 	const handleFileUpload = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -174,11 +190,20 @@ const RouteDetails = (): React.JSX.Element => {
 					) : (
 						<>
 							<h1 className={styles["label"]}>{name}</h1>
-							{hasEditPermissions && (
-								<div>
+							<div className={styles["header-actions"]}>
+								{hasEditPermissions && (
 									<Button label="Edit" onClick={handleToggleEditMode} />
-								</div>
-							)}
+								)}
+								{pois[0] && (
+									<IconButton
+										className={styles["icon-button"]}
+										icon="location"
+										label="Location"
+										onClick={handleOpenGoogleMaps(pois[0].id)}
+										size={24}
+									/>
+								)}
+							</div>
 						</>
 					)}
 				</div>

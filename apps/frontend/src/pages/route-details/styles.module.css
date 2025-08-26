@@ -51,6 +51,25 @@
 	gap: 8px;
 }
 
+.header-actions {
+	display: flex;
+	gap: 16px;
+}
+
+.icon-button {
+	padding: 12px;
+	color: var(--color-text-inverse-strong);
+	cursor: pointer;
+	background-color: var(--color-fill-brand-strong);
+	border: none;
+	border-radius: 8px;
+	box-shadow: var(--shadow-raised);
+}
+
+.icon-button:hover {
+	background-color: var(--color-fill-press);
+}
+
 @media (width <=1440px) {
 	.container {
 		max-width: 1000px;

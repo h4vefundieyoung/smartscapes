@@ -1,5 +1,6 @@
-import { MapProvider } from "~/libs/components/components.js";
-import { useAppNavigate, useCallback } from "~/libs/hooks/hooks.js";
+import { Link, MapProvider } from "~/libs/components/components.js";
+import { AppRoute } from "~/libs/enums/enums.js";
+import { configureString } from "~/libs/helpers/helpers.js";
 import { type UserRouteResponseDto } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
@@ -9,19 +10,16 @@ type CardProperties = {
 };
 
 const UserHistoryCard = ({ route }: CardProperties): React.JSX.Element => {
-	const navigate = useAppNavigate();
-
-	const handleClick = useCallback(() => {
-		navigate(`/app/routes/${route.id.toString()}`);
-	}, [navigate, route]);
-
 	const routeLine = { geometry: route.actualGeometry, id: "actual" };
 
 	return (
-		<button className={styles["route-container"]} onClick={handleClick}>
+		<Link
+			className={styles["card"]}
+			to={configureString(AppRoute.ROUTES_$ID, { id: route.id.toString() })}
+		>
 			<h1 className={styles["label"]}>{route.routeName}</h1>
 			<MapProvider routeLine={routeLine} />
-		</button>
+		</Link>
 	);
 };
 

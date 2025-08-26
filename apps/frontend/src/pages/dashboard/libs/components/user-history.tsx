@@ -24,7 +24,7 @@ const UserHistory = (): React.JSX.Element => {
 		return <UserHistoryCard key={route.id} route={route} />;
 	});
 
-	return <div className={styles["cards-container"]}>{cards}</div>;
+	return <div className={styles["cards-wrapper"]}>{cards}</div>;
 };
 
 export { UserHistory };

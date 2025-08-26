@@ -54,3 +54,10 @@
 	margin: 0;
 	overflow-y: auto;
 }
+
+.footer {
+	display: flex;
+	gap: 96px;
+	align-items: center;
+	justify-content: space-between;
+}

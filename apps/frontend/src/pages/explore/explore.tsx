@@ -1,4 +1,3 @@
-import { type RouteGetAllItemResponseDto } from "@smartscapes/shared";
 import React from "react";
 
 import { MapProvider } from "~/libs/components/components.js";
@@ -10,6 +9,7 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { actions as exploreActions } from "~/modules/explore/explore.js";
 import { actions as locationActions } from "~/modules/location/location.js";
+import { type RouteGetAllItemResponseDto } from "~/modules/routes/routes.js";
 
 import { RoutesPanel } from "./libs/components/components.js";
 import { mockPOIs } from "./mock-pois.js";

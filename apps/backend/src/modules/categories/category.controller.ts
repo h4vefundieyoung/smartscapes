@@ -7,12 +7,14 @@ import {
 } from "~/libs/modules/controller/controller.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type PaginationMeta } from "~/libs/types/types.js";
 import { type CategoryService } from "~/modules/categories/category.service.js";
 
 import { CategoriesApiPath } from "./libs/enums/enums.js";
 import {
 	type CategoryCreateRequestDto,
 	type CategoryGetAllItemResponseDto,
+	type PaginationQuery,
 } from "./libs/types/types.js";
 import { categoryCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 
@@ -132,6 +134,23 @@ class CategoryController extends BaseController {
 	 *     tags:
 	 *       - Categories
 	 *     summary: Retrieve all categories
+	 *     description: |
+	 *       **With pagination parameters (page & perPage)**: Returns paginated result
+	 *     parameters:
+	 *       - in: query
+	 *         name: page
+	 *         schema:
+	 *           type: string
+	 *           pattern: '^[1-9][0-9]*$'
+	 *           example: "1"
+	 *         description: Page number (starts from 1). When provided with perPage, returns paginated response.
+	 *       - in: query
+	 *         name: perPage
+	 *         schema:
+	 *           type: string
+	 *           pattern: '^[1-9][0-9]*$'
+	 *           example: "10"
+	 *         description: Number of items per page. When provided with page, returns paginated response.
 	 *     responses:
 	 *       200:
 	 *         description: A list of categories
@@ -144,15 +163,37 @@ class CategoryController extends BaseController {
 	 *                   type: array
 	 *                   items:
 	 *                     $ref: '#/components/schemas/Category'
+	 *                 meta:
+	 *                   type: object
+	 *                   properties:
+	 *                     currentPage:
+	 *                       type: number
+	 *                       example: 1
+	 *                     itemsPerPage:
+	 *                       type: number
+	 *                       example: 10
+	 *                     total:
+	 *                       type: number
+	 *                       example: 25
+	 *                     totalPages:
+	 *                       type: number
+	 *                       example: 3
+	 *               description: Paginated response (when page & perPage provided)
 	 */
 
-	public async findAll(): Promise<
-		APIHandlerResponse<CategoryGetAllItemResponseDto[]>
+	public async findAll(
+		options: APIHandlerOptions<{
+			query?: PaginationQuery;
+		}>,
+	): Promise<
+		APIHandlerResponse<CategoryGetAllItemResponseDto[], PaginationMeta>
 	> {
-		const { items } = await this.categoryService.findAll();
+		const { query = null } = options;
+
+		const { items, meta } = await this.categoryService.findAll(query);
 
 		return {
-			payload: { data: items },
+			payload: { data: items, meta },
 			status: HTTPCode.OK,
 		};
 	}

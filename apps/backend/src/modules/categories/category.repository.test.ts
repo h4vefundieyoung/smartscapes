@@ -53,9 +53,12 @@ describe("CategoryRepository", () => {
 
 		databaseTracker.on.select("categories").response(routeCategoryEntities);
 
-		const result = await route.findAll();
+		const result = await route.findAll(null);
 
-		assert.deepStrictEqual(result, routeCategoryEntities);
+		assert.deepStrictEqual(result, {
+			items: routeCategoryEntities,
+			total: routeCategoryEntities.length,
+		});
 	});
 
 	it("findByName should return category entity by name", async () => {

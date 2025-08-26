@@ -1,9 +1,9 @@
 import { Button, Loader, MapProvider } from "~/libs/components/components.js";
-import { useParams } from "~/libs/hooks/hooks.js";
+import { DataStatus } from "~/libs/enums/enums.js";
+import { useAppSelector, useParams } from "~/libs/hooks/hooks.js";
 
 import {
 	useRouteMapProperties,
-	useRouteState,
 	useUserRouteHandler,
 	useUserRouteNavigation,
 	useUserRouteState,
@@ -13,7 +13,10 @@ import styles from "./styles.module.css";
 const UserRoute = (): React.JSX.Element => {
 	const { routeId } = useParams<{ routeId: string }>();
 
-	const { isRouteLoading } = useRouteState();
+	const { isRouteLoading } = useAppSelector(({ routeDetails }) => ({
+		isRouteLoading: routeDetails.dataStatus === DataStatus.PENDING,
+	}));
+
 	const { isUserRouteActive, isUserRouteCompleted, isUserRouteLoading } =
 		useUserRouteState(Number(routeId));
 

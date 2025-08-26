@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
-import { type ValueOf } from "~/libs/types/types.js";
+import { type Coordinates, type ValueOf } from "~/libs/types/types.js";
 
 import { type UserRouteResponseDto } from "../libs/types/types.js";
 import { create, finish, getByRouteId, start } from "./actions.js";
 
 type State = {
+	actualPath: Coordinates[];
 	createStatus: ValueOf<typeof DataStatus>;
 	finishStatus: ValueOf<typeof DataStatus>;
 	startStatus: ValueOf<typeof DataStatus>;
@@ -15,6 +16,7 @@ type State = {
 };
 
 const initialState: State = {
+	actualPath: [],
 	createStatus: DataStatus.IDLE,
 	finishStatus: DataStatus.IDLE,
 	startStatus: DataStatus.IDLE,
@@ -53,6 +55,7 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(finish.fulfilled, (state, action) => {
 			state.userRouteDetails = action.payload.data;
 			state.finishStatus = DataStatus.FULFILLED;
+			state.actualPath = [];
 		});
 		builder.addCase(finish.rejected, (state) => {
 			state.finishStatus = DataStatus.REJECTED;
@@ -71,7 +74,14 @@ const { actions, name, reducer } = createSlice({
 	},
 	initialState,
 	name: "user-route-details",
-	reducers: {},
+	reducers: {
+		addPointToActualPath: (state, action: { payload: Coordinates }) => {
+			state.actualPath.push(action.payload);
+		},
+		setRestoredActualPath: (state, action: { payload: Coordinates[] }) => {
+			state.actualPath = action.payload;
+		},
+	},
 });
 
 export { actions, name, reducer };

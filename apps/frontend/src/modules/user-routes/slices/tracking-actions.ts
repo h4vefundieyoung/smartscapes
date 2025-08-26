@@ -6,8 +6,10 @@ import { type Coordinates } from "~/libs/types/types.js";
 
 import { TRACKING_CONFIG } from "../libs/constants/constants.js";
 import { TrackingExeptionMessage } from "../libs/enums/enums.js";
-import { getActualCoordinatesFromStorage } from "../libs/helpers/helpers.js";
-import { name as detailsSliceName } from "./user-route-details.slice.js";
+import {
+	actions,
+	name as detailsSliceName,
+} from "./user-route-details.slice.js";
 
 const addPointToActualPath = createAsyncThunk<
 	undefined,
@@ -19,11 +21,15 @@ const addPointToActualPath = createAsyncThunk<
 		const { storage } = extra;
 
 		try {
-			const storedPathCoordinates = await getActualCoordinatesFromStorage();
+			const currentPath = (await storage.get(
+				StorageKey.ACTUAL_PATH_COORDINATES,
+			)) as string;
 
-			const currentPath = storedPathCoordinates;
+			const parsedCurrentPath = currentPath
+				? (JSON.parse(currentPath) as Coordinates[])
+				: [];
 
-			const updatedPath = [...currentPath, point];
+			const updatedPath = [...parsedCurrentPath, point];
 
 			await storage.set(
 				StorageKey.ACTUAL_PATH_COORDINATES,
@@ -47,13 +53,16 @@ const startTrackingRoute = createAsyncThunk<
 		const { storage } = extra;
 
 		try {
-			const storedPathCoordinates = await getActualCoordinatesFromStorage();
+			const storedPathCoordinates = (await storage.get(
+				StorageKey.ACTUAL_PATH_COORDINATES,
+			)) as string;
 
-			if (storedPathCoordinates.length === 0) {
-				await storage.set(
-					StorageKey.ACTUAL_PATH_COORDINATES,
-					JSON.stringify([]),
-				);
+			const parsedStoredPathCoordinates = storedPathCoordinates
+				? (JSON.parse(storedPathCoordinates) as Coordinates[])
+				: [];
+
+			if (parsedStoredPathCoordinates.length > 0) {
+				dispatch(actions.setRestoredActualPath(parsedStoredPathCoordinates));
 			}
 
 			// eslint-disable-next-line sonarjs/no-intrusive-permissions
@@ -117,4 +126,4 @@ const stopTrackingRoute = createAsyncThunk<
 	},
 );
 
-export { addPointToActualPath, startTrackingRoute, stopTrackingRoute };
+export { startTrackingRoute, stopTrackingRoute };

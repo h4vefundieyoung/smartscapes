@@ -1,10 +1,10 @@
-import { LocationType } from "@smartscapes/shared";
-
-import { useAppDispatch, useCallback } from "~/libs/hooks/hooks.js";
+import { LocationType } from "~/libs/enums/enums.js";
 import {
-	getActualCoordinatesFromStorage,
-	actions as userRouteActions,
-} from "~/modules/user-routes/user-routes.js";
+	useAppDispatch,
+	useAppSelector,
+	useCallback,
+} from "~/libs/hooks/hooks.js";
+import { actions as userRouteActions } from "~/modules/user-routes/user-routes.js";
 
 type UseUserRouteHandler = {
 	handleFinish: () => void;
@@ -13,6 +13,9 @@ type UseUserRouteHandler = {
 
 const useUserRouteHandler = (routeId: number): UseUserRouteHandler => {
 	const dispatch = useAppDispatch();
+	const actualPath = useAppSelector(
+		(state) => state.userRouteDetails.actualPath,
+	);
 
 	const handleStart = useCallback(() => {
 		void dispatch(
@@ -22,23 +25,21 @@ const useUserRouteHandler = (routeId: number): UseUserRouteHandler => {
 		);
 	}, [dispatch, routeId]);
 
-	const handleFinish = useCallback(async () => {
+	const handleFinish = useCallback(() => {
 		void dispatch(userRouteActions.stopTrackingRoute());
-
-		const coordinates = await getActualCoordinatesFromStorage();
 
 		void dispatch(
 			userRouteActions.finish({
 				payload: {
 					actualGeometry: {
-						coordinates,
+						coordinates: actualPath,
 						type: LocationType.LINE_STRING,
 					},
 				},
 				query: { routeId },
 			}),
 		);
-	}, [dispatch, routeId]);
+	}, [dispatch, routeId, actualPath]);
 
 	return {
 		handleFinish,

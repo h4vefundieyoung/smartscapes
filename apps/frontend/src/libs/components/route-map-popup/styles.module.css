@@ -6,6 +6,7 @@
 	max-width: 280px;
 	padding: 12px 16px;
 	font-family: var(--font-family);
+	border-radius: 8px;
 }
 
 .title {

@@ -1,7 +1,6 @@
 export { AppLayout } from "./app-layout/app-layout.js";
 export { App } from "./app/app.js";
 export { Avatar } from "./avatar/avatar.js";
-export { ButtonContainer } from "./button-container/button-container.js";
 export { Button } from "./button/button.js";
 export { Carousel } from "./carousel/carousel.js";
 export { Checkbox } from "./checkbox/checkbox.js";

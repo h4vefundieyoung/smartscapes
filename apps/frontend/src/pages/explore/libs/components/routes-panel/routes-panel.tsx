@@ -38,53 +38,62 @@ const RoutesPanel = ({
 	const mapClient = useMapClient();
 	const currentMarkerReference = useRef<MapMarker | null>(null);
 
+	const clearCurrentMarker = useCallback((): void => {
+		if (currentMarkerReference.current) {
+			currentMarkerReference.current.remove();
+			currentMarkerReference.current = null;
+		}
+	}, []);
+
 	useEffect(() => {
 		return (): void => {
-			if (currentMarkerReference.current) {
-				currentMarkerReference.current.remove();
+			clearCurrentMarker();
+		};
+	}, [clearCurrentMarker]);
+
+	const createMarkerWithPopup = useCallback(
+		(
+			coordinates: [number, number],
+			route: RouteGetAllItemResponseDto,
+		): void => {
+			const newMarker = mapClient.addMarker({ coordinates });
+
+			if (newMarker) {
+				newMarker.addPopup(<RouteMapPopup route={route} />);
+				currentMarkerReference.current = newMarker;
+			} else {
 				currentMarkerReference.current = null;
 			}
-		};
-	}, []);
+		},
+		[mapClient],
+	);
+
+	const navigateToRoute = useCallback(
+		(route: RouteGetAllItemResponseDto): void => {
+			const [longitude, latitude] = route.geometry.coordinates[0] ?? [];
+
+			if (!longitude || !latitude) {
+				return;
+			}
+
+			clearCurrentMarker();
+			mapClient.flyTo([longitude, latitude]);
+			createMarkerWithPopup([longitude, latitude], route);
+		},
+		[mapClient, clearCurrentMarker, createMarkerWithPopup],
+	);
 
 	const handleRouteCardClick = useCallback(
 		(routeId: number) => (): void => {
 			const route = routes.find((route) => route.id === routeId);
 
-			if (
-				!route?.geometry.coordinates ||
-				route.geometry.coordinates.length === 0
-			) {
+			if (!route?.geometry.coordinates.length) {
 				return;
 			}
 
-			const [firstCoordinate] = route.geometry.coordinates;
-
-			if (firstCoordinate) {
-				const [longitude, latitude] = firstCoordinate;
-
-				if (longitude && latitude) {
-					if (currentMarkerReference.current) {
-						currentMarkerReference.current.remove();
-						currentMarkerReference.current = null;
-					}
-
-					mapClient.flyTo([longitude, latitude]);
-
-					const newMarker = mapClient.addMarker({
-						coordinates: [longitude, latitude],
-					});
-
-					if (newMarker) {
-						newMarker.addPopup(<RouteMapPopup route={route} />);
-						currentMarkerReference.current = newMarker;
-					} else {
-						currentMarkerReference.current = null;
-					}
-				}
-			}
+			navigateToRoute(route);
 		},
-		[routes, mapClient],
+		[routes, navigateToRoute],
 	);
 
 	const content = useMemo(() => {

@@ -20,4 +20,5 @@
 
 :global(.mapboxgl-popup-content) {
 	padding: 0;
+	border-radius: 8px;
 }

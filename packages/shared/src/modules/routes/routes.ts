@@ -8,6 +8,7 @@ export {
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
 	type RoutePatchResponseDto,
+	type RouteUploadImageResponseDto,
 } from "./libs/types/types.js";
 export {
 	routesConstruct as routesConstructValidationSchema,

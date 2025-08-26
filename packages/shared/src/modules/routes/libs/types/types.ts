@@ -6,3 +6,4 @@ export { type RouteGetAllItemResponseDto } from "./route-get-all-item-response-d
 export { type RouteGetByIdResponseDto } from "./route-get-by-id-response-dto.type.js";
 export { type RoutePatchRequestDto } from "./route-patch-request.dto.js";
 export { type RoutePatchResponseDto } from "./route-patch-response-dto.type.js";
+export { type RouteUploadImageResponseDto } from "./route-upload-image-response-dto.type.js";

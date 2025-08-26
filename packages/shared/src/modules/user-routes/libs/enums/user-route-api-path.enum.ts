@@ -1,5 +1,6 @@
 const UserRouteApiPath = {
 	$ID: "/:id",
+	CREATE: "/create",
 	FINISH: "/finish",
 	ROOT: "/",
 	START: "/start",

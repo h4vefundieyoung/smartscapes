@@ -1,4 +1,5 @@
-import { APIPath, ContentType } from "~/libs/enums/enums.js";
+import { APIPath } from "~/libs/enums/enums.js";
+import { getUrlWithQueryString } from "~/libs/helpers/helpers.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
@@ -34,12 +35,13 @@ class UserRoutesApi extends BaseHTTPApi {
 		routeId: number,
 	): Promise<APIResponse<UserRouteResponseDto>> {
 		const response = await this.load<APIResponse<UserRouteResponseDto>>(
-			this.getFullEndpoint(UserRouteApiPath.ROOT, {}),
+			this.getFullEndpoint(
+				getUrlWithQueryString(UserRouteApiPath.CREATE, { routeId }),
+				{},
+			),
 			{
-				contentType: ContentType.JSON,
 				hasAuth: true,
 				method: "POST",
-				payload: JSON.stringify({ routeId }),
 			},
 		);
 

@@ -1,3 +1,16 @@
+.upload-button {
+	min-width: 200px;
+	max-width: max-content;
+}
+
+.image {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 8px;
+}
+
 .container {
 	display: flex;
 	flex-direction: column;
@@ -41,6 +54,7 @@
 .edit-mode-controls {
 	display: flex;
 	gap: 8px;
+	min-width: 200px;
 }
 
 @media (width <=1440px) {

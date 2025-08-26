@@ -6,7 +6,14 @@ import { type ReviewGetByIdResponseDto } from "~/modules/reviews/reviews.js";
 
 import { actions as userRoutesActions } from "../../user-routes/user-routes.js";
 import { type RouteGetByIdResponseDto } from "../libs/types/types.js";
-import { createReview, getById, getReviews, patch } from "./actions.js";
+import {
+	createReview,
+	deleteImage,
+	getById,
+	getReviews,
+	patch,
+	uploadImage,
+} from "./actions.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
@@ -102,6 +109,27 @@ const { actions, name, reducer } = createSlice({
 			if (state.route) {
 				state.route.userRoute = null;
 			}
+		});
+
+		builder.addCase(deleteImage.fulfilled, (state, action) => {
+			if (state.route) {
+				state.route.images = state.route.images.filter(
+					(image) => image.id !== action.payload.data.id,
+				);
+			}
+
+			state.dataStatus = DataStatus.FULFILLED;
+		});
+
+		builder.addCase(uploadImage.fulfilled, (state, action) => {
+			if (state.route) {
+				state.route.images.push({
+					id: action.payload.data.id,
+					url: action.payload.data.url,
+				});
+			}
+
+			state.dataStatus = DataStatus.FULFILLED;
 		});
 	},
 	initialState,

@@ -106,6 +106,7 @@ export {
 	routesCreateValidationSchema,
 	routesSearchQueryValidationSchema,
 	routesUpdateValidationSchema,
+	type RouteUploadImageResponseDto,
 } from "./modules/routes/routes.js";
 export {
 	UserFollowsApiPath,
@@ -116,8 +117,6 @@ export {
 } from "./modules/user-follows/user-follows.js";
 export {
 	UserRouteApiPath,
-	type UserRouteCreateRequestDto,
-	userRouteCreateValidationSchema,
 	userRouteDeleteValidationSchema,
 	type UserRouteFinishRequestDto,
 	userRouteFinishValidationSchema,
@@ -125,9 +124,9 @@ export {
 	userRouteParametersValidationSchema,
 	type UserRoutePatchRequestDto,
 	userRoutePatchValidationSchema,
+	type UserRouteQueryRequestDto,
+	userRouteQueryValidationSchema,
 	type UserRouteResponseDto,
-	type UserRouteStartRequestDto,
-	userRouteStartValidationSchema,
 	UserRouteStatus,
 	type UserRouteStatusType,
 } from "./modules/user-routes/user-routes.js";

@@ -2,7 +2,7 @@ import { expect, request, test } from "@playwright/test";
 import {
 	APIResponse,
 	HTTPCode,
-	PointsOfInterestResponseDto,
+	PointsOfInterestGetByIdResponseDto,
 	UserSignInResponseDto,
 	UserSignUpResponseDto,
 } from "@smartscapes/shared";
@@ -91,7 +91,7 @@ test("Poi chain", async () => {
 		expect.soft(Array.isArray(body.data)).toBe(true);
 
 		const deletedPoi = body.data.find(
-			(poi: PointsOfInterestResponseDto) => poi.id === poiId,
+			(poi: PointsOfInterestGetByIdResponseDto) => poi.id === poiId,
 		);
 		expect.soft(deletedPoi).toBeUndefined();
 	});

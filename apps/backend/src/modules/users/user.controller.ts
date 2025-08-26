@@ -1,5 +1,6 @@
 import { APIPath } from "~/libs/enums/enums.js";
 import {
+	type APIHandlerOptions,
 	type APIHandlerResponse,
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
@@ -8,7 +9,12 @@ import { type Logger } from "~/libs/modules/logger/logger.js";
 import { type UserService } from "~/modules/users/user.service.js";
 
 import { UsersApiPath } from "./libs/enums/enums.js";
-import { type UserGetByIdItemResponseDto } from "./libs/types/types.js";
+import {
+	type UserAuthResponseDto,
+	type UserGetByIdItemResponseDto,
+	type UserPublicProfileResponseDto,
+} from "./libs/types/types.js";
+import { userGetProfileParametersValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 
 /**
  * @swagger
@@ -44,6 +50,15 @@ class UserController extends BaseController {
 			method: "GET",
 			path: UsersApiPath.ROOT,
 		});
+
+		this.addRoute({
+			handler: this.getUserProfile.bind(this),
+			method: "GET",
+			path: UsersApiPath.$ID,
+			validation: {
+				params: userGetProfileParametersValidationSchema,
+			},
+		});
 	}
 
 	/**
@@ -75,6 +90,53 @@ class UserController extends BaseController {
 
 		return {
 			payload: { data: items },
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /users/{id}:
+	 *   get:
+	 *     security:
+	 *      - bearerAuth: []
+	 *     tags:
+	 *       - Users
+	 *     summary: Get User profile public info by user id
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: number
+	 *     responses:
+	 *       200:
+	 *         description: User public profile
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                     $ref: '#/components/schemas/User'
+	 */
+
+	public async getUserProfile(
+		options: APIHandlerOptions<{
+			params: { id: number };
+		}>,
+	): Promise<APIHandlerResponse<UserPublicProfileResponseDto>> {
+		const { params, user } = options;
+
+		const currentUserId = (user as UserAuthResponseDto).id;
+
+		const userProfile = await this.userService.getUserProfile(
+			params.id,
+			currentUserId,
+		);
+
+		return {
+			payload: { data: userProfile },
 			status: HTTPCode.OK,
 		};
 	}

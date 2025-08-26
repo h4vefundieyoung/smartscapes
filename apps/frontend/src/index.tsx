@@ -14,12 +14,14 @@ import { store } from "~/libs/modules/store/store.js";
 import { Auth } from "~/pages/auth/auth.jsx";
 import { NotFound } from "~/pages/not-found/not-found.jsx";
 
+import { ConstructRoute } from "./pages/construct-route/construct-route.js";
 import { Dashboard } from "./pages/dashboard/dashboard.js";
 import { Explore } from "./pages/explore/explore.js";
 import { Landing } from "./pages/landing/landing.jsx";
 import { ManageRoutes } from "./pages/manage-routes/manage-routes.js";
 import { PointsOfInterestDetails } from "./pages/points-of-interest-details/points-of-interest-details.js";
 import { Profile } from "./pages/profile/profile.js";
+import { PublicProfile } from "./pages/public-profile/public-profile.js";
 import { RouteDetails } from "./pages/route-details/route-details.js";
 
 pwa.register();
@@ -69,6 +71,14 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 							},
 							{
 								element: (
+									<ProtectedRoute>
+										<PublicProfile />
+									</ProtectedRoute>
+								),
+								path: AppRoute.USERS_$ID,
+							},
+							{
+								element: (
 									<ProtectedRoute
 										routePermissions={[PermissionKey.MANAGE_ROUTES]}
 									>
@@ -76,6 +86,16 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 									</ProtectedRoute>
 								),
 								path: AppRoute.MANAGE_ROUTES,
+							},
+							{
+								element: (
+									<ProtectedRoute
+										routePermissions={[PermissionKey.MANAGE_ROUTES]}
+									>
+										<ConstructRoute />
+									</ProtectedRoute>
+								),
+								path: AppRoute.ROUTES_CONSTRUCT,
 							},
 						],
 						element: <App />,

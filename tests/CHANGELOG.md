@@ -1,5 +1,91 @@
 # Changelog
 
+## [0.1.6](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/tests-v0.1.5...@smartscapes/tests-v0.1.6) (2025-08-25)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.34.1 to 1.35.0
+
+## [0.1.5](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/tests-v0.1.4...@smartscapes/tests-v0.1.5) (2025-08-25)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.34.0 to 1.34.1
+
+## [0.1.4](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/tests-v0.1.3...@smartscapes/tests-v0.1.4) (2025-08-25)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.33.0 to 1.34.0
+
+## [0.1.3](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/tests-v0.1.2...@smartscapes/tests-v0.1.3) (2025-08-25)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.32.1 to 1.33.0
+
+## [0.1.2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/tests-v0.1.1...@smartscapes/tests-v0.1.2) (2025-08-24)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.32.0 to 1.32.1
+
+## [0.1.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/tests-v0.1.0...@smartscapes/tests-v0.1.1) (2025-08-24)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.31.0 to 1.32.0
+
+## [0.1.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/tests-v0.0.17...@smartscapes/tests-v0.1.0) (2025-08-23)
+
+
+### Features
+
+* **backend/frontend/shared:** merge pois find all endpoints into one ss-189 ([#515](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/515)) ([a5ce3e2](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/a5ce3e25681babba3462a05e6b55ca71c0e3ab59))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.30.0 to 1.31.0
+
+## [0.0.17](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/tests-v0.0.16...@smartscapes/tests-v0.0.17) (2025-08-23)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.29.0 to 1.30.0
+
+## [0.0.16](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/tests-v0.0.15...@smartscapes/tests-v0.0.16) (2025-08-22)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.28.0 to 1.29.0
+
 ## [0.0.15](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/tests-v0.0.14...@smartscapes/tests-v0.0.15) (2025-08-21)
 
 

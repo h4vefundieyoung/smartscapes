@@ -1,9 +1,8 @@
-.tbody {
+.body {
 	width: 100%;
-	border-right: 2px solid var(--color-stroke-weak);
 }
 
-.td {
+.cell {
 	padding: 4px 24px;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -12,9 +11,9 @@
 	line-height: 1.5;
 	color: var(--color-text-strong);
 	white-space: nowrap;
-	border-bottom: 2px solid var(--color-stroke-weak);
+	border-bottom: 1px solid var(--color-stroke-weak);
 }
 
-.tbody .tr:last-child .td {
+.body .row:last-child .cell {
 	border-bottom: none;
 }

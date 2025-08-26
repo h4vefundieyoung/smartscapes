@@ -1,5 +1,6 @@
 .pagination {
 	display: flex;
+	gap: 8px;
 	align-items: center;
 	justify-content: space-between;
 	width: 100%;
@@ -7,11 +8,13 @@
 	font-size: var(--font-size-tiny);
 	line-height: 1.5;
 	color: var(--color-text-strong);
+	white-space: nowrap;
 }
 
 .controls {
 	display: flex;
-	gap: 32px;
+	flex-wrap: wrap;
+	gap: 8px 32px;
 	align-items: center;
 }
 

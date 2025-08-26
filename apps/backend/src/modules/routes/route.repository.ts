@@ -47,6 +47,7 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(geometry)::json as geometry"),
 				"created_by_user_id",
+				this.routesModel.raw("'[]'::json as images"),
 			]);
 
 		return RouteEntity.initialize(result);
@@ -65,13 +66,18 @@ class RouteRepository implements Repository {
 
 		const query = this.routesModel
 			.query()
-			.withGraphFetched("pois")
-			.modifyGraph("pois", (builder) => {
-				builder.select(
-					"points_of_interest.id",
-					"points_of_interest.name",
-					"routes_to_pois.visit_order",
-				);
+			.withGraphFetched("[pois(selectPoiData), images(selectFileData)]")
+			.modifiers({
+				selectFileData(builder) {
+					builder.select("files.id", "files.url");
+				},
+				selectPoiData(builder) {
+					builder.select(
+						"points_of_interest.id",
+						"points_of_interest.name",
+						"routes_to_pois.visit_order",
+					);
+				},
 			})
 			.select([
 				"routes.id",
@@ -122,11 +128,14 @@ class RouteRepository implements Repository {
 	public async findById(id: number): Promise<null | RouteEntity> {
 		const route = await this.routesModel
 			.query()
-			.withGraphFetched("[pois(selectPoi),categories]")
+			.withGraphFetched("[pois(selectPoi), images(selectFileData), categories]")
 			.modifyGraph("categories", (builder) => {
 				builder.select("categories.id", "categories.key", "categories.name");
 			})
 			.modifiers({
+				selectFileData(builder) {
+					builder.select("files.id", "files.url");
+				},
 				selectPoi(builder) {
 					builder.select(
 						"points_of_interest.id",
@@ -161,6 +170,10 @@ class RouteRepository implements Repository {
 			duration: route.duration,
 			geometry: route.geometry,
 			id: route.id,
+			images: route.images.map((image) => ({
+				id: image.id,
+				url: image.url,
+			})),
 			name: route.name,
 			pois: route.pois.map((poi) => ({
 				id: poi.id,
@@ -192,11 +205,16 @@ class RouteRepository implements Repository {
 			}
 
 			const routeWithRelations = await RouteModel.query()
-				.withGraphFetched("[pois(selectPoi),categories]")
+				.withGraphFetched(
+					"[pois(selectPoi), images(selectFileData), categories]",
+				)
 				.modifyGraph("categories", (builder) => {
 					builder.select("categories.id", "categories.key", "categories.name");
 				})
 				.modifiers({
+					selectFileData(builder) {
+						builder.select("files.id", "files.url");
+					},
 					selectPoi(builder) {
 						builder.select(
 							"points_of_interest.id",
@@ -221,6 +239,10 @@ class RouteRepository implements Repository {
 				duration: routeWithRelations.duration,
 				geometry: routeWithRelations.geometry,
 				id: routeWithRelations.id,
+				images: routeWithRelations.images.map((image) => ({
+					id: image.id,
+					url: image.url,
+				})),
 				name: routeWithRelations.name,
 				pois: routeWithRelations.pois.map((poi) => ({
 					id: poi.id,

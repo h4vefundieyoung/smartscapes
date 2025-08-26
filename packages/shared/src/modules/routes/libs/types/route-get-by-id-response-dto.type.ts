@@ -1,4 +1,5 @@
 import { type LineStringGeometry } from "../../../../libs/types/types.js";
+import { type FileUploadResponseDto } from "../../../files/libs/types/types.js";
 
 type RouteGetByIdResponseDto = {
 	categories: {
@@ -12,6 +13,7 @@ type RouteGetByIdResponseDto = {
 	duration: number;
 	geometry: LineStringGeometry;
 	id: number;
+	images: Pick<FileUploadResponseDto, "id" | "url">[];
 	name: string;
 	pois: {
 		id: number;

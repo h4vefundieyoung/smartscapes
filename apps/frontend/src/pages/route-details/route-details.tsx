@@ -16,6 +16,7 @@ import {
 	useAppSelector,
 	useCallback,
 	useEffect,
+	useMemo,
 	useParams,
 	useRef,
 	useState,
@@ -65,7 +66,7 @@ const RouteDetails = (): React.JSX.Element => {
 	const [categoriesOptions, setCategoriesOptions] = useState<
 		{ label: string; value: number }[]
 	>([]);
-	useEffect(() => {
+	useMemo(() => {
 		const options = categories.map((category) => ({
 			label: category.name,
 			value: category.id,

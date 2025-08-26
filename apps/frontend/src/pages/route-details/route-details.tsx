@@ -141,10 +141,6 @@ const RouteDetails = (): React.JSX.Element => {
 		if (route) {
 			handleValueSet("name", route.name);
 			handleValueSet("description", route.description);
-			handleValueSet(
-				"categories",
-				route.categories.map((category) => category.id),
-			);
 		}
 	}, [route, handleValueSet]);
 

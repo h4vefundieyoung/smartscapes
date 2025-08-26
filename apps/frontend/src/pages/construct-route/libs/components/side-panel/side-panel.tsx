@@ -87,19 +87,20 @@ const SidePanel = ({
 	}, [dispatch, pointsOfInterest]);
 
 	const handleSaveClick = useCallback(() => {
-		const rt = searchParameters.get("returnTo");
+		const route = searchParameters.get("returnTo");
 
-		if (!rt || !plannedRouteId) {
+		if (!route || !plannedRouteId) {
 			return;
 		}
 
-		const [path, qs = ""] = rt.split("?");
-		const sp = new URLSearchParams(qs);
+		const [path, query = ""] = route.split("?");
+		const searchParameters_ = new URLSearchParams(query);
 
-		sp.set("plannedRouteId", String(plannedRouteId));
+		searchParameters_.set("plannedRouteId", String(plannedRouteId));
 
-		navigate(`${String(path)}?${sp.toString()}`);
+		navigate(`${String(path)}?${searchParameters_.toString()}`);
 	}, [plannedRouteId, searchParameters, navigate]);
+
 	const poiSelectOptions = useMemo(() => {
 		return filteredPois.map((poi) => ({
 			label: poi.name,

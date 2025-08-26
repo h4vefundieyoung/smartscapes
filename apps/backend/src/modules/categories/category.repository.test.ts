@@ -14,6 +14,7 @@ describe("CategoryRepository", () => {
 	const mockCategoryRepositoryCategory: Parameters<
 		typeof CategoryEntity.initialize
 	>[0] = {
+		createdAt: "2024-01-01T00:00:00Z",
 		id: 1,
 		key: "popular",
 		name: "Popular",

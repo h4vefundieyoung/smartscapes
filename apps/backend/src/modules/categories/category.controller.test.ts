@@ -19,6 +19,7 @@ describe("CategoryController", () => {
 	};
 
 	const mockCategory: CategoryGetAllItemResponseDto = {
+		createdAt: "2024-01-01T00:00:00Z",
 		id: 1,
 		name: "Popular",
 	};

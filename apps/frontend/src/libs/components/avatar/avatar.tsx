@@ -7,22 +7,30 @@ const DEFAULT_AVATAR_SIZE = 32;
 
 type Properties = {
 	size?: number;
+	theme?: "dark" | "light";
 	user: Pick<UserAuthResponseDto, "avatarUrl" | "firstName" | "lastName">;
-	variant?: "large" | "small";
 };
+
+const FONT_SIZE_RATIO = 3;
 
 const Avatar = ({
 	size = DEFAULT_AVATAR_SIZE,
+	theme = "dark",
 	user,
-	variant = "small",
 }: Properties): React.JSX.Element => {
 	const { avatarUrl, firstName, lastName } = user;
 	const hasAvatar = Boolean(avatarUrl);
+	const fontSize = Math.floor(size / FONT_SIZE_RATIO);
 
 	return (
 		<div
 			className={styles["avatar"]}
-			style={{ "--avatar-size": `${String(size)}px` } as React.CSSProperties}
+			style={
+				{
+					"--avatar-size": `${String(size)}px`,
+					"--font-size": `${String(fontSize)}px`,
+				} as React.CSSProperties
+			}
 		>
 			{hasAvatar ? (
 				<img
@@ -31,9 +39,7 @@ const Avatar = ({
 					src={avatarUrl as string}
 				/>
 			) : (
-				<span
-					className={combineClassNames(styles["fallback"], styles[variant])}
-				>
+				<span className={combineClassNames(styles["fallback"], styles[theme])}>
 					{getUserInitials(firstName, lastName)}
 				</span>
 			)}

@@ -5,6 +5,7 @@
 	width: var(--avatar-size);
 	height: var(--avatar-size);
 	overflow: hidden;
+	font-size: var(--font-size);
 	border-radius: 50%;
 }
 
@@ -25,12 +26,12 @@
 	border-radius: 50%;
 }
 
-.small {
+.dark {
 	font-weight: var(--font-weight-semibold);
 	color: var(--color-text-strong);
 }
 
-.large {
+.light {
 	font-size: calc(var(--font-size-h1));
 	color: var(--color-base);
 }

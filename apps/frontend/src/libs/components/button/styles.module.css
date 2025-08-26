@@ -80,7 +80,7 @@
 
 .outlined-danger {
 	color: var(--color-text-error);
-	background: var(--color-background-base);
+	background: transparent;
 	border-color: var(--color-text-error);
 }
 

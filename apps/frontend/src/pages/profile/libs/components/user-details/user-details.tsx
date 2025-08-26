@@ -62,7 +62,7 @@ const UserDetails = (): null | React.JSX.Element => {
 	return (
 		<div className={styles["user-details-container"]}>
 			<div className={styles["user-details-avatar"]}>
-				<Avatar size={128} user={authenticatedUser} variant="large" />
+				<Avatar size={128} theme="light" user={authenticatedUser} />
 				<div className={styles["user-upload-buttons"]}>
 					<Button
 						label="Upload avatar"
@@ -72,9 +72,9 @@ const UserDetails = (): null | React.JSX.Element => {
 					<Button label="Delete avatar" variant="outlined-danger" />
 					<input
 						accept="image/*"
+						className="visually-hidden"
 						onChange={handleFileUpload}
 						ref={fileInputReference}
-						style={{ display: "none" }}
 						type="file"
 					/>
 				</div>

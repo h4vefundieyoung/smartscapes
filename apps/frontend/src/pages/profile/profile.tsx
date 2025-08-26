@@ -1,7 +1,6 @@
-import { TabContainer } from "~/libs/components/components.js";
+import { PageHeading, TabContainer } from "~/libs/components/components.js";
 import { useTabNavigation } from "~/libs/hooks/hooks.js";
 
-import { DashboardHeading } from "./libs/components/components.js";
 import { PROFILE_TABS } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
@@ -14,7 +13,7 @@ const Profile = (): React.JSX.Element => {
 
 	return (
 		<main className={styles["profile-container"]}>
-			<DashboardHeading
+			<PageHeading
 				subtitle="Update your profile and manage reviews."
 				title="Profile"
 			/>

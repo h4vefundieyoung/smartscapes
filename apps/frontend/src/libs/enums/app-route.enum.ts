@@ -4,6 +4,7 @@ const AppRoute = {
 	CONTENT: "/app/content",
 	DASHBOARD: "/app/dashboard",
 	EXPLORE: "/app/explore",
+	MANAGE_CATEGORIES: "/app/manage-categories",
 	MANAGE_ROUTES: "/app/manage-routes",
 	POINTS_OF_INTEREST: "/app/points-of-interest",
 	POINTS_OF_INTEREST_$ID: "/app/points-of-interest/:id",
@@ -15,6 +16,7 @@ const AppRoute = {
 	ROUTES_CONSTRUCT: "/app/manage-routes/construct",
 	SIGN_IN: "/app/sign-in",
 	SIGN_UP: "/app/sign-up",
+	USER_ROUTES_$ROUTE_ID_MAP: "/app/user-routes/:routeId/map",
 	USERS_$ID: "/app/users/:id",
 } as const;
 

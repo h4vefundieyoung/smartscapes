@@ -39,6 +39,7 @@ const FIRST_POI_NAME = "SUP Kayak Club 4 Storony";
 const SECOND_POI_NAME = "River Grill, Rusanivska Embankment";
 const FIRST_ENTITY_ID = 1;
 const SECOND_ENTITY_ID = 2;
+const MOCK_CREATED_AT = "2024-01-01T00:00:00Z";
 
 const geometry: LineStringGeometry = {
 	coordinates: [
@@ -111,6 +112,8 @@ describe("RouteService", () => {
 	};
 
 	const mockRouteIdResponse: RoutePatchResponseDto = {
+		categories: [],
+		createdAt: MOCK_CREATED_AT,
 		createdByUserId: 5,
 		description: "Test route description",
 		distance: 12.3,
@@ -139,6 +142,7 @@ describe("RouteService", () => {
 	};
 
 	const mockRouteAllItemResponse: RouteGetAllItemResponseDto = {
+		createdAt: MOCK_CREATED_AT,
 		createdByUserId: 5,
 		distance: 12.3,
 		duration: 45.6,
@@ -187,6 +191,7 @@ describe("RouteService", () => {
 	];
 
 	const mockPatchPayload = {
+		categories: [],
 		description: "Updated description",
 		name: "Updated Route",
 	};
@@ -206,11 +211,21 @@ describe("RouteService", () => {
 
 	const createMockRouteRepository = (
 		overrides = {},
+		{
+			findAllItems = [createMockAllItemEntity(mockRouteAllItemResponse)],
+			findAllTotal = 1,
+		}: {
+			findAllItems?: RouteEntity[];
+			findAllTotal?: number;
+		} = {},
 	): Partial<RouteRepository> => ({
 		create: () => Promise.resolve(createMockIdEntity(mockRouteIdResponse)),
 		delete: () => Promise.resolve(true),
 		findAll: () =>
-			Promise.resolve([createMockAllItemEntity(mockRouteAllItemResponse)]),
+			Promise.resolve({
+				items: findAllItems,
+				total: findAllTotal,
+			}),
 		findById: () => Promise.resolve(createMockIdEntity(mockRouteIdResponse)),
 		patch: () =>
 			Promise.resolve(
@@ -382,10 +397,8 @@ describe("RouteService", () => {
 		});
 	});
 
-	it("findById should throw an error when route does not exist", async () => {
-		const routesRepository = createMockRouteRepository({
-			findById: () => Promise.resolve(null),
-		});
+	it("findById should return route when it exists", async () => {
+		const routesRepository = createMockRouteRepository();
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const { api: mapBoxApiMock } = createMockMapboxApi();
 		const plannedPathService = createMockPlannedPathService();
@@ -400,15 +413,21 @@ describe("RouteService", () => {
 			routesRepository: routesRepository as RouteRepository,
 		});
 
-		await assert.rejects(async () => {
-			await routeService.findById(NON_EXISTENT_ID);
-		}, mockNotFoundError);
+		const result = await routeService.findById(EXISTING_ID);
+
+		assert.deepStrictEqual(result, {
+			...mockRouteIdResponse,
+			savedUserRoute: null,
+		});
 	});
 
 	it("findAll should return all routes if options are not provided", async () => {
 		const routesRepository = createMockRouteRepository({
 			findAll: () =>
-				Promise.resolve([createMockAllItemEntity(mockRouteAllItemResponse)]),
+				Promise.resolve({
+					items: [createMockAllItemEntity(mockRouteAllItemResponse)],
+					total: 1,
+				}),
 		});
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const { api: mapBoxApiMock } = createMockMapboxApi();
@@ -426,12 +445,24 @@ describe("RouteService", () => {
 
 		const result = await routeService.findAll(null);
 
-		assert.deepStrictEqual(result, { items: [mockRouteAllItemResponse] });
+		assert.deepStrictEqual(result, {
+			items: [mockRouteAllItemResponse],
+			meta: {
+				currentPage: 1,
+				itemsPerPage: 1,
+				total: 1,
+				totalPages: 1,
+			},
+		});
 	});
 
 	it("findAll should return empty array when no routes exist", async () => {
 		const routesRepository = createMockRouteRepository({
-			findAll: () => Promise.resolve([]),
+			findAll: () =>
+				Promise.resolve({
+					items: [],
+					total: 0,
+				}),
 		});
 		const { api: mapBoxApiMock } = createMockMapboxApi();
 		const pointsOfInterestService = createMockPointsOfInterestService();
@@ -449,7 +480,15 @@ describe("RouteService", () => {
 
 		const result = await routeService.findAll(null);
 
-		assert.deepStrictEqual(result, { items: [] });
+		assert.deepStrictEqual(result, {
+			items: [],
+			meta: {
+				currentPage: 1,
+				itemsPerPage: 0,
+				total: 0,
+				totalPages: 1,
+			},
+		});
 	});
 
 	it("findAll should return response with routes that match search query", async () => {
@@ -474,7 +513,15 @@ describe("RouteService", () => {
 
 		const result = await routeService.findAll(mockOptions);
 
-		assert.deepStrictEqual(result, { items: [mockRouteAllItemResponse] });
+		assert.deepStrictEqual(result, {
+			items: [mockRouteAllItemResponse],
+			meta: {
+				currentPage: 1,
+				itemsPerPage: 1,
+				total: 1,
+				totalPages: 1,
+			},
+		});
 	});
 
 	it("patch should update existing route successfully", async () => {

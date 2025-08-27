@@ -19,7 +19,7 @@ type Constructor = {
 	storage: Storage;
 };
 
-class UserRoutesApi extends BaseHTTPApi {
+class UserRouteApi extends BaseHTTPApi {
 	public constructor({ baseUrl, http, storage }: Constructor) {
 		super({ baseUrl, http, path: APIPath.USER_ROUTES, storage });
 	}
@@ -84,6 +84,21 @@ class UserRoutesApi extends BaseHTTPApi {
 		return await response.json();
 	}
 
+	public async getByRouteId(
+		query: UserRouteQueryRequestDto,
+	): Promise<APIResponse<UserRouteResponseDto>> {
+		const response = await this.load<APIResponse<UserRouteResponseDto>>(
+			this.getFullEndpoint(UserRouteApiPath.GET, {}),
+			{
+				hasAuth: true,
+				method: "GET",
+				query,
+			},
+		);
+
+		return await response.json();
+	}
+
 	public async saveRoute(
 		routeId: number,
 	): Promise<APIResponse<UserRouteResponseDto>> {
@@ -117,4 +132,4 @@ class UserRoutesApi extends BaseHTTPApi {
 	}
 }
 
-export { UserRoutesApi };
+export { UserRouteApi };

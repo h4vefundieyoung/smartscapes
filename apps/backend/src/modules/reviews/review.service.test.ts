@@ -35,6 +35,21 @@ const createMockPointsOfInterestService =
 const createMockRouteService = (): Partial<RouteService> => ({
 	findById: (id: number) =>
 		Promise.resolve({
+			categories: [
+				{
+					createdAt: "2024-01-01T00:00:00Z",
+					id: 1,
+					key: "nature",
+					name: "Nature",
+				},
+				{
+					createdAt: "2024-01-01T00:00:00Z",
+					id: 2,
+					key: "historical",
+					name: "Historical",
+				},
+			],
+			createdAt: "2024-01-01T00:00:00Z",
 			createdByUserId: 10,
 			description: "Route description",
 			distance: 1.23,

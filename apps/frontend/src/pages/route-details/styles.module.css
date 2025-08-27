@@ -40,8 +40,9 @@
 	justify-content: space-between;
 }
 
-.edit-button-container {
-	width: 100px;
+.header-controls {
+	display: flex;
+	gap: 8px;
 }
 
 .loader-container {
@@ -77,6 +78,11 @@
 	align-items: center;
 }
 
-.save-button-container {
+.admin-button-container {
+	width: 100px;
+}
+
+.user-button-container {
 	display: flex;
+	gap: 16px;
 }

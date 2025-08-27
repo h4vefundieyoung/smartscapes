@@ -6,6 +6,7 @@ import { CategoryEntity } from "./category.entity.js";
 describe("CategoryEntity", () => {
 	it("should create new category entity", () => {
 		const categoryData = {
+			createdAt: "2024-01-01T00:00:00Z",
 			id: 1,
 			key: "popular",
 			name: "Popular",

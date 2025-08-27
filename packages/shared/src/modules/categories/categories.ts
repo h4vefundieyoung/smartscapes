@@ -6,5 +6,6 @@ export {
 export {
 	type CategoryCreateRequestDto,
 	type CategoryGetAllItemResponseDto,
+	type CategoryGetAllQuery,
 } from "./libs/types/types.js";
 export { categoryCreate as categoryCreateValidationSchema } from "./libs/validation-schemas/category-create.validation-schema.js";

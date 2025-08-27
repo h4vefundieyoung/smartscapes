@@ -96,6 +96,8 @@ describe("Route controller", () => {
 	};
 
 	const mockRoute: RouteGetByIdResponseDto = {
+		categories: [],
+		createdAt: "2024-01-01T00:00:00Z",
 		createdByUserId: 10,
 		description: "Test route description",
 		distance: 1.23,
@@ -203,8 +205,14 @@ describe("Route controller", () => {
 	it("findAll should return all routes if query is not provided", async () => {
 		const mockFindAll: RouteService["findAll"] = () =>
 			Promise.resolve({
-				items: [mockRoute as RouteGetAllItemResponseDto],
-			} as { items: RouteGetAllItemResponseDto[] });
+				items: [mockRoute] as RouteGetAllItemResponseDto[],
+				meta: {
+					currentPage: 1,
+					itemsPerPage: 10,
+					total: 1,
+					totalPages: 1,
+				},
+			});
 
 		const routeService = {
 			findAll: mockFindAll,
@@ -220,7 +228,15 @@ describe("Route controller", () => {
 		});
 
 		assert.deepStrictEqual(result, {
-			payload: { data: [mockRoute] },
+			payload: {
+				data: [mockRoute],
+				meta: {
+					currentPage: 1,
+					itemsPerPage: 10,
+					total: 1,
+					totalPages: 1,
+				},
+			},
 			status: HTTPCode.OK,
 		});
 	});
@@ -233,7 +249,15 @@ describe("Route controller", () => {
 					] as RouteGetAllItemResponseDto[])
 				: ([] as RouteGetAllItemResponseDto[]);
 
-			return Promise.resolve({ items });
+			return Promise.resolve({
+				items,
+				meta: {
+					currentPage: 1,
+					itemsPerPage: 10,
+					total: 1,
+					totalPages: 1,
+				},
+			});
 		};
 
 		const routeService = {
@@ -252,7 +276,15 @@ describe("Route controller", () => {
 		});
 
 		assert.deepStrictEqual(result, {
-			payload: { data: [mockRoute] },
+			payload: {
+				data: [mockRoute],
+				meta: {
+					currentPage: 1,
+					itemsPerPage: 10,
+					total: 1,
+					totalPages: 1,
+				},
+			},
 			status: HTTPCode.OK,
 		});
 	});
@@ -260,7 +292,15 @@ describe("Route controller", () => {
 	it("findAll should return response with empty array if no routes found", async () => {
 		const routeService = {
 			findAll: (() =>
-				Promise.resolve({ items: [] })) as RouteService["findAll"],
+				Promise.resolve({
+					items: [],
+					meta: {
+						currentPage: 1,
+						itemsPerPage: 0,
+						total: 0,
+						totalPages: 1,
+					},
+				})) as RouteService["findAll"],
 		} as RouteService;
 
 		const mockSearchQuery = "nonexistent";
@@ -275,7 +315,15 @@ describe("Route controller", () => {
 		});
 
 		assert.deepStrictEqual(result, {
-			payload: { data: [] },
+			payload: {
+				data: [],
+				meta: {
+					currentPage: 1,
+					itemsPerPage: 0,
+					total: 0,
+					totalPages: 1,
+				},
+			},
 			status: HTTPCode.OK,
 		});
 	});
@@ -288,6 +336,7 @@ describe("Route controller", () => {
 
 		const updateRouteMockData = {
 			body: {
+				categories: [],
 				description: updatedRoute.description ?? "",
 				name: updatedRoute.name,
 			},
@@ -428,6 +477,7 @@ describe("Route controller", () => {
 
 			const updateRouteMockData = {
 				body: {
+					categories: updatedRoute.categories.map((category) => category.id),
 					description: updatedRoute.description ?? "",
 					name: updatedRoute.name,
 				},
@@ -480,8 +530,14 @@ describe("Route controller", () => {
 	describe("GET routes should be accessible to all users (no permission required)", () => {
 		it("should allow user without manage_routes permission to get all routes", async () => {
 			const mockFindAll: RouteService["findAll"] = () => {
-				return Promise.resolve({ items: [mockRoute] } as {
-					items: RouteGetAllItemResponseDto[];
+				return Promise.resolve({
+					items: [mockRoute] as RouteGetAllItemResponseDto[],
+					meta: {
+						currentPage: 1,
+						itemsPerPage: 10,
+						total: 1,
+						totalPages: 1,
+					},
 				});
 			};
 
@@ -499,7 +555,15 @@ describe("Route controller", () => {
 			});
 
 			assert.deepStrictEqual(result, {
-				payload: { data: [mockRoute] },
+				payload: {
+					data: [mockRoute],
+					meta: {
+						currentPage: 1,
+						itemsPerPage: 10,
+						total: 1,
+						totalPages: 1,
+					},
+				},
 				status: HTTPCode.OK,
 			});
 		});

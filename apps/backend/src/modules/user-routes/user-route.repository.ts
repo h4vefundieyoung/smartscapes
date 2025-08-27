@@ -1,10 +1,10 @@
+import { SortingOrder } from "~/libs/enums/enums.js";
 import { type Repository } from "~/libs/types/types.js";
 
 import { UserRouteStatus } from "./libs/enums/enum.js";
+import { type UserRouteFilter } from "./libs/types/type.js";
 import { UserRouteEntity } from "./user-route.entity.js";
 import { type UserRouteModel } from "./user-route.model.js";
-
-type UserRouteFilters = Partial<ReturnType<UserRouteEntity["toObject"]>>;
 
 class UserRouteRepository implements Repository {
 	private userRouteModel: typeof UserRouteModel;
@@ -81,12 +81,13 @@ class UserRouteRepository implements Repository {
 	}
 
 	public async findByFilter(
-		filters: UserRouteFilters,
+		filters: UserRouteFilter,
 	): Promise<UserRouteEntity[]> {
 		const userRoutes = await this.userRouteModel
 			.query()
 			.where(filters)
 			.withGraphJoined("routes")
+			.orderBy("id", SortingOrder.DESC)
 			.select([
 				"user_routes.id as id",
 				"routeId",

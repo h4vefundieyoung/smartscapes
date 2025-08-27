@@ -53,8 +53,11 @@ const MapProvider = ({
 		const client = mapClientReference.current;
 		client.addNavigationControl();
 		client.addScaleControl();
-		client.addGeolocateControl();
-	}, []);
+
+		if (!center) {
+			client.addGeolocateControl();
+		}
+	}, [center]);
 
 	useEffect(() => {
 		const client = mapClientReference.current;
@@ -63,12 +66,12 @@ const MapProvider = ({
 	}, [markers]);
 
 	useEffect(() => {
-		if (!center) {
+		if (!isLoaded || !center) {
 			return;
 		}
 
-		mapClientReference.current.setCenter(center);
-	}, [center]);
+		mapClientReference.current.flyTo(center);
+	}, [isLoaded, center]);
 
 	useEffect(() => {
 		if (!isLoaded || !routeLine) {

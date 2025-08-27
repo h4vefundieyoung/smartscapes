@@ -1,8 +1,11 @@
 import { type LineStringGeometry } from "../../../../libs/types/types.js";
+import { type CategoryGetAllItemResponseDto } from "../../../categories/libs/types/types.js";
 import { type FileUploadResponseDto } from "../../../files/libs/types/types.js";
 import { type UserRouteResponseDto } from "../../../user-routes/user-routes.js";
 
 type RouteGetByIdResponseDto = {
+	categories: CategoryGetAllItemResponseDto[];
+	createdAt: string;
 	createdByUserId: number;
 	description: null | string;
 	distance: number;

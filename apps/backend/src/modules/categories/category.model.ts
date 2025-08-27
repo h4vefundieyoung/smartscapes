@@ -5,6 +5,8 @@ import {
 	DatabaseTableName,
 } from "~/libs/modules/database/database.js";
 
+import { RouteModel } from "../routes/route.model.js";
+
 class CategoryModel extends AbstractModel {
 	public static readonly relationMappings = {
 		routes: {
@@ -16,7 +18,7 @@ class CategoryModel extends AbstractModel {
 				},
 				to: "routes.id",
 			},
-			modelClass: CategoryModel,
+			modelClass: (): typeof RouteModel => RouteModel,
 			relation: Model.ManyToManyRelation,
 		},
 	};

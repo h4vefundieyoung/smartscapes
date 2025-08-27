@@ -8,6 +8,7 @@ import {
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type PaginationMeta } from "~/libs/types/types.js";
 
 import { type PlannedPathResponseDto } from "../planned-paths/planned-paths.js";
 import { RoutesApiPath } from "./libs/enums/enums.js";
@@ -527,13 +528,13 @@ class RouteController extends BaseController {
 		options: APIHandlerOptions<{
 			query?: RouteFindAllOptions;
 		}>,
-	): Promise<APIHandlerResponse<RouteGetAllItemResponseDto[]>> {
+	): Promise<APIHandlerResponse<RouteGetAllItemResponseDto[], PaginationMeta>> {
 		const { query = null } = options;
 
-		const { items } = await this.routeService.findAll(query);
+		const { items, meta } = await this.routeService.findAll(query);
 
 		return {
-			payload: { data: items },
+			payload: { data: items, meta },
 			status: HTTPCode.OK,
 		};
 	}
@@ -671,9 +672,10 @@ class RouteController extends BaseController {
 		}>,
 	): Promise<APIHandlerResponse<RoutePatchResponseDto>> {
 		const id = Number(options.params.id);
-		const { description, name } = options.body;
+		const { categories, description, name } = options.body;
 
 		const route = await this.routeService.patch(id, {
+			categories,
 			description,
 			name,
 		});

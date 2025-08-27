@@ -168,7 +168,7 @@ describe("UserRouteController", () => {
 				user: { id: 1 },
 			} as APIHandlerOptions;
 
-			const result = await userRouteController.getAllByUserId(options);
+			const result = await userRouteController.getAll(options);
 
 			assert.strictEqual(result.status, HTTPCode.OK);
 			assert.strictEqual(Array.isArray(result.payload.data), true);

@@ -130,7 +130,7 @@ class UserRouteController extends BaseController {
 		});
 
 		this.addRoute({
-			handler: this.getAllByUserId.bind(this),
+			handler: this.getAll.bind(this),
 			method: "GET",
 			path: UserRouteApiPath.ROOT,
 		});
@@ -344,7 +344,7 @@ class UserRouteController extends BaseController {
 	 *                       type: "LineString"
 	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
 	 */
-	public async getAllByUserId(
+	public async getAll(
 		options: APIHandlerOptions,
 	): Promise<APIHandlerResponse<UserRouteResponseDto[]>> {
 		const { user } = options;

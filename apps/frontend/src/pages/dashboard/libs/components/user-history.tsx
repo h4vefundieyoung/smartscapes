@@ -1,5 +1,5 @@
 import { Loader } from "~/libs/components/components.js";
-import { DataStatus } from "~/libs/enums/enums.js";
+import { DataStatus, UserRouteStatus } from "~/libs/enums/enums.js";
 import { useAppSelector } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
@@ -7,7 +7,9 @@ import { UserHistoryCard } from "./user-history-card.js";
 
 const UserHistory = (): React.JSX.Element => {
 	const finishedUserRoutes = useAppSelector((state) =>
-		state.userRoutes.userRoutes.filter((route) => route.completedAt !== null),
+		state.userRoutes.userRoutes.filter(
+			(route) => route.status === UserRouteStatus.COMPLETED,
+		),
 	);
 
 	const dataStatus = useAppSelector((state) => state.userRoutes.dataStatus);

@@ -11,6 +11,7 @@ import { CategoryError } from "./libs/exceptions/exceptions.js";
 
 describe("CategoryService", () => {
 	const mockCategory: Parameters<typeof CategoryEntity.initialize>[0] = {
+		createdAt: "2024-01-01T00:00:00Z",
 		id: 1,
 		key: "popular",
 		name: "Popular",
@@ -63,14 +64,26 @@ describe("CategoryService", () => {
 		const categoryEntity = CategoryEntity.initialize(mockCategory);
 
 		const categoryRepository = {
-			findAll: () => Promise.resolve([categoryEntity]),
+			findAll: (() =>
+				Promise.resolve({
+					items: [categoryEntity],
+					total: 1,
+				})) as CategoryRepository["findAll"],
 		} as CategoryRepository;
 
 		const categoryService = new CategoryService(categoryRepository);
 
-		const result = await categoryService.findAll();
+		const result = await categoryService.findAll(null);
 
-		assert.deepStrictEqual(result, { items: [categoryEntity.toObject()] });
+		assert.deepStrictEqual(result, {
+			items: [categoryEntity.toObject()],
+			meta: {
+				currentPage: 1,
+				itemsPerPage: 1,
+				total: 1,
+				totalPages: 1,
+			},
+		});
 	});
 
 	it("findByName should return category with corresponding name", async () => {

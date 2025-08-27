@@ -25,6 +25,7 @@ import {
 } from "~/modules/points-of-interest/points-of-interest.js";
 import { NotFound } from "~/pages/not-found/not-found.js";
 
+import { RoutesGallery } from "./libs/components/components.js";
 import { POINT_OF_INTEREST_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
@@ -145,7 +146,6 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 					</>
 				)}
 			</div>
-
 			<FeatureGallery
 				slides={[
 					{
@@ -191,6 +191,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 			) : (
 				hasDescription && <p className={styles["description"]}>{description}</p>
 			)}
+			<RoutesGallery routes={pointOfInterest.routes} />
 		</main>
 	);
 };

@@ -189,6 +189,7 @@ class RouteEntity implements Entity {
 	}
 
 	public toDetailsObject(): {
+		createdAt: string;
 		createdByUserId: number;
 		description: null | string;
 		distance: number;
@@ -205,6 +206,7 @@ class RouteEntity implements Entity {
 		savedUserRoute: null | SavedUserRoute;
 	} {
 		return {
+			createdAt: this.createdAt as string,
 			createdByUserId: this.createdByUserId,
 			description: this.description,
 			distance: this.distance,

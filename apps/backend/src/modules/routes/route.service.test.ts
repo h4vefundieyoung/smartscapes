@@ -112,6 +112,7 @@ describe("RouteService", () => {
 	};
 
 	const mockRouteIdResponse: RoutePatchResponseDto = {
+		createdAt: MOCK_CREATED_AT,
 		createdByUserId: 5,
 		description: "Test route description",
 		distance: 12.3,
@@ -193,11 +194,25 @@ describe("RouteService", () => {
 		name: "Updated Route",
 	};
 
+	type RouteInitArgument = Parameters<typeof RouteEntity.initialize>[0];
+
 	const createMockIdEntity = (data: RoutePatchResponseDto): RouteEntity => {
-		return RouteEntity.initialize({
-			...data,
+		// 2) Типізуємо payload явно як RouteInitArg — це “рве” ланцюг any.
+		const payload: RouteInitArgument = {
+			createdAt: data.createdAt ?? MOCK_CREATED_AT, // строго string
+			createdByUserId: data.createdByUserId,
 			description: data.description ?? "",
-		});
+			distance: data.distance,
+			duration: data.duration,
+			geometry: data.geometry,
+			id: data.id,
+			images: data.images,
+			name: data.name,
+			pois: data.pois,
+			// savedUserRoute — опціонально
+		};
+
+		return RouteEntity.initialize(payload);
 	};
 
 	const createMockAllItemEntity = (
@@ -394,10 +409,8 @@ describe("RouteService", () => {
 		});
 	});
 
-	it("findById should throw an error when route does not exist", async () => {
-		const routesRepository = createMockRouteRepository({
-			findById: () => Promise.resolve(null),
-		});
+	it("findById should return route when it exists", async () => {
+		const routesRepository = createMockRouteRepository();
 		const pointsOfInterestService = createMockPointsOfInterestService();
 		const { api: mapBoxApiMock } = createMockMapboxApi();
 		const plannedPathService = createMockPlannedPathService();
@@ -412,9 +425,12 @@ describe("RouteService", () => {
 			routesRepository: routesRepository as RouteRepository,
 		});
 
-		await assert.rejects(async () => {
-			await routeService.findById(NON_EXISTENT_ID);
-		}, mockNotFoundError);
+		const result = await routeService.findById(EXISTING_ID);
+
+		assert.deepStrictEqual(result, {
+			...mockRouteIdResponse,
+			savedUserRoute: null,
+		});
 	});
 
 	it("findAll should return all routes if options are not provided", async () => {

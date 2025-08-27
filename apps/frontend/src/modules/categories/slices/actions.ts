@@ -1,20 +1,41 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
+import {
+	type APIResponse,
+	type AsyncThunkConfig,
+	type PaginationMeta,
+} from "~/libs/types/types.js";
 
-import { type CategoryGetAllItemResponseDto } from "../libs/types/types.js";
+import {
+	type CategoryCreateRequestDto,
+	type CategoryGetAllItemResponseDto,
+	type CategoryGetAllQuery,
+} from "../libs/types/types.js";
 import { name as sliceName } from "./categories.slice.js";
 
-const getAll = createAsyncThunk<
-	APIResponse<CategoryGetAllItemResponseDto[]>,
-	undefined,
+const create = createAsyncThunk<
+	APIResponse<CategoryGetAllItemResponseDto>,
+	CategoryCreateRequestDto,
 	AsyncThunkConfig
->(`${sliceName}/get-all`, async (_, { extra }) => {
-	const { categoriesApi } = extra;
+>(`${sliceName}/create`, async (payload, { extra }) => {
+	const { categoriesApi, toastNotifier } = extra;
 
-	const response = await categoriesApi.getAll();
+	const category = await categoriesApi.create(payload);
+	toastNotifier.showSuccess("Category created successfully");
 
-	return response;
+	return category;
 });
 
-export { getAll };
+const getAll = createAsyncThunk<
+	APIResponse<CategoryGetAllItemResponseDto[], PaginationMeta>,
+	CategoryGetAllQuery | undefined,
+	AsyncThunkConfig
+>(`${sliceName}/get-all`, async (payload, { extra }) => {
+	const { categoriesApi } = extra;
+
+	const { data, meta } = await categoriesApi.getAll(payload);
+
+	return { data, meta };
+});
+
+export { create, getAll };

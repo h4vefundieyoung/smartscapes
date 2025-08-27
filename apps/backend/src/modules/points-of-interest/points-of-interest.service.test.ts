@@ -305,6 +305,7 @@ describe("PointsOfInterestService", () => {
 			routes: [
 				{
 					categories: [],
+					createdAt: "2025-08-15T00:00:00Z",
 					createdByUserId: 0,
 					description: "",
 					distance: 0,

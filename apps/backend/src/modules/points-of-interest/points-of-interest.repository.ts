@@ -169,6 +169,7 @@ class PointsOfInterestRepository implements Repository {
 
 		const routes = pointOfInterest.routes.map((route) =>
 			RouteEntity.initialize({
+				createdAt: route.createdAt,
 				createdByUserId: route.createdByUserId,
 				description: route.description,
 				distance: route.distance,

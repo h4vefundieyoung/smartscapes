@@ -1,8 +1,9 @@
-import { getAll } from "./actions.js";
+import { create, getAll } from "./actions.js";
 import { actions } from "./categories.slice.js";
 
 const allActions = {
 	...actions,
+	create,
 	getAll,
 };
 

@@ -10,6 +10,10 @@ const categoriesApi = new CategoriesApi({
 	storage,
 });
 
+export {
+	type CategoryCreateRequestDto,
+	type CategoryGetAllItemResponseDto,
+} from "./libs/types/types.js";
+export { categoryCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 export { categoriesApi };
-export { type CategoryGetAllItemResponseDto } from "./libs/types/types.js";
 export { actions, reducer } from "./slices/categories.js";

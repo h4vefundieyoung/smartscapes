@@ -5,6 +5,7 @@ import { type UserRouteResponseDto } from "../../../user-routes/user-routes.js";
 
 type RouteGetByIdResponseDto = {
 	categories: CategoryGetAllItemResponseDto[];
+	createdAt: string;
 	createdByUserId: number;
 	description: null | string;
 	distance: number;

@@ -6,7 +6,7 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { actions as userRoutesActions } from "~/modules/user-routes/user-routes.js";
 
-import { DASHBOARD_TABS } from "./libs/constants/dashboard-tabs.constant.js";
+import { DASHBOARD_TABS } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 const Dashboard = (): React.JSX.Element => {

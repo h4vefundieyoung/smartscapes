@@ -1,8 +1,10 @@
 import Analytics from "~/assets/images/icons/analytics.svg?react";
 import ArrowDown from "~/assets/images/icons/arrow-down.svg?react";
 import Bell from "~/assets/images/icons/bell.svg?react";
+import Bookmark from "~/assets/images/icons/bookmark.svg?react";
 import CaretDown from "~/assets/images/icons/caret-down.svg?react";
 import CaretUp from "~/assets/images/icons/caret-up.svg?react";
+import Check from "~/assets/images/icons/check.svg?react";
 import Close from "~/assets/images/icons/close.svg?react";
 import Dashboard from "~/assets/images/icons/dashboard.svg?react";
 import Edit from "~/assets/images/icons/edit.svg?react";
@@ -28,8 +30,10 @@ const iconNameToSvg: Record<
 	analytics: Analytics,
 	arrowDown: ArrowDown,
 	bell: Bell,
+	bookmark: Bookmark,
 	caretDown: CaretDown,
 	caretUp: CaretUp,
+	check: Check,
 	close: Close,
 	dashboard: Dashboard,
 	edit: Edit,

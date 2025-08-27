@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.60.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.59.0...v1.60.0) (2025-08-27)
+
+
+### Features
+
+* **backend/frontend/shared:** implement user bookmarks feature ss-497 ([#552](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/552)) ([c4d5e13](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c4d5e1375611810c114a451aa83bbe00824605f7))
+
+## [1.59.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.58.0...v1.59.0) (2025-08-26)
+
+
+### Features
+
+* **frontend/shared:** update profile page design ss-448 ([#482](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/482)) ([2b45448](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2b454483f05a54964e9dbdcba12cd1951d8e917a))
+
+## [1.58.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.57.0...v1.58.0) (2025-08-26)
+
+
+### Features
+
+* **frontend:** integrate route creation with construct route flow ss-542 ([#557](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/557)) ([61785d0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/61785d049110d2919f7ba3eedd561ec8055341ee))
+
 ## [1.57.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.56.0...v1.57.0) (2025-08-26)
 
 

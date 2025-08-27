@@ -1,7 +1,6 @@
 import {
 	Button,
 	FeatureGallery,
-	IconButton,
 	Input,
 	Loader,
 	MapProvider,
@@ -25,6 +24,7 @@ import {
 	actions as routeActions,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
+import { actions as userRoutesActions } from "~/modules/user-routes/user-routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
 import {
@@ -32,26 +32,32 @@ import {
 	RouteReviewsSection,
 } from "./libs/components/components.js";
 import { ROUTE_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
+import { UserRouteStatus } from "./libs/enums/enums.js";
 import { getGoogleMapsUrl } from "./libs/helpers/helpers.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
-	const route = useAppSelector(({ routeDetails }) => routeDetails.route);
+	const dispatch = useAppDispatch();
+	const { id: routeId } = useParams<{ id: string }>();
 	const user = useAppSelector(({ auth }) => auth.authenticatedUser);
 	const dataStatus = useAppSelector(
 		({ routeDetails }) => routeDetails.dataStatus,
 	);
-
 	const reviews = useAppSelector(({ routeDetails }) => routeDetails.reviews);
-	const isAuthenticatedUser = Boolean(user);
+	const route = useAppSelector(({ routeDetails }) => routeDetails.route);
+	const saveStatus = useAppSelector(
+		({ routeDetails }) => routeDetails.saveRouteStatus,
+	);
+
 	const { control, errors, getValues, handleReset } =
 		useAppForm<RoutePatchRequestDto>({
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
 		});
-	const dispatch = useAppDispatch();
-	const { id: routeId } = useParams<{ id: string }>();
 
+	const isAuthorized = Boolean(user);
+	const isSaved = route?.savedUserRoute?.status === UserRouteStatus.NOT_STARTED;
+	const isSaving = saveStatus === DataStatus.PENDING;
 	const hasEditPermissions = Boolean(
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
@@ -101,7 +107,7 @@ const RouteDetails = (): React.JSX.Element => {
 		}
 
 		handleReset({
-			description: route.description,
+			description: route.description ?? "",
 			name: route.name,
 		});
 	}, [handleReset, route]);
@@ -123,6 +129,18 @@ const RouteDetails = (): React.JSX.Element => {
 			setIsEditMode(false);
 		}
 	}, [dispatch, setIsEditMode, route, getValues]);
+
+	const handleSaveUserRoute = useCallback(() => {
+		if (route?.id) {
+			void dispatch(userRoutesActions.saveUserRoute(route.id));
+		}
+	}, [route?.id, dispatch]);
+
+	const handleDeleteUserRoute = useCallback(() => {
+		if (route?.savedUserRoute?.id) {
+			void dispatch(userRoutesActions.deleteUserRoute(route.savedUserRoute.id));
+		}
+	}, [route?.savedUserRoute?.id, dispatch]);
 
 	const handleDeleteImage = useCallback(
 		(id: number) => {
@@ -171,103 +189,113 @@ const RouteDetails = (): React.JSX.Element => {
 	const hasDescription = Boolean(description);
 
 	return (
-		<>
-			<main className={styles["container"]}>
-				<div className={styles["header-container"]}>
-					{isEditMode ? (
-						<>
-							<Input
-								control={control}
-								errors={errors}
-								label="Title"
-								name="name"
-							/>
-							<div className={styles["edit-mode-controls"]}>
-								<Button label="Save" onClick={handlePatchRequest} />
-								<Button label="Cancel" onClick={handleCancel} />
-							</div>
-						</>
-					) : (
-						<>
-							<h1 className={styles["label"]}>{name}</h1>
-							<div className={styles["header-actions"]}>
-								{hasEditPermissions && (
-									<Button label="Edit" onClick={handleToggleEditMode} />
-								)}
-								{pois[0] && (
-									<IconButton
-										className={styles["icon-button"]}
-										icon="location"
-										label="Location"
-										onClick={handleOpenGoogleMaps(pois[0].id)}
-										size={24}
-									/>
-								)}
-							</div>
-						</>
-					)}
-				</div>
-				<FeatureGallery
-					slides={[
-						{
-							content: <MapProvider />,
-						},
-						...images.map((image) => ({
-							content: (
-								<img
-									alt="point of interest"
-									className={styles["image"]}
-									src={image.url}
-								/>
-							),
-							...(isEditMode && {
-								onDelete: (): void => {
-									handleDeleteImage(image.id);
-								},
-							}),
-						})),
-					]}
-				/>
-
-				{isEditMode && (
+		<main className={styles["container"]}>
+			<div className={styles["header-container"]}>
+				{isEditMode ? (
 					<>
-						<input
-							accept="image/*"
-							onChange={handleFileUpload}
-							ref={fileInputReference}
-							style={{ display: "none" }}
-							type="file"
+						<Input
+							control={control}
+							errors={errors}
+							label="Title"
+							name="name"
 						/>
-						<div className={styles["upload-button"]}>
-							<Button
-								label="Upload image"
-								onClick={handleTriggerFileUpload}
-								variant="outlined"
-							/>
+						<div className={styles["edit-mode-controls"]}>
+							<Button label="Save" onClick={handlePatchRequest} />
+							<Button label="Cancel" onClick={handleCancel} />
+						</div>
+					</>
+				) : (
+					<>
+						<h1 className={styles["label"]}>{name}</h1>
+						<div className={styles["controls-container"]}>
+							{hasEditPermissions && (
+								<div className={styles["edit-button-container"]}>
+									<Button
+										label="Edit"
+										onClick={handleToggleEditMode}
+										variant="outlined"
+									/>
+								</div>
+							)}
+							{pois[0] && (
+								<Button
+									icon="location"
+									label="Location"
+									onClick={handleOpenGoogleMaps(pois[0].id)}
+								/>
+							)}
+							{isAuthorized && (
+								<div className={styles["save-button-container"]}>
+									<Button
+										icon="bookmark"
+										isDisabled={isSaving}
+										label="save route"
+										onClick={
+											isSaved ? handleDeleteUserRoute : handleSaveUserRoute
+										}
+										variant={isSaved ? "ghost" : "primary"}
+									/>
+								</div>
+							)}
 						</div>
 					</>
 				)}
-				{isEditMode ? (
+			</div>
+			<FeatureGallery
+				slides={[
+					{
+						content: <MapProvider />,
+					},
+					...images.map((image) => ({
+						content: (
+							<img
+								alt="point of interest"
+								className={styles["image"]}
+								src={image.url}
+							/>
+						),
+						...(isEditMode && {
+							onDelete: (): void => {
+								handleDeleteImage(image.id);
+							},
+						}),
+					})),
+				]}
+			/>
+			{isEditMode ? (
+				<>
+					<input
+						accept="image/*"
+						onChange={handleFileUpload}
+						ref={fileInputReference}
+						style={{ display: "none" }}
+						type="file"
+					/>
+					<div className={styles["upload-button"]}>
+						<Button
+							label="Upload image"
+							onClick={handleTriggerFileUpload}
+							variant="outlined"
+						/>
+					</div>
 					<TextArea
 						control={control}
 						errors={errors}
 						label="Description"
 						name="description"
 					/>
-				) : (
-					hasDescription && (
-						<p className={styles["description"]}>{description}</p>
-					)
-				)}
-				<PointOfInterestSection pointOfInterests={pois} />
-				<RouteReviewsSection
-					isAuthenticatedUser={isAuthenticatedUser}
-					items={reviews}
-					onCreate={handleCreateReview}
-					routeId={Number(id)}
-				/>
-			</main>
-		</>
+				</>
+			) : (
+				hasDescription && <p className={styles["description"]}>{description}</p>
+			)}
+			<PointOfInterestSection pointOfInterests={pois} />
+			<RouteReviewsSection
+				isAuthenticatedUser={isAuthorized}
+				items={reviews}
+				onCreate={handleCreateReview}
+				routeId={Number(id)}
+			/>
+		</main>
 	);
 };
 

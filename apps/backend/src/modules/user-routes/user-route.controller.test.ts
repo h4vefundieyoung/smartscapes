@@ -6,6 +6,7 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import {
+	type UserRouteDeleteParameters,
 	type UserRouteFinishRequestDto,
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
@@ -61,6 +62,7 @@ describe("UserRouteController", () => {
 
 	const mockUserRouteService = {
 		create: () => Promise.resolve(mockUserRouteResponse),
+		deleteSavedRoute: () => Promise.resolve(true),
 		finish: () => Promise.resolve(mockCompletedUserRoute),
 		getAllByUserId: () =>
 			Promise.resolve([
@@ -194,6 +196,27 @@ describe("UserRouteController", () => {
 				completedRoute.completedAt,
 				"2025-08-21T16:38:11.183Z",
 			);
+		});
+	});
+
+	describe("delete", () => {
+		it("should delete user route", async () => {
+			const parameters: UserRouteDeleteParameters = {
+				id: 1,
+			};
+
+			const options: APIHandlerOptions<{
+				params: UserRouteDeleteParameters;
+			}> = {
+				params: parameters,
+			} as APIHandlerOptions<{
+				params: UserRouteDeleteParameters;
+			}>;
+
+			const response = await userRouteController.delete(options);
+
+			assert.equal(response.status, HTTPCode.OK);
+			assert.equal(response.payload.data, true);
 		});
 	});
 });

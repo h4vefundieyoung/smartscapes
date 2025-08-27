@@ -1,4 +1,5 @@
 .upload-button {
+	min-width: 200px;
 	max-width: max-content;
 }
 
@@ -39,6 +40,10 @@
 	justify-content: space-between;
 }
 
+.edit-button-container {
+	width: 100px;
+}
+
 .loader-container {
 	display: flex;
 	flex: 1;
@@ -49,6 +54,7 @@
 .edit-mode-controls {
 	display: flex;
 	gap: 8px;
+	min-width: 200px;
 }
 
 .header-actions {
@@ -82,4 +88,14 @@
 		max-width: none;
 		padding: 40px 32px;
 	}
+}
+
+.controls-container {
+	display: flex;
+	column-gap: 16px;
+	align-items: center;
+}
+
+.save-button-container {
+	display: flex;
 }

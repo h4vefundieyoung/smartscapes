@@ -8,6 +8,7 @@ import {
 	BaseController,
 } from "~/libs/modules/controller/controller.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
+import { type PaginationMeta } from "~/libs/types/types.js";
 
 import { type PlannedPathResponseDto } from "../planned-paths/planned-paths.js";
 import { RoutesApiPath } from "./libs/enums/enums.js";
@@ -18,6 +19,7 @@ import {
 	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
+	type RoutePatchResponseDto,
 	type RouteUploadImageResponseDto,
 } from "./libs/types/types.js";
 import {
@@ -334,7 +336,7 @@ class RouteController extends BaseController {
 		options: APIHandlerOptions<{
 			body: RouteCreateRequestDto;
 		}>,
-	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
+	): Promise<APIHandlerResponse<RoutePatchResponseDto>> {
 		const route = await this.routeService.create(options.body);
 
 		return {
@@ -522,18 +524,17 @@ class RouteController extends BaseController {
 	 *                       type: string
 	 *                       example: "Unauthorized access"
 	 */
-
 	public async findAll(
 		options: APIHandlerOptions<{
 			query?: RouteFindAllOptions;
 		}>,
-	): Promise<APIHandlerResponse<RouteGetAllItemResponseDto[]>> {
+	): Promise<APIHandlerResponse<RouteGetAllItemResponseDto[], PaginationMeta>> {
 		const { query = null } = options;
 
-		const { items } = await this.routeService.findAll(query);
+		const { items, meta } = await this.routeService.findAll(query);
 
 		return {
-			payload: { data: items },
+			payload: { data: items, meta },
 			status: HTTPCode.OK,
 		};
 	}
@@ -607,12 +608,15 @@ class RouteController extends BaseController {
 	 *                       example: "You don't have permission to perform this action."
 	 */
 
-	public async findById(
-		options: APIHandlerOptions<{ params: { id: string } }>,
-	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
-		const id = Number(options.params.id);
+	public async findById({
+		params,
+		user,
+	}: APIHandlerOptions<{ params: { id: string } }>): Promise<
+		APIHandlerResponse<RouteGetByIdResponseDto>
+	> {
+		const id = Number(params.id);
 
-		const route = await this.routeService.findById(id);
+		const route = await this.routeService.findById(id, user?.id);
 
 		return {
 			payload: { data: route },
@@ -666,7 +670,7 @@ class RouteController extends BaseController {
 			body: RoutePatchRequestDto;
 			params: { id: string };
 		}>,
-	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
+	): Promise<APIHandlerResponse<RoutePatchResponseDto>> {
 		const id = Number(options.params.id);
 		const { description, name } = options.body;
 

@@ -71,6 +71,16 @@ class RouteRepository implements Repository {
 
 		const query = this.routesModel
 			.query()
+			.select([
+				"routes.id",
+				"routes.name",
+				"routes.description",
+				this.routesModel.raw("to_json(distance)::json as distance"),
+				this.routesModel.raw("to_json(duration)::json as duration"),
+				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
+				"routes.created_by_user_id",
+				"routes.created_at as createdAt",
+			])
 			.withGraphFetched("[pois(selectPoiData), images(selectFileData)]")
 			.modifiers({
 				selectFileData(builder) {
@@ -84,42 +94,35 @@ class RouteRepository implements Repository {
 					);
 				},
 			})
-			.select([
-				"routes.id",
-				"routes.name",
-				"routes.description",
-				this.routesModel.raw("to_json(distance)::json as distance"),
-				this.routesModel.raw("to_json(duration)::json as duration"),
-				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
-				"routes.created_by_user_id",
-				"routes.created_at as createdAt",
-			]);
+			.modify((builder) => {
+				if (name) {
+					builder.whereILike("routes.name", `%${name.trim()}%`);
+				}
 
-		if (name) {
-			query.whereILike("routes.name", `%${name.trim()}%`);
-		}
+				if (categories?.length) {
+					builder
+						.joinRelated("categories")
+						.whereIn("categories.key", categories as string[]);
+				}
 
-		if (hasLocationFilter) {
-			query
-				.joinRelated("pois")
-				.where("pois_join.visit_order", 0)
-				.select(
-					this.routesModel.raw(
-						`ST_Distance(
-							pois.location::geography,
-							ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography
-						) as distance_points`,
-						[longitude, latitude],
-					),
-				)
-				.orderBy("distance_points", SortingOrder.ASC);
-		}
+				if (hasLocationFilter) {
+					builder
+						.joinRelated("pois")
+						.where("pois_join.visit_order", 0)
+						.select(
+							this.routesModel.raw(
+								`ST_Distance(
+									pois.location::geography,
+									ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography
+								) as distance_points`,
+								[longitude, latitude],
+							),
+						)
+						.orderBy("distance_points", SortingOrder.ASC);
+				}
 
-		if (categories?.length) {
-			query
-				.joinRelated("categories")
-				.whereIn("categories.key", categories as string[]);
-		}
+				builder.orderBy("routes.created_at", SortingOrder.DESC);
+			});
 
 		if (hasPagination) {
 			const offset = (page - PAGE_NUMBER_OFFSET) * perPage;

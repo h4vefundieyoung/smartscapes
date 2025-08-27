@@ -21,6 +21,7 @@ import {
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
+import { type Coordinates, type RouteLine } from "~/libs/types/types.js";
 import { actions as categoriesActions } from "~/modules/categories/categories.js";
 import { type ReviewRequestDto } from "~/modules/reviews/reviews.js";
 import {
@@ -214,6 +215,30 @@ const RouteDetails = (): React.JSX.Element => {
 		},
 		[dispatch],
 	);
+	const routeGeometry = route?.geometry;
+
+	const routeLine = useMemo<null | RouteLine>(() => {
+		return routeGeometry && routeId
+			? { geometry: routeGeometry, id: routeId }
+			: null;
+	}, [routeId, routeGeometry]);
+
+	const markers = useMemo<{ coordinates: Coordinates }[]>(() => {
+		const startMarker = routeGeometry?.coordinates.find(Boolean);
+		const endMarker = routeGeometry?.coordinates.findLast(Boolean);
+
+		const result: { coordinates: Coordinates }[] = [];
+
+		if (startMarker) {
+			result.push({ coordinates: startMarker });
+		}
+
+		if (endMarker) {
+			result.push({ coordinates: endMarker });
+		}
+
+		return result;
+	}, [routeGeometry]);
 
 	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
 		return (
@@ -232,7 +257,6 @@ const RouteDetails = (): React.JSX.Element => {
 	}
 
 	const { description, id, images, name, pois } = route;
-
 	const hasDescription = Boolean(description);
 
 	return (
@@ -289,7 +313,7 @@ const RouteDetails = (): React.JSX.Element => {
 			<FeatureGallery
 				slides={[
 					{
-						content: <MapProvider />,
+						content: <MapProvider markers={markers} routeLine={routeLine} />,
 					},
 					...images.map((image) => ({
 						content: (

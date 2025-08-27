@@ -1,6 +1,6 @@
 type RouteCreateRequestDto = {
 	createdByUserId: number;
-	description: string;
+	description: null | string;
 	name: string;
 	plannedPathId: number;
 	poiIds: number[];

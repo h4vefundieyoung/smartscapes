@@ -4,6 +4,7 @@ import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 import { type ReviewGetByIdResponseDto } from "~/modules/reviews/reviews.js";
 
+import { actions as userRoutesActions } from "../../user-routes/user-routes.js";
 import { type RouteGetByIdResponseDto } from "../libs/types/types.js";
 import {
 	createReview,
@@ -21,6 +22,7 @@ type State = {
 	reviews: ReviewGetByIdResponseDto[];
 	reviewsDataStatus: ValueOf<typeof DataStatus>;
 	route: null | RouteGetByIdResponseDto;
+	saveRouteStatus: ValueOf<typeof DataStatus>;
 };
 
 const initialState: State = {
@@ -30,6 +32,7 @@ const initialState: State = {
 	reviews: [],
 	reviewsDataStatus: DataStatus.IDLE,
 	route: null,
+	saveRouteStatus: DataStatus.IDLE,
 };
 
 const { actions, name, reducer } = createSlice({
@@ -76,6 +79,36 @@ const { actions, name, reducer } = createSlice({
 		});
 		builder.addCase(createReview.rejected, (state) => {
 			state.reviewCreateStatus = DataStatus.REJECTED;
+		});
+		builder.addCase(userRoutesActions.saveUserRoute.pending, (state) => {
+			state.saveRouteStatus = DataStatus.PENDING;
+		});
+		builder.addCase(userRoutesActions.saveUserRoute.rejected, (state) => {
+			state.saveRouteStatus = DataStatus.REJECTED;
+		});
+
+		builder.addCase(
+			userRoutesActions.saveUserRoute.fulfilled,
+			(state, { payload: { id, status } }) => {
+				state.saveRouteStatus = DataStatus.FULFILLED;
+
+				if (state.route) {
+					state.route.savedUserRoute = { id, status };
+				}
+			},
+		);
+		builder.addCase(userRoutesActions.deleteUserRoute.pending, (state) => {
+			state.saveRouteStatus = DataStatus.PENDING;
+		});
+		builder.addCase(userRoutesActions.deleteUserRoute.rejected, (state) => {
+			state.saveRouteStatus = DataStatus.REJECTED;
+		});
+		builder.addCase(userRoutesActions.deleteUserRoute.fulfilled, (state) => {
+			state.saveRouteStatus = DataStatus.FULFILLED;
+
+			if (state.route) {
+				state.route.savedUserRoute = null;
+			}
 		});
 
 		builder.addCase(deleteImage.fulfilled, (state, action) => {

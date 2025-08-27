@@ -47,6 +47,39 @@ class UserRouteRepository implements Repository {
 		return UserRouteEntity.initialize(userRoute);
 	}
 
+	public async deleteSavedRoute(id: number, userId: number): Promise<boolean> {
+		const isDeleted = await this.userRouteModel
+			.query()
+			.delete()
+			.where({ id, userId })
+			.execute();
+
+		return Boolean(isDeleted);
+	}
+
+	public async findAllByUserId(userId: number): Promise<UserRouteEntity[]> {
+		const userRoutes = await this.userRouteModel
+			.query()
+			.where({ userId })
+			.select([
+				"id",
+				"routeId",
+				"userId",
+				"status",
+				"startedAt",
+				"completedAt",
+				this.userRouteModel.raw(
+					"ST_AsGeoJSON(actual_geometry)::json as actual_geometry",
+				),
+				this.userRouteModel.raw(
+					"ST_AsGeoJSON(planned_geometry)::json as planned_geometry",
+				),
+			])
+			.execute();
+
+		return userRoutes.map((item) => UserRouteEntity.initialize(item));
+	}
+
 	public async findByFilter(
 		filters: UserRouteFilters,
 	): Promise<UserRouteEntity[]> {
@@ -78,7 +111,6 @@ class UserRouteRepository implements Repository {
 		entity: UserRouteEntity,
 	): Promise<null | UserRouteEntity> {
 		const updatedUserData = entity.toNewObject();
-
 		const [updatedUserRoute] = await this.userRouteModel
 			.query()
 			.where({

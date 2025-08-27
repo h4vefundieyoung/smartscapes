@@ -1,3 +1,3 @@
-const ZOOM_LEVEL = 12;
+const ZOOM_LEVEL = 16;
 
 export { ZOOM_LEVEL };

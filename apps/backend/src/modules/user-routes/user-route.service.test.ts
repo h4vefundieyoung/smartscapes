@@ -157,6 +157,57 @@ describe("UserRouteService", () => {
 		});
 	});
 
+	describe("getByRouteIdAndUserId", () => {
+		it("should get user route by route ID and user ID", async () => {
+			const payload = {
+				routeId: 7,
+				userId: 1,
+			};
+
+			const mockRepositoryWithRoute = Object.assign({}, mockRepository, {
+				findByFilter: () =>
+					Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
+			}) as unknown as UserRouteRepository;
+
+			const serviceWithRoute = new UserRouteService(
+				mockRepositoryWithRoute,
+				mockRouteService,
+			);
+
+			const result = await serviceWithRoute.getRouteByFilter({
+				routeId: payload.routeId,
+				userId: payload.userId,
+			});
+
+			assert.strictEqual(result.routeId, payload.routeId);
+			assert.strictEqual(result.userId, payload.userId);
+			assert.strictEqual(result.status, UserRouteStatus.NOT_STARTED);
+		});
+
+		it("should throw error when user is not owner", async () => {
+			const payload = {
+				routeId: 7,
+				userId: 2,
+			};
+
+			const mockRepositoryWithRoute = Object.assign({}, mockRepository, {
+				findByFilter: () => Promise.resolve([]),
+			}) as unknown as UserRouteRepository;
+
+			const serviceWithRoute = new UserRouteService(
+				mockRepositoryWithRoute,
+				mockRouteService,
+			);
+
+			await assert.rejects(async () => {
+				await serviceWithRoute.getRouteByFilter({
+					routeId: payload.routeId,
+					userId: payload.userId,
+				});
+			}, UserRouteError);
+		});
+	});
+
 	describe("deleteSavedRoute", () => {
 		const USER_ROUTE_ID = 1;
 		const USER_ID = 1;

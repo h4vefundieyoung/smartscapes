@@ -6,11 +6,12 @@ import {
 	MapProvider,
 	TextArea,
 } from "~/libs/components/components.js";
-import { DataStatus, PermissionKey } from "~/libs/enums/enums.js";
-import { checkHasPermission } from "~/libs/helpers/helpers.js";
+import { AppRoute, DataStatus, PermissionKey } from "~/libs/enums/enums.js";
+import { checkHasPermission, configureString } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppForm,
+	useAppNavigate,
 	useAppSelector,
 	useCallback,
 	useEffect,
@@ -23,7 +24,7 @@ import {
 	actions as routeActions,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
-import { actions as userRoutesActions } from "~/modules/user-routes/user-routes.js";
+import { actions as userRouteActions } from "~/modules/user-routes/user-routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
 import {
@@ -42,6 +43,10 @@ const RouteDetails = (): React.JSX.Element => {
 	const dataStatus = useAppSelector(
 		({ routeDetails }) => routeDetails.dataStatus,
 	);
+	const isRouteCreated = useAppSelector(
+		({ userRouteDetails }) =>
+			userRouteDetails.createStatus === DataStatus.FULFILLED,
+	);
 	const reviews = useAppSelector(({ routeDetails }) => routeDetails.reviews);
 	const route = useAppSelector(({ routeDetails }) => routeDetails.route);
 	const saveStatus = useAppSelector(
@@ -53,6 +58,8 @@ const RouteDetails = (): React.JSX.Element => {
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
 		});
 
+	const navigate = useAppNavigate();
+
 	const isAuthorized = Boolean(user);
 	const isSaved = route?.savedUserRoute?.status === UserRouteStatus.NOT_STARTED;
 	const isSaving = saveStatus === DataStatus.PENDING;
@@ -60,6 +67,7 @@ const RouteDetails = (): React.JSX.Element => {
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
 	);
+
 	const fileInputReference = useRef<HTMLInputElement | null>(null);
 
 	const handleFileUpload = useCallback(
@@ -85,6 +93,10 @@ const RouteDetails = (): React.JSX.Element => {
 	const handleToggleEditMode = useCallback(() => {
 		setIsEditMode((isEditMode) => !isEditMode);
 	}, []);
+
+	const handleStart = useCallback(() => {
+		void dispatch(userRouteActions.create({ routeId: Number(routeId) }));
+	}, [dispatch, routeId]);
 
 	const handleResetFormValues = useCallback(() => {
 		if (!route) {
@@ -117,13 +129,13 @@ const RouteDetails = (): React.JSX.Element => {
 
 	const handleSaveUserRoute = useCallback(() => {
 		if (route?.id) {
-			void dispatch(userRoutesActions.saveUserRoute(route.id));
+			void dispatch(userRouteActions.saveUserRoute(route.id));
 		}
 	}, [route?.id, dispatch]);
 
 	const handleDeleteUserRoute = useCallback(() => {
 		if (route?.savedUserRoute?.id) {
-			void dispatch(userRoutesActions.deleteUserRoute(route.savedUserRoute.id));
+			void dispatch(userRouteActions.deleteUserRoute(route.savedUserRoute.id));
 		}
 	}, [route?.savedUserRoute?.id, dispatch]);
 
@@ -145,6 +157,16 @@ const RouteDetails = (): React.JSX.Element => {
 	useEffect(() => {
 		void dispatch(routeActions.getReviews({ routeId: Number(routeId) }));
 	}, [dispatch, routeId]);
+
+	useEffect(() => {
+		if (isRouteCreated) {
+			navigate(
+				configureString(AppRoute.USER_ROUTES_$ROUTE_ID_MAP, {
+					routeId: String(routeId),
+				}),
+			);
+		}
+	}, [isRouteCreated, navigate, routeId, route]);
 
 	const handleCreateReview = useCallback(
 		(payload: ReviewRequestDto): void => {
@@ -194,7 +216,7 @@ const RouteDetails = (): React.JSX.Element => {
 						<h1 className={styles["label"]}>{name}</h1>
 						<div className={styles["controls-container"]}>
 							{hasEditPermissions && (
-								<div className={styles["edit-button-container"]}>
+								<div className={styles["admin-button-container"]}>
 									<Button
 										label="Edit"
 										onClick={handleToggleEditMode}
@@ -203,7 +225,12 @@ const RouteDetails = (): React.JSX.Element => {
 								</div>
 							)}
 							{isAuthorized && (
-								<div className={styles["save-button-container"]}>
+								<div className={styles["user-button-container"]}>
+									<Button
+										label="Start"
+										onClick={handleStart}
+										variant="outlined"
+									/>
 									<Button
 										icon="bookmark"
 										isDisabled={isSaving}

@@ -29,7 +29,7 @@ import {
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
 import { actions as userRouteActions } from "~/modules/user-routes/user-routes.js";
-import { getGoogleMapsUrl } from "~/pages/route-details/libs/helpers/helpers.js";
+import { getGoogleMapsPointUrl } from "~/pages/route-details/libs/helpers/helpers.js";
 
 import { NotFound } from "../not-found/not-found.js";
 import {
@@ -100,7 +100,7 @@ const RouteDetails = (): React.JSX.Element => {
 			const [firstPoi] = route.pois;
 			const [lng, lat] = (firstPoi as RouteGetByIdResponseDto["pois"][0])
 				.location.coordinates;
-			const url = getGoogleMapsUrl(lat, lng);
+			const url = getGoogleMapsPointUrl(lat, lng);
 			window.open(url, "_blank");
 		}
 	}, [route]);

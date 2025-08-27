@@ -1,1 +1,1 @@
-export { getGoogleMapsUrl } from "./get-google-maps-url.helper.js";
+export { getGoogleMapsPointUrl } from "./get-google-maps-point-url.helper.js";

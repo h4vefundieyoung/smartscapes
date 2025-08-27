@@ -1,10 +1,4 @@
-import {
-	create,
-	finish,
-	getAllByUserId,
-	getAllForCurrentUser,
-	start,
-} from "./actions.js";
+import { create, finish, getAllByUserId, start } from "./actions.js";
 import { actions as userRouteDetailsActions } from "./user-route-details.slice.js";
 import { actions as userRouteActions } from "./user-routes.slice.js";
 
@@ -14,7 +8,6 @@ const allActions = {
 	create,
 	finish,
 	getAllByUserId,
-	getAllForCurrentUser,
 	start,
 };
 

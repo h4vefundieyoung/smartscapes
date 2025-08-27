@@ -13,7 +13,7 @@ const Dashboard = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		void dispatch(userRoutesActions.getAllForCurrentUser());
+		void dispatch(userRoutesActions.getAllByUserId());
 	}, [dispatch]);
 
 	const initialTabId = DASHBOARD_TABS[0]?.id ?? "";

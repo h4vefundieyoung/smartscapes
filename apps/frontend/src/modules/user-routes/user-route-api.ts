@@ -55,24 +55,7 @@ class UserRouteApi extends BaseHTTPApi {
 		return await response.json();
 	}
 
-	public async getAllByUserId(
-		query: UserRouteQueryRequestDto,
-	): Promise<APIResponse<UserRouteResponseDto[]>> {
-		const response = await this.load<APIResponse<UserRouteResponseDto[]>>(
-			this.getFullEndpoint(UserRouteApiPath.ROOT, {}),
-			{
-				hasAuth: true,
-				method: "GET",
-				query,
-			},
-		);
-
-		return await response.json();
-	}
-
-	public async getAllForCurrentUser(): Promise<
-		APIResponse<UserRouteResponseDto[]>
-	> {
+	public async getAllByUserId(): Promise<APIResponse<UserRouteResponseDto[]>> {
 		const response = await this.load<APIResponse<UserRouteResponseDto[]>>(
 			this.getFullEndpoint(UserRouteApiPath.ROOT, {}),
 			{

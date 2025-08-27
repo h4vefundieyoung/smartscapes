@@ -63,17 +63,14 @@ const RouteDetails = (): React.JSX.Element => {
 		});
 	const dispatch = useAppDispatch();
 	const { id: routeId } = useParams<{ id: string }>();
-	const [categoriesOptions, setCategoriesOptions] = useState<
-		{ label: string; value: number }[]
-	>([]);
-	useMemo(() => {
+	const categoriesOptions = useMemo(() => {
 		const options = categories.map((category) => ({
 			label: category.name,
 			value: category.id,
 		}));
-		setCategoriesOptions(options);
-	}, [categories]);
 
+		return options;
+	}, [categories]);
 	const hasEditPermissions = Boolean(
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),

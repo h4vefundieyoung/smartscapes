@@ -38,7 +38,7 @@ class CategoriesApi extends BaseHTTPApi {
 	}
 
 	public async getAll(
-		payload: CategoryGetAllQuery,
+		payload: CategoryGetAllQuery | undefined,
 	): Promise<APIResponse<CategoryGetAllItemResponseDto[], PaginationMeta>> {
 		const response = await this.load<
 			APIResponse<CategoryGetAllItemResponseDto[], PaginationMeta>

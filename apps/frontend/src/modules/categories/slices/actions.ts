@@ -28,7 +28,7 @@ const create = createAsyncThunk<
 
 const getAll = createAsyncThunk<
 	APIResponse<CategoryGetAllItemResponseDto[], PaginationMeta>,
-	CategoryGetAllQuery,
+	CategoryGetAllQuery | undefined,
 	AsyncThunkConfig
 >(`${sliceName}/get-all`, async (payload, { extra }) => {
 	const { categoriesApi } = extra;

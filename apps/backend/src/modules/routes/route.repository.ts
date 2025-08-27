@@ -160,7 +160,7 @@ class RouteRepository implements Repository {
 			return null;
 		}
 
-		return RouteEntity.initializeWithCategories({
+		return RouteEntity.initializeWithDetails({
 			categories: (route.categories ?? []).map((category) =>
 				CategoryEntity.initialize(category).toObject(),
 			),
@@ -229,7 +229,7 @@ class RouteRepository implements Repository {
 				return null;
 			}
 
-			return RouteEntity.initializeWithCategories({
+			return RouteEntity.initializeWithDetails({
 				categories: (routeWithRelations.categories ?? []).map((category) =>
 					CategoryEntity.initialize(category).toObject(),
 				),

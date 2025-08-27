@@ -131,45 +131,6 @@ class RouteEntity implements Entity {
 		});
 	}
 
-	public static initializeListWithCategories({
-		categories,
-		createdByUserId,
-		distance,
-		duration,
-		geometry,
-		id,
-		images,
-		name,
-		pois,
-	}: {
-		categories: ReturnType<CategoryEntity["toObject"]>[];
-		createdByUserId: number;
-		distance: number;
-		duration: number;
-		geometry: LineStringGeometry;
-		id: number;
-		images: RouteUploadImageResponseDto[];
-		name: string;
-		pois: {
-			id: number;
-			name: string;
-			visitOrder: number;
-		}[];
-	}): RouteEntity {
-		return new RouteEntity({
-			categories,
-			createdByUserId,
-			description: null,
-			distance,
-			duration,
-			geometry,
-			id,
-			images,
-			name,
-			pois,
-		});
-	}
-
 	public static initializeNew({
 		createdByUserId,
 		description,
@@ -203,7 +164,7 @@ class RouteEntity implements Entity {
 		});
 	}
 
-	public static initializeWithCategories(data: {
+	public static initializeWithDetails(data: {
 		categories: ReturnType<CategoryEntity["toObject"]>[];
 		createdByUserId: number;
 		description: string;

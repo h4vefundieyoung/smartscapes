@@ -1,11 +1,13 @@
+import knex from "knex";
+import { createTracker, MockClient, type Tracker } from "knex-mock-client";
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
+import { afterEach, beforeEach, describe, it } from "node:test";
 
 import { type LineStringGeometry } from "~/libs/types/types.js";
 
 import { UserRouteStatus } from "./libs/enums/enum.js";
 import { UserRouteEntity } from "./user-route.entity.js";
-import { type UserRouteModel } from "./user-route.model.js";
+import { UserRouteModel } from "./user-route.model.js";
 import { UserRouteRepository } from "./user-route.repository.js";
 
 describe("UserRouteRepository", () => {
@@ -150,6 +152,54 @@ describe("UserRouteRepository", () => {
 			assert.strictEqual(result.length, 1);
 			assert.strictEqual(result[0] instanceof UserRouteEntity, true);
 			assert.strictEqual(result[0]?.toObject().routeId, 7);
+		});
+	});
+
+	describe("delete", () => {
+		const DATABASE = "user_routes";
+		const DELETED_COUNT = 5;
+		const EXISTING_ID = 1;
+		const NON_EXISTING_ID = 9;
+		const NON_DELETED_COUNT = 0;
+		const USER_ID = 1;
+		let databaseTracker: Tracker;
+		let userRoutesRepository: UserRouteRepository;
+
+		beforeEach(() => {
+			const database = knex({ client: MockClient });
+
+			databaseTracker = createTracker(database);
+
+			UserRouteModel.knex(database);
+
+			userRoutesRepository = new UserRouteRepository(UserRouteModel);
+		});
+
+		afterEach(() => {
+			databaseTracker.reset();
+		});
+		it("delete should return true when route deleted", async () => {
+			databaseTracker.on.delete(DATABASE).response(DELETED_COUNT);
+
+			databaseTracker.on.delete(DATABASE).response(DELETED_COUNT);
+
+			const result = await userRoutesRepository.deleteSavedRoute(
+				EXISTING_ID,
+				USER_ID,
+			);
+
+			assert.strictEqual(result, true);
+		});
+
+		it("delete should return false when route not found", async () => {
+			databaseTracker.on.delete(DATABASE).response(NON_DELETED_COUNT);
+
+			const result = await userRoutesRepository.deleteSavedRoute(
+				NON_EXISTING_ID,
+				NON_EXISTING_ID,
+			);
+
+			assert.strictEqual(result, false);
 		});
 	});
 });

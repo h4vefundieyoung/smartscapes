@@ -10,16 +10,16 @@ type State = {
 	createStatus: ValueOf<typeof DataStatus>;
 	finishStatus: ValueOf<typeof DataStatus>;
 	startStatus: ValueOf<typeof DataStatus>;
-	userRouteDetails: null | UserRouteResponseDto;
 	userRouteDetailsDataStatus: ValueOf<typeof DataStatus>;
+	userRoutesDetails: null | UserRouteResponseDto;
 };
 
 const initialState: State = {
 	createStatus: DataStatus.IDLE,
 	finishStatus: DataStatus.IDLE,
 	startStatus: DataStatus.IDLE,
-	userRouteDetails: null,
 	userRouteDetailsDataStatus: DataStatus.IDLE,
+	userRoutesDetails: null,
 };
 
 const { actions, name, reducer } = createSlice({
@@ -28,7 +28,7 @@ const { actions, name, reducer } = createSlice({
 			state.createStatus = DataStatus.PENDING;
 		});
 		builder.addCase(create.fulfilled, (state, action) => {
-			state.userRouteDetails = action.payload.data;
+			state.userRoutesDetails = action.payload.data;
 			state.createStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(create.rejected, (state) => {
@@ -40,7 +40,7 @@ const { actions, name, reducer } = createSlice({
 			state.createStatus = DataStatus.IDLE;
 		});
 		builder.addCase(start.fulfilled, (state, action) => {
-			state.userRouteDetails = action.payload.data;
+			state.userRoutesDetails = action.payload.data;
 			state.startStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(start.rejected, (state) => {
@@ -51,7 +51,7 @@ const { actions, name, reducer } = createSlice({
 			state.finishStatus = DataStatus.PENDING;
 		});
 		builder.addCase(finish.fulfilled, (state, action) => {
-			state.userRouteDetails = action.payload.data;
+			state.userRoutesDetails = action.payload.data;
 			state.finishStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(finish.rejected, (state) => {
@@ -59,7 +59,7 @@ const { actions, name, reducer } = createSlice({
 		});
 	},
 	initialState,
-	name: "user-route-details",
+	name: "user-routes-details",
 	reducers: {},
 });
 

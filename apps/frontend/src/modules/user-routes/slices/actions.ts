@@ -8,7 +8,7 @@ import {
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
 } from "../libs/types/types.js";
-import { name as detailsSliceName } from "./user-route-details.slice.js";
+import { name as detailsSliceName } from "./user-routes-details.slice.js";
 import { name as sliceName } from "./user-routes.slice.js";
 
 const create = createAsyncThunk<
@@ -16,8 +16,8 @@ const create = createAsyncThunk<
 	UserRouteQueryRequestDto,
 	AsyncThunkConfig
 >(`${detailsSliceName}/create`, async ({ routeId }, { extra }) => {
-	const { userRouteApi } = extra;
-	const result = await userRouteApi.create({ routeId });
+	const { userRoutesApi } = extra;
+	const result = await userRoutesApi.create({ routeId });
 	toastNotifier.showSuccess("User route created successfully");
 
 	return result;
@@ -28,9 +28,9 @@ const getAllByUserId = createAsyncThunk<
 	undefined,
 	AsyncThunkConfig
 >(`${sliceName}/get-by-user-id`, async (_, { extra }) => {
-	const { userRouteApi } = extra;
+	const { userRoutesApi } = extra;
 
-	return await userRouteApi.getAllByUserId();
+	return await userRoutesApi.getAllByUserId();
 });
 
 const start = createAsyncThunk<
@@ -38,8 +38,8 @@ const start = createAsyncThunk<
 	UserRouteQueryRequestDto,
 	AsyncThunkConfig
 >(`${detailsSliceName}/start`, async ({ routeId }, { extra }) => {
-	const { userRouteApi } = extra;
-	const result = await userRouteApi.start({ routeId });
+	const { userRoutesApi } = extra;
+	const result = await userRoutesApi.start({ routeId });
 	toastNotifier.showSuccess("User route started successfully");
 
 	return result;
@@ -50,11 +50,39 @@ const finish = createAsyncThunk<
 	{ payload: UserRouteFinishRequestDto; query: UserRouteQueryRequestDto },
 	AsyncThunkConfig
 >(`${detailsSliceName}/finish`, async ({ payload, query }, { extra }) => {
-	const { userRouteApi } = extra;
-	const result = await userRouteApi.finish(payload, query);
+	const { userRoutesApi } = extra;
+	const result = await userRoutesApi.finish(payload, query);
 	toastNotifier.showSuccess("User route finished successfully");
 
 	return result;
 });
 
-export { create, finish, getAllByUserId, start };
+const saveUserRoute = createAsyncThunk<
+	UserRouteResponseDto,
+	number,
+	AsyncThunkConfig
+>(`${sliceName}/save-user-route`, async (routeId, { extra }) => {
+	const { userRoutesApi } = extra;
+	const { data } = await userRoutesApi.saveRoute(routeId);
+
+	return data;
+});
+
+const deleteUserRoute = createAsyncThunk<boolean, number, AsyncThunkConfig>(
+	`${sliceName}/delete-user-route`,
+	async (id, { extra }) => {
+		const { userRoutesApi } = extra;
+		const { data } = await userRoutesApi.deleteRoute(id);
+
+		return data;
+	},
+);
+
+export {
+	create,
+	deleteUserRoute,
+	finish,
+	getAllByUserId,
+	saveUserRoute,
+	start,
+};

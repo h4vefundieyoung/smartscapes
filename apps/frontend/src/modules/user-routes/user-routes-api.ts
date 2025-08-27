@@ -1,4 +1,5 @@
 import { APIPath, ContentType } from "~/libs/enums/enums.js";
+import { getUrlWithQueryString } from "~/libs/helpers/helpers.js";
 import { BaseHTTPApi } from "~/libs/modules/api/api.js";
 import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
@@ -17,7 +18,7 @@ type Constructor = {
 	storage: Storage;
 };
 
-class UserRouteApi extends BaseHTTPApi {
+class UserRoutesApi extends BaseHTTPApi {
 	public constructor({ baseUrl, http, storage }: Constructor) {
 		super({ baseUrl, http, path: APIPath.USER_ROUTES, storage });
 	}
@@ -31,6 +32,18 @@ class UserRouteApi extends BaseHTTPApi {
 				hasAuth: true,
 				method: "POST",
 				query,
+			},
+		);
+
+		return await response.json();
+	}
+
+	public async deleteRoute(id: number): Promise<APIResponse<boolean>> {
+		const response = await this.load<APIResponse<boolean>>(
+			this.getFullEndpoint(UserRouteApiPath.$ID, { id: id.toString() }),
+			{
+				hasAuth: true,
+				method: "DELETE",
 			},
 		);
 
@@ -67,6 +80,23 @@ class UserRouteApi extends BaseHTTPApi {
 		return await response.json();
 	}
 
+	public async saveRoute(
+		routeId: number,
+	): Promise<APIResponse<UserRouteResponseDto>> {
+		const response = await this.load<APIResponse<UserRouteResponseDto>>(
+			this.getFullEndpoint(
+				getUrlWithQueryString(UserRouteApiPath.CREATE, { routeId }),
+				{},
+			),
+			{
+				hasAuth: true,
+				method: "POST",
+			},
+		);
+
+		return await response.json();
+	}
+
 	public async start(
 		query: UserRouteQueryRequestDto,
 	): Promise<APIResponse<UserRouteResponseDto>> {
@@ -83,4 +113,4 @@ class UserRouteApi extends BaseHTTPApi {
 	}
 }
 
-export { UserRouteApi };
+export { UserRoutesApi };

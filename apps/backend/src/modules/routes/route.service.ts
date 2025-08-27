@@ -7,7 +7,11 @@ import {
 	MapboxAPIProfile,
 	type MapboxDirectionsApi,
 } from "~/libs/modules/mapbox/mapbox.js";
-import { type CollectionResult, type Service } from "~/libs/types/types.js";
+import {
+	type CollectionResult,
+	type PaginationMeta,
+	type Service,
+} from "~/libs/types/types.js";
 
 import { type FileService } from "../files/files.service.js";
 import { type PlannedPathResponseDto } from "../planned-paths/libs/types/types.js";
@@ -144,17 +148,31 @@ class RouteService implements Service {
 
 	public async findAll(
 		options: null | RouteFindAllOptions,
-	): Promise<CollectionResult<RouteGetAllItemResponseDto>> {
+	): Promise<CollectionResult<RouteGetAllItemResponseDto, PaginationMeta>> {
+		const DEFAULT_PAGE = 1;
+
+		const { page, perPage } = options ?? {};
+
 		if (options?.categories) {
 			options.categories = Array.isArray(options.categories)
 				? options.categories
 				: [options.categories];
 		}
 
-		const items = await this.routesRepository.findAll(options);
+		const { items = [], total = 0 } =
+			await this.routesRepository.findAll(options);
+
+		const totalPages =
+			total === 0 ? DEFAULT_PAGE : Math.ceil(total / (perPage ?? total));
 
 		return {
 			items: items.map((item) => item.toListObject()),
+			meta: {
+				currentPage: page ?? DEFAULT_PAGE,
+				itemsPerPage: perPage ?? total,
+				total,
+				totalPages,
+			},
 		};
 	}
 

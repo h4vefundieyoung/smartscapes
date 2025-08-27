@@ -116,7 +116,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 	const { description, name } = pointOfInterest;
 	const hasDescription = Boolean(description);
 
-	const [latitude, longitude] = pointOfInterest.location.coordinates;
+	const [longitude, latitude] = pointOfInterest.location.coordinates;
 
 	return (
 		<main className={styles["container"]}>

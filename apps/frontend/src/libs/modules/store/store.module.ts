@@ -11,6 +11,10 @@ import { storage } from "~/libs/modules/storage/storage.js";
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { reducer as appReducer } from "~/modules/app/app.js";
 import { authApi, reducer as authReducer } from "~/modules/auth/auth.js";
+import {
+	categoriesApi,
+	reducer as categoriesReducer,
+} from "~/modules/categories/categories.js";
 import { reducer as exploreReducer } from "~/modules/explore/explore.js";
 import { reducer as locationReducer } from "~/modules/location/location.js";
 import {
@@ -29,7 +33,11 @@ import {
 	routesApi,
 	routesReducer,
 } from "~/modules/routes/routes.js";
-import { userRoutesApi } from "~/modules/user-routes/user-routes.js";
+import {
+	userRouteApi,
+	userRouteDetailsReducer,
+	userRoutesReducer,
+} from "~/modules/user-routes/user-routes.js";
 import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
 
 import { type ExtraArguments, type RootReducer } from "./libs/types/types.js";
@@ -47,6 +55,7 @@ class Store {
 	public get extraArguments(): ExtraArguments {
 		return {
 			authApi,
+			categoriesApi,
 			notificationApi,
 			pointOfInterestApi,
 			reviewApi,
@@ -54,7 +63,7 @@ class Store {
 			storage,
 			toastNotifier,
 			userApi,
-			userRoutesApi,
+			userRouteApi,
 		};
 	}
 
@@ -71,6 +80,7 @@ class Store {
 			reducer: {
 				app: appReducer,
 				auth: authReducer,
+				categories: categoriesReducer,
 				constructRoute: constructRouteReducer,
 				explore: exploreReducer,
 				location: locationReducer,
@@ -79,6 +89,8 @@ class Store {
 				pointsOfInterest: pointsOfInterestReducer,
 				routeDetails: routeDetailsReducer,
 				routes: routesReducer,
+				userRouteDetails: userRouteDetailsReducer,
+				userRoutes: userRoutesReducer,
 				users: usersReducer,
 			},
 		});

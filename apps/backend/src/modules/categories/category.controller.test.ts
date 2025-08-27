@@ -19,8 +19,17 @@ describe("CategoryController", () => {
 	};
 
 	const mockCategory: CategoryGetAllItemResponseDto = {
+		createdAt: "2024-01-01T00:00:00Z",
 		id: 1,
+		key: "popular",
 		name: "Popular",
+	};
+
+	const mockPaginationMeta = {
+		currentPage: 1,
+		itemsPerPage: 1,
+		total: 1,
+		totalPages: 1,
 	};
 
 	it("create should create and return new category", async () => {
@@ -53,6 +62,7 @@ describe("CategoryController", () => {
 			findAll: (() =>
 				Promise.resolve({
 					items: [mockCategory],
+					meta: mockPaginationMeta,
 				})) as CategoryService["findAll"],
 		} as CategoryService;
 
@@ -61,10 +71,15 @@ describe("CategoryController", () => {
 			categoryService,
 		);
 
-		const result = await categoryController.findAll();
+		const result = await categoryController.findAll({
+			body: {},
+			params: {},
+			query: undefined,
+			user: null,
+		});
 
 		assert.deepStrictEqual(result, {
-			payload: { data: [mockCategory] },
+			payload: { data: [mockCategory], meta: mockPaginationMeta },
 			status: HTTPCode.OK,
 		});
 	});

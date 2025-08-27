@@ -1,5 +1,53 @@
 # Changelog
 
+## [1.54.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.53.0...@smartscapes/frontend-v1.54.0) (2025-08-27)
+
+
+### Features
+
+* **frontend/backend/shared:** add an ability to assign category to routes ss-496 ([#551](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/551)) ([23fadeb](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/23fadebf1d097e3ee81ee21d5e1b7fd128d502a8))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.39.0 to 1.40.0
+
+## [1.53.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.52.0...@smartscapes/frontend-v1.53.0) (2025-08-27)
+
+
+### Features
+
+* **frontend:** user route navigate ss-501 ([#558](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/558)) ([8d56411](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/8d56411cea39997ded2c8a0545397df9d28638ff))
+
+
+### Bug Fixes
+
+* **frontend:** swap poi coordinates to correctly display location ss-571 ([#572](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/572)) ([58e4561](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/58e4561b88cb2e4128abc1f716895d9f8b13f719))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.38.0 to 1.39.0
+
+## [1.52.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.51.0...@smartscapes/frontend-v1.52.0) (2025-08-27)
+
+
+### Features
+
+* **frontend/backend/shared:** add routes table ss-504 ([#563](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/563)) ([5847400](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/5847400dbd4f5625a3fd4a7488871500c9f151ff))
+* **frontend/backend:** add categories table ss-505 ([#566](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/566)) ([8ee4139](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/8ee413964c9a8041ff38169779193e7dbf5340c2))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.37.0 to 1.38.0
+
 ## [1.51.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.50.0...@smartscapes/frontend-v1.51.0) (2025-08-27)
 
 

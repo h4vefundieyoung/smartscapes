@@ -2,13 +2,18 @@ import { config } from "~/libs/modules/config/config.js";
 import { http } from "~/libs/modules/http/http.js";
 import { storage } from "~/libs/modules/storage/storage.js";
 
-import { UserRoutesApi } from "./user-routes-api.js";
+import { UserRouteApi } from "./user-route-api.js";
 
-const userRoutesApi = new UserRoutesApi({
+const userRouteApi = new UserRouteApi({
 	baseUrl: config.ENV.API.ORIGIN_URL,
 	http,
 	storage,
 });
 
-export { userRoutesApi };
-export { actions } from "./slices/user-routes.js";
+export { userRouteApi };
+export { UserRouteStatus } from "./libs/enums/enums.js";
+export {
+	actions,
+	userRouteDetailsReducer,
+	userRoutesReducer,
+} from "./slices/user-routes.js";

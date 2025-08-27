@@ -96,6 +96,7 @@ describe("Route controller", () => {
 	};
 
 	const mockRoute: RouteGetByIdResponseDto = {
+		categories: [],
 		createdAt: "2024-01-01T00:00:00Z",
 		createdByUserId: 10,
 		description: "Test route description",
@@ -345,6 +346,7 @@ describe("Route controller", () => {
 
 		const updateRouteMockData = {
 			body: {
+				categories: [],
 				description: updatedRoute.description ?? "",
 				name: updatedRoute.name,
 			},
@@ -485,6 +487,7 @@ describe("Route controller", () => {
 
 			const updateRouteMockData = {
 				body: {
+					categories: updatedRoute.categories.map((category) => category.id),
 					description: updatedRoute.description ?? "",
 					name: updatedRoute.name,
 				},

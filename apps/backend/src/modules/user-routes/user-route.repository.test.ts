@@ -92,8 +92,15 @@ describe("UserRouteRepository", () => {
 			Promise.resolve(mockWhereResult),
 	};
 
-	const mockWhereWrapper = {
+	const mockWhereWrapper: {
+		execute: () => Promise<never[]>;
+		orderBy: () => typeof mockWhereWrapper;
+		patch: () => typeof mockPatchReturningWrapper;
+		returning: () => typeof mockWhereReturning;
+		select: () => typeof mockSelectReturning;
+	} = {
 		execute: (): Promise<never[]> => Promise.resolve([]),
+		orderBy: (): typeof mockWhereWrapper => mockWhereWrapper,
 		patch: (): typeof mockPatchReturningWrapper => mockPatchReturningWrapper,
 		returning: (): typeof mockWhereReturning => mockWhereReturning,
 		select: (): typeof mockSelectReturning => mockSelectReturning,

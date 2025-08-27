@@ -1,1 +1,1 @@
-export { type CreateCategoryFormValues } from "./create-category-form-values.js";
+export { type CreateCategoryFormValues } from "./create-category-form-values.type.js";

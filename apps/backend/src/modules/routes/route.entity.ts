@@ -280,7 +280,7 @@ class RouteEntity implements Entity {
 	}
 
 	public toObject(): {
-		createdAt: null | string;
+		createdAt: string;
 		createdByUserId: number;
 		description: null | string;
 		distance: number;

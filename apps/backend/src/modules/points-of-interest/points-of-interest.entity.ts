@@ -54,11 +54,8 @@ class PointsOfInterestEntity implements Entity {
 			location: data.location,
 			name: data.name,
 			routes:
-				data.routes?.map((route) =>
-					RouteEntity.initialize(
-						route as Parameters<typeof RouteEntity.initialize>[0],
-					).toObject(),
-				) ?? [],
+				data.routes?.map((route) => RouteEntity.initialize(route).toObject()) ??
+				[],
 		});
 	}
 

@@ -194,23 +194,11 @@ describe("RouteService", () => {
 		name: "Updated Route",
 	};
 
-	type RouteInitArgument = Parameters<typeof RouteEntity.initialize>[0];
-
 	const createMockIdEntity = (data: RoutePatchResponseDto): RouteEntity => {
-		const payload: RouteInitArgument = {
-			createdAt: data.createdAt ?? MOCK_CREATED_AT,
-			createdByUserId: data.createdByUserId,
+		return RouteEntity.initialize({
+			...data,
 			description: data.description ?? "",
-			distance: data.distance,
-			duration: data.duration,
-			geometry: data.geometry,
-			id: data.id,
-			images: data.images,
-			name: data.name,
-			pois: data.pois,
-		};
-
-		return RouteEntity.initialize(payload);
+		});
 	};
 
 	const createMockAllItemEntity = (

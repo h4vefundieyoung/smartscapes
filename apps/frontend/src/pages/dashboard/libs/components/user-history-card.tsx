@@ -5,12 +5,12 @@ import { type UserRouteResponseDto } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
-type CardProperties = {
+type Properties = {
 	route: UserRouteResponseDto;
 };
 
-const UserHistoryCard = ({ route }: CardProperties): React.JSX.Element => {
-	const routeLine = { geometry: route.actualGeometry, id: "actual" };
+const UserHistoryCard = ({ route }: Properties): React.JSX.Element => {
+	const routeLine = { geometry: route.actualGeometry, id: route.routeName };
 
 	return (
 		<Link

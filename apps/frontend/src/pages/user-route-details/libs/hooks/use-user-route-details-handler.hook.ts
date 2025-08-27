@@ -26,8 +26,6 @@ const useUserRouteHandler = (routeId: number): UseUserRouteHandler => {
 	}, [dispatch, routeId]);
 
 	const handleFinish = useCallback(() => {
-		void dispatch(userRouteActions.stopTrackingRoute());
-
 		void dispatch(
 			userRouteActions.finish({
 				payload: {
@@ -38,7 +36,9 @@ const useUserRouteHandler = (routeId: number): UseUserRouteHandler => {
 				},
 				query: { routeId },
 			}),
-		);
+		).then(() => {
+			void dispatch(userRouteActions.stopTrackingRoute());
+		});
 	}, [dispatch, routeId, actualPath]);
 
 	return {

@@ -1,19 +1,21 @@
+import { AppRoute } from "~/libs/enums/app-route.enum.js";
+import { configureString } from "~/libs/helpers/helpers.js";
 import { useAppNavigate, useEffect } from "~/libs/hooks/hooks.js";
-
-const GO_BACK_STEPS = -1;
 
 type UseUserRouteNavigationProperties = {
 	isUserRouteCompleted: boolean;
+	routeId: string;
 };
 
 const useUserRouteNavigation = ({
 	isUserRouteCompleted,
+	routeId,
 }: UseUserRouteNavigationProperties): void => {
 	const navigate = useAppNavigate();
 
 	useEffect(() => {
 		if (isUserRouteCompleted) {
-			navigate(GO_BACK_STEPS);
+			navigate(configureString(AppRoute.ROUTES_$ID, { id: routeId }));
 		}
 	}, [isUserRouteCompleted, navigate]);
 };

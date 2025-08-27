@@ -13,6 +13,7 @@ type State = {
 	startStatus: ValueOf<typeof DataStatus>;
 	userRouteDetails: null | UserRouteResponseDto;
 	userRouteDetailsDataStatus: ValueOf<typeof DataStatus>;
+	watchId: null | number;
 };
 
 const initialState: State = {
@@ -22,6 +23,7 @@ const initialState: State = {
 	startStatus: DataStatus.IDLE,
 	userRouteDetails: null,
 	userRouteDetailsDataStatus: DataStatus.IDLE,
+	watchId: null,
 };
 
 const { actions, name, reducer } = createSlice({
@@ -75,11 +77,14 @@ const { actions, name, reducer } = createSlice({
 	initialState,
 	name: "user-route-details",
 	reducers: {
-		addPointToActualPath: (state, action: { payload: Coordinates }) => {
+		addPointToActualStorePath: (state, action: { payload: Coordinates }) => {
 			state.actualPath.push(action.payload);
 		},
-		setRestoredActualPath: (state, action: { payload: Coordinates[] }) => {
+		setRestoredActualStorePath: (state, action: { payload: Coordinates[] }) => {
 			state.actualPath = action.payload;
+		},
+		setWatchId: (state, action: { payload: number }) => {
+			state.watchId = action.payload;
 		},
 	},
 });

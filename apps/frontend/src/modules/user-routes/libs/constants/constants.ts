@@ -1,1 +1,1 @@
-export { TRACKING_CONFIG } from "./tracking-config.constant.js";
+export { LOCATION_TRACKING_CONFIG } from "./location-tracking-config.constant.js";

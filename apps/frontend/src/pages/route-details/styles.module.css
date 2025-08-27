@@ -39,6 +39,11 @@
 	justify-content: space-between;
 }
 
+.header-controls {
+	display: flex;
+	gap: 8px;
+}
+
 .loader-container {
 	display: flex;
 	flex: 1;

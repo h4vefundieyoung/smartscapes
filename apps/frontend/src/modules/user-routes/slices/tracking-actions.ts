@@ -4,14 +4,14 @@ import { StorageKey } from "~/libs/modules/storage/storage.js";
 import { type AsyncThunkConfig } from "~/libs/types/async-thunk-config.type.js";
 import { type Coordinates } from "~/libs/types/types.js";
 
-import { TRACKING_CONFIG } from "../libs/constants/constants.js";
+import { LOCATION_TRACKING_CONFIG } from "../libs/constants/constants.js";
 import { TrackingExeptionMessage } from "../libs/enums/enums.js";
 import {
 	actions,
 	name as detailsSliceName,
 } from "./user-route-details.slice.js";
 
-const addPointToActualPath = createAsyncThunk<
+const addPointToActualStoragePath = createAsyncThunk<
 	undefined,
 	Coordinates,
 	AsyncThunkConfig
@@ -53,16 +53,18 @@ const startTrackingRoute = createAsyncThunk<
 		const { storage } = extra;
 
 		try {
-			const storedPathCoordinates = (await storage.get(
+			const storedPathCoordinates = await storage.get<string>(
 				StorageKey.ACTUAL_PATH_COORDINATES,
-			)) as string;
+			);
 
 			const parsedStoredPathCoordinates = storedPathCoordinates
 				? (JSON.parse(storedPathCoordinates) as Coordinates[])
 				: [];
 
 			if (parsedStoredPathCoordinates.length > 0) {
-				dispatch(actions.setRestoredActualPath(parsedStoredPathCoordinates));
+				dispatch(
+					actions.setRestoredActualStorePath(parsedStoredPathCoordinates),
+				);
 			}
 
 			// eslint-disable-next-line sonarjs/no-intrusive-permissions
@@ -73,7 +75,8 @@ const startTrackingRoute = createAsyncThunk<
 						position.coords.latitude,
 					];
 
-					void dispatch(addPointToActualPath(coordinates));
+					void dispatch(addPointToActualStoragePath(coordinates));
+					dispatch(actions.addPointToActualStorePath(coordinates));
 				},
 				(error) => {
 					if (error instanceof GeolocationPositionError) {
@@ -84,10 +87,10 @@ const startTrackingRoute = createAsyncThunk<
 						TrackingExeptionMessage.FAILED_TO_TRACK_LOCATION,
 					);
 				},
-				TRACKING_CONFIG,
+				LOCATION_TRACKING_CONFIG,
 			);
 
-			await storage.set(StorageKey.TRACKING_WATCH_ID, watchId.toString());
+			dispatch(actions.setWatchId(watchId));
 		} catch (error) {
 			if (error instanceof Error) {
 				return rejectWithValue(error.message);
@@ -104,16 +107,16 @@ const stopTrackingRoute = createAsyncThunk<
 	AsyncThunkConfig
 >(
 	`${detailsSliceName}/stop-tracking-path`,
-	async (_, { extra, rejectWithValue }) => {
+	async (_, { extra, getState, rejectWithValue }) => {
 		const { storage } = extra;
 
 		try {
-			const watchId = await storage.get(StorageKey.TRACKING_WATCH_ID);
+			const state = getState();
+			const { watchId } = state.userRouteDetails;
 
 			if (watchId) {
-				navigator.geolocation.clearWatch(Number(watchId));
+				navigator.geolocation.clearWatch(watchId);
 
-				await storage.drop(StorageKey.TRACKING_WATCH_ID);
 				await storage.drop(StorageKey.ACTUAL_PATH_COORDINATES);
 			}
 		} catch (error) {

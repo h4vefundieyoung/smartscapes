@@ -7,7 +7,7 @@ import {
 	TextArea,
 } from "~/libs/components/components.js";
 import { AppRoute, DataStatus, PermissionKey } from "~/libs/enums/enums.js";
-import { checkHasPermission } from "~/libs/helpers/helpers.js";
+import { checkHasPermission, configureString } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppForm,
@@ -61,13 +61,6 @@ const RouteDetails = (): React.JSX.Element => {
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
 	);
 
-	const hasStartPermission = Boolean(
-		user &&
-			!checkHasPermission(
-				[PermissionKey.MANAGE_ROUTES],
-				user.group.permissions,
-			),
-	);
 	const fileInputReference = useRef<HTMLInputElement | null>(null);
 
 	const handleFileUpload = useCallback(
@@ -149,7 +142,9 @@ const RouteDetails = (): React.JSX.Element => {
 	useEffect(() => {
 		if (isRouteCreated) {
 			navigate(
-				AppRoute.USER_ROUTES_$ROUTE_ID_MAP.replace(":routeId", String(routeId)),
+				configureString(AppRoute.USER_ROUTES_$ROUTE_ID_MAP, {
+					routeId: String(routeId),
+				}),
 			);
 		}
 	}, [isRouteCreated, navigate, routeId, route]);
@@ -201,16 +196,12 @@ const RouteDetails = (): React.JSX.Element => {
 					) : (
 						<>
 							<h1 className={styles["label"]}>{name}</h1>
-							{hasEditPermissions && (
-								<div>
+							<div className={styles["header-controls"]}>
+								{hasEditPermissions && (
 									<Button label="Edit" onClick={handleToggleEditMode} />
-								</div>
-							)}
-							{hasStartPermission && (
-								<div>
-									<Button label="Start" onClick={handleStart} />
-								</div>
-							)}
+								)}
+								{user && <Button label="Start" onClick={handleStart} />}
+							</div>
 						</>
 					)}
 				</div>

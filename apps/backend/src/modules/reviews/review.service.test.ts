@@ -62,11 +62,19 @@ const createMockRouteService = (): Partial<RouteService> => ({
 			pois: [
 				{
 					id: 1,
+					location: {
+						coordinates: [FIRST_COORDINATE, SECOND_COORDINATE],
+						type: "Point",
+					},
 					name: "SUP Kayak Club 4 Storony",
 					visitOrder: 1,
 				},
 				{
 					id: 2,
+					location: {
+						coordinates: [SECOND_COORDINATE, FIRST_COORDINATE],
+						type: "Point",
+					},
 					name: "River Grill, Rusanivska Embankment",
 					visitOrder: 2,
 				},

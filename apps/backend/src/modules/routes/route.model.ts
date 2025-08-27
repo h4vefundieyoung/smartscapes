@@ -6,7 +6,10 @@ import {
 	AbstractModel,
 	DatabaseTableName,
 } from "~/libs/modules/database/database.js";
-import { type LineStringGeometry } from "~/libs/types/types.js";
+import {
+	type LineStringGeometry,
+	type PointGeometry,
+} from "~/libs/types/types.js";
 
 import { CategoryModel } from "../categories/category.model.js";
 import { FileModel } from "../files/files.model.js";
@@ -35,6 +38,7 @@ class RouteModel extends AbstractModel {
 
 	public pois!: {
 		id: number;
+		location: PointGeometry;
 		name: string;
 		visitOrder: number;
 	}[];

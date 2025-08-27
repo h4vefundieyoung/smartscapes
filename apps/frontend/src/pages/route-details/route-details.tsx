@@ -18,13 +18,14 @@ import {
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
-import { actions } from "~/modules/points-of-interest/slices/points-of-interest.js";
 import { type ReviewRequestDto } from "~/modules/reviews/reviews.js";
 import {
 	actions as routeActions,
+	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
 import { actions as userRoutesActions } from "~/modules/user-routes/user-routes.js";
+import { getGoogleMapsUrl } from "~/pages/route-details/libs/helpers/helpers.js";
 
 import { NotFound } from "../not-found/not-found.js";
 import {
@@ -33,7 +34,6 @@ import {
 } from "./libs/components/components.js";
 import { ROUTE_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
 import { UserRouteStatus } from "./libs/enums/enums.js";
-import { getGoogleMapsUrl } from "./libs/helpers/helpers.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
@@ -64,18 +64,15 @@ const RouteDetails = (): React.JSX.Element => {
 	);
 	const fileInputReference = useRef<HTMLInputElement | null>(null);
 
-	const handleOpenGoogleMaps = useCallback(
-		(poiId: number) => {
-			return async (): Promise<void> => {
-				const { data } = await dispatch(actions.getById(poiId)).unwrap();
-				const [lng, lat] = data.location.coordinates;
-
-				const googleMapsUrl = getGoogleMapsUrl(lat, lng);
-				window.open(googleMapsUrl, "_blank");
-			};
-		},
-		[dispatch],
-	);
+	const handleOpenGoogleMaps = useCallback(() => {
+		if (route) {
+			const [firstPoi] = route.pois;
+			const [lng, lat] = (firstPoi as RouteGetByIdResponseDto["pois"][0])
+				.location.coordinates;
+			const url = getGoogleMapsUrl(lat, lng);
+			window.open(url, "_blank");
+		}
+	}, [route]);
 
 	const handleFileUpload = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -185,7 +182,7 @@ const RouteDetails = (): React.JSX.Element => {
 	}
 
 	const { description, id, images, name, pois } = route;
-
+	const [routeStartPoint] = pois;
 	const hasDescription = Boolean(description);
 
 	return (
@@ -217,12 +214,14 @@ const RouteDetails = (): React.JSX.Element => {
 									/>
 								</div>
 							)}
-							{pois[0] && (
-								<Button
-									icon="location"
-									label="Location"
-									onClick={handleOpenGoogleMaps(pois[0].id)}
-								/>
+							{routeStartPoint && (
+								<div className={styles["location-button-container"]}>
+									<Button
+										icon="location"
+										label="Location"
+										onClick={handleOpenGoogleMaps}
+									/>
+								</div>
 							)}
 							{isAuthorized && (
 								<div className={styles["save-button-container"]}>

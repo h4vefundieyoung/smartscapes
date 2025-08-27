@@ -1,4 +1,8 @@
-import { type Entity, type LineStringGeometry } from "~/libs/types/types.js";
+import {
+	type Entity,
+	type LineStringGeometry,
+	type PointGeometry,
+} from "~/libs/types/types.js";
 
 import {
 	type RouteUploadImageResponseDto,
@@ -31,6 +35,7 @@ class RouteEntity implements Entity {
 
 	private pois: {
 		id: number;
+		location?: PointGeometry;
 		name?: string;
 		visitOrder: number;
 	}[];
@@ -61,6 +66,7 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
+			location?: PointGeometry;
 			name?: string;
 			visitOrder: number;
 		}[];
@@ -91,6 +97,7 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
+			location: PointGeometry;
 			name: string;
 			visitOrder: number;
 		}[];
@@ -132,6 +139,7 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
+			location?: PointGeometry;
 			name: string;
 			visitOrder: number;
 		}[];
@@ -200,6 +208,7 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
+			location: PointGeometry;
 			name: string;
 			visitOrder: number;
 		}[];
@@ -217,6 +226,7 @@ class RouteEntity implements Entity {
 			name: this.name,
 			pois: this.pois as {
 				id: number;
+				location: PointGeometry;
 				name: string;
 				visitOrder: number;
 			}[],
@@ -235,6 +245,7 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
+			location: PointGeometry;
 			name: string;
 			visitOrder: number;
 		}[];
@@ -250,6 +261,7 @@ class RouteEntity implements Entity {
 			name: this.name,
 			pois: this.pois as {
 				id: number;
+				location: PointGeometry;
 				name: string;
 				visitOrder: number;
 			}[],
@@ -291,6 +303,7 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
+			location: PointGeometry;
 			name: string;
 			visitOrder: number;
 		}[];
@@ -306,7 +319,10 @@ class RouteEntity implements Entity {
 			images: this.images,
 			name: this.name,
 			pois: this.pois as Required<
-				Pick<RouteEntity["pois"][number], "id" | "name" | "visitOrder">
+				Pick<
+					RouteEntity["pois"][number],
+					"id" | "location" | "name" | "visitOrder"
+				>
 			>[],
 		};
 	}

@@ -68,8 +68,9 @@ class RouteRepository implements Repository {
 
 		const hasLocationFilter = longitude !== undefined && latitude !== undefined;
 		const hasPagination = page !== undefined && perPage !== undefined;
+		const { routesModel } = this;
 
-		const query = this.routesModel
+		const query = routesModel
 			.query()
 			.select([
 				"routes.id",
@@ -91,6 +92,9 @@ class RouteRepository implements Repository {
 						"points_of_interest.id",
 						"points_of_interest.name",
 						"routes_to_pois.visit_order",
+						routesModel.raw(
+							"ST_AsGeoJSON(points_of_interest.location)::json as location",
+						),
 					);
 				},
 			})
@@ -150,7 +154,8 @@ class RouteRepository implements Repository {
 		routeId: number,
 		userId?: number,
 	): Promise<null | RouteEntity> {
-		const route = await this.routesModel
+		const { routesModel } = this;
+		const route = await routesModel
 			.query()
 			.withGraphFetched("[pois(selectPoi), images(selectFileData)]")
 			.modifiers({
@@ -162,6 +167,9 @@ class RouteRepository implements Repository {
 						"points_of_interest.id",
 						"points_of_interest.name",
 						"routes_to_pois.visit_order",
+						routesModel.raw(
+							"ST_AsGeoJSON(points_of_interest.location)::json as location",
+						),
 					);
 				},
 			})
@@ -204,7 +212,8 @@ class RouteRepository implements Repository {
 		id: number,
 		entity: Partial<RouteEntity["toObject"]>,
 	): Promise<null | RouteEntity> {
-		const [updatedRoute] = await this.routesModel
+		const { routesModel } = this;
+		const [updatedRoute] = await routesModel
 			.query()
 			.patch(entity)
 			.withGraphFetched("[pois(selectPoi), images(selectFileData)]")
@@ -213,7 +222,13 @@ class RouteRepository implements Repository {
 					builder.select("files.id", "files.url");
 				},
 				selectPoi(builder) {
-					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
+					builder.select(
+						"points_of_interest.id",
+						"routes_to_pois.visit_order",
+						routesModel.raw(
+							"ST_AsGeoJSON(points_of_interest.location)::json as location",
+						),
+					);
 				},
 			})
 			.where({ id })

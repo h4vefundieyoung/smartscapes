@@ -19,6 +19,8 @@ class RouteModel extends AbstractModel {
 		return DatabaseTableName.ROUTES;
 	}
 
+	public categories?: CategoryModel[];
+
 	public createdByUserId!: number;
 
 	public description!: string;

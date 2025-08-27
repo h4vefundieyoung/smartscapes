@@ -4,6 +4,7 @@ import {
 	Input,
 	Loader,
 	MapProvider,
+	Select,
 	TextArea,
 } from "~/libs/components/components.js";
 import { AppRoute, DataStatus, PermissionKey } from "~/libs/enums/enums.js";
@@ -15,10 +16,12 @@ import {
 	useAppSelector,
 	useCallback,
 	useEffect,
+	useMemo,
 	useParams,
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
+import { actions as categoriesActions } from "~/modules/categories/categories.js";
 import { type ReviewRequestDto } from "~/modules/reviews/reviews.js";
 import {
 	actions as routeActions,
@@ -31,15 +34,26 @@ import {
 	PointOfInterestSection,
 	RouteReviewsSection,
 } from "./libs/components/components.js";
+import { TagsContainer } from "./libs/components/tags-container/tag-container.js";
 import { ROUTE_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
 import { UserRouteStatus } from "./libs/enums/enums.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
+
+	const { user } = useAppSelector(({ auth }) => ({
+		user: auth.authenticatedUser,
+	}));
+	const { route } = useAppSelector(({ routeDetails }) => ({
+		route: routeDetails.route,
+	}));
+	const { categories } = useAppSelector(({ categories }) => ({
+		categories: categories.categories,
+	}));
+
 	const dispatch = useAppDispatch();
 	const { id: routeId } = useParams<{ id: string }>();
-	const user = useAppSelector(({ auth }) => auth.authenticatedUser);
 	const dataStatus = useAppSelector(
 		({ routeDetails }) => routeDetails.dataStatus,
 	);
@@ -48,21 +62,30 @@ const RouteDetails = (): React.JSX.Element => {
 			userRouteDetails.createStatus === DataStatus.FULFILLED,
 	);
 	const reviews = useAppSelector(({ routeDetails }) => routeDetails.reviews);
-	const route = useAppSelector(({ routeDetails }) => routeDetails.route);
-	const saveStatus = useAppSelector(
-		({ routeDetails }) => routeDetails.saveRouteStatus,
-	);
 
-	const { control, errors, getValues, handleReset } =
+	const { control, errors, getValues, handleReset, handleValueSet } =
 		useAppForm<RoutePatchRequestDto>({
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
 		});
+	const categoriesOptions = useMemo(() => {
+		const options = categories.map((category) => ({
+			label: category.name,
+			value: category.id,
+		}));
+
+		return options;
+	}, [categories]);
+
+	const saveStatus = useAppSelector(
+		({ routeDetails }) => routeDetails.saveRouteStatus,
+	);
 
 	const navigate = useAppNavigate();
 
 	const isAuthorized = Boolean(user);
 	const isSaved = route?.savedUserRoute?.status === UserRouteStatus.NOT_STARTED;
 	const isSaving = saveStatus === DataStatus.PENDING;
+
 	const hasEditPermissions = Boolean(
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
@@ -116,16 +139,37 @@ const RouteDetails = (): React.JSX.Element => {
 
 	const handlePatchRequest = useCallback(() => {
 		if (route) {
-			const { description, name } = getValues();
+			const { categories, description, name } = getValues();
 			void dispatch(
 				routeActions.patch({
 					id: route.id,
-					payload: { description, name },
+					payload: { categories, description, name },
 				}),
 			);
 			setIsEditMode(false);
 		}
 	}, [dispatch, setIsEditMode, route, getValues]);
+
+	useEffect(() => {
+		void dispatch(routeActions.getById(Number(routeId)));
+	}, [dispatch, routeId]);
+
+	useEffect(() => {
+		if (isEditMode) {
+			void dispatch(categoriesActions.getAll());
+		}
+	}, [isEditMode, dispatch]);
+
+	useEffect(() => {
+		if (route && isEditMode) {
+			handleValueSet("name", route.name);
+			handleValueSet("description", route.description ?? "");
+			handleValueSet(
+				"categories",
+				route.categories.map((category) => category.id),
+			);
+		}
+	}, [route, handleValueSet, isEditMode]);
 
 	const handleSaveUserRoute = useCallback(() => {
 		if (route?.id) {
@@ -145,10 +189,6 @@ const RouteDetails = (): React.JSX.Element => {
 		},
 		[dispatch],
 	);
-
-	useEffect(() => {
-		void dispatch(routeActions.getById(Number(routeId)));
-	}, [dispatch, routeId]);
 
 	useEffect(() => {
 		handleResetFormValues();
@@ -268,6 +308,22 @@ const RouteDetails = (): React.JSX.Element => {
 				]}
 			/>
 			{isEditMode ? (
+				<Select
+					control={control}
+					isMulti
+					label="Categories"
+					name="categories"
+					options={categoriesOptions}
+					placeholder="Select categories"
+				/>
+			) : (
+				route.categories.length > 0 && (
+					<TagsContainer
+						labels={route.categories.map((category) => category.name)}
+					/>
+				)
+			)}
+			{isEditMode ? (
 				<>
 					<input
 						accept="image/*"
@@ -293,6 +349,7 @@ const RouteDetails = (): React.JSX.Element => {
 			) : (
 				hasDescription && <p className={styles["description"]}>{description}</p>
 			)}
+
 			<PointOfInterestSection pointOfInterests={pois} />
 			<RouteReviewsSection
 				isAuthenticatedUser={isAuthorized}

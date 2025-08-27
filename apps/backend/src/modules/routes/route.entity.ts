@@ -1,5 +1,6 @@
 import { type Entity, type LineStringGeometry } from "~/libs/types/types.js";
 
+import { type CategoryEntity } from "../categories/category.entity.js";
 import {
 	type RouteUploadImageResponseDto,
 	type UserRouteStatusType,
@@ -11,6 +12,8 @@ type SavedUserRoute = {
 };
 
 class RouteEntity implements Entity {
+	private categories: null | ReturnType<CategoryEntity["toObject"]>[];
+
 	private createdAt: null | string;
 
 	private createdByUserId: number;
@@ -38,6 +41,7 @@ class RouteEntity implements Entity {
 	private savedUserRoute: null | SavedUserRoute;
 
 	private constructor({
+		categories = [],
 		createdAt,
 		createdByUserId,
 		description,
@@ -50,6 +54,7 @@ class RouteEntity implements Entity {
 		pois,
 		savedUserRoute,
 	}: {
+		categories?: ReturnType<CategoryEntity["toObject"]>[];
 		createdAt: null | string;
 		createdByUserId: number;
 		description: null | string;
@@ -66,6 +71,7 @@ class RouteEntity implements Entity {
 		}[];
 		savedUserRoute: null | SavedUserRoute[];
 	}) {
+		this.categories = categories;
 		this.createdAt = createdAt;
 		this.id = id;
 		this.distance = distance;
@@ -188,7 +194,41 @@ class RouteEntity implements Entity {
 		});
 	}
 
+	public static initializeWithDetails(data: {
+		categories: ReturnType<CategoryEntity["toObject"]>[];
+		createdByUserId: number;
+		description: string;
+		distance: number;
+		duration: number;
+		geometry: LineStringGeometry;
+		id: number;
+		images: RouteUploadImageResponseDto[];
+		name: string;
+		pois: {
+			id: number;
+			name: string;
+			visitOrder: number;
+		}[];
+		savedUserRoute?: SavedUserRoute[];
+	}): RouteEntity {
+		return new RouteEntity({
+			categories: data.categories,
+			createdAt: null,
+			createdByUserId: data.createdByUserId,
+			description: data.description,
+			distance: data.distance,
+			duration: data.duration,
+			geometry: data.geometry,
+			id: data.id,
+			images: data.images,
+			name: data.name,
+			pois: data.pois,
+			savedUserRoute: null,
+		});
+	}
+
 	public toDetailsObject(): {
+		categories: ReturnType<CategoryEntity["toObject"]>[];
 		createdAt: string;
 		createdByUserId: number;
 		description: null | string;
@@ -206,6 +246,7 @@ class RouteEntity implements Entity {
 		savedUserRoute: null | SavedUserRoute;
 	} {
 		return {
+			categories: this.categories as ReturnType<CategoryEntity["toObject"]>[],
 			createdAt: this.createdAt as string,
 			createdByUserId: this.createdByUserId,
 			description: this.description,
@@ -280,6 +321,7 @@ class RouteEntity implements Entity {
 	}
 
 	public toObject(): {
+		categories: ReturnType<CategoryEntity["toObject"]>[];
 		createdAt: string;
 		createdByUserId: number;
 		description: null | string;
@@ -296,6 +338,7 @@ class RouteEntity implements Entity {
 		}[];
 	} {
 		return {
+			categories: this.categories as ReturnType<CategoryEntity["toObject"]>[],
 			createdAt: this.createdAt as string,
 			createdByUserId: this.createdByUserId,
 			description: this.description,

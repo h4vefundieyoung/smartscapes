@@ -112,6 +112,7 @@ describe("RouteService", () => {
 	};
 
 	const mockRouteIdResponse: RoutePatchResponseDto = {
+		categories: [],
 		createdAt: MOCK_CREATED_AT,
 		createdByUserId: 5,
 		description: "Test route description",
@@ -190,6 +191,7 @@ describe("RouteService", () => {
 	];
 
 	const mockPatchPayload = {
+		categories: [],
 		description: "Updated description",
 		name: "Updated Route",
 	};

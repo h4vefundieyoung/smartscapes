@@ -31,7 +31,6 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(create.rejected, (state) => {
 			state.createStatus = DataStatus.REJECTED;
 		});
-
 		builder.addCase(getAll.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
 		});

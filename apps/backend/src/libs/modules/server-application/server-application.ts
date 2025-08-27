@@ -49,6 +49,10 @@ const apiV1 = new BaseServerApplicationApi(
 				method: "GET",
 				path: APIPath.REVIEWS,
 			},
+			{
+				method: "GET",
+				path: APIPath.CATEGORIES,
+			},
 		],
 	},
 	...authController.routes,

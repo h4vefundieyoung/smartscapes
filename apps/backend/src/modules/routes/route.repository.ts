@@ -1,3 +1,5 @@
+import { transaction } from "objection";
+
 import { SortingOrder } from "~/libs/enums/enums.js";
 import {
 	type EntityPagination,
@@ -5,6 +7,7 @@ import {
 	type TransactionOptions,
 } from "~/libs/types/types.js";
 
+import { CategoryEntity } from "../categories/category.entity.js";
 import { type PlannedPathModel } from "../planned-paths/planned-path.model.js";
 import { UserRouteStatus } from "./libs/enums/enums.js";
 import { type RouteFindAllOptions } from "./libs/types/types.js";
@@ -152,7 +155,10 @@ class RouteRepository implements Repository {
 	): Promise<null | RouteEntity> {
 		const route = await this.routesModel
 			.query()
-			.withGraphFetched("[pois(selectPoi), images(selectFileData)]")
+			.withGraphFetched("[pois(selectPoi), images(selectFileData), categories]")
+			.modifyGraph("categories", (builder) => {
+				builder.select("categories.id", "categories.key", "categories.name");
+			})
 			.modifiers({
 				selectFileData(builder) {
 					builder.select("files.id", "files.url");
@@ -197,38 +203,97 @@ class RouteRepository implements Repository {
 			return null;
 		}
 
-		return RouteEntity.initialize(route);
+		return RouteEntity.initializeWithDetails({
+			categories: (route.categories ?? []).map((category) =>
+				CategoryEntity.initialize(category).toObject(),
+			),
+			createdByUserId: route.createdByUserId,
+			description: route.description,
+			distance: route.distance,
+			duration: route.duration,
+			geometry: route.geometry,
+			id: route.id,
+			images: route.images.map((image) => ({
+				id: image.id,
+				url: image.url,
+			})),
+			name: route.name,
+			pois: route.pois.map((poi) => ({
+				id: poi.id,
+				name: poi.name,
+				visitOrder: poi.visitOrder,
+			})),
+		});
 	}
 
 	public async patch(
 		id: number,
 		entity: Partial<RouteEntity["toObject"]>,
 	): Promise<null | RouteEntity> {
-		const [updatedRoute] = await this.routesModel
-			.query()
-			.patch(entity)
-			.withGraphFetched("[pois(selectPoi), images(selectFileData)]")
-			.modifiers({
-				selectFileData(builder) {
-					builder.select("files.id", "files.url");
-				},
-				selectPoi(builder) {
-					builder.select("points_of_interest.id", "routes_to_pois.visit_order");
-				},
-			})
-			.where({ id })
-			.returning([
-				"id",
-				"name",
-				"description",
-				this.routesModel.raw("to_json(distance)::json as distance"),
-				this.routesModel.raw("to_json(duration)::json as duration"),
-				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
-				"routes.created_by_user_id",
-			])
-			.execute();
+		const { categories, ...patchData } = entity as Partial<
+			RouteEntity["toObject"] & { categories?: number[] }
+		>;
 
-		return updatedRoute ? RouteEntity.initialize(updatedRoute) : null;
+		return await transaction(this.routesModel, async (RouteModel) => {
+			await RouteModel.query().patch(patchData).where({ id });
+
+			if (categories) {
+				await RouteModel.relatedQuery("categories").for(id).unrelate();
+
+				if (categories.length > 0) {
+					await RouteModel.relatedQuery("categories")
+						.for(id)
+						.relate(categories);
+				}
+			}
+
+			const routeWithRelations = await RouteModel.query()
+				.withGraphFetched(
+					"[pois(selectPoi), images(selectFileData), categories]",
+				)
+				.modifyGraph("categories", (builder) => {
+					builder.select("categories.id", "categories.key", "categories.name");
+				})
+				.modifiers({
+					selectFileData(builder) {
+						builder.select("files.id", "files.url");
+					},
+					selectPoi(builder) {
+						builder.select(
+							"points_of_interest.id",
+							"routes_to_pois.visit_order",
+						);
+					},
+				})
+				.where("routes.id", id)
+				.first();
+
+			if (!routeWithRelations) {
+				return null;
+			}
+
+			return RouteEntity.initializeWithDetails({
+				categories: (routeWithRelations.categories ?? []).map((category) =>
+					CategoryEntity.initialize(category).toObject(),
+				),
+				createdByUserId: routeWithRelations.createdByUserId,
+				description: routeWithRelations.description,
+				distance: routeWithRelations.distance,
+				duration: routeWithRelations.duration,
+				geometry: routeWithRelations.geometry,
+				id: routeWithRelations.id,
+				images: routeWithRelations.images.map((image) => ({
+					id: image.id,
+					url: image.url,
+				})),
+				name: routeWithRelations.name,
+				pois: routeWithRelations.pois.map((poi) => ({
+					id: poi.id,
+					name: poi.name,
+					visitOrder: poi.visitOrder,
+				})),
+			});
+		});
 	}
 }
 

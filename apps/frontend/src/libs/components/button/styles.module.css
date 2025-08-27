@@ -86,11 +86,12 @@
 .button-ghost {
 	color: var(--color-fill-brand-strong);
 	background-color: var(--color-fill-weak);
+	border: none;
 }
 
-.icon,
-.button:hover .icon-pressed {
+.button:hover.button-ghost {
 	color: var(--color-text-inverse-strong);
+	background-color: var(--color-fill-brand-strong);
 }
 
 @media (width <= 768px) {

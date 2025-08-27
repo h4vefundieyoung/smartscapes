@@ -144,7 +144,7 @@ class RouteRepository implements Repository {
 			})
 			.modify((builder) => {
 				if (userId) {
-					builder.withGraphFetched("userRoute(filtered)").modifiers({
+					builder.withGraphFetched("savedUserRoute(filtered)").modifiers({
 						filtered(builder) {
 							builder
 								.select(

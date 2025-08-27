@@ -153,7 +153,7 @@ describe("Route controller", () => {
 				name: mockRoute.name,
 				plannedPathId: 1,
 				poiIds: [FIRST_POI_ID, SECOND_POI_ID],
-				userRoute: null,
+				savedUserRoute: null,
 			},
 			params: {},
 			query: {},

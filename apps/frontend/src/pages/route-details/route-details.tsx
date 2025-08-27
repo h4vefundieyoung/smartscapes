@@ -144,20 +144,15 @@ const RouteDetails = (): React.JSX.Element => {
 	}, [dispatch, routeId]);
 
 	useEffect(() => {
-		if (route) {
-			handleValueSet("name", route.name);
-			handleValueSet("description", route.description ?? "");
-		}
-	}, [route, handleValueSet]);
-
-	useEffect(() => {
 		if (isEditMode) {
 			void dispatch(categoriesActions.getAll());
 		}
 	}, [isEditMode, dispatch]);
 
 	useEffect(() => {
-		if (route?.categories && isEditMode) {
+		if (route && isEditMode) {
+			handleValueSet("name", route.name);
+			handleValueSet("description", route.description ?? "");
 			handleValueSet(
 				"categories",
 				route.categories.map((category) => category.id),
@@ -261,25 +256,6 @@ const RouteDetails = (): React.JSX.Element => {
 									/>
 								</div>
 							)}
-						</div>
-					</>
-				)}
-
-				{isEditMode && (
-					<>
-						<input
-							accept="image/*"
-							onChange={handleFileUpload}
-							ref={fileInputReference}
-							style={{ display: "none" }}
-							type="file"
-						/>
-						<div className={styles["upload-button"]}>
-							<Button
-								label="Upload image"
-								onClick={handleTriggerFileUpload}
-								variant="outlined"
-							/>
 						</div>
 					</>
 				)}

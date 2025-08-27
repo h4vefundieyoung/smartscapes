@@ -1,5 +1,52 @@
 # Changelog
 
+## [1.50.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.49.0...@smartscapes/frontend-v1.50.0) (2025-08-26)
+
+
+### Features
+
+* **frontend/shared:** update profile page design ss-448 ([#482](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/482)) ([2b45448](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2b454483f05a54964e9dbdcba12cd1951d8e917a))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.35.0 to 1.36.0
+
+## [1.49.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.48.0...@smartscapes/frontend-v1.49.0) (2025-08-26)
+
+
+### Features
+
+* **frontend:** integrate route creation with construct route flow ss-542 ([#557](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/557)) ([61785d0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/61785d049110d2919f7ba3eedd561ec8055341ee))
+
+## [1.48.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.47.0...@smartscapes/frontend-v1.48.0) (2025-08-26)
+
+
+### Features
+
+* **backend/frontend/shared:** implement edit and delete actions to pois ss-495 ([#543](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/543)) ([9c660ac](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/9c660ac75984b3c592339049f8dfa0cace25b078))
+
+
+### Bug Fixes
+
+* **frontend:** enhance routes pagination & input behavior ss-469 ([#492](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/492)) ([0a33a06](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/0a33a06af479b327a5f7b1c65227ecab836680e3))
+
+## [1.47.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.46.0...@smartscapes/frontend-v1.47.0) (2025-08-25)
+
+
+### Features
+
+* **frontend/backend:** ability to upload images to the route page ss-476 ([#513](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/513)) ([e4fa4eb](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/e4fa4ebad3fbdee53a403e1d157bfeaa554e1d03))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.34.1 to 1.35.0
+
 ## [1.46.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.45.0...@smartscapes/frontend-v1.46.0) (2025-08-25)
 
 

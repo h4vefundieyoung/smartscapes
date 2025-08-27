@@ -3,6 +3,7 @@ import { combineClassNames } from "~/libs/helpers/helpers.js";
 import styles from "./styles.module.css";
 
 type Properties = {
+	isDisabled?: boolean;
 	label: string;
 	onClick?: () => void;
 	to?: string;
@@ -11,6 +12,7 @@ type Properties = {
 };
 
 const Button = ({
+	isDisabled = false,
 	label,
 	onClick,
 	to,
@@ -34,7 +36,12 @@ const Button = ({
 	}
 
 	return (
-		<button className={buttonClass} onClick={onClick} type={type}>
+		<button
+			className={buttonClass}
+			disabled={isDisabled}
+			onClick={onClick}
+			type={type}
+		>
 			{label}
 		</button>
 	);

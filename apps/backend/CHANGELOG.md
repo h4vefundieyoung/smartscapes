@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.40.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.40.0...@smartscapes/backend-v1.40.1) (2025-08-26)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.35.0 to 1.36.0
+
+## [1.40.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.39.0...@smartscapes/backend-v1.40.0) (2025-08-26)
+
+
+### Features
+
+* **backend/frontend/shared:** implement edit and delete actions to pois ss-495 ([#543](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/543)) ([9c660ac](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/9c660ac75984b3c592339049f8dfa0cace25b078))
+
+## [1.39.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.38.0...@smartscapes/backend-v1.39.0) (2025-08-25)
+
+
+### Features
+
+* **frontend/backend:** ability to upload images to the route page ss-476 ([#513](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/513)) ([e4fa4eb](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/e4fa4ebad3fbdee53a403e1d157bfeaa554e1d03))
+
+
+### Bug Fixes
+
+* **backend:** fix user routes request ss-534 ([#548](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/548)) ([69123cd](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/69123cd01c58783fb15a2678eeeded290f74a0de))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.34.1 to 1.35.0
+
 ## [1.38.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/backend-v1.37.0...@smartscapes/backend-v1.38.0) (2025-08-25)
 
 

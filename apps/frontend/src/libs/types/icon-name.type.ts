@@ -5,6 +5,7 @@ type IconName =
 	| "caretDown"
 	| "caretUp"
 	| "category"
+	| "check"
 	| "close"
 	| "dashboard"
 	| "edit"

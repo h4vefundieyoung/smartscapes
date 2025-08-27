@@ -135,7 +135,7 @@ class PointsOfInterestRepository implements Repository {
 				),
 			])
 			.findById(id)
-			.withGraphFetched("routes")
+			.withGraphFetched("[routes.[images]]")
 			.execute();
 
 		if (!pointOfInterest) {

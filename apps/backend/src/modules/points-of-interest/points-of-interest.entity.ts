@@ -83,7 +83,7 @@ class PointsOfInterestEntity implements Entity {
 		id: number;
 		location: PointGeometry;
 		name: string;
-		routes: { id: number; name: string }[];
+		routes: { id: number; images: RouteEntity["images"]; name: string }[];
 	} {
 		return {
 			description: this.description,
@@ -91,7 +91,7 @@ class PointsOfInterestEntity implements Entity {
 			location: this.location,
 			name: this.name,
 			routes: this.routes
-				? this.routes.map(({ id, name }) => ({ id, name }))
+				? this.routes.map(({ id, images, name }) => ({ id, images, name }))
 				: [],
 		};
 	}

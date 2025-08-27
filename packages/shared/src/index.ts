@@ -121,6 +121,7 @@ export {
 	userRouteDeleteValidationSchema,
 	type UserRouteFinishRequestDto,
 	userRouteFinishValidationSchema,
+	type UserRouteGetAllQueryRequestDto,
 	type UserRoutePatchRequestDto,
 	type UserRouteQueryRequestDto,
 	userRouteQueryValidationSchema,

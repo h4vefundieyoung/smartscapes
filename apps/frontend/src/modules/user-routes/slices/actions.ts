@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { type UserRouteStatusType } from "@smartscapes/shared";
 
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
@@ -25,12 +26,12 @@ const create = createAsyncThunk<
 
 const getAllByUserId = createAsyncThunk<
 	APIResponse<UserRouteResponseDto[]>,
-	undefined,
+	UserRouteStatusType,
 	AsyncThunkConfig
->(`${sliceName}/get-by-user-id`, async (_, { extra }) => {
+>(`${sliceName}/get-by-user-id`, async (status, { extra }) => {
 	const { userRoutesApi } = extra;
 
-	return await userRoutesApi.getAllByUserId();
+	return await userRoutesApi.getAllByUserId({ status });
 });
 
 const start = createAsyncThunk<

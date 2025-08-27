@@ -150,7 +150,7 @@ describe("UserRouteService", () => {
 				mockRouteService,
 			);
 
-			const result = await serviceWithRoutes.getAllByUserId(1);
+			const result = await serviceWithRoutes.getAllByUserIdStatusType(1);
 
 			assert.strictEqual(Array.isArray(result), true);
 			assert.strictEqual(result.length, 1);

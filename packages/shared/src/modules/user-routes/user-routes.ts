@@ -2,6 +2,7 @@ export { UserRouteApiPath, UserRouteStatus } from "./libs/enums/enums.js";
 export {
 	type UserRouteDeleteParameters,
 	type UserRouteFinishRequestDto,
+	type UserRouteGetAllQueryRequestDto,
 	type UserRoutePatchRequestDto,
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,

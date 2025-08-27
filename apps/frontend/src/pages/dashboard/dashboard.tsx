@@ -1,21 +1,10 @@
 import { Carousel, TabContainer } from "~/libs/components/components.js";
-import {
-	useAppDispatch,
-	useEffect,
-	useTabNavigation,
-} from "~/libs/hooks/hooks.js";
-import { actions as userRoutesActions } from "~/modules/user-routes/user-routes.js";
+import { useTabNavigation } from "~/libs/hooks/hooks.js";
 
 import { DASHBOARD_TABS } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
 const Dashboard = (): React.JSX.Element => {
-	const dispatch = useAppDispatch();
-
-	useEffect(() => {
-		void dispatch(userRoutesActions.getAllByUserId());
-	}, [dispatch]);
-
 	const initialTabId = DASHBOARD_TABS[0]?.id ?? "";
 
 	const { activeTabId, handleTabChange } = useTabNavigation(

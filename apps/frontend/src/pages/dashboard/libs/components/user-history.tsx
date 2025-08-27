@@ -1,15 +1,24 @@
 import { Loader } from "~/libs/components/components.js";
 import { DataStatus, UserRouteStatus } from "~/libs/enums/enums.js";
-import { useAppSelector } from "~/libs/hooks/hooks.js";
+import {
+	useAppDispatch,
+	useAppSelector,
+	useEffect,
+} from "~/libs/hooks/hooks.js";
+import { actions as userRoutesActions } from "~/modules/user-routes/user-routes.js";
 
 import styles from "./styles.module.css";
 import { UserHistoryCard } from "./user-history-card.js";
 
 const UserHistory = (): React.JSX.Element => {
-	const finishedUserRoutes = useAppSelector((state) =>
-		state.userRoutes.userRoutes.filter(
-			(route) => route.status === UserRouteStatus.COMPLETED,
-		),
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		void dispatch(userRoutesActions.getAllByUserId(UserRouteStatus.COMPLETED));
+	}, [dispatch]);
+
+	const finishedUserRoutes = useAppSelector(
+		(state) => state.userRoutes.userRoutes,
 	);
 
 	const dataStatus = useAppSelector((state) => state.userRoutes.dataStatus);

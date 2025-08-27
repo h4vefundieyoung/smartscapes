@@ -107,8 +107,14 @@ class UserRouteService implements Service {
 		return updatedRoute.toObject();
 	}
 
-	public async getAllByUserId(userId: number): Promise<UserRouteResponseDto[]> {
-		const userRoutes = await this.userRouteRepository.findByFilter({ userId });
+	public async getAllByUserIdStatusType(
+		userId: number,
+		status?: UserRouteStatusType,
+	): Promise<UserRouteResponseDto[]> {
+		const userRoutes = await this.userRouteRepository.findByFilter({
+			userId,
+			...(status ? { status } : {}),
+		});
 
 		return userRoutes.map((item) => item.toObject());
 	}

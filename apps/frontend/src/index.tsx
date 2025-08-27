@@ -24,6 +24,7 @@ import { PointsOfInterestDetails } from "./pages/points-of-interest-details/poin
 import { Profile } from "./pages/profile/profile.js";
 import { PublicProfile } from "./pages/public-profile/public-profile.js";
 import { RouteDetails } from "./pages/route-details/route-details.js";
+import { UserRouteDetails } from "./pages/user-route-details/user-route-details.js";
 
 pwa.register();
 
@@ -69,6 +70,14 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 									</ProtectedRoute>
 								),
 								path: AppRoute.PROFILE,
+							},
+							{
+								element: (
+									<ProtectedRoute>
+										<UserRouteDetails />
+									</ProtectedRoute>
+								),
+								path: AppRoute.USER_ROUTES_$ROUTE_ID_MAP,
 							},
 							{
 								element: (

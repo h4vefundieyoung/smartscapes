@@ -275,8 +275,18 @@ class PointsOfInterestController extends BaseController {
 	 *
 	 *       **With search parameter**: Returns all points of interest searched by name
 	 *
-	 *       **With pagination parameters (page & perPage)**: Returns paginated result
+	 *       **With ids parameter**: Returns points of interest with specified IDs
+	 *
+	 *       **With pagination parameters (page & perPage)**: Returns paginated results with metadata
 	 *     parameters:
+	 *       - in: query
+	 *         name: ids
+	 *         schema:
+	 *           type: array
+	 *           items:
+	 *             type: integer
+	 *           example: [1, 2, 3]
+	 *         description: Array of point of interest IDs to filter by
 	 *       - in: query
 	 *         name: latitude
 	 *         schema:
@@ -336,28 +346,105 @@ class PointsOfInterestController extends BaseController {
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *              type: object
-	 *              properties:
-	 *                data:
-	 *                  type: array
-	 *                  items:
-	 *                    $ref: '#/components/schemas/PointsOfInterestGetAllItemResponseDto'
-	 *                meta:
-	 *                  type: object
-	 *                  properties:
-	 *                    currentPage:
-	 *                      type: number
-	 *                      example: 1
-	 *                    itemsPerPage:
-	 *                      type: number
-	 *                      example: 10
-	 *                    total:
-	 *                      type: number
-	 *                      example: 25
-	 *                    totalPages:
-	 *                      type: number
-	 *                      example: 3
-	 *              description: Paginated response (when page & perPage provided)
+	 *               oneOf:
+	 *                 - type: object
+	 *                   properties:
+	 *                     data:
+	 *                       type: array
+	 *                       items:
+	 *                         $ref: '#/components/schemas/PointsOfInterestGetAllItemResponseDto'
+	 *                   description: Array response (when pagination not used)
+	 *                 - type: object
+	 *                   properties:
+	 *                     data:
+	 *                       type: array
+	 *                       items:
+	 *                         $ref: '#/components/schemas/PointsOfInterestGetAllItemResponseDto'
+	 *                       meta:
+	 *                         type: object
+	 *                         properties:
+	 *                           currentPage:
+	 *                             type: number
+	 *                             example: 1
+	 *                           itemsPerPage:
+	 *                             type: number
+	 *                             example: 10
+	 *                           total:
+	 *                             type: number
+	 *                             example: 25
+	 *                           totalPages:
+	 *                             type: number
+	 *                             example: 3
+	 *                   description: Paginated response (when page & perPage provided)
+	 *             examples:
+	 *               all_pois:
+	 *                 summary: All points of interest
+	 *                 description: Response when no pagination or location filters are provided
+	 *                 value:
+	 *                   data:
+	 *                     - id: 1
+	 *                       name: "Central Park"
+	 *                       description: "A large park in New York City"
+	 *                       location:
+	 *                         type: "Point"
+	 *                         coordinates: [30.5234, 50.4501]
+	 *                     - id: 2
+	 *                       name: "Glass Bridge"
+	 *                       description: "A modern architectural marvel in Kyiv"
+	 *                       location:
+	 *                         type: "Point"
+	 *                         coordinates: [30.5289, 50.4553]
+	 *               nearby_pois:
+	 *                 summary: Nearby points of interest
+	 *                 description: Response when location filters are provided
+	 *                 value:
+	 *                   data:
+	 *                     - id: 1
+	 *                       name: "Central Park"
+	 *                       location:
+	 *                         type: "Point"
+	 *                         coordinates: [30.5234, 50.4501]
+	 *                       description: "A large park in New York City"
+	 *               paginated_pois:
+	 *                 summary: Paginated points of interest
+	 *                 description: Response when pagination parameters are provided
+	 *                 value:
+	 *                   data:
+	 *                     data:
+	 *                       - id: 1
+	 *                         name: "Central Park"
+	 *                         description: "A large park in New York City"
+	 *                         location:
+	 *                           type: "Point"
+	 *                           coordinates: [30.5234, 50.4501]
+	 *                       - id: 2
+	 *                         name: "Glass Bridge"
+	 *                         description: "A modern architectural marvel"
+	 *                         location:
+	 *                           type: "Point"
+	 *                           coordinates: [30.5289, 50.4553]
+	 *                     meta:
+	 *                       currentPage: 1
+	 *                       itemsPerPage: 10
+	 *                       total: 25
+	 *                       totalPages: 3
+	 *               filtered_by_ids:
+	 *                 summary: Points of interest filtered by IDs
+	 *                 description: Response when ids parameter is provided
+	 *                 value:
+	 *                   data:
+	 *                     - id: 1
+	 *                       name: "Central Park"
+	 *                       description: "A large park in New York City"
+	 *                       location:
+	 *                         type: "Point"
+	 *                         coordinates: [30.5234, 50.4501]
+	 *                     - id: 3
+	 *                       name: "Museum of Modern Art"
+	 *                       description: "Contemporary art museum"
+	 *                       location:
+	 *                         type: "Point"
+	 *                         coordinates: [30.5250, 50.4520]
 	 */
 	public async findAll(
 		options: APIHandlerOptions<{

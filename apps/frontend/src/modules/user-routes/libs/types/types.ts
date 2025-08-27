@@ -1,1 +1,5 @@
-export { type UserRouteResponseDto } from "@smartscapes/shared";
+export {
+	type UserRouteFinishRequestDto,
+	type UserRouteQueryRequestDto,
+	type UserRouteResponseDto,
+} from "@smartscapes/shared";

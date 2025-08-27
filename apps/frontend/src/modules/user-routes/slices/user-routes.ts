@@ -1,8 +1,10 @@
 import {
 	create,
+	deleteUserRoute,
 	finish,
 	getAllByUserId,
 	getByRouteId,
+	saveUserRoute,
 	start,
 } from "./actions.js";
 import { startTrackingRoute, stopTrackingRoute } from "./tracking-actions.js";
@@ -13,9 +15,11 @@ const allActions = {
 	...userRouteActions,
 	...userRouteDetailsActions,
 	create,
+	deleteUserRoute,
 	finish,
 	getAllByUserId,
 	getByRouteId,
+	saveUserRoute,
 	start,
 	startTrackingRoute,
 	stopTrackingRoute,

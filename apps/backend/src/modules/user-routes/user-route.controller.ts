@@ -10,11 +10,13 @@ import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
 import { UserRouteApiPath } from "./libs/enums/enum.js";
 import {
+	type UserRouteDeleteParameters,
 	type UserRouteFinishRequestDto,
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
 } from "./libs/types/type.js";
 import {
+	userRouteDeleteValidationSchema,
 	userRouteFinishValidationSchema,
 	userRouteQueryValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
@@ -132,7 +134,16 @@ class UserRouteController extends BaseController {
 		this.addRoute({
 			handler: this.getAll.bind(this),
 			method: "GET",
-			path: UserRouteApiPath.ROOT,
+			path: UserRouteApiPath.$ID,
+		});
+
+		this.addRoute({
+			handler: this.delete.bind(this),
+			method: "DELETE",
+			path: UserRouteApiPath.$ID,
+			validation: {
+				params: userRouteDeleteValidationSchema,
+			},
 		});
 
 		this.addRoute({
@@ -209,6 +220,67 @@ class UserRouteController extends BaseController {
 		return {
 			payload: { data: createdRoute },
 			status: HTTPCode.CREATED,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /user-routes/{id}:
+	 *   delete:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - User route
+	 *     summary: Delete saved user route
+	 *     description: Deletes a route that was previously saved by the user.
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     responses:
+	 *       200:
+	 *         description: Route deleted successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: boolean
+	 *                   example: true
+	 *       401:
+	 *         description: Unauthorized - Authentication required
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: Unauthorized access
+	 */
+
+	public async delete({
+		params,
+		user,
+	}: APIHandlerOptions<{ params: UserRouteDeleteParameters }>): Promise<
+		APIHandlerResponse<boolean>
+	> {
+		const routeId = Number(params.id);
+
+		const isDeleted = await this.userRouteService.deleteSavedRoute(
+			routeId,
+			user?.id as number,
+		);
+
+		return {
+			payload: { data: isDeleted },
+			status: HTTPCode.OK,
 		};
 	}
 
@@ -481,6 +553,7 @@ class UserRouteController extends BaseController {
 	 *                     type: "LineString"
 	 *                     coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
 	 */
+
 	public async start(
 		options: APIHandlerOptions<{
 			query: UserRouteQueryRequestDto;

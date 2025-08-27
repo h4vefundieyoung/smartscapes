@@ -70,4 +70,33 @@ const getByRouteId = createAsyncThunk<
 	},
 );
 
-export { create, finish, getAllByUserId, getByRouteId, start };
+const saveUserRoute = createAsyncThunk<
+	UserRouteResponseDto,
+	number,
+	AsyncThunkConfig
+>(`${sliceName}/save-user-route`, async (routeId, { extra }) => {
+	const { userRouteApi } = extra;
+	const { data } = await userRouteApi.saveRoute(routeId);
+
+	return data;
+});
+
+const deleteUserRoute = createAsyncThunk<boolean, number, AsyncThunkConfig>(
+	`${sliceName}/delete-user-route`,
+	async (id, { extra }) => {
+		const { userRouteApi } = extra;
+		const { data } = await userRouteApi.deleteRoute(id);
+
+		return data;
+	},
+);
+
+export {
+	create,
+	deleteUserRoute,
+	finish,
+	getAllByUserId,
+	getByRouteId,
+	saveUserRoute,
+	start,
+};

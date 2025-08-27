@@ -18,6 +18,7 @@ import { ConstructRoute } from "./pages/construct-route/construct-route.js";
 import { Dashboard } from "./pages/dashboard/dashboard.js";
 import { Explore } from "./pages/explore/explore.js";
 import { Landing } from "./pages/landing/landing.jsx";
+import { ManageCategories } from "./pages/manage-categories/manage-categories.js";
 import { ManageRoutes } from "./pages/manage-routes/manage-routes.js";
 import { PointsOfInterestDetails } from "./pages/points-of-interest-details/points-of-interest-details.js";
 import { Profile } from "./pages/profile/profile.js";
@@ -95,6 +96,16 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 									</ProtectedRoute>
 								),
 								path: AppRoute.MANAGE_ROUTES,
+							},
+							{
+								element: (
+									<ProtectedRoute
+										routePermissions={[PermissionKey.MANAGE_CATEGORIES]}
+									>
+										<ManageCategories />
+									</ProtectedRoute>
+								),
+								path: AppRoute.MANAGE_CATEGORIES,
 							},
 							{
 								element: (

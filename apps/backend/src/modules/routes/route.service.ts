@@ -7,7 +7,11 @@ import {
 	MapboxAPIProfile,
 	type MapboxDirectionsApi,
 } from "~/libs/modules/mapbox/mapbox.js";
-import { type CollectionResult, type Service } from "~/libs/types/types.js";
+import {
+	type CollectionResult,
+	type PaginationMeta,
+	type Service,
+} from "~/libs/types/types.js";
 
 import { type FileService } from "../files/files.service.js";
 import { type PlannedPathResponseDto } from "../planned-paths/libs/types/types.js";
@@ -22,6 +26,7 @@ import {
 	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
+	type RoutePatchResponseDto,
 } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
 import { RouteModel } from "./route.model.js";
@@ -87,7 +92,7 @@ class RouteService implements Service {
 
 	public async create(
 		payload: RouteCreateRequestDto,
-	): Promise<RouteGetByIdResponseDto> {
+	): Promise<RoutePatchResponseDto> {
 		await this.ensurePoisExist(payload.poiIds);
 
 		const formattedPayload = {
@@ -143,22 +148,39 @@ class RouteService implements Service {
 
 	public async findAll(
 		options: null | RouteFindAllOptions,
-	): Promise<CollectionResult<RouteGetAllItemResponseDto>> {
+	): Promise<CollectionResult<RouteGetAllItemResponseDto, PaginationMeta>> {
+		const DEFAULT_PAGE = 1;
+
+		const { page, perPage } = options ?? {};
+
 		if (options?.categories) {
 			options.categories = Array.isArray(options.categories)
 				? options.categories
 				: [options.categories];
 		}
 
-		const items = await this.routesRepository.findAll(options);
+		const { items = [], total = 0 } =
+			await this.routesRepository.findAll(options);
+
+		const totalPages =
+			total === 0 ? DEFAULT_PAGE : Math.ceil(total / (perPage ?? total));
 
 		return {
 			items: items.map((item) => item.toListObject()),
+			meta: {
+				currentPage: page ?? DEFAULT_PAGE,
+				itemsPerPage: perPage ?? total,
+				total,
+				totalPages,
+			},
 		};
 	}
 
-	public async findById(id: number): Promise<RouteGetByIdResponseDto> {
-		const item = await this.routesRepository.findById(id);
+	public async findById(
+		routeId: number,
+		userId?: number,
+	): Promise<RouteGetByIdResponseDto> {
+		const item = await this.routesRepository.findById(routeId, userId);
 
 		if (!item) {
 			throw new RoutesError({
@@ -167,13 +189,13 @@ class RouteService implements Service {
 			});
 		}
 
-		return item.toObject();
+		return item.toDetailsObject();
 	}
 
 	public async patch(
 		id: number,
 		payload: RoutePatchRequestDto,
-	): Promise<RouteGetByIdResponseDto> {
+	): Promise<RoutePatchResponseDto> {
 		const item = await this.routesRepository.patch(id, payload);
 
 		if (!item) {

@@ -1,15 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { DataStatus } from "~/libs/enums/enums.js";
-import { type ValueOf } from "~/libs/types/types.js";
+import { type PaginationMeta, type ValueOf } from "~/libs/types/types.js";
 
 import {
 	type RouteCreateRequestDto,
+	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 } from "./../libs/types/types.js";
 import {
 	create,
 	discardCreateRouteFormData,
+	findAll,
 	getAll,
 	restoreCreateRouteFormData,
 } from "./actions.js";
@@ -17,7 +19,9 @@ import {
 type State = {
 	createRouteFormData: null | Partial<RouteCreateRequestDto>;
 	createStatus: ValueOf<typeof DataStatus>;
+	data: RouteGetAllItemResponseDto[];
 	dataStatus: ValueOf<typeof DataStatus>;
+	meta: null | PaginationMeta;
 	restoreCreateRouteFormStatus: ValueOf<typeof DataStatus>;
 	routes: RouteGetByIdResponseDto[];
 };
@@ -25,7 +29,9 @@ type State = {
 const initialState: State = {
 	createRouteFormData: null,
 	createStatus: DataStatus.IDLE,
+	data: [],
 	dataStatus: DataStatus.IDLE,
+	meta: null,
 	restoreCreateRouteFormStatus: DataStatus.IDLE,
 	routes: [],
 };
@@ -67,10 +73,28 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(discardCreateRouteFormData.fulfilled, (state) => {
 			state.createRouteFormData = null;
 		});
+
+		builder.addCase(findAll.pending, (state) => {
+			state.dataStatus = DataStatus.PENDING;
+		});
+		builder.addCase(findAll.fulfilled, (state, action) => {
+			const { payload } = action;
+
+			state.data = payload.data;
+			state.meta = payload.meta;
+			state.dataStatus = DataStatus.FULFILLED;
+		});
+		builder.addCase(findAll.rejected, (state) => {
+			state.dataStatus = DataStatus.REJECTED;
+		});
 	},
 	initialState,
 	name: "routes",
-	reducers: {},
+	reducers: {
+		resetCreateStatus(state) {
+			state.createStatus = DataStatus.IDLE;
+		},
+	},
 });
 
 export { actions, name, reducer };

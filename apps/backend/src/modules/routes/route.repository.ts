@@ -1,14 +1,17 @@
 import { SortingOrder } from "~/libs/enums/enums.js";
 import {
+	type EntityPagination,
 	type Repository,
 	type TransactionOptions,
 } from "~/libs/types/types.js";
 
 import { type PlannedPathModel } from "../planned-paths/planned-path.model.js";
+import { UserRouteStatus } from "./libs/enums/enums.js";
 import { type RouteFindAllOptions } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
 import { type RouteModel } from "./route.model.js";
 
+const PAGE_NUMBER_OFFSET = 1;
 class RouteRepository implements Repository {
 	private plannedPathModel: typeof PlannedPathModel;
 
@@ -40,6 +43,7 @@ class RouteRepository implements Repository {
 				"id",
 				"name",
 				"description",
+				"created_at",
 				this.routesModel.raw("to_json(distance)::json as distance"),
 				this.routesModel.raw("to_json(duration)::json as duration"),
 				this.routesModel.raw("ST_AsGeoJSON(geometry)::json as geometry"),
@@ -58,11 +62,25 @@ class RouteRepository implements Repository {
 
 	public async findAll(
 		options: null | RouteFindAllOptions,
-	): Promise<RouteEntity[]> {
-		const { categories, latitude, longitude, name } = options ?? {};
+	): Promise<EntityPagination<RouteEntity>> {
+		const { categories, latitude, longitude, name, page, perPage } =
+			options ?? {};
+
+		const hasLocationFilter = longitude !== undefined && latitude !== undefined;
+		const hasPagination = page !== undefined && perPage !== undefined;
 
 		const query = this.routesModel
 			.query()
+			.select([
+				"routes.id",
+				"routes.name",
+				"routes.description",
+				this.routesModel.raw("to_json(distance)::json as distance"),
+				this.routesModel.raw("to_json(duration)::json as duration"),
+				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
+				"routes.created_by_user_id",
+				"routes.created_at as createdAt",
+			])
 			.withGraphFetched("[pois(selectPoiData), images(selectFileData)]")
 			.modifiers({
 				selectFileData(builder) {
@@ -76,53 +94,62 @@ class RouteRepository implements Repository {
 					);
 				},
 			})
-			.select([
-				"routes.id",
-				"routes.name",
-				"routes.description",
-				this.routesModel.raw("to_json(distance)::json as distance"),
-				this.routesModel.raw("to_json(duration)::json as duration"),
-				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
-				"routes.created_by_user_id",
-			])
 			.modify((builder) => {
-				if (options?.name) {
-					builder.whereILike("routes.name", `%${options.name.trim()}%`);
+				if (name) {
+					builder.whereILike("routes.name", `%${name.trim()}%`);
 				}
+
+				if (categories?.length) {
+					builder
+						.joinRelated("categories")
+						.whereIn("categories.key", categories as string[]);
+				}
+
+				if (hasLocationFilter) {
+					builder
+						.joinRelated("pois")
+						.where("pois_join.visit_order", 0)
+						.select(
+							this.routesModel.raw(
+								`ST_Distance(
+									pois.location::geography,
+									ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography
+								) as distance_points`,
+								[longitude, latitude],
+							),
+						)
+						.orderBy("distance_points", SortingOrder.ASC);
+				}
+
+				builder.orderBy("routes.created_at", SortingOrder.DESC);
 			});
 
-		if (name) {
-			query.whereILike("routes.name", `%${name.trim()}%`);
+		if (hasPagination) {
+			const offset = (page - PAGE_NUMBER_OFFSET) * perPage;
+
+			const [total, items] = await Promise.all([
+				query.clone().resultSize(),
+				query.clone().offset(offset).limit(perPage),
+			]);
+
+			return {
+				items: items.map((item) => RouteEntity.initialize(item)),
+				total,
+			};
 		}
 
-		if (latitude !== undefined && longitude !== undefined) {
-			query
-				.joinRelated("pois")
-				.where("pois_join.visit_order", 0)
-				.select(
-					this.routesModel.raw(
-						`ST_Distance(
-							pois.location::geography,
-							ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography
-						) as distance_points`,
-						[longitude, latitude],
-					),
-				)
-				.orderBy("distance_points", SortingOrder.ASC);
-		}
+		const items = await query;
 
-		if (categories?.length) {
-			query
-				.joinRelated("categories")
-				.whereIn("categories.key", categories as string[]);
-		}
-
-		const routes = await query;
-
-		return routes.map((route) => RouteEntity.initializeList(route));
+		return {
+			items: items.map((item) => RouteEntity.initialize(item)),
+			total: items.length,
+		};
 	}
 
-	public async findById(id: number): Promise<null | RouteEntity> {
+	public async findById(
+		routeId: number,
+		userId?: number,
+	): Promise<null | RouteEntity> {
 		const route = await this.routesModel
 			.query()
 			.withGraphFetched("[pois(selectPoi), images(selectFileData)]")
@@ -138,6 +165,22 @@ class RouteRepository implements Repository {
 					);
 				},
 			})
+			.modify((builder) => {
+				if (userId) {
+					builder.withGraphFetched("savedUserRoute(filtered)").modifiers({
+						filtered(builder) {
+							builder
+								.select(
+									"user_routes.id",
+									"user_routes.status",
+									"user_routes.user_id",
+								)
+								.where("user_routes.user_id", userId)
+								.andWhere("user_routes.status", UserRouteStatus.NOT_STARTED);
+						},
+					});
+				}
+			})
 			.select([
 				"routes.id",
 				"routes.name",
@@ -147,7 +190,7 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
 				"routes.created_by_user_id",
 			])
-			.where("routes.id", id)
+			.where("routes.id", routeId)
 			.first();
 
 		if (!route) {

@@ -1,4 +1,5 @@
 .upload-button {
+	min-width: 200px;
 	max-width: max-content;
 }
 
@@ -54,6 +55,7 @@
 .edit-mode-controls {
 	display: flex;
 	gap: 8px;
+	min-width: 200px;
 }
 
 @media (width <=1440px) {
@@ -68,4 +70,19 @@
 		max-width: none;
 		padding: 40px 32px;
 	}
+}
+
+.controls-container {
+	display: flex;
+	column-gap: 16px;
+	align-items: center;
+}
+
+.admin-button-container {
+	width: 100px;
+}
+
+.user-button-container {
+	display: flex;
+	gap: 16px;
 }

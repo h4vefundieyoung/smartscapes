@@ -25,6 +25,7 @@ describe("RouteRepository", () => {
 	let databaseTracker: Tracker;
 
 	const mockRoute = {
+		createdAt: "2024-01-01T00:00:00Z",
 		createdByUserId: 10,
 		description: "A test route description",
 		distance: 1.23,
@@ -52,6 +53,7 @@ describe("RouteRepository", () => {
 	};
 
 	const mockRouteList = {
+		createdAt: mockRoute.createdAt,
 		createdByUserId: mockRoute.createdByUserId,
 		distance: mockRoute.distance,
 		duration: mockRoute.duration,
@@ -121,7 +123,10 @@ describe("RouteRepository", () => {
 
 		const result = await routesRepository.findAll(null);
 
-		assert.deepStrictEqual(result, [mockRouteEntity]);
+		assert.deepStrictEqual(result, {
+			items: [mockRouteEntity],
+			total: 1,
+		});
 	});
 
 	it("findAll should return routes matching search query", async () => {
@@ -141,7 +146,10 @@ describe("RouteRepository", () => {
 
 		const result = await routesRepository.findAll(mockOptions);
 
-		assert.deepStrictEqual(result, [mockRouteEntity]);
+		assert.deepStrictEqual(result, {
+			items: [mockRouteEntity],
+			total: 1,
+		});
 	});
 
 	it("findAll should return empty array if no routes found", async () => {
@@ -151,7 +159,10 @@ describe("RouteRepository", () => {
 
 		const result = await routesRepository.findAll(mockOptions);
 
-		assert.deepStrictEqual(result, []);
+		assert.deepStrictEqual(result, {
+			items: [],
+			total: 0,
+		});
 	});
 
 	it("delete should return true when route deleted", async () => {

@@ -7,7 +7,7 @@ import {
 	UserRouteExeptionMessage,
 	UserRouteStatus,
 } from "./libs/enums/enum.js";
-import { UserRouteError } from "./libs/exeptions/exeptions.js";
+import { UserRouteError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserRouteResponseDto,
 	type UserRouteStatusType,
@@ -49,6 +49,25 @@ class UserRouteService implements Service {
 		const createdRoute = await this.userRouteRepository.create(createdData);
 
 		return createdRoute.toObject();
+	}
+
+	public async deleteSavedRoute(
+		routeId: number,
+		userId: number,
+	): Promise<boolean> {
+		const isDeleted = await this.userRouteRepository.deleteSavedRoute(
+			routeId,
+			userId,
+		);
+
+		if (!isDeleted) {
+			throw new UserRouteError({
+				message: UserRouteExeptionMessage.USER_ROUTE_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return isDeleted;
 	}
 
 	public async finish(payload: {

@@ -1,7 +1,15 @@
 import { type Entity, type LineStringGeometry } from "~/libs/types/types.js";
 
 import { type CategoryEntity } from "../categories/category.entity.js";
-import { type RouteUploadImageResponseDto } from "./libs/types/types.js";
+import {
+	type RouteUploadImageResponseDto,
+	type UserRouteStatusType,
+} from "./libs/types/types.js";
+
+type SavedUserRoute = {
+	id: number;
+	status: UserRouteStatusType;
+};
 
 class RouteEntity implements Entity {
 	private categories: null | ReturnType<CategoryEntity["toObject"]>[];
@@ -28,6 +36,8 @@ class RouteEntity implements Entity {
 		visitOrder: number;
 	}[];
 
+	private savedUserRoute: null | SavedUserRoute;
+
 	private constructor({
 		categories = [],
 		createdByUserId,
@@ -39,6 +49,7 @@ class RouteEntity implements Entity {
 		images,
 		name,
 		pois,
+		savedUserRoute,
 	}: {
 		categories?: ReturnType<CategoryEntity["toObject"]>[];
 		createdByUserId: number;
@@ -54,6 +65,7 @@ class RouteEntity implements Entity {
 			name?: string;
 			visitOrder: number;
 		}[];
+		savedUserRoute: null | SavedUserRoute[];
 	}) {
 		this.categories = categories;
 		this.id = id;
@@ -64,12 +76,13 @@ class RouteEntity implements Entity {
 		this.description = description;
 		this.pois = pois;
 		this.createdByUserId = createdByUserId;
+		this.savedUserRoute = savedUserRoute?.[0] ?? null;
 		this.images = images;
 	}
 
 	public static initialize(data: {
 		createdByUserId: number;
-		description: string;
+		description: null | string;
 		distance: number;
 		duration: number;
 		geometry: LineStringGeometry;
@@ -81,6 +94,7 @@ class RouteEntity implements Entity {
 			name: string;
 			visitOrder: number;
 		}[];
+		savedUserRoute?: SavedUserRoute[];
 	}): RouteEntity {
 		return new RouteEntity({
 			createdByUserId: data.createdByUserId,
@@ -92,6 +106,7 @@ class RouteEntity implements Entity {
 			images: data.images,
 			name: data.name,
 			pois: data.pois,
+			savedUserRoute: data.savedUserRoute ?? null,
 		});
 	}
 
@@ -128,6 +143,7 @@ class RouteEntity implements Entity {
 			images,
 			name,
 			pois,
+			savedUserRoute: null,
 		});
 	}
 
@@ -139,9 +155,10 @@ class RouteEntity implements Entity {
 		geometry,
 		name,
 		pois,
+		savedUserRoute,
 	}: {
 		createdByUserId: number;
-		description: string;
+		description: null | string;
 		distance: number;
 		duration: number;
 		geometry: LineStringGeometry;
@@ -150,6 +167,7 @@ class RouteEntity implements Entity {
 			id: number;
 			visitOrder: number;
 		}[];
+		savedUserRoute?: SavedUserRoute[];
 	}): RouteEntity {
 		return new RouteEntity({
 			createdByUserId,
@@ -161,6 +179,7 @@ class RouteEntity implements Entity {
 			images: [],
 			name,
 			pois,
+			savedUserRoute: savedUserRoute ?? null,
 		});
 	}
 
@@ -179,6 +198,7 @@ class RouteEntity implements Entity {
 			name: string;
 			visitOrder: number;
 		}[];
+		savedUserRoute?: SavedUserRoute[];
 	}): RouteEntity {
 		return new RouteEntity({
 			categories: data.categories,
@@ -191,7 +211,44 @@ class RouteEntity implements Entity {
 			images: data.images,
 			name: data.name,
 			pois: data.pois,
+			savedUserRoute: null,
 		});
+	}
+
+	public toDetailsObject(): {
+		categories: ReturnType<CategoryEntity["toObject"]>[];
+		createdByUserId: number;
+		description: null | string;
+		distance: number;
+		duration: number;
+		geometry: LineStringGeometry;
+		id: number;
+		images: RouteUploadImageResponseDto[];
+		name: string;
+		pois: {
+			id: number;
+			name: string;
+			visitOrder: number;
+		}[];
+		savedUserRoute: null | SavedUserRoute;
+	} {
+		return {
+			categories: this.categories as ReturnType<CategoryEntity["toObject"]>[],
+			createdByUserId: this.createdByUserId,
+			description: this.description,
+			distance: this.distance,
+			duration: this.duration,
+			geometry: this.geometry,
+			id: this.id as number,
+			images: this.images,
+			name: this.name,
+			pois: this.pois as {
+				id: number;
+				name: string;
+				visitOrder: number;
+			}[],
+			savedUserRoute: this.savedUserRoute,
+		};
 	}
 
 	public toListObject(): {
@@ -226,7 +283,7 @@ class RouteEntity implements Entity {
 
 	public toNewObject(): {
 		createdByUserId: number;
-		description: string;
+		description: null | string;
 		distance: number;
 		duration: number;
 		geometry: LineStringGeometry;
@@ -238,7 +295,7 @@ class RouteEntity implements Entity {
 	} {
 		return {
 			createdByUserId: this.createdByUserId,
-			description: this.description as string,
+			description: this.description,
 			distance: this.distance,
 			duration: this.duration,
 			geometry: this.geometry,
@@ -250,7 +307,7 @@ class RouteEntity implements Entity {
 	public toObject(): {
 		categories: ReturnType<CategoryEntity["toObject"]>[];
 		createdByUserId: number;
-		description: string;
+		description: null | string;
 		distance: number;
 		duration: number;
 		geometry: LineStringGeometry;
@@ -266,7 +323,7 @@ class RouteEntity implements Entity {
 		return {
 			categories: this.categories as ReturnType<CategoryEntity["toObject"]>[],
 			createdByUserId: this.createdByUserId,
-			description: this.description as string,
+			description: this.description,
 			distance: this.distance,
 			duration: this.duration,
 			geometry: this.geometry,

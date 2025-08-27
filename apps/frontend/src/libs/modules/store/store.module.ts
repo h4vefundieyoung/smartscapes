@@ -33,6 +33,7 @@ import {
 	routesApi,
 	routesReducer,
 } from "~/modules/routes/routes.js";
+import { userRoutesApi } from "~/modules/user-routes/user-routes.js";
 import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
 
 import { type ExtraArguments, type RootReducer } from "./libs/types/types.js";
@@ -58,6 +59,7 @@ class Store {
 			storage,
 			toastNotifier,
 			userApi,
+			userRoutesApi,
 		};
 	}
 

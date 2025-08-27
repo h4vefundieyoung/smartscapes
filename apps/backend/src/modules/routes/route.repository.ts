@@ -8,6 +8,7 @@ import {
 
 import { CategoryEntity } from "../categories/category.entity.js";
 import { type PlannedPathModel } from "../planned-paths/planned-path.model.js";
+import { UserRouteStatus } from "./libs/enums/enums.js";
 import { type RouteFindAllOptions } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
 import { type RouteModel } from "./route.model.js";
@@ -125,7 +126,10 @@ class RouteRepository implements Repository {
 		return routes.map((route) => RouteEntity.initializeList(route));
 	}
 
-	public async findById(id: number): Promise<null | RouteEntity> {
+	public async findById(
+		routeId: number,
+		userId?: number,
+	): Promise<null | RouteEntity> {
 		const route = await this.routesModel
 			.query()
 			.withGraphFetched("[pois(selectPoi), images(selectFileData), categories]")
@@ -144,6 +148,22 @@ class RouteRepository implements Repository {
 					);
 				},
 			})
+			.modify((builder) => {
+				if (userId) {
+					builder.withGraphFetched("savedUserRoute(filtered)").modifiers({
+						filtered(builder) {
+							builder
+								.select(
+									"user_routes.id",
+									"user_routes.status",
+									"user_routes.user_id",
+								)
+								.where("user_routes.user_id", userId)
+								.andWhere("user_routes.status", UserRouteStatus.NOT_STARTED);
+						},
+					});
+				}
+			})
 			.select([
 				"routes.id",
 				"routes.name",
@@ -153,7 +173,7 @@ class RouteRepository implements Repository {
 				this.routesModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
 				"routes.created_by_user_id",
 			])
-			.where("routes.id", id)
+			.where("routes.id", routeId)
 			.first();
 
 		if (!route) {

@@ -20,7 +20,7 @@ import { RoutesError } from "./libs/exceptions/exceptions.js";
 import {
 	type RouteFindAllOptions,
 	type RouteGetAllItemResponseDto,
-	type RouteGetByIdResponseDto,
+	type RoutePatchResponseDto,
 } from "./libs/types/types.js";
 import { RouteEntity } from "./route.entity.js";
 import { RouteModel } from "./route.model.js";
@@ -110,7 +110,7 @@ describe("RouteService", () => {
 		poiIds: [FIRST_POI_ID, SECOND_POI_ID],
 	};
 
-	const mockRouteIdResponse: RouteGetByIdResponseDto = {
+	const mockRouteIdResponse: RoutePatchResponseDto = {
 		categories: [],
 		createdByUserId: 5,
 		description: "Test route description",
@@ -193,8 +193,11 @@ describe("RouteService", () => {
 		name: "Updated Route",
 	};
 
-	const createMockIdEntity = (data: RouteGetByIdResponseDto): RouteEntity => {
-		return RouteEntity.initialize(data);
+	const createMockIdEntity = (data: RoutePatchResponseDto): RouteEntity => {
+		return RouteEntity.initialize({
+			...data,
+			description: data.description ?? "",
+		});
 	};
 
 	const createMockAllItemEntity = (
@@ -375,7 +378,10 @@ describe("RouteService", () => {
 
 		const result = await routeService.findById(EXISTING_ID);
 
-		assert.deepStrictEqual(result, mockRouteIdResponse);
+		assert.deepStrictEqual(result, {
+			...mockRouteIdResponse,
+			savedUserRoute: null,
+		});
 	});
 
 	it("findById should throw an error when route does not exist", async () => {

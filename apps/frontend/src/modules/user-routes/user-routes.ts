@@ -13,4 +13,3 @@ const userRoutesApi = new UserRoutesApi({
 export { userRoutesApi };
 export { actions } from "./slices/user-routes.js";
 export { userRoutesReducer } from "./slices/user-routes.js";
-export { userRoutesDetailsReducer } from "./slices/user-routes.js";

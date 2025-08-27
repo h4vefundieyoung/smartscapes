@@ -31,7 +31,6 @@ import {
 } from "~/modules/routes/routes.js";
 import {
 	userRoutesApi,
-	userRoutesDetailsReducer,
 	userRoutesReducer,
 } from "~/modules/user-routes/user-routes.js";
 import { userApi, reducer as usersReducer } from "~/modules/users/users.js";
@@ -84,7 +83,6 @@ class Store {
 				routeDetails: routeDetailsReducer,
 				routes: routesReducer,
 				userRoutes: userRoutesReducer,
-				userRoutesDetails: userRoutesDetailsReducer,
 				users: usersReducer,
 			},
 		});

@@ -77,7 +77,14 @@ class RouteService implements Service {
 			});
 		}
 
-		const coordinates = items.map(({ location }) => location.coordinates);
+		const sortedPois = items.toSorted((a, b) => {
+			const indexA = poiIds.indexOf(a.id);
+			const indexB = poiIds.indexOf(b.id);
+
+			return indexA - indexB;
+		});
+
+		const coordinates = sortedPois.map(({ location }) => location.coordinates);
 
 		const route = await this.mapboxDirectionApi.getRoute(
 			MapboxAPIProfile.WALKING,
@@ -224,11 +231,11 @@ class RouteService implements Service {
 	}
 
 	private async ensurePoisExist(pois: number[]): Promise<void> {
-		const filteredPois = await this.pointsOfInterestService.findAll({
+		const { items } = await this.pointsOfInterestService.findAll({
 			ids: pois,
 		});
 
-		if (pois.length !== filteredPois.items.length) {
+		if (pois.length !== items.length) {
 			throw new RoutesError({
 				message: RoutesExceptionMessage.POI_NOT_FOUND,
 				status: HTTPCode.NOT_FOUND,

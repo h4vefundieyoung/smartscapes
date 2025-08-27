@@ -197,9 +197,8 @@ describe("RouteService", () => {
 	type RouteInitArgument = Parameters<typeof RouteEntity.initialize>[0];
 
 	const createMockIdEntity = (data: RoutePatchResponseDto): RouteEntity => {
-		// 2) Типізуємо payload явно як RouteInitArg — це “рве” ланцюг any.
 		const payload: RouteInitArgument = {
-			createdAt: data.createdAt ?? MOCK_CREATED_AT, // строго string
+			createdAt: data.createdAt ?? MOCK_CREATED_AT,
 			createdByUserId: data.createdByUserId,
 			description: data.description ?? "",
 			distance: data.distance,
@@ -209,7 +208,6 @@ describe("RouteService", () => {
 			images: data.images,
 			name: data.name,
 			pois: data.pois,
-			// savedUserRoute — опціонально
 		};
 
 		return RouteEntity.initialize(payload);

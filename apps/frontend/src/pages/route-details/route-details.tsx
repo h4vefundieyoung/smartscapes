@@ -7,7 +7,6 @@ import {
 	Select,
 	TextArea,
 } from "~/libs/components/components.js";
-import { TagsContainer } from "~/libs/components/tags-container/tag-container.js";
 import { DataStatus, PermissionKey } from "~/libs/enums/enums.js";
 import { checkHasPermission } from "~/libs/helpers/helpers.js";
 import {
@@ -34,6 +33,7 @@ import {
 	PointOfInterestSection,
 	RouteReviewsSection,
 } from "./libs/components/components.js";
+import { TagsContainer } from "./libs/components/tags-container/tag-container.js";
 import { ROUTE_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
 import { UserRouteStatus } from "./libs/enums/enums.js";
 import styles from "./styles.module.css";

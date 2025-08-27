@@ -1,4 +1,4 @@
-import { Tag } from "../tag/tag.js";
+import { Tag } from "../../../../../libs/components/tag/tag.js";
 import styles from "./styles.module.css";
 
 type Properties = {

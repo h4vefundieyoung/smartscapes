@@ -17,7 +17,7 @@ const UserHistoryCard = ({ route }: CardProperties): React.JSX.Element => {
 			className={styles["card"]}
 			to={configureString(AppRoute.ROUTES_$ID, { id: route.id.toString() })}
 		>
-			<h1 className={styles["label"]}>{route.routeName}</h1>
+			<h2 className={styles["label"]}>{route.routeName}</h2>
 			<MapProvider routeLine={routeLine} />
 		</Link>
 	);

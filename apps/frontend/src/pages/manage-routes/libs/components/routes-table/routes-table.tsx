@@ -52,7 +52,7 @@ const RoutesTable = (): React.JSX.Element => {
 		validationSchema: routesCreateValidationSchema,
 	});
 
-	const plannedRouteId = searchParameters.get("plannedRouteId");
+	const plannedRouteId = Number(searchParameters.get("plannedRouteId"));
 
 	const saveFormData = useCallback(async () => {
 		const currentFormData = getValues();
@@ -105,7 +105,7 @@ const RoutesTable = (): React.JSX.Element => {
 			const submitData: RouteCreateRequestDto = {
 				...data,
 				createdByUserId: authenticatedUser.id,
-				plannedPathId: Number(plannedRouteId),
+				plannedPathId: plannedRouteId,
 			};
 
 			void dispatch(routesActions.create(submitData));
@@ -190,7 +190,7 @@ const RoutesTable = (): React.JSX.Element => {
 				isOpen={isModalOpen}
 				onClose={handleModalClose}
 				onSubmit={handleRouteSubmit}
-				plannedRouteId={plannedRouteId ? Number(plannedRouteId) : undefined}
+				plannedRouteId={plannedRouteId || undefined}
 			/>
 			<div className={styles["table-container"]}>
 				<Table

@@ -81,7 +81,6 @@ class RoutesApi extends BaseHTTPApi {
 		const response = await this.load<
 			APIResponse<RouteGetAllItemResponseDto[], PaginationMeta>
 		>(this.getFullEndpoint(RoutesApiPath.ROOT, {}), {
-			contentType: ContentType.JSON,
 			hasAuth: true,
 			method: "GET",
 			query: payload,

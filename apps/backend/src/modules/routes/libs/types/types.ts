@@ -6,5 +6,7 @@ export {
 	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
+	type RoutePatchResponseDto,
 	type RouteUploadImageResponseDto,
+	type UserRouteStatusType,
 } from "@smartscapes/shared";

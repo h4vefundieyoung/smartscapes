@@ -11,6 +11,12 @@ const NAVIGATION_ITEMS_GROUPS: NavigationItemsGroup[] = [
 				label: "Manage routes",
 				pagePermissions: [PermissionKey.MANAGE_ROUTES],
 			},
+			{
+				href: AppRoute.MANAGE_CATEGORIES,
+				icon: "category",
+				label: "Manage categories",
+				pagePermissions: [PermissionKey.MANAGE_CATEGORIES],
+			},
 		],
 		name: "Administration",
 	},

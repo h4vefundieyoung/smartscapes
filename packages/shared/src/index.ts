@@ -43,6 +43,7 @@ export {
 	categoryCreateValidationSchema,
 	CategoryExceptionMessage,
 	type CategoryGetAllItemResponseDto,
+	type CategoryGetAllQuery,
 } from "./modules/categories/categories.js";
 export {
 	FileFolderName,

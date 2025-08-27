@@ -11,6 +11,8 @@ type SavedUserRoute = {
 };
 
 class RouteEntity implements Entity {
+	private createdAt: null | string;
+
 	private createdByUserId: number;
 
 	private description: null | string;
@@ -36,6 +38,7 @@ class RouteEntity implements Entity {
 	private savedUserRoute: null | SavedUserRoute;
 
 	private constructor({
+		createdAt,
 		createdByUserId,
 		description,
 		distance,
@@ -47,6 +50,7 @@ class RouteEntity implements Entity {
 		pois,
 		savedUserRoute,
 	}: {
+		createdAt: null | string;
 		createdByUserId: number;
 		description: null | string;
 		distance: number;
@@ -62,6 +66,7 @@ class RouteEntity implements Entity {
 		}[];
 		savedUserRoute: null | SavedUserRoute[];
 	}) {
+		this.createdAt = createdAt;
 		this.id = id;
 		this.distance = distance;
 		this.duration = duration;
@@ -75,6 +80,7 @@ class RouteEntity implements Entity {
 	}
 
 	public static initialize(data: {
+		createdAt: string;
 		createdByUserId: number;
 		description: null | string;
 		distance: number;
@@ -91,6 +97,7 @@ class RouteEntity implements Entity {
 		savedUserRoute?: SavedUserRoute[];
 	}): RouteEntity {
 		return new RouteEntity({
+			createdAt: data.createdAt,
 			createdByUserId: data.createdByUserId,
 			description: data.description,
 			distance: data.distance,
@@ -105,6 +112,7 @@ class RouteEntity implements Entity {
 	}
 
 	public static initializeList({
+		createdAt,
 		createdByUserId,
 		distance,
 		duration,
@@ -114,6 +122,7 @@ class RouteEntity implements Entity {
 		name,
 		pois,
 	}: {
+		createdAt: string;
 		createdByUserId: number;
 		distance: number;
 		duration: number;
@@ -128,6 +137,7 @@ class RouteEntity implements Entity {
 		}[];
 	}): RouteEntity {
 		return new RouteEntity({
+			createdAt,
 			createdByUserId,
 			description: null,
 			distance,
@@ -164,6 +174,7 @@ class RouteEntity implements Entity {
 		savedUserRoute?: SavedUserRoute[];
 	}): RouteEntity {
 		return new RouteEntity({
+			createdAt: null,
 			createdByUserId,
 			description,
 			distance,
@@ -178,6 +189,7 @@ class RouteEntity implements Entity {
 	}
 
 	public toDetailsObject(): {
+		createdAt: string;
 		createdByUserId: number;
 		description: null | string;
 		distance: number;
@@ -194,6 +206,7 @@ class RouteEntity implements Entity {
 		savedUserRoute: null | SavedUserRoute;
 	} {
 		return {
+			createdAt: this.createdAt as string,
 			createdByUserId: this.createdByUserId,
 			description: this.description,
 			distance: this.distance,
@@ -212,6 +225,7 @@ class RouteEntity implements Entity {
 	}
 
 	public toListObject(): {
+		createdAt: string;
 		createdByUserId: number;
 		distance: number;
 		duration: number;
@@ -226,6 +240,7 @@ class RouteEntity implements Entity {
 		}[];
 	} {
 		return {
+			createdAt: this.createdAt as string,
 			createdByUserId: this.createdByUserId,
 			distance: this.distance,
 			duration: this.duration,
@@ -265,6 +280,7 @@ class RouteEntity implements Entity {
 	}
 
 	public toObject(): {
+		createdAt: string;
 		createdByUserId: number;
 		description: null | string;
 		distance: number;
@@ -280,6 +296,7 @@ class RouteEntity implements Entity {
 		}[];
 	} {
 		return {
+			createdAt: this.createdAt as string,
 			createdByUserId: this.createdByUserId,
 			description: this.description,
 			distance: this.distance,

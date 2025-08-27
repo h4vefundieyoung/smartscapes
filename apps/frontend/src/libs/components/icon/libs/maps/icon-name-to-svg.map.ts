@@ -4,6 +4,7 @@ import Bell from "~/assets/images/icons/bell.svg?react";
 import Bookmark from "~/assets/images/icons/bookmark.svg?react";
 import CaretDown from "~/assets/images/icons/caret-down.svg?react";
 import CaretUp from "~/assets/images/icons/caret-up.svg?react";
+import Category from "~/assets/images/icons/category.svg?react";
 import Check from "~/assets/images/icons/check.svg?react";
 import Close from "~/assets/images/icons/close.svg?react";
 import Dashboard from "~/assets/images/icons/dashboard.svg?react";
@@ -32,6 +33,7 @@ const iconNameToSvg: Record<
 	bookmark: Bookmark,
 	caretDown: CaretDown,
 	caretUp: CaretUp,
+	category: Category,
 	check: Check,
 	close: Close,
 	dashboard: Dashboard,

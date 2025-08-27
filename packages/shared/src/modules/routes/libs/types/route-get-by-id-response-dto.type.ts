@@ -3,6 +3,7 @@ import { type FileUploadResponseDto } from "../../../files/libs/types/types.js";
 import { type UserRouteResponseDto } from "../../../user-routes/user-routes.js";
 
 type RouteGetByIdResponseDto = {
+	createdAt: string;
 	createdByUserId: number;
 	description: null | string;
 	distance: number;

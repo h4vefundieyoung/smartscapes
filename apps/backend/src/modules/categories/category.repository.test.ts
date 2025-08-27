@@ -14,6 +14,7 @@ describe("CategoryRepository", () => {
 	const mockCategoryRepositoryCategory: Parameters<
 		typeof CategoryEntity.initialize
 	>[0] = {
+		createdAt: "2024-01-01T00:00:00Z",
 		id: 1,
 		key: "popular",
 		name: "Popular",
@@ -52,9 +53,12 @@ describe("CategoryRepository", () => {
 
 		databaseTracker.on.select("categories").response(routeCategoryEntities);
 
-		const result = await route.findAll();
+		const result = await route.findAll(null);
 
-		assert.deepStrictEqual(result, routeCategoryEntities);
+		assert.deepStrictEqual(result, {
+			items: routeCategoryEntities,
+			total: routeCategoryEntities.length,
+		});
 	});
 
 	it("findByName should return category entity by name", async () => {

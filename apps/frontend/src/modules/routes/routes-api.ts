@@ -5,6 +5,7 @@ import { type Storage } from "~/libs/modules/storage/storage.js";
 import {
 	type APIResponse,
 	type FileUploadResponseDto,
+	type PaginationMeta,
 } from "~/libs/types/types.js";
 
 import { RoutesApiPath } from "./libs/enums/enums.js";
@@ -14,6 +15,7 @@ import {
 	type RouteConstructRequestDto,
 	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
+	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type UploadImageActionPayload,
 } from "./libs/types/types.js";
@@ -69,6 +71,20 @@ class RoutesApi extends BaseHTTPApi {
 				method: "DELETE",
 			},
 		);
+
+		return await response.json();
+	}
+
+	public async findAll(
+		payload: RouteFindAllOptions,
+	): Promise<APIResponse<RouteGetAllItemResponseDto[], PaginationMeta>> {
+		const response = await this.load<
+			APIResponse<RouteGetAllItemResponseDto[], PaginationMeta>
+		>(this.getFullEndpoint(RoutesApiPath.ROOT, {}), {
+			hasAuth: true,
+			method: "GET",
+			query: payload,
+		});
 
 		return await response.json();
 	}

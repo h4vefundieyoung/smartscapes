@@ -73,11 +73,40 @@ const routesSearchQuery = z
 				message: RoutesValidationMessage.NAME_MAXIMUM_LENGTH,
 			})
 			.optional(),
+		page: z
+			.string()
+			.trim()
+			.transform(parseToFloat)
+			.pipe(
+				z
+					.number()
+					.min(RoutesValidationRule.MIN_PAGE, RoutesValidationMessage.MIN_PAGE),
+			)
+			.optional(),
+		perPage: z
+			.string()
+			.trim()
+			.transform(parseToFloat)
+			.pipe(
+				z
+					.number()
+					.min(
+						RoutesValidationRule.MIN_PER_PAGE,
+						RoutesValidationMessage.MIN_PER_PAGE,
+					),
+			)
+			.optional(),
 	})
 	.refine(
 		({ latitude, longitude }) => Boolean(latitude) === Boolean(longitude),
 		{
 			message: PointsOfInterestValidationMessage.COORDS_REQUIRED_TOGETHER,
+		},
+	)
+	.refine(
+		({ page, perPage }) => (page !== undefined) === (perPage !== undefined),
+		{
+			message: RoutesValidationMessage.PAGINATION_PARAMS_REQUIRED_TOGETHER,
 		},
 	);
 

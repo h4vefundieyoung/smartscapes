@@ -10,6 +10,7 @@ import {
 import { UserRouteError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserRouteFilter,
+	type UserRouteGetAllOptions,
 	type UserRouteResponseDto,
 	type UserRouteStatusType,
 } from "./libs/types/type.js";
@@ -112,13 +113,13 @@ class UserRouteService implements Service {
 		return updatedRoute.toObject();
 	}
 
-	public async getAllByUserIdStatusType(
+	public async getAllByUserId(
 		userId: number,
-		status?: UserRouteStatusType,
+		options: UserRouteGetAllOptions,
 	): Promise<UserRouteResponseDto[]> {
 		const userRoutes = await this.userRouteRepository.findByFilter({
 			userId,
-			...(status ? { status } : {}),
+			...options,
 		});
 
 		return userRoutes.map((item) => item.toObject());

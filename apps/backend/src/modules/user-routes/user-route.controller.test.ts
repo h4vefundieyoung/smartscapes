@@ -169,11 +169,11 @@ describe("UserRouteController", () => {
 	describe("getAll", () => {
 		it("should get all user routes and return 200 status with array of routes", async () => {
 			const options: APIHandlerOptions<{
-				query?: { status?: UserRouteStatusType };
+				query: { status: UserRouteStatusType };
 			}> = {
 				body: undefined,
 				params: undefined,
-				query: undefined,
+				query: { status: "active" },
 				user: {
 					avatarUrl: null,
 					email: "",

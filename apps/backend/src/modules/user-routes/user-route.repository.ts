@@ -86,8 +86,9 @@ class UserRouteRepository implements Repository {
 		const userRoutes = await this.userRouteModel
 			.query()
 			.where(filters)
+			.skipUndefined()
+			.orderBy("user_routes.id", SortingOrder.DESC)
 			.withGraphJoined("routes")
-			.orderBy("id", SortingOrder.DESC)
 			.select([
 				"user_routes.id as id",
 				"routeId",

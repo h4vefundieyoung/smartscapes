@@ -4,7 +4,7 @@ import {
 	UserDetails,
 } from "~/pages/profile/libs/components/components.js";
 
-import { ProfileTabItemKey } from "./profile-tab-item-key.constant.js";
+import { ProfileTabItemKey } from "../enums/enums.js";
 
 const PROFILE_TABS: TabItem[] = [
 	{

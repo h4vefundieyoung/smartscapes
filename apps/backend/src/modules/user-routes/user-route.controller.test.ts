@@ -66,7 +66,7 @@ describe("UserRouteController", () => {
 		create: () => Promise.resolve(mockUserRouteResponse),
 		deleteSavedRoute: () => Promise.resolve(true),
 		finish: () => Promise.resolve(mockCompletedUserRoute),
-		getAllByUserIdStatusType: () =>
+		getAllByUserId: () =>
 			Promise.resolve([
 				mockUserRouteResponse,
 				mockActiveUserRoute,

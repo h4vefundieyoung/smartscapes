@@ -106,6 +106,7 @@ describe("UserRouteRepository", () => {
 		patch: () => typeof mockPatchReturningWrapper;
 		returning: () => typeof mockWhereReturning;
 		select: () => typeof mockSelectReturning;
+		skipUndefined: () => typeof mockWhereWrapper;
 		withGraphJoined: () => typeof mockWithGraphJoinedWrapper;
 	} = {
 		execute: (): Promise<never[]> => Promise.resolve([]),
@@ -113,6 +114,7 @@ describe("UserRouteRepository", () => {
 		patch: (): typeof mockPatchReturningWrapper => mockPatchReturningWrapper,
 		returning: (): typeof mockWhereReturning => mockWhereReturning,
 		select: (): typeof mockSelectReturning => mockSelectReturning,
+		skipUndefined: (): typeof mockWhereWrapper => mockWhereWrapper,
 		withGraphJoined: (): typeof mockWithGraphJoinedWrapper =>
 			mockWithGraphJoinedWrapper,
 	};

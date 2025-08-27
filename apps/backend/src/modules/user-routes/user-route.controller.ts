@@ -134,7 +134,7 @@ class UserRouteController extends BaseController {
 		this.addRoute({
 			handler: this.getAll.bind(this),
 			method: "GET",
-			path: UserRouteApiPath.$ID,
+			path: UserRouteApiPath.ROOT,
 		});
 
 		this.addRoute({

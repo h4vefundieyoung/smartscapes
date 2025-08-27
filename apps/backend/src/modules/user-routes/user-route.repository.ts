@@ -29,7 +29,7 @@ class UserRouteRepository implements Repository {
 			.query()
 			.insert(insertData)
 			.returning([
-				"id",
+				"user_routes.id",
 				"routeId",
 				"userId",
 				"status",

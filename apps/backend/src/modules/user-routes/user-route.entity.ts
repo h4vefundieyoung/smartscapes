@@ -110,7 +110,6 @@ class UserRouteEntity implements Entity {
 		completedAt: null | string;
 		plannedGeometry: LineStringGeometry;
 		routeId: number;
-		routeName: string;
 		startedAt: null | string;
 		status: UserRouteStatusType;
 		userId: number;
@@ -120,7 +119,6 @@ class UserRouteEntity implements Entity {
 			completedAt: this.completedAt,
 			plannedGeometry: this.plannedGeometry,
 			routeId: this.routeId,
-			routeName: this.routeName,
 			startedAt: this.startedAt,
 			status: this.status as UserRouteStatusType,
 			userId: this.userId,

@@ -2,7 +2,7 @@ import { type EntityPagination, type Repository } from "~/libs/types/types.js";
 
 import { CategoryEntity } from "./category.entity.js";
 import { type CategoryModel } from "./category.model.js";
-import { type PaginationQuery } from "./libs/types/types.js";
+import { type CategoryGetAllQuery as CategoryGetAllQueryOptions } from "./libs/types/types.js";
 
 const PAGE_NUMBER_OFFSET = 1;
 
@@ -26,7 +26,7 @@ class CategoryRepository implements Repository {
 	}
 
 	public async findAll(
-		options: null | PaginationQuery,
+		options: CategoryGetAllQueryOptions | null,
 	): Promise<EntityPagination<CategoryEntity>> {
 		const { page, perPage } = options ?? {};
 

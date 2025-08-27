@@ -13,7 +13,7 @@ import { changeStringCase } from "./libs/helpers/helpers.js";
 import {
 	type CategoryCreateRequestDto,
 	type CategoryGetAllItemResponseDto,
-	type PaginationQuery,
+	type CategoryGetAllQuery as CategoryGetAllQueryOptions,
 } from "./libs/types/types.js";
 
 class CategoryService implements Service {
@@ -47,7 +47,7 @@ class CategoryService implements Service {
 	}
 
 	public async findAll(
-		options: null | PaginationQuery,
+		options: CategoryGetAllQueryOptions | null,
 	): Promise<CollectionResult<CategoryGetAllItemResponseDto, PaginationMeta>> {
 		const DEFAULT_PAGE = 1;
 

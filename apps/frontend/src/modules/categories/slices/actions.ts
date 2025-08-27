@@ -9,7 +9,7 @@ import {
 import {
 	type CategoryCreateRequestDto,
 	type CategoryGetAllItemResponseDto,
-	type PaginationQuery,
+	type CategoryGetAllQuery,
 } from "../libs/types/types.js";
 import { name as sliceName } from "./categories.slice.js";
 
@@ -28,7 +28,7 @@ const create = createAsyncThunk<
 
 const getAll = createAsyncThunk<
 	APIResponse<CategoryGetAllItemResponseDto[], PaginationMeta>,
-	PaginationQuery,
+	CategoryGetAllQuery,
 	AsyncThunkConfig
 >(`${sliceName}/get-all`, async (payload, { extra }) => {
 	const { categoriesApi } = extra;

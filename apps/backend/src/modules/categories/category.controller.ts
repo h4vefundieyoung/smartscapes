@@ -14,7 +14,7 @@ import { CategoriesApiPath } from "./libs/enums/enums.js";
 import {
 	type CategoryCreateRequestDto,
 	type CategoryGetAllItemResponseDto,
-	type PaginationQuery,
+	type CategoryGetAllQuery as CategoryGetAllQueryParameters,
 } from "./libs/types/types.js";
 import { categoryCreateValidationSchema } from "./libs/validation-schemas/validation-schemas.js";
 
@@ -183,7 +183,7 @@ class CategoryController extends BaseController {
 
 	public async findAll(
 		options: APIHandlerOptions<{
-			query?: PaginationQuery;
+			query?: CategoryGetAllQueryParameters;
 		}>,
 	): Promise<
 		APIHandlerResponse<CategoryGetAllItemResponseDto[], PaginationMeta>

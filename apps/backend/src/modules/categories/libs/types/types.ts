@@ -1,5 +1,5 @@
 export {
 	type CategoryCreateRequestDto,
 	type CategoryGetAllItemResponseDto,
-	type PaginationQuery,
+	type CategoryGetAllQuery,
 } from "@smartscapes/shared";

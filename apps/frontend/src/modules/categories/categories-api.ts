@@ -8,7 +8,7 @@ import { CategoriesApiPath } from "./libs/enums/enums.js";
 import {
 	type CategoryCreateRequestDto,
 	type CategoryGetAllItemResponseDto,
-	type PaginationQuery,
+	type CategoryGetAllQuery,
 } from "./libs/types/types.js";
 
 type Constructor = {
@@ -38,7 +38,7 @@ class CategoriesApi extends BaseHTTPApi {
 	}
 
 	public async getAll(
-		payload: PaginationQuery,
+		payload: CategoryGetAllQuery,
 	): Promise<APIResponse<CategoryGetAllItemResponseDto[], PaginationMeta>> {
 		const response = await this.load<
 			APIResponse<CategoryGetAllItemResponseDto[], PaginationMeta>

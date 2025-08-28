@@ -5,6 +5,7 @@ import {
 	Input,
 	Loader,
 	RouteCard,
+	RouteMapPopup,
 } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
@@ -13,10 +14,12 @@ import {
 	useDebouncedFunction,
 	useEffect,
 	useInfiniteScroll,
+	useMapClient,
 	useMemo,
 	useRef,
 	useWatch,
 } from "~/libs/hooks/hooks.js";
+import { type MapMarker } from "~/libs/modules/map-client/libs/types/types.js";
 import {
 	type RouteFindAllOptions,
 	type RouteGetAllItemResponseDto,
@@ -50,6 +53,67 @@ const RoutesPanel = ({
 }: Properties): React.JSX.Element => {
 	const hasLocationError = locationDataStatus === DataStatus.REJECTED;
 	const isRoutesLoading = routesDataStatus === DataStatus.PENDING;
+
+	const mapClient = useMapClient();
+	const currentMarkerReference = useRef<MapMarker | null>(null);
+
+	const clearCurrentMarker = useCallback((): void => {
+		if (currentMarkerReference.current) {
+			currentMarkerReference.current.remove();
+			currentMarkerReference.current = null;
+		}
+	}, []);
+
+	useEffect(() => {
+		return (): void => {
+			clearCurrentMarker();
+		};
+	}, [clearCurrentMarker]);
+
+	const createMarkerWithPopup = useCallback(
+		(
+			coordinates: [number, number],
+			route: RouteGetAllItemResponseDto,
+		): void => {
+			const newMarker = mapClient.addMarker({ coordinates });
+
+			if (newMarker) {
+				newMarker.addPopup(<RouteMapPopup route={route} />);
+				currentMarkerReference.current = newMarker;
+			} else {
+				currentMarkerReference.current = null;
+			}
+		},
+		[mapClient],
+	);
+
+	const navigateToRoute = useCallback(
+		(route: RouteGetAllItemResponseDto): void => {
+			const [longitude, latitude] = route.geometry.coordinates[0] ?? [];
+
+			if (!longitude || !latitude) {
+				return;
+			}
+
+			clearCurrentMarker();
+			mapClient.flyTo([longitude, latitude]);
+			createMarkerWithPopup([longitude, latitude], route);
+		},
+		[mapClient, clearCurrentMarker, createMarkerWithPopup],
+	);
+
+	const handleRouteCardClick = useCallback(
+		(routeId: number) => (): void => {
+			const route = routes.find((route) => route.id === routeId);
+
+			if (!route?.geometry.coordinates.length) {
+				return;
+			}
+
+			navigateToRoute(route);
+		},
+		[routes, navigateToRoute],
+	);
 
 	const { control, errors } = useAppForm<RouteFindAllOptions>({
 		defaultValues: {
@@ -151,13 +215,24 @@ const RoutesPanel = ({
 				<ul className={styles["list"]}>
 					{routes.map((route) => (
 						<RouteCard
+							id={route.id}
 							imageUrl={
 								route.images.length > 0 ? (route.images[0]?.url ?? null) : null
 							}
 							key={`${String(route.id)}-${route.name}`}
 							name={route.name}
+							onClick={handleRouteCardClick(route.id)}
 						/>
 					))}
+					{hasMore && (
+						<li className={styles["load-more-trigger"]} ref={elementReference}>
+							{isLoadingMore && (
+								<div className={styles["loader-container"]}>
+									<Loader />
+								</div>
+							)}
+						</li>
+					)}
 				</ul>
 			</>
 		);
@@ -168,40 +243,36 @@ const RoutesPanel = ({
 		routes,
 		routesError,
 		searchValue,
+		handleRouteCardClick,
+		hasMore,
+		isLoadingMore,
+		elementReference,
 	]);
 
 	return (
 		<div className={styles["container"]}>
-			<h3 className={styles["title"]}>Explore routes</h3>
+			<div className={styles["sticky-header"]}>
+				<h3 className={styles["title"]}>Explore routes</h3>
 
-			<div className={styles["search-container"]}>
-				<Input
-					control={control}
-					errors={errors}
-					iconLeft={{
-						label: "Search",
-						name: "search",
-						onClick: undefined,
-					}}
-					name="name"
-					type="text"
-				/>
+				<div className={styles["search-container"]}>
+					<Input
+						control={control}
+						errors={errors}
+						iconLeft={{
+							label: "Search",
+							name: "search",
+							onClick: undefined,
+						}}
+						name="name"
+						type="text"
+					/>
+				</div>
 			</div>
 
 			{content}
 
 			{routes.length > 0 && (
 				<>
-					{hasMore && (
-						<div className={styles["load-more-trigger"]} ref={elementReference}>
-							{isLoadingMore && (
-								<div className={styles["loader-container"]}>
-									<Loader />
-								</div>
-							)}
-						</div>
-					)}
-
 					{loadMoreFailed && (
 						<div className={styles["load-more-button-container"]}>
 							<Button

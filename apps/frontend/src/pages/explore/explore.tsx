@@ -101,21 +101,20 @@ const Explore = (): React.JSX.Element => {
 
 	return (
 		<main className={styles["main"]}>
-			<div className={styles["routes-container"]}>
-				<RoutesPanel
-					hasMore={hasMore}
-					isLoadingMore={isLoadingMore}
-					loadMoreFailed={loadMoreFailed}
-					locationDataStatus={locationDataStatus}
-					onLoadMore={handleLoadMore}
-					onSearch={handleSearch}
-					routes={routes}
-					routesDataStatus={routesDataStatus}
-					routesError={routesError}
-				/>
-			</div>
 			<div className={styles["container"]}>
-				<MapProvider markers={mockPOIs} />
+				<MapProvider markers={mockPOIs}>
+					<RoutesPanel
+						hasMore={hasMore}
+						isLoadingMore={isLoadingMore}
+						loadMoreFailed={loadMoreFailed}
+						locationDataStatus={locationDataStatus}
+						onLoadMore={handleLoadMore}
+						onSearch={handleSearch}
+						routes={routes}
+						routesDataStatus={routesDataStatus}
+						routesError={routesError}
+					/>
+				</MapProvider>
 			</div>
 		</main>
 	);

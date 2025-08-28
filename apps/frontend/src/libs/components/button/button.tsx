@@ -12,7 +12,7 @@ type Properties = {
 	onClick?: () => void;
 	to?: string;
 	type?: "button" | "submit";
-	variant?: "ghost" | "outlined" | "outlined-danger" | "primary" | "secondary";
+	variant?: "outlined" | "outlined-danger" | "primary";
 };
 
 const Button = ({
@@ -24,30 +24,22 @@ const Button = ({
 	type = "submit",
 	variant = "primary",
 }: Properties): React.JSX.Element => {
-	const isGhostVariant = variant === "ghost";
 	const buttonClass = combineClassNames(
 		styles["button"],
+		icon && styles["button-icon"],
 		variant === "outlined" && styles["button-outlined"],
-		variant === "outlined-danger" && styles["outlined-danger"],
+		variant === "outlined-danger" && styles["button-outlined-danger"],
 		variant === "primary" && styles["button-primary"],
-		variant === "secondary" && styles["button-secondary"],
-		isGhostVariant && styles["button-ghost"],
 	);
 
 	const buttonContent = useMemo(
 		() => (
 			<>
 				<span className={icon && "visually-hidden"}>{label}</span>
-				{icon && (
-					<span
-						className={isGhostVariant ? styles["icon-pressed"] : styles["icon"]}
-					>
-						<Icon height={20} name={icon} width={20} />
-					</span>
-				)}
+				{icon && <Icon height={24} name={icon} width={24} />}
 			</>
 		),
-		[icon, label, isGhostVariant],
+		[icon, label],
 	);
 
 	if (to) {

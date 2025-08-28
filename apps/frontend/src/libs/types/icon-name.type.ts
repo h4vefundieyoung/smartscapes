@@ -3,6 +3,7 @@ type IconName =
 	| "arrowDown"
 	| "bell"
 	| "bookmark"
+	| "bookmarkOff"
 	| "caretDown"
 	| "caretUp"
 	| "category"

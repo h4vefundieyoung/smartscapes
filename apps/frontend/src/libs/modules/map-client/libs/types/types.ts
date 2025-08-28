@@ -7,5 +7,7 @@ export {
 	type MapOptions,
 	type MarkerOptions,
 	type NavigationControlOptions,
+	type PopupOptions,
 	type ScaleControlOptions,
 } from "mapbox-gl";
+export { type ReactElement } from "react";

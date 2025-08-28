@@ -26,6 +26,7 @@ export { PointOfInterestCard } from "./point-of-interest-card/point-of-interest-
 export { ProtectedRoute } from "./protected-route/protected-route.js";
 export { ReviewCard } from "./review-card/review-card.js";
 export { RouteCard } from "./route-card/route-card.js";
+export { RouteMapPopup } from "./route-map-popup/route-map-popup.js";
 export { RouterProvider } from "./router-provider/router-provider.js";
 export { Select } from "./select/select.js";
 export { TabContainer } from "./tab-container/tab-container.js";

@@ -83,11 +83,11 @@ const RouteDetails = (): React.JSX.Element => {
 		({ routeDetails }) => routeDetails.saveRouteStatus,
 	);
 
-	const isSaved = route?.savedUserRoute?.status === UserRouteStatus.NOT_STARTED;
-
 	const navigate = useAppNavigate();
 
 	const isAuthorized = Boolean(user);
+
+	const isSaved = route?.savedUserRoute?.status === UserRouteStatus.NOT_STARTED;
 
 	const isSaving = saveStatus === DataStatus.PENDING;
 

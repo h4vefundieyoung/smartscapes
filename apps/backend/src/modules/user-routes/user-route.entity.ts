@@ -61,6 +61,7 @@ class UserRouteEntity implements Entity {
 		this.startedAt = startedAt;
 		this.status = status;
 		this.userId = userId;
+		this.routeName = routeName;
 	}
 
 	public static initialize(data: {

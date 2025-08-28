@@ -45,16 +45,15 @@ const Explore = (): React.JSX.Element => {
 
 	return (
 		<main className={styles["main"]}>
-			<div className={styles["routes-container"]}>
-				<RoutesPanel
-					locationDataStatus={locationDataStatus}
-					routes={routes}
-					routesDataStatus={routesDataStatus}
-					routesError={routesError}
-				/>
-			</div>
 			<div className={styles["container"]}>
-				<MapProvider markers={mockPOIs} />
+				<MapProvider markers={mockPOIs}>
+					<RoutesPanel
+						locationDataStatus={locationDataStatus}
+						routes={routes}
+						routesDataStatus={routesDataStatus}
+						routesError={routesError}
+					/>
+				</MapProvider>
 			</div>
 		</main>
 	);

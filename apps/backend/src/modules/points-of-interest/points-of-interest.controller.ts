@@ -200,13 +200,13 @@ class PointsOfInterestController extends BaseController {
 	 *               type: object
 	 *               properties:
 	 *                 data:
-	 *                   $ref: '#/components/schemas/PointsOfInterestGetByIdResponseDto'
+	 *                   $ref: '#/components/schemas/PointsOfInterestGetAllItemResponseDto'
 	 */
 	public async create(
 		options: APIHandlerOptions<{
 			body: PointsOfInterestCreateRequestDto;
 		}>,
-	): Promise<APIHandlerResponse<PointsOfInterestGetByIdResponseDto>> {
+	): Promise<APIHandlerResponse<PointsOfInterestGetAllItemResponseDto>> {
 		const { body } = options;
 		const pointOfInterest = await this.pointsOfInterestService.create(body);
 

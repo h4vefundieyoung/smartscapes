@@ -20,7 +20,7 @@ describe("UserRouteEntity", () => {
 		id: 1,
 		plannedGeometry: mockGeometry,
 		routeId: 7,
-		routeName: "route",
+		routeName: "Landscape alley",
 		startedAt: null,
 		status: UserRouteStatus.NOT_STARTED,
 		userId: 1,
@@ -50,7 +50,7 @@ describe("UserRouteEntity", () => {
 				distance: 1000,
 				plannedGeometry: mockGeometry,
 				routeId: 7,
-				routeName: "route",
+				routeName: "Landscape alley",
 				status: UserRouteStatus.NOT_STARTED,
 				userId: 1,
 			};

@@ -16,6 +16,8 @@ export {
 	type LineStringGeometry,
 	type PaginationMeta,
 	type PointGeometry,
+	type RouteGetAllItemResponseDto,
+	type UserRouteResponseDto,
 	type ValidationSchema,
 	type ValueOf,
 } from "@smartscapes/shared";

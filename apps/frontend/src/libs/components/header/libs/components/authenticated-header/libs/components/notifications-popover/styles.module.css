@@ -5,20 +5,20 @@
 
 .button {
 	display: flex;
-	padding: 12px;
+	padding: 8px;
 	color: var(--color-stroke-strong);
 	cursor: pointer;
 	background-color: transparent;
 	border: none;
-	fill: none;
-	stroke-width: 2;
-	stroke-linecap: round;
-	stroke-linejoin: round;
+	border-radius: 8px;
+	transition:
+		background-color 0.2s ease,
+		color 0.2s ease;
 }
 
 .button:hover {
+	color: var(--color-brand-1000);
 	background-color: var(--color-fill-weak);
-	border-radius: 4px;
 }
 
 .content {

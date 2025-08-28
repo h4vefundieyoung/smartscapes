@@ -42,7 +42,7 @@ const { actions, name, reducer } = createSlice({
 			state.createStatus = DataStatus.PENDING;
 		});
 		builder.addCase(create.fulfilled, (state, action) => {
-			state.routes.push(action.payload.data);
+			state.data.unshift(action.payload.data);
 			state.createStatus = DataStatus.FULFILLED;
 		});
 		builder.addCase(create.rejected, (state) => {

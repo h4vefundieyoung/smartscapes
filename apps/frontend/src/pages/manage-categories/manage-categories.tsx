@@ -90,14 +90,16 @@ const ManageCategories = (): React.JSX.Element => {
 				onSubmit={handleSubmit}
 			/>
 
-			<Table
-				columns={columns}
-				data={categories}
-				isLoading={categoriesStatus === DataStatus.PENDING}
-				paginationSettings={paginationCategories}
-				totalItems={total}
-				totalPages={totalPages}
-			/>
+			<div className={styles["table-container"]}>
+				<Table
+					columns={columns}
+					data={categories}
+					isLoading={categoriesStatus === DataStatus.PENDING}
+					paginationSettings={paginationCategories}
+					totalItems={total}
+					totalPages={totalPages}
+				/>
+			</div>
 		</main>
 	);
 };

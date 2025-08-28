@@ -21,13 +21,16 @@ import {
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
+import { type Coordinates, type RouteLine } from "~/libs/types/types.js";
 import { actions as categoriesActions } from "~/modules/categories/categories.js";
 import { type ReviewRequestDto } from "~/modules/reviews/reviews.js";
 import {
 	actions as routeActions,
+	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
 import { actions as userRouteActions } from "~/modules/user-routes/user-routes.js";
+import { getGoogleMapsPointUrl } from "~/pages/route-details/libs/helpers/helpers.js";
 
 import { NotFound } from "../not-found/not-found.js";
 import {
@@ -92,6 +95,16 @@ const RouteDetails = (): React.JSX.Element => {
 	);
 
 	const fileInputReference = useRef<HTMLInputElement | null>(null);
+
+	const handleOpenGoogleMaps = useCallback(() => {
+		if (route) {
+			const [firstPoi] = route.pois;
+			const [lng, lat] = (firstPoi as RouteGetByIdResponseDto["pois"][0])
+				.location.coordinates;
+			const url = getGoogleMapsPointUrl(lat, lng);
+			window.open(url, "_blank");
+		}
+	}, [route]);
 
 	const handleFileUpload = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -214,6 +227,23 @@ const RouteDetails = (): React.JSX.Element => {
 		},
 		[dispatch],
 	);
+	const routeGeometry = route?.geometry;
+
+	const routeLine = useMemo<null | RouteLine>(() => {
+		return routeGeometry && routeId
+			? { geometry: routeGeometry, id: routeId }
+			: null;
+	}, [routeId, routeGeometry]);
+
+	const markers = useMemo<{ coordinates: Coordinates }[]>(() => {
+		if (!route) {
+			return [];
+		}
+
+		return route.pois.map((poi) => ({
+			coordinates: poi.location.coordinates,
+		}));
+	}, [route]);
 
 	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
 		return (
@@ -232,6 +262,7 @@ const RouteDetails = (): React.JSX.Element => {
 	}
 
 	const { description, id, images, name, pois } = route;
+	const [routeStartPoint] = pois;
 
 	const hasDescription = Boolean(description);
 
@@ -246,41 +277,44 @@ const RouteDetails = (): React.JSX.Element => {
 							label="Title"
 							name="name"
 						/>
-						<div className={styles["edit-mode-controls"]}>
+						<div className={styles["controls-container"]}>
 							<Button label="Save" onClick={handlePatchRequest} />
-							<Button label="Cancel" onClick={handleCancel} />
+							<Button
+								label="Cancel"
+								onClick={handleCancel}
+								variant="outlined-danger"
+							/>
 						</div>
 					</>
 				) : (
 					<>
 						<h1 className={styles["label"]}>{name}</h1>
 						<div className={styles["controls-container"]}>
-							{hasEditPermissions && (
-								<div className={styles["admin-button-container"]}>
-									<Button
-										label="Edit"
-										onClick={handleToggleEditMode}
-										variant="outlined"
-									/>
-								</div>
+							{isAuthorized && <Button label="Start" onClick={handleStart} />}
+							{routeStartPoint && (
+								<Button
+									icon="location"
+									label="Location"
+									onClick={handleOpenGoogleMaps}
+								/>
 							)}
 							{isAuthorized && (
-								<div className={styles["user-button-container"]}>
-									<Button
-										label="Start"
-										onClick={handleStart}
-										variant="outlined"
-									/>
-									<Button
-										icon="bookmark"
-										isDisabled={isSaving}
-										label="save route"
-										onClick={
-											isSaved ? handleDeleteUserRoute : handleSaveUserRoute
-										}
-										variant={isSaved ? "ghost" : "primary"}
-									/>
-								</div>
+								<Button
+									icon={isSaved ? "bookmark" : "bookmarkOff"}
+									isDisabled={isSaving}
+									label="Save route"
+									onClick={
+										isSaved ? handleDeleteUserRoute : handleSaveUserRoute
+									}
+								/>
+							)}
+							{hasEditPermissions && (
+								<Button
+									icon="edit"
+									label="Edit"
+									onClick={handleToggleEditMode}
+									variant="outlined"
+								/>
 							)}
 						</div>
 					</>
@@ -289,15 +323,15 @@ const RouteDetails = (): React.JSX.Element => {
 			<FeatureGallery
 				slides={[
 					{
-						content: <MapProvider />,
+						content: (
+							<div className={styles["map-container"]}>
+								<MapProvider markers={markers} routeLine={routeLine} />
+							</div>
+						),
 					},
 					...images.map((image) => ({
 						content: (
-							<img
-								alt="point of interest"
-								className={styles["image"]}
-								src={image.url}
-							/>
+							<img alt="Route" className={styles["image"]} src={image.url} />
 						),
 						...(isEditMode && {
 							onDelete: (): void => {
@@ -307,6 +341,24 @@ const RouteDetails = (): React.JSX.Element => {
 					})),
 				]}
 			/>
+			{isEditMode && (
+				<>
+					<input
+						accept="image/*"
+						className="visually-hidden"
+						onChange={handleFileUpload}
+						ref={fileInputReference}
+						type="file"
+					/>
+					<div className={styles["upload-image-button-container"]}>
+						<Button
+							label="Upload image"
+							onClick={handleTriggerFileUpload}
+							variant="outlined"
+						/>
+					</div>
+				</>
+			)}
 			{isEditMode ? (
 				<Select
 					control={control}
@@ -324,30 +376,16 @@ const RouteDetails = (): React.JSX.Element => {
 				)
 			)}
 			{isEditMode ? (
-				<>
-					<input
-						accept="image/*"
-						onChange={handleFileUpload}
-						ref={fileInputReference}
-						style={{ display: "none" }}
-						type="file"
-					/>
-					<div className={styles["upload-button"]}>
-						<Button
-							label="Upload image"
-							onClick={handleTriggerFileUpload}
-							variant="outlined"
-						/>
-					</div>
-					<TextArea
-						control={control}
-						errors={errors}
-						label="Description"
-						name="description"
-					/>
-				</>
+				<TextArea
+					control={control}
+					errors={errors}
+					label="Description"
+					name="description"
+				/>
 			) : (
-				hasDescription && <p className={styles["description"]}>{description}</p>
+				<p className={styles["description"]}>
+					{hasDescription ? description : "No description available."}
+				</p>
 			)}
 
 			<PointOfInterestSection pointOfInterests={pois} />

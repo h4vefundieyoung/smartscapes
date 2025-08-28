@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.66.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.66.0...v1.66.1) (2025-08-28)
+
+
+### Bug Fixes
+
+* **frontend:** dashboard routes history ss-581 ([#583](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/583)) ([b4e0348](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/b4e03485825dab912df783b522516de45f94bbf1))
+
+## [1.66.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.65.0...v1.66.0) (2025-08-28)
+
+
+### Features
+
+* **frontend/shared:** add small ui adjustments and improvements ss-1 ([#584](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/584)) ([8cc897d](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/8cc897d5bf6d472d09eb07856d9fdeac539f70c9))
+* **frontend:** synchronize explore routes list with the map ss-472 ([#554](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/554)) ([8575b86](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/8575b860c29c78ad8aa9e2fc2459611efc93fbb6))
+
+## [1.65.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.64.0...v1.65.0) (2025-08-28)
+
+
+### Features
+
+* **frontend:** add constructed route to the map ss-574 ([#578](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/578)) ([d280b47](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/d280b472022744f892b1d8e1366ce879d781b7f3))
+
+## [1.64.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.63.0...v1.64.0) (2025-08-28)
+
+
+### Features
+
+* **frontend/backend:** route-history ss-508 ([#562](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/562)) ([2f2c68b](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2f2c68b4bbed641b2247a711639396e639418f54))
+* **frontend:** add get directions to the route button ss-509 ([#561](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/561)) ([b8bcd18](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/b8bcd1814aadf972c2f4638e8fe35dc8bb36e4a1))
+
 ## [1.63.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/v1.62.0...v1.63.0) (2025-08-27)
 
 

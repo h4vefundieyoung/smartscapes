@@ -1,13 +1,21 @@
-.container {
-	width: 100%;
+.label {
+	margin: 0;
+}
+
+.text {
+	gap: 8px;
+}
+
+.description {
+	color: var(--color-text-weak);
 }
 
 .components-container {
 	display: flex;
 	flex-direction: column;
-	gap: 5rem;
-	align-items: center;
+	gap: 48px;
 	justify-content: space-between;
+	padding: 48px 32px;
 }
 
 .carousel-container {

@@ -26,6 +26,7 @@ const RouteReviewsSection = ({
 	routeId,
 }: Properties): React.JSX.Element => {
 	const [isCreateReviewOpen, setIsCreateReviewOpen] = useState<boolean>(false);
+	const hasReviews = items.length > 0;
 
 	const handleModalToggle = useCallback(() => {
 		setIsCreateReviewOpen((previous) => !previous);
@@ -44,14 +45,23 @@ const RouteReviewsSection = ({
 			<div className={styles["header"]}>
 				<h2 className={styles["title"]}>Reviews</h2>
 				{isAuthenticatedUser && (
-					<Button label="Leave review" onClick={handleModalToggle} />
+					<div>
+						<Button label="Leave review" onClick={handleModalToggle} />
+					</div>
 				)}
 			</div>
-			<ul className={styles["list"]}>
-				{items.map((review) => (
-					<ReviewCard key={review.id} review={review} />
-				))}
-			</ul>
+			{hasReviews && (
+				<ul className={styles["list"]}>
+					{items.map((review) => (
+						<ReviewCard key={review.id} review={review} />
+					))}
+				</ul>
+			)}
+			{!hasReviews && (
+				<p className={styles["empty-placeholder"]}>
+					No reviews yet. Be the first to leave a review!
+				</p>
+			)}
 			<CreateReviewModal
 				isOpen={isCreateReviewOpen}
 				onClose={handleModalToggle}

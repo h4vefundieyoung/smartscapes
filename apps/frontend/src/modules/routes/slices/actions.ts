@@ -34,7 +34,7 @@ import { name as routeDetailsSliceName } from "./route-details.slice.js";
 import { name as routesSliceName } from "./routes.slice.js";
 
 const create = createAsyncThunk<
-	APIResponse<RouteGetByIdResponseDto>,
+	APIResponse<RouteGetAllItemResponseDto>,
 	RouteCreateRequestDto,
 	AsyncThunkConfig
 >(`${routesSliceName}/create`, async (payload, { extra }) => {

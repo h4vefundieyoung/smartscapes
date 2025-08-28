@@ -27,7 +27,7 @@ class PointsOfInterestService implements Service {
 
 	public async create(
 		payload: PointsOfInterestCreateRequestDto,
-	): Promise<PointsOfInterestGetByIdResponseDto> {
+	): Promise<PointsOfInterestGetAllItemResponseDto> {
 		await this.ensureNameIsUnique(payload.name);
 
 		const { description, location, name } = payload;
@@ -40,7 +40,7 @@ class PointsOfInterestService implements Service {
 			}),
 		);
 
-		return item.toDetailsObject();
+		return item.toListObject();
 	}
 
 	public async delete(id: number): Promise<boolean> {

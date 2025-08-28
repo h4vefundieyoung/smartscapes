@@ -13,9 +13,6 @@ const routesUpdate = z
 		description: z
 			.string()
 			.trim()
-			.min(RoutesValidationRule.DESCRIPTION_MINIMUM_LENGTH, {
-				message: RoutesValidationMessage.DESCRIPTION_MINIMUM_LENGTH,
-			})
 			.max(RoutesValidationRule.DESCRIPTION_MAXIMUM_LENGTH, {
 				message: RoutesValidationMessage.DESCRIPTION_MAXIMUM_LENGTH,
 			})

@@ -177,7 +177,7 @@ const RoutesTable = (): React.JSX.Element => {
 				<h2 className={styles["title"]}>Routes</h2>
 				<div>
 					<Button
-						label="Create new route"
+						label="Create route"
 						onClick={handleModalOpen}
 						type="button"
 					/>
@@ -190,7 +190,7 @@ const RoutesTable = (): React.JSX.Element => {
 				isOpen={isModalOpen}
 				onClose={handleModalClose}
 				onSubmit={handleRouteSubmit}
-				plannedRouteId={plannedRouteId || undefined}
+				plannedRouteId={plannedRouteId}
 			/>
 			<div className={styles["table-container"]}>
 				<Table

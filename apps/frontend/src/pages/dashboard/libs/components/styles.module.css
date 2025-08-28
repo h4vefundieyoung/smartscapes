@@ -1,6 +1,9 @@
 .label {
 	margin: 0 0 12px;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	text-align: start;
+	white-space: nowrap;
 }
 
 .card {
@@ -23,14 +26,22 @@
 	width: 100%;
 }
 
-@media (width <=991px) {
+@media (width <=1024px) {
 	.cards-wrapper {
 		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.card {
+		max-width: 330px;
 	}
 }
 
 @media (width <=768px) {
 	.cards-wrapper {
 		grid-template-columns: 1fr;
+	}
+
+	.card {
+		max-width: 350px;
 	}
 }

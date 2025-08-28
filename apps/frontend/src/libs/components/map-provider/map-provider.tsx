@@ -54,10 +54,10 @@ const MapProvider = ({
 		client.addNavigationControl();
 		client.addScaleControl();
 
-		if (!center) {
+		if (!center && !routeLine) {
 			client.addGeolocateControl();
 		}
-	}, [center]);
+	}, [center, routeLine]);
 
 	useEffect(() => {
 		const client = mapClientReference.current;
@@ -81,6 +81,12 @@ const MapProvider = ({
 		const client = mapClientReference.current;
 
 		client.renderRoute(routeLine);
+
+		const coords = routeLine.geometry.coordinates as Coordinates[] | undefined;
+
+		if (coords && coords.length > 0) {
+			client.fitToCoordinates(coords);
+		}
 	}, [isLoaded, routeLine]);
 
 	return (

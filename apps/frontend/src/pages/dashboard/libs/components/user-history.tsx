@@ -10,7 +10,7 @@ import { actions as userRoutesActions } from "~/modules/user-routes/user-routes.
 import styles from "./styles.module.css";
 import { UserHistoryCard } from "./user-history-card.js";
 
-const UserHistory = (): React.JSX.Element => {
+const UserHistory = (): null | React.JSX.Element => {
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
@@ -28,7 +28,7 @@ const UserHistory = (): React.JSX.Element => {
 	}
 
 	if (finishedUserRoutes.length === 0) {
-		return <></>;
+		return null;
 	}
 
 	const cards = finishedUserRoutes.map((route) => {

@@ -6,6 +6,7 @@ import { HTTPCode } from "~/libs/modules/http/http.js";
 import { type Logger } from "~/libs/modules/logger/logger.js";
 
 import {
+	type UserRouteDeleteParameters,
 	type UserRouteFinishRequestDto,
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
@@ -61,6 +62,7 @@ describe("UserRouteController", () => {
 
 	const mockUserRouteService = {
 		create: () => Promise.resolve(mockUserRouteResponse),
+		deleteSavedRoute: () => Promise.resolve(true),
 		finish: () => Promise.resolve(mockCompletedUserRoute),
 		getAllByUserId: () =>
 			Promise.resolve([
@@ -68,6 +70,7 @@ describe("UserRouteController", () => {
 				mockActiveUserRoute,
 				mockCompletedUserRoute,
 			]),
+		getRouteByFilter: () => Promise.resolve(mockUserRouteResponse),
 		start: () => Promise.resolve(mockActiveUserRoute),
 	} as unknown as UserRouteService;
 
@@ -161,13 +164,13 @@ describe("UserRouteController", () => {
 		});
 	});
 
-	describe("getAllByUserId", () => {
+	describe("getAll", () => {
 		it("should get all user routes and return 200 status with array of routes", async () => {
 			const options: APIHandlerOptions = {
 				user: { id: 1 },
 			} as APIHandlerOptions;
 
-			const result = await userRouteController.getAllByUserId(options);
+			const result = await userRouteController.getAll(options);
 
 			assert.strictEqual(result.status, HTTPCode.OK);
 			assert.strictEqual(Array.isArray(result.payload.data), true);
@@ -194,6 +197,48 @@ describe("UserRouteController", () => {
 				completedRoute.completedAt,
 				"2025-08-21T16:38:11.183Z",
 			);
+		});
+	});
+
+	describe("getByRouteId", () => {
+		it("should get user route by route ID and return 200 status", async () => {
+			const options: APIHandlerOptions<{
+				query: UserRouteQueryRequestDto;
+			}> = {
+				query: { routeId: 7 },
+				user: { id: 1 },
+			} as APIHandlerOptions<{
+				query: UserRouteQueryRequestDto;
+			}>;
+
+			const result = await userRouteController.getByRouteId(options);
+
+			assert.strictEqual(result.status, HTTPCode.OK);
+			assert.deepStrictEqual(result.payload.data, mockUserRouteResponse);
+			assert.strictEqual(result.payload.data.routeId, 7);
+			assert.strictEqual(result.payload.data.userId, 1);
+			assert.strictEqual(result.payload.data.status, "not_started");
+		});
+	});
+
+	describe("delete", () => {
+		it("should delete user route", async () => {
+			const parameters: UserRouteDeleteParameters = {
+				id: 1,
+			};
+
+			const options: APIHandlerOptions<{
+				params: UserRouteDeleteParameters;
+			}> = {
+				params: parameters,
+			} as APIHandlerOptions<{
+				params: UserRouteDeleteParameters;
+			}>;
+
+			const response = await userRouteController.delete(options);
+
+			assert.equal(response.status, HTTPCode.OK);
+			assert.equal(response.payload.data, true);
 		});
 	});
 });

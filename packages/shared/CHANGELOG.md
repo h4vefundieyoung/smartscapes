@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.40.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.39.0...@smartscapes/shared-v1.40.0) (2025-08-27)
+
+
+### Features
+
+* **frontend/backend/shared:** add an ability to assign category to routes ss-496 ([#551](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/551)) ([23fadeb](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/23fadebf1d097e3ee81ee21d5e1b7fd128d502a8))
+
+## [1.39.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.38.0...@smartscapes/shared-v1.39.0) (2025-08-27)
+
+
+### Features
+
+* **frontend:** user route navigate ss-501 ([#558](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/558)) ([8d56411](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/8d56411cea39997ded2c8a0545397df9d28638ff))
+
+## [1.38.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.37.0...@smartscapes/shared-v1.38.0) (2025-08-27)
+
+
+### Features
+
+* **frontend/backend/shared:** add routes table ss-504 ([#563](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/563)) ([5847400](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/5847400dbd4f5625a3fd4a7488871500c9f151ff))
+* **frontend/backend:** add categories table ss-505 ([#566](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/566)) ([8ee4139](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/8ee413964c9a8041ff38169779193e7dbf5340c2))
+
+## [1.37.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.36.0...@smartscapes/shared-v1.37.0) (2025-08-27)
+
+
+### Features
+
+* **backend/frontend/shared:** implement user bookmarks feature ss-497 ([#552](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/552)) ([c4d5e13](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c4d5e1375611810c114a451aa83bbe00824605f7))
+
 ## [1.36.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.35.0...@smartscapes/shared-v1.36.0) (2025-08-26)
 
 

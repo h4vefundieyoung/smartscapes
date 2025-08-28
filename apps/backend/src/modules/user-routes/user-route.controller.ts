@@ -10,11 +10,13 @@ import { type UserAuthResponseDto } from "~/modules/users/users.js";
 
 import { UserRouteApiPath } from "./libs/enums/enum.js";
 import {
+	type UserRouteDeleteParameters,
 	type UserRouteFinishRequestDto,
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
 } from "./libs/types/type.js";
 import {
+	userRouteDeleteValidationSchema,
 	userRouteFinishValidationSchema,
 	userRouteQueryValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
@@ -130,9 +132,27 @@ class UserRouteController extends BaseController {
 		});
 
 		this.addRoute({
-			handler: this.getAllByUserId.bind(this),
+			handler: this.getAll.bind(this),
 			method: "GET",
-			path: UserRouteApiPath.ROOT,
+			path: UserRouteApiPath.$ID,
+		});
+
+		this.addRoute({
+			handler: this.delete.bind(this),
+			method: "DELETE",
+			path: UserRouteApiPath.$ID,
+			validation: {
+				params: userRouteDeleteValidationSchema,
+			},
+		});
+
+		this.addRoute({
+			handler: this.getByRouteId.bind(this),
+			method: "GET",
+			path: UserRouteApiPath.GET,
+			validation: {
+				query: userRouteQueryValidationSchema,
+			},
 		});
 	}
 
@@ -200,6 +220,67 @@ class UserRouteController extends BaseController {
 		return {
 			payload: { data: createdRoute },
 			status: HTTPCode.CREATED,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /user-routes/{id}:
+	 *   delete:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - User route
+	 *     summary: Delete saved user route
+	 *     description: Deletes a route that was previously saved by the user.
+	 *     parameters:
+	 *       - in: path
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: string
+	 *     responses:
+	 *       200:
+	 *         description: Route deleted successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 data:
+	 *                   type: boolean
+	 *                   example: true
+	 *       401:
+	 *         description: Unauthorized - Authentication required
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 error:
+	 *                   type: object
+	 *                   properties:
+	 *                     message:
+	 *                       type: string
+	 *                       example: Unauthorized access
+	 */
+
+	public async delete({
+		params,
+		user,
+	}: APIHandlerOptions<{ params: UserRouteDeleteParameters }>): Promise<
+		APIHandlerResponse<boolean>
+	> {
+		const routeId = Number(params.id);
+
+		const isDeleted = await this.userRouteService.deleteSavedRoute(
+			routeId,
+			user?.id as number,
+		);
+
+		return {
+			payload: { data: isDeleted },
+			status: HTTPCode.OK,
 		};
 	}
 
@@ -344,7 +425,7 @@ class UserRouteController extends BaseController {
 	 *                       type: "LineString"
 	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
 	 */
-	public async getAllByUserId(
+	public async getAll(
 		options: APIHandlerOptions,
 	): Promise<APIHandlerResponse<UserRouteResponseDto[]>> {
 		const { user } = options;
@@ -354,6 +435,73 @@ class UserRouteController extends BaseController {
 
 		return {
 			payload: { data: userRoutes },
+			status: HTTPCode.OK,
+		};
+	}
+
+	/**
+	 * @swagger
+	 * /user-routes/get:
+	 *   get:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - User Routes
+	 *     summary: Get user route by route ID
+	 *     description: Get a specific user route by route ID for the authenticated user. User ID is derived from JWT token.
+	 *     parameters:
+	 *       - in: query
+	 *         name: routeId
+	 *         required: true
+	 *         schema:
+	 *           type: integer
+	 *         description: ID of the route to retrieve
+	 *         example: 7
+	 *     responses:
+	 *       200:
+	 *         description: User route retrieved successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *               properties:
+	 *                 payload:
+	 *                   type: object
+	 *                   properties:
+	 *                     data:
+	 *                       $ref: '#/components/schemas/UserRouteResponseDto'
+	 *             example:
+	 *               payload:
+	 *                 data:
+	 *                   id: 1
+	 *                   routeId: 7
+	 *                   userId: 1
+	 *                   status: "active"
+	 *                   startedAt: "2025-08-21T16:37:51.437Z"
+	 *                   completedAt: null
+	 *                   actualGeometry:
+	 *                     type: "LineString"
+	 *                     coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                   plannedGeometry:
+	 *                     type: "LineString"
+	 *                     coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 */
+	public async getByRouteId(
+		options: APIHandlerOptions<{
+			query: UserRouteQueryRequestDto;
+		}>,
+	): Promise<APIHandlerResponse<UserRouteResponseDto>> {
+		const { query, user } = options;
+		const { routeId } = query;
+		const { id: userId } = user as UserAuthResponseDto;
+
+		const userRoute = await this.userRouteService.getRouteByFilter({
+			routeId,
+			userId,
+		});
+
+		return {
+			payload: { data: userRoute },
 			status: HTTPCode.OK,
 		};
 	}
@@ -405,6 +553,7 @@ class UserRouteController extends BaseController {
 	 *                     type: "LineString"
 	 *                     coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
 	 */
+
 	public async start(
 		options: APIHandlerOptions<{
 			query: UserRouteQueryRequestDto;

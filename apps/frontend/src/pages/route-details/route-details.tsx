@@ -4,55 +4,93 @@ import {
 	Input,
 	Loader,
 	MapProvider,
+	Select,
 	TextArea,
 } from "~/libs/components/components.js";
-import { DataStatus, PermissionKey } from "~/libs/enums/enums.js";
-import { checkHasPermission } from "~/libs/helpers/helpers.js";
+import { AppRoute, DataStatus, PermissionKey } from "~/libs/enums/enums.js";
+import { checkHasPermission, configureString } from "~/libs/helpers/helpers.js";
 import {
 	useAppDispatch,
 	useAppForm,
+	useAppNavigate,
 	useAppSelector,
 	useCallback,
 	useEffect,
+	useMemo,
 	useParams,
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
+import { actions as categoriesActions } from "~/modules/categories/categories.js";
 import { type ReviewRequestDto } from "~/modules/reviews/reviews.js";
 import {
 	actions as routeActions,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
+import { actions as userRouteActions } from "~/modules/user-routes/user-routes.js";
 
 import { NotFound } from "../not-found/not-found.js";
 import {
 	PointOfInterestSection,
 	RouteReviewsSection,
 } from "./libs/components/components.js";
+import { TagsContainer } from "./libs/components/tags-container/tag-container.js";
 import { ROUTE_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
+import { UserRouteStatus } from "./libs/enums/enums.js";
 import styles from "./styles.module.css";
 
 const RouteDetails = (): React.JSX.Element => {
 	const [isEditMode, setIsEditMode] = useState<boolean>(false);
-	const route = useAppSelector(({ routeDetails }) => routeDetails.route);
-	const user = useAppSelector(({ auth }) => auth.authenticatedUser);
+
+	const { user } = useAppSelector(({ auth }) => ({
+		user: auth.authenticatedUser,
+	}));
+	const { route } = useAppSelector(({ routeDetails }) => ({
+		route: routeDetails.route,
+	}));
+	const { categories } = useAppSelector(({ categories }) => ({
+		categories: categories.categories,
+	}));
+
+	const dispatch = useAppDispatch();
+	const { id: routeId } = useParams<{ id: string }>();
 	const dataStatus = useAppSelector(
 		({ routeDetails }) => routeDetails.dataStatus,
 	);
-
+	const isRouteCreated = useAppSelector(
+		({ userRouteDetails }) =>
+			userRouteDetails.createStatus === DataStatus.FULFILLED,
+	);
 	const reviews = useAppSelector(({ routeDetails }) => routeDetails.reviews);
-	const isAuthenticatedUser = Boolean(user);
-	const { control, errors, getValues, handleReset } =
+
+	const { control, errors, getValues, handleReset, handleValueSet } =
 		useAppForm<RoutePatchRequestDto>({
 			defaultValues: ROUTE_FORM_DEFAULT_VALUES,
 		});
-	const dispatch = useAppDispatch();
-	const { id: routeId } = useParams<{ id: string }>();
+	const categoriesOptions = useMemo(() => {
+		const options = categories.map((category) => ({
+			label: category.name,
+			value: category.id,
+		}));
+
+		return options;
+	}, [categories]);
+
+	const saveStatus = useAppSelector(
+		({ routeDetails }) => routeDetails.saveRouteStatus,
+	);
+
+	const navigate = useAppNavigate();
+
+	const isAuthorized = Boolean(user);
+	const isSaved = route?.savedUserRoute?.status === UserRouteStatus.NOT_STARTED;
+	const isSaving = saveStatus === DataStatus.PENDING;
 
 	const hasEditPermissions = Boolean(
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
 	);
+
 	const fileInputReference = useRef<HTMLInputElement | null>(null);
 
 	const handleFileUpload = useCallback(
@@ -79,13 +117,17 @@ const RouteDetails = (): React.JSX.Element => {
 		setIsEditMode((isEditMode) => !isEditMode);
 	}, []);
 
+	const handleStart = useCallback(() => {
+		void dispatch(userRouteActions.create({ routeId: Number(routeId) }));
+	}, [dispatch, routeId]);
+
 	const handleResetFormValues = useCallback(() => {
 		if (!route) {
 			return;
 		}
 
 		handleReset({
-			description: route.description,
+			description: route.description ?? "",
 			name: route.name,
 		});
 	}, [handleReset, route]);
@@ -97,16 +139,49 @@ const RouteDetails = (): React.JSX.Element => {
 
 	const handlePatchRequest = useCallback(() => {
 		if (route) {
-			const { description, name } = getValues();
+			const { categories, description, name } = getValues();
 			void dispatch(
 				routeActions.patch({
 					id: route.id,
-					payload: { description, name },
+					payload: { categories, description, name },
 				}),
 			);
 			setIsEditMode(false);
 		}
 	}, [dispatch, setIsEditMode, route, getValues]);
+
+	useEffect(() => {
+		void dispatch(routeActions.getById(Number(routeId)));
+	}, [dispatch, routeId]);
+
+	useEffect(() => {
+		if (isEditMode) {
+			void dispatch(categoriesActions.getAll());
+		}
+	}, [isEditMode, dispatch]);
+
+	useEffect(() => {
+		if (route && isEditMode) {
+			handleValueSet("name", route.name);
+			handleValueSet("description", route.description ?? "");
+			handleValueSet(
+				"categories",
+				route.categories.map((category) => category.id),
+			);
+		}
+	}, [route, handleValueSet, isEditMode]);
+
+	const handleSaveUserRoute = useCallback(() => {
+		if (route?.id) {
+			void dispatch(userRouteActions.saveUserRoute(route.id));
+		}
+	}, [route?.id, dispatch]);
+
+	const handleDeleteUserRoute = useCallback(() => {
+		if (route?.savedUserRoute?.id) {
+			void dispatch(userRouteActions.deleteUserRoute(route.savedUserRoute.id));
+		}
+	}, [route?.savedUserRoute?.id, dispatch]);
 
 	const handleDeleteImage = useCallback(
 		(id: number) => {
@@ -116,16 +191,22 @@ const RouteDetails = (): React.JSX.Element => {
 	);
 
 	useEffect(() => {
-		void dispatch(routeActions.getById(Number(routeId)));
-	}, [dispatch, routeId]);
-
-	useEffect(() => {
 		handleResetFormValues();
 	}, [handleResetFormValues]);
 
 	useEffect(() => {
 		void dispatch(routeActions.getReviews({ routeId: Number(routeId) }));
 	}, [dispatch, routeId]);
+
+	useEffect(() => {
+		if (isRouteCreated) {
+			navigate(
+				configureString(AppRoute.USER_ROUTES_$ROUTE_ID_MAP, {
+					routeId: String(routeId),
+				}),
+			);
+		}
+	}, [isRouteCreated, navigate, routeId, route]);
 
 	const handleCreateReview = useCallback(
 		(payload: ReviewRequestDto): void => {
@@ -155,94 +236,128 @@ const RouteDetails = (): React.JSX.Element => {
 	const hasDescription = Boolean(description);
 
 	return (
-		<>
-			<main className={styles["container"]}>
-				<div className={styles["header-container"]}>
-					{isEditMode ? (
-						<>
-							<Input
-								control={control}
-								errors={errors}
-								label="Title"
-								name="name"
-							/>
-							<div className={styles["edit-mode-controls"]}>
-								<Button label="Save" onClick={handlePatchRequest} />
-								<Button label="Cancel" onClick={handleCancel} />
-							</div>
-						</>
-					) : (
-						<>
-							<h1 className={styles["label"]}>{name}</h1>
+		<main className={styles["container"]}>
+			<div className={styles["header-container"]}>
+				{isEditMode ? (
+					<>
+						<Input
+							control={control}
+							errors={errors}
+							label="Title"
+							name="name"
+						/>
+						<div className={styles["edit-mode-controls"]}>
+							<Button label="Save" onClick={handlePatchRequest} />
+							<Button label="Cancel" onClick={handleCancel} />
+						</div>
+					</>
+				) : (
+					<>
+						<h1 className={styles["label"]}>{name}</h1>
+						<div className={styles["controls-container"]}>
 							{hasEditPermissions && (
-								<div>
-									<Button label="Edit" onClick={handleToggleEditMode} />
+								<div className={styles["admin-button-container"]}>
+									<Button
+										label="Edit"
+										onClick={handleToggleEditMode}
+										variant="outlined"
+									/>
 								</div>
 							)}
-						</>
-					)}
-				</div>
-				<FeatureGallery
-					slides={[
-						{
-							content: <MapProvider />,
-						},
-						...images.map((image) => ({
-							content: (
-								<img
-									alt="point of interest"
-									className={styles["image"]}
-									src={image.url}
-								/>
-							),
-							...(isEditMode && {
-								onDelete: (): void => {
-									handleDeleteImage(image.id);
-								},
-							}),
-						})),
-					]}
-				/>
-
-				{isEditMode && (
-					<>
-						<input
-							accept="image/*"
-							onChange={handleFileUpload}
-							ref={fileInputReference}
-							style={{ display: "none" }}
-							type="file"
-						/>
-						<div className={styles["upload-button"]}>
-							<Button
-								label="Upload image"
-								onClick={handleTriggerFileUpload}
-								variant="outlined"
-							/>
+							{isAuthorized && (
+								<div className={styles["user-button-container"]}>
+									<Button
+										label="Start"
+										onClick={handleStart}
+										variant="outlined"
+									/>
+									<Button
+										icon="bookmark"
+										isDisabled={isSaving}
+										label="save route"
+										onClick={
+											isSaved ? handleDeleteUserRoute : handleSaveUserRoute
+										}
+										variant={isSaved ? "ghost" : "primary"}
+									/>
+								</div>
+							)}
 						</div>
 					</>
 				)}
-				{isEditMode ? (
+			</div>
+			<FeatureGallery
+				slides={[
+					{
+						content: <MapProvider />,
+					},
+					...images.map((image) => ({
+						content: (
+							<img
+								alt="point of interest"
+								className={styles["image"]}
+								src={image.url}
+							/>
+						),
+						...(isEditMode && {
+							onDelete: (): void => {
+								handleDeleteImage(image.id);
+							},
+						}),
+					})),
+				]}
+			/>
+			{isEditMode ? (
+				<Select
+					control={control}
+					isMulti
+					label="Categories"
+					name="categories"
+					options={categoriesOptions}
+					placeholder="Select categories"
+				/>
+			) : (
+				route.categories.length > 0 && (
+					<TagsContainer
+						labels={route.categories.map((category) => category.name)}
+					/>
+				)
+			)}
+			{isEditMode ? (
+				<>
+					<input
+						accept="image/*"
+						onChange={handleFileUpload}
+						ref={fileInputReference}
+						style={{ display: "none" }}
+						type="file"
+					/>
+					<div className={styles["upload-button"]}>
+						<Button
+							label="Upload image"
+							onClick={handleTriggerFileUpload}
+							variant="outlined"
+						/>
+					</div>
 					<TextArea
 						control={control}
 						errors={errors}
 						label="Description"
 						name="description"
 					/>
-				) : (
-					hasDescription && (
-						<p className={styles["description"]}>{description}</p>
-					)
-				)}
-				<PointOfInterestSection pointOfInterests={pois} />
-				<RouteReviewsSection
-					isAuthenticatedUser={isAuthenticatedUser}
-					items={reviews}
-					onCreate={handleCreateReview}
-					routeId={Number(id)}
-				/>
-			</main>
-		</>
+				</>
+			) : (
+				hasDescription && <p className={styles["description"]}>{description}</p>
+			)}
+
+			<PointOfInterestSection pointOfInterests={pois} />
+			<RouteReviewsSection
+				isAuthenticatedUser={isAuthorized}
+				items={reviews}
+				onCreate={handleCreateReview}
+				routeId={Number(id)}
+			/>
+		</main>
 	);
 };
 

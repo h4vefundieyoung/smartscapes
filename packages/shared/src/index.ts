@@ -43,6 +43,7 @@ export {
 	categoryCreateValidationSchema,
 	CategoryExceptionMessage,
 	type CategoryGetAllItemResponseDto,
+	type CategoryGetAllQuery,
 } from "./modules/categories/categories.js";
 export {
 	FileFolderName,
@@ -100,6 +101,7 @@ export {
 	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
+	type RoutePatchResponseDto,
 	RoutesApiPath,
 	routesConstructValidationSchema,
 	routesCreateValidationSchema,
@@ -116,8 +118,11 @@ export {
 } from "./modules/user-follows/user-follows.js";
 export {
 	UserRouteApiPath,
+	type UserRouteDeleteParameters,
+	userRouteDeleteValidationSchema,
 	type UserRouteFinishRequestDto,
 	userRouteFinishValidationSchema,
+	type UserRoutePatchRequestDto,
 	type UserRouteQueryRequestDto,
 	userRouteQueryValidationSchema,
 	type UserRouteResponseDto,

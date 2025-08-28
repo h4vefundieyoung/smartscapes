@@ -1,0 +1,15 @@
+.title {
+	margin: 0 0 16px;
+	font-size: var(--font-size-h3);
+	color: var(--color-text-strong);
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.button {
+	margin-left: auto;
+}

@@ -25,6 +25,7 @@ import {
 	type RouteConstructRequestDto,
 	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
+	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type UploadImageActionPayload,
 } from "../libs/types/types.js";
@@ -209,12 +210,25 @@ const findPointsOfInterest = createAsyncThunk<
 	return await pointOfInterestApi.findAll(query);
 });
 
+const findAll = createAsyncThunk<
+	APIResponse<RouteGetAllItemResponseDto[], PaginationMeta>,
+	RouteFindAllOptions,
+	AsyncThunkConfig
+>(`${routesSliceName}/find-all`, async (payload, { extra }) => {
+	const { routesApi } = extra;
+
+	const { data, meta } = await routesApi.findAll(payload);
+
+	return { data, meta };
+});
+
 export {
 	constructRoute,
 	create,
 	createReview,
 	deleteImage,
 	discardCreateRouteFormData,
+	findAll,
 	findPointsOfInterest,
 	getAll,
 	getById,

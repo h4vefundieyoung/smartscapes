@@ -1,10 +1,10 @@
+import { SortingOrder } from "~/libs/enums/enums.js";
 import { type Repository } from "~/libs/types/types.js";
 
 import { UserRouteStatus } from "./libs/enums/enum.js";
+import { type UserRouteFilter } from "./libs/types/type.js";
 import { UserRouteEntity } from "./user-route.entity.js";
 import { type UserRouteModel } from "./user-route.model.js";
-
-type UserRouteFilters = Partial<ReturnType<UserRouteEntity["toObject"]>>;
 
 class UserRouteRepository implements Repository {
 	private userRouteModel: typeof UserRouteModel;
@@ -47,12 +47,46 @@ class UserRouteRepository implements Repository {
 		return UserRouteEntity.initialize(userRoute);
 	}
 
+	public async deleteSavedRoute(id: number, userId: number): Promise<boolean> {
+		const isDeleted = await this.userRouteModel
+			.query()
+			.delete()
+			.where({ id, userId })
+			.execute();
+
+		return Boolean(isDeleted);
+	}
+
+	public async findAllByUserId(userId: number): Promise<UserRouteEntity[]> {
+		const userRoutes = await this.userRouteModel
+			.query()
+			.where({ userId })
+			.select([
+				"id",
+				"routeId",
+				"userId",
+				"status",
+				"startedAt",
+				"completedAt",
+				this.userRouteModel.raw(
+					"ST_AsGeoJSON(actual_geometry)::json as actual_geometry",
+				),
+				this.userRouteModel.raw(
+					"ST_AsGeoJSON(planned_geometry)::json as planned_geometry",
+				),
+			])
+			.execute();
+
+		return userRoutes.map((item) => UserRouteEntity.initialize(item));
+	}
+
 	public async findByFilter(
-		filters: UserRouteFilters,
+		filters: UserRouteFilter,
 	): Promise<UserRouteEntity[]> {
 		const userRoutes = await this.userRouteModel
 			.query()
 			.where(filters)
+			.orderBy("id", SortingOrder.DESC)
 			.select([
 				"id",
 				"routeId",
@@ -78,7 +112,6 @@ class UserRouteRepository implements Repository {
 		entity: UserRouteEntity,
 	): Promise<null | UserRouteEntity> {
 		const updatedUserData = entity.toNewObject();
-
 		const [updatedUserRoute] = await this.userRouteModel
 			.query()
 			.where({

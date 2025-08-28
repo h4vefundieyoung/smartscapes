@@ -99,7 +99,7 @@ class RouteService implements Service {
 
 	public async create(
 		payload: RouteCreateRequestDto,
-	): Promise<RoutePatchResponseDto> {
+	): Promise<RouteGetAllItemResponseDto> {
 		await this.ensurePoisExist(payload.poiIds);
 
 		const formattedPayload = {
@@ -131,7 +131,7 @@ class RouteService implements Service {
 			},
 		);
 
-		return route.toObject();
+		return route.toListObject();
 	}
 
 	public async delete(id: number): Promise<boolean> {

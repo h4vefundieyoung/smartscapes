@@ -1,4 +1,10 @@
-import { Button, Input, TextArea } from "~/libs/components/components.js";
+import {
+	Button,
+	FieldError,
+	Icon,
+	Input,
+	TextArea,
+} from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { getUrlWithQueryString } from "~/libs/helpers/helpers.js";
 import {
@@ -36,6 +42,10 @@ const CreateRouteForm = ({
 	onSubmit,
 	plannedRouteId,
 }: Properties): React.JSX.Element => {
+	const hasPlannedRoute = Boolean(plannedRouteId);
+	const plannedRouteError = errors["plannedPathId"]?.message;
+	const hasPlannedRouteError = Boolean(plannedRouteError);
+
 	return (
 		<>
 			<div className={styles["header"]}>
@@ -52,12 +62,13 @@ const CreateRouteForm = ({
 
 				<div className={styles["route-section"]}>
 					<span className={styles["label"]}>Route</span>
-					{Boolean(plannedRouteId) && (
-						<div>
-							<span>Route constructed</span>
+					{hasPlannedRoute && (
+						<div className={styles["route-constructed-message"]}>
+							<Icon height={24} name="check" width={24} />
+							<span>Route constructed.</span>
 						</div>
 					)}
-					<div>
+					<div className={styles["construct-button-container"]}>
 						<Button
 							label="Construct"
 							to={constructPagePath}
@@ -65,6 +76,9 @@ const CreateRouteForm = ({
 							variant="outlined"
 						/>
 					</div>
+					{hasPlannedRouteError && (
+						<FieldError description={plannedRouteError as string} />
+					)}
 				</div>
 
 				<TextArea

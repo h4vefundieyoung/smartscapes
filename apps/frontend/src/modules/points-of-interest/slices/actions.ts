@@ -28,7 +28,7 @@ const getById = createAsyncThunk<
 });
 
 const create = createAsyncThunk<
-	APIResponse<PointsOfInterestGetByIdResponseDto>,
+	APIResponse<PointsOfInterestGetAllItemResponseDto>,
 	PointsOfInterestCreateRequestDto,
 	AsyncThunkConfig
 >(`${poiSliceName}/create`, async (payload, { extra }) => {

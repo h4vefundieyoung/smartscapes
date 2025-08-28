@@ -1,8 +1,6 @@
 .actions-cell {
 	display: flex;
 	gap: 4px;
-	padding-top: 4px;
-	padding-bottom: 4px;
 }
 
 .icon-button {

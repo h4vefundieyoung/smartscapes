@@ -52,7 +52,7 @@ const NotificationsPopover = (): React.JSX.Element => {
 	return (
 		<div className={styles["container"]} ref={containerReference}>
 			<button className={styles["button"]} onClick={handleToggle}>
-				<Icon height={20} name="bell" width={18} />
+				<Icon height={24} name="bell" width={24} />
 			</button>
 
 			{isOpen && (

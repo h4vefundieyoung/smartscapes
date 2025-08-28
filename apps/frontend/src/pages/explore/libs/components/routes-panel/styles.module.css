@@ -1,15 +1,51 @@
 .container {
+	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
 	width: 464px;
+	max-width: calc(100vw - 64px);
 	height: 100%;
 	padding: 24px 32px;
+	margin: 32px;
 	overflow-y: scroll;
 	scrollbar-width: none;
 	scroll-behavior: smooth;
 	background-color: var(--color-base);
 	border-radius: 8px;
+}
+
+@media (width <= 1280px) {
+	.container {
+		position: fixed;
+		bottom: 0;
+		left: 56px;
+		z-index: 100;
+		width: calc(100% - 56px);
+		max-width: none;
+		height: auto;
+		padding: 32px 24px;
+		margin: 0;
+	}
+
+	.container .list {
+		flex-direction: row;
+		gap: 16px;
+		padding-bottom: 8px;
+		overflow: auto visible;
+	}
+
+	.title {
+		display: none;
+	}
+}
+
+@media (width <= 480px) {
+	.container {
+		bottom: 56px;
+		left: 0;
+		width: 100%;
+	}
 }
 
 .title {

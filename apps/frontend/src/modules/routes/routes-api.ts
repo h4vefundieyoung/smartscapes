@@ -49,8 +49,8 @@ class RoutesApi extends BaseHTTPApi {
 
 	public async create(
 		payload: RouteCreateRequestDto,
-	): Promise<APIResponse<RouteGetByIdResponseDto>> {
-		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
+	): Promise<APIResponse<RouteGetAllItemResponseDto>> {
+		const response = await this.load<APIResponse<RouteGetAllItemResponseDto>>(
 			this.getFullEndpoint("/", {}),
 			{
 				contentType: ContentType.JSON,

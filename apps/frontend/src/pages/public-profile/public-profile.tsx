@@ -1,4 +1,5 @@
 import { Avatar, Button, Loader } from "~/libs/components/components.js";
+import { AppRoute } from "~/libs/enums/app-route.enum.js";
 import { DataStatus } from "~/libs/enums/data-status.enum.js";
 import {
 	useAppDispatch,
@@ -53,8 +54,19 @@ const PublicProfile = (): React.JSX.Element => {
 		}
 	}, [userProfile, authenticatedUser, dispatch, id]);
 
-	if (!userProfile || !authenticatedUser || dataStatus === DataStatus.PENDING) {
+	if (dataStatus === DataStatus.PENDING) {
 		return <Loader />;
+	}
+
+	if (dataStatus === DataStatus.REJECTED || !userProfile) {
+		return (
+			<div className={styles["error-container"]}>
+				<div className={styles["not-found"]}>User not found</div>
+				<div>
+					<Button label="Back to home" to={AppRoute.APP} />
+				</div>
+			</div>
+		);
 	}
 
 	return (

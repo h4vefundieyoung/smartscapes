@@ -25,8 +25,9 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(create.pending, (state) => {
 			state.createStatus = DataStatus.PENDING;
 		});
-		builder.addCase(create.fulfilled, (state) => {
+		builder.addCase(create.fulfilled, (state, action) => {
 			state.createStatus = DataStatus.FULFILLED;
+			state.data.unshift(action.payload.data);
 		});
 		builder.addCase(create.rejected, (state) => {
 			state.createStatus = DataStatus.REJECTED;

@@ -14,6 +14,7 @@ import { RoutesApiPath } from "./libs/enums/enums.js";
 import {
 	type RouteConstructRequestDto,
 	type RouteCreateRequestDto,
+	type RouteCreateResponseDto,
 	type RouteFindAllOptions,
 	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
@@ -334,7 +335,7 @@ class RouteController extends BaseController {
 		options: APIHandlerOptions<{
 			body: RouteCreateRequestDto;
 		}>,
-	): Promise<APIHandlerResponse<RouteGetByIdResponseDto>> {
+	): Promise<APIHandlerResponse<RouteCreateResponseDto>> {
 		const route = await this.routeService.create(options.body);
 
 		return {

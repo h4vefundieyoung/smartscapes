@@ -96,6 +96,7 @@ export {
 	type RouteConstructRequestDto,
 	type RouteConstructResponseDto,
 	type RouteCreateRequestDto,
+	type RouteCreateResponseDto,
 	type RouteFindAllOptions,
 	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,

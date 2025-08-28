@@ -1,6 +1,8 @@
-import { type Entity, type LineStringGeometry } from "~/libs/types/types.js";
-
-import { type RouteUploadImageResponseDto } from "./libs/types/types.js";
+import {
+	type Coordinates,
+	type Entity,
+	type LineStringGeometry,
+} from "~/libs/types/types.js";
 
 class RouteEntity implements Entity {
 	private createdByUserId: number;
@@ -15,12 +17,20 @@ class RouteEntity implements Entity {
 
 	private id: null | number;
 
-	private images: RouteUploadImageResponseDto[];
+	private images: {
+		createdAt: string;
+		id: number;
+		url: string;
+	}[];
 
 	private name: string;
 
 	private pois: {
 		id: number;
+		location?: {
+			coordinates: Coordinates;
+			type: string;
+		};
 		name?: string;
 		visitOrder: number;
 	}[];
@@ -42,10 +52,18 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: null | number;
-		images: RouteUploadImageResponseDto[];
+		images: {
+			createdAt: string;
+			id: number;
+			url: string;
+		}[];
 		name: string;
 		pois: {
 			id: number;
+			location?: {
+				coordinates: Coordinates;
+				type: string;
+			};
 			name?: string;
 			visitOrder: number;
 		}[];
@@ -68,10 +86,18 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
-		images: RouteUploadImageResponseDto[];
+		images?: {
+			createdAt: string;
+			id: number;
+			url: string;
+		}[];
 		name: string;
 		pois: {
 			id: number;
+			location?: {
+				coordinates: Coordinates;
+				type: string;
+			};
 			name: string;
 			visitOrder: number;
 		}[];
@@ -83,7 +109,7 @@ class RouteEntity implements Entity {
 			duration: data.duration,
 			geometry: data.geometry,
 			id: data.id,
-			images: data.images,
+			images: data.images ?? [],
 			name: data.name,
 			pois: data.pois,
 		});
@@ -104,10 +130,18 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
-		images: RouteUploadImageResponseDto[];
+		images?: {
+			createdAt: string;
+			id: number;
+			url: string;
+		}[];
 		name: string;
 		pois: {
 			id: number;
+			location?: {
+				coordinates: Coordinates;
+				type: string;
+			};
 			name: string;
 			visitOrder: number;
 		}[];
@@ -119,7 +153,7 @@ class RouteEntity implements Entity {
 			duration,
 			geometry,
 			id,
-			images,
+			images: images ?? [],
 			name,
 			pois,
 		});
@@ -164,10 +198,18 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
-		images: RouteUploadImageResponseDto[];
+		images: {
+			createdAt: string;
+			id: number;
+			url: string;
+		}[];
 		name: string;
 		pois: {
 			id: number;
+			location?: {
+				coordinates: Coordinates;
+				type: string;
+			};
 			name: string;
 			visitOrder: number;
 		}[];
@@ -182,6 +224,10 @@ class RouteEntity implements Entity {
 			name: this.name,
 			pois: this.pois as {
 				id: number;
+				location?: {
+					coordinates: Coordinates;
+					type: string;
+				};
 				name: string;
 				visitOrder: number;
 			}[],
@@ -218,10 +264,18 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
-		images: RouteUploadImageResponseDto[];
+		images: {
+			createdAt: string;
+			id: number;
+			url: string;
+		}[];
 		name: string;
 		pois: {
 			id: number;
+			location: {
+				coordinates: Coordinates;
+				type: string;
+			};
 			name: string;
 			visitOrder: number;
 		}[];
@@ -236,7 +290,10 @@ class RouteEntity implements Entity {
 			images: this.images,
 			name: this.name,
 			pois: this.pois as Required<
-				Pick<RouteEntity["pois"][number], "id" | "name" | "visitOrder">
+				Pick<
+					RouteEntity["pois"][number],
+					"id" | "location" | "name" | "visitOrder"
+				>
 			>[],
 		};
 	}

@@ -135,7 +135,26 @@ class PointsOfInterestRepository implements Repository {
 				),
 			])
 			.findById(id)
-			.withGraphFetched("[routes.[images]]")
+			.withGraphFetched("[routes(formatRoute).[images, pois(formatPois)]]")
+			.modifiers({
+				formatPois: (builder) => {
+					builder.select(
+						"points_of_interest.id",
+						this.pointsOfInterestModel.raw(
+							"ST_AsGeoJSON(points_of_interest.location)::json as location",
+						),
+					);
+				},
+				formatRoute: (builder) => {
+					builder.select(
+						"routes.id as id",
+						"routes.name",
+						this.pointsOfInterestModel.raw(
+							"ST_AsGeoJSON(routes.geometry)::json as geometry",
+						),
+					);
+				},
+			})
 			.execute();
 
 		if (!pointOfInterest) {

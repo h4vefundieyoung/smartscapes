@@ -104,18 +104,30 @@ describe("Route controller", () => {
 		id: FIRST_POI_ID,
 		images: [
 			{
+				createdAt: "2024-01-01T00:00:00Z",
 				id: 1,
 				url: "https://s3.amazonaws.com/test/1.png",
 			},
 			{
+				createdAt: "2024-01-01T00:00:00Z",
 				id: 2,
 				url: "https://s3.amazonaws.com/test/2.png",
 			},
 		],
 		name: "Test Route",
 		pois: [
-			{ id: FIRST_POI_ID, name: FIRST_NAME, visitOrder: FIRST_VISIT_ORDER },
-			{ id: SECOND_POI_ID, name: SECOND_NAME, visitOrder: SECOND_VISIT_ORDER },
+			{
+				id: FIRST_POI_ID,
+				location: { coordinates: [1, 1], type: "Point" },
+				name: FIRST_NAME,
+				visitOrder: FIRST_VISIT_ORDER,
+			},
+			{
+				id: SECOND_POI_ID,
+				location: { coordinates: [1, 1], type: "Point" },
+				name: SECOND_NAME,
+				visitOrder: SECOND_VISIT_ORDER,
+			},
 		],
 	};
 

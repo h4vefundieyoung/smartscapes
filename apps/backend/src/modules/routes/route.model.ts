@@ -1,9 +1,11 @@
-import { type RouteUploadImageResponseDto } from "@smartscapes/shared";
 import { Model, type QueryBuilder, type RelationMappings } from "objection";
 
 import { FileFolderName } from "~/libs/enums/enums.js";
 import { DatabaseTableName } from "~/libs/modules/database/database.js";
-import { type LineStringGeometry } from "~/libs/types/types.js";
+import {
+	type Coordinates,
+	type LineStringGeometry,
+} from "~/libs/types/types.js";
 
 import { CategoryModel } from "../categories/category.model.js";
 import { FileModel } from "../files/files.model.js";
@@ -26,12 +28,20 @@ class RouteModel extends Model {
 
 	public id!: number;
 
-	public images!: RouteUploadImageResponseDto[];
+	public images?: {
+		createdAt: string;
+		id: number;
+		url: string;
+	}[];
 
 	public name!: string;
 
 	public pois!: {
 		id: number;
+		location?: {
+			coordinates: Coordinates;
+			type: "Point";
+		};
 		name: string;
 		visitOrder: number;
 	}[];

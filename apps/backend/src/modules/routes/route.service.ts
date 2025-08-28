@@ -18,6 +18,7 @@ import { RoutesError } from "./libs/exceptions/exceptions.js";
 import {
 	type FileUploadResponseDto,
 	type RouteCreateRequestDto,
+	type RouteCreateResponseDto,
 	type RouteFindAllOptions,
 	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
@@ -87,7 +88,7 @@ class RouteService implements Service {
 
 	public async create(
 		payload: RouteCreateRequestDto,
-	): Promise<RouteGetByIdResponseDto> {
+	): Promise<RouteCreateResponseDto> {
 		await this.ensurePoisExist(payload.poiIds);
 
 		const formattedPayload = {

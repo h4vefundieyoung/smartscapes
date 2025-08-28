@@ -91,6 +91,7 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(uploadImage.fulfilled, (state, action) => {
 			if (state.route) {
 				state.route.images.push({
+					createdAt: action.payload.data.createdAt,
 					id: action.payload.data.id,
 					url: action.payload.data.url,
 				});

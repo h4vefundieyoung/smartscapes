@@ -7,7 +7,9 @@ type RouteGetAllItemResponseDto = {
 	duration: number;
 	geometry: LineStringGeometry;
 	id: number;
-	images: Pick<FileUploadResponseDto, "id" | "url">[];
+	images: (Pick<FileUploadResponseDto, "id" | "url"> & {
+		createdAt: string;
+	})[];
 	name: string;
 	pois: {
 		id: number;

@@ -1,6 +1,9 @@
 import { type Entity, type PointGeometry } from "~/libs/types/types.js";
 
+import { type FileEntity } from "../files/files.entity.js";
 import { RouteEntity } from "../routes/route.entity.js";
+import { type RouteModel } from "../routes/route.model.js";
+import { type RouteGetByIdResponseDto } from "./libs/types/types.js";
 
 class PointsOfInterestEntity implements Entity {
 	private createdAt: null | string;
@@ -13,7 +16,7 @@ class PointsOfInterestEntity implements Entity {
 
 	private name: string;
 
-	private routes: null | ReturnType<RouteEntity["toObject"]>[];
+	private routes: null | RouteEntity[];
 
 	private constructor({
 		createdAt,
@@ -21,21 +24,21 @@ class PointsOfInterestEntity implements Entity {
 		id,
 		location,
 		name,
-		routes = null,
+		routes,
 	}: {
 		createdAt: null | string;
 		description: null | string;
 		id: null | number;
 		location: PointGeometry;
 		name: string;
-		routes: null | ReturnType<RouteEntity["toObject"]>[];
+		routes: null | RouteModel[];
 	}) {
 		this.id = id;
 		this.location = location;
 		this.name = name;
 		this.createdAt = createdAt;
 		this.description = description;
-		this.routes = routes;
+		this.routes = routes?.map((route) => RouteEntity.initialize(route)) ?? null;
 	}
 
 	public static initialize(data: {
@@ -44,7 +47,7 @@ class PointsOfInterestEntity implements Entity {
 		id: number;
 		location: PointGeometry;
 		name: string;
-		routes: null | ReturnType<RouteEntity["toObject"]>[];
+		routes?: RouteModel[];
 		updatedAt: string;
 	}): PointsOfInterestEntity {
 		return new PointsOfInterestEntity({
@@ -53,9 +56,7 @@ class PointsOfInterestEntity implements Entity {
 			id: data.id,
 			location: data.location,
 			name: data.name,
-			routes:
-				data.routes?.map((route) => RouteEntity.initialize(route).toObject()) ??
-				[],
+			routes: data.routes ?? null,
 		});
 	}
 
@@ -83,7 +84,15 @@ class PointsOfInterestEntity implements Entity {
 		id: number;
 		location: PointGeometry;
 		name: string;
-		routes: { id: number; images: RouteEntity["images"]; name: string }[];
+		routes: (Pick<
+			RouteGetByIdResponseDto,
+			"geometry" | "id" | "name" | "pois"
+		> & {
+			images: Pick<
+				ReturnType<FileEntity["toObject"]>,
+				"createdAt" | "id" | "url"
+			>[];
+		})[];
 	} {
 		return {
 			description: this.description,
@@ -91,7 +100,21 @@ class PointsOfInterestEntity implements Entity {
 			location: this.location,
 			name: this.name,
 			routes: this.routes
-				? this.routes.map(({ id, images, name }) => ({ id, images, name }))
+				? this.routes.map((route) => {
+						const { geometry, id, images, name, pois } = route.toObject();
+
+						return {
+							geometry,
+							id,
+							images: images.map(({ createdAt, id, url }) => ({
+								createdAt,
+								id,
+								url,
+							})),
+							name,
+							pois,
+						};
+					})
 				: [],
 		};
 	}

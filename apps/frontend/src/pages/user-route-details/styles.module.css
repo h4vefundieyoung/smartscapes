@@ -5,7 +5,7 @@
 }
 
 .button-container {
-	position: absolute;
+	position: fixed;
 	bottom: 48px;
 	left: 50%;
 	z-index: 1000;
@@ -21,13 +21,13 @@
 	transform: translate(-50%, -50%);
 }
 
-@media (width <= 768px) {
+@media (width <=768px) {
 	.container {
 		height: calc(100vh - 60px);
 	}
 }
 
-@media (width <= 480px) {
+@media (width <=480px) {
 	.button-container {
 		bottom: 80px;
 	}

@@ -12,11 +12,9 @@ type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
 	error: null | string;
 	hasMore: boolean;
-	isLoadingMore: boolean;
-	loadMoreFailed: boolean;
+	loadMoreDataStatus: ValueOf<typeof DataStatus>;
 	page: number;
 	routes: RouteGetAllItemResponseDto[];
-	searchTerm: string;
 };
 
 const DEFAULT_PAGE = 1;
@@ -25,14 +23,12 @@ const initialState: State = {
 	dataStatus: DataStatus.IDLE,
 	error: null,
 	hasMore: false,
-	isLoadingMore: false,
-	loadMoreFailed: false,
+	loadMoreDataStatus: DataStatus.IDLE,
 	page: DEFAULT_PAGE,
 	routes: [],
-	searchTerm: "",
 };
 
-const { actions, name, reducer } = createSlice({
+const { name, reducer } = createSlice({
 	extraReducers: (builder) => {
 		builder.addCase(getRoutes.pending, (state) => {
 			state.dataStatus = DataStatus.PENDING;
@@ -56,40 +52,31 @@ const { actions, name, reducer } = createSlice({
 		});
 
 		builder.addCase(loadMoreRoutes.pending, (state) => {
-			state.isLoadingMore = true;
-			state.loadMoreFailed = false;
+			state.loadMoreDataStatus = DataStatus.PENDING;
 			state.error = null;
 		});
 		builder.addCase(loadMoreRoutes.fulfilled, (state, action) => {
-			state.isLoadingMore = false;
-			state.loadMoreFailed = false;
+			state.loadMoreDataStatus = DataStatus.FULFILLED;
 			const newRoutes = action.payload.data;
-			state.routes.push(...newRoutes);
+
+			const existingRouteIds = new Set(state.routes.map((route) => route.id));
+			const uniqueNewRoutes = newRoutes.filter(
+				(route) => !existingRouteIds.has(route.id),
+			);
+
+			state.routes.push(...uniqueNewRoutes);
 			const { meta } = action.payload;
 			state.page = meta.currentPage;
 			state.hasMore = meta.currentPage < meta.totalPages;
 		});
 		builder.addCase(loadMoreRoutes.rejected, (state) => {
-			state.isLoadingMore = false;
-			state.loadMoreFailed = true;
+			state.loadMoreDataStatus = DataStatus.REJECTED;
 			state.hasMore = false;
 		});
 	},
 	initialState,
 	name: "explore",
-	reducers: {
-		clearError: (state) => {
-			state.error = null;
-		},
-		resetPagination: (state) => {
-			state.page = DEFAULT_PAGE;
-			state.hasMore = true;
-			state.error = null;
-		},
-		setSearchTerm: (state, action: { payload: string }) => {
-			state.searchTerm = action.payload;
-		},
-	},
+	reducers: {},
 });
 
-export { actions, name, reducer };
+export { name, reducer };

@@ -30,10 +30,9 @@ import styles from "./styles.module.css";
 
 type Properties = {
 	hasMore: boolean;
-	isLoadingMore: boolean;
-	loadMoreFailed: boolean;
+	loadMoreDataStatus: ValueOf<typeof DataStatus>;
 	locationDataStatus: ValueOf<typeof DataStatus>;
-	onLoadMore: () => void;
+	onLoadMore: (searchTerm?: string) => void;
 	onSearch: (searchTerm: string) => void;
 	routes: RouteGetAllItemResponseDto[];
 	routesDataStatus: ValueOf<typeof DataStatus>;
@@ -42,8 +41,7 @@ type Properties = {
 
 const RoutesPanel = ({
 	hasMore,
-	isLoadingMore,
-	loadMoreFailed,
+	loadMoreDataStatus,
 	locationDataStatus,
 	onLoadMore,
 	onSearch,
@@ -53,6 +51,8 @@ const RoutesPanel = ({
 }: Properties): React.JSX.Element => {
 	const hasLocationError = locationDataStatus === DataStatus.REJECTED;
 	const isRoutesLoading = routesDataStatus === DataStatus.PENDING;
+	const isLoadingMore = loadMoreDataStatus === DataStatus.PENDING;
+	const loadMoreFailed = loadMoreDataStatus === DataStatus.REJECTED;
 
 	const mapClient = useMapClient();
 	const currentMarkerReference = useRef<MapMarker | null>(null);
@@ -156,8 +156,8 @@ const RoutesPanel = ({
 	}, [onSearch, searchValue]);
 
 	const handleLoadMoreClick = useCallback(() => {
-		onLoadMore();
-	}, [onLoadMore]);
+		onLoadMore(searchValue || "");
+	}, [onLoadMore, searchValue]);
 
 	const content = useMemo(() => {
 		if (isRoutesLoading && routes.length === 0) {
@@ -263,6 +263,8 @@ const RoutesPanel = ({
 							name: "search",
 							onClick: undefined,
 						}}
+						isLabelHidden
+						label="Search routes"
 						name="name"
 						type="text"
 					/>

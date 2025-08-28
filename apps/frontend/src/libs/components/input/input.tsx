@@ -25,8 +25,9 @@ type Properties<T extends FieldValues> = {
 		ComponentProps<typeof InputIcon>,
 		"label" | "name" | "onClick"
 	>;
+	isLabelHidden?: boolean;
 	isReadonly?: boolean;
-	label?: string;
+	label: string;
 	name: FieldPath<T>;
 	placeholder?: string;
 	type?: "email" | "password" | "text";
@@ -38,6 +39,7 @@ const Input = <T extends FieldValues>({
 	errors,
 	iconLeft,
 	iconRight,
+	isLabelHidden = false,
 	isReadonly = false,
 	label,
 	name,
@@ -51,7 +53,14 @@ const Input = <T extends FieldValues>({
 
 	return (
 		<label className={styles["label"]}>
-			{label && <span className={styles["label-caption"]}>{label}</span>}
+			<span
+				className={combineClassNames(
+					styles["label-caption"],
+					isLabelHidden && "visually-hidden",
+				)}
+			>
+				{label}
+			</span>
 			<span className={styles["input-container"]}>
 				{iconLeft && (
 					<span className={styles["icon-left"]}>

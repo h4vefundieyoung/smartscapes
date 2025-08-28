@@ -9,11 +9,7 @@ import {
 	useEffect,
 } from "~/libs/hooks/hooks.js";
 import { type Location } from "~/libs/types/types.js";
-import {
-	actions as exploreActions,
-	getRoutes,
-	loadMoreRoutes,
-} from "~/modules/explore/explore.js";
+import { getRoutes, loadMoreRoutes } from "~/modules/explore/explore.js";
 import { actions as locationActions } from "~/modules/location/location.js";
 
 import { RoutesPanel } from "./libs/components/components.js";
@@ -28,41 +24,41 @@ const Explore = (): React.JSX.Element => {
 	const routesError = useAppSelector((state) => state.explore.error);
 	const routes = useAppSelector((state) => state.explore.routes);
 	const hasMore = useAppSelector((state) => state.explore.hasMore);
-	const isLoadingMore = useAppSelector((state) => state.explore.isLoadingMore);
-	const loadMoreFailed = useAppSelector(
-		(state) => state.explore.loadMoreFailed,
+	const loadMoreDataStatus = useAppSelector(
+		(state) => state.explore.loadMoreDataStatus,
 	);
 	const page = useAppSelector((state) => state.explore.page);
-	const searchTerm = useAppSelector((state) => state.explore.searchTerm);
 	const locationDataStatus = useAppSelector(
 		(state) => state.location.dataStatus,
 	);
 	const location = useAppSelector((state) => state.location.location);
 
-	const handleLoadMore = useCallback(() => {
-		const nextPage = page + DEFAULT_PAGE_INCREMENT;
-		const loadMoreParameters: {
-			location?: Location;
-			page: number;
-			searchTerm?: string;
-		} = {
-			page: nextPage,
-		};
+	const handleLoadMore = useCallback(
+		(searchTerm?: string) => {
+			const nextPage = page + DEFAULT_PAGE_INCREMENT;
+			const loadMoreParameters: {
+				location?: Location;
+				page: number;
+				searchTerm?: string;
+			} = {
+				page: nextPage,
+			};
 
-		if (location) {
-			loadMoreParameters.location = location;
-		}
+			if (location) {
+				loadMoreParameters.location = location;
+			}
 
-		if (searchTerm) {
-			loadMoreParameters.searchTerm = searchTerm;
-		}
+			if (searchTerm) {
+				loadMoreParameters.searchTerm = searchTerm;
+			}
 
-		void dispatch(loadMoreRoutes(loadMoreParameters));
-	}, [dispatch, page, location, searchTerm]);
+			void dispatch(loadMoreRoutes(loadMoreParameters));
+		},
+		[dispatch, page, location],
+	);
 
 	const handleSearch = useCallback(
 		(searchTerm: string) => {
-			dispatch(exploreActions.setSearchTerm(searchTerm));
 			const searchParameters: { location?: Location; searchTerm?: string } = {};
 
 			if (location) {
@@ -105,8 +101,7 @@ const Explore = (): React.JSX.Element => {
 				<MapProvider markers={mockPOIs}>
 					<RoutesPanel
 						hasMore={hasMore}
-						isLoadingMore={isLoadingMore}
-						loadMoreFailed={loadMoreFailed}
+						loadMoreDataStatus={loadMoreDataStatus}
 						locationDataStatus={locationDataStatus}
 						onLoadMore={handleLoadMore}
 						onSearch={handleSearch}

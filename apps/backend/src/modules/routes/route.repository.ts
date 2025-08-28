@@ -60,19 +60,22 @@ class RouteRepository implements Repository {
 		options: null | RouteFindAllOptions,
 	): Promise<RouteEntity[]> {
 		const { categories, latitude, longitude, name } = options ?? {};
-
+		const { routesModel } = this;
 		const query = this.routesModel
 			.query()
 			.withGraphFetched("[pois(selectPoiData), images(selectFileData)]")
 			.modifiers({
 				selectFileData(builder) {
-					builder.select("files.id", "files.url");
+					builder.select("files.id", "files.url", "files.created_at");
 				},
 				selectPoiData(builder) {
 					builder.select(
 						"points_of_interest.id",
 						"points_of_interest.name",
 						"routes_to_pois.visit_order",
+						routesModel.raw(
+							"ST_AsGeoJSON(points_of_interest.location)::json as location",
+						),
 					);
 				},
 			})

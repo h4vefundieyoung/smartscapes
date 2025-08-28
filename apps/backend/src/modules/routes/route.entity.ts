@@ -206,7 +206,7 @@ class RouteEntity implements Entity {
 		name: string;
 		pois: {
 			id: number;
-			location?: {
+			location: {
 				coordinates: Coordinates;
 				type: string;
 			};
@@ -224,7 +224,7 @@ class RouteEntity implements Entity {
 			name: this.name,
 			pois: this.pois as {
 				id: number;
-				location?: {
+				location: {
 					coordinates: Coordinates;
 					type: string;
 				};

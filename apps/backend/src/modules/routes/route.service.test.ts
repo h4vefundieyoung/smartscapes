@@ -166,9 +166,15 @@ describe("RouteService", () => {
 		],
 		name: "Test Route",
 		pois: [
-			{ id: FIRST_POI_ID, name: FIRST_POI_NAME, visitOrder: FIRST_VISIT_ORDER },
+			{
+				id: FIRST_POI_ID,
+				location: { coordinates: [1, 1], type: "Point" },
+				name: FIRST_POI_NAME,
+				visitOrder: FIRST_VISIT_ORDER,
+			},
 			{
 				id: SECOND_POI_ID,
+				location: { coordinates: [1, 1], type: "Point" },
 				name: SECOND_POI_NAME,
 				visitOrder: SECOND_VISIT_ORDER,
 			},

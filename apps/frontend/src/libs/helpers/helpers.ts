@@ -5,4 +5,5 @@ export { getPermittedNavigationItems } from "./get-permitted-navigation-items.he
 export { getRelativeTime } from "./get-relative-time.helper.js";
 export { getUrlWithQueryString } from "./get-url-with-query-string.helper.js";
 export { getUserInitials } from "./get-user-initials.helper.js";
+export { sortByDate } from "./sort-by-date.helper.js";
 export { configureString } from "@smartscapes/shared";

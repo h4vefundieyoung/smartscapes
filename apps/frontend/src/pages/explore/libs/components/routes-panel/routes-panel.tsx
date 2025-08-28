@@ -2,6 +2,7 @@ import React from "react";
 
 import { Loader, RouteCard } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
+import { sortByDate } from "~/libs/helpers/helpers.js";
 import { useMemo } from "~/libs/hooks/hooks.js";
 import { type ValueOf } from "~/libs/types/types.js";
 import { type RouteGetAllItemResponseDto } from "~/modules/routes/routes.js";
@@ -14,6 +15,8 @@ type Properties = {
 	routesDataStatus: ValueOf<typeof DataStatus>;
 	routesError: null | string;
 };
+
+const HALF = 2;
 
 const RoutesPanel = ({
 	locationDataStatus,
@@ -52,9 +55,28 @@ const RoutesPanel = ({
 				)}
 
 				<ul className={styles["list"]}>
-					{routes.map((route) => (
-						<RouteCard imageUrl={null} key={route.id} name={route.name} />
-					))}
+					{routes.map(({ geometry, id, images, name, pois }) => {
+						const imageUrl = sortByDate(images, "createdAt").at(0)?.url;
+						const coordsCenter = Math.floor(geometry.coordinates.length / HALF);
+						const routeCenter = geometry.coordinates[coordsCenter] as [
+							number,
+							number,
+						];
+
+						return (
+							<RouteCard
+								id={id}
+								imageUrl={imageUrl}
+								key={id}
+								mapProps={{
+									center: routeCenter,
+									markers: pois.map(({ location }) => location),
+									routeLine: { geometry, id: id.toString() },
+								}}
+								name={name}
+							/>
+						);
+					})}
 				</ul>
 			</>
 		);

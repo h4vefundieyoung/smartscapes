@@ -1,7 +1,8 @@
+import { RouteCard } from "~/libs/components/route-card/route-card.js";
+import { sortByDate } from "~/libs/helpers/helpers.js";
 import { useMemo } from "~/libs/hooks/hooks.js";
 import { type PointsOfInterestGetByIdResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 
-import { RouteCard } from "../route-card/route-card.js";
 import styles from "./styles.module.css";
 
 type Properties = {
@@ -14,12 +15,7 @@ const RoutesGallery = ({ routes }: Properties): React.JSX.Element => {
 	const cards = useMemo(
 		() =>
 			routes.map(({ geometry, id, images, name, pois }) => {
-				const cardImage = [...images]
-					.sort(
-						(a, b) =>
-							new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-					)
-					.at(0)?.url;
+				const cardImage = sortByDate(images, "createdAt").at(0)?.url;
 				const coordsCenter = Math.floor(geometry.coordinates.length / HALF);
 				const routeCenter = geometry.coordinates[coordsCenter] as [
 					number,

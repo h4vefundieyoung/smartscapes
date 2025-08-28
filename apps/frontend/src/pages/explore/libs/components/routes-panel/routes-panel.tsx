@@ -126,6 +126,7 @@ const RoutesPanel = ({
 				<ul className={styles["list"]}>
 					{routes.map((route) => (
 						<RouteCard
+							id={route.id}
 							imageUrl={null}
 							key={route.id}
 							name={route.name}

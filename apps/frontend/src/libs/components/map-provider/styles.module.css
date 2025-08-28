@@ -18,6 +18,10 @@
 	height: 100%;
 }
 
+.popup-container {
+	display: none;
+}
+
 :global(.mapboxgl-popup-content) {
 	padding: 0;
 	border-radius: 8px;

@@ -129,41 +129,51 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 							label="Title"
 							name="name"
 						/>
-						<div className={styles["edit-mode-controls"]}>
+						<div className={styles["controls-container"]}>
 							<Button label="Save" onClick={handlePatchRequest} />
-							<Button label="Cancel" onClick={handleCancel} />
+							<Button
+								label="Cancel"
+								onClick={handleCancel}
+								variant="outlined-danger"
+							/>
 						</div>
 					</>
 				) : (
 					<>
 						<h1 className={styles["label"]}>{name}</h1>
-						{hasEditPermissions && (
-							<div>
-								<Button label="Edit" onClick={handleToggleEditMode} />
-							</div>
-						)}
+						<div className={styles["controls-container"]}>
+							{hasEditPermissions && (
+								<Button
+									icon="edit"
+									label="Edit"
+									onClick={handleToggleEditMode}
+									variant="outlined"
+								/>
+							)}
+						</div>
 					</>
 				)}
 			</div>
-
 			<FeatureGallery
 				slides={[
 					{
 						content: (
-							<MapProvider
-								center={[longitude, latitude]}
-								markers={[
-									{
-										coordinates: [longitude, latitude],
-									},
-								]}
-							/>
+							<div className={styles["map-container"]}>
+								<MapProvider
+									center={[longitude, latitude]}
+									markers={[
+										{
+											coordinates: [longitude, latitude],
+										},
+									]}
+								/>
+							</div>
 						),
 					},
 					{
 						content: (
 							<img
-								alt="point of interest"
+								alt="Point of interest"
 								className={styles["image"]}
 								src={image2}
 							/>
@@ -172,7 +182,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 					{
 						content: (
 							<img
-								alt="point of interest"
+								alt="Point of interest"
 								className={styles["image"]}
 								src={image3}
 							/>
@@ -189,7 +199,9 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 					name="description"
 				/>
 			) : (
-				hasDescription && <p className={styles["description"]}>{description}</p>
+				<p className={styles["description"]}>
+					{hasDescription ? description : "No description available."}
+				</p>
 			)}
 		</main>
 	);

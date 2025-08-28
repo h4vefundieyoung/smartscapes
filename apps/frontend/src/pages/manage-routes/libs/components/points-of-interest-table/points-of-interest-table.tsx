@@ -9,7 +9,7 @@ import {
 	useState,
 } from "~/libs/hooks/hooks.js";
 import {
-	actions,
+	actions as pointsOfInterestActions,
 	type PointsOfInterestCreateRequestDto,
 } from "~/modules/points-of-interest/points-of-interest.js";
 
@@ -44,7 +44,7 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 
 	const handleSubmit = useCallback(
 		(payload: PointsOfInterestCreateRequestDto): void => {
-			void dispatch(actions.create(payload));
+			void dispatch(pointsOfInterestActions.create(payload));
 		},
 		[dispatch],
 	);
@@ -61,7 +61,7 @@ const PointsOfInterestTable = (): React.JSX.Element => {
 
 	useEffect(() => {
 		void dispatch(
-			actions.findAll({
+			pointsOfInterestActions.findAll({
 				page,
 				perPage: pageSize,
 			}),

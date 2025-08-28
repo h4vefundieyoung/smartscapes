@@ -32,13 +32,18 @@
 		outline 0.1s ease;
 }
 
-.input:not(:disabled):focus-visible {
+.input-left-icon-space {
+	padding-left: 48px;
+}
+
+.input:focus-visible {
 	outline: 2px solid var(--color-stroke-focus);
 	outline-offset: 2px;
 	background-color: initial;
 }
 
-.input-container:not(:has(.icon-right:hover)) .input:hover:not(:disabled) {
+.input-container:not(:has(.icon-right:hover, .icon-left:hover))
+	.input:hover:not(:disabled) {
 	background-color: var(--color-fill-hover);
 }
 
@@ -55,7 +60,7 @@
 	outline: 2px solid var(--color-stroke-error);
 }
 
-.input-container:not(:has(.icon-right:hover))
+.input-container:not(:has(.icon-right:hover, .icon-left:hover))
 	.input-error:hover:not(:disabled) {
 	background-color: var(--color-fill-error-weak);
 }
@@ -64,6 +69,17 @@
 	position: absolute;
 	top: 50%;
 	right: 0;
+	display: flex;
+	height: 100%;
+	padding: 8px;
+	color: var(--color-icon-neutral);
+	transform: translateY(-50%);
+}
+
+.icon-left {
+	position: absolute;
+	top: 50%;
+	z-index: 1;
 	display: flex;
 	height: 100%;
 	padding: 8px;

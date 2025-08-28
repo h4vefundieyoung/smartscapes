@@ -49,8 +49,8 @@ class RoutesApi extends BaseHTTPApi {
 
 	public async create(
 		payload: RouteCreateRequestDto,
-	): Promise<APIResponse<RouteGetByIdResponseDto>> {
-		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
+	): Promise<APIResponse<RouteGetAllItemResponseDto>> {
+		const response = await this.load<APIResponse<RouteGetAllItemResponseDto>>(
 			this.getFullEndpoint("/", {}),
 			{
 				contentType: ContentType.JSON,
@@ -91,16 +91,15 @@ class RoutesApi extends BaseHTTPApi {
 
 	public async getAll(
 		query?: RouteFindAllOptions,
-	): Promise<APIResponse<RouteGetByIdResponseDto[]>> {
-		const response = await this.load<APIResponse<RouteGetByIdResponseDto[]>>(
-			this.getFullEndpoint(RoutesApiPath.ROOT, {}),
-			{
-				contentType: ContentType.JSON,
-				hasAuth: false,
-				method: "GET",
-				query,
-			},
-		);
+	): Promise<APIResponse<RouteGetAllItemResponseDto[], PaginationMeta>> {
+		const response = await this.load<
+			APIResponse<RouteGetAllItemResponseDto[], PaginationMeta>
+		>(this.getFullEndpoint(RoutesApiPath.ROOT, {}), {
+			contentType: ContentType.JSON,
+			hasAuth: true,
+			method: "GET",
+			query,
+		});
 
 		return await response.json();
 	}

@@ -66,8 +66,8 @@ const routesSearchQuery = z
 		name: z
 			.string()
 			.trim()
-			.min(RoutesValidationRule.NAME_MINIMUM_LENGTH, {
-				message: RoutesValidationMessage.NAME_MINIMUM_LENGTH,
+			.min(RoutesValidationRule.SEARCH_NAME_MINIMUM_LENGTH, {
+				message: RoutesValidationMessage.SEARCH_NAME_MINIMUM_LENGTH,
 			})
 			.max(RoutesValidationRule.NAME_MAXIMUM_LENGTH, {
 				message: RoutesValidationMessage.NAME_MAXIMUM_LENGTH,

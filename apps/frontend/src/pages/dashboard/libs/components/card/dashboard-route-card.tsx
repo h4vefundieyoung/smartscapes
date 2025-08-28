@@ -9,13 +9,15 @@ type Properties = {
 	route: UserRouteResponseDto;
 };
 
-const UserHistoryCard = ({ route }: Properties): React.JSX.Element => {
+const DashboardRouteCard = ({ route }: Properties): React.JSX.Element => {
 	const routeLine = { geometry: route.actualGeometry, id: route.routeName };
 
 	return (
 		<Link
 			className={styles["card"]}
-			to={configureString(AppRoute.ROUTES_$ID, { id: route.id.toString() })}
+			to={configureString(AppRoute.ROUTES_$ID, {
+				id: route.routeId.toString(),
+			})}
 		>
 			<h2 className={styles["label"]}>{route.routeName}</h2>
 			<MapProvider routeLine={routeLine} />
@@ -23,4 +25,4 @@ const UserHistoryCard = ({ route }: Properties): React.JSX.Element => {
 	);
 };
 
-export { UserHistoryCard };
+export { DashboardRouteCard };

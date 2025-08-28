@@ -11,7 +11,7 @@ import {
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
 	type UserRouteStatusType,
-} from "./libs/types/type.js";
+} from "./libs/types/types.js";
 import { UserRouteController } from "./user-route.controller.js";
 import { type UserRouteService } from "./user-route.service.js";
 
@@ -25,6 +25,7 @@ describe("UserRouteController", () => {
 			type: "LineString",
 		},
 		completedAt: null,
+		distance: 1000,
 		id: 1,
 		plannedGeometry: {
 			coordinates: [
@@ -33,6 +34,7 @@ describe("UserRouteController", () => {
 			],
 			type: "LineString",
 		},
+		reviewComment: "comment",
 		routeId: 7,
 		routeName: "Landscape alley",
 		startedAt: null,
@@ -66,13 +68,13 @@ describe("UserRouteController", () => {
 		create: () => Promise.resolve(mockUserRouteResponse),
 		deleteSavedRoute: () => Promise.resolve(true),
 		finish: () => Promise.resolve(mockCompletedUserRoute),
-		getAllByUserId: () =>
+		getAll: () =>
 			Promise.resolve([
 				mockUserRouteResponse,
 				mockActiveUserRoute,
 				mockCompletedUserRoute,
 			]),
-		getRouteByFilter: () => Promise.resolve(mockUserRouteResponse),
+		getOne: () => Promise.resolve(mockUserRouteResponse),
 		start: () => Promise.resolve(mockActiveUserRoute),
 	} as unknown as UserRouteService;
 
@@ -169,11 +171,11 @@ describe("UserRouteController", () => {
 	describe("getAll", () => {
 		it("should get all user routes and return 200 status with array of routes", async () => {
 			const options: APIHandlerOptions<{
-				query: { status: UserRouteStatusType };
+				query: { id: number; status?: UserRouteStatusType };
 			}> = {
 				body: undefined,
 				params: undefined,
-				query: { status: "active" },
+				query: { id: 1, status: "active" },
 				user: {
 					avatarUrl: null,
 					email: "",

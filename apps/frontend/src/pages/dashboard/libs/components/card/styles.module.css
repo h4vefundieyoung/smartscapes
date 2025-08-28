@@ -1,6 +1,9 @@
 .label {
 	margin: 0 0 12px;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	text-align: start;
+	white-space: nowrap;
 }
 
 .card {
@@ -16,11 +19,16 @@
 	border: none;
 }
 
-.cards-wrapper {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 16px;
-	width: 100%;
+@media (width <=1024px) {
+	.card {
+		max-width: 330px;
+	}
+}
+
+@media (width <=768px) {
+	.card {
+		max-width: 350px;
+	}
 }
 
 .loader-container {

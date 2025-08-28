@@ -18,7 +18,7 @@
 
 .map-overlays {
 	position: relative;
-	z-index: 10;
+	z-index: 2;
 	pointer-events: none;
 }
 
@@ -28,7 +28,6 @@
 
 .popup-container {
 	position: relative;
-	z-index: 20;
 	display: none;
 }
 

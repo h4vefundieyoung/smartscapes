@@ -3,6 +3,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
+	width: 100%;
 	padding: 0;
 	margin: 0;
 	font: inherit;
@@ -31,9 +32,10 @@
 
 .route-card {
 	display: flex;
-	flex-shrink: 0;
+	flex: 0 0 auto;
 	flex-direction: column;
 	width: 100%;
+	min-width: 280px;
 	max-width: 400px;
 }
 

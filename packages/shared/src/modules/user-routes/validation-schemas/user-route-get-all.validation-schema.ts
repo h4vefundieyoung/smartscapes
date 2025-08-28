@@ -1,16 +1,14 @@
 import { z } from "zod";
 
-import { parseToFloat } from "../../../libs/helpers/helpers.js";
 import { UserRouteValidationMessage } from "../libs/enums/enums.js";
 
 const userRouteGetAll = z.object({
-	routeId: z
+	id: z
 		.string()
-		.transform(parseToFloat)
-		.pipe(
-			z.number({
-				message: UserRouteValidationMessage.USER_ID_INVALID_TYPE,
-			}),
-		),
+		.refine((value) => !Number.isNaN(Number(value)), {
+			message: UserRouteValidationMessage.USER_ID_INVALID_TYPE,
+		})
+		.transform(Number),
 });
+
 export { userRouteGetAll };

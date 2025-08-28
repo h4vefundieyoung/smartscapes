@@ -26,9 +26,9 @@ class PointOfInterestApi extends BaseHTTPApi {
 
 	public async create(
 		payload: PointsOfInterestCreateRequestDto,
-	): Promise<APIResponse<PointsOfInterestGetByIdResponseDto>> {
+	): Promise<APIResponse<PointsOfInterestGetAllItemResponseDto>> {
 		const response = await this.load<
-			APIResponse<PointsOfInterestGetByIdResponseDto>
+			APIResponse<PointsOfInterestGetAllItemResponseDto>
 		>(this.getFullEndpoint(PointsOfInterestApiPath.ROOT, {}), {
 			contentType: ContentType.JSON,
 			hasAuth: true,

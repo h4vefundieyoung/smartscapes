@@ -169,6 +169,23 @@ class MapClient {
 		this.map = null;
 	}
 
+	public fitToCoordinates(
+		coordinates: Coordinates[],
+		options?: mapboxgl.MapOptions["fitBoundsOptions"],
+	): void {
+		if (!this.map || coordinates.length === 0) {
+			return;
+		}
+
+		const bounds = new mapboxgl.LngLatBounds();
+
+		for (const point of coordinates) {
+			bounds.extend(point as [number, number]);
+		}
+
+		this.map.fitBounds(bounds, { padding: 40, ...options });
+	}
+
 	public flyTo(center: [number, number]): void {
 		if (!this.map) {
 			return;

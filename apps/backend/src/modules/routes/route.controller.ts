@@ -303,7 +303,7 @@ class RouteController extends BaseController {
 	 *               type: object
 	 *               properties:
 	 *                 data:
-	 *                   $ref: '#/components/schemas/Route'
+	 *                   $ref: '#/components/schemas/RouteGetAllItemResponseDto'
 	 *       401:
 	 *         description: Unauthorized - Authentication required
 	 *         content:
@@ -336,7 +336,7 @@ class RouteController extends BaseController {
 		options: APIHandlerOptions<{
 			body: RouteCreateRequestDto;
 		}>,
-	): Promise<APIHandlerResponse<RoutePatchResponseDto>> {
+	): Promise<APIHandlerResponse<RouteGetAllItemResponseDto>> {
 		const route = await this.routeService.create(options.body);
 
 		return {

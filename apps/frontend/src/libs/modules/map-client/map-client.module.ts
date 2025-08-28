@@ -9,6 +9,7 @@ import {
 	MAP_LAYER_STYLES,
 	MAP_MARKER_Z_INDEX_VALUE,
 	MAP_OPTIONS,
+	MAP_POPUP_OPTIONS,
 	MARKER_OPTIONS,
 	NAVIGATION_CONTROL_OPTIONS,
 	SCALE_CONTROL_OPTIONS,
@@ -23,6 +24,7 @@ import {
 	type MapMarker,
 	type MapMarkerOptions,
 	type MapOptions,
+	type ReactElement,
 } from "./libs/types/types.js";
 
 class MapClient {
@@ -31,6 +33,10 @@ class MapClient {
 	private controls = new Map<string, MapControl>();
 
 	private map: mapboxgl.Map | null = null;
+
+	private popupRenderCallback:
+		| ((content: ReactElement, container: HTMLElement) => void)
+		| null = null;
 
 	private resizeObserver: null | ResizeObserver = null;
 
@@ -172,9 +178,19 @@ class MapClient {
 		this.map.flyTo({ center, essential: true, zoom: ZOOM_LEVEL });
 	}
 
-	public init(container: HTMLElement, options?: { onLoad?: () => void }): void {
+	public init(
+		container: HTMLElement,
+		options?: {
+			onLoad?: () => void;
+			onPopupRender?: (content: ReactElement, container: HTMLElement) => void;
+		},
+	): void {
 		if (!this.accessToken) {
 			return;
+		}
+
+		if (options?.onPopupRender) {
+			this.popupRenderCallback = options.onPopupRender;
 		}
 
 		this.map = new mapboxgl.Map({
@@ -267,6 +283,22 @@ class MapClient {
 
 	private mapMarker(marker: mapboxgl.Marker): MapMarker {
 		return {
+			addPopup: (content: ReactElement): void => {
+				const popupDiv = document.createElement("div");
+
+				if (this.popupRenderCallback) {
+					this.popupRenderCallback(content, popupDiv);
+				} else {
+					popupDiv.innerHTML = "<div>Not available</div>";
+				}
+
+				const popup = new mapboxgl.Popup(MAP_POPUP_OPTIONS).setDOMContent(
+					popupDiv,
+				);
+
+				marker.setPopup(popup);
+				marker.getElement().style.cursor = "pointer";
+			},
 			remove: (): void => {
 				marker.remove();
 			},

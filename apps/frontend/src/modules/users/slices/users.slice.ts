@@ -9,13 +9,13 @@ import { followUser, getUserPublicProfile, unfollowUser } from "./actions.js";
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
 	followingStatus: ValueOf<typeof DataStatus>;
-	userProfile: null | UserPublicProfileResponseDto;
+	userProfile: null | undefined | UserPublicProfileResponseDto;
 };
 
 const initialState: State = {
 	dataStatus: DataStatus.IDLE,
 	followingStatus: DataStatus.IDLE,
-	userProfile: null,
+	userProfile: undefined,
 };
 
 const { actions, name, reducer } = createSlice({

@@ -9,6 +9,7 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { actions as usersActions } from "~/modules/users/users.js";
 
+import { NotFound } from "../not-found/not-found.js";
 import styles from "./styles.module.css";
 
 const PublicProfile = (): React.JSX.Element => {
@@ -53,8 +54,16 @@ const PublicProfile = (): React.JSX.Element => {
 		}
 	}, [userProfile, authenticatedUser, dispatch, id]);
 
-	if (!userProfile || !authenticatedUser || dataStatus === DataStatus.PENDING) {
+	if (
+		userProfile === undefined ||
+		!authenticatedUser ||
+		dataStatus === DataStatus.PENDING
+	) {
 		return <Loader />;
+	}
+
+	if (userProfile === null) {
+		return <NotFound />;
 	}
 
 	return (

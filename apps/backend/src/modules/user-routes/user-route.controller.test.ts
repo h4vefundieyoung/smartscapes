@@ -11,7 +11,7 @@ import {
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
 	type UserRouteStatusType,
-} from "./libs/types/type.js";
+} from "./libs/types/types.js";
 import { UserRouteController } from "./user-route.controller.js";
 import { type UserRouteService } from "./user-route.service.js";
 
@@ -68,13 +68,13 @@ describe("UserRouteController", () => {
 		create: () => Promise.resolve(mockUserRouteResponse),
 		deleteSavedRoute: () => Promise.resolve(true),
 		finish: () => Promise.resolve(mockCompletedUserRoute),
-		getAllByUserId: () =>
+		getAll: () =>
 			Promise.resolve([
 				mockUserRouteResponse,
 				mockActiveUserRoute,
 				mockCompletedUserRoute,
 			]),
-		getRouteByFilter: () => Promise.resolve(mockUserRouteResponse),
+		getOne: () => Promise.resolve(mockUserRouteResponse),
 		start: () => Promise.resolve(mockActiveUserRoute),
 	} as unknown as UserRouteService;
 

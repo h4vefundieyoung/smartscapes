@@ -12,12 +12,20 @@ import styles from "./styles.module.css";
 
 const SavedRoutes = (): null | React.JSX.Element => {
 	const dispatch = useAppDispatch();
+	const authenticatedUser = useAppSelector(
+		({ auth }) => auth.authenticatedUser,
+	);
 
 	useEffect(() => {
-		void dispatch(
-			userRoutesActions.getAllByUserId(UserRouteStatus.NOT_STARTED),
-		);
-	}, [dispatch]);
+		if (authenticatedUser) {
+			void dispatch(
+				userRoutesActions.getAllByUserId({
+					id: authenticatedUser.id,
+					status: UserRouteStatus.NOT_STARTED,
+				}),
+			);
+		}
+	}, [authenticatedUser, dispatch]);
 
 	const savedUserRoutes = useAppSelector(
 		(state) => state.userRoutes.userRoutes,

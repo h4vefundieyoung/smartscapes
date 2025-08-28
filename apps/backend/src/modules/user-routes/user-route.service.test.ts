@@ -40,8 +40,6 @@ describe("UserRouteService", () => {
 	const mockRepository = {
 		checkHasActiveRoute: () => Promise.resolve(false),
 		create: () => Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
-		findByFilter: () =>
-			Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
 		findMany: () => Promise.resolve([]),
 		findOne: () => Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
 		patch: () => Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
@@ -55,7 +53,7 @@ describe("UserRouteService", () => {
 			};
 
 			const mockRepositoryForCreate = Object.assign({}, mockRepository, {
-				findByFilter: () => Promise.resolve([]),
+				findOne: () => Promise.resolve(null),
 			});
 
 			const serviceForCreate = new UserRouteService(
@@ -86,8 +84,6 @@ describe("UserRouteService", () => {
 			});
 
 			const mockRepositoryWithActive = Object.assign({}, mockRepository, {
-				findByFilter: () =>
-					Promise.resolve([UserRouteEntity.initialize(mockActiveRoute)]),
 				findOne: () =>
 					Promise.resolve(UserRouteEntity.initialize(mockActiveRoute)),
 				patch: () =>
@@ -121,7 +117,6 @@ describe("UserRouteService", () => {
 			};
 
 			const mockRepositoryWithInactive = Object.assign({}, mockRepository, {
-				findByFilter: () => Promise.resolve([]),
 				findOne: () =>
 					Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
 			}) as unknown as UserRouteRepository;
@@ -161,13 +156,13 @@ describe("UserRouteService", () => {
 
 		it("should return all user routes as UserRouteResponseDto array", async () => {
 			const mockRepository = {
-				findAllByUserId: () =>
+				findAll: () =>
 					Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
 			} as unknown as UserRouteRepository;
 
 			const service = new UserRouteService(mockRepository, {} as RouteService);
 
-			const result = await service.getAllByUserId(1);
+			const result = await service.getAll({ userId: 1 });
 
 			assert.strictEqual(Array.isArray(result), true);
 		});
@@ -221,8 +216,6 @@ describe("UserRouteService", () => {
 			};
 
 			const mockRepositoryWithActive = Object.assign({}, mockRepository, {
-				findByFilter: () =>
-					Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
 				findMany: () => Promise.resolve([]),
 				findOne: () =>
 					Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),

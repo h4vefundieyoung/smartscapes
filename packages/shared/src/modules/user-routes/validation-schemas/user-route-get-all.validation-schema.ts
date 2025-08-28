@@ -1,6 +1,9 @@
 import { z } from "zod";
 
-import { UserRouteValidationMessage } from "../libs/enums/enums.js";
+import {
+	UserRouteStatus,
+	UserRouteValidationMessage,
+} from "../libs/enums/enums.js";
 
 const userRouteGetAll = z.object({
 	id: z
@@ -9,6 +12,7 @@ const userRouteGetAll = z.object({
 			message: UserRouteValidationMessage.USER_ID_INVALID_TYPE,
 		})
 		.transform(Number),
+	status: z.enum(Object.values(UserRouteStatus)).optional(),
 });
 
 export { userRouteGetAll };

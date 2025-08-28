@@ -24,7 +24,6 @@ describe("UserRouteRepository", () => {
 		distance: 1000,
 		plannedGeometry: mockGeometry as LineStringGeometry,
 		routeId: 7,
-		routeName: "Park",
 		status: UserRouteStatus.NOT_STARTED,
 		userId: 1,
 	});
@@ -93,6 +92,7 @@ describe("UserRouteRepository", () => {
 	const mockSelectReturning = {
 		execute: (): Promise<typeof mockWhereResult> =>
 			Promise.resolve(mockWhereResult),
+		orderBy: (): typeof mockWhereWrapper => mockWhereWrapper,
 	};
 
 	const mockWithGraphJoinedWrapper = {
@@ -103,6 +103,7 @@ describe("UserRouteRepository", () => {
 
 	const mockWhereWrapper: {
 		execute: () => Promise<never[]>;
+		first: () => Promise<(typeof mockWhereResult)[number] | null>;
 		orderBy: () => typeof mockWhereWrapper;
 		patch: () => typeof mockPatchReturningWrapper;
 		returning: () => typeof mockWhereReturning;
@@ -111,6 +112,8 @@ describe("UserRouteRepository", () => {
 		withGraphJoined: () => typeof mockWithGraphJoinedWrapper;
 	} = {
 		execute: (): Promise<never[]> => Promise.resolve([]),
+		first: (): Promise<(typeof mockWhereResult)[number] | null> =>
+			Promise.resolve(mockWhereResult[0] ?? null),
 		orderBy: (): typeof mockWhereWrapper => mockWhereWrapper,
 		patch: (): typeof mockPatchReturningWrapper => mockPatchReturningWrapper,
 		returning: (): typeof mockWhereReturning => mockWhereReturning,
@@ -125,6 +128,7 @@ describe("UserRouteRepository", () => {
 			first: (): Promise<null> => Promise.resolve(null),
 			insert: (): typeof mockInsertReturningWrapper =>
 				mockInsertReturningWrapper,
+			orderBy: (): typeof mockWhereWrapper => mockWhereWrapper,
 			patch: (): typeof mockPatchReturningWrapper => mockPatchReturningWrapper,
 			select: (): typeof mockSelectReturning => mockSelectReturning,
 			where: (): typeof mockWhereWrapper => mockWhereWrapper,
@@ -145,24 +149,12 @@ describe("UserRouteRepository", () => {
 		});
 	});
 
-	describe("findByFilter", () => {
-		it("should find multiple routes", async () => {
-			const result = await repository.findByFilter({ userId: 1 });
-
-			assert.strictEqual(Array.isArray(result), true);
-			assert.strictEqual(result.length, 1);
-			assert.strictEqual(result[0] instanceof UserRouteEntity, true);
-			assert.strictEqual(result[0]?.toObject().userId, 1);
-		});
-	});
-
-	describe("findByFilter single", () => {
+	describe("findOne", () => {
 		it("should find single route", async () => {
-			const result = await repository.findByFilter({ routeId: 7 });
+			const result = await repository.findOne({ userId: 1 });
 
-			assert.strictEqual(result.length, 1);
-			assert.strictEqual(result[0] instanceof UserRouteEntity, true);
-			assert.strictEqual(result[0]?.toObject().routeId, 7);
+			assert.strictEqual(result instanceof UserRouteEntity, true);
+			assert.strictEqual(result?.toObject().userId, 1);
 		});
 	});
 

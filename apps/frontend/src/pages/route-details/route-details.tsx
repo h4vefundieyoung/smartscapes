@@ -302,7 +302,7 @@ const RouteDetails = (): React.JSX.Element => {
 							)}
 							{isAuthorized && (
 								<Button
-									icon={isSaved ? "bookmark" : "bookmarkOff"}
+									icon={isSaved ? "bookmarkOff" : "bookmark"}
 									isDisabled={isSaving}
 									label="Save route"
 									onClick={

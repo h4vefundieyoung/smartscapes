@@ -7,7 +7,7 @@ import {
 import { type LineStringGeometry } from "~/libs/types/types.js";
 
 import { RouteModel } from "../routes/route.model.js";
-import { type UserRouteStatusType } from "./libs/types/type.js";
+import { type UserRouteStatusType } from "./libs/types/types.js";
 
 class UserRouteModel extends AbstractModel {
 	public static override get tableName(): string {
@@ -34,16 +34,18 @@ class UserRouteModel extends AbstractModel {
 
 	public userId!: number;
 
-	public static readonly relationMappings = (): RelationMappings => ({
-		routes: {
-			join: {
-				from: "user_routes.routeId",
-				to: "routes.id",
+	public static relationMappings(): RelationMappings {
+		return {
+			routes: {
+				join: {
+					from: "user_routes.routeId",
+					to: "routes.id",
+				},
+				modelClass: RouteModel,
+				relation: this.BelongsToOneRelation,
 			},
-			modelClass: RouteModel,
-			relation: this.BelongsToOneRelation,
-		},
-	});
+		};
+	}
 }
 
 export { UserRouteModel };

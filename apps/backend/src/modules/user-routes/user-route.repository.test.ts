@@ -23,6 +23,7 @@ describe("UserRouteRepository", () => {
 		actualGeometry: mockGeometry as LineStringGeometry,
 		plannedGeometry: mockGeometry as LineStringGeometry,
 		routeId: 7,
+		routeName: "Park",
 		status: UserRouteStatus.NOT_STARTED,
 		userId: 1,
 	});
@@ -33,6 +34,7 @@ describe("UserRouteRepository", () => {
 		id: 1,
 		plannedGeometry: mockGeometry,
 		routeId: 7,
+		routeName: "Park",
 		startedAt: null,
 		status: UserRouteStatus.NOT_STARTED,
 		userId: 1,
@@ -92,28 +94,33 @@ describe("UserRouteRepository", () => {
 			Promise.resolve(mockWhereResult),
 	};
 
+	const mockWithGraphJoinedWrapper = {
+		execute: (): Promise<typeof mockWhereResult> =>
+			Promise.resolve(mockWhereResult),
+		select: (): typeof mockSelectReturning => mockSelectReturning,
+	};
+
 	const mockWhereWrapper: {
 		execute: () => Promise<never[]>;
 		orderBy: () => typeof mockWhereWrapper;
 		patch: () => typeof mockPatchReturningWrapper;
 		returning: () => typeof mockWhereReturning;
 		select: () => typeof mockSelectReturning;
+		skipUndefined: () => typeof mockWhereWrapper;
+		withGraphJoined: () => typeof mockWithGraphJoinedWrapper;
 	} = {
 		execute: (): Promise<never[]> => Promise.resolve([]),
 		orderBy: (): typeof mockWhereWrapper => mockWhereWrapper,
 		patch: (): typeof mockPatchReturningWrapper => mockPatchReturningWrapper,
 		returning: (): typeof mockWhereReturning => mockWhereReturning,
 		select: (): typeof mockSelectReturning => mockSelectReturning,
+		skipUndefined: (): typeof mockWhereWrapper => mockWhereWrapper,
+		withGraphJoined: (): typeof mockWithGraphJoinedWrapper =>
+			mockWithGraphJoinedWrapper,
 	};
 
 	const mockModel = {
-		query: (): {
-			first: () => Promise<null>;
-			insert: () => typeof mockInsertReturningWrapper;
-			patch: () => typeof mockPatchReturningWrapper;
-			select: () => typeof mockSelectReturning;
-			where: () => typeof mockWhereWrapper;
-		} => ({
+		query: () => ({
 			first: (): Promise<null> => Promise.resolve(null),
 			insert: (): typeof mockInsertReturningWrapper =>
 				mockInsertReturningWrapper,

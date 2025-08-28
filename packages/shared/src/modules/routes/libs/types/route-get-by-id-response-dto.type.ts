@@ -1,4 +1,7 @@
-import { type LineStringGeometry } from "../../../../libs/types/types.js";
+import {
+	type LineStringGeometry,
+	type PointGeometry,
+} from "../../../../libs/types/types.js";
 import { type CategoryGetAllItemResponseDto } from "../../../categories/libs/types/types.js";
 import { type FileUploadResponseDto } from "../../../files/libs/types/types.js";
 import { type UserRouteResponseDto } from "../../../user-routes/user-routes.js";
@@ -16,6 +19,7 @@ type RouteGetByIdResponseDto = {
 	name: string;
 	pois: {
 		id: number;
+		location: PointGeometry;
 		name: string;
 		visitOrder: number;
 	}[];

@@ -21,13 +21,16 @@ import {
 	useRef,
 	useState,
 } from "~/libs/hooks/hooks.js";
+import { type Coordinates, type RouteLine } from "~/libs/types/types.js";
 import { actions as categoriesActions } from "~/modules/categories/categories.js";
 import { type ReviewRequestDto } from "~/modules/reviews/reviews.js";
 import {
 	actions as routeActions,
+	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
 import { actions as userRouteActions } from "~/modules/user-routes/user-routes.js";
+import { getGoogleMapsPointUrl } from "~/pages/route-details/libs/helpers/helpers.js";
 
 import { NotFound } from "../not-found/not-found.js";
 import {
@@ -92,6 +95,16 @@ const RouteDetails = (): React.JSX.Element => {
 	);
 
 	const fileInputReference = useRef<HTMLInputElement | null>(null);
+
+	const handleOpenGoogleMaps = useCallback(() => {
+		if (route) {
+			const [firstPoi] = route.pois;
+			const [lng, lat] = (firstPoi as RouteGetByIdResponseDto["pois"][0])
+				.location.coordinates;
+			const url = getGoogleMapsPointUrl(lat, lng);
+			window.open(url, "_blank");
+		}
+	}, [route]);
 
 	const handleFileUpload = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -214,6 +227,23 @@ const RouteDetails = (): React.JSX.Element => {
 		},
 		[dispatch],
 	);
+	const routeGeometry = route?.geometry;
+
+	const routeLine = useMemo<null | RouteLine>(() => {
+		return routeGeometry && routeId
+			? { geometry: routeGeometry, id: routeId }
+			: null;
+	}, [routeId, routeGeometry]);
+
+	const markers = useMemo<{ coordinates: Coordinates }[]>(() => {
+		if (!route) {
+			return [];
+		}
+
+		return route.pois.map((poi) => ({
+			coordinates: poi.location.coordinates,
+		}));
+	}, [route]);
 
 	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
 		return (
@@ -232,6 +262,7 @@ const RouteDetails = (): React.JSX.Element => {
 	}
 
 	const { description, id, images, name, pois } = route;
+	const [routeStartPoint] = pois;
 
 	const hasDescription = Boolean(description);
 
@@ -259,19 +290,23 @@ const RouteDetails = (): React.JSX.Element => {
 					<>
 						<h1 className={styles["label"]}>{name}</h1>
 						<div className={styles["controls-container"]}>
+							{isAuthorized && <Button label="Start" onClick={handleStart} />}
+							{routeStartPoint && (
+								<Button
+									icon="location"
+									label="Location"
+									onClick={handleOpenGoogleMaps}
+								/>
+							)}
 							{isAuthorized && (
-								<>
-									<Button label="Start" onClick={handleStart} />
-									<Button
-										icon={isSaved ? "bookmark" : "bookmarkOff"}
-										isDisabled={isSaving}
-										label="Save route"
-										onClick={
-											isSaved ? handleDeleteUserRoute : handleSaveUserRoute
-										}
-										variant="outlined"
-									/>
-								</>
+								<Button
+									icon={isSaved ? "bookmark" : "bookmarkOff"}
+									isDisabled={isSaving}
+									label="Save route"
+									onClick={
+										isSaved ? handleDeleteUserRoute : handleSaveUserRoute
+									}
+								/>
 							)}
 							{hasEditPermissions && (
 								<Button
@@ -290,7 +325,7 @@ const RouteDetails = (): React.JSX.Element => {
 					{
 						content: (
 							<div className={styles["map-container"]}>
-								<MapProvider />
+								<MapProvider markers={markers} routeLine={routeLine} />
 							</div>
 						),
 					},

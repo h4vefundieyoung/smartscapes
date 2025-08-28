@@ -125,6 +125,12 @@ class UserRouteService implements Service {
 		return userRoutes.map((item) => item.toObject());
 	}
 
+	public async getPopularRoutes(): Promise<UserRouteResponseDto[]> {
+		const routes = await this.userRouteRepository.findPopular();
+
+		return routes.map((item) => item.toObject());
+	}
+
 	public async getRouteByFilter(
 		filters: UserRouteFilter,
 	): Promise<UserRouteResponseDto> {

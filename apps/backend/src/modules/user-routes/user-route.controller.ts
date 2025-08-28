@@ -155,6 +155,12 @@ class UserRouteController extends BaseController {
 				query: userRouteQueryValidationSchema,
 			},
 		});
+
+		this.addRoute({
+			handler: this.getPopular.bind(this),
+			method: "GET",
+			path: UserRouteApiPath.POPULAR,
+		});
 	}
 
 	/**
@@ -363,6 +369,64 @@ class UserRouteController extends BaseController {
 
 	/**
 	 * @swagger
+	 * /user-routes/popular:
+	 *   get:
+	 *     security:
+	 *       - bearerAuth: []
+	 *     tags:
+	 *       - User Routes
+	 *     summary: Get all popular routes
+	 *     description: Get top 10 completed routes by absolute amount.
+	 *     responses:
+	 *       200:
+	 *         description: User routes retrieved successfully
+	 *         content:
+	 *           application/json:
+	 *             schema:
+	 *               type: object
+	 *             example:
+	 *               payload:
+	 *                 data:
+	 *                   - id: 1
+	 *                     routeId: 7
+	 *                     userId: 1
+	 *                     status: "not_started"
+	 *                     startedAt: null
+	 *                     completedAt: null
+	 *                     actualGeometry:
+	 *                       type: "LineString"
+	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                     plannedGeometry:
+	 *                       type: "LineString"
+	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                   - id: 2
+	 *                     routeId: 8
+	 *                     userId: 1
+	 *                     status: "active"
+	 *                     startedAt: "2025-08-21T16:37:51.437Z"
+	 *                     completedAt: null
+	 *                     actualGeometry:
+	 *                       type: "LineString"
+	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                     plannedGeometry:
+	 *                       type: "LineString"
+	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                   - id: 3
+	 *                     routeId: 9
+	 *                     userId: 1
+	 *                     status: "completed"
+	 *                     startedAt: "2025-08-21T16:37:51.437Z"
+	 *                     completedAt: "2025-08-21T16:38:11.183Z"
+	 *                     actualGeometry:
+	 *                       type: "LineString"
+	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 *                     plannedGeometry:
+	 *                       type: "LineString"
+	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
+	 */
+
+	/**
+	 * @swagger
 	 * /user-routes:
 	 *   get:
 	 *     security:
@@ -517,6 +581,17 @@ class UserRouteController extends BaseController {
 
 		return {
 			payload: { data: userRoute },
+			status: HTTPCode.OK,
+		};
+	}
+
+	public async getPopular(): Promise<
+		APIHandlerResponse<UserRouteResponseDto[]>
+	> {
+		const popular = await this.userRouteService.getPopularRoutes();
+
+		return {
+			payload: { data: popular },
 			status: HTTPCode.OK,
 		};
 	}

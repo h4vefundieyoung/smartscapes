@@ -109,6 +109,29 @@ class UserRouteRepository implements Repository {
 		return userRoutes.map((item) => UserRouteEntity.initialize(item));
 	}
 
+	public async findPopular(): Promise<UserRouteEntity[]> {
+		const LIMIT = 10;
+
+		const popularRoutes = await this.userRouteModel
+			.query()
+			.select(["popular_routes.routeId", "name as routeName"])
+			.from(
+				this.userRouteModel
+					.query()
+					.select("routeId")
+					.count("id as totalCount")
+					.where("status", UserRouteStatus.COMPLETED)
+					.groupBy("routeId")
+					.orderBy("totalCount", "desc")
+					.limit(LIMIT)
+					.as("popular_routes"),
+			)
+			.join("routes", "popular_routes.routeId", "=", "routes.id")
+			.orderBy("popular_routes.totalCount", "desc");
+
+		return popularRoutes.map((item) => UserRouteEntity.initialize(item));
+	}
+
 	public async patch(
 		id: number,
 		userId: number,

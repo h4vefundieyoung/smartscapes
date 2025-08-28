@@ -31,18 +31,22 @@ const auth = (app: FastifyInstance, { whiteRoutes }: PluginOptions): void => {
 				throw new AuthError();
 			}
 
-			const [, token] = headers.authorization.split(" ");
+			try {
+				const [, token] = headers.authorization.split(" ");
 
-			const { userId } = await tokenService.verify<TokenPayload>(
-				token as string,
-			);
-			const user = await userService.findById(userId);
+				const { userId } = await tokenService.verify<TokenPayload>(
+					token as string,
+				);
+				const user = await userService.findById(userId);
 
-			if (!user) {
+				if (!user) {
+					throw new AuthError();
+				}
+
+				request.user = user;
+			} catch {
 				throw new AuthError();
 			}
-
-			request.user = user;
 		};
 
 		try {

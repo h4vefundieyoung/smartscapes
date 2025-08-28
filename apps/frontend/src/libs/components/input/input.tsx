@@ -56,6 +56,7 @@ const Input = <T extends FieldValues>({
 						iconRight && styles["input-right-icon-space"],
 						isReadonly && styles["input-readonly"],
 					)}
+					disabled={isReadonly}
 					name={field.name}
 					onChange={field.onChange}
 					placeholder={placeholder}

@@ -43,7 +43,7 @@ const Checkbox = <T extends FieldValues>({
 				type="checkbox"
 			/>
 			<span className={styles["custom-checkbox"]}>
-				{isChecked && <Icon height={8} name="check" width={8} />}
+				{isChecked && <Icon height={12} name="check" width={12} />}
 			</span>
 			<span className="visually-hidden">{label}</span>
 			{label}

@@ -146,7 +146,7 @@ const SidePanel = ({
 				/>
 
 				<div className={styles["body"]}>
-					<span className={styles["list-title"]}>POIs</span>
+					<h4 className={styles["list-title"]}>POIs</h4>
 					<ul className={styles["list"]}>
 						{pointsOfInterest.map((point) => (
 							<PointOfInterestCard

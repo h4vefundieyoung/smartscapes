@@ -1,6 +1,7 @@
 import Analytics from "~/assets/images/icons/analytics.svg?react";
 import ArrowDown from "~/assets/images/icons/arrow-down.svg?react";
 import Bell from "~/assets/images/icons/bell.svg?react";
+import BookmarkOff from "~/assets/images/icons/bookmark-off.svg?react";
 import Bookmark from "~/assets/images/icons/bookmark.svg?react";
 import CaretDown from "~/assets/images/icons/caret-down.svg?react";
 import CaretUp from "~/assets/images/icons/caret-up.svg?react";
@@ -31,6 +32,7 @@ const iconNameToSvg: Record<
 	arrowDown: ArrowDown,
 	bell: Bell,
 	bookmark: Bookmark,
+	bookmarkOff: BookmarkOff,
 	caretDown: CaretDown,
 	caretUp: CaretUp,
 	category: Category,

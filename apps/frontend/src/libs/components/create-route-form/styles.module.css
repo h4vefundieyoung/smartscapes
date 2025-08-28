@@ -15,15 +15,20 @@
 	font-size: var(--font-size-small);
 }
 
-.label {
-	font-weight: var(--font-weight-bold);
-}
-
 .route-section {
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
-	font-size: var(--font-size-h4);
+}
+
+.route-constructed-message {
+	display: flex;
+	gap: 8px;
+	color: var(--color-text-brand);
+}
+
+.construct-button-container {
+	margin-right: auto;
 }
 
 .footer {

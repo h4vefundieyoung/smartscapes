@@ -26,9 +26,11 @@ import { actions as categoriesActions } from "~/modules/categories/categories.js
 import { type ReviewRequestDto } from "~/modules/reviews/reviews.js";
 import {
 	actions as routeActions,
+	type RouteGetByIdResponseDto,
 	type RoutePatchRequestDto,
 } from "~/modules/routes/routes.js";
 import { actions as userRouteActions } from "~/modules/user-routes/user-routes.js";
+import { getGoogleMapsPointUrl } from "~/pages/route-details/libs/helpers/helpers.js";
 
 import { NotFound } from "../not-found/not-found.js";
 import {
@@ -93,6 +95,16 @@ const RouteDetails = (): React.JSX.Element => {
 	);
 
 	const fileInputReference = useRef<HTMLInputElement | null>(null);
+
+	const handleOpenGoogleMaps = useCallback(() => {
+		if (route) {
+			const [firstPoi] = route.pois;
+			const [lng, lat] = (firstPoi as RouteGetByIdResponseDto["pois"][0])
+				.location.coordinates;
+			const url = getGoogleMapsPointUrl(lat, lng);
+			window.open(url, "_blank");
+		}
+	}, [route]);
 
 	const handleFileUpload = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -257,6 +269,8 @@ const RouteDetails = (): React.JSX.Element => {
 	}
 
 	const { description, id, images, name, pois } = route;
+	const [routeStartPoint] = pois;
+
 	const hasDescription = Boolean(description);
 
 	return (
@@ -295,6 +309,19 @@ const RouteDetails = (): React.JSX.Element => {
 										onClick={handleStart}
 										variant="outlined"
 									/>
+								</div>
+							)}
+							{routeStartPoint && (
+								<div className={styles["location-button-container"]}>
+									<Button
+										icon="location"
+										label="Location"
+										onClick={handleOpenGoogleMaps}
+									/>
+								</div>
+							)}
+							{isAuthorized && (
+								<div className={styles["user-button-container"]}>
 									<Button
 										icon="bookmark"
 										isDisabled={isSaving}

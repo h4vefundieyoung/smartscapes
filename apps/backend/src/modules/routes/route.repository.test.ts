@@ -7,6 +7,7 @@ import { DatabaseTableName } from "~/libs/modules/database/database.js";
 import {
 	type Coordinates,
 	type LineStringGeometry,
+	type PointGeometry,
 } from "~/libs/types/types.js";
 
 import { PlannedPathModel } from "../planned-paths/planned-path.model.js";
@@ -49,7 +50,17 @@ describe("RouteRepository", () => {
 			},
 		],
 		name: "Test Route",
-		pois: [{ id: 1, name: "Test POI", visitOrder: 1 }],
+		pois: [
+			{
+				id: 1,
+				location: {
+					coordinates: [30.5234, 50.4501] as Coordinates,
+					type: "Point" as const,
+				},
+				name: "Test POI",
+				visitOrder: 1,
+			},
+		],
 	};
 
 	const mockRouteList = {
@@ -61,7 +72,12 @@ describe("RouteRepository", () => {
 		id: mockRoute.id,
 		images: [],
 		name: mockRoute.name,
-		pois: [] as { id: number; name: string; visitOrder: number }[],
+		pois: [] as {
+			id: number;
+			location: PointGeometry;
+			name: string;
+			visitOrder: number;
+		}[],
 	};
 
 	const createMockRouteEntity = (): RouteEntity =>

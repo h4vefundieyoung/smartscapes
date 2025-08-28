@@ -277,54 +277,44 @@ const RouteDetails = (): React.JSX.Element => {
 							label="Title"
 							name="name"
 						/>
-						<div className={styles["edit-mode-controls"]}>
+						<div className={styles["controls-container"]}>
 							<Button label="Save" onClick={handlePatchRequest} />
-							<Button label="Cancel" onClick={handleCancel} />
+							<Button
+								label="Cancel"
+								onClick={handleCancel}
+								variant="outlined-danger"
+							/>
 						</div>
 					</>
 				) : (
 					<>
 						<h1 className={styles["label"]}>{name}</h1>
 						<div className={styles["controls-container"]}>
-							{hasEditPermissions && (
-								<div className={styles["admin-button-container"]}>
-									<Button
-										label="Edit"
-										onClick={handleToggleEditMode}
-										variant="outlined"
-									/>
-								</div>
-							)}
-							{isAuthorized && (
-								<div className={styles["user-button-container"]}>
-									<Button
-										label="Start"
-										onClick={handleStart}
-										variant="outlined"
-									/>
-								</div>
-							)}
+							{isAuthorized && <Button label="Start" onClick={handleStart} />}
 							{routeStartPoint && (
-								<div className={styles["location-button-container"]}>
-									<Button
-										icon="location"
-										label="Location"
-										onClick={handleOpenGoogleMaps}
-									/>
-								</div>
+								<Button
+									icon="location"
+									label="Location"
+									onClick={handleOpenGoogleMaps}
+								/>
 							)}
 							{isAuthorized && (
-								<div className={styles["user-button-container"]}>
-									<Button
-										icon="bookmark"
-										isDisabled={isSaving}
-										label="save route"
-										onClick={
-											isSaved ? handleDeleteUserRoute : handleSaveUserRoute
-										}
-										variant={isSaved ? "ghost" : "primary"}
-									/>
-								</div>
+								<Button
+									icon={isSaved ? "bookmark" : "bookmarkOff"}
+									isDisabled={isSaving}
+									label="Save route"
+									onClick={
+										isSaved ? handleDeleteUserRoute : handleSaveUserRoute
+									}
+								/>
+							)}
+							{hasEditPermissions && (
+								<Button
+									icon="edit"
+									label="Edit"
+									onClick={handleToggleEditMode}
+									variant="outlined"
+								/>
 							)}
 						</div>
 					</>
@@ -333,15 +323,15 @@ const RouteDetails = (): React.JSX.Element => {
 			<FeatureGallery
 				slides={[
 					{
-						content: <MapProvider markers={markers} routeLine={routeLine} />,
+						content: (
+							<div className={styles["map-container"]}>
+								<MapProvider markers={markers} routeLine={routeLine} />
+							</div>
+						),
 					},
 					...images.map((image) => ({
 						content: (
-							<img
-								alt="point of interest"
-								className={styles["image"]}
-								src={image.url}
-							/>
+							<img alt="Route" className={styles["image"]} src={image.url} />
 						),
 						...(isEditMode && {
 							onDelete: (): void => {
@@ -351,6 +341,24 @@ const RouteDetails = (): React.JSX.Element => {
 					})),
 				]}
 			/>
+			{isEditMode && (
+				<>
+					<input
+						accept="image/*"
+						className="visually-hidden"
+						onChange={handleFileUpload}
+						ref={fileInputReference}
+						type="file"
+					/>
+					<div className={styles["upload-image-button-container"]}>
+						<Button
+							label="Upload image"
+							onClick={handleTriggerFileUpload}
+							variant="outlined"
+						/>
+					</div>
+				</>
+			)}
 			{isEditMode ? (
 				<Select
 					control={control}
@@ -368,30 +376,16 @@ const RouteDetails = (): React.JSX.Element => {
 				)
 			)}
 			{isEditMode ? (
-				<>
-					<input
-						accept="image/*"
-						onChange={handleFileUpload}
-						ref={fileInputReference}
-						style={{ display: "none" }}
-						type="file"
-					/>
-					<div className={styles["upload-button"]}>
-						<Button
-							label="Upload image"
-							onClick={handleTriggerFileUpload}
-							variant="outlined"
-						/>
-					</div>
-					<TextArea
-						control={control}
-						errors={errors}
-						label="Description"
-						name="description"
-					/>
-				</>
+				<TextArea
+					control={control}
+					errors={errors}
+					label="Description"
+					name="description"
+				/>
 			) : (
-				hasDescription && <p className={styles["description"]}>{description}</p>
+				<p className={styles["description"]}>
+					{hasDescription ? description : "No description available."}
+				</p>
 			)}
 
 			<PointOfInterestSection pointOfInterests={pois} />

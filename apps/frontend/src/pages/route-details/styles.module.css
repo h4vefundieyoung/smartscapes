@@ -1,6 +1,7 @@
-.upload-button {
-	min-width: 200px;
-	max-width: max-content;
+.map-container {
+	display: grid;
+	overflow: hidden;
+	border-radius: 8px;
 }
 
 .image {
@@ -40,11 +41,6 @@
 	justify-content: space-between;
 }
 
-.header-controls {
-	display: flex;
-	gap: 8px;
-}
-
 .loader-container {
 	display: flex;
 	flex: 1;
@@ -52,10 +48,13 @@
 	justify-content: center;
 }
 
-.edit-mode-controls {
+.controls-container {
 	display: flex;
-	gap: 8px;
-	min-width: 200px;
+	column-gap: 8px;
+}
+
+.upload-image-button-container {
+	margin-right: auto;
 }
 
 @media (width <=1440px) {
@@ -70,19 +69,4 @@
 		max-width: none;
 		padding: 40px 32px;
 	}
-}
-
-.controls-container {
-	display: flex;
-	column-gap: 16px;
-	align-items: center;
-}
-
-.admin-button-container {
-	width: 100px;
-}
-
-.user-button-container {
-	display: flex;
-	gap: 16px;
 }

@@ -10,7 +10,7 @@ type Properties = {
 	user: Pick<UserAuthResponseDto, "avatarUrl" | "firstName" | "lastName">;
 };
 
-const FONT_SIZE_RATIO = 3;
+const FONT_SIZE_RATIO = 2.5;
 
 const Avatar = ({
 	size = DEFAULT_AVATAR_SIZE,

@@ -5,16 +5,6 @@
 	width: 100%;
 }
 
-.error {
-	display: inline-flex;
-	gap: 8px;
-	align-items: center;
-	font-size: var(--font-size-tiny);
-	font-weight: var(--font-weight-semibold);
-	line-height: 1;
-	color: var(--color-text-error);
-}
-
 .label-caption {
 	font-size: var(--font-size-small);
 	font-weight: var(--font-weight-regular);
@@ -34,20 +24,21 @@
 	font-size: var(--font-size-small);
 	line-height: 1.5;
 	background-color: var(--color-background-base);
-	border: 1px solid var(--color-stroke-strong);
+	border: none;
 	border-radius: 8px;
+	box-shadow: 0 0 0 1px var(--color-stroke-strong) inset;
 	transition:
 		background-color 0.2s ease-in-out,
 		outline 0.1s ease;
 }
 
-.input:focus-visible {
+.input:not(:disabled):focus-visible {
 	outline: 2px solid var(--color-stroke-focus);
 	outline-offset: 2px;
 	background-color: initial;
 }
 
-.input-container:not(:has(.icon-right:hover)) .input:hover {
+.input-container:not(:has(.icon-right:hover)) .input:hover:not(:disabled) {
 	background-color: var(--color-fill-hover);
 }
 
@@ -57,14 +48,15 @@
 
 .input-error {
 	outline: none;
-	border: 1px solid var(--color-stroke-error);
+	box-shadow: 0 0 0 1px var(--color-stroke-error) inset;
 }
 
-.input-error:focus {
+.input-error:not(:disabled):focus-visible {
 	outline: 2px solid var(--color-stroke-error);
 }
 
-.input-container:not(:has(.icon-right:hover)) .input-error:hover {
+.input-container:not(:has(.icon-right:hover))
+	.input-error:hover:not(:disabled) {
 	background-color: var(--color-fill-error-weak);
 }
 
@@ -85,7 +77,7 @@
 
 .input-readonly {
 	color: var(--color-text-weak);
-	cursor: default;
+	cursor: not-allowed;
 	background-color: var(--color-fill-grey);
-	border: 1px solid var(--color-stroke-weak);
+	box-shadow: 0 0 0 1px var(--color-stroke-weak) inset;
 }

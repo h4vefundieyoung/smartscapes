@@ -78,7 +78,7 @@ const PublicProfile = (): React.JSX.Element => {
 								<Button
 									label={userProfile.isFollowed ? "Unfollow" : "Follow"}
 									onClick={handleFollowToggle}
-									variant={userProfile.isFollowed ? "secondary" : "primary"}
+									variant={userProfile.isFollowed ? "outlined" : "primary"}
 								/>
 							</div>
 						</div>

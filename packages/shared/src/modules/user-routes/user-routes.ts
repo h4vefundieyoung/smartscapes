@@ -12,6 +12,7 @@ export {
 export {
 	userRouteDeleteParameters as userRouteDeleteValidationSchema,
 	userRouteFinish as userRouteFinishValidationSchema,
+	userRouteGetAll as userRouteGetAllValidationSchema,
 	userRouteQuery as userRouteQueryValidationSchema,
 	userRouteStart as userRouteStartValidationSchema,
 } from "./validation-schemas/validation-schemas.js";

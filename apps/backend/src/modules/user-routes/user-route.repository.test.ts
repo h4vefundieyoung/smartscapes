@@ -21,6 +21,7 @@ describe("UserRouteRepository", () => {
 
 	const mockEntity = UserRouteEntity.initializeNew({
 		actualGeometry: mockGeometry as LineStringGeometry,
+		distance: 1000,
 		plannedGeometry: mockGeometry as LineStringGeometry,
 		routeId: 7,
 		routeName: "Park",

@@ -2,7 +2,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 
-import { type UserPublicProfileResponseDto } from "../libs/types/types.js";
+import {
+	type UserPublicProfileResponseDto,
+	type UserRouteResponseDto,
+} from "../libs/types/types.js";
 import { name as sliceName } from "./users.slice.js";
 
 const getUserPublicProfile = createAsyncThunk<
@@ -43,4 +46,16 @@ const unfollowUser = createAsyncThunk<
 	return response;
 });
 
-export { followUser, getUserPublicProfile, unfollowUser };
+const getActivities = createAsyncThunk<
+	APIResponse<UserRouteResponseDto[]>,
+	number,
+	AsyncThunkConfig
+>(`${sliceName}/get-user-activities`, async (id, { extra }) => {
+	const { userRouteApi } = extra;
+
+	const response = await userRouteApi.getAllByUserId({ id });
+
+	return response;
+});
+
+export { followUser, getActivities, getUserPublicProfile, unfollowUser };

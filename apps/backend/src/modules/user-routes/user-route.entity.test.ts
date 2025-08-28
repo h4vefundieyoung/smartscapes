@@ -16,6 +16,7 @@ describe("UserRouteEntity", () => {
 	const mockData = {
 		actualGeometry: mockGeometry,
 		completedAt: null,
+		distance: 1000,
 		id: 1,
 		plannedGeometry: mockGeometry,
 		routeId: 7,
@@ -46,6 +47,7 @@ describe("UserRouteEntity", () => {
 		it("should initialize new entity with null id and timestamps", () => {
 			const newData = {
 				actualGeometry: mockGeometry,
+				distance: 1000,
 				plannedGeometry: mockGeometry,
 				routeId: 7,
 				routeName: "Landscape alley",

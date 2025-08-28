@@ -47,7 +47,7 @@ const Sidebar = ({ navigationItemsGroups }: Properties): React.JSX.Element => {
 	}, [pathname]);
 
 	return (
-		<div className={styles["container"]}>
+		<div className={styles["container"]} data-testid="app-sidebar">
 			<div className={styles["drawer"]} data-open={isOpen}>
 				<div className={styles["header"]}>
 					<button

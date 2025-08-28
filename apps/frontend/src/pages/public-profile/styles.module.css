@@ -54,10 +54,10 @@
 .error-container {
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
+	gap: 24px;
 	align-items: center;
 	justify-content: space-between;
-	width: 360px;
+	max-width: 360px;
 	margin: auto;
 }
 

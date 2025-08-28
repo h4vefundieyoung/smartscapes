@@ -115,23 +115,16 @@ class UserRouteRepository implements Repository {
 		const popularRoutes = await this.userRouteModel
 			.query()
 			.select([
-				"popular_routes.routeId",
-				"name as routeName",
-				"geometry as plannedGeometry",
+				"routes.id as routeId",
+				"routes.name as routeName",
+				"routes.geometry as plannedGeometry",
 			])
-			.from(
-				this.userRouteModel
-					.query()
-					.select("routeId")
-					.count("id as totalCount")
-					.where("status", UserRouteStatus.COMPLETED)
-					.groupBy("routeId")
-					.orderBy("totalCount", "desc")
-					.limit(LIMIT)
-					.as("popular_routes"),
-			)
-			.join("routes", "popular_routes.routeId", "=", "routes.id")
-			.orderBy("popular_routes.totalCount", "desc");
+			.count("user_routes.id as totalCount")
+			.join("routes", "routes.id", "user_routes.routeId")
+			.where("user_routes.status", UserRouteStatus.COMPLETED)
+			.groupBy("routes.id", "routes.name", "routes.geometry")
+			.orderBy("totalCount", "desc")
+			.limit(LIMIT);
 
 		return popularRoutes.map((item) => UserRouteEntity.initialize(item));
 	}

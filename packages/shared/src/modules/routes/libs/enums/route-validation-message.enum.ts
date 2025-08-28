@@ -19,6 +19,7 @@ const RoutesValidationMessage = {
 	PLANNED_ROUTE_INVALID_TYPE: "Planned route should be a number.",
 	REQUIRED_FIELDS_FOR_UPDATE: "At least one field must be provided for update.",
 	ROUTES_MINIMUM_COUNT: `There should be no less than ${String(RoutesValidationRule.ROUTES_MINIMUM_COUNT)} points.`,
+	SEARCH_NAME_MINIMUM_LENGTH: `Search term must be at least ${String(RoutesValidationRule.SEARCH_NAME_MINIMUM_LENGTH)} character long.`,
 	USER_ID_INVALID_TYPE: "User id should be a number.",
 } as const;
 

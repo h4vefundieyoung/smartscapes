@@ -10,6 +10,7 @@ const RoutesValidationRule = {
 	REQUEST_MAX_POINTS_OF_INTEREST: 25,
 	REQUEST_MIN_POINTS_OF_INTEREST: 2,
 	ROUTES_MINIMUM_COUNT: 2,
+	SEARCH_NAME_MINIMUM_LENGTH: 1,
 } as const;
 
 export { RoutesValidationRule };

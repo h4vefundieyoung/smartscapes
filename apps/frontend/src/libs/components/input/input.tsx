@@ -17,12 +17,16 @@ type Properties<T extends FieldValues> = {
 	autocomplete?: HTMLInputElement["autocomplete"];
 	control: Control<T, null>;
 	errors: FieldErrors<T>;
+	iconLeft?: Pick<
+		ComponentProps<typeof InputIcon>,
+		"label" | "name" | "onClick"
+	>;
 	iconRight?: Pick<
 		ComponentProps<typeof InputIcon>,
 		"label" | "name" | "onClick"
 	>;
 	isReadonly?: boolean;
-	label: string;
+	label?: string;
 	name: FieldPath<T>;
 	placeholder?: string;
 	type?: "email" | "password" | "text";
@@ -32,6 +36,7 @@ const Input = <T extends FieldValues>({
 	autocomplete = "on",
 	control,
 	errors,
+	iconLeft,
 	iconRight,
 	isReadonly = false,
 	label,
@@ -46,13 +51,24 @@ const Input = <T extends FieldValues>({
 
 	return (
 		<label className={styles["label"]}>
-			<span className={styles["label-caption"]}>{label}</span>
+			{label && <span className={styles["label-caption"]}>{label}</span>}
 			<span className={styles["input-container"]}>
+				{iconLeft && (
+					<span className={styles["icon-left"]}>
+						<InputIcon
+							label={iconLeft.label}
+							name={iconLeft.name}
+							onClick={iconLeft.onClick}
+							state={hasError ? "error" : "default"}
+						/>
+					</span>
+				)}
 				<input
 					autoComplete={autocomplete}
 					className={combineClassNames(
 						styles["input"],
 						hasError && styles["input-error"],
+						iconLeft && styles["input-left-icon-space"],
 						iconRight && styles["input-right-icon-space"],
 						isReadonly && styles["input-readonly"],
 					)}

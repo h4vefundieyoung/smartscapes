@@ -11,4 +11,5 @@ export {
 	ContentType,
 	LocationType,
 	PermissionKey,
+	UserRouteStatus,
 } from "@smartscapes/shared";

@@ -10,6 +10,7 @@ import {
 import { UserRouteError } from "./libs/exceptions/exceptions.js";
 import {
 	type UserRouteFilter,
+	type UserRouteGetAllOptions,
 	type UserRouteResponseDto,
 	type UserRouteStatusType,
 } from "./libs/types/type.js";
@@ -39,12 +40,13 @@ class UserRouteService implements Service {
 
 		await this.ensureIsNotDuplicateRoute(routeId, userId);
 
-		const { geometry } = await this.routeService.findById(routeId);
+		const { geometry, name } = await this.routeService.findById(routeId);
 
 		const createdData = UserRouteEntity.initializeNew({
 			actualGeometry: geometry,
 			plannedGeometry: geometry,
 			routeId,
+			routeName: name,
 			status: UserRouteStatus.NOT_STARTED,
 			userId,
 		});
@@ -111,8 +113,14 @@ class UserRouteService implements Service {
 		return updatedRoute.toObject();
 	}
 
-	public async getAllByUserId(userId: number): Promise<UserRouteResponseDto[]> {
-		const userRoutes = await this.userRouteRepository.findByFilter({ userId });
+	public async getAllByUserId(
+		userId: number,
+		options: UserRouteGetAllOptions,
+	): Promise<UserRouteResponseDto[]> {
+		const userRoutes = await this.userRouteRepository.findByFilter({
+			userId,
+			...options,
+		});
 
 		return userRoutes.map((item) => item.toObject());
 	}

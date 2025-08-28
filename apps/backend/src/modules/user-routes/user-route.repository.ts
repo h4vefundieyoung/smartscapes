@@ -29,7 +29,7 @@ class UserRouteRepository implements Repository {
 			.query()
 			.insert(insertData)
 			.returning([
-				"id",
+				"user_routes.id",
 				"routeId",
 				"userId",
 				"status",
@@ -86,9 +86,11 @@ class UserRouteRepository implements Repository {
 		const userRoutes = await this.userRouteModel
 			.query()
 			.where(filters)
-			.orderBy("id", SortingOrder.DESC)
+			.skipUndefined()
+			.orderBy("user_routes.id", SortingOrder.DESC)
+			.withGraphJoined("routes")
 			.select([
-				"id",
+				"user_routes.id as id",
 				"routeId",
 				"userId",
 				"status",
@@ -100,6 +102,7 @@ class UserRouteRepository implements Repository {
 				this.userRouteModel.raw(
 					"ST_AsGeoJSON(planned_geometry)::json as planned_geometry",
 				),
+				"name as routeName",
 			])
 			.execute();
 

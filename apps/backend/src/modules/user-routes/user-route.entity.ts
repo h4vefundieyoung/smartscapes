@@ -13,6 +13,8 @@ class UserRouteEntity implements Entity {
 
 	private routeId: number;
 
+	private routeName: string;
+
 	private startedAt: null | string;
 
 	private status: null | UserRouteStatusType;
@@ -25,6 +27,7 @@ class UserRouteEntity implements Entity {
 		id,
 		plannedGeometry,
 		routeId,
+		routeName,
 		startedAt,
 		status,
 		userId,
@@ -34,6 +37,7 @@ class UserRouteEntity implements Entity {
 		id: null | number;
 		plannedGeometry: LineStringGeometry;
 		routeId: number;
+		routeName: string;
 		startedAt: null | string;
 		status: null | UserRouteStatusType;
 		userId: number;
@@ -46,6 +50,7 @@ class UserRouteEntity implements Entity {
 		this.startedAt = startedAt;
 		this.status = status;
 		this.userId = userId;
+		this.routeName = routeName;
 	}
 
 	public static initialize(data: {
@@ -54,6 +59,7 @@ class UserRouteEntity implements Entity {
 		id: number;
 		plannedGeometry: LineStringGeometry;
 		routeId: number;
+		routeName: string;
 		startedAt: null | string;
 		status: UserRouteStatusType;
 		userId: number;
@@ -64,6 +70,7 @@ class UserRouteEntity implements Entity {
 			id: data.id,
 			plannedGeometry: data.plannedGeometry,
 			routeId: data.routeId,
+			routeName: data.routeName,
 			startedAt: data.startedAt,
 			status: data.status,
 			userId: data.userId,
@@ -74,12 +81,14 @@ class UserRouteEntity implements Entity {
 		actualGeometry,
 		plannedGeometry,
 		routeId,
+		routeName,
 		status,
 		userId,
 	}: {
 		actualGeometry: LineStringGeometry;
 		plannedGeometry: LineStringGeometry;
 		routeId: number;
+		routeName: string;
 		status: UserRouteStatusType;
 		userId: number;
 	}): UserRouteEntity {
@@ -89,6 +98,7 @@ class UserRouteEntity implements Entity {
 			id: null,
 			plannedGeometry,
 			routeId,
+			routeName,
 			startedAt: null,
 			status,
 			userId,
@@ -121,6 +131,7 @@ class UserRouteEntity implements Entity {
 		id: number;
 		plannedGeometry: LineStringGeometry;
 		routeId: number;
+		routeName: string;
 		startedAt: null | string;
 		status: UserRouteStatusType;
 		userId: number;
@@ -131,6 +142,7 @@ class UserRouteEntity implements Entity {
 			id: this.id as number,
 			plannedGeometry: this.plannedGeometry,
 			routeId: this.routeId,
+			routeName: this.routeName,
 			startedAt: this.startedAt,
 			status: this.status as UserRouteStatusType,
 			userId: this.userId,

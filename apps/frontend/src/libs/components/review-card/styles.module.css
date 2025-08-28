@@ -6,10 +6,12 @@
 	background: var(--color-base);
 }
 
-.head {
+.link {
 	display: flex;
-	gap: 24px;
+	gap: 20px;
 	align-items: center;
+	max-width: max-content;
+	text-decoration: none;
 }
 
 .username {

@@ -12,10 +12,20 @@ import styles from "./styles.module.css";
 
 const UserHistory = (): null | React.JSX.Element => {
 	const dispatch = useAppDispatch();
+	const authenticatedUser = useAppSelector(
+		({ auth }) => auth.authenticatedUser,
+	);
 
 	useEffect(() => {
-		void dispatch(userRoutesActions.getAllByUserId(UserRouteStatus.COMPLETED));
-	}, [dispatch]);
+		if (authenticatedUser) {
+			void dispatch(
+				userRoutesActions.getAllByUserId({
+					id: authenticatedUser.id,
+					status: UserRouteStatus.COMPLETED,
+				}),
+			);
+		}
+	}, [authenticatedUser, dispatch]);
 
 	const finishedUserRoutes = useAppSelector(
 		(state) => state.userRoutes.userRoutes,

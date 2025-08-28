@@ -7,9 +7,13 @@ class UserRouteEntity implements Entity {
 
 	private completedAt: null | string;
 
+	private distance: number;
+
 	private id: null | number;
 
 	private plannedGeometry: LineStringGeometry;
+
+	private reviewComment: null | string;
 
 	private routeId: number;
 
@@ -24,8 +28,10 @@ class UserRouteEntity implements Entity {
 	private constructor({
 		actualGeometry,
 		completedAt,
+		distance,
 		id,
 		plannedGeometry,
+		reviewComment,
 		routeId,
 		routeName,
 		startedAt,
@@ -34,8 +40,10 @@ class UserRouteEntity implements Entity {
 	}: {
 		actualGeometry: LineStringGeometry;
 		completedAt: null | string;
+		distance: number;
 		id: null | number;
 		plannedGeometry: LineStringGeometry;
+		reviewComment?: null | string;
 		routeId: number;
 		routeName: string;
 		startedAt: null | string;
@@ -47,6 +55,9 @@ class UserRouteEntity implements Entity {
 		this.completedAt = completedAt;
 		this.plannedGeometry = plannedGeometry;
 		this.routeId = routeId;
+		this.routeName = routeName;
+		this.reviewComment = reviewComment ?? null;
+		this.distance = distance;
 		this.startedAt = startedAt;
 		this.status = status;
 		this.userId = userId;
@@ -56,8 +67,10 @@ class UserRouteEntity implements Entity {
 	public static initialize(data: {
 		actualGeometry: LineStringGeometry;
 		completedAt: null | string;
+		distance: number;
 		id: number;
 		plannedGeometry: LineStringGeometry;
+		reviewComment?: null | string;
 		routeId: number;
 		routeName: string;
 		startedAt: null | string;
@@ -67,8 +80,10 @@ class UserRouteEntity implements Entity {
 		return new UserRouteEntity({
 			actualGeometry: data.actualGeometry,
 			completedAt: data.completedAt,
+			distance: data.distance,
 			id: data.id,
 			plannedGeometry: data.plannedGeometry,
+			reviewComment: data.reviewComment ?? null,
 			routeId: data.routeId,
 			routeName: data.routeName,
 			startedAt: data.startedAt,
@@ -79,14 +94,18 @@ class UserRouteEntity implements Entity {
 
 	public static initializeNew({
 		actualGeometry,
+		distance,
 		plannedGeometry,
+		reviewComment,
 		routeId,
 		routeName,
 		status,
 		userId,
 	}: {
 		actualGeometry: LineStringGeometry;
+		distance: number;
 		plannedGeometry: LineStringGeometry;
+		reviewComment?: null | string;
 		routeId: number;
 		routeName: string;
 		status: UserRouteStatusType;
@@ -95,8 +114,10 @@ class UserRouteEntity implements Entity {
 		return new UserRouteEntity({
 			actualGeometry,
 			completedAt: null,
+			distance,
 			id: null,
 			plannedGeometry,
+			reviewComment: reviewComment ?? null,
 			routeId,
 			routeName,
 			startedAt: null,
@@ -109,6 +130,7 @@ class UserRouteEntity implements Entity {
 		actualGeometry: LineStringGeometry;
 		completedAt: null | string;
 		plannedGeometry: LineStringGeometry;
+		reviewComment: null | string;
 		routeId: number;
 		startedAt: null | string;
 		status: UserRouteStatusType;
@@ -118,6 +140,7 @@ class UserRouteEntity implements Entity {
 			actualGeometry: this.actualGeometry,
 			completedAt: this.completedAt,
 			plannedGeometry: this.plannedGeometry,
+			reviewComment: this.reviewComment,
 			routeId: this.routeId,
 			startedAt: this.startedAt,
 			status: this.status as UserRouteStatusType,
@@ -128,8 +151,10 @@ class UserRouteEntity implements Entity {
 	public toObject(): {
 		actualGeometry: LineStringGeometry;
 		completedAt: null | string;
+		distance: number;
 		id: number;
 		plannedGeometry: LineStringGeometry;
+		reviewComment: null | string;
 		routeId: number;
 		routeName: string;
 		startedAt: null | string;
@@ -139,8 +164,10 @@ class UserRouteEntity implements Entity {
 		return {
 			actualGeometry: this.actualGeometry,
 			completedAt: this.completedAt,
+			distance: this.distance,
 			id: this.id as number,
 			plannedGeometry: this.plannedGeometry,
+			reviewComment: this.reviewComment,
 			routeId: this.routeId,
 			routeName: this.routeName,
 			startedAt: this.startedAt,

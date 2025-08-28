@@ -18,7 +18,11 @@ class UserRouteModel extends AbstractModel {
 
 	public completedAt!: null | string;
 
+	public distance!: number;
+
 	public plannedGeometry!: LineStringGeometry;
+
+	public reviewComment!: null | string;
 
 	public routeId!: number;
 

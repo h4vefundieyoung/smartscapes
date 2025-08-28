@@ -1,0 +1,30 @@
+.activity {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	font-weight: var(--font-weight-medium);
+}
+
+.activity-title {
+	margin: 0;
+	font-size: var(--font-size-h4);
+	color: var(--color-text-strong);
+}
+
+.activity-distance {
+	font-size: var(--font-size-small);
+	font-weight: var(--font-weight-medium);
+	color: var(--color-text-weak);
+}
+
+.map-wrapper {
+	height: 257px;
+	overflow: hidden;
+	border-radius: 8px;
+}
+
+.activity-comment {
+	font-size: var(--font-size-small);
+	font-weight: var(--font-weight-regular);
+	color: var(--color-text-strong);
+}

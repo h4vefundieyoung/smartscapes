@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { type UserRouteStatusType } from "@smartscapes/shared";
 
 import { toastNotifier } from "~/libs/modules/toast-notifier/toast-notifier.js";
 import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 
 import {
 	type UserRouteFinishRequestDto,
+	type UserRouteGetAllQueryRequestDto,
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
 } from "../libs/types/types.js";
@@ -22,6 +22,16 @@ const create = createAsyncThunk<
 	toastNotifier.showSuccess("User route created successfully");
 
 	return result;
+});
+
+const getAllByUserId = createAsyncThunk<
+	APIResponse<UserRouteResponseDto[]>,
+	UserRouteGetAllQueryRequestDto,
+	AsyncThunkConfig
+>(`${sliceName}/get-by-user-id`, async ({ id }, { extra }) => {
+	const { userRouteApi } = extra;
+
+	return await userRouteApi.getAllByUserId({ id });
 });
 
 const start = createAsyncThunk<
@@ -60,16 +70,6 @@ const getByRouteId = createAsyncThunk<
 		return await userRouteApi.getByRouteId({ routeId });
 	},
 );
-
-const getAllByUserId = createAsyncThunk<
-	APIResponse<UserRouteResponseDto[]>,
-	UserRouteStatusType,
-	AsyncThunkConfig
->(`${sliceName}/get-by-user-id`, async (status, { extra }) => {
-	const { userRouteApi } = extra;
-
-	return await userRouteApi.getAllByUserId({ status });
-});
 
 const saveUserRoute = createAsyncThunk<
 	UserRouteResponseDto,

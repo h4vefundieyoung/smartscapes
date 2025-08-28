@@ -134,13 +134,13 @@ describe("RouteService", () => {
 		pois: [
 			{
 				id: FIRST_POI_ID,
-				location: { coordinates: [0, 0], type: "Point" },
+				location: { coordinates: [30.123_45, 50.543_21], type: "Point" },
 				name: FIRST_POI_NAME,
 				visitOrder: FIRST_VISIT_ORDER,
 			},
 			{
 				id: SECOND_POI_ID,
-				location: { coordinates: [0, 0], type: "Point" },
+				location: { coordinates: [30.6789, 50.987_65], type: "Point" },
 				name: SECOND_POI_NAME,
 				visitOrder: SECOND_VISIT_ORDER,
 			},
@@ -382,7 +382,7 @@ describe("RouteService", () => {
 
 		const result = await routeService.create(mockCreatePayload);
 
-		assert.deepStrictEqual(result, mockRouteIdResponse);
+		assert.deepStrictEqual(result, mockRouteAllItemResponse);
 	});
 
 	it("findById should return route when it exists", async () => {
@@ -646,7 +646,7 @@ describe("RouteService", () => {
 
 		const result = await routeService.create(mockCreatePayload);
 
-		assert.deepStrictEqual(result, mockRouteIdResponse);
+		assert.deepStrictEqual(result, mockRouteAllItemResponse);
 	});
 
 	it("ensurePoisExist should throw error when POI does not exist", async () => {

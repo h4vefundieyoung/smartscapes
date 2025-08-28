@@ -58,7 +58,7 @@ describe("PointsOfInterestService", () => {
 			name: mockPointOfInterest.name,
 		});
 
-		assert.deepStrictEqual(result, pointOfInterestEntity.toDetailsObject());
+		assert.deepStrictEqual(result, pointOfInterestEntity.toListObject());
 	});
 
 	it("findAll should return all points of interest", async () => {

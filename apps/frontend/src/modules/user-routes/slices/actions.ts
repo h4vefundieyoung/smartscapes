@@ -28,10 +28,10 @@ const getAllByUserId = createAsyncThunk<
 	APIResponse<UserRouteResponseDto[]>,
 	UserRouteGetAllQueryRequestDto,
 	AsyncThunkConfig
->(`${sliceName}/get-by-user-id`, async ({ id }, { extra }) => {
+>(`${sliceName}/get-by-user-id`, async (query, { extra }) => {
 	const { userRouteApi } = extra;
 
-	return await userRouteApi.getAllByUserId({ id });
+	return await userRouteApi.getAllByUserId(query);
 });
 
 const start = createAsyncThunk<

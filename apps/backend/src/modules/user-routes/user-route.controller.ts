@@ -12,9 +12,10 @@ import { UserRouteApiPath } from "./libs/enums/enum.js";
 import {
 	type UserRouteDeleteParameters,
 	type UserRouteFinishRequestDto,
+	type UserRouteGetAllQueryRequestDto,
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
-} from "./libs/types/type.js";
+} from "./libs/types/types.js";
 import {
 	userRouteDeleteValidationSchema,
 	userRouteFinishValidationSchema,
@@ -451,14 +452,12 @@ class UserRouteController extends BaseController {
 	 */
 	public async getAll(
 		options: APIHandlerOptions<{
-			query: {
-				id: number;
-			};
+			query: UserRouteGetAllQueryRequestDto;
 		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto[]>> {
 		const { query } = options;
 
-		const userRoutes = await this.userRouteService.getAllByUserId(query.id);
+		const userRoutes = await this.userRouteService.getAll(query);
 
 		return {
 			payload: { data: userRoutes },
@@ -522,7 +521,7 @@ class UserRouteController extends BaseController {
 		const { routeId } = query;
 		const { id: userId } = user as UserAuthResponseDto;
 
-		const userRoute = await this.userRouteService.getRouteByFilter({
+		const userRoute = await this.userRouteService.getOne({
 			routeId,
 			userId,
 		});

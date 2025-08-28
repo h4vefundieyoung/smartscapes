@@ -2,10 +2,9 @@ import { SortingOrder } from "~/libs/enums/enums.js";
 import { type Repository } from "~/libs/types/types.js";
 
 import { UserRouteStatus } from "./libs/enums/enum.js";
+import { type UserRouteGetAllFilters } from "./libs/types/types.js";
 import { UserRouteEntity } from "./user-route.entity.js";
 import { type UserRouteModel } from "./user-route.model.js";
-
-type UserRouteFilters = Partial<ReturnType<UserRouteEntity["toObject"]>>;
 
 class UserRouteRepository implements Repository {
 	private userRouteModel: typeof UserRouteModel;
@@ -20,7 +19,7 @@ class UserRouteRepository implements Repository {
 			.where({ status: UserRouteStatus.ACTIVE, userId })
 			.execute();
 
-		return userRoute ? true : false;
+		return Boolean(userRoute);
 	}
 
 	public async create(entity: UserRouteEntity): Promise<UserRouteEntity> {
@@ -58,21 +57,13 @@ class UserRouteRepository implements Repository {
 		return Boolean(isDeleted);
 	}
 
-	public async findAllByUserId(userId: number): Promise<UserRouteEntity[]> {
-		const reviewJoinCondition = `
-		"reviews"."route_id" = "user_routes"."route_id"
-		AND "reviews"."user_id" = ?
-	`;
-		const knex = this.userRouteModel.knex();
-
+	public async findAll(
+		filters: UserRouteGetAllFilters,
+	): Promise<UserRouteEntity[]> {
 		const userRoutes = await this.userRouteModel
 			.query()
-			.where("user_routes.user_id", userId)
-			.andWhere("user_routes.status", UserRouteStatus.COMPLETED)
-			.leftJoin("reviews", function () {
-				this.on(knex.raw(reviewJoinCondition, [userId]));
-			})
-			.leftJoin("routes", "routes.id", "user_routes.route_id")
+			.leftJoin("reviews", "reviews.route_id", "user_routes.route_id")
+			.withGraphJoined("routes")
 			.select([
 				"user_routes.id",
 				"user_routes.route_id",
@@ -80,29 +71,42 @@ class UserRouteRepository implements Repository {
 				"user_routes.status",
 				"user_routes.started_at",
 				"user_routes.completed_at",
-				knex.raw(
+				this.userRouteModel.raw(
 					"ST_AsGeoJSON(user_routes.actual_geometry)::json as actual_geometry",
 				),
-				knex.raw(
+				this.userRouteModel.raw(
 					"ST_AsGeoJSON(user_routes.planned_geometry)::json as planned_geometry",
 				),
 				"reviews.content as review_comment",
 				"routes.name as route_name",
 				"routes.distance",
 			])
+			.modify((builder) => {
+				if (filters.userId) {
+					builder.where("user_routes.user_id", filters.userId);
+					builder.where("reviews.user_id", filters.userId);
+				}
+
+				if (filters.status) {
+					builder.where("user_routes.status", filters.status);
+				}
+
+				if (filters.routeId) {
+					builder.where("user_routes.route_id", filters.routeId);
+				}
+			})
+			.orderBy("user_routes.created_at", SortingOrder.DESC)
 			.execute();
 
 		return userRoutes.map((item) => UserRouteEntity.initialize(item));
 	}
 
-	public async findByFilter(
-		filters: UserRouteFilters,
-	): Promise<UserRouteEntity[]> {
-		const userRoutes = await this.userRouteModel
+	public async findOne(
+		filters: UserRouteGetAllFilters,
+	): Promise<null | UserRouteEntity> {
+		const userRoute = await this.userRouteModel
 			.query()
 			.where(filters)
-			.skipUndefined()
-			.orderBy("user_routes.id", SortingOrder.DESC)
 			.withGraphJoined("routes")
 			.select([
 				"user_routes.id as id",
@@ -120,9 +124,10 @@ class UserRouteRepository implements Repository {
 				"name as routeName",
 				"distance",
 			])
-			.execute();
+			.orderBy("user_routes.created_at", SortingOrder.DESC)
+			.first();
 
-		return userRoutes.map((item) => UserRouteEntity.initialize(item));
+		return userRoute ? UserRouteEntity.initialize(userRoute) : null;
 	}
 
 	public async findPopular(): Promise<UserRouteEntity[]> {

@@ -218,7 +218,7 @@ class RouteEntity implements Entity {
 			name: string;
 			visitOrder: number;
 		}[];
-		savedUserRoute?: SavedUserRoute[];
+		savedUserRoute: null | SavedUserRoute[];
 	}): RouteEntity {
 		return new RouteEntity({
 			categories: data.categories,
@@ -232,7 +232,7 @@ class RouteEntity implements Entity {
 			images: data.images,
 			name: data.name,
 			pois: data.pois,
-			savedUserRoute: null,
+			savedUserRoute: data.savedUserRoute,
 		});
 	}
 

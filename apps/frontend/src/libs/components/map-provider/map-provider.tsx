@@ -82,10 +82,12 @@ const MapProvider = ({
 
 		client.renderRoute(routeLine);
 
-		const coords = routeLine.geometry.coordinates as Coordinates[] | undefined;
+		const coordinates = routeLine.geometry.coordinates as
+			| Coordinates[]
+			| undefined;
 
-		if (coords && coords.length > 0) {
-			client.fitToCoordinates(coords);
+		if (coordinates && coordinates.length > 0) {
+			client.fitToCoordinates(coordinates);
 		}
 	}, [isLoaded, routeLine]);
 

@@ -7,8 +7,8 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { actions as userRoutesActions } from "~/modules/user-routes/user-routes.js";
 
+import { DashboardRouteCard } from "../../card/dashboard-route-card.js";
 import styles from "./styles.module.css";
-import { UserHistoryCard } from "./user-history-card.js";
 
 const UserHistory = (): null | React.JSX.Element => {
 	const dispatch = useAppDispatch();
@@ -32,7 +32,7 @@ const UserHistory = (): null | React.JSX.Element => {
 	}
 
 	const cards = finishedUserRoutes.map((route) => {
-		return <UserHistoryCard key={route.id} route={route} />;
+		return <DashboardRouteCard key={route.id} route={route} />;
 	});
 
 	return <div className={styles["cards-wrapper"]}>{cards}</div>;

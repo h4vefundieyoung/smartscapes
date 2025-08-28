@@ -1,0 +1,18 @@
+.cards-wrapper {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 64px;
+	width: 100%;
+}
+
+@media (width <=1024px) {
+	.cards-wrapper {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (width <=768px) {
+	.cards-wrapper {
+		grid-template-columns: 1fr;
+	}
+}

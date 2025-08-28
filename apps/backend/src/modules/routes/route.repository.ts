@@ -232,6 +232,7 @@ class RouteRepository implements Repository {
 				name: poi.name,
 				visitOrder: poi.visitOrder,
 			})),
+			savedUserRoute: route.savedUserRoute,
 		});
 	}
 
@@ -305,6 +306,7 @@ class RouteRepository implements Repository {
 					name: poi.name,
 					visitOrder: poi.visitOrder,
 				})),
+				savedUserRoute: routeWithRelations.savedUserRoute,
 			});
 		});
 	}

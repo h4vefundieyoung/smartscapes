@@ -4,6 +4,7 @@ export { useAppForm } from "./use-app-form/use-app-form.hook.js";
 export { useAppNavigate } from "./use-app-navigate/use-app-navigate.hook.js";
 export { useAppSelector } from "./use-app-selector/use-app-selector.hook.js";
 export { useDebouncedFunction } from "./use-debounced-function/use-debounced-function.hook.js";
+export { useInfiniteScroll } from "./use-infinite-scroll/use-infinite-scroll.js";
 export { useMapClient } from "./use-map-client/use-map-client.hook.js";
 export { usePagination } from "./use-pagination/use-pagination.hook.js";
 export { useTabNavigation } from "./use-tab-navigation/use-tab-navigation.hook.js";
@@ -16,5 +17,5 @@ export {
 	useRef,
 	useState,
 } from "react";
-export { useController as useFormController } from "react-hook-form";
+export { useController as useFormController, useWatch } from "react-hook-form";
 export { useLocation, useParams, useSearchParams } from "react-router";

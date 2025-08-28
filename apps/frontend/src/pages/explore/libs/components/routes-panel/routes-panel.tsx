@@ -1,39 +1,58 @@
 import React from "react";
 
 import {
+	Button,
+	Input,
 	Loader,
 	RouteCard,
 	RouteMapPopup,
 } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
+	useAppForm,
 	useCallback,
+	useDebouncedFunction,
 	useEffect,
+	useInfiniteScroll,
 	useMapClient,
 	useMemo,
 	useRef,
+	useWatch,
 } from "~/libs/hooks/hooks.js";
 import { type MapMarker } from "~/libs/modules/map-client/libs/types/types.js";
-import { type ValueOf } from "~/libs/types/types.js";
-import { type RouteGetAllItemResponseDto } from "~/modules/routes/routes.js";
+import {
+	type RouteFindAllOptions,
+	type RouteGetAllItemResponseDto,
+	type ValueOf,
+} from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
+	hasMore: boolean;
+	loadMoreDataStatus: ValueOf<typeof DataStatus>;
 	locationDataStatus: ValueOf<typeof DataStatus>;
+	onLoadMore: (searchTerm?: string) => void;
+	onSearch: (searchTerm: string) => void;
 	routes: RouteGetAllItemResponseDto[];
 	routesDataStatus: ValueOf<typeof DataStatus>;
 	routesError: null | string;
 };
 
 const RoutesPanel = ({
+	hasMore,
+	loadMoreDataStatus,
 	locationDataStatus,
+	onLoadMore,
+	onSearch,
 	routes,
 	routesDataStatus,
 	routesError,
 }: Properties): React.JSX.Element => {
 	const hasLocationError = locationDataStatus === DataStatus.REJECTED;
 	const isRoutesLoading = routesDataStatus === DataStatus.PENDING;
+	const isLoadingMore = loadMoreDataStatus === DataStatus.PENDING;
+	const loadMoreFailed = loadMoreDataStatus === DataStatus.REJECTED;
 
 	const mapClient = useMapClient();
 	const currentMarkerReference = useRef<MapMarker | null>(null);
@@ -96,8 +115,52 @@ const RoutesPanel = ({
 		[routes, navigateToRoute],
 	);
 
+	const { control, errors } = useAppForm<RouteFindAllOptions>({
+		defaultValues: {
+			name: "",
+		},
+		mode: "onChange",
+	});
+
+	const searchValue = useWatch({ control, name: "name" });
+	const isFirstRender = useRef(true);
+
+	const searchFunction = useCallback(
+		(searchTerm: string) => {
+			onSearch(searchTerm);
+		},
+		[onSearch],
+	);
+
+	const debouncedSearch = useDebouncedFunction(searchFunction);
+
+	useEffect(() => {
+		if (isFirstRender.current) {
+			isFirstRender.current = false;
+
+			return;
+		}
+
+		debouncedSearch(searchValue || "");
+	}, [searchValue, debouncedSearch]);
+
+	const { elementReference } = useInfiniteScroll({
+		hasNextPage: hasMore,
+		isLoading: isLoadingMore,
+		onLoadMore,
+		threshold: 0.1,
+	});
+
+	const handleRetrySearch = useCallback(() => {
+		onSearch(searchValue || "");
+	}, [onSearch, searchValue]);
+
+	const handleLoadMoreClick = useCallback(() => {
+		onLoadMore(searchValue || "");
+	}, [onLoadMore, searchValue]);
+
 	const content = useMemo(() => {
-		if (isRoutesLoading) {
+		if (isRoutesLoading && routes.length === 0) {
 			return (
 				<div className={styles["loader-container"]}>
 					<Loader />
@@ -105,13 +168,27 @@ const RoutesPanel = ({
 			);
 		}
 
-		if (routesError) {
-			return <span className={styles["error"]}>{routesError}</span>;
-		}
+		if (routes.length === 0 && !isRoutesLoading) {
+			if (routesError) {
+				return (
+					<div className={styles["error-container"]}>
+						<span className={styles["error"]}>{routesError}</span>
+						<Button
+							label="Try Again"
+							onClick={handleRetrySearch}
+							type="button"
+							variant="primary"
+						/>
+					</div>
+				);
+			}
 
-		if (routes.length === 0) {
 			return (
-				<div className={styles["list-empty"]}>No routes found nearby.</div>
+				<div className={styles["list-empty"]}>
+					{searchValue
+						? "No routes found matching your search."
+						: "No routes found nearby."}
+				</div>
 			);
 		}
 
@@ -123,31 +200,93 @@ const RoutesPanel = ({
 					</div>
 				)}
 
+				{routesError && (
+					<div className={styles["error-container"]}>
+						<span className={styles["error"]}>{routesError}</span>
+						<Button
+							label="Try Again"
+							onClick={handleRetrySearch}
+							type="button"
+							variant="primary"
+						/>
+					</div>
+				)}
+
 				<ul className={styles["list"]}>
 					{routes.map((route) => (
 						<RouteCard
 							id={route.id}
-							imageUrl={null}
-							key={route.id}
+							imageUrl={
+								route.images.length > 0 ? (route.images[0]?.url ?? null) : null
+							}
+							key={`${String(route.id)}-${route.name}`}
 							name={route.name}
 							onClick={handleRouteCardClick(route.id)}
 						/>
 					))}
+					{hasMore && (
+						<li className={styles["load-more-trigger"]} ref={elementReference}>
+							{isLoadingMore && (
+								<div className={styles["loader-container"]}>
+									<Loader />
+								</div>
+							)}
+						</li>
+					)}
 				</ul>
 			</>
 		);
 	}, [
-		isRoutesLoading,
-		routesError,
 		hasLocationError,
+		handleRetrySearch,
+		isRoutesLoading,
 		routes,
+		routesError,
+		searchValue,
 		handleRouteCardClick,
+		hasMore,
+		isLoadingMore,
+		elementReference,
 	]);
 
 	return (
 		<div className={styles["container"]}>
-			<h3 className={styles["title"]}>Explore routes</h3>
+			<div className={styles["sticky-header"]}>
+				<h3 className={styles["title"]}>Explore routes</h3>
+
+				<div className={styles["search-container"]}>
+					<Input
+						control={control}
+						errors={errors}
+						iconLeft={{
+							label: "Search",
+							name: "search",
+							onClick: undefined,
+						}}
+						isLabelHidden
+						label="Search routes"
+						name="name"
+						type="text"
+					/>
+				</div>
+			</div>
+
 			{content}
+
+			{routes.length > 0 && (
+				<>
+					{loadMoreFailed && (
+						<div className={styles["load-more-button-container"]}>
+							<Button
+								label="Load More"
+								onClick={handleLoadMoreClick}
+								type="button"
+								variant="outlined"
+							/>
+						</div>
+					)}
+				</>
+			)}
 		</div>
 	);
 };

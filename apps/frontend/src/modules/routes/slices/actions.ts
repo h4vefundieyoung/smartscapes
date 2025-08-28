@@ -68,7 +68,7 @@ const patch = createAsyncThunk<
 });
 
 const getAll = createAsyncThunk<
-	APIResponse<RouteGetByIdResponseDto[]>,
+	APIResponse<RouteGetAllItemResponseDto[], PaginationMeta>,
 	RouteFindAllOptions | undefined,
 	AsyncThunkConfig
 >(`${routesSliceName}/get-all`, async (options, { extra }) => {

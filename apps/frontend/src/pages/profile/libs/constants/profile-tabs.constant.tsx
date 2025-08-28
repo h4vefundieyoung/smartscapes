@@ -4,15 +4,17 @@ import {
 	UserDetails,
 } from "~/pages/profile/libs/components/components.js";
 
+import { ProfileTabItemKey } from "../enums/enums.js";
+
 const PROFILE_TABS: TabItem[] = [
 	{
 		element: <UserDetails />,
-		id: "user-details",
+		id: ProfileTabItemKey.USER_DETAILS,
 		label: "User details",
 	},
 	{
 		element: <MyReviews />,
-		id: "my-reviews",
+		id: ProfileTabItemKey.MY_REVIEWS,
 		label: "My reviews",
 	},
 ];

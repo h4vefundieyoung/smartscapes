@@ -26,6 +26,7 @@ describe("UserRouteService", () => {
 		id: 1,
 		plannedGeometry: mockGeometry,
 		routeId: 7,
+		routeName: "Landscape alley",
 		startedAt: null,
 		status: UserRouteStatus.NOT_STARTED,
 		userId: 1,
@@ -149,7 +150,7 @@ describe("UserRouteService", () => {
 				mockRouteService,
 			);
 
-			const result = await serviceWithRoutes.getAllByUserId(1);
+			const result = await serviceWithRoutes.getAllByUserId(1, {});
 
 			assert.strictEqual(Array.isArray(result), true);
 			assert.strictEqual(result.length, 1);

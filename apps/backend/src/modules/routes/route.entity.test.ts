@@ -34,8 +34,21 @@ describe("RouteEntity", () => {
 		],
 		name: "Routes 2 Test Name",
 		pois: [
-			{ id: 1, name: "POI 1 Test Name", visitOrder: 0 },
-			{ id: 2, name: "POI 2 Test Name", visitOrder: 1 },
+			{
+				id: 1,
+				location: {
+					coordinates: [30.123_45, 50.543_21],
+					type: "Point" as const,
+				},
+				name: "POI 1 Test Name",
+				visitOrder: 0,
+			},
+			{
+				id: 2,
+				location: { coordinates: [30.6789, 50.987_65], type: "Point" as const },
+				name: "POI 2 Test Name",
+				visitOrder: 1,
+			},
 		],
 	};
 
@@ -45,8 +58,24 @@ describe("RouteEntity", () => {
 			id: 1,
 			name: "Route 1 Test Name",
 			pois: [
-				{ id: 1, name: "POI 1 Test Name", visitOrder: 0 },
-				{ id: 2, name: "POI 2 Test Name", visitOrder: 1 },
+				{
+					id: 1,
+					location: {
+						coordinates: [30.123_45, 50.543_21] as Coordinates,
+						type: "Point" as const,
+					},
+					name: "POI 1 Test Name",
+					visitOrder: 0,
+				},
+				{
+					id: 2,
+					location: {
+						coordinates: [30.6789, 50.987_65] as Coordinates,
+						type: "Point" as const,
+					},
+					name: "POI 2 Test Name",
+					visitOrder: 1,
+				},
 			],
 		};
 

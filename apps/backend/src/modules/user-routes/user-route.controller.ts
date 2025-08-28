@@ -14,6 +14,7 @@ import {
 	type UserRouteFinishRequestDto,
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
+	type UserRouteStatusType,
 } from "./libs/types/type.js";
 import {
 	userRouteDeleteValidationSchema,
@@ -134,7 +135,7 @@ class UserRouteController extends BaseController {
 		this.addRoute({
 			handler: this.getAll.bind(this),
 			method: "GET",
-			path: UserRouteApiPath.$ID,
+			path: UserRouteApiPath.ROOT,
 		});
 
 		this.addRoute({
@@ -370,6 +371,13 @@ class UserRouteController extends BaseController {
 	 *       - User Routes
 	 *     summary: Get all user routes
 	 *     description: Get all user routes for the authenticated user including their status, timestamps, and geometry information. User ID is derived from JWT token.
+	 *     parameters:
+	 *       - in: query
+	 *         name: status
+	 *         schema:
+	 *           type: string
+	 *           enum: ["active", "completed", "cancelled", "expired", "not_started"]
+	 *           example: "active"
 	 *     responses:
 	 *       200:
 	 *         description: User routes retrieved successfully
@@ -426,12 +434,19 @@ class UserRouteController extends BaseController {
 	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
 	 */
 	public async getAll(
-		options: APIHandlerOptions,
+		options: APIHandlerOptions<{
+			query: {
+				status?: UserRouteStatusType;
+			};
+		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto[]>> {
-		const { user } = options;
+		const { query, user } = options;
 		const { id: userId } = user as UserAuthResponseDto;
 
-		const userRoutes = await this.userRouteService.getAllByUserId(userId);
+		const userRoutes = await this.userRouteService.getAllByUserId(
+			userId,
+			query,
+		);
 
 		return {
 			payload: { data: userRoutes },

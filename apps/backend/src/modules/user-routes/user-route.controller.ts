@@ -18,6 +18,7 @@ import {
 import {
 	userRouteDeleteValidationSchema,
 	userRouteFinishValidationSchema,
+	userRouteGetAllValidationSchema,
 	userRouteQueryValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 import { type UserRouteService } from "./user-route.service.js";
@@ -134,7 +135,10 @@ class UserRouteController extends BaseController {
 		this.addRoute({
 			handler: this.getAll.bind(this),
 			method: "GET",
-			path: UserRouteApiPath.$ID,
+			path: UserRouteApiPath.ROOT,
+			validation: {
+				query: userRouteGetAllValidationSchema,
+			},
 		});
 
 		this.addRoute({
@@ -143,15 +147,6 @@ class UserRouteController extends BaseController {
 			path: UserRouteApiPath.$ID,
 			validation: {
 				params: userRouteDeleteValidationSchema,
-			},
-		});
-
-		this.addRoute({
-			handler: this.getByRouteId.bind(this),
-			method: "GET",
-			path: UserRouteApiPath.GET,
-			validation: {
-				query: userRouteQueryValidationSchema,
 			},
 		});
 	}
@@ -370,6 +365,20 @@ class UserRouteController extends BaseController {
 	 *       - User Routes
 	 *     summary: Get all user routes
 	 *     description: Get all user routes for the authenticated user including their status, timestamps, and geometry information. User ID is derived from JWT token.
+	 *     parameters:
+	 *       - in: query
+	 *         name: status
+	 *         schema:
+	 *           type: string
+	 *           enum: ["active", "completed", "cancelled", "expired", "not_started"]
+	 *           example: "active"
+	 *       - in: query
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: integer
+	 *         description: ID of user to retrieve routes for
+	 *         example: 1
 	 *     responses:
 	 *       200:
 	 *         description: User routes retrieved successfully
@@ -426,12 +435,15 @@ class UserRouteController extends BaseController {
 	 *                       coordinates: [[30.528909, 50.455232], [30.528209, 50.415232]]
 	 */
 	public async getAll(
-		options: APIHandlerOptions,
+		options: APIHandlerOptions<{
+			query: {
+				id: number;
+			};
+		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto[]>> {
-		const { user } = options;
-		const { id: userId } = user as UserAuthResponseDto;
+		const { query } = options;
 
-		const userRoutes = await this.userRouteService.getAllByUserId(userId);
+		const userRoutes = await this.userRouteService.getAllByUserId(query.id);
 
 		return {
 			payload: { data: userRoutes },

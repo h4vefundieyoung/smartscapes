@@ -39,12 +39,15 @@ class UserRouteService implements Service {
 
 		await this.ensureIsNotDuplicateRoute(routeId, userId);
 
-		const { geometry } = await this.routeService.findById(routeId);
+		const { distance, geometry, name } =
+			await this.routeService.findById(routeId);
 
 		const createdData = UserRouteEntity.initializeNew({
 			actualGeometry: geometry,
+			distance,
 			plannedGeometry: geometry,
 			routeId,
+			routeName: name,
 			status: UserRouteStatus.NOT_STARTED,
 			userId,
 		});
@@ -112,7 +115,7 @@ class UserRouteService implements Service {
 	}
 
 	public async getAllByUserId(userId: number): Promise<UserRouteResponseDto[]> {
-		const userRoutes = await this.userRouteRepository.findByFilter({ userId });
+		const userRoutes = await this.userRouteRepository.findAllByUserId(userId);
 
 		return userRoutes.map((item) => item.toObject());
 	}

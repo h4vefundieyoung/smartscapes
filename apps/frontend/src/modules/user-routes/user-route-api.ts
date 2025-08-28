@@ -8,6 +8,7 @@ import { type APIResponse } from "~/libs/types/types.js";
 import { UserRouteApiPath } from "./libs/enums/enums.js";
 import {
 	type UserRouteFinishRequestDto,
+	type UserRouteGetAllQueryRequestDto,
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
 } from "./libs/types/types.js";
@@ -69,7 +70,7 @@ class UserRouteApi extends BaseHTTPApi {
 	}
 
 	public async getAllByUserId(
-		query: UserRouteQueryRequestDto,
+		query: UserRouteGetAllQueryRequestDto,
 	): Promise<APIResponse<UserRouteResponseDto[]>> {
 		const response = await this.load<APIResponse<UserRouteResponseDto[]>>(
 			this.getFullEndpoint(UserRouteApiPath.ROOT, {}),

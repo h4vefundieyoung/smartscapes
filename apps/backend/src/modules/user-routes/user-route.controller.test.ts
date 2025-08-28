@@ -10,6 +10,7 @@ import {
 	type UserRouteFinishRequestDto,
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
+	type UserRouteStatusType,
 } from "./libs/types/type.js";
 import { UserRouteController } from "./user-route.controller.js";
 import { type UserRouteService } from "./user-route.service.js";
@@ -24,6 +25,7 @@ describe("UserRouteController", () => {
 			type: "LineString",
 		},
 		completedAt: null,
+		distance: 1000,
 		id: 1,
 		plannedGeometry: {
 			coordinates: [
@@ -32,7 +34,9 @@ describe("UserRouteController", () => {
 			],
 			type: "LineString",
 		},
+		reviewComment: "comment",
 		routeId: 7,
+		routeName: "Landscape alley",
 		startedAt: null,
 		status: "not_started",
 		userId: 1,
@@ -166,9 +170,23 @@ describe("UserRouteController", () => {
 
 	describe("getAll", () => {
 		it("should get all user routes and return 200 status with array of routes", async () => {
-			const options: APIHandlerOptions = {
-				user: { id: 1 },
-			} as APIHandlerOptions;
+			const options: APIHandlerOptions<{
+				query: { id: number; status?: UserRouteStatusType };
+			}> = {
+				body: undefined,
+				params: undefined,
+				query: { id: 1, status: "active" },
+				user: {
+					avatarUrl: null,
+					email: "",
+					firstName: "",
+					group: { id: 1, key: "admins", name: "Test Group", permissions: [] },
+					groupId: 1,
+					id: 1,
+					isVisibleProfile: true,
+					lastName: "",
+				},
+			};
 
 			const result = await userRouteController.getAll(options);
 

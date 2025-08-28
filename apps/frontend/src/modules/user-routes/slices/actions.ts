@@ -5,6 +5,7 @@ import { type APIResponse, type AsyncThunkConfig } from "~/libs/types/types.js";
 
 import {
 	type UserRouteFinishRequestDto,
+	type UserRouteGetAllQueryRequestDto,
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
 } from "../libs/types/types.js";
@@ -25,12 +26,12 @@ const create = createAsyncThunk<
 
 const getAllByUserId = createAsyncThunk<
 	APIResponse<UserRouteResponseDto[]>,
-	UserRouteQueryRequestDto,
+	UserRouteGetAllQueryRequestDto,
 	AsyncThunkConfig
->(`${sliceName}/get-by-user-id`, async ({ routeId }, { extra }) => {
+>(`${sliceName}/get-by-user-id`, async ({ id }, { extra }) => {
 	const { userRouteApi } = extra;
 
-	return await userRouteApi.getAllByUserId({ routeId });
+	return await userRouteApi.getAllByUserId({ id });
 });
 
 const start = createAsyncThunk<

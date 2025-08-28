@@ -236,21 +236,14 @@ const RouteDetails = (): React.JSX.Element => {
 	}, [routeId, routeGeometry]);
 
 	const markers = useMemo<{ coordinates: Coordinates }[]>(() => {
-		const startMarker = routeGeometry?.coordinates.find(Boolean);
-		const endMarker = routeGeometry?.coordinates.findLast(Boolean);
-
-		const result: { coordinates: Coordinates }[] = [];
-
-		if (startMarker) {
-			result.push({ coordinates: startMarker });
+		if (!route) {
+			return [];
 		}
 
-		if (endMarker) {
-			result.push({ coordinates: endMarker });
-		}
-
-		return result;
-	}, [routeGeometry]);
+		return route.pois.map((poi) => ({
+			coordinates: poi.location.coordinates,
+		}));
+	}, [route]);
 
 	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
 		return (

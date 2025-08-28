@@ -62,12 +62,13 @@ class UserRouteRepository implements Repository {
 		const reviewJoinCondition = `
 		"reviews"."route_id" = "user_routes"."route_id"
 		AND "reviews"."user_id" = ?
-		`;
+	`;
 		const knex = this.userRouteModel.knex();
 
 		const userRoutes = await this.userRouteModel
 			.query()
 			.where("user_routes.user_id", userId)
+			.andWhere("user_routes.status", UserRouteStatus.COMPLETED)
 			.leftJoin("reviews", function () {
 				this.on(knex.raw(reviewJoinCondition, [userId]));
 			})

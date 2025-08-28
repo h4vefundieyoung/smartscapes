@@ -8,7 +8,11 @@ import styles from "./styles.module.css";
 const Landing = (): React.JSX.Element => {
 	return (
 		<main className={styles["landing"]}>
-			<Header actions={[{ label: "Explore", to: AppRoute.APP }]} user={null} />
+			<Header
+				actions={[{ label: "Explore", to: AppRoute.APP }]}
+				containerWidth="var(--landing-container-width)"
+				user={null}
+			/>
 			<HeroSection />
 			<PopularSection />
 		</main>

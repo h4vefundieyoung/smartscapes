@@ -14,10 +14,11 @@ type Properties = {
 		label: string;
 		to: ValueOf<typeof AppRoute>;
 	}[];
+	containerWidth?: string;
 	user: null | UserAuthResponseDto;
 };
 
-const Header = ({ actions, user }: Properties): JSX.Element => {
+const Header = ({ actions, containerWidth, user }: Properties): JSX.Element => {
 	const renderHeaderContent = (): JSX.Element => {
 		if (user) {
 			return <AuthenticatedHeader user={user} />;
@@ -34,7 +35,7 @@ const Header = ({ actions, user }: Properties): JSX.Element => {
 
 	return (
 		<header className={styles["header"]}>
-			<div className={styles["container"]}>
+			<div className={styles["container"]} style={{ maxWidth: containerWidth }}>
 				<Link to={AppRoute.ROOT}>
 					<span className="visually-hidden">Go to landing</span>
 					<img

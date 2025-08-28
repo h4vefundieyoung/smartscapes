@@ -12,12 +12,8 @@ const TableBody = <T,>({ table }: Properties<T>): React.JSX.Element => {
 			{table.getRowModel().rows.map((row) => (
 				<tr className={styles["row"]} key={row.id}>
 					{row.getVisibleCells().map((cell) => (
-						<td key={cell.id}>
-							<div className={styles["cell"]}>
-								<div className={styles["cell-content-wrapper"]}>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</div>
-							</div>
+						<td className={styles["cell"]} key={cell.id}>
+							{flexRender(cell.column.columnDef.cell, cell.getContext())}
 						</td>
 					))}
 				</tr>

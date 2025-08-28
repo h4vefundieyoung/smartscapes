@@ -3,13 +3,12 @@
 	flex: 1;
 	flex-direction: column;
 	width: 100%;
-	padding: 0 0 24px;
 }
 
 .tab-navigation {
 	display: flex;
 	align-items: center;
-	margin-bottom: 56px;
+	margin-bottom: 48px;
 	border-bottom: 1px solid var(--color-stroke-weak);
 }
 

@@ -1,4 +1,4 @@
-import { Carousel, TabContainer } from "~/libs/components/components.js";
+import { PageHeading, TabContainer } from "~/libs/components/components.js";
 import { useTabNavigation } from "~/libs/hooks/hooks.js";
 
 import { DASHBOARD_TABS } from "./libs/constants/constants.js";
@@ -14,21 +14,15 @@ const Dashboard = (): React.JSX.Element => {
 
 	return (
 		<main className={styles["container"]}>
-			<div className={styles["components-container"]}>
-				<div className={styles["text"]}>
-					<h1 className={styles["label"]}>Dashboard</h1>
-					<p className={styles["description"]}>
-						Start saved routes and review your route history
-					</p>
-				</div>
-
-				<TabContainer
-					activeTabId={activeTabId}
-					onTabChange={handleTabChange}
-					tabsData={DASHBOARD_TABS}
-				/>
-			</div>
-			<Carousel images={[""]} />
+			<PageHeading
+				subtitle="Start saved routes and review your route history."
+				title="Dashboard"
+			/>
+			<TabContainer
+				activeTabId={activeTabId}
+				onTabChange={handleTabChange}
+				tabsData={DASHBOARD_TABS}
+			/>
 		</main>
 	);
 };

@@ -114,7 +114,11 @@ class UserRouteRepository implements Repository {
 
 		const popularRoutes = await this.userRouteModel
 			.query()
-			.select(["popular_routes.routeId", "name as routeName"])
+			.select([
+				"popular_routes.routeId",
+				"name as routeName",
+				"geometry as plannedGeometry",
+			])
 			.from(
 				this.userRouteModel
 					.query()

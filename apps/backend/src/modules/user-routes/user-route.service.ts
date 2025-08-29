@@ -9,11 +9,10 @@ import {
 } from "./libs/enums/enum.js";
 import { UserRouteError } from "./libs/exceptions/exceptions.js";
 import {
-	type UserRouteFilter,
-	type UserRouteGetAllOptions,
+	type UserRouteGetAllFilters,
 	type UserRouteResponseDto,
 	type UserRouteStatusType,
-} from "./libs/types/type.js";
+} from "./libs/types/types.js";
 import { UserRouteEntity } from "./user-route.entity.js";
 import { type UserRouteRepository } from "./user-route.repository.js";
 
@@ -40,13 +39,13 @@ class UserRouteService implements Service {
 
 		await this.ensureIsNotDuplicateRoute(routeId, userId);
 
-		const { geometry, name } = await this.routeService.findById(routeId);
+		const { distance, geometry } = await this.routeService.findById(routeId);
 
 		const createdData = UserRouteEntity.initializeNew({
 			actualGeometry: geometry,
+			distance,
 			plannedGeometry: geometry,
 			routeId,
-			routeName: name,
 			status: UserRouteStatus.NOT_STARTED,
 			userId,
 		});
@@ -81,7 +80,7 @@ class UserRouteService implements Service {
 	}): Promise<UserRouteResponseDto> {
 		const { actualGeometry, routeId, userId } = payload;
 
-		const userRoute = await this.getRouteByFilter({
+		const userRoute = await this.getOne({
 			routeId,
 			userId,
 		});
@@ -113,28 +112,18 @@ class UserRouteService implements Service {
 		return updatedRoute.toObject();
 	}
 
-	public async getAllByUserId(
-		userId: number,
-		options: UserRouteGetAllOptions,
+	public async getAll(
+		filters: UserRouteGetAllFilters,
 	): Promise<UserRouteResponseDto[]> {
-		const userRoutes = await this.userRouteRepository.findByFilter({
-			userId,
-			...options,
-		});
+		const userRoutes = await this.userRouteRepository.findAll(filters);
 
 		return userRoutes.map((item) => item.toObject());
 	}
 
-	public async getPopularRoutes(): Promise<UserRouteResponseDto[]> {
-		const routes = await this.userRouteRepository.findPopular();
-
-		return routes.map((item) => item.toObject());
-	}
-
-	public async getRouteByFilter(
-		filters: UserRouteFilter,
+	public async getOne(
+		filters: UserRouteGetAllFilters,
 	): Promise<UserRouteResponseDto> {
-		const [userRoute] = await this.userRouteRepository.findByFilter(filters);
+		const userRoute = await this.userRouteRepository.findOne(filters);
 
 		if (!userRoute) {
 			throw new UserRouteError({
@@ -146,16 +135,19 @@ class UserRouteService implements Service {
 		return userRoute.toObject();
 	}
 
+	public async getPopularRoutes(): Promise<UserRouteResponseDto[]> {
+		const routes = await this.userRouteRepository.findPopular();
+
+		return routes.map((item) => item.toObject());
+	}
+
 	public async start(payload: {
 		routeId: number;
 		userId: number;
 	}): Promise<UserRouteResponseDto> {
 		const { routeId, userId } = payload;
 
-		const userRoute = await this.getRouteByFilter({
-			routeId,
-			userId,
-		});
+		const userRoute = await this.getOne({ routeId, userId });
 
 		this.ensureUserIsOwner(userRoute.userId, userId);
 
@@ -189,13 +181,13 @@ class UserRouteService implements Service {
 		routeId: number,
 		userId: number,
 	): Promise<void> {
-		const userRoutes = await this.userRouteRepository.findByFilter({
+		const userRoute = await this.userRouteRepository.findOne({
 			routeId,
 			status: UserRouteStatus.NOT_STARTED,
 			userId,
 		});
 
-		if (userRoutes.length > 0) {
+		if (userRoute) {
 			throw new UserRouteError({
 				message: UserRouteExeptionMessage.USER_ROUTE_ALREADY_EXISTS,
 				status: HTTPCode.FORBIDDEN,

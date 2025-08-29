@@ -16,6 +16,7 @@ export {
 	type LineStringGeometry,
 	type PaginationMeta,
 	type PointGeometry,
+	type RouteFindAllOptions,
 	type RouteGetAllItemResponseDto,
 	type UserRouteResponseDto,
 	type ValidationSchema,

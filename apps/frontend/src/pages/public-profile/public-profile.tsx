@@ -1,3 +1,4 @@
+import { Activity } from "~/libs/components/activity/activity.js";
 import { Avatar, Button, Loader } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/data-status.enum.js";
 import {
@@ -23,10 +24,12 @@ const PublicProfile = (): React.JSX.Element => {
 	);
 	const dataStatus = useAppSelector(({ users }) => users.dataStatus);
 	const userProfile = useAppSelector(({ users }) => users.userProfile);
+	const userActivities = useAppSelector(({ users }) => users.userActivities);
 
 	useEffect(() => {
 		if (id) {
 			void dispatch(usersActions.getUserPublicProfile(Number(id)));
+			void dispatch(usersActions.getActivities(Number(id)));
 		}
 	}, [dispatch, id]);
 
@@ -92,6 +95,33 @@ const PublicProfile = (): React.JSX.Element => {
 							</div>
 						</div>
 					</div>
+				</div>
+
+				<div className={styles["activities-container"]}>
+					<div className={styles["activities-header"]}>
+						<div className={styles["activity-label"]}>
+							<span>Activity</span>
+						</div>
+					</div>
+
+					{userActivities.length === 0 && (
+						<div className={styles["no-activities-label"]}>
+							User have no activities yet.
+						</div>
+					)}
+					{userActivities.length > 0 &&
+						userActivities.map((route) => (
+							<Activity
+								comment={route.reviewComment}
+								key={route.id}
+								length={route.distance}
+								routeLine={{
+									geometry: route.actualGeometry,
+									id: route.id.toString(),
+								}}
+								title={route.routeName}
+							/>
+						))}
 				</div>
 			</main>
 		</div>

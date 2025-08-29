@@ -86,7 +86,9 @@ const RouteDetails = (): React.JSX.Element => {
 	const navigate = useAppNavigate();
 
 	const isAuthorized = Boolean(user);
+
 	const isSaved = route?.savedUserRoute?.status === UserRouteStatus.NOT_STARTED;
+
 	const isSaving = saveStatus === DataStatus.PENDING;
 
 	const hasEditPermissions = Boolean(
@@ -300,7 +302,7 @@ const RouteDetails = (): React.JSX.Element => {
 							)}
 							{isAuthorized && (
 								<Button
-									icon={isSaved ? "bookmark" : "bookmarkOff"}
+									icon={isSaved ? "bookmarkOff" : "bookmark"}
 									isDisabled={isSaving}
 									label="Save route"
 									onClick={

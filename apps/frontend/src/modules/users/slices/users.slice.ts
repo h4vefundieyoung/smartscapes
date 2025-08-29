@@ -3,18 +3,28 @@ import { createSlice } from "@reduxjs/toolkit";
 import { DataStatus } from "~/libs/enums/enums.js";
 import { type ValueOf } from "~/libs/types/types.js";
 
-import { type UserPublicProfileResponseDto } from "../libs/types/types.js";
-import { followUser, getUserPublicProfile, unfollowUser } from "./actions.js";
+import {
+	type UserPublicProfileResponseDto,
+	type UserRouteResponseDto,
+} from "../libs/types/types.js";
+import {
+	followUser,
+	getActivities,
+	getUserPublicProfile,
+	unfollowUser,
+} from "./actions.js";
 
 type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
 	followingStatus: ValueOf<typeof DataStatus>;
+	userActivities: UserRouteResponseDto[];
 	userProfile: null | undefined | UserPublicProfileResponseDto;
 };
 
 const initialState: State = {
 	dataStatus: DataStatus.IDLE,
 	followingStatus: DataStatus.IDLE,
+	userActivities: [],
 	userProfile: undefined,
 };
 
@@ -60,6 +70,17 @@ const { actions, name, reducer } = createSlice({
 		});
 		builder.addCase(unfollowUser.rejected, (state) => {
 			state.followingStatus = DataStatus.REJECTED;
+		});
+		builder.addCase(getActivities.pending, (state) => {
+			state.dataStatus = DataStatus.PENDING;
+		});
+		builder.addCase(getActivities.fulfilled, (state, action) => {
+			state.userActivities = action.payload.data;
+			state.dataStatus = DataStatus.FULFILLED;
+		});
+		builder.addCase(getActivities.rejected, (state) => {
+			state.dataStatus = DataStatus.REJECTED;
+			state.userActivities = [];
 		});
 	},
 	initialState,

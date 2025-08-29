@@ -12,13 +12,14 @@ import { UserRouteApiPath } from "./libs/enums/enum.js";
 import {
 	type UserRouteDeleteParameters,
 	type UserRouteFinishRequestDto,
+	type UserRouteGetAllQueryRequestDto,
 	type UserRouteQueryRequestDto,
 	type UserRouteResponseDto,
-	type UserRouteStatusType,
-} from "./libs/types/type.js";
+} from "./libs/types/types.js";
 import {
 	userRouteDeleteValidationSchema,
 	userRouteFinishValidationSchema,
+	userRouteGetAllValidationSchema,
 	userRouteQueryValidationSchema,
 } from "./libs/validation-schemas/validation-schemas.js";
 import { type UserRouteService } from "./user-route.service.js";
@@ -136,6 +137,9 @@ class UserRouteController extends BaseController {
 			handler: this.getAll.bind(this),
 			method: "GET",
 			path: UserRouteApiPath.ROOT,
+			validation: {
+				query: userRouteGetAllValidationSchema,
+			},
 		});
 
 		this.addRoute({
@@ -384,6 +388,13 @@ class UserRouteController extends BaseController {
 	 *           type: string
 	 *           enum: ["active", "completed", "cancelled", "expired", "not_started"]
 	 *           example: "active"
+	 *       - in: query
+	 *         name: id
+	 *         required: true
+	 *         schema:
+	 *           type: integer
+	 *         description: ID of user to retrieve routes for
+	 *         example: 1
 	 *     responses:
 	 *       200:
 	 *         description: User routes retrieved successfully
@@ -441,18 +452,12 @@ class UserRouteController extends BaseController {
 	 */
 	public async getAll(
 		options: APIHandlerOptions<{
-			query: {
-				status?: UserRouteStatusType;
-			};
+			query: UserRouteGetAllQueryRequestDto;
 		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto[]>> {
-		const { query, user } = options;
-		const { id: userId } = user as UserAuthResponseDto;
+		const { query } = options;
 
-		const userRoutes = await this.userRouteService.getAllByUserId(
-			userId,
-			query,
-		);
+		const userRoutes = await this.userRouteService.getAll(query);
 
 		return {
 			payload: { data: userRoutes },
@@ -516,7 +521,7 @@ class UserRouteController extends BaseController {
 		const { routeId } = query;
 		const { id: userId } = user as UserAuthResponseDto;
 
-		const userRoute = await this.userRouteService.getRouteByFilter({
+		const userRoute = await this.userRouteService.getOne({
 			routeId,
 			userId,
 		});

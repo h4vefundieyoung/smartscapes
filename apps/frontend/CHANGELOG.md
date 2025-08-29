@@ -1,5 +1,47 @@
 # Changelog
 
+## [1.60.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.59.0...@smartscapes/frontend-v1.60.0) (2025-08-29)
+
+
+### Features
+
+* **frontend:** unify ui elements and remove unnecessary components ss-1 ([#603](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/603)) ([19f979d](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/19f979d221e376cb55e1f4a13cfd1637c71f2720))
+
+## [1.59.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.58.0...@smartscapes/frontend-v1.59.0) (2025-08-28)
+
+
+### Features
+
+* **backend/frontend:** load and display saved routes on dashboard page ss-586 ([#600](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/600)) ([117ece7](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/117ece78d1b36753c1b1a165824e398431ca1134))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.43.0 to 1.44.0
+
+## [1.58.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.57.1...@smartscapes/frontend-v1.58.0) (2025-08-28)
+
+
+### Features
+
+* **frontend/backend/shared:** display activities and reviews on user public profile ss-545 ([#593](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/593)) ([9766bb5](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/9766bb55e9e0aee6b226720b0a34490cc979a017))
+* **frontend:** add ability search routes on explore page and infinity scroll ss-510 ([#591](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/591)) ([68de4e3](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/68de4e39d0fab8f61ed09f0ff557ad79b76e3124))
+* **frontend:** add link to review ss-582 ([#592](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/592)) ([32686a9](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/32686a95dc5f72c6d4e2f29fb3ce1af0bd358f6e))
+
+
+### Bug Fixes
+
+* **frontend:** change button positioning ss-596 ([#599](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/599)) ([feed436](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/feed436accfd86384115f60ee1c41c968b5199a9))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @smartscapes/shared bumped from 1.42.0 to 1.43.0
+
 ## [1.57.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/frontend-v1.57.0...@smartscapes/frontend-v1.57.1) (2025-08-28)
 
 

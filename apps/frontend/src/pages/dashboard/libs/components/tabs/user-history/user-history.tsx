@@ -7,15 +7,25 @@ import {
 } from "~/libs/hooks/hooks.js";
 import { actions as userRoutesActions } from "~/modules/user-routes/user-routes.js";
 
+import { DashboardRouteCard } from "../../card/dashboard-route-card.js";
 import styles from "./styles.module.css";
-import { UserHistoryCard } from "./user-history-card.js";
 
 const UserHistory = (): null | React.JSX.Element => {
 	const dispatch = useAppDispatch();
+	const authenticatedUser = useAppSelector(
+		({ auth }) => auth.authenticatedUser,
+	);
 
 	useEffect(() => {
-		void dispatch(userRoutesActions.getAllByUserId(UserRouteStatus.COMPLETED));
-	}, [dispatch]);
+		if (authenticatedUser) {
+			void dispatch(
+				userRoutesActions.getAllByUserId({
+					id: authenticatedUser.id,
+					status: UserRouteStatus.COMPLETED,
+				}),
+			);
+		}
+	}, [authenticatedUser, dispatch]);
 
 	const finishedUserRoutes = useAppSelector(
 		(state) => state.userRoutes.userRoutes,
@@ -24,15 +34,23 @@ const UserHistory = (): null | React.JSX.Element => {
 	const dataStatus = useAppSelector((state) => state.userRoutes.dataStatus);
 
 	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
-		return <Loader />;
+		return (
+			<div className={styles["loader-container"]}>
+				<Loader />
+			</div>
+		);
 	}
 
 	if (finishedUserRoutes.length === 0) {
-		return null;
+		return (
+			<div className={styles["empty-placeholder"]}>
+				Complete your first route to see it here.
+			</div>
+		);
 	}
 
 	const cards = finishedUserRoutes.map((route) => {
-		return <UserHistoryCard key={route.id} route={route} />;
+		return <DashboardRouteCard key={route.id} route={route} />;
 	});
 
 	return <div className={styles["cards-wrapper"]}>{cards}</div>;

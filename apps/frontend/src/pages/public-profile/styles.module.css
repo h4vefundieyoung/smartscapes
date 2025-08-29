@@ -32,10 +32,16 @@
 .user-info-details {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-around;
+	gap: 12px;
+}
+
+.details {
+	gap: 4px;
+	width: 100%;
 }
 
 .details-name {
+	margin: 0;
 	font-size: var(--font-size-h3);
 	font-weight: var(--font-weight-semibold);
 	color: var(--color-text-strong);

@@ -68,3 +68,9 @@
 		display: flex;
 	}
 }
+
+@media (width <= 480px) {
+	.slide-wrapper {
+		min-width: 100%;
+	}
+}

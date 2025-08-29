@@ -106,10 +106,12 @@ describe("Route controller", () => {
 		id: FIRST_POI_ID,
 		images: [
 			{
+				createdAt: "2024-01-01T00:00:00Z",
 				id: 1,
 				url: "https://s3.amazonaws.com/test/1.png",
 			},
 			{
+				createdAt: "2024-01-01T00:00:00Z",
 				id: 2,
 				url: "https://s3.amazonaws.com/test/2.png",
 			},

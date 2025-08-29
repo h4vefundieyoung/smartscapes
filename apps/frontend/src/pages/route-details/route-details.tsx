@@ -95,18 +95,7 @@ const RouteDetails = (): React.JSX.Element => {
 		user &&
 			checkHasPermission([PermissionKey.MANAGE_ROUTES], user.group.permissions),
 	);
-
 	const fileInputReference = useRef<HTMLInputElement | null>(null);
-
-	const handleOpenGoogleMaps = useCallback(() => {
-		if (route) {
-			const [firstPoi] = route.pois;
-			const [lng, lat] = (firstPoi as RouteGetByIdResponseDto["pois"][0])
-				.location.coordinates;
-			const url = getGoogleMapsPointUrl(lat, lng);
-			window.open(url, "_blank");
-		}
-	}, [route]);
 
 	const handleFileUpload = useCallback(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,6 +112,16 @@ const RouteDetails = (): React.JSX.Element => {
 		},
 		[dispatch, route],
 	);
+
+	const handleOpenGoogleMaps = useCallback(() => {
+		if (route) {
+			const [firstPoi] = route.pois;
+			const [lng, lat] = (firstPoi as RouteGetByIdResponseDto["pois"][0])
+				.location.coordinates;
+			const url = getGoogleMapsPointUrl(lat, lng);
+			window.open(url, "_blank");
+		}
+	}, [route]);
 
 	const handleTriggerFileUpload = useCallback(() => {
 		fileInputReference.current?.click();
@@ -166,6 +165,13 @@ const RouteDetails = (): React.JSX.Element => {
 		}
 	}, [dispatch, setIsEditMode, route, getValues]);
 
+	const handleDeleteImage = useCallback(
+		(id: number) => {
+			void dispatch(routeActions.deleteImage(id));
+		},
+		[dispatch],
+	);
+
 	useEffect(() => {
 		void dispatch(routeActions.getById(Number(routeId)));
 	}, [dispatch, routeId]);
@@ -198,13 +204,6 @@ const RouteDetails = (): React.JSX.Element => {
 			void dispatch(userRouteActions.deleteUserRoute(route.savedUserRoute.id));
 		}
 	}, [route?.savedUserRoute?.id, dispatch]);
-
-	const handleDeleteImage = useCallback(
-		(id: number) => {
-			void dispatch(routeActions.deleteImage(id));
-		},
-		[dispatch],
-	);
 
 	useEffect(() => {
 		handleResetFormValues();

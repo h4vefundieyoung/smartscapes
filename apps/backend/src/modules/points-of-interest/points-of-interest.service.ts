@@ -125,13 +125,25 @@ class PointsOfInterestService implements Service {
 			});
 		}
 
-		return item.toDetailsObject();
+		const { routes, ...details } = item.toDetailsObject();
+
+		return {
+			...details,
+			routes: routes.map((route) => {
+				const { images, ...routeDetails } = route;
+
+				return {
+					...routeDetails,
+					coverImage: images[0]?.url ?? null,
+				};
+			}),
+		};
 	}
 
 	public async patch(
 		id: number,
 		payload: PointsOfInterestCreateRequestDto,
-	): Promise<PointsOfInterestGetByIdResponseDto> {
+	): Promise<Omit<PointsOfInterestGetByIdResponseDto, "routes">> {
 		const { name } = payload;
 
 		await this.ensureNameIsUnique(name, id);

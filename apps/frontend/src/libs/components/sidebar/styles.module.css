@@ -173,7 +173,7 @@
 	clip-path: inset(100%);
 }
 
-@media (width <=480px) {
+@media (width <= 640px) {
 	.container {
 		top: auto;
 		width: 100%;

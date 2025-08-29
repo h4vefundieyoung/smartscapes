@@ -1,4 +1,4 @@
-import defaultUrl from "~/assets/images/placeholder-card.jpg";
+import defaultUrl from "~/assets/images/placeholder-poi-card.png";
 import { Link } from "~/libs/components/components.js";
 import { AppRoute } from "~/libs/enums/enums.js";
 import { configureString } from "~/libs/helpers/helpers.js";

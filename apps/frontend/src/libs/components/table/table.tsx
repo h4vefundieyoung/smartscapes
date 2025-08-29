@@ -56,7 +56,7 @@ const Table = <T,>({
 			</div>
 
 			<div className={styles["footer"]}>
-				{!isLoading && totalItems > 0 && (
+				{totalItems > 0 && (
 					<Pagination
 						paginationSettings={paginationSettings}
 						totalItems={totalItems}

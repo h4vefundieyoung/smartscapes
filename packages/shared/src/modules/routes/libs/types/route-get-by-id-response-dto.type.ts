@@ -15,7 +15,7 @@ type RouteGetByIdResponseDto = {
 	duration: number;
 	geometry: LineStringGeometry;
 	id: number;
-	images: Pick<FileUploadResponseDto, "id" | "url">[];
+	images: Pick<FileUploadResponseDto, "createdAt" | "id" | "url">[];
 	name: string;
 	pois: {
 		id: number;

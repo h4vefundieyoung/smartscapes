@@ -6,7 +6,12 @@ type PointsOfInterestGetByIdResponseDto = {
 	id: number;
 	location: PointGeometry;
 	name: string;
-	routes: Pick<RouteGetByIdResponseDto, "id" | "name">[];
+	routes: (Pick<
+		RouteGetByIdResponseDto,
+		"geometry" | "id" | "name" | "pois"
+	> & {
+		coverImage: null | string;
+	})[];
 };
 
 export { type PointsOfInterestGetByIdResponseDto };

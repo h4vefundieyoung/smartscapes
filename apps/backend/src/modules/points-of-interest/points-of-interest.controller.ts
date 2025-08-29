@@ -548,7 +548,9 @@ class PointsOfInterestController extends BaseController {
 			body: PointsOfInterestCreateRequestDto;
 			params: { id: string };
 		}>,
-	): Promise<APIHandlerResponse<PointsOfInterestGetByIdResponseDto>> {
+	): Promise<
+		APIHandlerResponse<Omit<PointsOfInterestGetByIdResponseDto, "routes">>
+	> {
 		const { body, params } = options;
 		const id = Number(params.id);
 

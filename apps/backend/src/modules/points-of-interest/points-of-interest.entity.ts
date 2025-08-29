@@ -1,6 +1,6 @@
 import { type Entity, type PointGeometry } from "~/libs/types/types.js";
 
-import { RouteEntity } from "../routes/route.entity.js";
+import { type RouteEntity } from "../routes/route.entity.js";
 
 class PointsOfInterestEntity implements Entity {
 	private createdAt: null | string;
@@ -21,7 +21,7 @@ class PointsOfInterestEntity implements Entity {
 		id,
 		location,
 		name,
-		routes = null,
+		routes,
 	}: {
 		createdAt: null | string;
 		description: null | string;
@@ -44,7 +44,7 @@ class PointsOfInterestEntity implements Entity {
 		id: number;
 		location: PointGeometry;
 		name: string;
-		routes: null | ReturnType<RouteEntity["toObject"]>[];
+		routes?: ReturnType<RouteEntity["toObject"]>[];
 		updatedAt: string;
 	}): PointsOfInterestEntity {
 		return new PointsOfInterestEntity({
@@ -53,9 +53,7 @@ class PointsOfInterestEntity implements Entity {
 			id: data.id,
 			location: data.location,
 			name: data.name,
-			routes:
-				data.routes?.map((route) => RouteEntity.initialize(route).toObject()) ??
-				[],
+			routes: data.routes ?? [],
 		});
 	}
 
@@ -83,16 +81,14 @@ class PointsOfInterestEntity implements Entity {
 		id: number;
 		location: PointGeometry;
 		name: string;
-		routes: { id: number; name: string }[];
+		routes: ReturnType<RouteEntity["toObject"]>[];
 	} {
 		return {
 			description: this.description,
 			id: this.id as number,
 			location: this.location,
 			name: this.name,
-			routes: this.routes
-				? this.routes.map(({ id, name }) => ({ id, name }))
-				: [],
+			routes: this.routes ?? [],
 		};
 	}
 

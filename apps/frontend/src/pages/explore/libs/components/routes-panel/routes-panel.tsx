@@ -213,15 +213,19 @@ const RoutesPanel = ({
 				)}
 
 				<ul className={styles["list"]}>
-					{routes.map((route) => (
+					{routes.map(({ geometry, id, images, name, pois }) => (
 						<RouteCard
-							id={route.id}
-							imageUrl={
-								route.images.length > 0 ? (route.images[0]?.url ?? null) : null
-							}
-							key={`${String(route.id)}-${route.name}`}
-							name={route.name}
-							onClick={handleRouteCardClick(route.id)}
+							id={id}
+							imageUrl={images.at(0)?.url ?? null}
+							key={`${String(id)}-${name}`}
+							mapProps={{
+								markers: pois.map((poi) => ({
+									coordinates: poi.location.coordinates,
+								})),
+								routeLine: { geometry, id: String(id) },
+							}}
+							name={name}
+							onClick={handleRouteCardClick(id)}
 						/>
 					))}
 					{hasMore && (

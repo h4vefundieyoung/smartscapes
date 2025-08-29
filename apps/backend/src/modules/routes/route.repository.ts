@@ -177,6 +177,7 @@ class RouteRepository implements Repository {
 							"ST_AsGeoJSON(points_of_interest.location)::json as location",
 						),
 					);
+					builder.orderBy("routes_to_pois.visit_order", SortingOrder.ASC);
 				},
 			})
 			.modify((builder) => {
@@ -276,6 +277,7 @@ class RouteRepository implements Repository {
 								"ST_AsGeoJSON(points_of_interest.location)::json as location",
 							),
 						);
+						builder.orderBy("routes_to_pois.visit_order", SortingOrder.ASC);
 					},
 				})
 				.where("routes.id", id)

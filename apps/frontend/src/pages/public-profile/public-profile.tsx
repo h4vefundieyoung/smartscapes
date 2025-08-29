@@ -77,15 +77,18 @@ const PublicProfile = (): React.JSX.Element => {
 						<Avatar size={128} user={userProfile} />
 
 						<div className={styles["user-info-details"]}>
-							<h1 className={styles["details-name"]}>
-								{`${userProfile.firstName} ${userProfile.lastName}`}
-							</h1>
-							<div className={styles["details-followers"]}>
-								{userProfile.followersCount.toString()} &nbsp;
-								{userProfile.followersCount === SINGLE_FOLLOWER_COUNT
-									? "follower"
-									: "followers"}
+							<div className={styles["details"]}>
+								<h1 className={styles["details-name"]}>
+									{`${userProfile.firstName} ${userProfile.lastName}`}
+								</h1>
+								<div className={styles["details-followers"]}>
+									{userProfile.followersCount.toString()} &nbsp;
+									{userProfile.followersCount === SINGLE_FOLLOWER_COUNT
+										? "follower"
+										: "followers"}
+								</div>
 							</div>
+
 							<div className={styles["follow-button-container"]}>
 								<Button
 									label={userProfile.isFollowed ? "Unfollow" : "Follow"}

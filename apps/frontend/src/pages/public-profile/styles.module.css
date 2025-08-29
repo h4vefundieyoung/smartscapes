@@ -32,7 +32,12 @@
 .user-info-details {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	gap: 12px;
+}
+
+.details {
+	gap: 4px;
+	width: 100%;
 }
 
 .details-name {

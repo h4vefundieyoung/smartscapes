@@ -73,8 +73,9 @@ const getAll = createAsyncThunk<
 	AsyncThunkConfig
 >(`${routesSliceName}/get-all`, async (options, { extra }) => {
 	const { routesApi } = extra;
+	const result = await routesApi.getAll(options);
 
-	return await routesApi.getAll(options);
+	return result;
 });
 
 const uploadImage = createAsyncThunk<

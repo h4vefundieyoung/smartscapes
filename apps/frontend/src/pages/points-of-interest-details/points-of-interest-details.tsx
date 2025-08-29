@@ -1,5 +1,5 @@
-import image2 from "~/assets/images/route-details/placeholder-image-2.png";
-import image3 from "~/assets/images/route-details/placeholder-image-3.png";
+import image1 from "~/assets/images/route-details/placeholder-image-1.jpg";
+import image2 from "~/assets/images/route-details/placeholder-image-2.jpg";
 import {
 	Button,
 	FeatureGallery,
@@ -184,7 +184,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 							<img
 								alt="Point of interest"
 								className={styles["image"]}
-								src={image2}
+								src={image1}
 							/>
 						),
 					},
@@ -193,7 +193,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 							<img
 								alt="Point of interest"
 								className={styles["image"]}
-								src={image3}
+								src={image2}
 							/>
 						),
 					},

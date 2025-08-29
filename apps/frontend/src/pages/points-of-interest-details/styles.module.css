@@ -24,8 +24,6 @@
 
 .label {
 	margin: 0;
-	overflow: hidden;
-	text-overflow: ellipsis;
 	font-size: var(--font-size-h1);
 	font-weight: var(--font-weight-semibold);
 	line-height: 1.2;
@@ -69,7 +67,7 @@
 	}
 }
 
-@media (width <=480px) {
+@media (width <= 480px) {
 	.container {
 		padding: 24px;
 	}

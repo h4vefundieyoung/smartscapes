@@ -16,7 +16,7 @@ const PopularSection = (): React.JSX.Element => {
 	const routes = useAppSelector(({ routes }) => routes.data);
 
 	useEffect(() => {
-		void dispatch(routesActions.getAll({ categories: "popular" }));
+		void dispatch(routesActions.getAll({ page: 1, perPage: 10 }));
 	}, [dispatch]);
 
 	if (dataStatus === DataStatus.PENDING) {

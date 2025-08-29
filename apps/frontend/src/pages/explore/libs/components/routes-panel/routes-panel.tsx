@@ -214,11 +214,17 @@ const RoutesPanel = ({
 				)}
 
 				<ul className={styles["list"]}>
-					{routes.map(({ id, images, name }) => (
+					{routes.map(({ geometry, id, images, name, pois }) => (
 						<RouteCard
 							id={id}
 							imageUrl={sortByDate(images, "createdAt")[0]?.url ?? null}
 							key={`${String(id)}-${name}`}
+							mapProps={{
+								markers: pois.map((poi) => ({
+									coordinates: poi.location.coordinates,
+								})),
+								routeLine: { geometry, id: String(id) },
+							}}
 							name={name}
 							onClick={handleRouteCardClick(id)}
 						/>

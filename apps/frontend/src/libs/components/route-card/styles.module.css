@@ -59,7 +59,7 @@
 }
 
 .image-placeholder {
-	background-color: var(--color-fill-grey);
+	pointer-events: none;
 }
 
 .image,

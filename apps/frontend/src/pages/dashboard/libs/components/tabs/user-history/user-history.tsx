@@ -34,11 +34,19 @@ const UserHistory = (): null | React.JSX.Element => {
 	const dataStatus = useAppSelector((state) => state.userRoutes.dataStatus);
 
 	if (dataStatus === DataStatus.PENDING || dataStatus === DataStatus.IDLE) {
-		return <Loader />;
+		return (
+			<div className={styles["loader-container"]}>
+				<Loader />
+			</div>
+		);
 	}
 
 	if (finishedUserRoutes.length === 0) {
-		return null;
+		return (
+			<div className={styles["empty-placeholder"]}>
+				Complete your first route to see it here.
+			</div>
+		);
 	}
 
 	const cards = finishedUserRoutes.map((route) => {

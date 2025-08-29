@@ -1,18 +1,22 @@
 .cards-wrapper {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 64px;
+	grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+	grid-auto-rows: min-content;
+	gap: 24px;
 	width: 100%;
 }
 
-@media (width <=1024px) {
-	.cards-wrapper {
-		grid-template-columns: repeat(2, 1fr);
-	}
+.loader-container {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	justify-content: center;
 }
 
-@media (width <=768px) {
-	.cards-wrapper {
-		grid-template-columns: 1fr;
-	}
+.empty-placeholder {
+	display: flex;
+	flex: 1;
+	align-items: center;
+	justify-content: center;
+	color: var(--color-text-weak);
 }

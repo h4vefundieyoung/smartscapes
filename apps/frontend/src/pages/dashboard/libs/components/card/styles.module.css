@@ -1,7 +1,9 @@
 .label {
-	margin: 0 0 12px;
+	margin: 12px 0 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	font-size: var(--font-size-h4);
+	font-weight: var(--font-weight-semibold);
 	text-align: start;
 	white-space: nowrap;
 }
@@ -9,8 +11,7 @@
 .card {
 	position: relative;
 	width: 100%;
-	max-width: 500px;
-	min-height: 350px;
+	min-width: 336px;
 	color: inherit;
 	text-decoration: none;
 	cursor: pointer;
@@ -19,14 +20,9 @@
 	border: none;
 }
 
-@media (width <=1024px) {
-	.card {
-		max-width: 330px;
-	}
-}
-
-@media (width <=768px) {
-	.card {
-		max-width: 350px;
-	}
+.map-container {
+	display: grid;
+	height: 340px;
+	overflow: hidden;
+	border-radius: 8px;
 }

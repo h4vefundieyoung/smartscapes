@@ -19,8 +19,10 @@ const DashboardRouteCard = ({ route }: Properties): React.JSX.Element => {
 				id: route.routeId.toString(),
 			})}
 		>
+			<div className={styles["map-container"]}>
+				<MapProvider routeLine={routeLine} />
+			</div>
 			<h2 className={styles["label"]}>{route.routeName}</h2>
-			<MapProvider routeLine={routeLine} />
 		</Link>
 	);
 };

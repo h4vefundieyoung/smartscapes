@@ -1,36 +1,7 @@
-.label {
-	margin: 0;
-}
-
-.text {
-	gap: 8px;
-}
-
-.description {
-	color: var(--color-text-weak);
-}
-
-.components-container {
+.container {
 	display: flex;
+	flex: 1;
 	flex-direction: column;
-	gap: 48px;
 	justify-content: space-between;
 	padding: 48px 32px;
-}
-
-.carousel-container {
-	width: 50%;
-	margin-bottom: 1rem;
-}
-
-.select-container {
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-	width: 50%;
-	margin-bottom: 10rem;
-}
-
-.button-container {
-	margin-bottom: 2rem;
 }

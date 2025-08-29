@@ -2,7 +2,7 @@
 	display: flex;
 	flex: 1;
 	flex-direction: column;
-	padding: 32px 48px;
+	padding: 48px 32px;
 }
 
 .profile-title {
@@ -15,6 +15,6 @@
 
 @media (width <= 480px) {
 	.profile-container {
-		padding: 16px 24px;
+		padding: 24px 16px;
 	}
 }

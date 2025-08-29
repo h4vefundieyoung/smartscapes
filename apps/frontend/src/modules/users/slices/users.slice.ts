@@ -18,14 +18,14 @@ type State = {
 	dataStatus: ValueOf<typeof DataStatus>;
 	followingStatus: ValueOf<typeof DataStatus>;
 	userActivities: UserRouteResponseDto[];
-	userProfile: null | UserPublicProfileResponseDto;
+	userProfile: null | undefined | UserPublicProfileResponseDto;
 };
 
 const initialState: State = {
 	dataStatus: DataStatus.IDLE,
 	followingStatus: DataStatus.IDLE,
 	userActivities: [],
-	userProfile: null,
+	userProfile: undefined,
 };
 
 const { actions, name, reducer } = createSlice({

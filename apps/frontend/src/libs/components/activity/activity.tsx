@@ -1,5 +1,5 @@
 import { getFormattedLengthString } from "~/libs/helpers/helpers.js";
-import { type Coordinates, type RouteLine } from "~/libs/types/types.js";
+import { type RouteLine } from "~/libs/types/types.js";
 
 import { MapProvider } from "../components.js";
 import styles from "./styles.module.css";
@@ -17,13 +17,16 @@ const Activity = ({
 	routeLine,
 	title,
 }: Properties): React.JSX.Element => {
-	const center = routeLine.geometry.coordinates[0] as Coordinates;
 	const lengthFormattedString = getFormattedLengthString(length);
 
 	return (
 		<div className={styles["activity"]}>
 			<div className={styles["map-wrapper"]}>
-				<MapProvider center={center} routeLine={routeLine} />
+				<MapProvider
+					isInteractive={false}
+					routeLine={routeLine}
+					shouldFitToBounds
+				/>
 			</div>
 			<h4 className={styles["activity-title"]}>{title}</h4>
 			<span className={styles["activity-distance"]}>

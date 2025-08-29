@@ -215,11 +215,11 @@ const RouteDetails = (): React.JSX.Element => {
 
 	useEffect(() => {
 		if (isRouteCreated) {
-			navigate(
-				configureString(AppRoute.USER_ROUTES_$ROUTE_ID_MAP, {
-					routeId: String(routeId),
-				}),
-			);
+			const mapPageLink = configureString(AppRoute.USER_ROUTES_$ROUTE_ID_MAP, {
+				routeId: String(routeId),
+			});
+
+			navigate(mapPageLink);
 		}
 	}, [isRouteCreated, navigate, routeId, route]);
 
@@ -327,7 +327,11 @@ const RouteDetails = (): React.JSX.Element => {
 					{
 						content: (
 							<div className={styles["map-container"]}>
-								<MapProvider markers={markers} routeLine={routeLine} />
+								<MapProvider
+									markers={markers}
+									routeLine={routeLine}
+									shouldFitToBounds
+								/>
 							</div>
 						),
 					},

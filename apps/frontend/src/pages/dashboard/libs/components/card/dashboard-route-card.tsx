@@ -20,7 +20,11 @@ const DashboardRouteCard = ({ route }: Properties): React.JSX.Element => {
 			})}
 		>
 			<div className={styles["map-container"]}>
-				<MapProvider routeLine={routeLine} />
+				<MapProvider
+					isInteractive={false}
+					routeLine={routeLine}
+					shouldFitToBounds
+				/>
 			</div>
 			<h2 className={styles["label"]}>{route.routeName}</h2>
 		</Link>

@@ -41,7 +41,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 		(state) => state.pointOfInterestDetails.pointOfInterest,
 	);
 
-	const { control, errors, getValues, handleReset } =
+	const { control, errors, getValues, handleReset, handleValueSet } =
 		useAppForm<PointOfInterestPatchRequestDto>({
 			defaultValues: POINT_OF_INTEREST_FORM_DEFAULT_VALUES,
 		});
@@ -60,6 +60,13 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 	const handleToggleEditMode = useCallback(() => {
 		setIsEditMode((previous) => !previous);
 	}, []);
+
+	useEffect(() => {
+		if (pointOfInterest && isEditMode) {
+			handleValueSet("name", pointOfInterest.name);
+			handleValueSet("description", pointOfInterest.description ?? "");
+		}
+	}, [pointOfInterest, handleValueSet, isEditMode]);
 
 	const handleResetFormValues = useCallback(() => {
 		if (!pointOfInterest) {

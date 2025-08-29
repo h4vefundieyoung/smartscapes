@@ -64,10 +64,12 @@ const createMockRouteService = (): Partial<RouteService> => ({
 			id,
 			images: [
 				{
+					createdAt: "2024-01-01T00:00:00Z",
 					id: 1,
 					url: "https://s3.amazonaws.com/test/1.png",
 				},
 				{
+					createdAt: "2024-01-01T00:00:00Z",
 					id: 2,
 					url: "https://s3.amazonaws.com/test/2.png",
 				},

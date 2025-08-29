@@ -25,6 +25,7 @@ import {
 } from "~/modules/points-of-interest/points-of-interest.js";
 import { NotFound } from "~/pages/not-found/not-found.js";
 
+import { RoutesGallery } from "./libs/components/components.js";
 import { POINT_OF_INTEREST_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
@@ -41,7 +42,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 		(state) => state.pointOfInterestDetails.pointOfInterest,
 	);
 
-	const { control, errors, getValues, handleReset } =
+	const { control, errors, getValues, handleReset, handleValueSet } =
 		useAppForm<PointOfInterestPatchRequestDto>({
 			defaultValues: POINT_OF_INTEREST_FORM_DEFAULT_VALUES,
 		});
@@ -60,6 +61,13 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 	const handleToggleEditMode = useCallback(() => {
 		setIsEditMode((previous) => !previous);
 	}, []);
+
+	useEffect(() => {
+		if (pointOfInterest && isEditMode) {
+			handleValueSet("name", pointOfInterest.name);
+			handleValueSet("description", pointOfInterest.description ?? "");
+		}
+	}, [pointOfInterest, handleValueSet, isEditMode]);
 
 	const handleResetFormValues = useCallback(() => {
 		if (!pointOfInterest) {
@@ -204,6 +212,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 					{hasDescription ? description : "No description available."}
 				</p>
 			)}
+			<RoutesGallery routes={pointOfInterest.routes} />
 		</main>
 	);
 };

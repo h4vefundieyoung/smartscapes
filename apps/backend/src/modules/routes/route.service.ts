@@ -22,6 +22,7 @@ import { RoutesError } from "./libs/exceptions/exceptions.js";
 import {
 	type FileUploadResponseDto,
 	type RouteCreateRequestDto,
+	type RouteCreateResponseDto,
 	type RouteFindAllOptions,
 	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
@@ -99,7 +100,7 @@ class RouteService implements Service {
 
 	public async create(
 		payload: RouteCreateRequestDto,
-	): Promise<RouteGetAllItemResponseDto> {
+	): Promise<RouteCreateResponseDto> {
 		await this.ensurePoisExist(payload.poiIds);
 
 		const formattedPayload = {
@@ -131,7 +132,7 @@ class RouteService implements Service {
 			},
 		);
 
-		return route.toListObject();
+		return route.toDetailsObject();
 	}
 
 	public async delete(id: number): Promise<boolean> {
@@ -173,7 +174,7 @@ class RouteService implements Service {
 			total === 0 ? DEFAULT_PAGE : Math.ceil(total / (perPage ?? total));
 
 		return {
-			items: items.map((item) => item.toListObject()),
+			items: items.map((item) => item.toDetailsObject()),
 			meta: {
 				currentPage: page ?? DEFAULT_PAGE,
 				itemsPerPage: perPage ?? total,

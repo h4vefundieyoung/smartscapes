@@ -20,8 +20,8 @@ const SavedRoutes = (): null | React.JSX.Element => {
 		if (authenticatedUser) {
 			void dispatch(
 				userRoutesActions.getAllByUserId({
-					id: authenticatedUser.id,
 					status: UserRouteStatus.NOT_STARTED,
+					userId: authenticatedUser.id,
 				}),
 			);
 		}

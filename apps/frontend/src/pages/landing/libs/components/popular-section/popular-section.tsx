@@ -32,7 +32,7 @@ const PopularSection = (): React.JSX.Element => {
 						<RouteCard
 							id={id}
 							imageUrl={images.at(0)?.url ?? null}
-							key={`${String(id)}-${name}`}
+							key={id}
 							mapProps={{
 								markers: pois.map((poi) => ({
 									coordinates: poi.location.coordinates,

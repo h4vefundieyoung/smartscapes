@@ -7,7 +7,7 @@ import styles from "./styles.module.css";
 
 type Properties = {
 	id: number;
-	imageUrl: string | undefined;
+	imageUrl: null | string;
 	mapProps: React.ComponentProps<typeof MapProvider>;
 	name: string;
 };

@@ -4,5 +4,4 @@ export {
 	type PointsOfInterestGetAllItemResponseDto,
 	type PointsOfInterestGetAllQuery,
 	type PointsOfInterestGetByIdResponseDto,
-	type RouteGetByIdResponseDto,
 } from "@smartscapes/shared";

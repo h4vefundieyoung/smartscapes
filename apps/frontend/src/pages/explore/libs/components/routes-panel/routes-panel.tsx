@@ -8,7 +8,6 @@ import {
 	RouteMapPopup,
 } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
-import { sortByDate } from "~/libs/helpers/sort-by-date.helper.js";
 import {
 	useAppForm,
 	useCallback,
@@ -217,7 +216,7 @@ const RoutesPanel = ({
 					{routes.map(({ geometry, id, images, name, pois }) => (
 						<RouteCard
 							id={id}
-							imageUrl={sortByDate(images, "createdAt")[0]?.url ?? null}
+							imageUrl={images.at(0)?.url ?? null}
 							key={`${String(id)}-${name}`}
 							mapProps={{
 								markers: pois.map((poi) => ({

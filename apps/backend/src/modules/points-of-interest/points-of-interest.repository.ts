@@ -4,6 +4,8 @@ import { type PointsOfInterestGetAllOptions } from "~/modules/points-of-interest
 import { PointsOfInterestEntity } from "~/modules/points-of-interest/points-of-interest.entity.js";
 import { type PointsOfInterestModel } from "~/modules/points-of-interest/points-of-interest.model.js";
 
+import { RouteEntity } from "../routes/route.entity.js";
+
 const PAGE_NUMBER_OFFSET = 1;
 
 class PointsOfInterestRepository implements Repository {
@@ -158,7 +160,9 @@ class PointsOfInterestRepository implements Repository {
 				),
 			])
 			.findById(id)
-			.withGraphFetched("[routes(formatRoute).[images, pois(formatPois)]]")
+			.withGraphFetched(
+				"[routes(formatRoute).[images(pickCoverImage), pois(formatPois)]]",
+			)
 			.modifiers({
 				formatPois: (builder) => {
 					builder.select(
@@ -177,6 +181,9 @@ class PointsOfInterestRepository implements Repository {
 						),
 					);
 				},
+				pickCoverImage: (builder) => {
+					builder.orderBy("createdAt", SortingOrder.ASC);
+				},
 			})
 			.execute();
 
@@ -184,13 +191,17 @@ class PointsOfInterestRepository implements Repository {
 			return null;
 		}
 
+		const routes = pointOfInterest.routes.map((routeModel) =>
+			RouteEntity.initialize(routeModel).toObject(),
+		);
+
 		return PointsOfInterestEntity.initialize({
 			createdAt: pointOfInterest.createdAt,
 			description: pointOfInterest.description,
 			id: pointOfInterest.id,
 			location: pointOfInterest.location,
 			name: pointOfInterest.name,
-			routes: pointOfInterest.routes,
+			routes,
 			updatedAt: pointOfInterest.updatedAt,
 		});
 	}

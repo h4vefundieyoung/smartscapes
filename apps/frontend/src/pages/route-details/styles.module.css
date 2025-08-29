@@ -1,7 +1,3 @@
-.upload-button {
-	max-width: max-content;
-}
-
 .map-container {
 	display: grid;
 	overflow: hidden;

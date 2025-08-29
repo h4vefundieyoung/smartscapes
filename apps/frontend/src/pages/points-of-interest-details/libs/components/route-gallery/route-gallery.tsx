@@ -1,4 +1,3 @@
-import { sortByDate } from "~/libs/helpers/helpers.js";
 import { useMemo } from "~/libs/hooks/hooks.js";
 import { type PointsOfInterestGetByIdResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 
@@ -12,13 +11,11 @@ type Properties = {
 const RoutesGallery = ({ routes }: Properties): React.JSX.Element => {
 	const cards = useMemo(
 		() =>
-			routes.map(({ geometry, id, images, name, pois }) => {
-				const cardImage = sortByDate(images, "createdAt").at(0)?.url;
-
+			routes.map(({ coverImage, geometry, id, name, pois }) => {
 				return (
 					<RouteCard
 						id={id}
-						imageUrl={cardImage}
+						imageUrl={coverImage}
 						key={id}
 						mapProps={{
 							markers: pois.map(({ location }) => location),

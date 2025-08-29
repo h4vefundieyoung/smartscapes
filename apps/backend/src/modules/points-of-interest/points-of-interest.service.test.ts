@@ -6,7 +6,6 @@ import { configureString } from "~/libs/helpers/helpers.js";
 import { PointOfInterestExceptionMessage } from "~/modules/points-of-interest/libs/enums/enums.js";
 import { PointOfInterestError } from "~/modules/points-of-interest/libs/exceptions/exceptions.js";
 
-import { type RouteModel } from "../routes/route.model.js";
 import { PointsOfInterestEntity } from "./points-of-interest.entity.js";
 import { type PointsOfInterestRepository } from "./points-of-interest.repository.js";
 import { PointsOfInterestService } from "./points-of-interest.service.js";
@@ -319,9 +318,8 @@ describe("PointsOfInterestService", () => {
 					images: [],
 					name: "Test Route",
 					pois: [],
-					updatedAt: "2025-08-15T00:00:00Z",
 				},
-			] as unknown as RouteModel[],
+			],
 		});
 
 		const pointsOfInterestRepository = {

@@ -1,9 +1,6 @@
 import { type Entity, type PointGeometry } from "~/libs/types/types.js";
 
-import { type FileEntity } from "../files/files.entity.js";
-import { RouteEntity } from "../routes/route.entity.js";
-import { type RouteModel } from "../routes/route.model.js";
-import { type RouteGetByIdResponseDto } from "./libs/types/types.js";
+import { type RouteEntity } from "../routes/route.entity.js";
 
 class PointsOfInterestEntity implements Entity {
 	private createdAt: null | string;
@@ -16,7 +13,7 @@ class PointsOfInterestEntity implements Entity {
 
 	private name: string;
 
-	private routes: null | RouteEntity[];
+	private routes: null | ReturnType<RouteEntity["toObject"]>[];
 
 	private constructor({
 		createdAt,
@@ -31,14 +28,14 @@ class PointsOfInterestEntity implements Entity {
 		id: null | number;
 		location: PointGeometry;
 		name: string;
-		routes: null | RouteModel[];
+		routes: null | ReturnType<RouteEntity["toObject"]>[];
 	}) {
 		this.id = id;
 		this.location = location;
 		this.name = name;
 		this.createdAt = createdAt;
 		this.description = description;
-		this.routes = routes?.map((route) => RouteEntity.initialize(route)) ?? null;
+		this.routes = routes;
 	}
 
 	public static initialize(data: {
@@ -47,7 +44,7 @@ class PointsOfInterestEntity implements Entity {
 		id: number;
 		location: PointGeometry;
 		name: string;
-		routes?: RouteModel[];
+		routes?: ReturnType<RouteEntity["toObject"]>[];
 		updatedAt: string;
 	}): PointsOfInterestEntity {
 		return new PointsOfInterestEntity({
@@ -56,7 +53,7 @@ class PointsOfInterestEntity implements Entity {
 			id: data.id,
 			location: data.location,
 			name: data.name,
-			routes: data.routes ?? null,
+			routes: data.routes ?? [],
 		});
 	}
 
@@ -84,38 +81,14 @@ class PointsOfInterestEntity implements Entity {
 		id: number;
 		location: PointGeometry;
 		name: string;
-		routes: (Pick<
-			RouteGetByIdResponseDto,
-			"geometry" | "id" | "name" | "pois"
-		> & {
-			images: Pick<
-				ReturnType<FileEntity["toObject"]>,
-				"createdAt" | "id" | "url"
-			>[];
-		})[];
+		routes: ReturnType<RouteEntity["toObject"]>[];
 	} {
 		return {
 			description: this.description,
 			id: this.id as number,
 			location: this.location,
 			name: this.name,
-			routes: this.routes
-				? this.routes.map((route) => {
-						const { geometry, id, images, name, pois } = route.toObject();
-
-						return {
-							geometry,
-							id,
-							images: images.map(({ createdAt, id, url }) => ({
-								createdAt,
-								id,
-								url,
-							})),
-							name,
-							pois,
-						};
-					})
-				: [],
+			routes: this.routes ?? [],
 		};
 	}
 

@@ -15,6 +15,7 @@ import { RoutesApiPath } from "./libs/enums/enums.js";
 import {
 	type RouteConstructRequestDto,
 	type RouteCreateRequestDto,
+	type RouteCreateResponseDto,
 	type RouteFindAllOptions,
 	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
@@ -336,7 +337,7 @@ class RouteController extends BaseController {
 		options: APIHandlerOptions<{
 			body: RouteCreateRequestDto;
 		}>,
-	): Promise<APIHandlerResponse<RouteGetAllItemResponseDto>> {
+	): Promise<APIHandlerResponse<RouteCreateResponseDto>> {
 		const route = await this.routeService.create(options.body);
 
 		return {
@@ -530,7 +531,6 @@ class RouteController extends BaseController {
 		}>,
 	): Promise<APIHandlerResponse<RouteGetAllItemResponseDto[], PaginationMeta>> {
 		const { query = null } = options;
-
 		const { items, meta } = await this.routeService.findAll(query);
 
 		return {
@@ -607,7 +607,6 @@ class RouteController extends BaseController {
 	 *                       type: string
 	 *                       example: "You don't have permission to perform this action."
 	 */
-
 	public async findById({
 		params,
 		user,

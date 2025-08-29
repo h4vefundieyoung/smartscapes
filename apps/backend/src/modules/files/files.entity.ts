@@ -6,6 +6,8 @@ import { type FileMimeType } from "./libs/types/types.js";
 class FileEntity implements Entity {
 	private contentType: FileMimeType;
 
+	private createdAt: null | string;
+
 	private entityId: number;
 
 	private folder: ValueOf<typeof FileFolderName>;
@@ -16,17 +18,20 @@ class FileEntity implements Entity {
 
 	private constructor({
 		contentType,
+		createdAt,
 		entityId,
 		folder,
 		id,
 		url,
 	}: {
 		contentType: FileMimeType;
+		createdAt: null | string;
 		entityId: number;
 		folder: ValueOf<typeof FileFolderName>;
 		id: null | number;
 		url: string;
 	}) {
+		this.createdAt = createdAt;
 		this.contentType = contentType;
 		this.id = id;
 		this.url = url;
@@ -45,6 +50,7 @@ class FileEntity implements Entity {
 	}): FileEntity {
 		return new FileEntity({
 			contentType: data.contentType,
+			createdAt: data.createdAt,
 			entityId: data.entityId,
 			folder: data.folder,
 			id: data.id,
@@ -65,6 +71,7 @@ class FileEntity implements Entity {
 	}): FileEntity {
 		return new FileEntity({
 			contentType,
+			createdAt: null,
 			entityId,
 			folder,
 			id: null,
@@ -88,6 +95,7 @@ class FileEntity implements Entity {
 
 	public toObject(): {
 		contentType: FileMimeType;
+		createdAt: string;
 		entityId: number;
 		folder: ValueOf<typeof FileFolderName>;
 		id: number;
@@ -95,6 +103,7 @@ class FileEntity implements Entity {
 	} {
 		return {
 			contentType: this.contentType,
+			createdAt: this.createdAt as string,
 			entityId: this.entityId,
 			folder: this.folder,
 			id: this.id as number,

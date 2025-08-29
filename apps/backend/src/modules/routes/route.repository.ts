@@ -222,10 +222,12 @@ class RouteRepository implements Repository {
 			duration: route.duration,
 			geometry: route.geometry,
 			id: route.id,
-			images: route.images.map((image) => ({
-				id: image.id,
-				url: image.url,
-			})),
+			images:
+				route.images?.map(({ createdAt, id, url }) => ({
+					createdAt,
+					id,
+					url,
+				})) ?? [],
 			name: route.name,
 			pois: route.pois.map((poi) => ({
 				id: poi.id,
@@ -297,10 +299,12 @@ class RouteRepository implements Repository {
 				duration: routeWithRelations.duration,
 				geometry: routeWithRelations.geometry,
 				id: routeWithRelations.id,
-				images: routeWithRelations.images.map((image) => ({
-					id: image.id,
-					url: image.url,
-				})),
+				images:
+					routeWithRelations.images?.map(({ createdAt, id, url }) => ({
+						createdAt,
+						id,
+						url,
+					})) ?? [],
 				name: routeWithRelations.name,
 				pois: routeWithRelations.pois.map((poi) => ({
 					id: poi.id,

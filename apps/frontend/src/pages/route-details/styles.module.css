@@ -50,7 +50,7 @@
 
 .controls-container {
 	display: flex;
-	column-gap: 16px;
+	gap: 16px;
 }
 
 .upload-image-button-container {

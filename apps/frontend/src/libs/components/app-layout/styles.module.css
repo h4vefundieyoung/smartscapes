@@ -9,7 +9,7 @@
 	padding-left: var(--width-sidebar-collapsed);
 }
 
-@media (width <=480px) {
+@media (width <= 640px) {
 	.sidebar-space {
 		padding-bottom: var(--tabs-navigation-height);
 		padding-left: 0;

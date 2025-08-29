@@ -19,3 +19,10 @@
 	justify-content: center;
 	color: var(--color-text-weak);
 }
+
+@media (width <= 480px) {
+	.cards-wrapper {
+		display: flex;
+		flex-direction: column;
+	}
+}

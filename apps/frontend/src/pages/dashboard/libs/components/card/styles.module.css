@@ -26,3 +26,13 @@
 	overflow: hidden;
 	border-radius: 8px;
 }
+
+@media (width <= 480px) {
+	.card {
+		min-width: 100%;
+	}
+
+	.map-container {
+		height: 260px;
+	}
+}

@@ -144,7 +144,7 @@ class UserRouteRepository implements Repository {
 			.join("routes", "routes.id", "user_routes.routeId")
 			.where("user_routes.status", UserRouteStatus.COMPLETED)
 			.groupBy("routes.id", "routes.name", "routes.geometry")
-			.orderBy("totalCount", "desc")
+			.orderBy("totalCount", SortingOrder.DESC)
 			.limit(LIMIT);
 
 		return popularRoutes.map((item) => UserRouteEntity.initialize(item));

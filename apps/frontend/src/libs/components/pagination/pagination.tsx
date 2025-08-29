@@ -29,6 +29,7 @@ const Pagination = ({
 		max: totalItems,
 		min: 1,
 	};
+	const startValue = Math.min(pageSize, range.max);
 
 	return (
 		<div className={styles["pagination"]}>
@@ -39,7 +40,7 @@ const Pagination = ({
 					<NumberInput
 						onChange={handlePageSizeChange}
 						range={range}
-						value={pageSize}
+						value={startValue}
 					/>
 				</div>
 				<span className={styles["page-status"]}>

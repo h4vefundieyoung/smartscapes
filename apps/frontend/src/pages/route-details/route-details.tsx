@@ -141,6 +141,7 @@ const RouteDetails = (): React.JSX.Element => {
 		}
 
 		handleReset({
+			categories: route.categories.map((category) => category.id),
 			description: route.description ?? "",
 			name: route.name,
 		});

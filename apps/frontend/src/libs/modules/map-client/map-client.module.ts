@@ -189,6 +189,7 @@ class MapClient {
 
 		this.map.fitBounds(bounds, {
 			linear: true,
+			maxZoom: 12,
 			padding: 40,
 		});
 	}

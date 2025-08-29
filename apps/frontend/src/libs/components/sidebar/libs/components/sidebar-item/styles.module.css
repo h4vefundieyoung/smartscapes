@@ -55,7 +55,7 @@
 	}
 }
 
-@media (width <=480px) {
+@media (width <= 640px) {
 	.item {
 		flex: 1;
 		container: none;

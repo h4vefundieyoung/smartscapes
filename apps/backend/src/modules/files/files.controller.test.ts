@@ -19,6 +19,7 @@ describe("FilesController", () => {
 
 	const mockFile = {
 		contentType: "image/jpg" as FileMimeType,
+		createdAt: "2024-01-01T00:00:00Z",
 		id: 1,
 		url: "https://example.com/file.jpg",
 	};

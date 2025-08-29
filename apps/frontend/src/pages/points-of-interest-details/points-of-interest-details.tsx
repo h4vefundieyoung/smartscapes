@@ -1,5 +1,5 @@
-import image2 from "~/assets/images/route-details/placeholder-image-2.png";
-import image3 from "~/assets/images/route-details/placeholder-image-3.png";
+import image1 from "~/assets/images/route-details/placeholder-image-1.jpg";
+import image2 from "~/assets/images/route-details/placeholder-image-2.jpg";
 import {
 	Button,
 	FeatureGallery,
@@ -25,6 +25,7 @@ import {
 } from "~/modules/points-of-interest/points-of-interest.js";
 import { NotFound } from "~/pages/not-found/not-found.js";
 
+import { RoutesGallery } from "./libs/components/components.js";
 import { POINT_OF_INTEREST_FORM_DEFAULT_VALUES } from "./libs/constants/constants.js";
 import styles from "./styles.module.css";
 
@@ -41,7 +42,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 		(state) => state.pointOfInterestDetails.pointOfInterest,
 	);
 
-	const { control, errors, getValues, handleReset } =
+	const { control, errors, getValues, handleReset, handleValueSet } =
 		useAppForm<PointOfInterestPatchRequestDto>({
 			defaultValues: POINT_OF_INTEREST_FORM_DEFAULT_VALUES,
 		});
@@ -60,6 +61,13 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 	const handleToggleEditMode = useCallback(() => {
 		setIsEditMode((previous) => !previous);
 	}, []);
+
+	useEffect(() => {
+		if (pointOfInterest && isEditMode) {
+			handleValueSet("name", pointOfInterest.name);
+			handleValueSet("description", pointOfInterest.description ?? "");
+		}
+	}, [pointOfInterest, handleValueSet, isEditMode]);
 
 	const handleResetFormValues = useCallback(() => {
 		if (!pointOfInterest) {
@@ -176,7 +184,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 							<img
 								alt="Point of interest"
 								className={styles["image"]}
-								src={image2}
+								src={image1}
 							/>
 						),
 					},
@@ -185,7 +193,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 							<img
 								alt="Point of interest"
 								className={styles["image"]}
-								src={image3}
+								src={image2}
 							/>
 						),
 					},
@@ -204,6 +212,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 					{hasDescription ? description : "No description available."}
 				</p>
 			)}
+			<RoutesGallery routes={pointOfInterest.routes} />
 		</main>
 	);
 };

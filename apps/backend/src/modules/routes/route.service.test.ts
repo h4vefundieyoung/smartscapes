@@ -122,10 +122,12 @@ describe("RouteService", () => {
 		id: EXISTING_ID,
 		images: [
 			{
+				createdAt: "2024-01-01T00:00:00Z",
 				id: 1,
 				url: "https://s3.amazonaws.com/test/1.png",
 			},
 			{
+				createdAt: "2024-01-01T00:00:00Z",
 				id: 2,
 				url: "https://s3.amazonaws.com/test/2.png",
 			},
@@ -148,6 +150,7 @@ describe("RouteService", () => {
 	};
 
 	const mockRouteAllItemResponse: RouteGetAllItemResponseDto = {
+		categories: [],
 		createdAt: MOCK_CREATED_AT,
 		createdByUserId: 5,
 		distance: 12.3,
@@ -156,10 +159,12 @@ describe("RouteService", () => {
 		id: EXISTING_ID,
 		images: [
 			{
+				createdAt: "2024-01-01T00:00:00Z",
 				id: 1,
 				url: "https://s3.amazonaws.com/test/1.png",
 			},
 			{
+				createdAt: "2024-01-01T00:00:00Z",
 				id: 2,
 				url: "https://s3.amazonaws.com/test/2.png",
 			},
@@ -179,6 +184,7 @@ describe("RouteService", () => {
 				visitOrder: SECOND_VISIT_ORDER,
 			},
 		],
+		savedUserRoute: null,
 	};
 
 	const mockPoisFindAll: PointsOfInterestGetAllItemResponseDto[] = [
@@ -382,7 +388,10 @@ describe("RouteService", () => {
 
 		const result = await routeService.create(mockCreatePayload);
 
-		assert.deepStrictEqual(result, mockRouteAllItemResponse);
+		assert.deepStrictEqual(result, {
+			...mockRouteAllItemResponse,
+			description: mockCreatePayload.description,
+		});
 	});
 
 	it("findById should return route when it exists", async () => {
@@ -429,6 +438,7 @@ describe("RouteService", () => {
 
 		assert.deepStrictEqual(result, {
 			...mockRouteIdResponse,
+			description: mockCreatePayload.description,
 			savedUserRoute: null,
 		});
 	});
@@ -458,7 +468,7 @@ describe("RouteService", () => {
 		const result = await routeService.findAll(null);
 
 		assert.deepStrictEqual(result, {
-			items: [mockRouteAllItemResponse],
+			items: [{ ...mockRouteAllItemResponse, description: null }],
 			meta: {
 				currentPage: 1,
 				itemsPerPage: 1,
@@ -526,7 +536,7 @@ describe("RouteService", () => {
 		const result = await routeService.findAll(mockOptions);
 
 		assert.deepStrictEqual(result, {
-			items: [mockRouteAllItemResponse],
+			items: [{ ...mockRouteAllItemResponse, description: null }],
 			meta: {
 				currentPage: 1,
 				itemsPerPage: 1,
@@ -646,7 +656,10 @@ describe("RouteService", () => {
 
 		const result = await routeService.create(mockCreatePayload);
 
-		assert.deepStrictEqual(result, mockRouteAllItemResponse);
+		assert.deepStrictEqual(result, {
+			...mockRouteAllItemResponse,
+			description: mockCreatePayload.description,
+		});
 	});
 
 	it("ensurePoisExist should throw error when POI does not exist", async () => {

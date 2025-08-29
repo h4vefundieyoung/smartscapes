@@ -41,6 +41,7 @@ describe("FileService", () => {
 
 		assert.deepStrictEqual(result, {
 			contentType: mockFile.contentType,
+			createdAt: mockFile.createdAt,
 			entityId: mockFile.entityId,
 			folder: mockFile.folder,
 			id: mockFile.id,

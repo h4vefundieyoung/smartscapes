@@ -1,4 +1,4 @@
-import { Icon, Link } from "~/libs/components/components.js";
+import { Icon, Link, MapProvider } from "~/libs/components/components.js";
 import { AppRoute, KeyboardKey } from "~/libs/enums/enums.js";
 import { configureString } from "~/libs/helpers/helpers.js";
 import { useCallback } from "~/libs/hooks/hooks.js";
@@ -8,6 +8,7 @@ import styles from "./styles.module.css";
 type Properties = {
 	id?: number;
 	imageUrl: null | string;
+	mapProps: React.ComponentProps<typeof MapProvider>;
 	name: string;
 	onClick?: () => void;
 };
@@ -15,6 +16,7 @@ type Properties = {
 const RouteCard = ({
 	id,
 	imageUrl,
+	mapProps,
 	name,
 	onClick,
 }: Properties): React.JSX.Element => {
@@ -43,7 +45,9 @@ const RouteCard = ({
 					{imageUrl ? (
 						<img alt={name} className={styles["image"]} src={imageUrl} />
 					) : (
-						<div className={styles["image-placeholder"]} />
+						<div className={styles["image-placeholder"]}>
+							<MapProvider {...mapProps} />
+						</div>
 					)}
 					<div className={styles["data"]}>
 						<p className={styles["label"]}>{name}</p>

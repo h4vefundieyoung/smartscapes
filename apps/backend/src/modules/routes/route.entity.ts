@@ -5,10 +5,7 @@ import {
 } from "~/libs/types/types.js";
 
 import { type CategoryEntity } from "../categories/category.entity.js";
-import {
-	type RouteUploadImageResponseDto,
-	type UserRouteStatusType,
-} from "./libs/types/types.js";
+import { type UserRouteStatusType } from "./libs/types/types.js";
 
 type SavedUserRoute = {
 	id: number;
@@ -32,7 +29,11 @@ class RouteEntity implements Entity {
 
 	private id: null | number;
 
-	private images: RouteUploadImageResponseDto[];
+	private images: {
+		createdAt: string;
+		id: number;
+		url: string;
+	}[];
 
 	private name: string;
 
@@ -67,7 +68,11 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: null | number;
-		images: RouteUploadImageResponseDto[];
+		images: {
+			createdAt: string;
+			id: number;
+			url: string;
+		}[];
 		name: string;
 		pois: {
 			id: number;
@@ -99,7 +104,11 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
-		images: RouteUploadImageResponseDto[];
+		images?: {
+			createdAt: string;
+			id: number;
+			url: string;
+		}[];
 		name: string;
 		pois: {
 			id: number;
@@ -117,7 +126,7 @@ class RouteEntity implements Entity {
 			duration: data.duration,
 			geometry: data.geometry,
 			id: data.id,
-			images: data.images,
+			images: data.images ?? [],
 			name: data.name,
 			pois: data.pois,
 			savedUserRoute: data.savedUserRoute ?? null,
@@ -141,7 +150,11 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
-		images: RouteUploadImageResponseDto[];
+		images?: {
+			createdAt: string;
+			id: number;
+			url: string;
+		}[];
 		name: string;
 		pois: {
 			id: number;
@@ -158,7 +171,7 @@ class RouteEntity implements Entity {
 			duration,
 			geometry,
 			id,
-			images,
+			images: images ?? [],
 			name,
 			pois,
 			savedUserRoute: null,
@@ -210,7 +223,11 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
-		images: RouteUploadImageResponseDto[];
+		images: {
+			createdAt: string;
+			id: number;
+			url: string;
+		}[];
 		name: string;
 		pois: {
 			id: number;
@@ -245,7 +262,11 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
-		images: RouteUploadImageResponseDto[];
+		images: {
+			createdAt: string;
+			id: number;
+			url: string;
+		}[];
 		name: string;
 		pois: {
 			id: number;
@@ -283,7 +304,11 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
-		images: RouteUploadImageResponseDto[];
+		images: {
+			createdAt: string;
+			id: number;
+			url: string;
+		}[];
 		name: string;
 		pois: {
 			id: number;
@@ -342,7 +367,11 @@ class RouteEntity implements Entity {
 		duration: number;
 		geometry: LineStringGeometry;
 		id: number;
-		images: RouteUploadImageResponseDto[];
+		images: {
+			createdAt: string;
+			id: number;
+			url: string;
+		}[];
 		name: string;
 		pois: {
 			id: number;

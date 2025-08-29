@@ -22,11 +22,7 @@ const Activity = ({
 	return (
 		<div className={styles["activity"]}>
 			<div className={styles["map-wrapper"]}>
-				<MapProvider
-					isInteractive={false}
-					routeLine={routeLine}
-					shouldFitToBounds
-				/>
+				<MapProvider routeLine={routeLine} shouldFitToBounds />
 			</div>
 			<h4 className={styles["activity-title"]}>{title}</h4>
 			<span className={styles["activity-distance"]}>

@@ -17,15 +17,21 @@ const MapContext = createContext<MapClient | null>(null);
 type Properties = {
 	center?: Coordinates;
 	children?: React.ReactNode;
+	isInteractive?: boolean;
 	markers?: { coordinates: Coordinates }[];
 	routeLine?: null | RouteLine;
+	shouldFitToBounds?: boolean;
+	shouldZoomOnGeolocate?: boolean;
 };
 
 const MapProvider = ({
 	center,
 	children,
+	isInteractive = true,
 	markers = [],
 	routeLine,
+	shouldFitToBounds = false,
+	shouldZoomOnGeolocate = false,
 }: Properties): React.JSX.Element => {
 	const mapClientReference = useRef(new MapClient());
 	const containerReference = useRef<HTMLDivElement>(null);
@@ -56,6 +62,7 @@ const MapProvider = ({
 		}
 
 		client.init(container, {
+			isInteractive,
 			onLoad: handleMapLoad,
 			onPopupRender: handlePopupRender,
 		});
@@ -64,23 +71,40 @@ const MapProvider = ({
 			setIsLoaded(false);
 			client.destroy();
 		};
-	}, [handleMapLoad, handlePopupRender]);
+	}, [handleMapLoad, handlePopupRender, isInteractive]);
 
 	useEffect(() => {
-		const client = mapClientReference.current;
-		client.addNavigationControl();
-		client.addScaleControl();
+		if (isInteractive && isLoaded) {
+			const client = mapClientReference.current;
 
-		if (!center && !routeLine) {
-			client.addGeolocateControl();
+			client.addNavigationControl();
+			client.addScaleControl();
+			client.addGeolocateControl({
+				shouldTrigger: !shouldFitToBounds,
+				shouldZoomOnGeolocate,
+			});
 		}
-	}, [center, routeLine]);
+	}, [isInteractive, isLoaded, shouldFitToBounds, shouldZoomOnGeolocate]);
 
 	useEffect(() => {
+		if (!isLoaded) {
+			return;
+		}
+
 		const client = mapClientReference.current;
 
 		client.addMarkers(markers);
-	}, [markers]);
+	}, [markers, isLoaded]);
+
+	useEffect(() => {
+		if (!isLoaded || !routeLine) {
+			return;
+		}
+
+		const client = mapClientReference.current;
+
+		client.renderRoute(routeLine);
+	}, [isLoaded, routeLine]);
 
 	useEffect(() => {
 		if (!isLoaded || !center) {
@@ -91,22 +115,21 @@ const MapProvider = ({
 	}, [isLoaded, center]);
 
 	useEffect(() => {
-		if (!isLoaded || !routeLine) {
+		const hasFeatures = routeLine || markers.length > 0;
+
+		if (!isLoaded || !hasFeatures || !shouldFitToBounds) {
 			return;
 		}
 
+		const coordinates = [
+			...(routeLine?.geometry.coordinates ?? []),
+			...markers.map((marker) => marker.coordinates),
+		];
+
 		const client = mapClientReference.current;
 
-		client.renderRoute(routeLine);
-
-		const coordinates = routeLine.geometry.coordinates as
-			| Coordinates[]
-			| undefined;
-
-		if (coordinates && coordinates.length > 0) {
-			client.fitToCoordinates(coordinates);
-		}
-	}, [isLoaded, routeLine]);
+		client.fitToCoordinates(coordinates);
+	}, [isLoaded, routeLine, markers, shouldFitToBounds]);
 
 	return (
 		<MapContext.Provider value={mapClientReference.current}>

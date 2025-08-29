@@ -5,6 +5,7 @@ import { type Coordinates, type RouteLine } from "~/libs/types/types.js";
 
 import {
 	GEOLOCATE_CONTROL_OPTIONS,
+	GEOLOCATE_CONTROL_TRIGGER_TIMEOUT,
 	MAP_CONTROLS_POSITION,
 	MAP_LAYER_STYLES,
 	MAP_MARKER_Z_INDEX_VALUE,
@@ -27,6 +28,11 @@ import {
 	type ReactElement,
 } from "./libs/types/types.js";
 
+type AddGeolocateControlOptions = {
+	shouldTrigger?: boolean;
+	shouldZoomOnGeolocate?: boolean;
+};
+
 class MapClient {
 	private accessToken: MapOptions["accessToken"];
 
@@ -44,30 +50,31 @@ class MapClient {
 		this.accessToken = config.ENV.MAPBOX.ACCESS_TOKEN;
 	}
 
-	public addGeolocateControl(): void {
+	public addGeolocateControl({
+		shouldTrigger = false,
+		shouldZoomOnGeolocate = false,
+	}: AddGeolocateControlOptions): void {
 		if (!this.map) {
 			return;
 		}
 
-		const control = new mapboxgl.GeolocateControl(GEOLOCATE_CONTROL_OPTIONS);
+		const control = new mapboxgl.GeolocateControl({
+			...GEOLOCATE_CONTROL_OPTIONS,
+			...(shouldZoomOnGeolocate && { fitBoundsOptions: { linear: true } }),
+		});
 		this.addControl(
 			MapControlId.GEOLOCATE,
 			control,
 			MAP_CONTROLS_POSITION["GEOLOCATE"] as ControlPosition,
 		);
 
-		const isMapLoaded = this.map.loaded();
-
-		if (isMapLoaded) {
-			control.trigger();
-		} else {
-			const handleMapLoad = (): void => {
-				this.map?.off(MapEventType.LOAD, handleMapLoad);
-				control.trigger();
-			};
-
-			this.map.on(MapEventType.LOAD, handleMapLoad);
+		if (!shouldTrigger) {
+			return;
 		}
+
+		setTimeout(() => {
+			control.trigger();
+		}, GEOLOCATE_CONTROL_TRIGGER_TIMEOUT);
 	}
 
 	public addMapClickListener(
@@ -169,10 +176,7 @@ class MapClient {
 		this.map = null;
 	}
 
-	public fitToCoordinates(
-		coordinates: Coordinates[],
-		options?: mapboxgl.MapOptions["fitBoundsOptions"],
-	): void {
+	public fitToCoordinates(coordinates: Coordinates[]): void {
 		if (!this.map || coordinates.length === 0) {
 			return;
 		}
@@ -183,7 +187,10 @@ class MapClient {
 			bounds.extend(point as [number, number]);
 		}
 
-		this.map.fitBounds(bounds, { padding: 40, ...options });
+		this.map.fitBounds(bounds, {
+			linear: true,
+			padding: 40,
+		});
 	}
 
 	public flyTo(center: [number, number]): void {
@@ -198,6 +205,7 @@ class MapClient {
 	public init(
 		container: HTMLElement,
 		options?: {
+			isInteractive?: boolean;
 			onLoad?: () => void;
 			onPopupRender?: (content: ReactElement, container: HTMLElement) => void;
 		},
@@ -214,6 +222,7 @@ class MapClient {
 			accessToken: this.accessToken,
 			container,
 			...MAP_OPTIONS,
+			interactive: options?.isInteractive ?? true,
 		});
 
 		if (options?.onLoad) {

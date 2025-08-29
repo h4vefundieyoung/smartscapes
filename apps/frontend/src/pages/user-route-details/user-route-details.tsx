@@ -1,3 +1,5 @@
+import { type ComponentProps } from "react";
+
 import { Button, Loader, MapProvider } from "~/libs/components/components.js";
 import { DataStatus } from "~/libs/enums/enums.js";
 import {
@@ -7,8 +9,6 @@ import {
 	useMemo,
 	useParams,
 } from "~/libs/hooks/hooks.js";
-import { type RouteLine } from "~/libs/types/route-line.type.js";
-import { type Coordinates } from "~/libs/types/types.js";
 import { actions as pointsOfInterestActions } from "~/modules/points-of-interest/points-of-interest.js";
 import { actions as routeDetailsActions } from "~/modules/routes/routes.js";
 
@@ -18,12 +18,6 @@ import {
 	useUserRouteState,
 } from "./libs/hooks/hooks.js";
 import styles from "./styles.module.css";
-
-type MapProperties = {
-	center: Coordinates;
-	markers: { coordinates: Coordinates }[];
-	routeLine: null | RouteLine;
-};
 
 const UserRouteDetails = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
@@ -61,13 +55,14 @@ const UserRouteDetails = (): React.JSX.Element => {
 		}
 	}, [route, dispatch]);
 
-	const mapProperties = useMemo((): MapProperties | null => {
+	const mapProperties = useMemo((): ComponentProps<
+		typeof MapProvider
+	> | null => {
 		if (!route) {
 			return null;
 		}
 
 		return {
-			center: pointsOfInterest[0]?.location.coordinates || [0, 0],
 			markers: pointsOfInterest.map((poi) => ({
 				coordinates: poi.location.coordinates,
 			})),
@@ -75,6 +70,7 @@ const UserRouteDetails = (): React.JSX.Element => {
 				geometry: route.geometry,
 				id: String(routeId),
 			},
+			shouldZoomOnGeolocate: true,
 		};
 	}, [route, pointsOfInterest, routeId]);
 

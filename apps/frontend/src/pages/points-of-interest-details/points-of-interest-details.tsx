@@ -166,6 +166,7 @@ const PointsOfInterestDetails = (): React.JSX.Element => {
 											coordinates: [longitude, latitude],
 										},
 									]}
+									shouldFitToBounds
 								/>
 							</div>
 						),

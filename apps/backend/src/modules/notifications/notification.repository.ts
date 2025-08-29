@@ -1,3 +1,4 @@
+import { SortingOrder } from "~/libs/enums/enums.js";
 import { type Repository, type ValueOf } from "~/libs/types/types.js";
 import {
 	type NotificationEntityType,
@@ -44,7 +45,7 @@ class NotificationRepository implements Repository {
 		const notifications = await this.notificationModel
 			.query()
 			.where("user_id", userId)
-			.orderBy("created_at", "desc")
+			.orderBy("created_at", SortingOrder.DESC)
 			.execute();
 
 		return notifications.map((notification) =>

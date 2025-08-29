@@ -57,9 +57,9 @@
 	text-align: center;
 }
 
-@media (width <= 768px) {
+@media (width <=768px) {
 	.content {
-		left: 0;
+		right: 10px;
 		min-width: 210px;
 	}
 }

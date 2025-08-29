@@ -7,6 +7,7 @@ import { DatabaseTableName } from "~/libs/modules/database/database.js";
 import {
 	type Coordinates,
 	type LineStringGeometry,
+	type PointGeometry,
 } from "~/libs/types/types.js";
 
 import { PlannedPathModel } from "../planned-paths/planned-path.model.js";
@@ -25,6 +26,7 @@ describe("RouteRepository", () => {
 	let databaseTracker: Tracker;
 
 	const mockRoute = {
+		createdAt: "2024-01-01T00:00:00Z",
 		createdByUserId: 10,
 		description: "A test route description",
 		distance: 1.23,
@@ -50,10 +52,21 @@ describe("RouteRepository", () => {
 			},
 		],
 		name: "Test Route",
-		pois: [{ id: 1, name: "Test POI", visitOrder: 1 }],
+		pois: [
+			{
+				id: 1,
+				location: {
+					coordinates: [30.5234, 50.4501] as Coordinates,
+					type: "Point" as const,
+				},
+				name: "Test POI",
+				visitOrder: 1,
+			},
+		],
 	};
 
 	const mockRouteList = {
+		createdAt: mockRoute.createdAt,
 		createdByUserId: mockRoute.createdByUserId,
 		distance: mockRoute.distance,
 		duration: mockRoute.duration,
@@ -61,7 +74,12 @@ describe("RouteRepository", () => {
 		id: mockRoute.id,
 		images: [],
 		name: mockRoute.name,
-		pois: [] as { id: number; name: string; visitOrder: number }[],
+		pois: [] as {
+			id: number;
+			location: PointGeometry;
+			name: string;
+			visitOrder: number;
+		}[],
 	};
 
 	const createMockRouteEntity = (): RouteEntity =>
@@ -123,7 +141,10 @@ describe("RouteRepository", () => {
 
 		const result = await routesRepository.findAll(null);
 
-		assert.deepStrictEqual(result, [mockRouteEntity]);
+		assert.deepStrictEqual(result, {
+			items: [mockRouteEntity],
+			total: 1,
+		});
 	});
 
 	it("findAll should return routes matching search query", async () => {
@@ -143,7 +164,10 @@ describe("RouteRepository", () => {
 
 		const result = await routesRepository.findAll(mockOptions);
 
-		assert.deepStrictEqual(result, [mockRouteEntity]);
+		assert.deepStrictEqual(result, {
+			items: [mockRouteEntity],
+			total: 1,
+		});
 	});
 
 	it("findAll should return empty array if no routes found", async () => {
@@ -153,7 +177,10 @@ describe("RouteRepository", () => {
 
 		const result = await routesRepository.findAll(mockOptions);
 
-		assert.deepStrictEqual(result, []);
+		assert.deepStrictEqual(result, {
+			items: [],
+			total: 0,
+		});
 	});
 
 	it("delete should return true when route deleted", async () => {

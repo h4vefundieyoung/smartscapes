@@ -4,11 +4,16 @@ import { type HTTP } from "~/libs/modules/http/http.js";
 import { type Storage } from "~/libs/modules/storage/storage.js";
 import { type APIResponse } from "~/libs/types/types.js";
 
-import { UserFollowsApiPath, UsersApiPath } from "./libs/enums/enums.js";
+import {
+	UserFollowsApiPath,
+	UserRouteApiPath,
+	UsersApiPath,
+} from "./libs/enums/enums.js";
 import {
 	type UserFollowsRequestDto,
 	type UserGetByIdItemResponseDto,
 	type UserPublicProfileResponseDto,
+	type UserRouteResponseDto,
 } from "./libs/types/types.js";
 
 type Constructor = {
@@ -35,6 +40,22 @@ class UserApi extends BaseHTTPApi {
 				hasAuth: true,
 				method: "POST",
 				payload: JSON.stringify({ followingId } as UserFollowsRequestDto),
+			},
+		);
+
+		return await response.json();
+	}
+
+	public async getActivities(
+		id: number,
+	): Promise<APIResponse<UserRouteResponseDto[]>> {
+		const response = await this.load<APIResponse<UserRouteResponseDto[]>>(
+			this.getFullEndpoint(UserRouteApiPath.ROOT, {
+				id: id.toString(),
+			}),
+			{
+				hasAuth: true,
+				method: "GET",
 			},
 		);
 

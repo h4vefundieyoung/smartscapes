@@ -1,59 +1,48 @@
 .button {
 	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	width: 100%;
-	min-width: 120px;
+	min-width: 100px;
 	padding: 12px 16px;
 	font-family: var(--font-family);
 	font-size: var(--font-size-small);
+	font-weight: var(--font-weight-medium);
 	line-height: 1.5;
 	color: inherit;
 	text-align: center;
 	text-decoration: none;
 	cursor: pointer;
+	border: none;
 	border-radius: 8px;
-	transition: all 0.3s ease;
+	transition:
+		background 0.2s ease,
+		color 0.2s ease,
+		outline 0.1s ease;
 }
 
-.button:focus-visible {
-	outline: none;
-}
-
-.button:focus-visible::after {
-	position: absolute;
-	inset: -4px;
-	content: "";
-	background: transparent;
-	border: 2px solid var(--color-fill-press);
-	border-radius: 12px;
+.button-icon {
+	width: auto;
+	min-width: auto;
+	aspect-ratio: 1;
+	padding: 12px;
 }
 
 .button:disabled {
 	cursor: not-allowed;
-	opacity: 0.3;
+	opacity: 0.5;
 }
 
 .button-primary {
 	color: var(--color-text-inverse-strong);
 	background-color: var(--color-fill-brand-strong);
-	border: none;
 	box-shadow: var(--shadow-raised);
 }
 
-.button-secondary {
-	color: var(--color-text-weak);
-	background-color: var(--color-brand-200);
-	border: none;
-}
-
-.button-secondary:hover {
-	color: var(--color-text-inverse-strong);
-	background-color: var(--color-brand-800);
-	box-shadow: none;
-}
-
-.button-primary:disabled {
-	background-color: var(--color-fill-press);
-	box-shadow: none;
+.button-primary:focus-visible:not(:disabled) {
+	outline: 2px solid var(--color-stroke-focus);
+	outline-offset: 2px;
 }
 
 .button-primary:hover:not(:disabled),
@@ -62,14 +51,14 @@
 }
 
 .button-outlined {
-	color: var(--color-fill-brand-strong);
+	color: var(--color-text-brand);
 	background-color: transparent;
-	border: 2px solid var(--color-fill-brand-strong);
+	box-shadow: 0 0 0 2px var(--color-fill-brand-strong) inset;
 }
 
-.button-outlined:disabled {
-	color: var(--color-fill-press);
-	border-color: var(--color-fill-press);
+.button-outlined:focus-visible:not(:disabled) {
+	outline: 2px solid var(--color-stroke-focus);
+	outline-offset: 2px;
 }
 
 .button-outlined:hover:not(:disabled),
@@ -78,13 +67,19 @@
 	background-color: var(--color-fill-brand-strong);
 }
 
-.outlined-danger {
+.button-outlined-danger {
 	color: var(--color-text-error);
-	border-color: var(--color-text-error);
+	background-color: transparent;
+	box-shadow: 0 0 0 2px var(--color-text-error) inset;
 }
 
-@media (width <= 768px) {
-	.button {
-		font-size: var(--font-size-tiny);
-	}
+.button-outlined-danger:focus-visible:not(:disabled) {
+	outline: 2px solid var(--color-stroke-error);
+	outline-offset: 2px;
+}
+
+.button-outlined-danger:hover:not(:disabled),
+.button-outlined-danger:focus-visible:not(:disabled) {
+	color: var(--color-text-inverse-strong);
+	background-color: var(--color-text-error);
 }

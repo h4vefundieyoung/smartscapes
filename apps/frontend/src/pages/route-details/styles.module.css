@@ -2,6 +2,12 @@
 	max-width: max-content;
 }
 
+.map-container {
+	display: grid;
+	overflow: hidden;
+	border-radius: 8px;
+}
+
 .image {
 	display: block;
 	width: 100%;
@@ -46,9 +52,13 @@
 	justify-content: center;
 }
 
-.edit-mode-controls {
+.controls-container {
 	display: flex;
-	gap: 8px;
+	column-gap: 8px;
+}
+
+.upload-image-button-container {
+	margin-right: auto;
 }
 
 @media (width <=1440px) {

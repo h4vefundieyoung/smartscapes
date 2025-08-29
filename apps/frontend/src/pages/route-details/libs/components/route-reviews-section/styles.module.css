@@ -1,14 +1,16 @@
 .section {
-	margin-top: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+	max-width: 750px;
+	margin-top: 16px;
 }
 
 .header {
 	display: flex;
 	gap: 32px;
 	align-items: center;
-	justify-content: flex-start;
-	max-width: 296px;
-	margin-bottom: 32px;
+	justify-content: space-between;
 }
 
 .title {
@@ -21,10 +23,6 @@
 	display: grid;
 	gap: 32px;
 	padding: 0;
+	margin: 0;
 	list-style: none;
-}
-
-.info {
-	margin-bottom: 8px;
-	color: var(--color-text-weak);
 }

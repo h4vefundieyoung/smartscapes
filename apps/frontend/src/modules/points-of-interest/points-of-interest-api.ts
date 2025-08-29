@@ -26,15 +26,27 @@ class PointOfInterestApi extends BaseHTTPApi {
 
 	public async create(
 		payload: PointsOfInterestCreateRequestDto,
-	): Promise<APIResponse<PointsOfInterestGetByIdResponseDto>> {
+	): Promise<APIResponse<PointsOfInterestGetAllItemResponseDto>> {
 		const response = await this.load<
-			APIResponse<PointsOfInterestGetByIdResponseDto>
+			APIResponse<PointsOfInterestGetAllItemResponseDto>
 		>(this.getFullEndpoint(PointsOfInterestApiPath.ROOT, {}), {
 			contentType: ContentType.JSON,
 			hasAuth: true,
 			method: "POST",
 			payload: JSON.stringify(payload),
 		});
+
+		return await response.json();
+	}
+
+	public async delete(id: number): Promise<APIResponse<boolean>> {
+		const response = await this.load<APIResponse<boolean>>(
+			this.getFullEndpoint(PointsOfInterestApiPath.$ID, { id: String(id) }),
+			{
+				hasAuth: true,
+				method: "DELETE",
+			},
+		);
 
 		return await response.json();
 	}
@@ -51,6 +63,20 @@ class PointOfInterestApi extends BaseHTTPApi {
 			hasAuth: true,
 			method: "GET",
 			query: payload,
+		});
+
+		return await response.json();
+	}
+
+	public async getAll(
+		query?: PointsOfInterestGetAllQuery,
+	): Promise<APIResponse<PointsOfInterestGetAllItemResponseDto[]>> {
+		const response = await this.load<
+			APIResponse<PointsOfInterestGetAllItemResponseDto[]>
+		>(this.getFullEndpoint(PointsOfInterestApiPath.ROOT, {}), {
+			hasAuth: true,
+			method: "GET",
+			query,
 		});
 
 		return await response.json();

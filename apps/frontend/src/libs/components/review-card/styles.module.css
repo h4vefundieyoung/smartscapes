@@ -1,14 +1,17 @@
 .card {
+	display: flex;
+	flex-direction: column;
 	gap: 24px;
 	min-width: 0;
 	background: var(--color-base);
 }
 
-.head {
+.link {
 	display: flex;
-	gap: 24px;
+	gap: 20px;
 	align-items: center;
-	margin-bottom: 24px;
+	max-width: max-content;
+	text-decoration: none;
 }
 
 .username {
@@ -19,7 +22,7 @@
 
 .content {
 	gap: 24px;
-	max-width: 750px;
+	margin: 0;
 	font-size: var(--font-size-small);
 	line-height: 1.5;
 	color: var(--color-text-strong);

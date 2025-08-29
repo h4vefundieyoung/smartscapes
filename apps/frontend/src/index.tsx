@@ -18,11 +18,13 @@ import { ConstructRoute } from "./pages/construct-route/construct-route.js";
 import { Dashboard } from "./pages/dashboard/dashboard.js";
 import { Explore } from "./pages/explore/explore.js";
 import { Landing } from "./pages/landing/landing.jsx";
+import { ManageCategories } from "./pages/manage-categories/manage-categories.js";
 import { ManageRoutes } from "./pages/manage-routes/manage-routes.js";
 import { PointsOfInterestDetails } from "./pages/points-of-interest-details/points-of-interest-details.js";
 import { Profile } from "./pages/profile/profile.js";
 import { PublicProfile } from "./pages/public-profile/public-profile.js";
 import { RouteDetails } from "./pages/route-details/route-details.js";
+import { UserRouteDetails } from "./pages/user-route-details/user-route-details.js";
 
 pwa.register();
 
@@ -72,6 +74,14 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 							{
 								element: (
 									<ProtectedRoute>
+										<UserRouteDetails />
+									</ProtectedRoute>
+								),
+								path: AppRoute.USER_ROUTES_$ROUTE_ID_MAP,
+							},
+							{
+								element: (
+									<ProtectedRoute>
 										<PublicProfile />
 									</ProtectedRoute>
 								),
@@ -86,6 +96,16 @@ createRoot(document.querySelector("#root") as HTMLElement).render(
 									</ProtectedRoute>
 								),
 								path: AppRoute.MANAGE_ROUTES,
+							},
+							{
+								element: (
+									<ProtectedRoute
+										routePermissions={[PermissionKey.MANAGE_CATEGORIES]}
+									>
+										<ManageCategories />
+									</ProtectedRoute>
+								),
+								path: AppRoute.MANAGE_CATEGORIES,
 							},
 							{
 								element: (

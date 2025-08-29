@@ -1,16 +1,23 @@
+import { Icon } from "~/libs/components/components.js";
 import { combineClassNames } from "~/libs/helpers/helpers.js";
+import { useMemo } from "~/libs/hooks/hooks.js";
+import { type IconName } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
+	icon?: IconName;
+	isDisabled?: boolean;
 	label: string;
 	onClick?: () => void;
 	to?: string;
 	type?: "button" | "submit";
-	variant?: "outlined" | "outlined-danger" | "primary" | "secondary";
+	variant?: "outlined" | "outlined-danger" | "primary";
 };
 
 const Button = ({
+	icon,
+	isDisabled = false,
 	label,
 	onClick,
 	to,
@@ -19,23 +26,38 @@ const Button = ({
 }: Properties): React.JSX.Element => {
 	const buttonClass = combineClassNames(
 		styles["button"],
+		icon && styles["button-icon"],
 		variant === "outlined" && styles["button-outlined"],
-		variant === "outlined-danger" && styles["outlined-danger"],
+		variant === "outlined-danger" && styles["button-outlined-danger"],
 		variant === "primary" && styles["button-primary"],
-		variant === "secondary" && styles["button-secondary"],
+	);
+
+	const buttonContent = useMemo(
+		() => (
+			<>
+				<span className={icon && "visually-hidden"}>{label}</span>
+				{icon && <Icon height={24} name={icon} width={24} />}
+			</>
+		),
+		[icon, label],
 	);
 
 	if (to) {
 		return (
 			<a className={buttonClass} href={to}>
-				{label}
+				{buttonContent}
 			</a>
 		);
 	}
 
 	return (
-		<button className={buttonClass} onClick={onClick} type={type}>
-			{label}
+		<button
+			className={buttonClass}
+			disabled={isDisabled}
+			onClick={onClick}
+			type={type}
+		>
+			{buttonContent}
 		</button>
 	);
 };

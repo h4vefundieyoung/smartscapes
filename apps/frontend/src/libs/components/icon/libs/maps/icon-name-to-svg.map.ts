@@ -1,8 +1,12 @@
 import Analytics from "~/assets/images/icons/analytics.svg?react";
 import ArrowDown from "~/assets/images/icons/arrow-down.svg?react";
 import Bell from "~/assets/images/icons/bell.svg?react";
+import BookmarkOff from "~/assets/images/icons/bookmark-off.svg?react";
+import Bookmark from "~/assets/images/icons/bookmark.svg?react";
 import CaretDown from "~/assets/images/icons/caret-down.svg?react";
 import CaretUp from "~/assets/images/icons/caret-up.svg?react";
+import Category from "~/assets/images/icons/category.svg?react";
+import Check from "~/assets/images/icons/check.svg?react";
 import Close from "~/assets/images/icons/close.svg?react";
 import Dashboard from "~/assets/images/icons/dashboard.svg?react";
 import Edit from "~/assets/images/icons/edit.svg?react";
@@ -10,6 +14,7 @@ import Error from "~/assets/images/icons/error.svg?react";
 import EyeOff from "~/assets/images/icons/eye-off.svg?react";
 import Eye from "~/assets/images/icons/eye.svg?react";
 import Link from "~/assets/images/icons/link.svg?react";
+import Location from "~/assets/images/icons/location.svg?react";
 import Logout from "~/assets/images/icons/logout.svg?react";
 import Map from "~/assets/images/icons/map.svg?react";
 import Message from "~/assets/images/icons/message.svg?react";
@@ -27,8 +32,12 @@ const iconNameToSvg: Record<
 	analytics: Analytics,
 	arrowDown: ArrowDown,
 	bell: Bell,
+	bookmark: Bookmark,
+	bookmarkOff: BookmarkOff,
 	caretDown: CaretDown,
 	caretUp: CaretUp,
+	category: Category,
+	check: Check,
 	close: Close,
 	dashboard: Dashboard,
 	edit: Edit,
@@ -36,6 +45,7 @@ const iconNameToSvg: Record<
 	eye: Eye,
 	eyeOff: EyeOff,
 	link: Link,
+	location: Location,
 	logout: Logout,
 	map: Map,
 	message: Message,

@@ -20,11 +20,7 @@ class PointsOfInterestRepository implements Repository {
 
 		const pointOfInterest = await this.pointsOfInterestModel
 			.query()
-			.insert({
-				description,
-				location,
-				name,
-			})
+			.insert({ description, location, name })
 			.returning([
 				"id",
 				"name",
@@ -37,7 +33,15 @@ class PointsOfInterestRepository implements Repository {
 			])
 			.execute();
 
-		return PointsOfInterestEntity.initialize(pointOfInterest);
+		return PointsOfInterestEntity.initialize({
+			createdAt: pointOfInterest.createdAt,
+			description: pointOfInterest.description,
+			id: pointOfInterest.id,
+			location: pointOfInterest.location,
+			name: pointOfInterest.name,
+			routes: [],
+			updatedAt: pointOfInterest.updatedAt,
+		});
 	}
 
 	public async delete(id: number): Promise<boolean> {
@@ -101,14 +105,23 @@ class PointsOfInterestRepository implements Repository {
 
 		if (hasPagination) {
 			const offset = (page - PAGE_NUMBER_OFFSET) * perPage;
-
 			const [total, items] = await Promise.all([
 				baseQuery.clone().resultSize(),
 				baseQuery.clone().offset(offset).limit(perPage),
 			]);
 
 			return {
-				items: items.map((item) => PointsOfInterestEntity.initialize(item)),
+				items: items.map((item) =>
+					PointsOfInterestEntity.initialize({
+						createdAt: item.createdAt,
+						description: item.description,
+						id: item.id,
+						location: item.location,
+						name: item.name,
+						routes: [],
+						updatedAt: item.updatedAt,
+					}),
+				),
 				total,
 			};
 		}
@@ -116,7 +129,17 @@ class PointsOfInterestRepository implements Repository {
 		const items = await baseQuery.execute();
 
 		return {
-			items: items.map((item) => PointsOfInterestEntity.initialize(item)),
+			items: items.map((item) =>
+				PointsOfInterestEntity.initialize({
+					createdAt: item.createdAt,
+					description: item.description,
+					id: item.id,
+					location: item.location,
+					name: item.name,
+					routes: [],
+					updatedAt: item.updatedAt,
+				}),
+			),
 			total: items.length,
 		};
 	}
@@ -161,10 +184,15 @@ class PointsOfInterestRepository implements Repository {
 			return null;
 		}
 
-		const initializedPointOfInterest =
-			PointsOfInterestEntity.initialize(pointOfInterest);
-
-		return initializedPointOfInterest;
+		return PointsOfInterestEntity.initialize({
+			createdAt: pointOfInterest.createdAt,
+			description: pointOfInterest.description,
+			id: pointOfInterest.id,
+			location: pointOfInterest.location,
+			name: pointOfInterest.name,
+			routes: pointOfInterest.routes,
+			updatedAt: pointOfInterest.updatedAt,
+		});
 	}
 
 	public async findByName(
@@ -189,14 +217,22 @@ class PointsOfInterestRepository implements Repository {
 			return null;
 		}
 
-		return PointsOfInterestEntity.initialize(pointOfInterest);
+		return PointsOfInterestEntity.initialize({
+			createdAt: pointOfInterest.createdAt,
+			description: pointOfInterest.description,
+			id: pointOfInterest.id,
+			location: pointOfInterest.location,
+			name: pointOfInterest.name,
+			routes: [],
+			updatedAt: pointOfInterest.updatedAt,
+		});
 	}
 
 	public async patch(
 		id: number,
 		entity: Partial<PointsOfInterestEntity["toObject"]>,
 	): Promise<null | PointsOfInterestEntity> {
-		const [updatedPointOfInterest] = await this.pointsOfInterestModel
+		const [pointOfInterest] = await this.pointsOfInterestModel
 			.query()
 			.patch(entity)
 			.where("id", "=", id)
@@ -212,11 +248,19 @@ class PointsOfInterestRepository implements Repository {
 			])
 			.execute();
 
-		if (!updatedPointOfInterest) {
+		if (!pointOfInterest) {
 			return null;
 		}
 
-		return PointsOfInterestEntity.initialize(updatedPointOfInterest);
+		return PointsOfInterestEntity.initialize({
+			createdAt: pointOfInterest.createdAt,
+			description: pointOfInterest.description,
+			id: pointOfInterest.id,
+			location: pointOfInterest.location,
+			name: pointOfInterest.name,
+			routes: [],
+			updatedAt: pointOfInterest.updatedAt,
+		});
 	}
 }
 

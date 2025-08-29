@@ -7,8 +7,9 @@ import {
 	UserRouteExeptionMessage,
 	UserRouteStatus,
 } from "./libs/enums/enum.js";
-import { UserRouteError } from "./libs/exeptions/exeptions.js";
+import { UserRouteError } from "./libs/exceptions/exceptions.js";
 import {
+	type UserRouteFilter,
 	type UserRouteResponseDto,
 	type UserRouteStatusType,
 } from "./libs/types/type.js";
@@ -34,21 +35,44 @@ class UserRouteService implements Service {
 	}): Promise<UserRouteResponseDto> {
 		const { routeId, userId } = payload;
 
-		const { geometry } = await this.routeService.findById(routeId);
-
-		const createdData = UserRouteEntity.initializeNew({
-			actualGeometry: geometry,
-			plannedGeometry: geometry,
-			routeId,
-			status: UserRouteStatus.NOT_STARTED,
-			userId,
-		});
+		await this.ensureUserIsNotOnActiveRoute(userId);
 
 		await this.ensureIsNotDuplicateRoute(routeId, userId);
 
+		const { distance, geometry, name } =
+			await this.routeService.findById(routeId);
+
+		const createdData = UserRouteEntity.initializeNew({
+			actualGeometry: geometry,
+			distance,
+			plannedGeometry: geometry,
+			routeId,
+			routeName: name,
+			status: UserRouteStatus.NOT_STARTED,
+			userId,
+		});
 		const createdRoute = await this.userRouteRepository.create(createdData);
 
 		return createdRoute.toObject();
+	}
+
+	public async deleteSavedRoute(
+		routeId: number,
+		userId: number,
+	): Promise<boolean> {
+		const isDeleted = await this.userRouteRepository.deleteSavedRoute(
+			routeId,
+			userId,
+		);
+
+		if (!isDeleted) {
+			throw new UserRouteError({
+				message: UserRouteExeptionMessage.USER_ROUTE_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return isDeleted;
 	}
 
 	public async finish(payload: {
@@ -58,7 +82,10 @@ class UserRouteService implements Service {
 	}): Promise<UserRouteResponseDto> {
 		const { actualGeometry, routeId, userId } = payload;
 
-		const userRoute = await this.getByRouteIdAndUserId(routeId, userId);
+		const userRoute = await this.getRouteByFilter({
+			routeId,
+			userId,
+		});
 
 		this.ensureUserIsOwner(userRoute.userId, userId);
 
@@ -88,9 +115,30 @@ class UserRouteService implements Service {
 	}
 
 	public async getAllByUserId(userId: number): Promise<UserRouteResponseDto[]> {
-		const userRoutes = await this.userRouteRepository.findByFilter({ userId });
+		const userRoutes = await this.userRouteRepository.findAllByUserId(userId);
 
 		return userRoutes.map((item) => item.toObject());
+	}
+
+	public async getPopularRoutes(): Promise<UserRouteResponseDto[]> {
+		const routes = await this.userRouteRepository.findPopular();
+
+		return routes.map((item) => item.toObject());
+	}
+
+	public async getRouteByFilter(
+		filters: UserRouteFilter,
+	): Promise<UserRouteResponseDto> {
+		const [userRoute] = await this.userRouteRepository.findByFilter(filters);
+
+		if (!userRoute) {
+			throw new UserRouteError({
+				message: UserRouteExeptionMessage.USER_ROUTE_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		return userRoute.toObject();
 	}
 
 	public async start(payload: {
@@ -99,7 +147,10 @@ class UserRouteService implements Service {
 	}): Promise<UserRouteResponseDto> {
 		const { routeId, userId } = payload;
 
-		const userRoute = await this.getByRouteIdAndUserId(routeId, userId);
+		const userRoute = await this.getRouteByFilter({
+			routeId,
+			userId,
+		});
 
 		this.ensureUserIsOwner(userRoute.userId, userId);
 
@@ -135,6 +186,7 @@ class UserRouteService implements Service {
 	): Promise<void> {
 		const userRoutes = await this.userRouteRepository.findByFilter({
 			routeId,
+			status: UserRouteStatus.NOT_STARTED,
 			userId,
 		});
 
@@ -174,25 +226,6 @@ class UserRouteService implements Service {
 				status: HTTPCode.FORBIDDEN,
 			});
 		}
-	}
-
-	private async getByRouteIdAndUserId(
-		routeId: number,
-		userId: number,
-	): Promise<UserRouteResponseDto> {
-		const [userRoute] = await this.userRouteRepository.findByFilter({
-			routeId,
-			userId,
-		});
-
-		if (!userRoute) {
-			throw new UserRouteError({
-				message: UserRouteExeptionMessage.USER_ROUTE_NOT_FOUND,
-				status: HTTPCode.NOT_FOUND,
-			});
-		}
-
-		return userRoute.toObject();
 	}
 }
 

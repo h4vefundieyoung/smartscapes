@@ -30,7 +30,7 @@ const PointOfInterestCard = ({
 			<span className={styles["name"]}>{name}</span>
 
 			<div className={styles["right"]}>
-				<Link to={poiDetailsPath}>
+				<Link target="_blank" to={poiDetailsPath}>
 					<div className={styles["icon"]}>
 						<Icon height={24} name="link" width={24} />
 					</div>

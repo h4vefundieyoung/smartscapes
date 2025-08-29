@@ -5,6 +5,7 @@ import { type Storage } from "~/libs/modules/storage/storage.js";
 import {
 	type APIResponse,
 	type FileUploadResponseDto,
+	type PaginationMeta,
 } from "~/libs/types/types.js";
 
 import { RoutesApiPath } from "./libs/enums/enums.js";
@@ -14,6 +15,7 @@ import {
 	type RouteConstructRequestDto,
 	type RouteCreateRequestDto,
 	type RouteFindAllOptions,
+	type RouteGetAllItemResponseDto,
 	type RouteGetByIdResponseDto,
 	type UploadImageActionPayload,
 } from "./libs/types/types.js";
@@ -47,8 +49,8 @@ class RoutesApi extends BaseHTTPApi {
 
 	public async create(
 		payload: RouteCreateRequestDto,
-	): Promise<APIResponse<RouteGetByIdResponseDto>> {
-		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
+	): Promise<APIResponse<RouteGetAllItemResponseDto>> {
+		const response = await this.load<APIResponse<RouteGetAllItemResponseDto>>(
 			this.getFullEndpoint("/", {}),
 			{
 				contentType: ContentType.JSON,
@@ -73,18 +75,31 @@ class RoutesApi extends BaseHTTPApi {
 		return await response.json();
 	}
 
+	public async findAll(
+		payload: RouteFindAllOptions,
+	): Promise<APIResponse<RouteGetAllItemResponseDto[], PaginationMeta>> {
+		const response = await this.load<
+			APIResponse<RouteGetAllItemResponseDto[], PaginationMeta>
+		>(this.getFullEndpoint(RoutesApiPath.ROOT, {}), {
+			hasAuth: true,
+			method: "GET",
+			query: payload,
+		});
+
+		return await response.json();
+	}
+
 	public async getAll(
 		query?: RouteFindAllOptions,
-	): Promise<APIResponse<RouteGetByIdResponseDto[]>> {
-		const response = await this.load<APIResponse<RouteGetByIdResponseDto[]>>(
-			this.getFullEndpoint(RoutesApiPath.ROOT, {}),
-			{
-				contentType: ContentType.JSON,
-				hasAuth: false,
-				method: "GET",
-				query,
-			},
-		);
+	): Promise<APIResponse<RouteGetAllItemResponseDto[], PaginationMeta>> {
+		const response = await this.load<
+			APIResponse<RouteGetAllItemResponseDto[], PaginationMeta>
+		>(this.getFullEndpoint(RoutesApiPath.ROOT, {}), {
+			contentType: ContentType.JSON,
+			hasAuth: true,
+			method: "GET",
+			query,
+		});
 
 		return await response.json();
 	}
@@ -95,7 +110,7 @@ class RoutesApi extends BaseHTTPApi {
 		const response = await this.load<APIResponse<RouteGetByIdResponseDto>>(
 			this.getFullEndpoint(`${RoutesApiPath.ROOT}${id.toString()}`, {}),
 			{
-				hasAuth: false,
+				hasAuth: true,
 				method: "GET",
 			},
 		);

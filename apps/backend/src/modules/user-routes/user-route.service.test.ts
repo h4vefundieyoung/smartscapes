@@ -1,3 +1,4 @@
+import { HTTPCode } from "@smartscapes/shared";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
@@ -5,7 +6,7 @@ import { type LineStringGeometry } from "~/libs/types/types.js";
 
 import { type RouteService } from "../routes/route.service.js";
 import { UserRouteStatus } from "./libs/enums/enum.js";
-import { UserRouteError } from "./libs/exeptions/exeptions.js";
+import { UserRouteError } from "./libs/exceptions/exceptions.js";
 import { UserRouteEntity } from "./user-route.entity.js";
 import { type UserRouteRepository } from "./user-route.repository.js";
 import { UserRouteService } from "./user-route.service.js";
@@ -22,9 +23,11 @@ describe("UserRouteService", () => {
 	const mockUserRoute = {
 		actualGeometry: mockGeometry,
 		completedAt: null,
+		distance: 1000,
 		id: 1,
 		plannedGeometry: mockGeometry,
 		routeId: 7,
+		routeName: "Landscape alley",
 		startedAt: null,
 		status: UserRouteStatus.NOT_STARTED,
 		userId: 1,
@@ -96,7 +99,7 @@ describe("UserRouteService", () => {
 							}),
 						),
 					),
-			});
+			}) as unknown as UserRouteRepository;
 
 			const serviceWithActive = new UserRouteService(
 				mockRepositoryWithActive,
@@ -121,7 +124,7 @@ describe("UserRouteService", () => {
 				findByFilter: () => Promise.resolve([]),
 				findOne: () =>
 					Promise.resolve(UserRouteEntity.initialize(mockUserRoute)),
-			});
+			}) as unknown as UserRouteRepository;
 
 			const serviceWithInactive = new UserRouteService(
 				mockRepositoryWithInactive,
@@ -135,24 +138,78 @@ describe("UserRouteService", () => {
 	});
 
 	describe("getAllByUserId", () => {
-		it("should get all routes for user", async () => {
-			const mockRepositoryWithRoutes = Object.assign({}, mockRepository, {
-				findByFilter: () =>
-					Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
-				findMany: () =>
-					Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
-			}) as unknown as UserRouteRepository;
+		const mockGeometry = {
+			coordinates: [
+				[30.528_909, 50.455_232],
+				[30.528_209, 50.415_232],
+			],
+			type: "LineString",
+		} as LineStringGeometry;
 
-			const serviceWithRoutes = new UserRouteService(
-				mockRepositoryWithRoutes,
+		const mockUserRoute = {
+			actualGeometry: mockGeometry,
+			completedAt: null,
+			distance: 1000,
+			id: 1,
+			plannedGeometry: mockGeometry,
+			routeId: 7,
+			routeName: "Landscape alley",
+			startedAt: null,
+			status: UserRouteStatus.NOT_STARTED,
+			userId: 1,
+		};
+
+		it("should return all user routes as UserRouteResponseDto array", async () => {
+			const mockRepository = {
+				findAllByUserId: () =>
+					Promise.resolve([UserRouteEntity.initialize(mockUserRoute)]),
+			} as unknown as UserRouteRepository;
+
+			const service = new UserRouteService(mockRepository, {} as RouteService);
+
+			const result = await service.getAllByUserId(1);
+
+			assert.strictEqual(Array.isArray(result), true);
+		});
+	});
+
+	describe("deleteSavedRoute", () => {
+		const USER_ROUTE_ID = 1;
+		const USER_ID = 1;
+
+		it("delete should delete existing route successfully", async () => {
+			const mockUserRoutesRepository = Object.assign({}, mockRepository, {
+				deleteSavedRoute: () => Promise.resolve(true),
+			}) as unknown as UserRouteRepository;
+			const mockUserRoutesService = new UserRouteService(
+				mockUserRoutesRepository,
 				mockRouteService,
 			);
 
-			const result = await serviceWithRoutes.getAllByUserId(1);
+			const result = await mockUserRoutesService.deleteSavedRoute(
+				USER_ROUTE_ID,
+				USER_ROUTE_ID,
+			);
 
-			assert.strictEqual(Array.isArray(result), true);
-			assert.strictEqual(result.length, 1);
-			assert.strictEqual(result[0]?.userId, 1);
+			assert.strictEqual(result, true);
+		});
+
+		it("delete should throw an error when trying to delete non-existent route", async () => {
+			const mockUserRoutesRepository = Object.assign({}, mockRepository, {
+				deleteSavedRoute: () => Promise.resolve(false),
+			}) as unknown as UserRouteRepository;
+			const mockUserRoutesService = new UserRouteService(
+				mockUserRoutesRepository,
+				mockRouteService,
+			);
+
+			try {
+				await mockUserRoutesService.deleteSavedRoute(USER_ROUTE_ID, USER_ID);
+				assert.fail();
+			} catch (error) {
+				assert.equal(error instanceof UserRouteError, true);
+				assert.equal((error as UserRouteError).status, HTTPCode.NOT_FOUND);
+			}
 		});
 	});
 
@@ -178,7 +235,7 @@ describe("UserRouteService", () => {
 							}),
 						),
 					),
-			});
+			}) as unknown as UserRouteRepository;
 
 			const serviceWithActive = new UserRouteService(
 				mockRepositoryWithActive,

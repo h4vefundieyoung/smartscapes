@@ -6,6 +6,7 @@ export {
 	type UserFollowsRequestDto,
 	type UserGetByIdItemResponseDto,
 	type UserPublicProfileResponseDto,
+	type UserRouteResponseDto,
 	type UserSignInRequestDto,
 	type UserSignInResponseDto,
 	type UserSignUpRequestDto,

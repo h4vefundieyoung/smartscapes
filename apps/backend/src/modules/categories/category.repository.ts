@@ -1,7 +1,10 @@
-import { type Repository } from "~/libs/types/types.js";
+import { type EntityPagination, type Repository } from "~/libs/types/types.js";
 
 import { CategoryEntity } from "./category.entity.js";
 import { type CategoryModel } from "./category.model.js";
+import { type CategoryGetAllQuery as CategoryGetAllQueryOptions } from "./libs/types/types.js";
+
+const PAGE_NUMBER_OFFSET = 1;
 
 class CategoryRepository implements Repository {
 	private categoryModel: typeof CategoryModel;
@@ -22,10 +25,35 @@ class CategoryRepository implements Repository {
 		return CategoryEntity.initialize(category);
 	}
 
-	public async findAll(): Promise<CategoryEntity[]> {
-		const categories = await this.categoryModel.query().execute();
+	public async findAll(
+		options: CategoryGetAllQueryOptions | null,
+	): Promise<EntityPagination<CategoryEntity>> {
+		const { page, perPage } = options ?? {};
 
-		return categories.map((category) => CategoryEntity.initialize(category));
+		const hasPagination = page !== undefined && perPage !== undefined;
+
+		const query = this.categoryModel.query();
+
+		if (hasPagination) {
+			const offset = (page - PAGE_NUMBER_OFFSET) * perPage;
+
+			const [total, items] = await Promise.all([
+				query.clone().resultSize(),
+				query.clone().offset(offset).limit(perPage),
+			]);
+
+			return {
+				items: items.map((item) => CategoryEntity.initialize(item)),
+				total,
+			};
+		}
+
+		const items = await query.execute();
+
+		return {
+			items: items.map((item) => CategoryEntity.initialize(item)),
+			total: items.length,
+		};
 	}
 
 	public async findByKey(key: string): Promise<CategoryEntity | null> {

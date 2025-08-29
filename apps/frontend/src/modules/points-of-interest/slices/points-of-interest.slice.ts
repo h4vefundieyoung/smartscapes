@@ -4,7 +4,7 @@ import { DataStatus } from "~/libs/enums/enums.js";
 import { type PaginationMeta, type ValueOf } from "~/libs/types/types.js";
 import { type PointsOfInterestGetAllItemResponseDto } from "~/modules/points-of-interest/points-of-interest.js";
 
-import { create, findAll } from "./actions.js";
+import { create, findAll, remove } from "./actions.js";
 
 type State = {
 	createStatus: ValueOf<typeof DataStatus>;
@@ -25,8 +25,9 @@ const { actions, name, reducer } = createSlice({
 		builder.addCase(create.pending, (state) => {
 			state.createStatus = DataStatus.PENDING;
 		});
-		builder.addCase(create.fulfilled, (state) => {
+		builder.addCase(create.fulfilled, (state, action) => {
 			state.createStatus = DataStatus.FULFILLED;
+			state.data.unshift(action.payload.data);
 		});
 		builder.addCase(create.rejected, (state) => {
 			state.createStatus = DataStatus.REJECTED;
@@ -44,6 +45,16 @@ const { actions, name, reducer } = createSlice({
 		});
 		builder.addCase(findAll.rejected, (state) => {
 			state.dataStatus = DataStatus.REJECTED;
+		});
+
+		builder.addCase(remove.fulfilled, (state, action) => {
+			const { payload } = action;
+
+			state.data = state.data.filter((poi) => poi.id !== payload);
+
+			if (state.meta) {
+				state.meta.total -= 1;
+			}
 		});
 	},
 	initialState,

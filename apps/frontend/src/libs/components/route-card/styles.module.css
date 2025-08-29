@@ -1,54 +1,111 @@
-.card {
+.button {
+	box-sizing: border-box;
 	display: flex;
-	flex-grow: 1;
-	flex-shrink: 0;
 	flex-direction: column;
-	row-gap: 16px;
+	gap: 12px;
 	width: 100%;
-	max-width: 390px;
-	min-height: 240px;
-	list-style: none;
-}
-
-.card-content {
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
-	height: 100%;
+	padding: 0;
+	margin: 0;
+	font: inherit;
+	color: inherit;
 	text-decoration: none;
-}
-
-.image {
-	display: block;
-	width: 100%;
-	height: 100%;
-	max-height: 240px;
-	object-fit: cover;
+	appearance: none;
+	cursor: pointer;
+	outline: inherit;
+	background: none;
+	border: none;
 	border-radius: 8px;
 }
 
-.title {
+.button:hover {
+	background-color: var(--color-fill-hover);
+	transform: translateY(-2px);
+}
+
+.button:focus {
+	outline: inherit;
+}
+
+.button:focus-visible {
+	outline: inherit;
+}
+
+.route-card {
+	display: flex;
+	flex: 0 0 auto;
+	flex-direction: column;
+	width: 100%;
+	min-width: 280px;
+	max-width: 400px;
+}
+
+@media (width <= 768px) {
+	.route-card {
+		flex: 0 0 280px;
+		width: 280px;
+	}
+}
+
+.container {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.image {
+	align-items: center;
+	width: 100%;
+	object-fit: cover;
+}
+
+.image-placeholder {
+	background-color: var(--color-fill-grey);
+}
+
+.image,
+.image-placeholder {
+	height: 240px;
+	border-radius: 8px;
+}
+
+.data {
+	display: flex;
+	gap: 16px;
+	align-items: center;
+	justify-content: space-between;
+	padding: 6px 4px;
+}
+
+.label {
 	margin: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	font-size: var(--font-size-h4);
 	font-weight: var(--font-weight-semibold);
-	line-height: 1.2;
-	color: var(--color-text-strong);
+	line-height: 1.4;
 	white-space: nowrap;
 }
 
-.event-disable {
-	pointer-events: none;
+.linkButton {
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: center;
+	padding: 12px;
+	color: var(--color-text-brand);
+	text-decoration: none;
+	cursor: pointer;
+	outline: none;
+	background: none;
+	border: none;
+	border-radius: 8px;
+	transition: background-color 0.2s ease;
 }
 
-@media (width <= 991px) {
-	.card {
-		max-width: 300px;
-	}
+.linkButton:hover {
+	background-color: var(--color-fill-hover);
+}
 
-	.title {
-		font-size: var(--font-size-h5);
-		white-space: normal;
-	}
+.linkButton:active {
+	background-color: var(--color-fill-press);
 }

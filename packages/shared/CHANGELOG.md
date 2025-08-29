@@ -1,5 +1,68 @@
 # Changelog
 
+## [1.42.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.41.0...@smartscapes/shared-v1.42.0) (2025-08-28)
+
+
+### Features
+
+* **frontend/shared:** add small ui adjustments and improvements ss-1 ([#584](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/584)) ([8cc897d](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/8cc897d5bf6d472d09eb07856d9fdeac539f70c9))
+
+## [1.41.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.40.0...@smartscapes/shared-v1.41.0) (2025-08-28)
+
+
+### Features
+
+* **frontend/backend:** route-history ss-508 ([#562](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/562)) ([2f2c68b](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2f2c68b4bbed641b2247a711639396e639418f54))
+* **frontend:** add get directions to the route button ss-509 ([#561](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/561)) ([b8bcd18](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/b8bcd1814aadf972c2f4638e8fe35dc8bb36e4a1))
+
+## [1.40.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.39.0...@smartscapes/shared-v1.40.0) (2025-08-27)
+
+
+### Features
+
+* **frontend/backend/shared:** add an ability to assign category to routes ss-496 ([#551](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/551)) ([23fadeb](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/23fadebf1d097e3ee81ee21d5e1b7fd128d502a8))
+
+## [1.39.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.38.0...@smartscapes/shared-v1.39.0) (2025-08-27)
+
+
+### Features
+
+* **frontend:** user route navigate ss-501 ([#558](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/558)) ([8d56411](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/8d56411cea39997ded2c8a0545397df9d28638ff))
+
+## [1.38.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.37.0...@smartscapes/shared-v1.38.0) (2025-08-27)
+
+
+### Features
+
+* **frontend/backend/shared:** add routes table ss-504 ([#563](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/563)) ([5847400](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/5847400dbd4f5625a3fd4a7488871500c9f151ff))
+* **frontend/backend:** add categories table ss-505 ([#566](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/566)) ([8ee4139](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/8ee413964c9a8041ff38169779193e7dbf5340c2))
+
+## [1.37.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.36.0...@smartscapes/shared-v1.37.0) (2025-08-27)
+
+
+### Features
+
+* **backend/frontend/shared:** implement user bookmarks feature ss-497 ([#552](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/552)) ([c4d5e13](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/c4d5e1375611810c114a451aa83bbe00824605f7))
+
+## [1.36.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.35.0...@smartscapes/shared-v1.36.0) (2025-08-26)
+
+
+### Features
+
+* **frontend/shared:** update profile page design ss-448 ([#482](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/482)) ([2b45448](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/2b454483f05a54964e9dbdcba12cd1951d8e917a))
+
+## [1.35.0](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.34.1...@smartscapes/shared-v1.35.0) (2025-08-25)
+
+
+### Features
+
+* **frontend/backend:** ability to upload images to the route page ss-476 ([#513](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/513)) ([e4fa4eb](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/e4fa4ebad3fbdee53a403e1d157bfeaa554e1d03))
+
+
+### Bug Fixes
+
+* **backend:** fix user routes request ss-534 ([#548](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/issues/548)) ([69123cd](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/commit/69123cd01c58783fb15a2678eeeded290f74a0de))
+
 ## [1.34.1](https://github.com/BinaryStudioAcademy/bsa-2025-smartscapes/compare/@smartscapes/shared-v1.34.0...@smartscapes/shared-v1.34.1) (2025-08-25)
 
 

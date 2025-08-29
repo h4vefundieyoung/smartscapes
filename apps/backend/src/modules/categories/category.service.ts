@@ -1,5 +1,9 @@
 import { HTTPCode } from "~/libs/modules/http/http.js";
-import { type CollectionResult, type Service } from "~/libs/types/types.js";
+import {
+	type CollectionResult,
+	type PaginationMeta,
+	type Service,
+} from "~/libs/types/types.js";
 
 import { CategoryEntity } from "./category.entity.js";
 import { type CategoryRepository } from "./category.repository.js";
@@ -9,6 +13,7 @@ import { changeStringCase } from "./libs/helpers/helpers.js";
 import {
 	type CategoryCreateRequestDto,
 	type CategoryGetAllItemResponseDto,
+	type CategoryGetAllQuery as CategoryGetAllQueryOptions,
 } from "./libs/types/types.js";
 
 class CategoryService implements Service {
@@ -41,12 +46,26 @@ class CategoryService implements Service {
 		return item.toObject();
 	}
 
-	public async findAll(): Promise<
-		CollectionResult<CategoryGetAllItemResponseDto>
-	> {
-		const items = await this.categoryRepository.findAll();
+	public async findAll(
+		options: CategoryGetAllQueryOptions | null,
+	): Promise<CollectionResult<CategoryGetAllItemResponseDto, PaginationMeta>> {
+		const DEFAULT_PAGE = 1;
 
-		return { items: items.map((item) => item.toObject()) };
+		const { page, perPage } = options ?? {};
+
+		const { items, total } = await this.categoryRepository.findAll(options);
+
+		const totalPages = Math.ceil(total / (perPage ?? total));
+
+		return {
+			items: items.map((item) => item.toObject()),
+			meta: {
+				currentPage: page ?? DEFAULT_PAGE,
+				itemsPerPage: perPage ?? total,
+				total,
+				totalPages,
+			},
+		};
 	}
 
 	public async findByName(

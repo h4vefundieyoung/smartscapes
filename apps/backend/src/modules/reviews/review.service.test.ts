@@ -35,6 +35,21 @@ const createMockPointsOfInterestService =
 const createMockRouteService = (): Partial<RouteService> => ({
 	findById: (id: number) =>
 		Promise.resolve({
+			categories: [
+				{
+					createdAt: "2024-01-01T00:00:00Z",
+					id: 1,
+					key: "nature",
+					name: "Nature",
+				},
+				{
+					createdAt: "2024-01-01T00:00:00Z",
+					id: 2,
+					key: "historical",
+					name: "Historical",
+				},
+			],
+			createdAt: "2024-01-01T00:00:00Z",
 			createdByUserId: 10,
 			description: "Route description",
 			distance: 1.23,
@@ -63,17 +78,24 @@ const createMockRouteService = (): Partial<RouteService> => ({
 			pois: [
 				{
 					id: 1,
-					location: { coordinates: [1, 1], type: "Point" },
+					location: {
+						coordinates: [FIRST_COORDINATE, SECOND_COORDINATE],
+						type: "Point",
+					},
 					name: "SUP Kayak Club 4 Storony",
 					visitOrder: 1,
 				},
 				{
 					id: 2,
-					location: { coordinates: [1, 1], type: "Point" },
+					location: {
+						coordinates: [SECOND_COORDINATE, FIRST_COORDINATE],
+						type: "Point",
+					},
 					name: "River Grill, Rusanivska Embankment",
 					visitOrder: 2,
 				},
 			],
+			savedUserRoute: null,
 		}),
 });
 

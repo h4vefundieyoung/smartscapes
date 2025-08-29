@@ -41,9 +41,6 @@ const userRouteFinish = z.strictObject({
 			message: UserRouteValidationMessage.INVALID_LOCATION_TYPE,
 		}),
 	}),
-	routeId: z.number({
-		message: UserRouteValidationMessage.ROUTE_ID_INVALID_TYPE,
-	}),
 });
 
 export { userRouteFinish };

@@ -1,0 +1,47 @@
+.label {
+	margin: 0 0 12px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: start;
+	white-space: nowrap;
+}
+
+.card {
+	position: relative;
+	width: 100%;
+	max-width: 500px;
+	min-height: 350px;
+	color: inherit;
+	text-decoration: none;
+	cursor: pointer;
+	outline: none;
+	background: none;
+	border: none;
+}
+
+.cards-wrapper {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 64px;
+	width: 100%;
+}
+
+@media (width <=1024px) {
+	.cards-wrapper {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.card {
+		max-width: 330px;
+	}
+}
+
+@media (width <=768px) {
+	.cards-wrapper {
+		grid-template-columns: 1fr;
+	}
+
+	.card {
+		max-width: 350px;
+	}
+}

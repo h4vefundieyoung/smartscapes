@@ -1,4 +1,5 @@
 import { METERS_IN_KM } from "~/libs/constants/constants.js";
+import { configureString } from "~/libs/helpers/helpers.js";
 import { HTTPCode } from "~/libs/modules/http/http.js";
 import {
 	type CollectionResult,
@@ -26,7 +27,7 @@ class PointsOfInterestService implements Service {
 
 	public async create(
 		payload: PointsOfInterestCreateRequestDto,
-	): Promise<PointsOfInterestGetByIdResponseDto> {
+	): Promise<PointsOfInterestGetAllItemResponseDto> {
 		await this.ensureNameIsUnique(payload.name);
 
 		const { description, location, name } = payload;
@@ -39,10 +40,36 @@ class PointsOfInterestService implements Service {
 			}),
 		);
 
-		return item.toDetailsObject();
+		return item.toListObject();
 	}
 
 	public async delete(id: number): Promise<boolean> {
+		const poi = await this.pointsOfInterestRepository.findById(id);
+
+		if (!poi) {
+			throw new PointOfInterestError({
+				message: PointOfInterestExceptionMessage.ID_NOT_FOUND,
+				status: HTTPCode.NOT_FOUND,
+			});
+		}
+
+		const details = poi.toDetailsObject();
+
+		if (details.routes.length > 0) {
+			const [route] = details.routes;
+			const { name: routeName } = route as Required<
+				(typeof details)["routes"][number]
+			>;
+
+			throw new PointOfInterestError({
+				message: configureString(
+					PointOfInterestExceptionMessage.CANNOT_DELETE_INCLUDED_IN_ROUTE,
+					{ routeName },
+				),
+				status: HTTPCode.BAD_REQUEST,
+			});
+		}
+
 		const isDeleted = await this.pointsOfInterestRepository.delete(id);
 
 		if (!isDeleted) {

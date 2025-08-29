@@ -1,51 +1,65 @@
-import imagePlaceholer from "~/assets/images/placeholder-card.jpg";
-import { MapProvider, TextLink } from "~/libs/components/components.js";
-import { AppRoute } from "~/libs/enums/enums.js";
-import { combineClassNames, configureString } from "~/libs/helpers/helpers.js";
+import { Icon, Link } from "~/libs/components/components.js";
+import { AppRoute, KeyboardKey } from "~/libs/enums/enums.js";
+import { configureString } from "~/libs/helpers/helpers.js";
+import { useCallback } from "~/libs/hooks/hooks.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
-	id: number;
-	imageUrl: string | undefined;
-	mapProps: React.ComponentProps<typeof MapProvider>;
+	id?: number;
+	imageUrl: null | string;
 	name: string;
+	onClick?: () => void;
 };
 
 const RouteCard = ({
 	id,
 	imageUrl,
-	mapProps,
 	name,
+	onClick,
 }: Properties): React.JSX.Element => {
-	const hasImage = Boolean(imageUrl);
-	const routeDetailsUrl = configureString(AppRoute.ROUTES_$ID, {
-		id: id.toString(),
-	});
+	const handleKeyDown = useCallback(
+		(event: React.KeyboardEvent): void => {
+			if (
+				onClick &&
+				(event.key === KeyboardKey.ENTER || event.key === KeyboardKey.SPACE)
+			) {
+				event.preventDefault();
+				onClick();
+			}
+		},
+		[onClick],
+	);
 
 	return (
-		<li className={styles["card"]}>
-			<TextLink to={routeDetailsUrl}>
-				{hasImage ? (
-					<span className={styles["card-content"]}>
-						<img
-							alt={name}
-							className={styles["image"]}
-							src={imageUrl ?? imagePlaceholer}
-						/>
-					</span>
-				) : (
-					<span
-						className={combineClassNames(
-							styles["event-disable"],
-							styles["card-content"],
+		<li className={styles["route-card"]}>
+			<div className={styles["container"]}>
+				<button
+					aria-label={onClick ? `Select route: ${name}` : undefined}
+					className={styles["button"]}
+					onClick={onClick}
+					onKeyDown={handleKeyDown}
+				>
+					{imageUrl ? (
+						<img alt={name} className={styles["image"]} src={imageUrl} />
+					) : (
+						<div className={styles["image-placeholder"]} />
+					)}
+					<div className={styles["data"]}>
+						<p className={styles["label"]}>{name}</p>
+						{id && (
+							<Link
+								className={styles["linkButton"]}
+								to={configureString(AppRoute.ROUTES_$ID, {
+									id: id.toString(),
+								})}
+							>
+								<Icon height={16} name="link" width={16} />
+							</Link>
 						)}
-					>
-						<MapProvider {...mapProps} />
-					</span>
-				)}
-			</TextLink>
-			<span className={styles["title"]}>{name}</span>
+					</div>
+				</button>
+			</div>
 		</li>
 	);
 };

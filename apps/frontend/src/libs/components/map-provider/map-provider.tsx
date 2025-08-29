@@ -1,3 +1,5 @@
+import { createPortal } from "react-dom";
+
 import {
 	createContext,
 	useCallback,
@@ -27,11 +29,23 @@ const MapProvider = ({
 }: Properties): React.JSX.Element => {
 	const mapClientReference = useRef(new MapClient());
 	const containerReference = useRef<HTMLDivElement>(null);
+	const popupPortalContainerReference = useRef<HTMLDivElement>(null);
 	const [isLoaded, setIsLoaded] = useState<boolean>(false);
+	const [currentPopup, setCurrentPopup] = useState<null | {
+		container: HTMLElement;
+		content: React.ReactNode;
+	}>(null);
 
 	const handleMapLoad = useCallback(() => {
 		setIsLoaded(true);
 	}, []);
+
+	const handlePopupRender = useCallback(
+		(content: React.ReactElement, container: HTMLElement) => {
+			setCurrentPopup({ container, content });
+		},
+		[],
+	);
 
 	useEffect(() => {
 		const client = mapClientReference.current;
@@ -41,20 +55,26 @@ const MapProvider = ({
 			return;
 		}
 
-		client.init(container, { onLoad: handleMapLoad });
+		client.init(container, {
+			onLoad: handleMapLoad,
+			onPopupRender: handlePopupRender,
+		});
 
 		return (): void => {
 			setIsLoaded(false);
 			client.destroy();
 		};
-	}, [handleMapLoad]);
+	}, [handleMapLoad, handlePopupRender]);
 
 	useEffect(() => {
 		const client = mapClientReference.current;
 		client.addNavigationControl();
 		client.addScaleControl();
-		client.addGeolocateControl();
-	}, []);
+
+		if (!center && !routeLine) {
+			client.addGeolocateControl();
+		}
+	}, [center, routeLine]);
 
 	useEffect(() => {
 		const client = mapClientReference.current;
@@ -63,12 +83,12 @@ const MapProvider = ({
 	}, [markers]);
 
 	useEffect(() => {
-		if (!center) {
+		if (!isLoaded || !center) {
 			return;
 		}
 
-		mapClientReference.current.setCenter(center);
-	}, [center]);
+		mapClientReference.current.flyTo(center);
+	}, [isLoaded, center]);
 
 	useEffect(() => {
 		if (!isLoaded || !routeLine) {
@@ -78,6 +98,14 @@ const MapProvider = ({
 		const client = mapClientReference.current;
 
 		client.renderRoute(routeLine);
+
+		const coordinates = routeLine.geometry.coordinates as
+			| Coordinates[]
+			| undefined;
+
+		if (coordinates && coordinates.length > 0) {
+			client.fitToCoordinates(coordinates);
+		}
 	}, [isLoaded, routeLine]);
 
 	return (
@@ -85,6 +113,13 @@ const MapProvider = ({
 			<div className={styles["map-wrapper"]}>
 				<div className={styles["map"]} ref={containerReference} />
 				{isLoaded && <div className={styles["map-overlays"]}>{children}</div>}
+				<div
+					className={styles["popup-container"]}
+					ref={popupPortalContainerReference}
+				>
+					{currentPopup &&
+						createPortal(currentPopup.content, currentPopup.container)}
+				</div>
 			</div>
 		</MapContext.Provider>
 	);

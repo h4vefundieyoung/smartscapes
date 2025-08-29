@@ -1,0 +1,32 @@
+.container {
+	flex: 1;
+	width: 100%;
+	padding: 48px 32px;
+}
+
+.title {
+	margin: 0;
+	font-size: var(--font-size-h1);
+	font-weight: var(--font-weight-semibold);
+	line-height: 1.2;
+}
+
+.header {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: center;
+	justify-content: space-between;
+	margin: 48px 0 32px;
+}
+
+.header-title {
+	margin: 0;
+	font-size: var(--font-size-h2);
+	font-weight: var(--font-weight-semibold);
+	line-height: 1.1;
+}
+
+.table-container {
+	height: 675px;
+}

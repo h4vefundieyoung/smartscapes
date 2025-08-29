@@ -5,24 +5,74 @@ import { DataStatus } from "~/libs/enums/enums.js";
 import {
 	useAppDispatch,
 	useAppSelector,
+	useCallback,
 	useEffect,
 } from "~/libs/hooks/hooks.js";
-import { actions as exploreActions } from "~/modules/explore/explore.js";
+import { type Location } from "~/libs/types/types.js";
+import { getRoutes, loadMoreRoutes } from "~/modules/explore/explore.js";
 import { actions as locationActions } from "~/modules/location/location.js";
 
 import { RoutesPanel } from "./libs/components/components.js";
 import { mockPOIs } from "./mock-pois.js";
 import styles from "./styles.module.css";
 
+const DEFAULT_PAGE_INCREMENT = 1;
+
 const Explore = (): React.JSX.Element => {
 	const dispatch = useAppDispatch();
 	const routesDataStatus = useAppSelector((state) => state.explore.dataStatus);
 	const routesError = useAppSelector((state) => state.explore.error);
 	const routes = useAppSelector((state) => state.explore.routes);
+	const hasMore = useAppSelector((state) => state.explore.hasMore);
+	const loadMoreDataStatus = useAppSelector(
+		(state) => state.explore.loadMoreDataStatus,
+	);
+	const page = useAppSelector((state) => state.explore.page);
 	const locationDataStatus = useAppSelector(
 		(state) => state.location.dataStatus,
 	);
 	const location = useAppSelector((state) => state.location.location);
+
+	const handleLoadMore = useCallback(
+		(searchTerm?: string) => {
+			const nextPage = page + DEFAULT_PAGE_INCREMENT;
+			const loadMoreParameters: {
+				location?: Location;
+				page: number;
+				searchTerm?: string;
+			} = {
+				page: nextPage,
+			};
+
+			if (location) {
+				loadMoreParameters.location = location;
+			}
+
+			if (searchTerm) {
+				loadMoreParameters.searchTerm = searchTerm;
+			}
+
+			void dispatch(loadMoreRoutes(loadMoreParameters));
+		},
+		[dispatch, page, location],
+	);
+
+	const handleSearch = useCallback(
+		(searchTerm: string) => {
+			const searchParameters: { location?: Location; searchTerm?: string } = {};
+
+			if (location) {
+				searchParameters.location = location;
+			}
+
+			if (searchTerm) {
+				searchParameters.searchTerm = searchTerm;
+			}
+
+			void dispatch(getRoutes(searchParameters));
+		},
+		[dispatch, location],
+	);
 
 	useEffect(() => {
 		void dispatch(locationActions.getCurrentUserLocation());
@@ -30,14 +80,16 @@ const Explore = (): React.JSX.Element => {
 
 	useEffect(() => {
 		if (locationDataStatus === DataStatus.REJECTED) {
-			void dispatch(exploreActions.getRoutes());
+			void dispatch(getRoutes({}));
 		}
 
 		if (locationDataStatus === DataStatus.FULFILLED && location !== null) {
 			void dispatch(
-				exploreActions.getRoutes({
-					latitude: location.latitude,
-					longitude: location.longitude,
+				getRoutes({
+					location: {
+						latitude: location.latitude,
+						longitude: location.longitude,
+					},
 				}),
 			);
 		}
@@ -45,16 +97,19 @@ const Explore = (): React.JSX.Element => {
 
 	return (
 		<main className={styles["main"]}>
-			<div className={styles["routes-container"]}>
-				<RoutesPanel
-					locationDataStatus={locationDataStatus}
-					routes={routes}
-					routesDataStatus={routesDataStatus}
-					routesError={routesError}
-				/>
-			</div>
 			<div className={styles["container"]}>
-				<MapProvider markers={mockPOIs} />
+				<MapProvider markers={mockPOIs}>
+					<RoutesPanel
+						hasMore={hasMore}
+						loadMoreDataStatus={loadMoreDataStatus}
+						locationDataStatus={locationDataStatus}
+						onLoadMore={handleLoadMore}
+						onSearch={handleSearch}
+						routes={routes}
+						routesDataStatus={routesDataStatus}
+						routesError={routesError}
+					/>
+				</MapProvider>
 			</div>
 		</main>
 	);

@@ -1,62 +1,46 @@
 import { Icon, Link } from "~/libs/components/components.js";
-import { AppRoute, KeyboardKey } from "~/libs/enums/enums.js";
+import { AppRoute } from "~/libs/enums/enums.js";
 import {
 	configureString,
 	generateStaticMapUrl,
 } from "~/libs/helpers/helpers.js";
 import { useCallback, useMemo } from "~/libs/hooks/hooks.js";
-import { type Coordinates, type RouteLine } from "~/libs/types/types.js";
+import { type RouteGetAllItemResponseDto } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
-	id?: number;
-	imageUrl: null | string;
-	mapProps: {
-		markers?: { coordinates: Coordinates }[];
-		routeLine?: null | RouteLine;
-	};
-	name: string;
-	onClick?: () => void;
+	onClick: (id: number) => void;
+	route: RouteGetAllItemResponseDto;
 };
 
-const RouteCard = ({
-	id,
-	imageUrl,
-	mapProps,
-	name,
-	onClick,
-}: Properties): React.JSX.Element => {
-	const handleKeyDown = useCallback(
-		(event: React.KeyboardEvent): void => {
-			if (
-				onClick &&
-				(event.key === KeyboardKey.ENTER || event.key === KeyboardKey.SPACE)
-			) {
-				event.preventDefault();
-				onClick();
-			}
-		},
-		[onClick],
-	);
+const RouteCard = ({ onClick, route }: Properties): React.JSX.Element => {
+	const { id, images, name, pois } = route;
+
+	const coverImage = images.at(0)?.url;
+
+	const handleClick = useCallback((): void => {
+		onClick(id);
+	}, [onClick, id]);
+
+	const markers = useMemo(() => {
+		return pois.map((poi) => ({
+			coordinates: poi.location.coordinates,
+		}));
+	}, [pois]);
 
 	const staticMapUrl = useMemo(() => {
 		return generateStaticMapUrl({
-			markers: mapProps.markers || [],
+			markers,
 		});
-	}, [mapProps.markers]);
+	}, [markers]);
 
 	return (
 		<li className={styles["route-card"]}>
 			<div className={styles["container"]}>
-				<button
-					aria-label={onClick ? `Select route: ${name}` : undefined}
-					className={styles["button"]}
-					onClick={onClick}
-					onKeyDown={handleKeyDown}
-				>
-					{imageUrl ? (
-						<img alt={name} className={styles["image"]} src={imageUrl} />
+				<button className={styles["button"]} onClick={handleClick}>
+					{coverImage ? (
+						<img alt={name} className={styles["image"]} src={coverImage} />
 					) : (
 						<div className={styles["image-placeholder"]}>
 							<img
@@ -68,7 +52,7 @@ const RouteCard = ({
 					)}
 					<div className={styles["data"]}>
 						<p className={styles["label"]}>{name}</p>
-						{id && (
+						{Boolean(id) && (
 							<Link
 								className={styles["linkButton"]}
 								to={configureString(AppRoute.ROUTES_$ID, {

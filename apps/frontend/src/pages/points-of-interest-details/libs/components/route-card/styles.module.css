@@ -6,7 +6,9 @@
 	width: 100%;
 	max-width: 390px;
 	min-height: 240px;
+	overflow: hidden;
 	list-style: none;
+	border-radius: 8px;
 }
 
 .card-content {

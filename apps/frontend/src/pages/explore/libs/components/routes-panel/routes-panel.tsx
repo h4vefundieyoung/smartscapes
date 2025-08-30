@@ -103,7 +103,7 @@ const RoutesPanel = ({
 	);
 
 	const handleRouteCardClick = useCallback(
-		(routeId: number) => (): void => {
+		(routeId: number): void => {
 			const route = routes.find((route) => route.id === routeId);
 
 			if (!route?.geometry.coordinates.length) {
@@ -213,19 +213,11 @@ const RoutesPanel = ({
 				)}
 
 				<ul className={styles["list"]}>
-					{routes.map(({ geometry, id, images, name, pois }) => (
+					{routes.map((route) => (
 						<RouteCard
-							id={id}
-							imageUrl={images.at(0)?.url ?? null}
-							key={`${String(id)}-${name}`}
-							mapProps={{
-								markers: pois.map((poi) => ({
-									coordinates: poi.location.coordinates,
-								})),
-								routeLine: { geometry, id: String(id) },
-							}}
-							name={name}
-							onClick={handleRouteCardClick(id)}
+							key={route.id}
+							onClick={handleRouteCardClick}
+							route={route}
 						/>
 					))}
 					{hasMore && (

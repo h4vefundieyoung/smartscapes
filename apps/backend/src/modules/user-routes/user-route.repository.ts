@@ -62,7 +62,13 @@ class UserRouteRepository implements Repository {
 	): Promise<UserRouteEntity[]> {
 		const userRoutes = await this.userRouteModel
 			.query()
-			.leftJoin("reviews", "reviews.route_id", "user_routes.route_id")
+			.leftJoin("reviews", (join) => {
+				join.on("reviews.route_id", "user_routes.route_id");
+
+				if (filters.userId) {
+					join.andOn("reviews.user_id", "user_routes.user_id");
+				}
+			})
 			.withGraphJoined("routes")
 			.select([
 				"user_routes.id",
@@ -84,7 +90,6 @@ class UserRouteRepository implements Repository {
 			.modify((builder) => {
 				if (filters.userId) {
 					builder.where("user_routes.user_id", filters.userId);
-					builder.where("reviews.user_id", filters.userId);
 				}
 
 				if (filters.status) {

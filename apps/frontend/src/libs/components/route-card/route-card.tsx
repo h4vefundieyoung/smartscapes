@@ -1,14 +1,21 @@
-import { Icon, Link, MapProvider } from "~/libs/components/components.js";
+import { Icon, Link } from "~/libs/components/components.js";
 import { AppRoute, KeyboardKey } from "~/libs/enums/enums.js";
-import { configureString } from "~/libs/helpers/helpers.js";
-import { useCallback } from "~/libs/hooks/hooks.js";
+import {
+	configureString,
+	generateStaticMapUrl,
+} from "~/libs/helpers/helpers.js";
+import { useCallback, useMemo } from "~/libs/hooks/hooks.js";
+import { type Coordinates, type RouteLine } from "~/libs/types/types.js";
 
 import styles from "./styles.module.css";
 
 type Properties = {
 	id?: number;
 	imageUrl: null | string;
-	mapProps: React.ComponentProps<typeof MapProvider>;
+	mapProps: {
+		markers?: { coordinates: Coordinates }[];
+		routeLine?: null | RouteLine;
+	};
 	name: string;
 	onClick?: () => void;
 };
@@ -33,6 +40,12 @@ const RouteCard = ({
 		[onClick],
 	);
 
+	const staticMapUrl = useMemo(() => {
+		return generateStaticMapUrl({
+			markers: mapProps.markers || [],
+		});
+	}, [mapProps.markers]);
+
 	return (
 		<li className={styles["route-card"]}>
 			<div className={styles["container"]}>
@@ -46,7 +59,11 @@ const RouteCard = ({
 						<img alt={name} className={styles["image"]} src={imageUrl} />
 					) : (
 						<div className={styles["image-placeholder"]}>
-							<MapProvider {...mapProps} />
+							<img
+								alt={`Map preview for ${name}`}
+								className={styles["image"]}
+								src={staticMapUrl}
+							/>
 						</div>
 					)}
 					<div className={styles["data"]}>

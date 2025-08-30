@@ -456,7 +456,6 @@ class UserRouteController extends BaseController {
 		}>,
 	): Promise<APIHandlerResponse<UserRouteResponseDto[]>> {
 		const { query } = options;
-
 		const userRoutes = await this.userRouteService.getAll(query);
 
 		return {

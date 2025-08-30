@@ -115,20 +115,13 @@ const MapProvider = ({
 	}, [isLoaded, center]);
 
 	useEffect(() => {
-		const hasFeatures = routeLine || markers.length > 0;
-
-		if (!isLoaded || !hasFeatures || !shouldFitToBounds) {
+		if (!isLoaded || !routeLine || !shouldFitToBounds) {
 			return;
 		}
 
-		const coordinates = [
-			...(routeLine?.geometry.coordinates ?? []),
-			...markers.map((marker) => marker.coordinates),
-		];
-
 		const client = mapClientReference.current;
 
-		client.fitToCoordinates(coordinates);
+		client.fitToCoordinates(routeLine.geometry.coordinates);
 	}, [isLoaded, routeLine, markers, shouldFitToBounds]);
 
 	return (

@@ -198,6 +198,7 @@ class UserRepository implements Repository {
 				"users.first_name",
 				"users.email",
 				"users.last_name",
+				"users.is_visible_profile",
 				"users.password_hash as passwordHash",
 				"users.password_salt as passwordSalt",
 				"users.group_id as groupId",

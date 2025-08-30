@@ -282,6 +282,15 @@ class RouteRepository implements Repository {
 						builder.orderBy("routes_to_pois.visit_order", SortingOrder.ASC);
 					},
 				})
+				.select([
+					"routes.id",
+					"routes.name",
+					"routes.description",
+					"routes.created_by_user_id",
+					RouteModel.raw("to_json(distance)::json as distance"),
+					RouteModel.raw("to_json(duration)::json as duration"),
+					RouteModel.raw("ST_AsGeoJSON(routes.geometry)::json as geometry"),
+				])
 				.where("routes.id", id)
 				.first();
 

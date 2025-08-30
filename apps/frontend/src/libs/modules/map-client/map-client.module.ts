@@ -176,8 +176,8 @@ class MapClient {
 		this.map = null;
 	}
 
-	public fitToCoordinates(coordinates: Coordinates[] | undefined): void {
-		if (!this.map || !coordinates || coordinates.length === 0) {
+	public fitToCoordinates(coordinates: Coordinates[]): void {
+		if (!this.map || coordinates.length === 0) {
 			return;
 		}
 

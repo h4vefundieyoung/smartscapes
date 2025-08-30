@@ -18,8 +18,10 @@ const RoutesGallery = ({ routes }: Properties): React.JSX.Element => {
 						imageUrl={coverImage}
 						key={id}
 						mapProps={{
+							isInteractive: false,
 							markers: pois.map(({ location }) => location),
 							routeLine: { geometry, id: id.toString() },
+							shouldFitToBounds: true,
 						}}
 						name={name}
 					/>

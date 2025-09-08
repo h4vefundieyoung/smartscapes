@@ -132,8 +132,10 @@ const RouteDetails = (): React.JSX.Element => {
 	}, []);
 
 	const handleStart = useCallback(() => {
-		void dispatch(userRouteActions.create({ routeId: Number(routeId) }));
-	}, [dispatch, routeId]);
+		if (!isSaved) {
+			void dispatch(userRouteActions.create({ routeId: Number(routeId) }));
+		}
+	}, [dispatch, routeId, isSaved]);
 
 	const handleResetFormValues = useCallback(() => {
 		if (!route) {

@@ -66,3 +66,13 @@
 		padding: 40px 32px;
 	}
 }
+
+@media (width <= 480px) {
+	.container {
+		padding: 24px;
+	}
+
+	.label {
+		font-size: var(--font-size-h2);
+	}
+}

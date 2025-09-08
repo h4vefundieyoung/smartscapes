@@ -14,7 +14,7 @@ const createColumns = (
 		header: "Id",
 		maxSize: 100,
 		minSize: 50,
-		size: 66,
+		size: 80,
 	},
 	{
 		accessorKey: "name",

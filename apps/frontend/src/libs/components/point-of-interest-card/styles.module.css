@@ -13,14 +13,6 @@
 	text-decoration: none;
 }
 
-.image {
-	display: block;
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	border-radius: 8px;
-}
-
 .title {
 	margin: 0;
 	overflow: hidden;
@@ -32,7 +24,14 @@
 	white-space: nowrap;
 }
 
-@media (width <= 991px) {
+.map {
+	max-width: 390px;
+	height: 240px;
+	overflow: hidden;
+	border-radius: 8px;
+}
+
+@media (width <=991px) {
 	.card {
 		max-width: 300px;
 	}
